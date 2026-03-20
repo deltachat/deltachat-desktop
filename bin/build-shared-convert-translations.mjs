@@ -3,8 +3,12 @@ import { xml2js } from 'xml-js'
 import { extname, join } from 'path'
 import { readdir, readFile, writeFile } from 'fs/promises'
 
+
+/**
+ * @param {string} input
+ */
 function removeJunk(input) {
-  return input
+  return input.replace(/\s*\n\s*/g, ' ').trim()
     .replace(new RegExp('\\\\n', 'g'), '\n')
     .replace(new RegExp("\\\\'", 'g'), "'")
     .replace(new RegExp('\\\\\\"', 'g'), '"')
@@ -31,7 +35,7 @@ async function xmlToJson(filename) {
 
   async function done() {
     const newFile = filename.replace(extname(filename), '') + '.json'
-    await writeFile(newFile, JSON.stringify(res, null, 2))
+    await writeFile(newFile, JSON.stringify(res, null, 2) + '\n')
   }
 
   if (!js.resources || !js.resources.string || !js.resources.plurals)
