@@ -371,11 +371,9 @@ function openVideoCallWindow<D extends CallDirection>(
       }
 
       const { response } = await dialog.showMessageBox(win, {
-        // TODO i18n
         // TODO show the account name / label that received the call?
-        message: chatInfo
-          ? `📞 ${chatInfo.name} is calling`
-          : `📞 ${tx('call_incoming')}`,
+        message:
+          `📞 ${tx('call_incoming')}` + (chatInfo ? ' ' + chatInfo.name : ''),
         type: 'question',
         buttons: ['Decline', 'Answer'],
         defaultId: 0,
