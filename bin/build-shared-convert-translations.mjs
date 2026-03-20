@@ -3,8 +3,12 @@ import { xml2js } from 'xml-js'
 import { extname, join } from 'path'
 import { readdir, readFile, writeFile } from 'fs/promises'
 
+
+/**
+ * @param {string} input
+ */
 function removeJunk(input) {
-  return input
+  return input.replace(/\s*\n\s*/g, ' ').trim()
     .replace(new RegExp('\\\\n', 'g'), '\n')
     .replace(new RegExp("\\\\'", 'g'), "'")
     .replace(new RegExp('\\\\\\"', 'g'), '"')

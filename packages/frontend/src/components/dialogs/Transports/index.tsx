@@ -121,7 +121,7 @@ export default function TransportsDialog(
   const deleteTransport = useCallback(
     async (transport: EnteredLoginParam) => {
       const confirmed = await openConfirmationDialog({
-        message: tx('confirm_remove_transport', transport.addr),
+        message: tx('confirm_remove_or_hide_transport_x', transport.addr),
       })
       if (confirmed) {
         await BackendRemote.rpc.deleteTransport(accountId, transport.addr)

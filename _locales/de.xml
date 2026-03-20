@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+<resources
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingTranslation">
     <!-- common strings without special context -->
     <string name="app_name">Delta Chat</string>
     <string name="ok">OK</string>
@@ -115,7 +117,7 @@
     <string name="last_month">Letzter Monat</string>
     <!-- Refers to the time a contact was last seen. Shown below contact name in the profile. The placeholder will be replaced by date or time, resulting in "Last seen at 12:13 AM" or "Last seen Nov 12" -->
     <string name="last_seen_at">Zuletzt gesehen %1$s</string>
-    <!-- Refers to the time a contact was last seen. Shown below contact name in the profile. The placeholder will be replaced by a relative point in time as "3 minutes ago" (see https://momentjs.com for more examples and languages)-->
+    <!-- Refers to the time a contact was last seen. Shown below contact name in the profile. The placeholder will be replaced by a relative point in time as "3 minutes ago" (see https://momentjs.com for more examples and languages) -->
     <string name="last_seen_relative">Zuletzt gesehen %1$s</string>
     <string name="last_seen_unknown">Zuletzt gesehen: Unbekannt</string>
     <!-- Call duration as shown in the call bubbles. There is some risk to mix with the sending time, so the word "Duration" may be helpful. Might also be "Duration: %d minutes", "%d-minute duration", "%d-minute length" or "%d-minute call" -->
@@ -166,6 +168,7 @@
         <item quantity="other">%d ausgewählt</item>
     </plurals>
     <string name="selected_colon">Ausgewählt:</string>
+    <string name="selected">Ausgewählt</string>
     <string name="self">Ich</string>
     <string name="draft">Entwurf</string>
     <string name="image">Bild</string>
@@ -400,6 +403,12 @@
     <string name="audio_call">Sprachanruf</string>
     <!-- Used in call bubbles, summaries, notifications -->
     <string name="video_call">Videoanruf</string>
+    <string name="call_initializing">Initialisieren…</string>
+    <string name="call_incoming">Eingehender Anruf</string>
+    <string name="call_ringing">Klingeln…</string>
+    <string name="call_reconnecting">Wiederverbinden…</string>
+    <string name="call_ended">Anruf beendet</string>
+    <string name="call_failed">Anruf fehlgeschlagen</string>
     <!-- deprecated, use "Audio call" instead -->
     <string name="outgoing_audio_call">Ausgehender Sprachanruf</string>
     <!-- deprecated, use "Video call" instead -->
@@ -617,7 +626,7 @@
     <!-- welcome and login -->
     <!-- Primary button on the welcome screen, allows to create an instant profile -->
     <string name="onboarding_create_instant_account">Neues Profil erstellen</string>
-    <!-- Secondary button on the welcome screen, allows to "Add as Second Device", "Restore from Backup"  -->
+    <!-- Secondary button on the welcome screen, allows to "Add as Second Device", "Restore from Backup" -->
     <string name="onboarding_alternative_logins">Ich habe bereits ein Profil</string>
     <!-- This is a button and a title, allowing to use existing, classic email, setting ports, passwords and so on -->
     <string name="manual_account_setup_option">Klassische E-Mail als Relay</string>
@@ -676,12 +685,16 @@
     <string name="add_transport">Relay hinzufügen</string>
     <string name="remove_transport">Relay entfernen</string>
     <string name="edit_transport">Relay bearbeiten</string>
+    <string name="used_for_sending">Zum Senden verwendet</string>
+    <string name="hide_from_contacts">Vor Kontakten verstecken</string>
+    <string name="hidden_from_contacts">Vor Kontakten versteckt</string>
+    <!-- Hint for the list of relays -->
+    <string name="transport_list_hint">Nachrichten werden auf allen Relays empfangen</string>
     <!-- shown if a QR code was scanned that can be used as a relay -->
     <string name="confirm_add_transport">Relay hinzufügen?</string>
     <string name="invalid_transport_qr">Der gescannte QR-Code enthält keine gültiges Relay.</string>
     <!-- placeholder will be replaced by a relay server name -->
-    <string name="confirm_remove_transport">Relay \"%1$s\" entfernen?\n\nDeine Kontakte können dich nur erreichen, wenn du sie zuvor über einen anderes Relay erreicht hast.\n\nIm Zweifel, entferne den Relay später.</string>
-
+    <string name="confirm_remove_or_hide_transport_x">Relay \"%1$s\" entfernen?\n\nKontakte, die nur dieses Relay kennen, erreichen dich möglicherweise erst wieder, wenn du ihnen erneut eine Nachricht schickst.\n\nIm Zweifelsfall, verstecke das Relay anstelle es zu löschen.</string>
     <string name="login_certificate_checks">Zertifikatsüberprüfung</string>
     <string name="login_error_mail">Bitte eine gültige E-Mail-Adresse eingeben</string>
     <string name="login_error_server">Bitte eine gültige Server/IP-Adresse eingeben</string>
@@ -797,7 +810,7 @@
     <string name="pref_background_btn_default">Standard-Bild verwenden</string>
     <string name="pref_background_btn_gallery">Aus Galerie auswählen</string>
     <string name="pref_imap_folder_warn_disable_defaults">Wenn du diese Option änderst, stelle sicher, dass der Server und die anderen Geräte entsprechend konfiguriert sind\n\nAndernfalls funktionieren Dinge möglicherweise nicht wie erwartet.</string>
-    <!-- No need to be literal here, you can also use "Use Multiple Devices", "Support Multiple Devices" or other fitting terms. However, it should fit to the wording or your language at https://delta.chat/help  -->
+    <!-- No need to be literal here, you can also use "Use Multiple Devices", "Support Multiple Devices" or other fitting terms. However, it should fit to the wording or your language at https://delta.chat/help -->
     <string name="pref_multidevice">Mehrgerätemodus</string>
     <string name="pref_multidevice_explain">Synchronisiere deine Nachrichten mit deinen anderen Geräten. Wird beim Hinzufügen eines zweiten Geräts automatisch aktiviert.</string>
     <string name="pref_multidevice_change_warn">Der Mehrgerätemodus muss aktiviert sein, wenn dasselbe Profil auf mehreren Geräten verwendet wird. Deaktiviere diese Einstellung nur, wenn du dieses Profil von allen anderen Geräten entfernt hast.\n\nDie Deaktivierung des Mehrgerätemodus bei Verwendung des Profils auf mehreren Geräten führt zu verlorenen Nachrichten und anderen Problemen.</string>
@@ -839,7 +852,7 @@
     <string name="stats_disable_dialog">Das Senden von Statistiken ist bereits eingeschaltet.\n\nMöchtest du es ausschalten?</string>
     <string name="disable">Ausschalten</string>
     <string name="stats_keep_sending">Weiter senden</string>
-    <string name="stats_msg_body">Der Anhang enthält anonyme Statistiken, die uns helfen, Delta Chat zu verbessern. Vielen Dank!</string>
+    <string name="stats_msg_body">Der Anhang enthält anonyme Statistiken, die uns helfen, Delta Chat zu verbessern. Vielen Dank! Für weitere Infos, siehe https://delta.chat/help#statssending </string>
 
     <!-- Emoji picker and categories -->
     <string name="emoji_search_results">Suchergebnisse</string>
@@ -1031,7 +1044,7 @@
     <string name="confirm_replace_draft">%1$s hat bereits einen Entwurf. Möchtest du diesen ersetzen?</string>
     <string name="mailto_link_could_not_be_decoded">Mailto-Link konnte nicht dekodiert werden: %1$s</string>
 
-    <!-- notifications  -->
+    <!-- notifications -->
     <string name="notify_reply_button">Antworten</string>
     <string name="notify_new_message">Neue Nachricht</string>
     <string name="notify_background_connection_enabled">Hintergrundverbindung aktiviert</string>
@@ -1109,7 +1122,9 @@
     <string name="message_detail_received_desktop">Empfangen</string>
     <string name="menu.view.developer.open.log.folder">Log-Ordner öffnen</string>
     <string name="menu.view.developer.open.current.log.file">Aktuelle Logdatei öffnen</string>
-    <string name="explain_desktop_minimized_disabled_tray_pref" tools:ignore="TypographyDashes">Benachrichtigungssymbol kann nicht deaktiviert werden, da Delta Chat mit der Option --minimized gestartet wurde.</string>
+    <string
+        name="explain_desktop_minimized_disabled_tray_pref"
+        tools:ignore="TypographyDashes">Benachrichtigungssymbol kann nicht deaktiviert werden, da Delta Chat mit der Option --minimized gestartet wurde.</string>
     <string name="no_spellcheck_suggestions_found">Keine Rechtschreibvorschläge gefunden.</string>
     <string name="show_window">Fenster anzeigen</string>
 

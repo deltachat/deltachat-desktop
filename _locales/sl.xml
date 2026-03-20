@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+<resources
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingTranslation">
     <!-- common strings without special context -->
     <string name="app_name">Delta Chat</string>
     <string name="ok">OK</string>
@@ -56,7 +58,6 @@
     <!-- Adjective "smth is muted". used to describe a muted or silenced chat, that e.g. does not make noise or cause notifications -->
     <string name="muted">Utišan</string>
     <string name="ephemeral_messages">Izginjajoča sporočila</string>
-    <string name="ephemeral_messages_hint">Velja za vsa sporočila v tem klepetu. Sporočila lahko še vedno kopirajo, shranijo ali posredujejo.</string>
     <string name="save">Shrani</string>
     <string name="chat">Klepet</string>
     <string name="media">Večpredstavnost</string>
@@ -77,8 +78,6 @@
     <string name="hide">Skrij</string>
     <string name="activate">Aktiviraj</string>
     <string name="load_remote_content">Naloži oddaljene slike</string>
-    <!-- Possible answers to the question are: Never, Always, Once -->
-    <string name="load_remote_content_ask">Oddaljene slike vam lahko sledijo.\n\nTa nastavitev nastavitev omogoča tudi nalaganje fontov in sorodnih vsebin.\n\nOmogoči nalaganje oddaljenih slik?</string>
     <string name="always">Vedno</string>
     <string name="always_load_remote_images">Vedno naloži oddaljene slike</string>
     <string name="once">Enkrat</string>
@@ -113,7 +112,7 @@
     <string name="last_month">Zadnji mesec</string>
     <!-- Refers to the time a contact was last seen. Shown below contact name in the profile. The placeholder will be replaced by date or time, resulting in "Last seen at 12:13 AM" or "Last seen Nov 12" -->
     <string name="last_seen_at">Nazadnje viden %1$s</string>
-    <!-- Refers to the time a contact was last seen. Shown below contact name in the profile. The placeholder will be replaced by a relative point in time as "3 minutes ago" (see https://momentjs.com for more examples and languages)-->
+    <!-- Refers to the time a contact was last seen. Shown below contact name in the profile. The placeholder will be replaced by a relative point in time as "3 minutes ago" (see https://momentjs.com for more examples and languages) -->
     <string name="last_seen_relative">Nazadnje viden %1$s</string>
     <string name="last_seen_unknown">Nazadnje viden: neznano</string>
     <!-- Shown beside messages that are "N minutes old". Prefer short strings, or well-known abbreviations. -->
@@ -184,7 +183,6 @@
     <!-- "Stickers" as known from other messengers; in some languages, the English "Sticker" is fine. -->
     <string name="sticker">Nalepka</string>
     <string name="add_to_sticker_collection">Dodaj v zbirko nalepk</string>
-    <string name="add_stickers_instructions">Če želite dodati svoje nalepke, tapnite \"Odpri mapo z nalepkami,\" tam ustvarite podmapo ter vanjo prenesite svoje datoteke s slikami oz. nalepkami.</string>
     <string name="open_sticker_folder">Odpri mapo z nalepkami</string>
     <string name="images">Slike</string>
     <!-- a noun, used for "Music" and other "Audio" files -->
@@ -262,7 +260,6 @@
     <string name="menu_delete_chat">Zbriši klepet</string>
     <!-- Command to delete all messages in a chat. The chat itself will not be deleted but will be empty afterwards, so make sure to be different from "Delete Chat" here. "Clear" is a verb here, "Empty Chat" would also be fine (eg. in German "Chat leeren") -->
     <string name="clear_chat">Izbriši vsa sporočila v klepetu</string>
-    <string name="share_invite_link_explain">Vsakdo s to povezavo lahko vidi vaš profil ter začne klepet v vami. Delite jo le z osebami, ki jim zaupate.</string>
     <!-- %1$s is replaced by the user's invitation link ("https://i.delta.chat/...") -->
     <string name="invite_friends_text">Kontraktiraj me na Delta Chat:\n%1$s</string>
     <string name="menu_reply">Odziv na sporočilo</string>
@@ -282,7 +279,6 @@
     <string name="chat_record_explain">Tapni in drži za snemanje glasovnega sporočila, spusti za pošiljanje.</string>
     <string name="chat_share_with_title">Deli z...</string>
     <string name="archive_empty_hint">Arhivirani klepeti bodo prikazani tu.</string>
-    <string name="saved_messages_explain">• Posreduj sporočila sem za lažji dostop\n\n• Delaj zapiske ali si shrani glasovna sporočila\n\n• Pripni datoteke za shrambo</string>
     <!-- this is a warning that is shown when one tries to send something to a chat that is not yet accepted. -->
     <string name="accept_request_first">Najprej sprejmite prošnjo za klepet.</string>
     <string name="search_in_chat">Išči v klepetu</string>
@@ -320,7 +316,6 @@
     <string name="autodel_device_title">Briši sporočila z naprave</string>
     <string name="autodel_server_title">Briši sporočila s strežnika</string>
     <string name="secure_join_wait">Vzpostavljanje povezave, prosimo počakajte...</string>
-    <!-- notifications  -->
+    <!-- notifications -->
     <string name="notify_reply_button">Odziv</string>
-    <string name="InfoPlist_NSMicrophoneUsageDescription">Delta Chat uporablja vaš mikrofon za snemanje glasovnih sporočil in videoposnetkov.</string>
     </resources>
