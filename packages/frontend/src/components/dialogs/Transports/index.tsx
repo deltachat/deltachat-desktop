@@ -22,7 +22,6 @@ import { TransportListEntry } from '@deltachat/jsonrpc-client/dist/generated/typ
 import classNames from 'classnames'
 import useDialog from '../../../hooks/dialog/useDialog'
 import { processQr } from '../../../backend/qr'
-import Icon from '../../Icon'
 import useAddTransportDialog from '../../../hooks/dialog/useAddTransportDialog'
 
 /**
@@ -240,6 +239,7 @@ export default function TransportsDialog(
               </div>
             ))}
           </div>
+          <p>{tx('transport_list_hint')}</p>
         </div>
       </DialogBody>
       <DialogFooter>
@@ -249,7 +249,7 @@ export default function TransportsDialog(
           aria-label={tx('add_transport')}
           title={tx('add_transport')}
         >
-          <Icon icon='plus' size={16} />
+          {tx('add_transport')}
         </Button>
       </DialogFooter>
     </Dialog>
