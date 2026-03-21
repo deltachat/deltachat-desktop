@@ -239,22 +239,18 @@ export default function TransportsDialog(
               </div>
             ))}
           </div>
-          <div className={styles.transportHint}>
-            {tx('transport_list_hint')}
-          </div>
+          <p>{tx('transport_list_hint')}</p>
         </div>
       </DialogBody>
       <DialogFooter>
-        <FooterActions>
-          <Button
-            className={styles.addTransportButton}
-            onClick={() => openQrScanner()}
-            aria-label={tx('add_transport')}
-            title={tx('add_transport')}
-          >
-            {tx('add_transport')}
-          </Button>
-        </FooterActions>
+        <Button
+          className={styles.addTransportButton}
+          onClick={() => openQrScanner()}
+          aria-label={tx('add_transport')}
+          title={tx('add_transport')}
+        >
+          {tx('add_transport')}
+        </Button>
       </DialogFooter>
     </Dialog>
   )
