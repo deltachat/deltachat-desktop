@@ -2,6 +2,58 @@
 
 All notable changes to this project will be documented in this file.
 
+<a id="2_46_0"></a>
+## [2.46.0] - 2026-03-21
+
+### Added
+
+- Add global audio player UI
+- When playing voice message, pause other ones
+- Play next voice message after finishing one
+- Add autostart functionality ([#6076](https://github.com/deltachat/deltachat-desktop/issues/6076))
+- Add channel/group descriptions ([#6026](https://github.com/deltachat/deltachat-desktop/issues/6026))
+- WebXDC: "Open link?" dialog for HTTP links
+- Add "Show in chat" menu for "recent apps"
+- Add "Who can call me" setting
+- Click on call message to open call window
+- Add hint to "Media Quality" settings dialog
+- Bigger QR Code for Add second device ([#6085](https://github.com/deltachat/deltachat-desktop/issues/6085))
+- Show view count on own channel posts
+- Unpublish transport ([#6137](https://github.com/deltachat/deltachat-desktop/issues/6137))
+- Show transport hint ([#6143](https://github.com/deltachat/deltachat-desktop/issues/6143))
+
+### Fixed
+
+- Extraneous padding on full screen image view
+- A little better drag regions
+- `canOutsideClickClose=false` for "New Group"
+- Do not resize images based on wrong values
+- Don't modifiy image if user didn't change it
+- Allow transparent background for png avatars
+- WebXDC: remove wrapper `<iframe>`
+- Mobile: more reactions picker getting closed
+- Remove notification when its message deleted
+- Prevent WebXDCs from spamming "Open link?"
+- Scroll to new messages if appropriate
+- Voice message not being shown as playing
+- Don't keep global player after non-voice end
+- Align "recent apps" vertically
+- Do not cover video controls ([#6096](https://github.com/deltachat/deltachat-desktop/issues/6096))
+- Do not crop stickers ([#6069](https://github.com/deltachat/deltachat-desktop/issues/6069))
+- Make more text selectable
+- Fix overflow in delete account dialog ([#6070](https://github.com/deltachat/deltachat-desktop/issues/6070))
+- Make "mentions" setting per-account
+- User specific tmp dir if needed ([#6124](https://github.com/deltachat/deltachat-desktop/issues/6124))
+- Remove notifs of read chats
+- Fix various UI issues
+- keep container at fixed 450×450px size regardless of source image dimensions
+- remove maximum zoom limit to allow zooming in on small images
+
+### Build system
+- Upgrade core 2.46.0 ([#6132](https://github.com/deltachat/deltachat-desktop/issues/6132))
+- Upgrade Electron to 41
+
+
 <a id="2_43_0"></a>
 ## [2.43.0] - 2026-02-18
 
