@@ -78,7 +78,7 @@ We use SCSS to create themes, because it allows us to save work by using its col
 4. compile the theme to CSS in watch mode.
 
 ```sh
-# For Windows:
+# General:
 pnpm sass --watch path/to/Deltachat/config/folder/custom-themes/my_theme.scss path/to/Deltachat/config/folder/custom-themes/my_theme.css -I packages/frontend/themes/ --no-source-map
 # For Linux:
 pnpm sass --watch ~/.config/DeltaChat/custom-themes/my_theme.scss ~/.config/DeltaChat/custom-themes/my_theme.css -I packages/frontend/themes/ --no-source-map
@@ -110,7 +110,7 @@ Read the comments in the theme files for additional information.
 3. compile the theme to CSS in watch mode.
 
 ```sh
-# For Windows:
+# General:
 sass -w path/to/Deltachat/config/folder/custom-themes/my_theme.scss path/to/Deltachat/config/folder/custom-themes/my_theme.css --load-path path/to/deltachat-desktop-git-folder/themes/
 # For Linux:
 sass -w ~/.config/DeltaChat/custom-themes/my_theme.scss ~/.config/DeltaChat/custom-themes/my_theme.css --load-path themes/
