@@ -2,6 +2,56 @@
 
 All notable changes to this project will be documented in this file.
 
+<a id="2_47_0"></a>
+## [2.47.0] - 2026-03-24
+
+### Added
+
+- Add autostart functionality (off by default, Settings -> Advanced -> Autostart) ([#6076](https://github.com/deltachat/deltachat-desktop/issues/6076))
+- Add channel/group descriptions ([#6026](https://github.com/deltachat/deltachat-desktop/issues/6026))
+- Mini-apps (WebXDC): you can now click on links
+- Better voice message playback: global player UI
+- Add "Who can call me" setting
+  - Click on a call message to open call window if "who can call me" is disabled for this caller
+- View count in channels (visible only to channel owner)
+- Add "Unpublish a transport" feature (Advanced) ([#6137](https://github.com/deltachat/deltachat-desktop/issues/6137))
+
+### Fixed
+
+- Remove notification when its message gets read or deleted
+- Make "mentions" setting per-account.
+  Unfortunately this means that if you disabled "mentions",
+  they are again enabled on all your accounts.
+  You can change that in Settings -> Notifications.
+- Extraneous padding on full screen image view
+- Don't close "New Group" dialog on outside click, losing progress
+- Better group / channel / profile avatar editor
+  - better image quality
+  - remove maximum zoom limit to allow zooming in on small images
+  - a little better UI
+
+- WebXDC: remove wrapper `<iframe>`:
+  no need for app developers to hack around
+  `visibilitychange` and `beforeunload`.
+- Mobile: fix reactions picker getting closed on keyboard open
+- Scroll to new messages if appropriate
+  (some messages didn't cause a scroll previously)
+- Do not cover video controls with message sent date ([#6096](https://github.com/deltachat/deltachat-desktop/issues/6096))
+- Do not crop stickers ([#6069](https://github.com/deltachat/deltachat-desktop/issues/6069))
+- Make more text selectable, such as in the "Encryption info" dialog
+- Fix text overflow in delete account dialog ([#6070](https://github.com/deltachat/deltachat-desktop/issues/6070))
+- Fix some functionality not working
+  when multiple users use Delta Chat on the same machine,
+  due only one being the temp folder owner ([#6124](https://github.com/deltachat/deltachat-desktop/issues/6124))
+- Fix various UI issues
+- Bigger QR Code for Add second device ([#6085](https://github.com/deltachat/deltachat-desktop/issues/6085))
+
+### Build system
+- Upgrade core from 2.43.0 to [2.47.0](https://github.com/chatmail/core/blob/main/CHANGELOG.md#2470---2026-03-24)
+- Upgrade Electron to 41
+  - fix pointer lock in some mini-app games
+
+
 <a id="2_43_0"></a>
 ## [2.43.0] - 2026-02-18
 
@@ -3940,7 +3990,8 @@ This section is only relevant to contributors.
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.43.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.47.0...HEAD
+[2.47.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.43.0...v2.47.0
 [2.43.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.35.0...v2.43.0
 [2.35.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.33.0...v2.35.0
 [2.33.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.25.3...v2.33.0
