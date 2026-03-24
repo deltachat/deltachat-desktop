@@ -174,7 +174,12 @@ export default function Attachment({
     }
     // the native fullscreen option is better right now so we don't need to open our own one
     return (
-      <div className={classNames('message-attachment-media')}>
+      <div
+        className={classNames(
+          'message-attachment-media',
+          withCaption ? 'content-below' : null
+        )}
+      >
         <video
           className='attachment-content video-content'
           src={runtime.transformBlobURL(message.file)}
