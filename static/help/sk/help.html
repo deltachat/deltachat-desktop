@@ -5,7 +5,6 @@
       <li><a href="#howtoe2ee">How can I find people to chat with?</a></li>
       <li><a href="#why-is-a-chat-marked-as-request">Why is a chat marked as “Request”?</a></li>
       <li><a href="#how-can-i-put-two-of-my-friends-in-contact-with-each-other">How can I put two of my friends in contact with each other?</a></li>
-      <li><a href="#podporuje-delta-chat-obrázky-videá-a-iné-prílohy">Podporuje Delta Chat obrázky, videá a iné prílohy?</a></li>
       <li><a href="#multiple-accounts">What are profiles? How can I switch between them?</a></li>
       <li><a href="#kto-vidí-moju-profilovú-fotku">Kto vidí moju profilovú fotku?</a></li>
       <li><a href="#signature">Can I set a Bio/Status with Delta Chat?</a></li>
@@ -14,8 +13,9 @@
       <li><a href="#what-does-the-green-dot-mean">What does the green dot mean?</a></li>
       <li><a href="#čo-znamenajú-zaškrtnutia-zobrazené-vedľa-odchádzajúcich-správ">Čo znamenajú zaškrtnutia zobrazené vedľa odchádzajúcich správ?</a></li>
       <li><a href="#edit">Correct typos and delete messages after sending</a></li>
+      <li><a href="#mediaquality">How is media quality handled?</a></li>
       <li><a href="#ephemeralmsgs">How do disappearing messages work?</a></li>
-      <li><a href="#delold">What happens if I turn on “Delete old messages from device”?</a></li>
+      <li><a href="#delold">What happens if I turn on “Delete Messages from Device”?</a></li>
       <li><a href="#remove-account">How can I delete my chat profile?</a></li>
     </ul>
   </li>
@@ -26,6 +26,7 @@
       <li><a href="#omylom-som-sa-vymazal">Omylom som sa vymazal.</a></li>
       <li><a href="#už-viac-nechcem-dostávať-správy-od-skupiny">Už viac nechcem dostávať správy od skupiny.</a></li>
       <li><a href="#cloning-a-group">Cloning a group</a></li>
+      <li><a href="#how-many-members-can-participate-in-a-single-group">How many members can participate in a single group?</a></li>
     </ul>
   </li>
   <li><a href="#webxdc">In-chat apps</a>
@@ -54,11 +55,12 @@
   </li>
   <li><a href="#advanced">Advanced</a>
     <ul>
-      <li><a href="#experimental-features">Experimental Features</a></li>
-      <li><a href="#statssending">What is “Send statistics to Delta Chat’s developers”?</a></li>
+      <li><a href="#experiments">Experimental Features</a></li>
+      <li><a href="#relays">What are Relays?</a></li>
       <li><a href="#can-i-use-a-classic-email-address-with-delta-chat">Can I use a classic email address with Delta Chat?</a></li>
       <li><a href="#classic-email">How can I configure a chat profile with a classic email address as relay?</a></li>
       <li><a href="#i-want-to-manage-my-own-server-for-delta-chat-what-do-you-recommend">I want to manage my own server for Delta Chat. What do you recommend?</a></li>
+      <li><a href="#statssending">What is “Send statistics to Delta Chat’s developers”?</a></li>
       <li><a href="#zaujímajú-ma-technické-detaily-môžete-mi-povedať-viac">Zaujímajú ma technické detaily. Môžete mi povedať viac?</a></li>
     </ul>
   </li>
@@ -75,6 +77,7 @@
       <li><a href="#tls">Are messages marked with the mail icon exposed on the Internet?</a></li>
       <li><a href="#message-metadata">How does Delta Chat protect metadata in messages?</a></li>
       <li><a href="#device-seizure">How to protect metadata and contacts when a device is seized?</a></li>
+      <li><a href="#who-sees-my-ip-address">Who sees my IP Address?</a></li>
       <li><a href="#sealedsender">Does Delta Chat support “Sealed Sender”?</a></li>
       <li><a href="#pfs">Does Delta Chat support Perfect Forward Secrecy?</a></li>
       <li><a href="#pqc">Does Delta Chat support Post-Quantum-Cryptography?</a></li>
@@ -184,7 +187,8 @@ If you add each other to <a href="#groups">groups</a>, end-to-end encryption wil
 <p>As being a private messenger,
 only friends and family you <a href="#howtoe2ee">share your QR code or invite link with</a> can write to you.</p>
 
-<p>Your friends may share your contact with other friends, this appears as a <strong>request</strong>.</p>
+<p>Your friends may share your contact with other friends,
+this appears as <b style="border: 1px solid currentColor; padding: 0 3px; font-size:90%">Request</b></p>
 
 <ul>
   <li>
@@ -213,24 +217,6 @@ You can also add a little introduction message.</p>
 
 <p>The second contact will receive a <strong>card</strong> then
 and can tap it to start chatting with the first contact.</p>
-    
-      <h3 id="podporuje-delta-chat-obrázky-videá-a-iné-prílohy">
-        
-        
-          Podporuje Delta Chat obrázky, videá a iné prílohy? <a href="#podporuje-delta-chat-obrázky-videá-a-iné-prílohy" class="anchor"></a>
-        
-        
-      </h3>
-
-<ul>
-  <li>
-    <p>Yes. Images, videos, files, voice messages etc. can be sent using the <img style="vertical-align:middle; width:1.0em; margin:1px" src="../paperclip.png" alt="Paperclip" /> <strong>Attachment-</strong>
-or <img style="vertical-align:middle; width:0.8em; margin:1px" src="../mic.png" alt="Microphone" /> <strong>Voice Message</strong> buttons</p>
-  </li>
-  <li>
-    <p>For performance, images are optimized and sent at a smaller size by default, but you can send it as a “file” to preserve the original.</p>
-  </li>
-</ul>
     
       <h3 id="multiple-accounts">
         
@@ -261,16 +247,11 @@ or to <strong>Switch Profiles</strong>.</p>
         
       </h3>
 
-<ul>
-  <li>
-    <p>V nastaveniach si môžete pridať profilový obrázok. Ak napíšete svojim kontaktom
+<p>V nastaveniach si môžete pridať profilový obrázok. Ak napíšete svojim kontaktom
 alebo si ich pridáte pomocou QR kódu, automaticky to vidia ako váš profilový obrázok.</p>
-  </li>
-  <li>
-    <p>Z dôvodu ochrany osobných údajov nikto nevidí váš profilový obrázok, kým im nenapíšete
+
+<p>Z dôvodu ochrany osobných údajov nikto nevidí váš profilový obrázok, kým im nenapíšete
 správu.</p>
-  </li>
-</ul>
     
       <h3 id="signature">
         
@@ -304,7 +285,8 @@ they will see it when they view your contact details.</p>
   </li>
   <li>
     <p><strong>Archive chats</strong> if you do not want to see them in your chat list any longer.
-Archived chats remain accessible above the chat list or via search.</p>
+They remain accessible above the chat list or via search
+and are marked by <b style="border: 1px solid currentColor; padding: 0 3px; font-size:90%">Archived</b></p>
   </li>
   <li>
     <p>When an archived chat gets a new message, unless muted, it will <strong>pop out of the archive</strong> and back into your chat list.
@@ -339,7 +321,7 @@ By tapping <img style="vertical-align:middle; width:1.2em; margin:1px" src="../g
 you can go back to the original message in the original chat</p>
   </li>
   <li>
-    <p>Finally, you can also use “Save Messages” to take <strong>personal notes</strong> - open the chat, type something, add a photo or a voice message etc.</p>
+    <p>Finally, you can also use “Saved Messages” to take <strong>personal notes</strong> - open the chat, type something, add a photo or a voice message etc.</p>
   </li>
   <li>
     <p>As “Saved Message” are synced, they can become very handy for transferring data between devices</p>
@@ -376,22 +358,18 @@ and others will as well not always see that you are “online”.</p>
 <ul>
   <li>
     <p><strong>One tick</strong> <img style="vertical-align:middle; width:1.5em; margin:1px" src="../tick1.png" alt="" />
-means that the message was sent successfully to your provider.</p>
+means that the message was sent successfully to the <a href="#relays">relay</a>.</p>
   </li>
   <li>
     <p><strong>Two ticks</strong>  <img style="vertical-align:middle; width:1.5em; margin:1px" src="../tick2.png" alt="" />
-mean that at least one recipient’s device
-reported back to having received the message.</p>
-  </li>
-  <li>
-    <p>Recipients may have disabled read-receipts,
-so even if you see only one tick, the message may have been read.</p>
-  </li>
-  <li>
-    <p>The other way round, two ticks do not automatically mean
-that a human has read or understood the message ;)</p>
+indicate your contact has read the message.</p>
   </li>
 </ul>
+
+<p>In <a href="#groups">groups</a> the second tick means that at least one member has reported back having read the message.</p>
+
+<p>You will only get the second tick if both you and one of the recipients who read the message
+has <strong>Settings → Chats → Read Receipts</strong> enabled.</p>
     
       <h3 id="edit">
         
@@ -419,6 +397,32 @@ Notifications are not sent and there is no time limit.</p>
 
 <p>Note, that the original message may still be received by chat members
 who could have already replied, forwarded, saved, screenshotted or otherwise copied the message.</p>
+    
+      <h3 id="mediaquality">
+        
+        
+          How is media quality handled? <a href="#mediaquality" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>Images, videos, files, voice messages etc. can be sent using the <img style="vertical-align:middle; width:1.0em; margin:1px" src="../paperclip.png" alt="Paperclip" /> <strong>Attach-</strong>
+or <img style="vertical-align:middle; width:0.8em; margin:1px" src="../mic.png" alt="Microphone" /> <strong>Voice Message</strong> buttons.</p>
+
+<ul>
+  <li>
+    <p>By default, compression ensures <strong>fast, efficient delivery</strong> that respects everyone’s data limits and storage.
+This is ideal for everyday communication.</p>
+  </li>
+  <li>
+    <p>In regions with worse connectivity,
+you can choose higher compression at <strong>Settings → Chats → Outgoing Media Quality</strong>.</p>
+  </li>
+  <li>
+    <p>If you specifically need to send media in its <strong>original quality</strong>, use <img style="vertical-align:middle; width:1.0em; margin:1px" src="../paperclip.png" alt="Paperclip" /> <strong>Attach → File</strong> in the chat.
+Please use this method sparingly, as sending original files will significantly increase data usage for you and all recipients in the chat.</p>
+  </li>
+</ul>
     
       <h3 id="ephemeralmsgs">
         
@@ -456,19 +460,18 @@ the (anyway encrypted) messages may take longer to get deleted from their server
       <h3 id="delold">
         
         
-          What happens if I turn on “Delete old messages from device”? <a href="#delold" class="anchor"></a>
+          What happens if I turn on “Delete Messages from Device”? <a href="#delold" class="anchor"></a>
         
         
       </h3>
 
-<ul>
-  <li>If you want to save storage on your device, you can choose to delete old
-messages automatically.</li>
-  <li>To turn it on, go to “delete old messages from device” in the “Chats &amp; Media”
-settings. You can set a timeframe between “after an hour” and “after a year”;
+<p>If you want to save storage on your device, you can choose to delete old
+messages automatically.</p>
+
+<p>To turn it on, go to <strong>Settings → Chats → Delete Message from Device</strong>.
+You can set a timeframe between “after an hour” and “after a year”;
 this way, <em>all</em> messages will be deleted from your device as soon as they are
-older than that.</li>
-</ul>
+older than that.</p>
     
       <h3 id="remove-account">
         
@@ -516,9 +519,15 @@ and <a href="#edit">delete their own messages</a> from all member’s devices.</
       </h3>
 
 <ul>
-  <li>Vyberte <strong>Nový chat</strong> a potom <strong>Nová skupina</strong> z ponuky v pravom hornom rohu alebo stlačte príslušné tlačidlo v systéme Android/iOS.</li>
-  <li>Na nasledujúcej obrazovke vyberte <strong>členov skupiny</strong> a definujte <strong>názov skupiny</strong>. Môžete si tiež vybrať <strong>avatara skupiny</strong>.</li>
-  <li>Hneď ako napíšete <strong>prvú správu</strong> v skupine, všetci členovia sú informovaní o novej skupine a môžu odpovedať v skupine (pokiaľ nenapíšete správu v skupine, skupina je pre skupinu neviditeľná členovia).</li>
+  <li>
+    <p>Vyberte <strong>Nový chat</strong> a potom <strong>Nová skupina</strong> z ponuky v pravom hornom rohu alebo stlačte príslušné tlačidlo v systéme Android/iOS.</p>
+  </li>
+  <li>
+    <p>Na nasledujúcej obrazovke vyberte <strong>členov skupiny</strong> a definujte <strong>názov skupiny</strong>. Môžete si tiež vybrať <strong>avatara skupiny</strong>.</p>
+  </li>
+  <li>
+    <p>Hneď ako napíšete <strong>prvú správu</strong> v skupine, všetci členovia sú informovaní o novej skupine a môžu odpovedať v skupine (pokiaľ nenapíšete správu v skupine, skupina je pre skupinu neviditeľná členovia).</p>
+  </li>
 </ul>
     
       <h3 id="addmembers">
@@ -529,11 +538,10 @@ and <a href="#edit">delete their own messages</a> from all member’s devices.</
         
       </h3>
 
-<ul>
-  <li>
-    <p>All group members have the <strong>same rights</strong>.
+<p>All group members have the <strong>same rights</strong>.
 For this reason, everyone can delete any member or add new ones.</p>
-  </li>
+
+<ul>
   <li>
     <p>To <strong>add or delete members</strong>, tap the group name in the chat and select the member to add or remove.</p>
   </li>
@@ -561,10 +569,8 @@ However, since groups are <a href="#groups">meant for trusted people</a>, avoid 
         
       </h3>
 
-<ul>
-  <li>Keďže už nie ste členom skupiny, nemôžete sa znova pridať. 
-Žiadny problém, jednoducho požiadajte ktoréhokoľvek iného člena skupiny v bežnom chate, aby vás znova pridal.</li>
-</ul>
+<p>Keďže už nie ste členom skupiny, nemôžete sa znova pridať. 
+  Žiadny problém, jednoducho požiadajte ktoréhokoľvek iného člena skupiny v bežnom chate, aby vás znova pridal.</p>
     
       <h3 id="už-viac-nechcem-dostávať-správy-od-skupiny">
         
@@ -575,15 +581,12 @@ However, since groups are <a href="#groups">meant for trusted people</a>, avoid 
       </h3>
 
 <ul>
-  <li>
-    <p>Vymažte sa zo zoznamu členov alebo odstráňte celý chat.
- Ak sa chcete neskôr znova pripojiť k skupine, požiadajte iného člena skupiny, aby vás znova pridal.</p>
-  </li>
-  <li>
-    <p>Ako alternatívu môžete tiež “Stlmiť” skupinu - znamená to, že budete dostávať všetky správy a
-môžete stále písať, ale už nebudete upozorňovaní na žiadne nové správy.</p>
-  </li>
+  <li>Vymažte sa zo zoznamu členov alebo odstráňte celý chat.
+ Ak sa chcete neskôr znova pripojiť k skupine, požiadajte iného člena skupiny, aby vás znova pridal.</li>
 </ul>
+
+<p>Ako alternatívu môžete tiež “Stlmiť” skupinu - znamená to, že budete dostávať všetky správy a
+môžete stále písať, ale už nebudete upozorňovaní na žiadne nové správy.</p>
     
       <h3 id="cloning-a-group">
         
@@ -608,6 +611,21 @@ or right-click the group in the chat list (Desktop).</p>
 
 <p>The new group is <strong>fully independent</strong> from the original,
 which continues to work as before.</p>
+    
+      <h3 id="how-many-members-can-participate-in-a-single-group">
+        
+        
+          How many members can participate in a single group? <a href="#how-many-members-can-participate-in-a-single-group" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>There is no strict technical limit,
+but more than 150 is not recommended.</p>
+
+<p>As groups get larger, they can become socially unstable and may need a hierarchy -
+where Delta Chat is a private messenger for chatting with <a href="#groups">equal rights</a>.
+See <a href="https://en.wikipedia.org/wiki/Dunbar%27s_number">Dunbar’s number</a> for more insights.</p>
     
       <h2 id="webxdc">
         
@@ -897,7 +915,7 @@ One device is not needed for the other to work.</p>
     <p>Double-check both devices are in the <strong>same Wi-Fi or network</strong></p>
   </li>
   <li>
-    <p>On <strong>Windows</strong>, go to <strong>Control Panel / Network and Internet</strong>
+    <p>On <strong>Windows</strong>, go to “Control Panel / Network and Internet”
 and make sure, <strong>Private Network</strong> is selected as “Network profile type”
 (after transfer, you can change back to the original value)</p>
   </li>
@@ -949,22 +967,21 @@ try the <strong>manual transfer</strong> described below</p>
 <p>This method is only recommended if “Add Second Device” as described above does not work.</p>
 
 <ul>
-  <li>On the old device, go to “Settings -&gt; Chats and media -&gt; Export Backup”. Enter your
+  <li>
+    <p>On the old device, go to <strong>Settings → Chats → Export Backup</strong>. Enter your
 screen unlock PIN, pattern, or password. Then you can click on “Start
 Backup”. This saves the backup file to your device. Now you have to transfer
-it to the other device somehow.</li>
-  <li>On the new device, in the “I already have a profile” menu,
-choose “restore from backup”. After import, your conversations, encryption
-keys, and media should be copied to the new device.
-    <ul>
-      <li><strong>If you use iOS:</strong> and you encounter difficulties, maybe
-<a href="https://support.delta.chat/t/import-backup-to-ios/1628">this guide</a> will
-help you.</li>
-    </ul>
+it to the other device somehow.</p>
   </li>
-  <li>You are now synchronized, and can use both devices for sending and receiving
-end-to-end encrypted messages with your communication partners.</li>
+  <li>
+    <p>On the new device, select <strong>I Already Have a Profile → Restore from Backup</strong>.
+If you use iOS and encounter difficulties,
+<a href="https://support.delta.chat/t/import-backup-to-ios/1628">this guide</a> might help you.</p>
+  </li>
 </ul>
+
+<p>You are now synchronized, and can use both devices for sending and receiving
+end-to-end encrypted messages with your communication partners.</p>
     
       <h3 id="máte-nejaké-plány-na-zavedenie-webového-klienta-delta-chat">
         
@@ -993,10 +1010,10 @@ alebo AppImage pre Linux. Nájdete ich na
         
       </h2>
     
-      <h3 id="experimental-features">
+      <h3 id="experiments">
         
         
-          Experimental Features <a href="#experimental-features" class="anchor"></a>
+          Experimental Features <a href="#experiments" class="anchor"></a>
         
         
       </h3>
@@ -1009,33 +1026,48 @@ you can try out features we are working on.</p>
 <p>You can find more information
 and give feedback in the <a href="https://support.delta.chat">Forum</a>.</p>
     
-      <h3 id="statssending">
+      <h3 id="relays">
         
         
-          What is “Send statistics to Delta Chat’s developers”? <a href="#statssending" class="anchor"></a>
+          What are Relays? <a href="#relays" class="anchor"></a>
         
         
       </h3>
 
-<p>We would like to improve Delta Chat with your help,
-which is why Delta Chat for Android asks whether you want
-to send anonymous usage statistics.</p>
+<p>Relays are used to temporarily hold messages in case your device is offline.
+Relays are cheap and dumb servers,
+that do not store data as group states, your name or avatar -
+all that exist only on your device.
+Relays are operated by different groups and people.</p>
 
-<p>You can turn it on and off at
-<strong>Settings → Advanced → Send statistics to Delta Chat’s developers</strong>.</p>
-
-<p>When you turn it on,
-weekly statistics will be automatically sent to a bot.</p>
-
-<p>We are interested e.g. in statistics like:</p>
+<p>By default, after installation, a relay is <strong>automatically set up</strong>,
+so you do not need to care about that.
+However, if you want to,
+you can configure relays at <strong>Settings → Advanced → Relays</strong>:</p>
 
 <ul>
-  <li>How many contacts are introduced by personally scanning a QR code?</li>
-  <li>Which versions of Delta Chat are being used?</li>
-  <li>How many messages are unencrypted?</li>
+  <li>
+    <p>You can <strong>add</strong> a relay by scanning its QR code;
+<a href="https://chatmail.at/relays">chatmail.at/relays</a> shows some known ones.
+If you have multiple relays, you will receive messages on all of them.
+Contacts learn your current relays automatically when you message them.</p>
+  </li>
+  <li>
+    <p>Tap on a relay to set it as <strong>used for sending</strong>.</p>
+  </li>
+  <li>
+    <p>If you <strong>remove</strong> a relay,
+contacts who only know this relay may not reach you until you message them again.
+To stay reachable in the meantime, choose <strong>Hide from Contacts</strong> in the confirmation dialog
+instead of removing it right away.</p>
+  </li>
+  <li>
+    <p>To <strong>show</strong> a hidden relay again, tap on it.</p>
+  </li>
 </ul>
 
-<p>We will <em>not</em> collect any personally identifiable information about you.</p>
+<p>For more details and future possibilities of relays,
+you can follow discussions in the <a href="https://support.delta.chat">Forum</a>.</p>
     
       <h3 id="can-i-use-a-classic-email-address-with-delta-chat">
         
@@ -1102,6 +1134,40 @@ except if your users’ devices require Google/Apple <a href="#instant-delivery"
 and <a href="https://github.com/chatmail/core">core Rust developments</a> 
 that power <a href="https://chatmail.at/clients">chatmail clients</a> of which Delta Chat is the most well known.</p>
     
+      <h3 id="statssending">
+        
+        
+          What is “Send statistics to Delta Chat’s developers”? <a href="#statssending" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>We would like to improve Delta Chat with your help,
+which is why Delta Chat for Android asks whether you want
+to send anonymous usage statistics.</p>
+
+<p>You can turn it on and off at
+<strong>Settings → Advanced → Send statistics to Delta Chat’s developers</strong>.</p>
+
+<p>When you turn it on,
+weekly statistics will be automatically sent to a bot.</p>
+
+<p>We are interested e.g. in statistics like:</p>
+
+<ul>
+  <li>
+    <p>How many contacts are introduced by personally scanning a QR code?</p>
+  </li>
+  <li>
+    <p>Which versions of Delta Chat are being used?</p>
+  </li>
+  <li>
+    <p>What errors occur for users?</p>
+  </li>
+</ul>
+
+<p>We will <em>not</em> collect any personally identifiable information about you.</p>
+    
       <h3 id="zaujímajú-ma-technické-detaily-môžete-mi-povedať-viac">
         
         
@@ -1110,9 +1176,7 @@ that power <a href="https://chatmail.at/clients">chatmail clients</a> of which D
         
       </h3>
 
-<ul>
-  <li>Pozrite si <a href="https://github.com/chatmail/core/blob/main/standards.md#standards-used-in-delta-chat">Štandardy používané v Delta Chate</a>.</li>
-</ul>
+<p>Pozrite si <a href="https://github.com/chatmail/core/blob/main/standards.md#standards-used-in-delta-chat">Štandardy používané v Delta Chate</a>.</p>
     
       <h2 id="e2ee">
         
@@ -1141,6 +1205,10 @@ to exchange encryption setup information through QR-code scanning or “invite l
   <li>
     <p><a href="https://autocrypt.org">Autocrypt</a> is used for automatically
 establishing end-to-end encryption between contacts and all members of a group chat.</p>
+  </li>
+  <li>
+    <p><a href="https://autocrypt2.org">Autocrypt v2</a>, scheduled for full implementation in 2026, 
+will bring post-quantum resistant encryption and forward secrecy.</p>
   </li>
   <li>
     <p><a href="https://github.com/chatmail/core/blob/main/spec.md#attaching-a-contact-to-a-message">Sharing a contact to a
@@ -1325,11 +1393,9 @@ Instead, all group metadata is end-to-end encrypted and stored on end-user devic
 <p>Servers can therefore only see:</p>
 
 <ul>
-  <li>the sender and receiver addresses</li>
-  <li>and the message size.</li>
+  <li>Sender and receiver addresses, randomly generated by default</li>
+  <li>Message size</li>
 </ul>
-
-<p>By default, the addresses are randomly generated.</p>
 
 <p>All other message, contact and group metadata resides in the end-to-end encrypted part of messages.</p>
     
@@ -1350,6 +1416,32 @@ so you can easily use situation-specific profiles next to your “main” profil
 with the knowledge that all their data, along with all metadata, will be deleted.
 Moreover, if a device is seized then chat contacts using short-lived profiles
 can not be identified easily.</p>
+    
+      <h3 id="who-sees-my-ip-address">
+        
+        
+          Who sees my IP Address? <a href="#who-sees-my-ip-address" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>The used <a href="#relays">relay</a> needs to know your IP Address,
+as well as sometimes your contact’s devices if you have a <a href="#experiments">call</a>
+or use <a href="#webxdc">apps</a> together.</p>
+
+<p>IP Addresses are needed for connectivity and efficiency.
+They are neither persisted nor exposed.
+Note that the IP Address
+is not like a detailed address you give to a delivery service,
+but much more coarse, often defining region or country only.</p>
+
+<p>As this is just how the internet and other messengers work by default,
+we do not offer options here or ask upfront questions.</p>
+
+<p>If you see your IP Address as a security or privacy risk,
+we recommend to use a VPN, in combination with system lockdown mode.
+Hunting down options in all apps on your system will leave gaps.
+For example, tapping a link exposes IP Addresses to unknown parties and is the by far larger risk here.</p>
     
       <h3 id="sealedsender">
         
@@ -1380,7 +1472,7 @@ but an implementation has not been agreed as a priority yet.</p>
         
       </h3>
 
-<p>No, not yet.</p>
+<p>Not yet, but it’s coming with <a href="https://autocrypt2.org">Autocrypt v2</a>.</p>
 
 <p>Delta Chat today doesn’t support Perfect Forward Secrecy (PFS).
 This means that if your private decryption key is leaked,
@@ -1391,12 +1483,9 @@ Otherwise, someone obtaining your decryption keys
 is typically also able to get all your non-deleted messages
 and doesn’t even need to decrypt any previously collected messages.</p>
 
-<p>We designed a Forward Secrecy approach that withstood 
-initial examination from some cryptographers and implementation experts 
-but is pending a more formal write up 
-to ascertain it reliably works in federated messaging and with multi-device usage,
-before it could be implemented in <a href="https://github.com/chatmail/core">chatmail core</a>,
-which would make it available in all <a href="https://chatmail.at/clients">chatmail clients</a>.</p>
+<p><a href="https://autocrypt2.org">Autocrypt v2</a>, scheduled for full implementation in 2026,
+will provide reliable deletion (forward secrecy) through automatic key rotation.
+This approach is specified in the <a href="https://datatracker.ietf.org/doc/draft-autocrypt-openpgp-v2-cert/">Autocrypt v2 OpenPGP Certificates</a> draft.</p>
     
       <h3 id="pqc">
         
@@ -1406,12 +1495,13 @@ which would make it available in all <a href="https://chatmail.at/clients">chatm
         
       </h3>
 
-<p>No, not yet.</p>
+<p>Not yet, but it’s coming with <a href="https://autocrypt2.org">Autocrypt v2</a>.</p>
 
-<p>Delta Chat uses the Rust OpenPGP library <a href="https://github.com/rpgp/rpgp">rPGP</a>
-which supports the latest <a href="https://datatracker.ietf.org/doc/draft-ietf-openpgp-pqc/">IETF Post-Quantum-Cryptography OpenPGP draft</a>. 
-We aim to add PQC support in <a href="https://github.com/chatmail/core">chatmail core</a>  after the draft is finalized at the IETF
-in collaboration with other OpenPGP implementers.</p>
+<p><a href="https://autocrypt2.org">Autocrypt v2</a>, scheduled for full implementation in 2026,
+will bring post-quantum resistant encryption to protect against quantum computer attacks.
+Delta Chat uses the Rust OpenPGP library <a href="https://github.com/rpgp/rpgp">rPGP</a>
+which supports the latest <a href="https://datatracker.ietf.org/doc/draft-ietf-openpgp-pqc/">IETF Post-Quantum-Cryptography OpenPGP draft</a>.
+The implementation is specified in the <a href="https://datatracker.ietf.org/doc/draft-autocrypt-openpgp-v2-cert/">Autocrypt v2 OpenPGP Certificates</a> draft.</p>
     
       <h3 id="how-can-i-manually-check-encryption-information">
         
@@ -1590,52 +1680,38 @@ ordered chronologically:</p>
 
 <ul>
   <li>
-    <p>The <a href="https://nextleap.eu">NEXTLEAP</a> EU project funded the research
-and implementation of verified groups and setup contact protocols
-in 2017 and 2018 and also helped to integrate end-to-end Encryption
-through <a href="https://autocrypt.org">Autocrypt</a>.</p>
-  </li>
-  <li>
-    <p>The <a href="https://opentechfund.org">Open Technology Fund</a> gave us a 
-first 2018/2019 grant (~$200K) during which we majorly improved the Android app 
-and released a first Desktop app beta version, and which moreover 
-moored our feature developments in UX research in human rights contexts, 
-see our concluding <a href="https://delta.chat/en/2019-07-19-uxreport">Needfinding and UX report</a>.
-The second 2019/2020 grant (~$300K) helped us to 
-release Delta/iOS versions, to convert our core library to Rust, and
-to provide new features for all platforms.</p>
-  </li>
-  <li>
-    <p>The <a href="https://nlnet.nl/">NLnet foundation</a> granted in 2019/2020 EUR 46K for
-completing Rust/Python bindings and instigating a Chat-bot eco-system.</p>
+    <p>In 2023 and 2024 we got accepted in the Next Generation Internet (NGI)
+program for our work in <a href="https://nlnet.nl/project/WebXDC-Push/">webxdc PUSH</a>,
+along with collaboration partners working on
+<a href="https://nlnet.nl/project/Webxdc-Evolve/">webxdc evolve</a>,
+<a href="https://nlnet.nl/project/WebXDC-XMPP/">webxdc XMPP</a>,
+<a href="https://nlnet.nl/project/DeltaTouch/">DeltaTouch</a> and
+<a href="https://nlnet.nl/project/DeltaTauri/">DeltaTauri</a>.
+All of these projects are partially completed or to be completed in early 2025.</p>
   </li>
   <li>
     <p>In 2021 we received further EU funding for two Next-Generation-Internet
 proposals, namely for <a href="https://dapsi.ngi.eu/hall-of-fame/eppd/">EPPD - email provider portability directory</a> (~97K EUR) and <a href="https://nlnet.nl/project/EmailPorting/">AEAP - email address porting</a> (~90K EUR) which resulted in better multi-profile support, improved QR-code contact and group setups and many networking improvements on all platforms.</p>
   </li>
   <li>
-    <p>From End 2021 till March 2023 we received <em>Internet Freedom</em> funding (500K USD) from the
-U.S. Bureau of Democracy, Human Rights and Labor (DRL). 
-This funding supported our long-running goals to make Delta Chat more usable 
-and compatible with a wide range of email servers world-wide, and more resilient and secure
-in places often affected by internet censorship and shutdowns.</p>
+    <p>The <a href="https://nlnet.nl/">NLnet foundation</a> granted in 2019/2020 EUR 46K for
+completing Rust/Python bindings and instigating a Chat-bot eco-system.</p>
   </li>
   <li>
-    <p>2023-2024 we successfully completed the OTF-funded 
-<a href="https://www.opentech.fund/projects-we-support/supported-projects/secure-chat-mail-with-delta-chat/">Secure Chatmail project</a>, 
-allowing us to introduce guaranteed encryption, 
-creating a <a href="https://delta.chat/chatmail">chatmail server network</a> 
-and providing “instant onboarding” in all apps released from April 2024 on.</p>
+    <p>The <a href="https://opentechfund.org">Open Technology Fund</a> gave us a
+first 2018/2019 grant (~$200K) during which we majorly improved the Android app
+and released a first Desktop app beta version, and which moreover
+moored our feature developments in UX research in human rights contexts,
+see our concluding <a href="https://delta.chat/en/2019-07-19-uxreport">Needfinding and UX report</a>.
+The second 2019/2020 grant (~$300K) helped us to
+release Delta/iOS versions, to convert our core library to Rust, and
+to provide new features for all platforms.</p>
   </li>
   <li>
-    <p>In 2023 and 2024 we got accepted in the Next Generation Internet (NGI)
-program for our work in <a href="https://nlnet.nl/project/WebXDC-Push/">webxdc PUSH</a>,
-along with collaboration partners working on 
-<a href="https://nlnet.nl/project/Webxdc-Evolve/">webxdc evolve</a>, 
-<a href="https://nlnet.nl/project/WebXDC-XMPP/">webxdc XMPP</a>, 
-<a href="https://nlnet.nl/project/DeltaTouch/">DeltaTouch</a> and 
-<a href="https://nlnet.nl/project/DeltaTauri/">DeltaTauri</a>. 
-All of these projects are partially completed or to be completed in early 2025.</p>
+    <p>The <a href="https://nextleap.eu">NEXTLEAP</a> EU project funded the research
+and implementation of verified groups and setup contact protocols
+in 2017 and 2018 and also helped to integrate end-to-end Encryption
+through <a href="https://autocrypt.org">Autocrypt</a>.</p>
   </li>
   <li>
     <p>Sometimes we receive one-time donations from private individuals. 
