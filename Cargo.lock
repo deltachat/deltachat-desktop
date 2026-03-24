@@ -1875,8 +1875,8 @@ dependencies = [
 
 [[package]]
 name = "deltachat"
-version = "2.46.0"
-source = "git+https://github.com/chatmail/core?tag=v2.46.0#191e6c2821b0a420e93cbec911a50accbfcd87e1"
+version = "2.47.0"
+source = "git+https://github.com/chatmail/core?tag=v2.47.0#8528184fa31725fcf0c14b7460c79d9f672a0396"
 dependencies = [
  "anyhow",
  "astral-tokio-tar",
@@ -1959,7 +1959,7 @@ dependencies = [
 [[package]]
 name = "deltachat-contact-tools"
 version = "0.0.0"
-source = "git+https://github.com/chatmail/core?tag=v2.46.0#191e6c2821b0a420e93cbec911a50accbfcd87e1"
+source = "git+https://github.com/chatmail/core?tag=v2.47.0#8528184fa31725fcf0c14b7460c79d9f672a0396"
 dependencies = [
  "anyhow",
  "chrono",
@@ -1969,8 +1969,8 @@ dependencies = [
 
 [[package]]
 name = "deltachat-jsonrpc"
-version = "2.46.0"
-source = "git+https://github.com/chatmail/core?tag=v2.46.0#191e6c2821b0a420e93cbec911a50accbfcd87e1"
+version = "2.47.0"
+source = "git+https://github.com/chatmail/core?tag=v2.47.0#8528184fa31725fcf0c14b7460c79d9f672a0396"
 dependencies = [
  "anyhow",
  "async-channel 2.5.0",
@@ -2039,12 +2039,12 @@ dependencies = [
 [[package]]
 name = "deltachat-time"
 version = "1.0.0"
-source = "git+https://github.com/chatmail/core?tag=v2.46.0#191e6c2821b0a420e93cbec911a50accbfcd87e1"
+source = "git+https://github.com/chatmail/core?tag=v2.47.0#8528184fa31725fcf0c14b7460c79d9f672a0396"
 
 [[package]]
 name = "deltachat_derive"
 version = "2.0.0"
-source = "git+https://github.com/chatmail/core?tag=v2.46.0#191e6c2821b0a420e93cbec911a50accbfcd87e1"
+source = "git+https://github.com/chatmail/core?tag=v2.47.0#8528184fa31725fcf0c14b7460c79d9f672a0396"
 dependencies = [
  "quote",
  "syn 2.0.111",
@@ -2976,7 +2976,7 @@ dependencies = [
 [[package]]
 name = "format-flowed"
 version = "1.0.0"
-source = "git+https://github.com/chatmail/core?tag=v2.46.0#191e6c2821b0a420e93cbec911a50accbfcd87e1"
+source = "git+https://github.com/chatmail/core?tag=v2.47.0#8528184fa31725fcf0c14b7460c79d9f672a0396"
 
 [[package]]
 name = "fsevent-sys"
@@ -7279,7 +7279,7 @@ dependencies = [
 [[package]]
 name = "ratelimit"
 version = "1.0.0"
-source = "git+https://github.com/chatmail/core?tag=v2.46.0#191e6c2821b0a420e93cbec911a50accbfcd87e1"
+source = "git+https://github.com/chatmail/core?tag=v2.47.0#8528184fa31725fcf0c14b7460c79d9f672a0396"
 
 [[package]]
 name = "rav1e"
@@ -7906,9 +7906,9 @@ checksum = "94143f37725109f92c262ed2cf5e59bce7498c01bcc1502d7b9afe439a4e9f49"
 
 [[package]]
 name = "sdp"
-version = "0.10.0"
+version = "0.17.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "32c374dceda16965d541c8800ce9cc4e1c14acfd661ddf7952feeedc3411e5c6"
+checksum = "22c3b0257608d7de4de4c4ea650ccc2e6e3e45e3cd80039fcdee768bcb449253"
 dependencies = [
  "rand 0.9.2",
  "substring",
