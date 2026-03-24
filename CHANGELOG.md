@@ -18,35 +18,38 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
+- Remove notification when its message gets read or deleted
+- Make "mentions" setting per-account.
+  Unfortunately this means that if you disabled "mentions",
+  they are again enabled on all your accounts.
+  You can change that in Settings -> Notifications.
 - Extraneous padding on full screen image view
-- A little better drag regions
-- `canOutsideClickClose=false` for "New Group"
-- Do not resize images based on wrong values
-- Don't modifiy image if user didn't change it
-- Allow transparent background for png avatars
-- WebXDC: remove wrapper `<iframe>`
-- Mobile: more reactions picker getting closed
-- Remove notification when its message deleted
-- Prevent WebXDCs from spamming "Open link?"
+- Don't close "New Group" dialog on outside click, losing progress
+- Better group / channel / profile avatar editor
+  - better image quality
+  - remove maximum zoom limit to allow zooming in on small images
+  - a little better UI
+
+- WebXDC: remove wrapper `<iframe>`:
+  no need for app developers to hack around
+  `visibilitychange` and `beforeunload`.
+- Mobile: fix reactions picker getting closed on keyboard open
 - Scroll to new messages if appropriate
-- Voice message not being shown as playing
-- Don't keep global player after non-voice end
-- Align "recent apps" vertically
-- Do not cover video controls ([#6096](https://github.com/deltachat/deltachat-desktop/issues/6096))
+  (some messages didn't cause a scroll previously)
+- Do not cover video controls with message sent date ([#6096](https://github.com/deltachat/deltachat-desktop/issues/6096))
 - Do not crop stickers ([#6069](https://github.com/deltachat/deltachat-desktop/issues/6069))
-- Make more text selectable
-- Fix overflow in delete account dialog ([#6070](https://github.com/deltachat/deltachat-desktop/issues/6070))
-- Make "mentions" setting per-account
-- User specific tmp dir if needed ([#6124](https://github.com/deltachat/deltachat-desktop/issues/6124))
-- Remove notifs of read chats
+- Make more text selectable, such as in the "Encryption info" dialog
+- Fix text overflow in delete account dialog ([#6070](https://github.com/deltachat/deltachat-desktop/issues/6070))
+- Fix some functionality not working
+  when multiple users use Delta Chat on the same machine,
+  due only one being the temp folder owner ([#6124](https://github.com/deltachat/deltachat-desktop/issues/6124))
 - Fix various UI issues
-- keep container at fixed 450×450px size regardless of source image dimensions
-- remove maximum zoom limit to allow zooming in on small images
 - Bigger QR Code for Add second device ([#6085](https://github.com/deltachat/deltachat-desktop/issues/6085))
 
 ### Build system
-- Upgrade core 2.47.0
+- Upgrade core from 2.43.0 to [2.47.0](https://github.com/chatmail/core/blob/main/CHANGELOG.md#2470---2026-03-24)
 - Upgrade Electron to 41
+  - fix pointer lock in some mini-app games
 
 
 <a id="2_43_0"></a>
