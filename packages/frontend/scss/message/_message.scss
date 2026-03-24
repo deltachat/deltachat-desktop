@@ -332,15 +332,10 @@ $info-text-max-width: 400px;
   }
 }
 
-.message.outgoing.video-only,
-.message.incoming.video-only {
+.message.video-only {
   .msg-container {
     /* make the whole container black, as videos always have a black background */
     background-color: #000;
-    .message-attachment-media {
-      /* nneeded to avoid metadata video controls overlap */
-      padding-bottom: 12px;
-    }
   }
 }
 

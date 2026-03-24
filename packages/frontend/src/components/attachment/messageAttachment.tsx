@@ -177,6 +177,7 @@ export default function Attachment({
       <div
         className={classNames(
           'message-attachment-media',
+          'video',
           withCaption ? 'content-below' : null
         )}
       >
