@@ -7,20 +7,14 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- Add global audio player UI
-- When playing voice message, pause other ones
-- Play next voice message after finishing one
-- Add autostart functionality ([#6076](https://github.com/deltachat/deltachat-desktop/issues/6076))
+- Add autostart functionality (off by default, Settings -> Advanced -> Autostart) ([#6076](https://github.com/deltachat/deltachat-desktop/issues/6076))
 - Add channel/group descriptions ([#6026](https://github.com/deltachat/deltachat-desktop/issues/6026))
-- WebXDC: "Open link?" dialog for HTTP links
-- Add "Show in chat" menu for "recent apps"
+- Mini-apps (WebXDC): you can now click on links
+- Better voice message playback: global player UI
 - Add "Who can call me" setting
-- Click on call message to open call window
-- Add hint to "Media Quality" settings dialog
-- Bigger QR Code for Add second device ([#6085](https://github.com/deltachat/deltachat-desktop/issues/6085))
-- Show view count on own channel posts
-- Unpublish transport ([#6137](https://github.com/deltachat/deltachat-desktop/issues/6137))
-- Show transport hint ([#6143](https://github.com/deltachat/deltachat-desktop/issues/6143))
+  - Click on a call message to open call window if "who can call me" is disabled for this caller
+- View count in channels (visible only to channel owner)
+- Add "Unpublish a transport" feature (Advanced) ([#6137](https://github.com/deltachat/deltachat-desktop/issues/6137))
 
 ### Fixed
 
@@ -48,6 +42,7 @@ All notable changes to this project will be documented in this file.
 - Fix various UI issues
 - keep container at fixed 450×450px size regardless of source image dimensions
 - remove maximum zoom limit to allow zooming in on small images
+- Bigger QR Code for Add second device ([#6085](https://github.com/deltachat/deltachat-desktop/issues/6085))
 
 ### Build system
 - Upgrade core 2.47.0
