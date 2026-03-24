@@ -78,8 +78,9 @@ We use SCSS to create themes, because it allows us to save work by using its col
 4. compile the theme to CSS in watch mode.
 
 ```sh
+# General:
 pnpm sass --watch path/to/Deltachat/config/folder/custom-themes/my_theme.scss path/to/Deltachat/config/folder/custom-themes/my_theme.css -I packages/frontend/themes/ --no-source-map
-# for linux
+# For Linux:
 pnpm sass --watch ~/.config/DeltaChat/custom-themes/my_theme.scss ~/.config/DeltaChat/custom-themes/my_theme.css -I packages/frontend/themes/ --no-source-map
 ```
 
@@ -100,7 +101,7 @@ Read the comments in the theme files for additional information.
 
 ### **Method B** - Without cloning the whole deltachat desktop
 
-0. install the sass compiler via `npm i -g sass` (if it says that npm was not found, then you need to install nodejs first)
+0. install the sass compiler via `npm i -g sass` (if it says that npm was not found, then you need to install nodejs first. Alternatively you can install the package `dart-sass` from your software repository if available)
 
 1. Download all files starting with `_` from https://github.com/deltachat/deltachat-desktop/tree/main/packages/frontend/themes and put them in a `./themes/` folder in your working directory (or alternatively download the folder to your working directory).
 
@@ -109,12 +110,13 @@ Read the comments in the theme files for additional information.
 3. compile the theme to CSS in watch mode.
 
 ```sh
-sass -w path/to/Deltachat/config/folder/custom-themes/my_theme.scss path/to/Deltachat/config/folder/custom-themes/my_theme.css --include-path path/to/deltachat-desktop-git-folder/themes/
-# for linux:
-sass -w ~/.config/DeltaChat/custom-themes/my_theme.scss ~/.config/DeltaChat/custom-themes/my_theme.css --include-path themes/
+# General:
+sass -w path/to/Deltachat/config/folder/custom-themes/my_theme.scss path/to/Deltachat/config/folder/custom-themes/my_theme.css --load-path path/to/deltachat-desktop-git-folder/themes/
+# For Linux:
+sass -w ~/.config/DeltaChat/custom-themes/my_theme.scss ~/.config/DeltaChat/custom-themes/my_theme.css --load-path themes/
 ```
 
-> Note: you have to set `--include-path` to the theme folder you created or downloaded earlier in step 1.
+> Note: you have to set `--load-path` to the theme folder you created or downloaded earlier in step 1.
 
 4. open a new terminal window/tab
 
