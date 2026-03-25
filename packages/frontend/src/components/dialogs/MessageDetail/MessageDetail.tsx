@@ -11,6 +11,7 @@ import { BasicMessageInfo } from './BasicMessageInfo'
 import type { T } from '@deltachat/jsonrpc-client'
 import { ContextMenuContext } from '../../../contexts/ContextMenuContext'
 import { mouseEventToPosition } from '../../../utils/mouseEventToPosition'
+import styles from './styles.module.scss'
 
 function TechnicalMessageInfoDialog({
   messageId,
@@ -60,8 +61,7 @@ function MessageInfo({
   }, [messageId])
 
   return (
-    <div className='module-message-detail'>
-      <br />
+    <>
       {message && content && (
         <BasicMessageInfo
           message={message}
@@ -70,7 +70,7 @@ function MessageInfo({
           onClose={onClose}
         />
       )}
-    </div>
+    </>
   )
 }
 
@@ -114,6 +114,7 @@ export default function MessageDetail(
   return (
     <Dialog onClose={onClose}>
       <DialogHeader
+        className={styles.dialogHeader}
         title={tx('menu_message_details')}
         onClose={onClose}
         onContextMenuClick={isOpen ? onContextMenuClick : undefined}
