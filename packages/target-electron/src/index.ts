@@ -142,7 +142,7 @@ import {
   WEBXDC_PARTITION_PREFIX,
   webxdcStartUpCleanup,
 } from './deltachat/webxdc.js'
-import { openExternalHttpOrPromptToCopy } from './deltachat/link-clicks.js'
+import { openExternalWhitelistedOrPromptToCopy } from './deltachat/link-clicks.js'
 import {
   cleanupDraftTempDir,
   cleanupInternalTempDirs,
@@ -418,7 +418,7 @@ app.on('web-contents-created', (_ev, contents) => {
           break
         }
         case 2: {
-          await openExternalHttpOrPromptToCopy(win, url)
+          await openExternalWhitelistedOrPromptToCopy(win, url)
           break
         }
         default: {
