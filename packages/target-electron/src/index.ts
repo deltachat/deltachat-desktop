@@ -147,7 +147,7 @@ import {
   cleanupDraftTempDir,
   cleanupInternalTempDirs,
 } from './cleanup_temp_dir.js'
-import { isInviteLink } from '@deltachat-desktop/shared/util.js'
+import { shouldHandleLinkInMainApp } from '@deltachat-desktop/shared/util.js'
 
 app.ipcReady = false
 app.isQuitting = false
@@ -316,11 +316,7 @@ app.on('web-contents-created', (_ev, contents) => {
     let preventOpeningLinkClickDialogs = false
 
     const webxdcOpenUrl = async (url: string) => {
-      if (
-        url.startsWith('mailto:') ||
-        url.startsWith('openpgp4fpr:') ||
-        isInviteLink(url)
-      ) {
+      if (shouldHandleLinkInMainApp(url)) {
         // handle mailto in dc, without any prompt.
         // Note that such links can also lead to exfiltration,
         // however this has been regarded as acceptable,
