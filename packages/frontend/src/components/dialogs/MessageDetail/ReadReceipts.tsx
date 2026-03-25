@@ -9,26 +9,143 @@ import moment from 'moment'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import { useRpcFetch } from '../../../hooks/useFetch'
 import { unknownErrorToString } from '../../helpers/unknownErrorToString'
-type ReadReceiptsListProps = { messageId: number }
 
-export function ReadReceiptsList(props: ReadReceiptsListProps) {
-  const tx = useTranslationFunction()
+function useMessageReadReceipts(messageId: number) {
   const accountId = selectedAccountId()
-
   const receiptsFetch = useRpcFetch(BackendRemote.rpc.getMessageReadReceipts, [
     accountId,
-    props.messageId,
+    messageId,
   ])
   const refresh = receiptsFetch.refresh
+
   useEffect(
     () =>
       onDCEvent(accountId, 'MsgRead', ({ msgId }) => {
-        if (msgId === props.messageId) {
+        if (msgId === messageId) {
           refresh()
         }
       }),
-    [accountId, props.messageId, refresh]
+    [accountId, messageId, refresh]
   )
+
+  return receiptsFetch
+}
+
+type ReadReceiptsListProps = { messageId: number }
+
+type FormattedMessageInfoProps = {
+  message: T.Message
+  info: string
+  messageId: number
+}
+
+export function FormattedMessageInfo(props: FormattedMessageInfoProps) {
+  const { message } = props
+  const _tx = useTranslationFunction()
+  const receiptsFetch = useMessageReadReceipts(props.messageId)
+
+  const receipts = receiptsFetch.lingeringResult?.ok
+    ? receiptsFetch.lingeringResult.value
+    : []
+
+  // Format sent timestamp
+  const sentTimestamp = moment(message.timestamp * 1000)
+  const sentFormatted = sentTimestamp.format('L LT')
+
+  // Format received timestamp
+  const receivedTimestamp = message.receivedTimestamp
+    ? moment(message.receivedTimestamp * 1000)
+    : null
+  const receivedFormatted = receivedTimestamp
+    ? receivedTimestamp.format('L LT')
+    : null
+
+  return (
+    <div className={styles.formattedMessageInfo}>
+      <div className={styles.infoRow}>
+        <span className={styles.infoLabel}>
+          {_tx('message_detail_sent_desktop')}
+        </span>
+        <span className={styles.infoValue}>{sentFormatted}</span>
+      </div>
+      {receivedFormatted && (
+        <div className={styles.infoRow}>
+          <span className={styles.infoLabel}>
+            {_tx('message_detail_received_desktop')}
+          </span>
+          <span className={styles.infoValue}>{receivedFormatted}</span>
+        </div>
+      )}
+      {receipts.length > 0 && (
+        <>
+          <div className={styles.infoRow}>
+            <div className={styles.readByHeader}>
+              <span className={styles.doubleCheckmarkIcon}></span>
+              <strong>{_tx('read_by')}</strong>
+            </div>
+          </div>
+          {receipts
+            .filter(
+              (
+                receipt: T.MessageReadReceipt
+              ): receipt is T.MessageReadReceipt =>
+                receipt.timestamp !== undefined
+            )
+            .map((receipt: T.MessageReadReceipt, index: number) => (
+              <ReadReceiptFormatted
+                key={receipt.contactId}
+                receipt={receipt}
+                index={index}
+              />
+            ))}
+        </>
+      )}
+    </div>
+  )
+}
+
+function ReadReceiptFormatted(props: {
+  receipt: T.MessageReadReceipt
+  index: number
+}) {
+  const accountId = selectedAccountId()
+  const [contact, setContact] = useState<T.Contact | null>(null)
+
+  useEffect(() => {
+    BackendRemote.rpc
+      .getContact(accountId, props.receipt.contactId)
+      .then(setContact)
+  }, [props.receipt.contactId, accountId])
+
+  const time = moment(props.receipt.timestamp * 1000)
+  const timeFormatted = time.format('L LT')
+
+  if (!contact) {
+    return null
+  }
+
+  return (
+    <div className={styles.readReceiptFormatted}>
+      <div className={styles.readReceiptLeft}>
+        <Avatar
+          small
+          displayName={contact.displayName}
+          avatarPath={contact.profileImage}
+          addr={contact.address}
+          color={contact.color}
+          aria-hidden={true}
+        />
+        <span className={styles.contactName}>{contact.displayName}</span>
+      </div>
+      <span className={styles.infoValue}>{timeFormatted}</span>
+    </div>
+  )
+}
+
+export function ReadReceiptsList(props: ReadReceiptsListProps) {
+  const tx = useTranslationFunction()
+  const receiptsFetch = useMessageReadReceipts(props.messageId)
+
   if (receiptsFetch.lingeringResult?.ok === false) {
     return tx(
       'error_x',
@@ -44,12 +161,12 @@ export function ReadReceiptsList(props: ReadReceiptsListProps) {
     return null
   }
   return (
-    <div className={styles.ReadReceiptsContainer}>
-      <div className={styles.Heading}>
-        <div className={styles.DoubleCheckmarkIcon}></div>
+    <div className={styles.readReceiptsContainer}>
+      <div className={styles.heading}>
+        <div className={styles.doubleCheckmarkIcon}></div>
         {tx('read_by')}
       </div>
-      <ul className={styles.ReadReceiptBox}>
+      <ul className={styles.readReceiptBox}>
         {receipts.map(receipt => (
           <li key={receipt.contactId}>
             <ReadReceipt receipt={receipt} />
@@ -76,7 +193,7 @@ function ReadReceipt(props: { receipt: T.MessageReadReceipt }) {
     return null
   }
   return (
-    <div className={styles.ReadReceipt}>
+    <div className={styles.readReceipt}>
       <Avatar
         small
         displayName={contact.displayName}
@@ -88,18 +205,18 @@ function ReadReceipt(props: { receipt: T.MessageReadReceipt }) {
         // because we display the contact name below.
         aria-hidden={true}
       />
-      <div className={styles.ReadReceiptContactLabel}>
+      <div className={styles.readReceiptContactLabel}>
         <div>
           <span className='truncated'>
             <b>{contact.displayName}</b>
           </span>{' '}
         </div>
         {!contact.isVerified && (
-          <div className={styles.ContactEmail}>{contact.address}</div>
+          <div className={styles.contactEmail}>{contact.address}</div>
         )}
       </div>
       <div>
-        <span className={styles.Date}>{time.format('L')}</span>{' '}
+        <span className={styles.date}>{time.format('L')}</span>{' '}
         {time.format('LT')}
       </div>
     </div>
