@@ -25,15 +25,19 @@ export async function openExternalHttpOrPromptToCopy(
   ) {
     shell.openExternal(url)
   } else if (url) {
-    await dialog
-      .showMessageBox(win, {
-        buttons: [tx('no'), tx('menu_copy_link_to_clipboard')],
-        message: tx('ask_copy_unopenable_link_to_clipboard', url),
-      })
-      .then(({ response }) => {
-        if (response == 1) {
-          clipboard.writeText(url)
-        }
-      })
+    promptToCopy(win, url)
   }
+}
+
+async function promptToCopy(win: BrowserWindow, url: string) {
+  await dialog
+    .showMessageBox(win, {
+      buttons: [tx('no'), tx('menu_copy_link_to_clipboard')],
+      message: tx('ask_copy_unopenable_link_to_clipboard', url),
+    })
+    .then(({ response }) => {
+      if (response == 1) {
+        clipboard.writeText(url)
+      }
+    })
 }
