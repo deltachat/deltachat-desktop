@@ -8,7 +8,6 @@ import { Avatar } from '../../Avatar'
 import moment from 'moment'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import { useRpcFetch } from '../../../hooks/useFetch'
-import { unknownErrorToString } from '../../helpers/unknownErrorToString'
 import useOpenViewProfileDialog from '../../../hooks/dialog/useOpenViewProfileDialog'
 
 function useMessageReadReceipts(messageId: number) {
@@ -32,18 +31,16 @@ function useMessageReadReceipts(messageId: number) {
   return receiptsFetch
 }
 
-type ReadReceiptsListProps = { messageId: number }
-
-type FormattedMessageInfoProps = {
+type BasicMessageInfoProps = {
   message: T.Message
   info: string
   messageId: number
   onClose: () => void
 }
 
-export function FormattedMessageInfo(props: FormattedMessageInfoProps) {
+export function BasicMessageInfo(props: BasicMessageInfoProps) {
   const { message } = props
-  const _tx = useTranslationFunction()
+  const tx = useTranslationFunction()
   const receiptsFetch = useMessageReadReceipts(props.messageId)
 
   const receipts = receiptsFetch.lingeringResult?.ok
@@ -66,14 +63,14 @@ export function FormattedMessageInfo(props: FormattedMessageInfoProps) {
     <div className={styles.formattedMessageInfo}>
       <div className={styles.infoRow}>
         <span className={styles.infoLabel}>
-          {_tx('message_detail_sent_desktop')}
+          {tx('message_detail_sent_desktop')}
         </span>
         <span className={styles.infoValue}>{sentFormatted}</span>
       </div>
       {receivedFormatted && (
         <div className={styles.infoRow}>
           <span className={styles.infoLabel}>
-            {_tx('message_detail_received_desktop')}
+            {tx('message_detail_received_desktop')}
           </span>
           <span className={styles.infoValue}>{receivedFormatted}</span>
         </div>
@@ -83,7 +80,7 @@ export function FormattedMessageInfo(props: FormattedMessageInfoProps) {
           <div className={styles.infoRow}>
             <div className={styles.readByHeader}>
               <span className={styles.doubleCheckmarkIcon}></span>
-              <strong>{_tx('read_by')}</strong>
+              <strong>{tx('read_by')}</strong>
             </div>
           </div>
           {receipts
@@ -93,11 +90,10 @@ export function FormattedMessageInfo(props: FormattedMessageInfoProps) {
               ): receipt is T.MessageReadReceipt =>
                 receipt.timestamp !== undefined
             )
-            .map((receipt: T.MessageReadReceipt, index: number) => (
+            .map((receipt: T.MessageReadReceipt) => (
               <ReadReceiptFormatted
                 key={receipt.contactId}
                 receipt={receipt}
-                index={index}
                 onAction={props.onClose}
               />
             ))}
@@ -109,7 +105,6 @@ export function FormattedMessageInfo(props: FormattedMessageInfoProps) {
 
 function ReadReceiptFormatted(props: {
   receipt: T.MessageReadReceipt
-  index: number
   onAction?: () => void
 }) {
   const accountId = selectedAccountId()
@@ -150,86 +145,5 @@ function ReadReceiptFormatted(props: {
       </div>
       <span className={styles.infoValue}>{timeFormatted}</span>
     </button>
-  )
-}
-
-export function ReadReceiptsList(props: ReadReceiptsListProps) {
-  const tx = useTranslationFunction()
-  const receiptsFetch = useMessageReadReceipts(props.messageId)
-
-  if (receiptsFetch.lingeringResult?.ok === false) {
-    return tx(
-      'error_x',
-      `Failed to fetch read receipts:\n${unknownErrorToString(receiptsFetch.lingeringResult.err)}`
-    )
-  }
-  const receipts = receiptsFetch.lingeringResult?.value
-  if (!receipts) {
-    return null
-  }
-
-  if (receipts.length === 0) {
-    return null
-  }
-  return (
-    <div className={styles.readReceiptsContainer}>
-      <div className={styles.heading}>
-        <div className={styles.doubleCheckmarkIcon}></div>
-        {tx('read_by')}
-      </div>
-      <ul className={styles.readReceiptBox}>
-        {receipts.map(receipt => (
-          <li key={receipt.contactId}>
-            <ReadReceipt receipt={receipt} />
-          </li>
-        ))}
-      </ul>
-    </div>
-  )
-}
-
-function ReadReceipt(props: { receipt: T.MessageReadReceipt }) {
-  const accountId = selectedAccountId()
-  const [contact, setContact] = useState<T.Contact | null>(null)
-
-  useEffect(() => {
-    BackendRemote.rpc
-      .getContact(accountId, props.receipt.contactId)
-      .then(setContact)
-  }, [props.receipt.contactId, accountId])
-
-  const time = moment(props.receipt.timestamp * 1000)
-
-  if (!contact) {
-    return null
-  }
-  return (
-    <div className={styles.readReceipt}>
-      <Avatar
-        small
-        displayName={contact.displayName}
-        avatarPath={contact.profileImage}
-        addr={contact.address}
-        color={contact.color}
-        // Avatar is purely decorative here,
-        // and is redundant accessibility-wise,
-        // because we display the contact name below.
-        aria-hidden={true}
-      />
-      <div className={styles.readReceiptContactLabel}>
-        <div>
-          <span className='truncated'>
-            <b>{contact.displayName}</b>
-          </span>{' '}
-        </div>
-        {!contact.isVerified && (
-          <div className={styles.contactEmail}>{contact.address}</div>
-        )}
-      </div>
-      <div>
-        <span className={styles.date}>{time.format('L')}</span>{' '}
-        {time.format('LT')}
-      </div>
-    </div>
   )
 }

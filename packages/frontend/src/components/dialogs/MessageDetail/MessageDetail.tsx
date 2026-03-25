@@ -4,28 +4,49 @@ import { selectedAccountId } from '../../../ScreenController'
 import { BackendRemote } from '../../../backend-com'
 import Dialog, { DialogBody, DialogHeader } from '../../Dialog'
 import Callout from '../../Callout'
+import useDialog from '../../../hooks/dialog/useDialog'
 
 import type { DialogProps } from '../../../contexts/DialogContext'
-import { FormattedMessageInfo } from './ReadReceipts'
+import { BasicMessageInfo } from './BasicMessageInfo'
 import type { T } from '@deltachat/jsonrpc-client'
 import { ContextMenuContext } from '../../../contexts/ContextMenuContext'
 import { mouseEventToPosition } from '../../../utils/mouseEventToPosition'
 
-function MessageInfo({
+function TechnicalMessageInfoDialog({
   messageId,
-  showTechnicalDetails,
-  onCloseTechnicalDetails,
   onClose,
 }: {
   messageId: number
-  showTechnicalDetails: boolean
-  onCloseTechnicalDetails: () => void
+} & DialogProps) {
+  const [content, setContent] = useState<string | undefined>()
+  const tx = window.static_translate
+
+  useEffect(() => {
+    const accountId = selectedAccountId()
+    BackendRemote.rpc.getMessageInfo(accountId, messageId).then(setContent)
+  }, [messageId])
+
+  return (
+    <Dialog onClose={onClose}>
+      <DialogHeader title={tx('info')} onClose={onClose} />
+      <DialogBody>
+        <Callout>
+          <p style={{ whiteSpace: 'pre-wrap' }}>{content}</p>
+        </Callout>
+      </DialogBody>
+    </Dialog>
+  )
+}
+
+function MessageInfo({
+  messageId,
+  onClose,
+}: {
+  messageId: number
   onClose: () => void
 }) {
   const [content, setContent] = useState<string | undefined>()
   const [message, setMessage] = useState<T.Message | undefined>()
-
-  const tx = window.static_translate
 
   useEffect(() => {
     const accountId = selectedAccountId()
@@ -38,40 +59,16 @@ function MessageInfo({
     refresh()
   }, [messageId])
 
-  // Escape key handler for technical details dialog
-  useEffect(() => {
-    if (!showTechnicalDetails) return
-    const handleKeyDown = (ev: KeyboardEvent) => {
-      if (ev.code === 'Escape') {
-        ev.preventDefault()
-        ev.stopPropagation()
-        onCloseTechnicalDetails()
-      }
-    }
-    document.addEventListener('keydown', handleKeyDown)
-    return () => document.removeEventListener('keydown', handleKeyDown)
-  }, [showTechnicalDetails, onCloseTechnicalDetails])
-
   return (
     <div className='module-message-detail'>
       <br />
       {message && content && (
-        <FormattedMessageInfo
+        <BasicMessageInfo
           message={message}
           info={content}
           messageId={messageId}
           onClose={onClose}
         />
-      )}
-      {showTechnicalDetails && (
-        <Dialog canEscapeKeyClose={false} onClose={onCloseTechnicalDetails}>
-          <DialogHeader title={tx('info')} onClose={onCloseTechnicalDetails} />
-          <DialogBody>
-            <Callout>
-              <p style={{ whiteSpace: 'pre-wrap' }}>{content}</p>
-            </Callout>
-          </DialogBody>
-        </Dialog>
       )}
     </div>
   )
@@ -86,7 +83,7 @@ export default function MessageDetail(
   const isOpen = !!id
   const tx = window.static_translate
   const { openContextMenu } = useContext(ContextMenuContext)
-  const [showTechnicalDetails, setShowTechnicalDetails] = useState(false)
+  const { openDialog } = useDialog()
 
   const onContextMenuClick = useCallback(
     (
@@ -100,29 +97,18 @@ export default function MessageDetail(
         items: [
           {
             label: tx('global_menu_view_developer_desktop'),
-            action: () => setShowTechnicalDetails(true),
+            action: () =>
+              openDialog(TechnicalMessageInfoDialog, { messageId: id }),
           },
         ],
       })
     },
-    [openContextMenu, tx]
-  )
-
-  const onCloseTechnicalDetails = useCallback(
-    () => setShowTechnicalDetails(false),
-    []
+    [openContextMenu, tx, openDialog, id]
   )
 
   let body = <div />
   if (isOpen) {
-    body = (
-      <MessageInfo
-        messageId={id}
-        showTechnicalDetails={showTechnicalDetails}
-        onCloseTechnicalDetails={onCloseTechnicalDetails}
-        onClose={onClose}
-      />
-    )
+    body = <MessageInfo messageId={id} onClose={onClose} />
   }
 
   return (
