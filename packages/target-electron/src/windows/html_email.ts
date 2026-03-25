@@ -509,7 +509,11 @@ function makeBrowserView(
     }`)
 
   const openLink = (url: string) => {
-    if (url.startsWith('mailto:') || isInviteLink(url)) {
+    if (
+      url.startsWith('mailto:') ||
+      url.startsWith('openpgp4fpr:') ||
+      isInviteLink(url)
+    ) {
       open_url(url)
       mainWindow.window?.show()
     } else {
