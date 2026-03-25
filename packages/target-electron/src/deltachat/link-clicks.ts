@@ -41,8 +41,8 @@ export async function openExternalWhitelistedOrPromptToCopy(
   win: BrowserWindow,
   url: string
 ): Promise<void> {
-  const lowercase = url.toLowerCase()
-  if (whitelist.some(scheme => lowercase.startsWith(scheme))) {
+  const parsed = URL.parse(url)
+  if (parsed != null && whitelist.some(scheme => parsed.protocol === scheme)) {
     shell.openExternal(url)
   } else if (url) {
     promptToCopy(win, url)
@@ -56,9 +56,10 @@ export async function openExternalHttpOrPromptToCopy(
   win: BrowserWindow,
   url: string
 ): Promise<void> {
+  const parsed = URL.parse(url)
   if (
-    url.toLowerCase().startsWith('https:') ||
-    url.toLowerCase().startsWith('http:')
+    parsed != null &&
+    (parsed.protocol === 'https:' || parsed.protocol === 'http:')
   ) {
     shell.openExternal(url)
   } else if (url) {
