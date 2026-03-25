@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import moment from 'moment'
 
 import { selectedAccountId } from '../../../ScreenController'
@@ -9,105 +9,71 @@ import Callout from '../../Callout'
 import type { DialogProps } from '../../../contexts/DialogContext'
 import { ReadReceiptsList } from './ReadReceipts'
 
-type MessageInfoProps = {
-  messageId: number
-}
+function MessageInfo({ messageId }: { messageId: number }) {
+  const [content, setContent] = useState<string | undefined>()
+  const [receivedAt, setReceivedAt] = useState<number | undefined>()
+  const [sentAt, setSentAt] = useState<number | undefined>()
+  const [isEdited, setIsEdited] = useState(false)
 
-class MessageInfo extends React.Component<
-  MessageInfoProps,
-  {
-    loading: boolean
-    content?: string
-    receivedAt?: number
-    sentAt?: number
-    isEdited?: boolean
-  }
-> {
-  constructor(props: MessageInfoProps) {
-    super(props)
-    this.state = {
-      loading: true,
-      content: undefined,
-      receivedAt: undefined,
-      sentAt: undefined,
-      isEdited: false,
-    }
-  }
+  const tx = window.static_translate
 
-  componentDidMount() {
-    this.refresh()
-  }
-
-  async refresh() {
-    this.setState({ loading: true })
+  useEffect(() => {
     const accountId = selectedAccountId()
-    const message = await BackendRemote.rpc.getMessage(
-      accountId,
-      this.props.messageId
-    )
-    const info = await BackendRemote.rpc.getMessageInfo(
-      accountId,
-      this.props.messageId
-    )
-    this.setState({
-      loading: false,
-      content: info,
-      sentAt: (message?.timestamp || 0) * 1000,
-      receivedAt: (message?.receivedTimestamp || 0) * 1000,
-      isEdited: message?.isEdited,
-    })
-    this.forceUpdate()
-  }
+    async function refresh() {
+      const message = await BackendRemote.rpc.getMessage(accountId, messageId)
+      const info = await BackendRemote.rpc.getMessageInfo(accountId, messageId)
+      setContent(info)
+      setSentAt((message?.timestamp || 0) * 1000)
+      setReceivedAt((message?.receivedTimestamp || 0) * 1000)
+      setIsEdited(message?.isEdited ?? false)
+    }
+    refresh()
+  }, [messageId])
 
-  render() {
-    const { receivedAt, sentAt, content, isEdited } = this.state
-    const tx = window.static_translate
-
-    return (
-      <div className='module-message-detail'>
-        <br />
-        <ReadReceiptsList messageId={this.props.messageId} />
-        <Callout>
-          <p>{content}</p>
-        </Callout>
-        <br />
-        <DialogContent>
-          <table className='module-message-detail__info'>
-            <tbody>
+  return (
+    <div className='module-message-detail'>
+      <br />
+      <ReadReceiptsList messageId={messageId} />
+      <Callout>
+        <p>{content}</p>
+      </Callout>
+      <br />
+      <DialogContent>
+        <table className='module-message-detail__info'>
+          <tbody>
+            <tr>
+              <td className='module-message-detail__label'>
+                {tx('message_detail_sent_desktop')}
+              </td>
+              <td>{moment(sentAt).format('LLLL')}</td>
+            </tr>
+            {receivedAt ? (
               <tr>
                 <td className='module-message-detail__label'>
-                  {tx('message_detail_sent_desktop')}
+                  {tx('message_detail_received_desktop')}
                 </td>
-                <td>{moment(sentAt).format('LLLL')}</td>
+                <td>{moment(receivedAt).format('LLLL')}</td>
               </tr>
-              {receivedAt ? (
-                <tr>
-                  <td className='module-message-detail__label'>
-                    {tx('message_detail_received_desktop')}
-                  </td>
-                  <td>{moment(receivedAt).format('LLLL')}</td>
-                </tr>
-              ) : null}
-              {this.props.messageId && (
-                <tr>
-                  <td className='module-message-detail__label'>messageId</td>
-                  <td>{this.props.messageId}</td>
-                </tr>
-              )}
-              {isEdited && (
-                <tr>
-                  <td className='module-message-detail__label'>
-                    {tx('edited')}
-                  </td>
-                  <td>{tx('yes')}</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </DialogContent>
-      </div>
-    )
-  }
+            ) : null}
+            {messageId && (
+              <tr>
+                <td className='module-message-detail__label'>messageId</td>
+                <td>{messageId}</td>
+              </tr>
+            )}
+            {isEdited && (
+              <tr>
+                <td className='module-message-detail__label'>
+                  {tx('edited')}
+                </td>
+                <td>{tx('yes')}</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </DialogContent>
+    </div>
+  )
 }
 
 export default function MessageDetail(
