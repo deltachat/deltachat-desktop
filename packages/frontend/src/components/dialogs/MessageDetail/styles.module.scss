@@ -82,6 +82,19 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 8px;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 6px;
+  font: inherit;
+  color: inherit;
+  text-align: start;
+
+  &:hover {
+    background-color: var(--chatListItemBgHover);
+  }
 }
 
 .readReceiptLeft {

@@ -15,10 +15,12 @@ function MessageInfo({
   messageId,
   showTechnicalDetails,
   onCloseTechnicalDetails,
+  onClose,
 }: {
   messageId: number
   showTechnicalDetails: boolean
   onCloseTechnicalDetails: () => void
+  onClose: () => void
 }) {
   const [content, setContent] = useState<string | undefined>()
   const [message, setMessage] = useState<T.Message | undefined>()
@@ -58,6 +60,7 @@ function MessageInfo({
           message={message}
           info={content}
           messageId={messageId}
+          onClose={onClose}
         />
       )}
       {showTechnicalDetails && (
@@ -117,6 +120,7 @@ export default function MessageDetail(
         messageId={id}
         showTechnicalDetails={showTechnicalDetails}
         onCloseTechnicalDetails={onCloseTechnicalDetails}
+        onClose={onClose}
       />
     )
   }

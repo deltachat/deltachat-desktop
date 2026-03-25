@@ -9,6 +9,7 @@ import moment from 'moment'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import { useRpcFetch } from '../../../hooks/useFetch'
 import { unknownErrorToString } from '../../helpers/unknownErrorToString'
+import useOpenViewProfileDialog from '../../../hooks/dialog/useOpenViewProfileDialog'
 
 function useMessageReadReceipts(messageId: number) {
   const accountId = selectedAccountId()
@@ -37,6 +38,7 @@ type FormattedMessageInfoProps = {
   message: T.Message
   info: string
   messageId: number
+  onClose: () => void
 }
 
 export function FormattedMessageInfo(props: FormattedMessageInfoProps) {
@@ -96,6 +98,7 @@ export function FormattedMessageInfo(props: FormattedMessageInfoProps) {
                 key={receipt.contactId}
                 receipt={receipt}
                 index={index}
+                onAction={props.onClose}
               />
             ))}
         </>
@@ -107,9 +110,13 @@ export function FormattedMessageInfo(props: FormattedMessageInfoProps) {
 function ReadReceiptFormatted(props: {
   receipt: T.MessageReadReceipt
   index: number
+  onAction?: () => void
 }) {
   const accountId = selectedAccountId()
   const [contact, setContact] = useState<T.Contact | null>(null)
+  const openViewProfileDialog = useOpenViewProfileDialog({
+    onAction: props.onAction,
+  })
 
   useEffect(() => {
     BackendRemote.rpc
@@ -125,7 +132,11 @@ function ReadReceiptFormatted(props: {
   }
 
   return (
-    <div className={styles.readReceiptFormatted}>
+    <button
+      type='button'
+      className={styles.readReceiptFormatted}
+      onClick={() => openViewProfileDialog(accountId, props.receipt.contactId)}
+    >
       <div className={styles.readReceiptLeft}>
         <Avatar
           small
@@ -138,7 +149,7 @@ function ReadReceiptFormatted(props: {
         <span className={styles.contactName}>{contact.displayName}</span>
       </div>
       <span className={styles.infoValue}>{timeFormatted}</span>
-    </div>
+    </button>
   )
 }
 
