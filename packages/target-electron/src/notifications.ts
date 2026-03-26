@@ -92,9 +92,9 @@ function onClickNotification(
 }
 
 /**
- * As of writing we expect one notification per message,
- * but just in case let's have an array of notifications
- * for each message.
+ * There may be multiple notifications per one message.
+ * Such as with "Bob reacted to your message",
+ * this is why we have `Notification[]` here.
  */
 const notifications: {
   [accountId: number]: { [chatId: number]: { [msgId: number]: Notification[] } }
