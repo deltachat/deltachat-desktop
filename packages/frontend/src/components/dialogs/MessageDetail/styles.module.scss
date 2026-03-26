@@ -2,22 +2,6 @@
   padding-bottom: 0;
 }
 
-.readReceiptsContainer {
-  margin: 10px;
-}
-
-.heading {
-  display: flex;
-  align-items: center;
-  font-size: 1.15em;
-}
-
-.readReceiptBox {
-  background-color: var(--MessageDetails-ReadReceipt-Bg);
-  border-radius: 10px;
-  padding: 3px 9px;
-}
-
 .doubleCheckmarkIcon {
   height: 1.5em;
   width: 2.25em;
@@ -25,28 +9,6 @@
   mask: url($svg) no-repeat center;
   mask-size: 1.5em;
   background-color: var(--messageStatusIcon);
-}
-
-.readReceipt {
-  display: flex;
-  align-items: center;
-  margin-block: 5.8px;
-}
-
-.readReceiptContactLabel {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  justify-content: center;
-  margin-inline-start: 7px;
-}
-
-.contactEmail {
-  color: var(--textSecondary);
-}
-
-.date {
-  color: var(--MessageDetails-ReadReceipt-Date);
 }
 
 .formattedMessageInfo {
