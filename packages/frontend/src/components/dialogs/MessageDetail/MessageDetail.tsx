@@ -80,7 +80,6 @@ export default function MessageDetail(
   } & DialogProps
 ) {
   const { id, onClose } = props
-  const isOpen = !!id
   const tx = window.static_translate
   const { openContextMenu } = useContext(ContextMenuContext)
   const { openDialog } = useDialog()
@@ -106,20 +105,17 @@ export default function MessageDetail(
     [openContextMenu, tx, openDialog, id]
   )
 
-  let body = <div />
-  if (isOpen) {
-    body = <MessageInfo messageId={id} onClose={onClose} />
-  }
-
   return (
     <Dialog onClose={onClose}>
       <DialogHeader
         className={styles.dialogHeader}
         title={tx('menu_message_details')}
         onClose={onClose}
-        onContextMenuClick={isOpen ? onContextMenuClick : undefined}
+        onContextMenuClick={onContextMenuClick}
       />
-      <DialogBody>{body}</DialogBody>
+      <DialogBody>
+        <MessageInfo messageId={id} onClose={onClose} />
+      </DialogBody>
     </Dialog>
   )
 }
