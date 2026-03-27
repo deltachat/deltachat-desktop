@@ -722,23 +722,48 @@ test('accept or decline channel invite', async ({ browserName }) => {
   await expect(channelChatItemC).toBeVisible()
 })
 
-test('leave channel and remove from channel', async () => {
-  const userA = existingProfiles[0]
+test('channel main view shows Leave Channel instead of Delete Chat', async () => {
   const userB = existingProfiles[1]
-  const userC = existingProfiles[2]
 
-  // userB leaves the channel via context menu
   await switchToProfile(page, userB.id)
   const channelChatItemB = page
     .locator('.chat-list .chat-list-item')
     .filter({ hasText: channelName })
   await expect(channelChatItemB).toBeVisible()
-  await channelChatItemB.click({ button: 'right' })
+  await channelChatItemB.click()
+
+  await page.locator('#three-dot-menu-button').click()
+  await expect(page.getByRole('menu')).toBeVisible()
+
+  // Subscriber should see Leave Channel instead of Delete Chat
+  await expect(
+    page.getByRole('menuitem', { name: 'Leave Channel' })
+  ).toBeVisible()
+  await expect(
+    page.getByRole('menuitem', { name: 'Delete Chat' })
+  ).not.toBeVisible()
+
+  await page.keyboard.press('Escape')
+})
+
+test('leave channel and remove from channel', async () => {
+  const userA = existingProfiles[0]
+  const userB = existingProfiles[1]
+  const userC = existingProfiles[2]
+
+  // userB leaves the channel via main view 3-dot menu
+  await switchToProfile(page, userB.id)
+  const channelChatItemB = page
+    .locator('.chat-list .chat-list-item')
+    .filter({ hasText: channelName })
+  await expect(channelChatItemB).toBeVisible()
+  await channelChatItemB.click()
+  await page.locator('#three-dot-menu-button').click()
   await expect(page.getByRole('menu')).toBeVisible()
   await page.getByRole('menuitem', { name: 'Leave Channel' }).click()
-  const leaveDialog = page.getByTestId('confirm-dialog')
-  await expect(leaveDialog).toBeVisible()
-  await leaveDialog.getByTestId('confirm').click()
+  const leaveDialog = page.getByRole('dialog')
+  await expect(leaveDialog).toContainText('Are you sure you want to leave?')
+  await leaveDialog.getByRole('button', { name: 'Leave Channel' }).click()
 
   // userA removes userC from the channel via the channel profile
   await switchToProfile(page, userA.id)
