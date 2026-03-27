@@ -456,13 +456,9 @@ app.on('web-contents-created', (_ev, contents) => {
       if (isSaneWebxdcUrl && isSameOrigin) {
         // allow internal webxdc nav
         return
-      } else if (ev.url.startsWith('mailto:')) {
-        // handle mailto in dc
+      } else {
         ev.preventDefault()
         webxdcOpenUrl(ev.url)
-      } else {
-        // prevent navigation to unknown scheme
-        ev.preventDefault()
       }
     })
 
