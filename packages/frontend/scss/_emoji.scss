@@ -20,16 +20,6 @@
   font-size: 3em;
 }
 
-// we need these, or we'll make conversation items too big in the left-nav
-.conversations {
-  .emoji-container.small,
-  .emoji-container.medium,
-  .emoji-container.large,
-  .emoji-container.jumbo {
-    font-size: 1em;
-  }
-}
-
 // This is the emoji button in the composer
 button.emoji {
   width: 36px;
