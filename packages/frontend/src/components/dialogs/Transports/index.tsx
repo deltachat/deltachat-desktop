@@ -21,7 +21,6 @@ import styles from './styles.module.scss'
 import { TransportListEntry } from '@deltachat/jsonrpc-client/dist/generated/types'
 import classNames from 'classnames'
 import useDialog from '../../../hooks/dialog/useDialog'
-import { processQr } from '../../../backend/qr'
 import useAddTransportDialog from '../../../hooks/dialog/useAddTransportDialog'
 
 /**
@@ -96,7 +95,7 @@ export default function TransportsDialog(
     )
     openDialog(BasicQrScanner, {
       onSuccess: async (result: string) => {
-        const { qr } = await processQr(accountId, result)
+        const qr = await BackendRemote.rpc.checkQr(accountId, result)
         if (qr.kind === 'account' || qr.kind === 'login') {
           const transportAdded = await addTransportDialog(
             accountId,
