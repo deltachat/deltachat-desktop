@@ -181,9 +181,7 @@ function clearNotificationsForChat(
 ) {
   log.debug('clearNotificationsForChat', { accountId, chatId, notifications })
   if (notifications[accountId]?.[chatId]) {
-    for (const messageId of Object.keys(
-      notifications[accountId]?.[chatId] || {}
-    )) {
+    for (const messageId of Object.keys(notifications[accountId][chatId])) {
       clearNotificationsForMessage(_, accountId, chatId, Number(messageId))
     }
     delete notifications[accountId][chatId]
