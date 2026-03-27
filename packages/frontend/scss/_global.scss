@@ -82,21 +82,6 @@ a {
   color: var(--globalLinkColor);
 }
 
-.SelectGroupImage {
-  width: 100px;
-}
-
-.GroupImage {
-  width: 100px;
-  height: 100px;
-  cursor: pointer;
-}
-
-.RemoveGroupImage {
-  width: 100px;
-  margin-bottom: 4px;
-}
-
 $unread-badge-size: 21px;
 
 input[type='text'],
@@ -143,15 +128,6 @@ code {
   background-color: rgba(0, 0, 0, 0.25);
   border-radius: 0.8pt;
   padding: 0.4pt 3pt;
-}
-
-.sharp-pixel-image {
-  -ms-interpolation-mode: nearest-neighbor;
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: -webkit-crisp-edges;
-  image-rendering: -moz-crisp-edges;
-  image-rendering: -o-crisp-edges;
-  image-rendering: pixelated;
 }
 
 // toast for errors and success messages
