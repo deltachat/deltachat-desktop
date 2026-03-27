@@ -1,5 +1,5 @@
 .dialogHeader {
-  padding-bottom: 0;
+  padding-bottom: 10px;
 }
 
 .doubleCheckmarkIcon {
@@ -14,7 +14,7 @@
 .formattedMessageInfo {
   margin: 10px;
   font-size: 0.95em;
-  padding: 5px 20px;
+  padding: 5px 0px;
 }
 
 .infoRow {
@@ -22,7 +22,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
-  padding: 2px 0;
+  padding: 2px 20px;
 }
 
 .infoLabel {
@@ -39,16 +39,14 @@
   display: flex;
   align-items: center;
   gap: 5px;
-  margin-top: 10px;
-  margin-bottom: 5px;
+  margin-top: 20px;
 }
 
 .readReceiptFormatted {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
-  width: 100%;
+  width: calc(100% - 20px);
   background: none;
   border: none;
   padding: 10px;
@@ -57,7 +55,7 @@
   font: inherit;
   color: inherit;
   text-align: start;
-
+  margin-left: 10px;
   &:hover {
     background-color: var(--chatListItemBgHover);
   }

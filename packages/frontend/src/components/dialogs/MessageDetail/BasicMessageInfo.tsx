@@ -49,14 +49,14 @@ export function BasicMessageInfo(props: BasicMessageInfoProps) {
 
   // Format sent timestamp
   const sentTimestamp = moment(message.timestamp * 1000)
-  const sentFormatted = sentTimestamp.format('L LT')
+  const sentFormatted = sentTimestamp.format('lll')
 
   // Format received timestamp
   const receivedTimestamp = message.receivedTimestamp
     ? moment(message.receivedTimestamp * 1000)
     : null
   const receivedFormatted = receivedTimestamp
-    ? receivedTimestamp.format('L LT')
+    ? receivedTimestamp.format('lll')
     : null
 
   return (
@@ -120,7 +120,7 @@ function ReadReceiptFormatted(props: {
   }, [props.receipt.contactId, accountId])
 
   const time = moment(props.receipt.timestamp * 1000)
-  const timeFormatted = time.format('L LT')
+  const timeFormatted = time.format('lll')
 
   if (!contact) {
     return null
