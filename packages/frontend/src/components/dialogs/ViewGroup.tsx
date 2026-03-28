@@ -389,11 +389,6 @@ function ViewGroupInner(
                 displayName={groupName}
                 disableFullscreen={shouldDisableFullscreenAvatar(chat)}
               />
-              {groupDescription && (
-                <div className='group-profile-description'>
-                  {groupDescription}
-                </div>
-              )}
               <div className='group-profile-subtitle'>
                 {!isBroadcast
                   ? group.contactIds.length > 1 || group.selfInGroup
@@ -405,6 +400,11 @@ function ViewGroupInner(
                       quantity: group.contactIds.length,
                     })}
               </div>
+              {groupDescription && (
+                <div className='group-profile-description'>
+                  {groupDescription}
+                </div>
+              )}
             </DialogContent>
             <div
               className='group-member-contact-list-wrapper'
