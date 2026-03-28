@@ -194,13 +194,6 @@ $info-text-max-width: 400px;
     margin-bottom: -7px;
   }
 
-  .module-message__img-attachment {
-    object-fit: cover;
-    width: auto;
-    max-width: 100%;
-    min-height: unset;
-  }
-
   .show-html {
     @include mixins.button-reset;
 
