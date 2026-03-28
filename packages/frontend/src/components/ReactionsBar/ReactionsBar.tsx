@@ -8,7 +8,7 @@ import EmojiPicker from '../EmojiPicker'
 
 import styles from './styles.module.scss'
 
-import type { BaseEmoji } from 'emoji-mart/index'
+import type { EmojiMartData } from '../EmojiPicker'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 import {
@@ -80,7 +80,7 @@ export default function ReactionsBar({
           id={undefined}
           labelledBy={undefined}
           className={styles.reactionsBarPicker}
-          onSelect={(emoji: BaseEmoji) => toggleReaction(emoji.native)}
+          onSelect={(emoji: EmojiMartData) => toggleReaction(emoji.native)}
         />
       )}
       {!showAllEmojis && (

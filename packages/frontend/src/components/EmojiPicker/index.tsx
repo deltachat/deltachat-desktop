@@ -1,21 +1,31 @@
-import Picker from '@emoji-mart/react'
 import React from 'react'
 import classNames from 'classnames'
 import emojiData from '@emoji-mart/data'
+import { EmojiPicker as Picker } from '@emoji-mart-awesome/react'
 
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { useThemeCssVar } from '../../ThemeManager'
 
 import styles from './styles.module.scss'
 
-import type { BaseEmoji } from 'emoji-mart/index'
+export type EmojiMartData = {
+  id: string
+  name: string
+  native: string
+  unified: string
+  shortcodes: string
+  skin?: number
+  keywords?: string[]
+  aliases?: string[]
+  emoticons?: string[]
+}
 
 type Props = {
   role: 'tabpanel' | undefined
   id: string | undefined
   labelledBy: string | undefined
   className?: string
-  onSelect: (emoji: BaseEmoji) => void
+  onSelect: (emoji: EmojiMartData) => void
   full?: boolean
 }
 

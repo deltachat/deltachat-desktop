@@ -28,7 +28,7 @@ import useMessage from '../../hooks/chat/useMessage'
 import useChat from '../../hooks/chat/useChat'
 import { useDraft, type DraftObject } from '../../hooks/chat/useDraft'
 
-import type { EmojiData, BaseEmoji } from 'emoji-mart/index'
+import type { EmojiMartData } from '../EmojiPicker'
 import { VisualVCardComponent } from '../message/VCard'
 import { ActionEmitter, KeybindAction } from '../../keybindings'
 import useKeyBindingAction from '../../hooks/useKeyBindingAction'
@@ -306,10 +306,10 @@ const Composer = forwardRef<
 
   const onEmojiIconClick = () => setShowEmojiPicker(!showEmojiPicker)
   const shiftPressed = useRef(false)
-  const onEmojiSelect = (emoji: EmojiData) => {
+  const onEmojiSelect = (emoji: EmojiMartData) => {
     log.debug(`EmojiPicker: Selected ${emoji.id}`)
     currentComposerMessageInputRef.current?.insertStringAtCursorPosition(
-      (emoji as BaseEmoji).native
+      emoji.native
     )
     if (!shiftPressed.current) {
       setShowEmojiPicker(false)

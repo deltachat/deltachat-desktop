@@ -17,7 +17,7 @@ import useMessage from '../../hooks/chat/useMessage'
 
 import styles from './styles.module.scss'
 
-import type { EmojiData } from 'emoji-mart/index'
+import type { EmojiMartData } from '../EmojiPicker'
 import {
   RovingTabindexProvider,
   useRovingTabindex,
@@ -187,7 +187,7 @@ const EmojiOrStickerSelectorButton = (
 export const EmojiAndStickerPicker = forwardRef<
   HTMLDivElement,
   {
-    onEmojiSelect: (emoji: EmojiData) => void
+    onEmojiSelect: (emoji: EmojiMartData) => void
     chatId: number
     setShowEmojiPicker: React.Dispatch<React.SetStateAction<boolean>>
     /**
