@@ -60,7 +60,11 @@ export function Avatar(props: {
   } = props
 
   const content = avatarPath ? (
-    <img className='content' src={runtime.transformBlobURL(avatarPath)} />
+    <img
+      className='content'
+      src={runtime.transformBlobURL(avatarPath)}
+      alt={displayName}
+    />
   ) : (
     <div
       className='content'
