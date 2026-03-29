@@ -269,6 +269,11 @@ export default function AccountItem({
         role='tab'
         aria-selected={isSelected}
         aria-busy={!account && accountFetch.loading}
+        aria-label={
+          account?.kind === 'Configured'
+            ? (account.displayName || undefined)
+            : undefined
+        }
         onClick={() => onSelectAccount(accountId)}
         onContextMenu={onContextMenu}
         aria-haspopup='menu'
@@ -316,7 +321,7 @@ export default function AccountItem({
         )}
         {muted && (
           <div
-            aria-label='Account notifications muted'
+            aria-label={tx('muted')}
             className={styles.accountMutedIconShadow}
           >
             <Icon className={styles.accountMutedIcon} icon='audio-muted' />
