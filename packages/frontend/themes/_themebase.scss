@@ -232,10 +232,6 @@ $scrollbarTransparency: 0.34 !default;
   --htmlEmail-color: #{$textPrimary};
   --htmlEmail-border-color: #{changeContrast($bgPrimary, 20%)};
 
-  /** MessageDetails Colors **/
-  --MessageDetails-ReadReceipt-Bg: #{changeContrast($bgPrimary, 10%)};
-  --MessageDetails-ReadReceipt-Date: #{changeContrast($textPrimary, 30%)};
-
   /** generic reusable colors */
   --summary-text-color: #{changeContrast($textPrimary, 33%)};
   --textPrimary: #{$textPrimary};

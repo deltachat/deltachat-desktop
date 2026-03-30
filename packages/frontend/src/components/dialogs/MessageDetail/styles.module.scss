@@ -1,20 +1,8 @@
-.ReadReceiptsContainer {
-  margin: 10px;
+.dialogHeader {
+  padding-bottom: 10px;
 }
 
-.Heading {
-  display: flex;
-  align-items: center;
-  font-size: 1.15em;
-}
-
-.ReadReceiptBox {
-  background-color: var(--MessageDetails-ReadReceipt-Bg);
-  border-radius: 10px;
-  padding: 3px 9px;
-}
-
-.DoubleCheckmarkIcon {
+.doubleCheckmarkIcon {
   height: 1.5em;
   width: 2.25em;
   $svg: './images/read.svg';
@@ -23,24 +11,63 @@
   background-color: var(--messageStatusIcon);
 }
 
-.ReadReceipt {
+.formattedMessageInfo {
+  margin: 10px;
+  font-size: 0.95em;
+  padding: 5px 0px;
+}
+
+.infoRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 2px 20px;
+}
+
+.infoLabel {
+  min-width: 200px;
+  flex-shrink: 0;
+}
+
+.infoValue {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.readByHeader {
   display: flex;
   align-items: center;
-  margin-block: 5.8px;
+  gap: 5px;
+  margin-top: 20px;
 }
 
-.ReadReceiptContactLabel {
+.readReceiptFormatted {
   display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  justify-content: center;
-  margin-inline-start: 7px;
+  justify-content: space-between;
+  align-items: center;
+  width: calc(100% - 20px);
+  background: none;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 6px;
+  font: inherit;
+  color: inherit;
+  text-align: start;
+  margin-left: 10px;
+  &:hover {
+    background-color: var(--chatListItemBgHover);
+  }
 }
 
-.ContactEmail {
-  color: var(--textSecondary);
+.readReceiptLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
 }
 
-.Date {
-  color: var(--MessageDetails-ReadReceipt-Date);
+.contactName {
+  font-weight: normal;
 }
