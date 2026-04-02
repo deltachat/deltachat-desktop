@@ -294,8 +294,9 @@ function CreateChatMain(props: CreateChatMainProps) {
             label: tx('delete_contact'),
             action: async () => {
               const confirmed = await openConfirmationDialog({
-                message: tx('ask_delete_contact', contact.address),
-                confirmLabel: tx('delete'),
+                message: tx('ask_delete_contact', contact.displayName),
+                confirmLabel: tx('delete_contact'),
+                isConfirmDanger: true,
               })
 
               if (confirmed) {
