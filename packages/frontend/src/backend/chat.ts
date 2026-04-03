@@ -60,7 +60,7 @@ export async function unmuteChat(accountId: number, chatId: number) {
   })
 }
 
-export function markChatAsSeen(accountId: number, chatId: number) {
+export function marknoticedChat(accountId: number, chatId: number) {
   // Mark all messages in chat as "seen" in core backend
   BackendRemote.rpc.marknoticedChat(accountId, chatId)
 
