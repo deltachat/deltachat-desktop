@@ -17,6 +17,7 @@ import styles from './styles.module.scss'
 import useDialog from '../../../hooks/dialog/useDialog'
 import UseOtherServerDialog from './UseOtherServerDialog'
 import { BackendRemote } from '../../../backend-com'
+import SettingsStoreInstance from '../../../stores/settings'
 
 import { ContextMenuContext } from '../../../contexts/ContextMenuContext'
 import { mouseEventToPosition } from '../../../utils/mouseEventToPosition'
@@ -157,6 +158,7 @@ export default function InstantOnboardingScreen({
       // We redirect the user to the main screen after the account got
       // successfully created
       resetInstantOnboarding()
+      await SettingsStoreInstance.effect.load()
       changeScreen(Screens.Main)
 
       // If the user scanned a QR code to join a contact or group, then
