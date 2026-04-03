@@ -250,6 +250,17 @@ export default function ChatList(props: {
     () => (activeChatId != null ? chatListIds.indexOf(activeChatId) : -1),
     [chatListIds, activeChatId]
   )
+  /**
+   * Can be `false` when `chatListIds` is still loading (it's empty then)
+   * or if we're switching between the "archived" and normal view.
+   */
+  const activeChatIsInList = activeChatIndex !== -1
+  const scrollActiveChatIntoView = useEffectEvent(() => {
+    if (!activeChatIsInList) {
+      return
+    }
+    scrollChatIntoView(activeChatIndex)
+  })
   const lastShowArchivedChatsState = useRef(showArchivedChats)
   const lastQuery = useRef(queryStr)
   // on select chat - scroll to selected chat - chatView
@@ -263,7 +274,7 @@ export default function ChatList(props: {
     }
     // when showArchivedChats changes, select selected chat if it is archived/not-archived otherwise select first item
     if (activeChatIndex !== -1) {
-      scrollChatIntoView(activeChatIndex)
+      scrollActiveChatIntoView()
     } else {
       if (lastShowArchivedChatsState.current !== showArchivedChats) {
         scrollChatIntoView(0)
