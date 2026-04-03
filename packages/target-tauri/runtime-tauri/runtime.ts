@@ -119,6 +119,7 @@ export class TauriDeltaChat extends BaseDeltaChat<TauriTransport> {
 
 // Probably not super reliable, but we don't need it to be.
 const isWindowsOS = navigator.userAgent.includes('Win')
+const isMacOS = navigator.userAgent.includes('Mac')
 
 class TauriRuntime implements Runtime {
   constructor() {
@@ -581,7 +582,12 @@ class TauriRuntime implements Runtime {
         value === 0 ? undefined : 'images/tray/unread-badge.png'
       )
     }
-    window.setTitle(`Delta Chat Tauri${value === 0 ? '' : ` (${value})`}`)
+
+    // On macOS title bar is in `Overlay` mode and title is set to "",
+    // adding the title bar on macOS would interfere with other UI elements.
+    if (!isMacOS) {
+      window.setTitle(`Delta Chat Tauri${value === 0 ? '' : ` (${value})`}`)
+    }
 
     invoke('update_tray_icon_badge', { counter: value })
   }
