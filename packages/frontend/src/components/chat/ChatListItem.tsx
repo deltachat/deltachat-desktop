@@ -4,7 +4,8 @@ import { T, C } from '@deltachat/jsonrpc-client'
 
 import Timestamp from '../conversations/Timestamp'
 import { Avatar } from '../Avatar'
-import { Type, EffectfulBackendActions } from '../../backend-com'
+import { Type } from '../../backend-com'
+import { markChatAsSeen } from '../../backend/chat'
 import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
 import { getLogger } from '../../../../shared/logger'
 import { useContextMenuWithActiveState } from '../ContextMenu'
@@ -157,10 +158,7 @@ function ChatListItemArchiveLink({
     {
       label: tx('mark_all_as_read'),
       action: () => {
-        EffectfulBackendActions.marknoticedChat(
-          selectedAccountId(),
-          C.DC_CHAT_ID_ARCHIVED_LINK
-        )
+        markChatAsSeen(selectedAccountId(), C.DC_CHAT_ID_ARCHIVED_LINK)
       },
     },
   ])
