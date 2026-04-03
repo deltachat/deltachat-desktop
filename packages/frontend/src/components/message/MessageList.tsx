@@ -31,7 +31,7 @@ import {
   RovingTabindexProvider,
   useRovingTabindex,
 } from '../../contexts/RovingTabindex'
-import { markChatAsSeen } from '../../backend/chat'
+import { marknoticedChat } from '../../backend/chat'
 
 const onWindowFocus = (accountId: number) => {
   log.debug('window focused')
@@ -1066,7 +1066,7 @@ function JumpDownButton({
               // as seen, even if we're skipping over many messages
               // without the user actually seeing them.
               // See https://github.com/deltachat/deltachat-desktop/issues/3072.
-              markChatAsSeen(accountId, chat.id)
+              marknoticedChat(accountId, chat.id)
             }
           }}
           // Technically this is not always "to bottom",
