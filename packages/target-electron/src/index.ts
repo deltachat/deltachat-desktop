@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-console
 console.time('init')
 
-import { mkdirSync, Stats, watchFile } from 'fs'
+import { existsSync, mkdirSync, Stats, watchFile } from 'fs'
 import { app as rawApp, dialog, ipcMain, protocol, clipboard } from 'electron'
 import { BrowserWindow } from 'electron/main'
 import rc from './rc.js'
@@ -182,6 +182,45 @@ async function onReady([_appReady, _loadedState, _appx, _webxdc_cleanup]: [
   // can fail due to user error so running it first is better (cli argument)
   acceptThemeCLI()
   setLanguage(DesktopSettings.state.locale || app.getLocale().split('-')[0]) // can consist of 2 strings like in en-GB
+
+  // Warn non-MAS macOS users if data exists in the sandbox container path
+  // (left over from a previous Mac App Store installation),
+  // but only when there are no accounts yet in the non-sandbox location.
+  if (
+    process.platform === 'darwin' &&
+    !process.mas &&
+    !existsSync(getAccountsPath())
+  ) {
+    const { homedir } = await import('os')
+    const sandboxAccountsPath = join(
+      homedir(),
+      'Library/Containers/chat.delta.desktop.electron/Data/Library/Application Support/DeltaChat/accounts'
+    )
+    if (existsSync(sandboxAccountsPath)) {
+      const result = await dialog.showMessageBox({
+        type: 'warning',
+        title: 'Data found from previous Mac App Store installation',
+        message:
+          'A previous Mac App Store installation left account data in the location:\n\n' +
+          sandboxAccountsPath +
+          '\n\n' +
+          'This non-store version uses a different location and will not see that data. ' +
+          '\n' +
+          'We recommend to avoid running different versions of Delta Chat simultaneously. ' +
+          '\n' +
+          'To keep your existing profiles, you can create a backup in the previous app before launching the new version and import it again.' +
+          '\n\n' +
+          'Would you like to continue launching?',
+        buttons: ['Continue', 'Quit'],
+        defaultId: 0,
+        cancelId: 1,
+      })
+      if (result.response === 1) {
+        app.quit()
+        return
+      }
+    }
+  }
 
   const cwd = getAccountsPath()
   log.info(`cwd ${cwd}`)
