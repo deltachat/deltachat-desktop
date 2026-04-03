@@ -1,5 +1,5 @@
 import { BackendRemote } from './backend-com'
-import { getDeviceChatId, markChatAsSeen } from './backend/chat'
+import { getDeviceChatId, marknoticedChat } from './backend/chat'
 
 export async function updateDeviceChat(
   accountId: number,
@@ -38,7 +38,7 @@ export async function updateDeviceChats() {
     await updateDeviceChat(accountId, false)
     if (accountId !== selectedAccount) {
       const devChatId = await getDeviceChatId(accountId)
-      if (devChatId) markChatAsSeen(accountId, devChatId)
+      if (devChatId) marknoticedChat(accountId, devChatId)
     }
   }
 }

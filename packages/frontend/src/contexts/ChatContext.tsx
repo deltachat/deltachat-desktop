@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 
 import { ActionEmitter, KeybindAction } from '../keybindings'
-import { markChatAsSeen, saveLastChatId } from '../backend/chat'
+import { marknoticedChat, saveLastChatId } from '../backend/chat'
 import { BackendRemote } from '../backend-com'
 
 import type { RefObject, PropsWithChildren } from 'react'
@@ -150,7 +150,7 @@ export const ChatProvider = ({
       setChatId(nextChatId)
 
       // Clear system notifications and mark chat as seen in backend
-      markChatAsSeen(accountId, nextChatId)
+      marknoticedChat(accountId, nextChatId)
 
       // Remember that user selected this chat to open it again when they come back
       saveLastChatId(accountId, nextChatId)
