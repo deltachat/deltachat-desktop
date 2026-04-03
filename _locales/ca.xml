@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:ignore="MissingTranslation">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- common strings without special context -->
     <string name="app_name">Delta Chat</string>
     <string name="ok">D\'acord</string>
@@ -18,7 +16,6 @@
     <string name="off">Desactivat</string>
     <string name="def">Per defecte</string>
     <string name="default_value">Per defecte (%1$s)</string>
-    <string name="default_value_as_above">Per defecte (igual que a dalt)</string>
     <string name="custom">Personalitzat</string>
     <string name="none">Cap</string>
     <string name="automatic">Automàtic</string>
@@ -36,8 +33,6 @@
     <string name="update">Actualitza</string>
     <string name="emoji">Emojis</string>
     <string name="attachment">Adjunt</string>
-    <!-- the placeholder will be replaced by the name of the image or file to attach -->
-    <string name="ask_attach">Voleu adjuntar \"%1$s\"?</string>
     <string name="back">Enrere</string>
     <string name="close">Tanca</string>
     <string name="close_window">Tanca la finestra</string>
@@ -74,6 +69,8 @@
     <string name="mark_as_read">Marca-ho com a llegit</string>
     <!-- Shortest text for "Mark as being read". In english, this could be "Read" (past tense of "to read"), in german, this could be "Gelesen". -->
     <string name="mark_as_read_short">Llegit</string>
+    <!-- Shortest text for "Mark as being unread". In english, this could be "Unread" (past tense of "to unread"), in german, this could be "Ungelesen". -->
+    <string name="mark_as_unread_short">No llegit</string>
     <!-- Placeholder text when something is loading -->
     <string name="loading">S\'està carregant...</string>
     <string name="hide">Amaga</string>
@@ -105,7 +102,7 @@
     <string name="email_address">Adreça de correu electrònic</string>
     <string name="bad_email_address">Adreça de correu electrònic errònia.</string>
     <string name="password">Contrasenya</string>
-    <string name="existing_password">Ja existeix aquesta contrasenya</string>
+    <string name="existing_password">Contrasenya existent</string>
     <string name="now">Ara</string>
     <!-- Headline for destructive actions with no undo. Could also be "Caution" or "Warning". -->
     <string name="danger">Perill</string>
@@ -346,8 +343,6 @@
     <string name="menu_more_options">Més opcions</string>
     <string name="menu_learn_spelling">Aprèn l\'ortografia</string>
     <string name="jump_to_message">Ves al missatge</string>
-    <string name="jump_to_original_message">Vés al Missatge Original</string>
-    <string name="copy_json">Copia el JSON</string>
     <string name="replace_draft">Substitueix l\'esborrany</string>
     <string name="title_share_location">Comparteix la ubicació amb tots els membres del grup</string>
     <string name="device_talk">Missatges del dispositiu</string>
@@ -420,6 +415,7 @@
     <string name="declined_call">Trucada rebutjada</string>
     <string name="canceled_call">Trucada cancel·lada</string>
     <string name="missed_call">Trucada perduda</string>
+    <string name="already_in_call">En una trucada</string>
 
     <!-- get confirmations -->
     <!-- confirmation for leaving groups or channels. If a subject is needed, "Are you sure you want to leave the chat?" would work as well -->
@@ -448,11 +444,9 @@
     <string name="ask_remove_from_channel">Eliminar %1$s del canal?</string>
     <string name="open_url_confirmation">Voleu obrir aquest enllaç?</string>
 
-
     <!-- contact list -->
     <string name="contacts_title">Llista de contactes</string>
     <string name="contacts_type_email_above">Escriviu l\'adreça d\'email superior</string>
-
 
     <!-- chatlist and chat view -->
     <plurals name="chat_archived">
@@ -513,24 +507,13 @@
     <string name="send_file_to">Envia \"%1$s\" a…</string>
     <!-- title shown above a list contacts where one should be selected (eg. when a webxdc attempts to send a message to a chat) -->
     <string name="send_message_to">Envia el missatge a...</string>
-    <string name="enable_realtime">Aplicacions en temps real</string>
-    <string name="enable_realtime_explain">Activa connexions en temps real per a aplicacions compartides als xats. Si està activada, els companys de xat poden descobrir la vostra IP en iniciar una aplicació.</string>
-
-    <!-- map -->
-    <string name="filter_map_on_time">Mostra les ubicacions al llarg del temps</string>
-    <string name="show_location_traces">Mostra el rastre</string>
-    <string name="add_poi">Envia el punt d\'interès</string>
-
 
     <!-- punycode warning / labeled links -->
-    <!-- placeholder is domain/hostname that should be trusted -->
-    <string name="open_external_url_trust_domain">No em tornis a demanar per %1$s</string>
     <string name="puny_code_warning_header">S\'ha detectat un enllaç sospitós</string>
     <!-- placeholder contains the hostname converted to ascii -->
     <string name="puny_code_warning_question">Esteu segur de voler visitar %1$s?</string>
     <!-- this message is shown whenever a link with non-latin characters is clicked. first placeholder is original hostname with special chars, second placeholder is hostname encoded in ascii -->
     <string name="puny_code_warning_description">Aquest enllaç usa caràcters amb un aspecte similar però de diferents alfabets. Si seguiu l\'enllaç %1$sus enviarà a %2$s, que és normal per a caràcters no llatins. Si no espereu aquests caràcters, l\'enllaç podria ser maliciós. </string>
-
 
     <!-- search -->
     <string name="search">Busca</string>
@@ -540,7 +523,6 @@
     <string name="search_no_result_for_x">No s\'han trobat resultats per \"%s\"</string>
     <!-- Adjective, as in "Show Unread Messages" -->
     <string name="search_unread">Sense llegir</string>
-
 
     <!-- create/edit groups, contact/group profile -->
     <string name="group_name">Nom del grup</string>
@@ -622,14 +604,13 @@
     <!-- Used for describing resource usage, resulting string will be eg. "1.2 GiB of 3 GiB used" -->
     <string name="part_of_total_used">%1$s de %2$s usats</string>
 
-
     <!-- welcome and login -->
     <!-- Primary button on the welcome screen, allows to create an instant profile -->
     <string name="onboarding_create_instant_account">Crea un perfil nou</string>
     <!-- Secondary button on the welcome screen, allows to "Add as Second Device", "Restore from Backup" -->
     <string name="onboarding_alternative_logins">Ja tinc un perfil</string>
     <!-- This is a button and a title, allowing to use existing, classic email, setting ports, passwords and so on -->
-    <string name="manual_account_setup_option">Inici de sessió correu-e clàssic</string>
+    <string name="manual_account_setup_option">Utilitza correu-e clàssic com a retransmissor</string>
     <!-- Instant onboarding title (there is not more to do than to set name and avatar) -->
     <string name="instant_onboarding_title">El vostre perfil</string>
     <!-- The placeholder will be replaced by the default onboarding server -->
@@ -681,20 +662,20 @@
     <string name="proxy_enabled">Servidor intermediari activat</string>
     <string name="proxy_enabled_hint">Esteu fent servir un servidor intermediari. Si teniu problemes per a connectar-vos, proveu un servidor intermediari diferent.</string>
     <!-- "Relay" refers to the relay servers used; please chose a common term in your language, no need to be literal. If in doubt, stay with "Relay" -->
-    <string name="transports">Relés</string>
-    <string name="add_transport">Afegir Relé</string>
-    <string name="remove_transport">Elimina Relé</string>
-    <string name="edit_transport">Edita Relé</string>
+    <string name="transports">Retransmissors</string>
+    <string name="add_transport">Afegir Retransmissor</string>
+    <string name="remove_transport">Elimina Retransmissors</string>
+    <string name="edit_transport">Edita Retransmissor</string>
     <string name="used_for_sending">Utilitzat per enviar</string>
     <string name="hide_from_contacts">Amagar als contactes</string>
     <string name="hidden_from_contacts">Amagat als contactes</string>
     <!-- Hint for the list of relays -->
-    <string name="transport_list_hint">Missatges rebuts en tots els relés</string>
+    <string name="transport_list_hint">Els missatges es reben en tots els retransmissors.  ⚠️ Si canvies qualsevol cosa aquí, assegura\'t que tots els teus dispositius funcionin com a mínim amb la versió 2.48.0. Sinó, els dispositius més antics podrien no rebre els missatges.</string>
     <!-- shown if a QR code was scanned that can be used as a relay -->
-    <string name="confirm_add_transport">Afegeix aquest relé?</string>
-    <string name="invalid_transport_qr">El codi QR escanejat no conté un relé vàlid.</string>
+    <string name="confirm_add_transport">Afegir aquest retransmissor?</string>
+    <string name="invalid_transport_qr">El codi QR escanejat no conté un retransmissor vàlid.</string>
     <!-- placeholder will be replaced by a relay server name -->
-    <string name="confirm_remove_or_hide_transport_x">Esborrar el relé \"%1$s\"?\n\nEls contactes que només coneixen aquest relé no et podran contactar fins que els escriguis de nou.\n\nSi no ho tens clar, amaga\'l enlloc d\'esborrar-lo.</string>
+    <string name="confirm_remove_or_hide_transport_x">Esborrar el retransmissor \"%1$s\"?\n\nEls contactes que només coneixen aquest retransmissor no et podran contactar fins que els escriguis de nou.\n\nSi no ho tens clar, amaga\'l enlloc d\'esborrar-lo.</string>
     <string name="login_certificate_checks">El certificat coincideix</string>
     <string name="login_error_mail">Si us plau poseu una adreça d\'email vàlida</string>
     <string name="login_error_server">Si us plau poseu un servidor / adreça IP vàlida</string>
@@ -734,7 +715,6 @@
     <string name="videos_sent_without_recoding">(Els vídeos s\'envien en el format original, fitxers grans. Per a enviar vídeos en fitxers més petits, adjunteu-los per separat)</string>
     <string name="share_text_multiple_chats">Voleu enviar aquest text a %1$d xats?\n\n«%2$s»</string>
     <string name="share_abort">S\'ha avortat la compartició per falta de permisos.</string>
-
 
     <!-- preferences -->
     <string name="pref_profile_info_headline">El vostre perfil</string>
@@ -834,17 +814,11 @@
     <string name="up_to_x_most_worse_quality_images">Fins a %1$s, les imatges de pitjor qualitat</string>
     <string name="up_to_x_most_balanced_quality_images">Fins a %1$s, imatges de qualitat la majoria de vegades.</string>
     <string name="download_failed">La baixada ha fallat</string>
-    <!-- %1$s will be replaced by a human-readable number of bytes, eg. 32 KiB, 1 MiB. Resulting string eg. "1 MiB message" -->
-    <string name="n_bytes_message">%1$s missatge</string>
-    <!-- %1$s will be replaced by human-readable date and time -->
-    <string name="download_max_available_until">Baixa el màxim disponible fins a %1$s</string>
     <string name="profile_image_select">Trieu la imatge de perfil</string>
     <string name="select_your_new_profile_image">Trieu la imatge nova de perfil</string>
     <string name="profile_image_delete">Esborra la imatge del perfil</string>
     <string name="pref_show_tray_icon">Mostra la icona de la safata</string>
     <string name="pref_edit_profile">Edita el perfil</string>
-    <string name="disable_imap_idle">Desactiva IMAP IDLE</string>
-    <string name="disable_imap_idle_explain">No usis l\'extensió IMAP IDLE encara que el servidor la permeti. Activar aquesta opció endarreria l\'obtenció de missatges, activeu-ho només per a proves.</string>
     <string name="send_stats_to_devs">Envia estadístiques als desenvolupadors del Delta Chat</string>
     <string name="stats_device_message">Voleu ajudar a millorar Delta Chat i donar suport a la recerca enviant estadístiques d\'ús anònimes setmanalment?\n\n👉 Feu clic aquí… 👈</string>
     <string name="stats_confirmation_dialog">Voleu ajudar a millorar Delta Chat i donar suport a la recerca enviant estadístiques d\'ús anònimes setmanalment?</string>
@@ -972,10 +946,11 @@
     <!-- %1$s will be replaced by the number of weeks (always >1) the timer is set to, %2$s will be replaced by name of the contact -->
     <string name="ephemeral_timer_weeks_by_other">%2$s ha definit el temporitzador dels missatges efímers a %1$s setmanes.</string>
     <string name="chat_unencrypted_explanation">Els missatges en aquest xat fan servir el correu electrònic tradicional i no estan xifrats d\'extrem a extrem.</string>
+    <string name="messages_are_e2ee">Els missatges són xifrats d\'extrem a extrem</string>
     <string name="chat_protection_enabled_tap_to_learn_more">Us garantim que a partir d\'ara els missatges són xifrats d\'extrem a extrem. Toqueu per a obtenir més informació.</string>
-    <string name="chat_protection_enabled_explanation">Ara es garanteix que tots els missatges d\'aquest xat són xifrats d\'extrem a extrem.\n\nEl xifratge d\'extrem a extrem manté privats els missatges entre vós i els companys de xat. Ni tan sols el vostre proveïdor de correu electrònic pot llegir-los.</string>
+    <string name="chat_protection_enabled_explanation">Tots els missatges en aquest xat estan xifrats d\'extrem a extrem. El xifrat d\'extrem a extrem manté els missatges privats entre tu i els destinataris. Ni tan sols els servidors, els proveïdors o els retransmissors els poden llegir.</string>
     <string name="invalid_unencrypted_tap_to_learn_more">%1$srequereix xifratge d\'extrem a extrem, que encara no s\'ha configurat per a aquest xat. Toqueu per a obtenir més informació.</string>
-    <string name="invalid_unencrypted_explanation">Per a establir xifratge d\'extrem a extrem, heu de trobar-vos amb els contactes en persona i escanejar el seu codi QR per a poder afegir-los.</string>
+    <string name="invalid_unencrypted_explanation">Per a establir xifratge d\'extrem a extrem, heu de trobar-vos amb els contactes en persona i escanejar el seu codi QR per a afegir-los.</string>
     <string name="learn_more">Més informació</string>
 
     <string name="devicemsg_self_deleted">Heu esborrat el xat «Missatges desats».\n\nℹ️ Per a usar altre cop la funcionalitat de «Missatges desats», creeu un xat nou amb vós mateix.</string>
@@ -1060,7 +1035,6 @@
     <string name="new_messages_body">Teniu missatges nous</string>
     <string name="n_messages_in_m_chats">%1$d missatges en %2$d xats</string>
 
-
     <!-- permissions -->
     <string name="perm_required_title">Es requereix permís</string>
     <string name="perm_continue">Continua</string>
@@ -1081,9 +1055,6 @@
     <string name="ImageEditorHud_flip">Capgira</string>
     <string name="ImageEditorHud_rotate">Gira</string>
 
-    <!-- strings introduced on desktop. we want to share strings between the os, in general, please do not add generic strings here -->
-    <string name="about_offical_app_desktop">Aquesta és l\'aplicació d\'escriptori oficial de Delta Chat.</string>
-    <string name="about_licensed_under_desktop">Aquest programari és llicenciat amb la llicència GNU GPL versió 3 i el codi font és disponible a GitHub</string>
     <string name="welcome_desktop">Us donem la benvinguda al Delta Chat</string>
     <string name="global_menu_preferences_language_desktop">Trieu l\'idioma...</string>
     <string name="global_menu_file_desktop">Arxiva</string>
@@ -1122,9 +1093,8 @@
     <string name="message_detail_received_desktop">rebut</string>
     <string name="menu.view.developer.open.log.folder">Obre la carpeta de registre</string>
     <string name="menu.view.developer.open.current.log.file">Obre el fitxer de registre actual</string>
-    <string
-        name="explain_desktop_minimized_disabled_tray_pref"
-        tools:ignore="TypographyDashes">La icona de la safata no es pot desactivar perquè Delta Chat s\'ha iniciat amb l\'opció --minimized</string>
+    <string name="explain_desktop_minimized_disabled_tray_pref" tools:ignore="TypographyDashes">La icona de la safata no es pot desactivar perquè Delta Chat s\'ha iniciat amb l\'opció --minimized</string>
+    <!-- deprecated, used on desktop although there is not spell checker -->
     <string name="no_spellcheck_suggestions_found">No s\'ha trobat cap suggeriment ortogràfic.</string>
     <string name="show_window">Mostra la finestra</string>
 
