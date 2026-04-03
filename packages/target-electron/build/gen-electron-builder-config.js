@@ -123,6 +123,12 @@ build['mas'] = {
   // binaries // Paths of any extra binaries that need to be signed.
   // For universal builds: allow these binaries to be x64 in both ASAR files
   x64ArchFiles: '**/*darwin*/**',
+  extraResources: [
+    {
+      from: 'build/container-migration.plist',
+      to: '../container-migration.plist',
+    },
+  ],
 }
 
 build['dmg'] = {
