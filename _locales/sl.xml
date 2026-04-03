@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:ignore="MissingTranslation">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- common strings without special context -->
     <string name="app_name">Delta Chat</string>
     <string name="ok">OK</string>
@@ -18,7 +16,6 @@
     <string name="off">Ugasnjeno</string>
     <string name="def">Privzeto</string>
     <string name="default_value">Privzeto (%1$s)</string>
-    <string name="default_value_as_above">Privzeto (enako kot zgoraj)</string>
     <string name="custom">Po meri</string>
     <string name="none">Nič</string>
     <string name="automatic">Samodejno</string>
@@ -36,8 +33,6 @@
     <string name="update">Posodobi</string>
     <string name="emoji">Emoji</string>
     <string name="attachment">Priponka</string>
-    <!-- the placeholder will be replaced by the name of the image or file to attach -->
-    <string name="ask_attach">Pripni \"%1$s\"?</string>
     <string name="back">Nazaj</string>
     <string name="close">Zapri</string>
     <string name="close_window">Zapri okno</string>
@@ -274,7 +269,6 @@
     <!-- %1$s is replaced by a comma-separated list of names -->
     <string name="ask_remove_members">Odstrani \"%1$s\" iz skupine?</string>
     <string name="contacts_type_email_above">Spodaj vnesite e-poštni naslov</string>
-
 
     <string name="chat_record_explain">Tapni in drži za snemanje glasovnega sporočila, spusti za pošiljanje.</string>
     <string name="chat_share_with_title">Deli z...</string>
