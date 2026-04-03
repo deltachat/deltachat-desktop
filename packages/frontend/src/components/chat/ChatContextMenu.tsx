@@ -35,6 +35,7 @@ type ChatListItem = Pick<
   | 'isPinned'
   | 'isArchived'
   | 'isMuted'
+  | 'freshMessageCounter'
   | 'isDeviceTalk'
   | 'isSelfTalk'
   | 'isSelfInGroup'
@@ -55,6 +56,7 @@ export function fullChatToChatListItem(chat: T.FullChat): ChatListItem {
     isPinned: chat.pinned,
     isArchived: chat.archived,
     isMuted: chat.isMuted,
+    freshMessageCounter: chat.freshMessageCounter,
     isDeviceTalk: chat.isDeviceChat,
     isSelfTalk: chat.isSelfTalk,
     isSelfInGroup: chat.selfInGroup,
@@ -486,6 +488,29 @@ export function useChatContextMenu(): {
         action: onSearchInChat,
       },
       !isMainView && pin,
+      !isMainView &&
+        (chatListItems.some(c => c.freshMessageCounter > 0)
+          ? {
+              label: tx('mark_as_read'),
+              action: () =>
+                Promise.all(
+                  chatListItems.map(c =>
+                    BackendRemote.rpc.marknoticedChat(accountId, c.id)
+                  )
+                ),
+            }
+          : {
+              label: tx('mark_as_unread'),
+              action: () =>
+                Promise.all(
+                  chatListItems.map(c => {
+                    if (c.id === activeChatId) {
+                      unselectChat()
+                    }
+                    return BackendRemote.rpc.markfreshChat(accountId, c.id)
+                  })
+                ),
+            }),
       ephemeralMessagesMenuItem,
       muteMenuItem,
       archive,
