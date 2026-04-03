@@ -264,7 +264,7 @@ export default function ChatList(props: {
   const lastShowArchivedChatsState = useRef(showArchivedChats)
   const lastQuery = useRef(queryStr)
   // on select chat - scroll to selected chat - chatView
-  // follow chat after loading or when it's position in the chatlist changes
+  // follow chat after loading
   useEffect(() => {
     if (isSearchActive && lastQuery.current !== queryStr) {
       scrollChatIntoView(0)
@@ -273,7 +273,7 @@ export default function ChatList(props: {
       return
     }
     // when showArchivedChats changes, select selected chat if it is archived/not-archived otherwise select first item
-    if (activeChatIndex !== -1) {
+    if (activeChatIsInList) {
       scrollActiveChatIntoView()
     } else {
       if (lastShowArchivedChatsState.current !== showArchivedChats) {
@@ -282,7 +282,8 @@ export default function ChatList(props: {
     }
     lastShowArchivedChatsState.current = showArchivedChats
   }, [
-    activeChatIndex,
+    activeChatId,
+    activeChatIsInList,
     isSearchActive,
     scrollChatIntoView,
     showArchivedChats,
