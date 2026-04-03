@@ -80,6 +80,24 @@ test('create profiles', async ({ browserName, isChatmail }) => {
   expect(existingProfiles.length).toBe(numberOfProfiles)
 })
 
+test('check "New E-Mail" option presence', async ({ isChatmail }) => {
+  await page.locator('#new-chat-button').click()
+
+  await expect(page.getByRole('button', { name: 'New Group' })).toBeVisible()
+
+  // Since we're on a Chatmail server, this button is not supposed to be shown.
+  const newEmailButton = page.getByRole('button', { name: 'New E-Mail' })
+  if (isChatmail) {
+    await expect(newEmailButton).not.toBeVisible()
+    // Same button, but double-check, by ID.
+    await expect(page.locator('#newemail')).not.toBeVisible({ timeout: 1 })
+  } else {
+    await expect(newEmailButton).toBeVisible()
+  }
+
+  await page.getByRole('dialog').press('Escape')
+})
+
 test('start chat with user', async ({ browserName }) => {
   if (browserName.toLowerCase().indexOf('chrom') > -1) {
     await page.context().grantPermissions(['clipboard-read', 'clipboard-write'])
