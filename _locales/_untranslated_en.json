@@ -112,5 +112,11 @@
   },
   "messages_are_e2ee": {
     "message": "Messages are end-to-end encrypted."
+  },
+  "search_sticker_placeholder_desktop": {
+    "message": "Search stickers…"
+  },
+  "all": {
+    "message": "All"
   }
 }

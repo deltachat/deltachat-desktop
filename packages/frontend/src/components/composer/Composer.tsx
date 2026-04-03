@@ -15,6 +15,7 @@ import MenuAttachment from './menuAttachment'
 import ComposerMessageInput from './ComposerMessageInput'
 import { getLogger } from '../../../../shared/logger'
 import { EmojiAndStickerPicker } from './EmojiAndStickerPicker'
+import { StickerSuggestions, detectStickerQuery } from './StickerSuggestions'
 import { Quote } from '../message/Message'
 import { DraftAttachment } from '../attachment/messageAttachment'
 import { useSettingsStore } from '../../stores/settings'
@@ -93,6 +94,7 @@ const Composer = forwardRef<
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
   const [showAppPicker, setShowAppPicker] = useState(false)
   const [recording, setRecording] = useState(false)
+  const [stickerQuery, setStickerQuery] = useState<string | null>(null)
 
   const emojiAndStickerRef = useRef<HTMLDivElement>(null)
   const pickerButtonRef = useRef<HTMLButtonElement>(null)
@@ -133,7 +135,10 @@ const Composer = forwardRef<
     : regularMessageInputRef
 
   const onComposerMessageInputChange = useCallback(
-    (newText: string) => updateDraftText(newText, chatId),
+    (newText: string) => {
+      updateDraftText(newText, chatId)
+      setStickerQuery(detectStickerQuery(newText))
+    },
     [chatId, updateDraftText]
   )
 
@@ -316,6 +321,20 @@ const Composer = forwardRef<
       currentComposerMessageInputRef.current?.focus()
     }
   }
+
+  const onStickerSuggestionSent = useCallback(() => {
+    // Remove the `:query` text from the input
+    const textarea = regularMessageInputRef.current?.textareaRef?.current
+    if (textarea) {
+      const text = textarea.value
+      const match = text.match(/(?:^|\s)(:\S+)$/)
+      if (match) {
+        const newText = text.substring(0, text.length - match[1].length)
+        updateDraftText(newText.trimEnd(), chatId)
+      }
+    }
+    setStickerQuery(null)
+  }, [chatId, updateDraftText, regularMessageInputRef])
   // track shift key -> update [shiftPressed]
   // handle escape key for composer, emoji picker and app picker
   useEffect(() => {
@@ -327,12 +346,17 @@ const Composer = forwardRef<
             (ev.target as any).id
           ) &&
           !showEmojiPicker &&
-          !showAppPicker
+          !showAppPicker &&
+          stickerQuery === null
         ) {
           // only handle escape events in composer or related components here
           return
         }
         let handled = false
+        if (stickerQuery !== null) {
+          setStickerQuery(null)
+          handled = true
+        }
         if (showEmojiPicker) {
           setShowEmojiPicker(false)
           handled = true
@@ -383,6 +407,7 @@ const Composer = forwardRef<
     smallScreenMode,
     showEmojiPicker,
     showAppPicker,
+    stickerQuery,
     draftState.quote,
     removeQuote,
   ])
@@ -789,6 +814,14 @@ const Composer = forwardRef<
             <AppPicker onAppSelected={onAppSelected!} />
           </OutsideClickHelper>
         )}
+        {stickerQuery !== null &&
+          !messageEditing.isEditingModeActive && (
+            <StickerSuggestions
+              query={stickerQuery}
+              chatId={chatId}
+              onStickerSent={onStickerSuggestionSent}
+            />
+          )}
         {showEmojiPicker && (
           <EmojiAndStickerPicker
             chatId={chatId}
