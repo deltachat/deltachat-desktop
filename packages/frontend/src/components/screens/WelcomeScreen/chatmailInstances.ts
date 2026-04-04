@@ -1,4 +1,4 @@
-import type { QrWithUrl } from '../../../backend/qr'
+import type { QrWithUrl } from '../../../backend/qr-types'
 
 // URL to list of various other chatmail instances
 export const CHATMAIL_INSTANCES_LIST_URL = 'https://chatmail.at/relays'
