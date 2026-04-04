@@ -14,6 +14,7 @@ import { selectedAccountId } from '../../ScreenController'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import EmojiPicker from '../EmojiPicker'
 import Button from '../Button'
+import Icon from '../Icon'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useMessage from '../../hooks/chat/useMessage'
 
@@ -208,9 +209,7 @@ function StickerPackNav({
         onClick={onOpenStickerFolder}
         title={tx('open_sticker_folder')}
       >
-        <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'>
-          <path d='M2 4a2 2 0 0 1 2-2h3.17a2 2 0 0 1 1.41.59l1.42 1.41h6a2 2 0 0 1 2 2v2h-2V6H9.83l-1.42-1.41-.29-.3-.29.3L6.41 6H4v10h7v2H4a2 2 0 0 1-2-2V4zm15 6v3h3v2h-3v3h-2v-3h-3v-2h3v-3h2z' />
-        </svg>
+        <Icon icon='open_in_new' size={18} coloring='currentColor' />
       </button>
     </div>
   )
@@ -235,6 +234,7 @@ function StickerPackNavItem(props: {
       })}
       onClick={onClick}
       title={label}
+      aria-selected={isSelected || undefined}
       tabIndex={rovingTabindex.tabIndex}
       onKeyDown={rovingTabindex.onKeydown}
       onFocus={rovingTabindex.setAsActiveElement}
@@ -242,7 +242,7 @@ function StickerPackNavItem(props: {
       {thumbnailSrc ? (
         <img src={thumbnailSrc} alt={label} />
       ) : (
-        <span className='all-packs-icon'>⊞</span>
+        <span className='all-packs-icon'>{label}</span>
       )}
     </button>
   )
@@ -260,14 +260,6 @@ function StickerSearchBar({
 
   return (
     <div className='sticker-search-bar'>
-      <span className='sticker-search-icon'>
-        <svg
-          xmlns='http://www.w3.org/2000/svg'
-          viewBox='0 0 18 18'
-        >
-          <path d='M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z' />
-        </svg>
-      </span>
       <input
         type='search'
         className='sticker-search-input'
