@@ -9,7 +9,7 @@ import {
   isQRWithDefaultInstance,
 } from './chatmailInstances'
 
-import type { AccountQr, QrWithUrl } from '../../../backend/qr'
+import type { AccountQr, QrWithUrl } from '../../../backend/qr-types'
 
 const URL_REGEX = /(https?:\/\/[^\s]+)/g
 

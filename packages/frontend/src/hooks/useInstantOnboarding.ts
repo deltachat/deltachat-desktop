@@ -14,7 +14,7 @@ import type {
   JoinBroadcastQr,
   VerifyContactQr,
   VerifyGroupQr,
-} from '../backend/qr'
+} from '../backend/qr-types'
 import AlertDialog from '../components/dialogs/AlertDialog'
 
 type InstantOnboarding = {
