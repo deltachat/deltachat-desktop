@@ -10,7 +10,7 @@ import type {
   QrWithUrl,
   VerifyContactQr,
   VerifyGroupQr,
-} from '../backend/qr'
+} from '../backend/qr-types'
 import type { TranslationKey } from '@deltachat-desktop/shared/translationKeyType'
 
 type QrKind = 'askVerifyContact' | 'askVerifyGroup' | 'askJoinBroadcast'

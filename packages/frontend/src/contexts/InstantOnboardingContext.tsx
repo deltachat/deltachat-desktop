@@ -8,7 +8,7 @@ import type {
   JoinBroadcastQr,
   VerifyContactQr,
   VerifyGroupQr,
-} from '../backend/qr'
+} from '../backend/qr-types'
 
 export type WelcomeQr =
   | VerifyGroupQr
