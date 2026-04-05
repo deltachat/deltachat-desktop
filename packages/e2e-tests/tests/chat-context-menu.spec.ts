@@ -293,6 +293,7 @@ test.describe('Chat List Context Menu - Single Selection', () => {
     // Chat list menu items for DM chat
     await expect(getMenuItems(page)).toHaveText([
       'Pin Chat',
+      'Mark as Unread',
       'Mute Notifications',
       'Archive Chat',
       'View Profile',
@@ -314,6 +315,7 @@ test.describe('Chat List Context Menu - Single Selection', () => {
     // Chat list menu items for group chat
     await expect(getMenuItems(page)).toHaveText([
       'Pin Chat',
+      'Mark as Unread',
       'Mute Notifications',
       'Archive Chat',
       'View Profile',

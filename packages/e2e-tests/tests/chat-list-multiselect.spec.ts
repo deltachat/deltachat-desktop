@@ -208,6 +208,7 @@ test.describe('context menu', () => {
     })
     await expect(page.getByRole('menu').getByRole('menuitem')).toHaveText([
       'Pin Chat',
+      'Mark as Unread',
       'Mute Notifications',
       'Archive Chat',
       'Delete Chat',
@@ -272,6 +273,7 @@ test.describe('context menu', () => {
     })
     await expect(page.getByRole('menu').getByRole('menuitem')).toHaveText([
       'Unpin Chat',
+      'Mark as Unread',
       'Mute Notifications',
       'Archive Chat',
       'Delete Chat',
@@ -288,6 +290,7 @@ test.describe('context menu', () => {
     // Some of the selected are pinned, some are not.
     await expect(page.getByRole('menu').getByRole('menuitem')).toHaveText([
       'Pin Chat',
+      'Mark as Unread',
       'Mute Notifications',
       'Archive Chat',
       'Delete Chat',
@@ -344,6 +347,7 @@ test.describe('context menu', () => {
     })
     await expect(page.getByRole('menu').getByRole('menuitem')).toHaveText([
       'Pin Chat',
+      'Mark as Unread',
       'Unmute',
       'Archive Chat',
       'Delete Chat',
@@ -360,11 +364,59 @@ test.describe('context menu', () => {
     // Some of the selected are muted, some are not.
     await expect(page.getByRole('menu').getByRole('menuitem')).toHaveText([
       'Pin Chat',
+      'Mark as Unread',
       'Mute Notifications',
       'Archive Chat',
       'Delete Chat',
     ])
     await page.keyboard.press('Escape')
+  })
+
+  test('Mark as Read / Unread', async () => {
+    await getChat(1).click()
+    await getChat(1).click({ button: 'right' })
+    await page.getByRole('menuitem', { name: 'Mark as Unread' }).click()
+
+    // Here again we have to wait for the item to get updated
+    // before we open the context menu again.
+    // Unfortunately a11y sucks, so `1$` is our selector.
+    await expect(getChat(1)).toContainText(/1$/)
+    await getChat(1).click({ button: 'right' })
+    await expect(page.getByRole('menu').getByRole('menuitem')).toHaveText([
+      'Pin Chat',
+
+      'Mark as Read',
+
+      'Mute Notifications',
+      'Archive Chat',
+      'View Profile',
+      'Encryption Info',
+      'Clone Chat',
+      'Leave Group',
+      'Delete Chat',
+    ])
+    await page.keyboard.press('Escape')
+
+    await getChat(1).click({
+      modifiers: ['ControlOrMeta'],
+    })
+    await getChat(4).click({
+      modifiers: ['ControlOrMeta'],
+    })
+    await getChat(4).click({ button: 'right' })
+    await expectSelectedChats([4, 1])
+    await page.getByRole('menuitem', { name: 'Mark as Read' }).click()
+    await expect(getChat(1)).not.toContainText(/1$/)
+    await expect(getChat(4)).not.toContainText(/1$/)
+
+    await getChat(4).click({ button: 'right' })
+    await expectSelectedChats([4, 1])
+    await page.getByRole('menuitem', { name: 'Mark as Unread' }).click()
+    await expect(getChat(1)).toContainText(/1$/)
+    await expect(getChat(4)).toContainText(/1$/)
+
+    await getChat(4).click({ button: 'right' })
+    await page.getByRole('menuitem', { name: 'Mark as Read' }).click()
   })
 })
 

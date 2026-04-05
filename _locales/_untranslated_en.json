@@ -112,5 +112,8 @@
   },
   "messages_are_e2ee": {
     "message": "Messages are end-to-end encrypted."
+  },
+  "mark_as_unread": {
+    "message": "Mark as Unread"
   }
 }
