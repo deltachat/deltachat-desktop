@@ -231,9 +231,7 @@ test('chat list item context menu', async () => {
     button: 'right',
   })
   // "Leave Group" does not apply to unencrypted groups.
-  await expect(
-    page.getByRole('menuitem', { name: 'Delete Chat' })
-  ).toBeVisible()
+  await expect(page.getByRole('menuitem', { name: 'Delete' })).toBeVisible()
   await expect(
     page.getByRole('menuitem', { name: 'Leave Group' })
   ).not.toBeVisible()
@@ -241,4 +239,30 @@ test('chat list item context menu', async () => {
 
   await page.getByRole('menuitem').first().press('Escape')
   await expect(page.getByRole('menuitem')).not.toBeVisible()
+})
+
+test('main view 3-dot menu shows Delete Chat for unencrypted group', async () => {
+  const chatListItem = page
+    .locator('.chat-list .chat-list-item')
+    .filter({ hasText: unencryptedGroupSubject1 })
+    .first()
+  await chatListItem.click()
+
+  await page.locator('#three-dot-menu-button').click()
+  await expect(page.getByRole('menu')).toBeVisible()
+
+  // Unencrypted groups show "Delete Chat" instead of "Leave Group"
+  await expect(
+    page.getByRole('menuitem', { name: 'Delete Chat' })
+  ).toBeVisible()
+  await expect(
+    page.getByRole('menuitem', { name: 'Leave Group' })
+  ).not.toBeVisible()
+
+  // No "Disappearing Messages" for unencrypted groups
+  await expect(
+    page.getByRole('menuitem', { name: 'Disappearing Messages' })
+  ).not.toBeVisible()
+
+  await page.keyboard.press('Escape')
 })

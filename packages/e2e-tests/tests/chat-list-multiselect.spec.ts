@@ -207,10 +207,10 @@ test.describe('context menu', () => {
       button: 'right',
     })
     await expect(page.getByRole('menu').getByRole('menuitem')).toHaveText([
-      'Pin Chat',
+      'Pin',
       'Mute Notifications',
-      'Archive Chat',
-      'Delete Chat',
+      'Archive',
+      'Delete',
     ])
     await expectSelectedChats([7, 5])
 
@@ -248,7 +248,7 @@ test.describe('context menu', () => {
     await getChat(5).click({
       button: 'right',
     })
-    await page.getByRole('menuitem', { name: 'Pin Chat' }).click()
+    await page.getByRole('menuitem', { name: 'Pin' }).click()
 
     // Unfortunately we have to wait for core to respond to the "Pin" action,
     // otherwise the menu would think that the chats are still not pinned.
@@ -271,10 +271,10 @@ test.describe('context menu', () => {
       button: 'right',
     })
     await expect(page.getByRole('menu').getByRole('menuitem')).toHaveText([
-      'Unpin Chat',
+      'Unpin',
       'Mute Notifications',
-      'Archive Chat',
-      'Delete Chat',
+      'Archive',
+      'Delete',
     ])
     await page.keyboard.press('Escape')
 
@@ -287,13 +287,13 @@ test.describe('context menu', () => {
     })
     // Some of the selected are pinned, some are not.
     await expect(page.getByRole('menu').getByRole('menuitem')).toHaveText([
-      'Pin Chat',
+      'Pin',
       'Mute Notifications',
-      'Archive Chat',
-      'Delete Chat',
+      'Archive',
+      'Delete',
     ])
 
-    await page.getByRole('menuitem', { name: 'Pin Chat' }).click()
+    await page.getByRole('menuitem', { name: 'Pin' }).click()
     await expect(
       chatList.getByRole('tab', { name: 'Some chat ' })
     ).toContainText([
@@ -312,7 +312,7 @@ test.describe('context menu', () => {
       button: 'right',
     })
     // Unpin all, to restore state for other tests.
-    await page.getByRole('menuitem', { name: 'Unpin Chat' }).click()
+    await page.getByRole('menuitem', { name: 'Unpin' }).click()
     await expect(
       chatList.getByRole('tab', { name: 'Some chat ' })
     ).toContainText([
@@ -343,10 +343,10 @@ test.describe('context menu', () => {
       button: 'right',
     })
     await expect(page.getByRole('menu').getByRole('menuitem')).toHaveText([
-      'Pin Chat',
+      'Pin',
       'Unmute',
-      'Archive Chat',
-      'Delete Chat',
+      'Archive',
+      'Delete',
     ])
     await page.keyboard.press('Escape')
 
@@ -359,10 +359,10 @@ test.describe('context menu', () => {
     })
     // Some of the selected are muted, some are not.
     await expect(page.getByRole('menu').getByRole('menuitem')).toHaveText([
-      'Pin Chat',
+      'Pin',
       'Mute Notifications',
-      'Archive Chat',
-      'Delete Chat',
+      'Archive',
+      'Delete',
     ])
     await page.keyboard.press('Escape')
   })
@@ -392,7 +392,7 @@ test("selection doesn't reset if items get reordered", async () => {
     button: 'right',
   })
   // Change the order of chats by pinning some.
-  await page.getByRole('menuitem', { name: 'Pin Chat' }).click()
+  await page.getByRole('menuitem', { name: 'Pin' }).click()
   await expect(chatList.getByRole('tab', { name: 'Some chat ' })).toContainText(
     [
       'Some chat 7',
@@ -413,7 +413,7 @@ test("selection doesn't reset if items get reordered", async () => {
     button: 'right',
   })
   // Unpin all, to restore state for other tests.
-  await page.getByRole('menuitem', { name: 'Unpin Chat' }).click()
+  await page.getByRole('menuitem', { name: 'Unpin' }).click()
   await expect(chatList.getByRole('tab', { name: 'Some chat ' })).toContainText(
     [
       'Some chat 9',
@@ -493,7 +493,7 @@ test('when chats get removed from the list, they get unselected', async () => {
     button: 'right',
   })
   // Unpin all, to restore state for other tests.
-  await page.getByRole('menuitem', { name: 'Unpin Chat' }).click()
+  await page.getByRole('menuitem', { name: 'Unpin' }).click()
   await expect(chatList.getByRole('tab', { name: 'Some chat ' })).toContainText(
     [
       'Some chat 9',
@@ -523,7 +523,7 @@ test('delete several', async () => {
   await getChat(6).click({
     button: 'right',
   })
-  await page.getByRole('menuitem', { name: 'Delete Chat' }).click()
+  await page.getByRole('menuitem', { name: 'Delete' }).click()
 
   await expect(page.getByRole('dialog')).toContainText('Delete 4 chats?')
   await expect(page.getByRole('dialog').locator('p')).toHaveText(
