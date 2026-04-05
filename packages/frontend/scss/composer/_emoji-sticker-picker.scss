@@ -60,26 +60,109 @@ $emojimart-search-height: 31px + 6px;
     height: calc(#{$esp-height} - #{$esp-header-height});
   }
 
+  $sticker-pack-nav-height: 48px;
+  $sticker-search-height: 40px;
+
   div.sticker-picker {
     background: var(--emojiMartBg);
     width: 100%;
     display: flex;
-    overflow: auto;
+    overflow: hidden;
     flex-direction: column;
 
-    $pack-title-vertical-padding: 8px;
-    $pack-title-font-size: 16px;
-    $pack-title-line-height: 1.15;
+    // --- Emoji-mart variables mirrored for sticker picker ---
+    --em-padding: 12px;
+    --em-padding-small: 6px;
+    --em-font-size: 15px;
+    --em-duration: 225ms;
+    --em-easing: cubic-bezier(0.4, 0, 0.2, 1);
+
+    // --- Search bar: pixel-copy of emoji-mart .search ---
+    .sticker-search-bar {
+      z-index: 2;
+      position: relative;
+      padding: var(--em-padding);
+      padding-bottom: var(--em-padding-small);
+      flex-shrink: 0;
+
+      .sticker-search-input {
+        width: 100%;
+        background-color: var(--picker-border-and-hover-color, $esp-border-color);
+        transition-duration: var(--em-duration);
+        transition-property: background-color, box-shadow;
+        transition-timing-function: var(--em-easing);
+        border: 0;
+        border-radius: 10px;
+        outline: 0;
+        padding: 10px 1em;
+        display: block;
+        font-size: calc(var(--em-font-size) - 1px);
+        font-family: var(--font-family);
+        color: rgb(var(--picker-text-rgb));
+        box-sizing: border-box;
+        line-height: normal;
+        -webkit-appearance: none;
+        appearance: none;
+        -webkit-font-smoothing: antialiased;
+
+        &:focus {
+          background-color: rgb(var(--picker-selected-input-bg-rgb));
+          box-shadow: inset 0 0 0 1px rgb(var(--picker-accent-rgb)),
+            0 1px 3px rgba(65, 69, 73, 0.2);
+        }
+
+        &::placeholder {
+          color: inherit;
+          opacity: 0.6;
+        }
+
+        &::-webkit-search-decoration,
+        &::-webkit-search-cancel-button,
+        &::-webkit-search-results-button,
+        &::-webkit-search-results-decoration {
+          -webkit-appearance: none;
+          appearance: none;
+        }
+      }
+    }
+
+    // --- Sticker grid container ---
     .sticker-container {
       display: flex;
       flex-direction: column;
       flex: 1;
-      padding: 0px 12px 12px;
+      padding: 0;
+      padding-inline-start: var(--em-padding);
       overflow-y: auto;
+      overflow-x: hidden;
 
-      // To account for the `position: sticky` title.
-      scroll-padding-top: $pack-title-font-size * $pack-title-line-height +
-        $pack-title-vertical-padding * 2;
+      // Scrollbar matching emoji-mart
+      &::-webkit-scrollbar {
+        width: 16px;
+        height: 16px;
+      }
+      &::-webkit-scrollbar-track {
+        border: 0;
+      }
+      &::-webkit-scrollbar-button {
+        width: 0;
+        height: 0;
+        display: none;
+      }
+      &::-webkit-scrollbar-corner {
+        background-color: transparent;
+      }
+      &::-webkit-scrollbar-thumb {
+        min-height: 65px;
+        border: 4px solid rgb(var(--picker-background-rgb));
+        border-radius: 8px;
+      }
+      &::-webkit-scrollbar-thumb:hover {
+        background-color: var(--picker-border-and-hover-color) !important;
+      }
+      &:hover::-webkit-scrollbar-thumb {
+        background-color: var(--picker-border-and-hover-color);
+      }
 
       .no-stickers {
         display: flex;
@@ -87,32 +170,36 @@ $emojimart-search-height: 31px + 6px;
         justify-content: center;
         align-items: center;
         flex: 1;
+        padding: var(--em-padding);
 
         & > .description {
-          font-size: large;
+          font-size: var(--em-font-size);
           text-align: center;
+          color: rgba(var(--picker-text-rgb), 0.65);
         }
       }
 
+      // --- Pack section: header matches emoji-mart .sticky category ---
       .sticker-pack {
         & > .title {
-          padding: $pack-title-vertical-padding 0px;
-          color: grey;
-          font-size: large;
-          font-weight: 500;
-          text-transform: capitalize;
-          font-family: var(--font-family);
-          font-size: $pack-title-font-size;
-          line-height: $pack-title-line-height;
+          z-index: 1;
+          background-color: rgba(var(--picker-background-rgb), 0.9);
+          -webkit-backdrop-filter: blur(4px);
+          backdrop-filter: blur(4px);
           font-weight: 500;
           position: sticky;
           top: -1px;
-          background-color: var(--picker-Background);
+          padding: var(--em-padding-small) 0;
+          font-family: var(--font-family);
+          font-size: calc(var(--em-font-size) - 1px);
+          line-height: normal;
+          color: rgb(var(--picker-text-rgb));
+          text-transform: capitalize;
         }
         & > .container {
           display: flex;
           flex-wrap: wrap;
-          justify-content: space-between;
+          padding-bottom: var(--em-padding);
 
           & > .sticker {
             display: flex;
@@ -129,7 +216,7 @@ $emojimart-search-height: 31px + 6px;
 
             &:hover,
             &:focus {
-              background-color: lightgrey;
+              background-color: var(--picker-border-and-hover-color, rgba(0, 0, 0, 0.05));
               cursor: pointer;
             }
 
@@ -143,9 +230,168 @@ $emojimart-search-height: 31px + 6px;
       }
     }
 
-    .sticker-actions-container {
-      border-top: 1px solid $esp-border-color;
-      padding: 0px 12px;
+    // --- Same vars as emoji-mart uses internally ---
+    --em-rgb-color: var(--picker-text-rgb);
+    --em-rgb-accent: var(--picker-accent-rgb);
+    --em-color-border: var(--picker-border-and-hover-color);
+    --color-a: rgb(var(--em-rgb-color));
+    --color-b: rgba(var(--em-rgb-color), 0.65);
+    --duration: 225ms;
+    --easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --category-icon-size: 18px;
+    --sidebar-width: 16px;
+
+    // --- Bottom pack nav: copy of emoji-mart #nav CSS ---
+    .sticker-pack-nav {
+      z-index: 2;
+      padding-top: 12px;
+      padding-bottom: 0;
+      padding-inline-end: var(--sidebar-width);
+      position: relative;
+      display: flex;
+      align-items: stretch;
+      flex-shrink: 0;
+
+      // copy of #nav:before (bottom position)
+      &::before {
+        content: '';
+        height: 2px;
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 100%;
+        background: linear-gradient(to top, var(--em-color-border), transparent);
+      }
+
+      .sticker-pack-nav-items {
+        display: flex;
+        align-items: stretch;
+        flex: 1;
+        min-width: 0;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scrollbar-width: none;
+        &::-webkit-scrollbar { display: none; }
+      }
+
+      // copy of #nav button
+      .sticker-pack-nav-item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 12px 12px;
+        border: 0;
+        border-bottom: 3px solid transparent;
+        border-radius: 0;
+        background: transparent;
+        cursor: pointer;
+        color: var(--color-b);
+        transition:
+          color var(--duration) var(--easing),
+          border-bottom-color var(--duration) var(--easing);
+
+        &:hover {
+          color: var(--color-a);
+        }
+
+        // copy of #nav button[aria-selected]
+        &[aria-selected],
+        &.selected {
+          color: rgb(var(--em-rgb-accent));
+          border-bottom-color: rgb(var(--em-rgb-accent));
+        }
+
+        // copy of #nav svg, #nav img
+        img {
+          width: var(--category-icon-size);
+          height: var(--category-icon-size);
+          object-fit: contain;
+        }
+
+        .all-packs-icon {
+          font-size: 13px;
+          font-weight: 500;
+          line-height: 1;
+        }
+      }
+
+      .sticker-folder-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 12px 12px;
+        border: 0;
+        border-bottom: 3px solid transparent;
+        border-radius: 0;
+        background: transparent;
+        cursor: pointer;
+        color: var(--color-b);
+        transition: color var(--duration) var(--easing);
+
+        &:hover {
+          color: var(--color-a);
+        }
+      }
+    }
+  }
+}
+
+// --- Inline sticker suggestions popup (triggered by :query in compose box) ---
+.sticker-suggestions {
+  position: absolute;
+  bottom: 100%;
+  inset-inline-start: 0;
+  inset-inline-end: 0;
+  z-index: map.get(variables.$z-index, emoji-sticker-picker);
+  background: var(--emojiMartBg);
+  border-radius: var(--picker-BorderRadius) var(--picker-BorderRadius) 0 0;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.15);
+  max-height: 160px;
+  overflow: hidden;
+
+  .sticker-suggestions-list {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 8px;
+    gap: 4px;
+
+    // Scrollbar
+    &::-webkit-scrollbar {
+      height: 6px;
+    }
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: var(--picker-border-and-hover-color);
+      border-radius: 3px;
+    }
+  }
+
+  .sticker-suggestion-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    min-width: 80px;
+    padding: 4px;
+    border: none;
+    border-radius: 6px;
+    background-color: transparent;
+    cursor: pointer;
+
+    &:hover,
+    &:focus {
+      background-color: var(--picker-border-and-hover-color, rgba(0, 0, 0, 0.05));
+    }
+
+    img {
+      max-width: 70px;
+      max-height: 70px;
+      object-fit: contain;
     }
   }
 }
