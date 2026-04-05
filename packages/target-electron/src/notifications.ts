@@ -161,7 +161,7 @@ function showNotification(_event: IpcMainInvokeEvent, data: DcNotification) {
   }
 }
 
-function clearNotificationsForMessage(
+function _clearNotificationsForMessage(
   _: unknown,
   accountId: number,
   chatId: number,
@@ -176,6 +176,63 @@ function clearNotificationsForMessage(
   })
   delete notifications[accountId][chatId][messageId]
 }
+function clearNotificationsForMessage(
+  _: unknown,
+  accountId: number,
+  chatId: number,
+  messageId: number
+) {
+  _clearNotificationsForMessage(_, accountId, chatId, messageId)
+
+  // A message in this chat and account is noticed.
+  // This means that this chat and account is noticed,
+  // so also clear generic notificaions that apply to this chat and account.
+  clearGenericPerChatNotifications(_, accountId, chatId)
+  clearGenericPerAccountNotifications(_, accountId)
+}
+// Unfortunately we've come to rely on `chatId` or `messageId` of 0
+// having special meaning. Namely we produce those
+// for `n_messages_in_m_chats` and `chat_n_new_messages` notifications.
+// Also possibly Core is firing events with `chatId` or `messageId`
+// set to 0.
+// So when it comes to clearing notifications, we should treat 0
+// as a "wildcard" value, meaning
+// "this notification might belong to any chat in this account"
+// (when `chatId === 0`),
+// or "any message in this chat" (when `chatId !== 0 && messageId === 0`).
+// See https://github.com/deltachat/deltachat-desktop/issues/3937#issuecomment-2261541284.
+/**
+ * Clear notifications that have `messageId === 0`,
+ * such as `chat_n_new_messages`.
+ */
+function clearGenericPerChatNotifications(
+  _: unknown,
+  accountId: number,
+  chatId: number
+) {
+  _clearNotificationsForMessage(_, accountId, chatId, 0)
+}
+/**
+ * Clear notifications that have `chatId === 0`,
+ * such as `n_messages_in_m_chats`.
+ */
+function clearGenericPerAccountNotifications(_: unknown, accountId: number) {
+  const chatIdZero = 0
+  // Yes, this is copy-pasted from `clearNotificationsForChat`.
+  // We're not using that function directly to avoid recursion.
+  //
+  // Also note that simply doing
+  // `clearNotificationsForMessage_(_, accountId, 0, 0)`
+  // would have been enough because we don't expect
+  // 0-chat to have non-0 `messageId`s,
+  // but let's properly loop through all keys.
+  if (notifications[accountId]?.[chatIdZero]) {
+    for (const messageId of Object.keys(notifications[accountId][chatIdZero])) {
+      _clearNotificationsForMessage(_, accountId, chatIdZero, Number(messageId))
+    }
+    delete notifications[accountId][chatIdZero]
+  }
+}
 
 function clearNotificationsForChat(
   _: unknown,
@@ -189,6 +246,15 @@ function clearNotificationsForChat(
     }
     delete notifications[accountId][chatId]
   }
+  // No need to `clearGenericPerChatNotifications()`,
+  // because we've already cleared notifications
+  // for _all_ message IDs just above, including 0.
+
+  // A chat in this account is noticed.
+  // This means that this account is noticed,
+  // so also clear generic notificaions that apply to this account.
+  clearGenericPerAccountNotifications(_, accountId)
+
   log.debug('after cleared Notifications', { accountId, chatId, notifications })
 }
 
@@ -198,6 +264,9 @@ function clearAccount(_event: IpcMainInvokeEvent | null, accountId: number) {
       clearNotificationsForChat(null, Number(accountId), Number(chatId))
     }
   }
+  // No need to `clearGenericPerAccountNotifications()`,
+  // because we've already cleared notifications
+  // for _all_ chat IDs just above, including 0.
 }
 
 function clearAll() {
