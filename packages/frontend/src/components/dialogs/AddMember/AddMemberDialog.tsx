@@ -6,6 +6,7 @@ import Icon from '../../Icon'
 import { C, type T } from '@deltachat/jsonrpc-client'
 import type { DialogProps } from '../../../contexts/DialogContext'
 import { Avatar } from '../../Avatar'
+import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import styles from './styles.module.scss'
 
 export function AddMemberDialog({
@@ -69,6 +70,7 @@ export const AddMemberChip = (props: {
   contact: T.Contact
   onRemoveClick: (contact: T.Contact) => void
 }) => {
+  const tx = useTranslationFunction()
   const { contact, onRemoveClick } = props
   return (
     <div key={contact.id} className={styles.AddMemberChip}>
@@ -91,7 +93,7 @@ export const AddMemberChip = (props: {
         type='button'
         className={styles.removeMember}
         onClick={() => onRemoveClick(contact)}
-        aria-label='Remove'
+        aria-label={tx('remove_desktop')}
       >
         <Icon className={styles.removeIcon} icon={'cross'} size={12} />
       </button>

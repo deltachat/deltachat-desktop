@@ -49,6 +49,7 @@ export default function GroupImage(props: Props) {
       <AvatarTag
         className='group-image'
         onClick={() => groupImage && showAvatarFullscreen()}
+        {...(groupImage ? { 'aria-label': tx('group_avatar') } : {})}
       >
         <Avatar
           displayName={groupName || ''}
@@ -56,6 +57,7 @@ export default function GroupImage(props: Props) {
           color={color}
           style={{ ...style, cursor: 'pointer' }}
           large
+          aria-hidden={true}
         />
       </AvatarTag>
       <button

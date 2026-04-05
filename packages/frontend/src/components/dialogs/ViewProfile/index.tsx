@@ -103,7 +103,7 @@ export default function ViewProfile(
               onClick={onClickViewProfileMenu}
               icon='more_vert'
               iconSize={24}
-              aria-label='Profile Menu'
+              aria-label={tx('menu_more_options')}
             />
           </>
         )}

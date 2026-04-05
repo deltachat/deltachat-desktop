@@ -443,7 +443,7 @@ test.describe('draft', () => {
       await page.getByRole('menuitem', { name: 'View Profile' }).click()
       await page
         .getByRole('dialog')
-        .getByRole('button', { name: 'Profile Menu' })
+        .getByRole('button', { name: 'More options' })
         .click()
       await page.getByRole('menuitem', { name: 'Share' }).click()
       await page
