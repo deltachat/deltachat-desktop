@@ -127,6 +127,9 @@ export default function ConnectivityToast() {
   useKeyBindingAction(KeybindAction.Debug_MaybeNetwork, maybeNetwork)
 
   useEffect(() => {
+    onConnectivityChanged()
+  }, [onConnectivityChanged])
+  useEffect(() => {
     if (navigator.onLine === false) onBrowserOffline()
 
     window.addEventListener('online', onBrowserOnline)
