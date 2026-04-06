@@ -249,7 +249,15 @@ export function useMultiselect<T>(
         return true // shouldPreventDefault
       }
 
-      onSelectionChange(new Set([item]))
+      if (
+        // Check if it's already selected.
+        !(
+          selectedItemsRef.current.size === 1 &&
+          selectedItemsRef.current.has(item)
+        )
+      ) {
+        onSelectionChange(new Set([item]))
+      }
       lastActivatedItem.current = item
       return false
     },

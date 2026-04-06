@@ -431,6 +431,38 @@ test('resets selection when the active chat changes', async () => {
   await expectSelectedChats([6])
 })
 
+test.describe("doesn't unselect active chat after switching to archive", () => {
+  test.beforeAll(async () => {
+    // Archive a chat
+    await getChat(7).click()
+    await expectSelectedChats([7])
+    await getChat(7).click({
+      button: 'right',
+    })
+    await page.getByRole('menuitem', { name: 'Archive Chat' }).click()
+  })
+  test.afterAll(async () => {
+    // Un-archive
+    await chatList.getByRole('button', { name: 'Archived Chats' }).click()
+    await getChat(7).click({
+      button: 'right',
+    })
+    await page.getByRole('menuitem', { name: 'Unarchive' }).click()
+    await page.getByLabel('Chats').getByRole('button', { name: 'Back' }).click()
+  })
+
+  test("doesn't unselect active chat after switching to archive", async () => {
+    await getChat(5).click()
+    await expectSelectedChats([5])
+
+    await chatList.getByRole('button', { name: 'Archived Chats' }).click()
+    await expectSelectedChats([])
+
+    await page.getByLabel('Chats').getByRole('button', { name: 'Back' }).click()
+    await expectSelectedChats([5])
+  })
+})
+
 test("selection doesn't reset if items get reordered", async () => {
   await getChat(7).click()
   await expectSelectedChats([7])
