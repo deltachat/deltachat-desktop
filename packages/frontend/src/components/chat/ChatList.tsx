@@ -1030,6 +1030,8 @@ function useChatListMultiselect(
     selectedChats,
     useCallback(
       newSelectedChats => {
+        const origSize = newSelectedChats.size
+
         // `chatListIds` might include `C.DC_CHAT_ID_ARCHIVED_LINK`.
         // Let's make sure that only normal chat list items can be selected
         // with multiselect.
@@ -1040,6 +1042,16 @@ function useChatListMultiselect(
         // other weird chat list items.
         for (let i = 0; i <= C.DC_CHAT_ID_LAST_SPECIAL; i++) {
           newSelectedChats.delete(i)
+        }
+
+        const newSelectionOnlyHasSpecialChats =
+          origSize > 0 && newSelectedChats.size === 0
+        if (newSelectionOnlyHasSpecialChats) {
+          // This is so that when you click on "Archived Chats"
+          // and go back to the normal chat list view,
+          // you don't get "0 chats selected".
+          // We want to have the active chat selected instead.
+          return
         }
 
         // TODO perf: to avoid re-renders, maybe store this into a ref,
