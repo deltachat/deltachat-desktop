@@ -20,7 +20,7 @@ import styles from './styles.module.scss'
 import { useRpcFetch } from '../../../hooks/useFetch'
 import { Avatar } from '../../Avatar'
 import AlertDialog from '../AlertDialog'
-import { unknownErrorToString } from '../../helpers/unknownErrorToString'
+import { unknownErrorToString } from '@deltachat-desktop/shared/unknownErrorToString'
 
 type ForwardMessageProps = {
   message: T.Message

@@ -7,7 +7,7 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 import { useRpcFetch } from '../../hooks/useFetch'
-import { unknownErrorToString } from '../helpers/unknownErrorToString'
+import { unknownErrorToString } from '@deltachat-desktop/shared/unknownErrorToString'
 
 export type Props =
   | {

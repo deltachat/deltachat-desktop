@@ -22,7 +22,7 @@ import {
 import SearchInputButton from '../SearchInput/SearchInputButton'
 import { ClickableLink } from '../helpers/ClickableLink'
 import { useFetch, useRpcFetch } from '../../hooks/useFetch'
-import { unknownErrorToString } from '../helpers/unknownErrorToString'
+import { unknownErrorToString } from '@deltachat-desktop/shared/unknownErrorToString'
 
 const log = getLogger('renderer/components/AppPicker')
 

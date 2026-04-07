@@ -16,7 +16,7 @@ import { selectedAccountId } from '../../../ScreenController'
 
 import type { DcEventType } from '@deltachat/jsonrpc-client'
 import type { DialogProps } from '../../../contexts/DialogContext'
-import { unknownErrorToString } from '../../helpers/unknownErrorToString'
+import { unknownErrorToString } from '@deltachat-desktop/shared/unknownErrorToString'
 
 type Props = {
   backupFile: string

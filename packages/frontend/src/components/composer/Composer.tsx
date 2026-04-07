@@ -45,7 +45,7 @@ import {
   AudioRecorderError,
 } from '../AudioRecorder/AudioRecorder'
 import AlertDialog from '../dialogs/AlertDialog'
-import { unknownErrorToString } from '../helpers/unknownErrorToString'
+import { unknownErrorToString } from '@deltachat-desktop/shared/unknownErrorToString'
 
 const log = getLogger('renderer/composer')
 
