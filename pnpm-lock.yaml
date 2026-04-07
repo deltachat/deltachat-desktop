@@ -143,10 +143,10 @@ importers:
         specifier: 'catalog:'
         version: 2.49.0(ws@8.18.2)
       '@emoji-mart-awesome/react':
-        specifier: ^1.0.0
+        specifier: 1.0.0
         version: 1.0.0(emoji-mart-awesome@3.0.0)(react@19.2.0)
       '@emoji-mart/data':
-        specifier: ^1.2.1
+        specifier: 1.2.1
         version: 1.2.1
       '@jcoreio/async-throttle':
         specifier: ^1.6.1
