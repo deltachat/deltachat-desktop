@@ -112,5 +112,11 @@
   },
   "messages_are_e2ee": {
     "message": "Messages are end-to-end encrypted."
+  },
+  "data_found_other_installation_title": {
+    "message": "Data found from a previous %1$s installation"
+  },
+  "data_found_other_installation_message": {
+    "message": "A previous %1$s installation left account data that this version will not see.\nWe recommend to avoid running different versions of Delta Chat simultaneously.\nTo keep your existing profiles, you can create a backup in the previous app before launching the new version and import it again."
   }
 }

@@ -6,7 +6,7 @@ import { app as rawApp, dialog, ipcMain, protocol, clipboard } from 'electron'
 import { BrowserWindow } from 'electron/main'
 import rc from './rc.js'
 import contextMenu from './electron-context-menu.js'
-import { initIsWindowsStorePackageVar } from './isAppx.js'
+import { appx, initIsWindowsStorePackageVar } from './isAppx.js'
 import { getHelpMenu } from './help_menu.js'
 import { initialisePowerMonitor } from './resume_from_sleep.js'
 
@@ -183,35 +183,43 @@ async function onReady([_appReady, _loadedState, _appx, _webxdc_cleanup]: [
   acceptThemeCLI()
   setLanguage(DesktopSettings.state.locale || app.getLocale().split('-')[0]) // can consist of 2 strings like in en-GB
 
-  // Warn non-MAS macOS users if data exists in the sandbox container path
-  // (left over from a previous Mac App Store installation),
-  // but only when there are no accounts yet in the non-sandbox location.
-  if (
-    process.platform === 'darwin' &&
-    !process.mas &&
-    !existsSync(getAccountsPath())
-  ) {
-    const { homedir } = await import('os')
-    const sandboxAccountsPath = join(
-      homedir(),
-      'Library/Containers/chat.delta.desktop.electron/Data/Library/Application Support/DeltaChat/accounts'
-    )
-    if (existsSync(sandboxAccountsPath)) {
+  // Warn users if data exists from a different installation variant
+  // (e.g. Mac App Store vs DMG, or Windows Store APPX vs Setup.exe),
+  // but only when there are no accounts yet in the current location.
+  if (!existsSync(getAccountsPath())) {
+    let otherStoreName: string | undefined
+    let otherAccountsPath: string | undefined
+
+    if (process.platform === 'darwin' && !process.mas) {
+      const { homedir } = await import('os')
+      const sandboxPath = join(
+        homedir(),
+        'Library/Containers/chat.delta.desktop.electron/Data/Library/Application Support/DeltaChat/accounts'
+      )
+      if (existsSync(sandboxPath)) {
+        otherStoreName = 'Mac App Store'
+        otherAccountsPath = sandboxPath
+      }
+    } else if (process.platform === 'win32') {
+      const { homedir } = await import('os')
+      const normalPath = join(homedir(), 'AppData/Local/DeltaChat/accounts')
+      const appxPath = join(
+        homedir(),
+        'AppData/Local/Packages/merlinux.DeltaChat_v2ry5hvxhdhyy/LocalCache/Local/DeltaChat/accounts'
+      )
+      const otherPath = appx ? normalPath : appxPath
+      if (existsSync(otherPath)) {
+        otherStoreName = appx ? 'non-store' : 'Microsoft Store'
+        otherAccountsPath = otherPath
+      }
+    }
+
+    if (otherStoreName && otherAccountsPath) {
       const result = await dialog.showMessageBox({
         type: 'warning',
-        title: 'Data found from previous Mac App Store installation',
-        message:
-          'A previous Mac App Store installation left account data in the location:\n\n' +
-          sandboxAccountsPath +
-          '\n\n' +
-          'This non-store version uses a different location and will not see that data. ' +
-          '\n' +
-          'We recommend to avoid running different versions of Delta Chat simultaneously. ' +
-          '\n' +
-          'To keep your existing profiles, you can create a backup in the previous app before launching the new version and import it again.' +
-          '\n\n' +
-          'Would you like to continue launching?',
-        buttons: ['Continue', 'Quit'],
+        title: tx('data_found_other_installation_title', otherStoreName),
+        message: tx('data_found_other_installation_message', otherStoreName),
+        buttons: [tx('ok'), tx('cancel')],
         defaultId: 0,
         cancelId: 1,
       })
