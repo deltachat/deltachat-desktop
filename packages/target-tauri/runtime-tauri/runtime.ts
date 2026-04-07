@@ -584,7 +584,7 @@ class TauriRuntime implements Runtime {
 
     // On macOS title bar is in `Overlay` mode and title is set to "",
     // adding the title bar on macOS would interfere with other UI elements.
-    if (!RuntimeInfo.isMac) {
+    if (!this.getRuntimeInfo().isMac) {
       window.setTitle(`Delta Chat Tauri${value === 0 ? '' : ` (${value})`}`)
     }
 
