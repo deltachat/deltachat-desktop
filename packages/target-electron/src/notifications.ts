@@ -1,5 +1,6 @@
 import { platform } from 'os'
 import { app, Notification, nativeImage, ipcMain } from 'electron'
+import { dialog } from 'electron/main'
 
 import * as mainWindow from './windows/main.js'
 import { appIcon } from './application-constants.js'
@@ -8,6 +9,9 @@ import { getLogger } from '../../shared/logger.js'
 
 import type { NativeImage, IpcMainInvokeEvent } from 'electron'
 import { DCJsonrpcRemoteInitializedP } from './ipc.js'
+import { tx } from './load-translations.js'
+import { unknownErrorToString } from '@deltachat-desktop/shared/unknownErrorToString'
+import { appName } from '@deltachat-desktop/shared/constants.js'
 
 /**
  * Notification related functions to:
@@ -64,6 +68,12 @@ function createNotification(data: DcNotification): Notification {
     body:
       platform() === 'linux' ? filterNotificationText(data.body) : data.body,
     icon,
+    hasReply:
+      data.accountId !== 0 &&
+      data.chatId !== 0 &&
+      // Also need this condition because we don't want to have the "reply" UI
+      // for generic "<chat name>: 3 new messages" notifications.
+      data.messageId !== 0,
     timeoutType: 'default',
   }
 
@@ -140,6 +150,45 @@ function showNotification(_event: IpcMainInvokeEvent, data: DcNotification) {
       }
       // eslint-disable-next-line no-console
       console.log('Notification close event triggered', notify)
+    })
+    notify.on('reply', async e => {
+      // See the Android's implementation:
+      // https://github.com/deltachat/deltachat-android/blob/acb4eb2ae1ccc327aa7df6cf2b40da09e1b7e47b/src/main/java/org/thoughtcrime/securesms/notifications/RemoteReplyReceiver.java#L58-L71
+      try {
+        const jsonrpcRemote = await DCJsonrpcRemoteInitializedP
+
+        const sendP = jsonrpcRemote.rpc.sendMsg(accountId, chatId, {
+          quotedMessageId: data.messageId,
+          text: e.reply,
+
+          file: null,
+          filename: null,
+          html: null,
+          location: null,
+          overrideSenderName: null,
+          quotedText: null,
+          viewtype: null,
+        })
+
+        // We don't `await` these because they're not that important.
+        jsonrpcRemote.rpc.markseenMsgs(accountId, [data.messageId])
+        jsonrpcRemote.rpc.marknoticedChat(accountId, chatId)
+
+        await sendP
+      } catch (err) {
+        // Note that we expect this error for channels and otherwise
+        // read-only chats, i.e. `!chat.canSend`.
+        // TODO fix: we should do the same checks as we do
+        // for the "Reply" menu item, `showReply`.
+        dialog.showErrorBox(
+          `${appName}: ${tx('notify_reply_button')} failed`,
+          tx(
+            'error_x',
+            'Failed to send reply from notification:\n' +
+              unknownErrorToString(err)
+          )
+        )
+      }
     })
 
     if (!notifications[accountId]) {
