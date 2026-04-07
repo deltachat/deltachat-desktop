@@ -34,7 +34,7 @@ import { AddMemberDialog } from './AddMember/AddMemberDialog'
 import { RovingTabindexProvider } from '../../contexts/RovingTabindex'
 import { copyToBlobDir } from '../../utils/copyToBlobDir'
 import AlertDialog from './AlertDialog'
-import { unknownErrorToString } from '../helpers/unknownErrorToString'
+import { unknownErrorToString } from '@deltachat-desktop/shared/unknownErrorToString'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 const log = getLogger('ViewGroup')
 

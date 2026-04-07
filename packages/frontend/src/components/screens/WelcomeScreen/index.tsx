@@ -9,7 +9,7 @@ import { getConfiguredAccounts } from '../../../backend/account'
 import { BackendRemote, EffectfulBackendActions } from '../../../backend-com'
 import useDialog from '../../../hooks/dialog/useDialog'
 import AlertDialog from '../../dialogs/AlertDialog'
-import { unknownErrorToString } from '../../helpers/unknownErrorToString'
+import { unknownErrorToString } from '@deltachat-desktop/shared/unknownErrorToString'
 
 type Props = {
   selectedAccountId: number

@@ -32,7 +32,7 @@ import {
 import classNames from 'classnames'
 import { useRpcFetch } from '../../hooks/useFetch'
 import AlertDialog from '../dialogs/AlertDialog'
-import { unknownErrorToString } from '../helpers/unknownErrorToString'
+import { unknownErrorToString } from '@deltachat-desktop/shared/unknownErrorToString'
 
 type Props = {
   onAddAccount: () => Promise<number>

@@ -16,7 +16,7 @@ import { Proxy } from '../../Settings/DefaultCredentials'
 import { debounce } from 'debounce'
 
 import { getLogger } from '@deltachat-desktop/shared/logger'
-import { unknownErrorToString } from '../../helpers/unknownErrorToString'
+import { unknownErrorToString } from '@deltachat-desktop/shared/unknownErrorToString'
 
 import ProxyItemRow from './ProxyItemRow'
 import BasicQrScanner from '../BasicScanner'

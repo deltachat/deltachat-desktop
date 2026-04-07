@@ -48,7 +48,7 @@ import { dirname } from 'path'
 import QrCode from '../QrCode'
 import { areAllContactsVerified } from '../../../backend/chat'
 import AlertDialog from '../AlertDialog'
-import { unknownErrorToString } from '../../helpers/unknownErrorToString'
+import { unknownErrorToString } from '@deltachat-desktop/shared/unknownErrorToString'
 
 import type { T } from '@deltachat/jsonrpc-client'
 import type { DialogProps } from '../../../contexts/DialogContext'

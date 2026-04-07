@@ -12,7 +12,7 @@ import MessageDetail from '../dialogs/MessageDetail/MessageDetail'
 import type { OpenDialog } from '../../contexts/DialogContext'
 import { C, T } from '@deltachat/jsonrpc-client'
 import ConfirmDeleteMessageDialog from '../dialogs/ConfirmDeleteMessage'
-import { unknownErrorToString } from '../helpers/unknownErrorToString'
+import { unknownErrorToString } from '@deltachat-desktop/shared/unknownErrorToString'
 import AlertDialog from '../dialogs/AlertDialog'
 import type { msgStatus } from '../../types-app'
 

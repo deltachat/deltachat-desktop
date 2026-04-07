@@ -10,7 +10,7 @@ import type { DialogProps } from '../../contexts/DialogContext'
 
 import styles from './SelectAccountDialog.module.scss'
 import { useFetch } from '../../hooks/useFetch'
-import { unknownErrorToString } from '../helpers/unknownErrorToString'
+import { unknownErrorToString } from '@deltachat-desktop/shared/unknownErrorToString'
 
 type Props = {
   onSelect: (accountId: number) => void
