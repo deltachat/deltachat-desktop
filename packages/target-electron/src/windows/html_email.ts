@@ -107,15 +107,13 @@ export function openHtmlEmailWindow(
     300
   )
 
-  const loadRemoteContentAtStart =
+  let loadRemoteContent =
     DesktopSettings.state.HTMLEmailAlwaysLoadRemoteContent && !isContactRequest
 
   window.webContents.ipc.handle('html_email:get_info', _ => ({
     subject,
     from,
     receiveTime,
-    networkButtonLabelText: tx('load_remote_content'),
-    toggle_network: loadRemoteContentAtStart,
   }))
 
   nativeTheme.on('updated', () => {
@@ -236,7 +234,7 @@ export function openHtmlEmailWindow(
    */
   let sandboxedView: WebContentsView = makeBrowserView(
     account_id,
-    loadRemoteContentAtStart,
+    loadRemoteContent,
     htmlEmail,
     window
   )
@@ -251,6 +249,15 @@ export function openHtmlEmailWindow(
       [key: string]: () => MenuItemConstructorOptions
     } = {
       separator: () => ({ type: 'separator' }),
+      load_remote_images: () => ({
+        id: 'load_remote_images',
+        type: 'checkbox',
+        label: tx('load_remote_content'),
+        checked: loadRemoteContent,
+        click() {
+          update_restrictions(null, !loadRemoteContent)
+        },
+      }),
       always_show: () => ({
         id: 'always_show',
         type: 'checkbox',
@@ -264,11 +271,6 @@ export function openHtmlEmailWindow(
           })
           // apply change
           update_restrictions(null, newValue, true)
-          window.webContents.executeJavaScript(
-            `document.getElementById('toggle_network').checked = window.network_enabled= ${Boolean(
-              newValue
-            )}`
-          )
         },
       }),
       dont_ask: () => ({
@@ -286,9 +288,13 @@ export function openHtmlEmailWindow(
     }
     let menu: Electron.Menu
     if (isContactRequest) {
-      menu = electron.Menu.buildFromTemplate([menuItems.dont_ask()])
+      menu = electron.Menu.buildFromTemplate([
+        menuItems.load_remote_images(),
+        menuItems.dont_ask(),
+      ])
     } else {
       menu = electron.Menu.buildFromTemplate([
+        menuItems.load_remote_images(),
         menuItems.always_show(),
         menuItems.dont_ask(),
       ])
@@ -379,13 +385,14 @@ export function openHtmlEmailWindow(
       buttons[result.response].action()
     }
 
+    loadRemoteContent = allow_network
     const bounds = sandboxedView?.getBounds()
     window.contentView.removeChildView(sandboxedView)
     context_menu_handle()
     sandboxedView.webContents.close()
     sandboxedView = makeBrowserView(
       account_id,
-      allow_network,
+      loadRemoteContent,
       htmlEmail,
       window
     )
@@ -396,8 +403,6 @@ export function openHtmlEmailWindow(
     // for debugging email
     // sandboxedView.webContents.openDevTools({ mode: 'detach' })
   }
-  // handle toggle network button
-  window.webContents.ipc.handle('html-view:change-network', update_restrictions)
 
   window.loadFile(
     join(
