@@ -127,6 +127,7 @@ export function useDraft(
     if (skipLoadingDraft) {
       return
     }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setDraftIsLoading(true)
     BackendRemote.rpc
       .getDraft(accountId, chatId)
