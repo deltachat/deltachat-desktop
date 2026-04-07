@@ -255,7 +255,7 @@ export function openHtmlEmailWindow(
         label: tx('load_remote_content'),
         checked: loadRemoteContent,
         click() {
-          update_restrictions(null, !loadRemoteContent)
+          update_restrictions(!loadRemoteContent)
         },
       }),
       always_show: () => ({
@@ -270,7 +270,7 @@ export function openHtmlEmailWindow(
             HTMLEmailAlwaysLoadRemoteContent: newValue,
           })
           // apply change
-          update_restrictions(null, newValue, true)
+          update_restrictions(newValue, true)
         },
       }),
       dont_ask: () => ({
@@ -332,7 +332,6 @@ export function openHtmlEmailWindow(
   })
 
   const update_restrictions = async (
-    _ev: any,
     allow_network: boolean,
     skip_sideeffects = false
   ) => {
