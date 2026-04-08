@@ -155,7 +155,7 @@ app.isQuitting = false
 Promise.all([
   new Promise((resolve, _reject) => app.on('ready', resolve)),
   DesktopSettings.load(),
-  initIsWindowsStorePackageVar(),
+  initIsWindowsStorePackageVar().then(() => existsSync(getAccountsPath())),
   webxdcStartUpCleanup(),
 ])
   .then(onReady)
@@ -173,12 +173,12 @@ Also make sure you are not trying to run multiple instances of deltachat.`
 
 let ipc_shutdown_function: (() => void) | null = null
 
-async function onReady([_appReady, _loadedState, _appx, _webxdc_cleanup]: [
-  any,
-  any,
-  any,
-  any,
-]) {
+async function onReady([
+  _appReady,
+  _loadedState,
+  accountsPathExists,
+  _webxdc_cleanup,
+]: [any, any, boolean, any]) {
   // can fail due to user error so running it first is better (cli argument)
   acceptThemeCLI()
   setLanguage(DesktopSettings.state.locale || app.getLocale().split('-')[0]) // can consist of 2 strings like in en-GB
@@ -186,7 +186,7 @@ async function onReady([_appReady, _loadedState, _appx, _webxdc_cleanup]: [
   // Warn users if data exists from a different installation variant
   // (e.g. Mac App Store vs DMG, or Windows Store APPX vs Setup.exe),
   // but only when there are no accounts yet in the current location.
-  if (!existsSync(getAccountsPath())) {
+  if (!accountsPathExists) {
     let otherStoreName: string | undefined
     let otherAccountsPath: string | undefined
 
@@ -209,7 +209,9 @@ async function onReady([_appReady, _loadedState, _appx, _webxdc_cleanup]: [
       )
       const otherPath = appx ? normalPath : appxPath
       if (existsSync(otherPath)) {
-        otherStoreName = appx ? 'non-store' : 'Microsoft Store'
+        // note that it seems per default if data exists in normalPath it will be used by the appx version
+        // but in that case we expect the previous accounts to be used, so this warning will not appear
+        otherStoreName = appx ? 'get.delta.chat' : 'Microsoft Store'
         otherAccountsPath = otherPath
       }
     }
@@ -217,7 +219,7 @@ async function onReady([_appReady, _loadedState, _appx, _webxdc_cleanup]: [
     if (otherStoreName && otherAccountsPath) {
       const result = await dialog.showMessageBox({
         type: 'warning',
-        title: tx('data_found_other_installation_title', otherStoreName),
+        title: tx('warning'),
         message: tx('data_found_other_installation_message', otherStoreName),
         buttons: [tx('ok'), tx('cancel')],
         defaultId: 0,
