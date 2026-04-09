@@ -117,6 +117,6 @@
     "message": "Warning"
   },
   "data_found_other_installation_message": {
-    "message": "Your profiles from another Delta Chat installation are not accessible - different installations store their data in separate locations.\n\nTo keep the existing profiles:\n1. Exit now\n2. Open the other Delta Chat - you may need to reinstall it from %1$s\n3. Create a backup there at \"Settings / Chats\"\n4. Relaunch this version\n5. Restore the backup on the next page at \"I already have a profile\"\n\nContinue without your previous profiles?"
+    "message": "Your profiles from another Delta Chat installation are not accessible - different installations store their data in separate locations.\n\nTo keep existing profiles:\n1. Quit now\n2. Open the other Delta Chat - if needed, reinstall it from %1$s\n3. Back up each profile at \"Settings/Chats\"\n4. Relaunch this version\n5. Restore the backups using \"I already have a profile\"\n\nContinue without your previous profiles?"
   }
 }
