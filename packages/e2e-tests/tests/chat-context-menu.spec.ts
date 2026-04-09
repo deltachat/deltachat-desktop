@@ -208,7 +208,7 @@ test.describe('Main View - 3-Dot Menu', () => {
       page.getByRole('menuitem', { name: 'Leave Group' })
     ).toBeVisible()
     await expect(
-      page.getByRole('menuitem', { name: 'Delete Chat' })
+      page.getByRole('menuitem', { name: 'Delete' })
     ).not.toBeVisible()
 
     // Leave the group (without deleting)
@@ -224,7 +224,7 @@ test.describe('Main View - 3-Dot Menu', () => {
       page.getByRole('menuitem', { name: 'Delete Chat' })
     ).toBeVisible()
     await expect(
-      page.getByRole('menuitem', { name: 'Leave Group' })
+      page.getByRole('menuitem', { name: 'Leave' })
     ).not.toBeVisible()
     await closeMenu(page)
 
@@ -390,7 +390,7 @@ test.describe('Chat List Context Menu - Single Selection', () => {
 
     await openChatListContextMenu(page, groupName)
 
-    // Chat list menu items for group chat (no Leave Group in chat list)
+    // Chat list menu items for group chat
     await expect(getMenuItems(page)).toHaveText([
       'Pin Chat',
       'Mute Notifications',
