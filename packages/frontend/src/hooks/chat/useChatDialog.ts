@@ -8,7 +8,7 @@ import useConfirmationDialog from '../dialog/useConfirmationDialog'
 import useDialog from '../dialog/useDialog'
 import useTranslationFunction from '../useTranslationFunction'
 import { BackendRemote, EffectfulBackendActions } from '../../backend-com'
-import { shallLeaveBeforeDelete } from '../../components/chat/ChatContextMenu'
+import { canLeaveChat } from '../../components/chat/ChatContextMenu'
 
 import type { T } from '@deltachat/jsonrpc-client'
 import { getLogger } from '@deltachat-desktop/shared/logger'
@@ -122,7 +122,7 @@ export default function useChatDialog() {
         return
       }
 
-      const anyNeedLeave = chats.some(chat => shallLeaveBeforeDelete(chat))
+      const anyNeedLeave = chats.some(chat => canLeaveChat(chat))
 
       const hasUserConfirmed = await openConfirmationDialog({
         message:
@@ -145,7 +145,7 @@ export default function useChatDialog() {
             if (selectedChatId === chat.id) {
               unselectChat()
             }
-            if (shallLeaveBeforeDelete(chat)) {
+            if (canLeaveChat(chat)) {
               await BackendRemote.rpc.leaveGroup(accountId, chat.id)
             }
             await EffectfulBackendActions.deleteChat(accountId, chat.id)

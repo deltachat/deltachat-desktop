@@ -130,8 +130,8 @@ test.describe('Main View - 3-Dot Menu', () => {
       'Mute Notifications',
       'Archive Chat',
       'Block Contact',
-      'Delete Chat',
       'Clear Chat',
+      'Delete Chat',
     ])
 
     await closeMenu(page)
@@ -154,8 +154,8 @@ test.describe('Main View - 3-Dot Menu', () => {
       'Mute Notifications',
       'Archive Chat',
       'Clone Chat',
-      'Leave Group',
       'Clear Chat',
+      'Leave Group',
     ])
 
     await closeMenu(page)
@@ -398,7 +398,7 @@ test.describe('Chat List Context Menu - Single Selection', () => {
       'View Profile',
       'Encryption Info',
       'Clone Chat',
-      'Delete',
+      'Leave Group',
     ])
 
     await closeMenu(page)

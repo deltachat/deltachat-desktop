@@ -23,10 +23,10 @@ import { ActionEmitter, KeybindAction } from '../../keybindings'
 const log = getLogger('ChatListContextMenu')
 
 /**
- * Returns true if the user should leave the group/channel before deleting it.
+ * Returns true if the user can (and should) leave the group/channel before deleting it.
  * When true, the menu shows "Leave" instead of "Delete Chat".
  */
-export function shallLeaveBeforeDelete(
+export function canLeaveChat(
   chat: Pick<ChatListItem, 'chatType' | 'isEncrypted'> &
     Partial<Pick<ChatListItem, 'isSelfInGroup' | 'isContactRequest'>>
 ): boolean {
@@ -282,24 +282,23 @@ function buildViewEditMenuItems(
  * Builds encryption info menu item
  */
 function buildEncryptionInfoMenuItem(
-  relatedChat: T.FullChat,
+  fullChat: T.FullChat,
   tx: ReturnType<typeof useTranslationFunction>,
   openEncryptionInfoDialog: ReturnType<
     typeof useChatDialog
   >['openEncryptionInfoDialog']
 ): ContextMenuItem | false {
   return (
-    !relatedChat.isDeviceChat &&
-    !relatedChat.isSelfTalk && {
+    !fullChat.isDeviceChat &&
+    !fullChat.isSelfTalk && {
       label: tx('encryption_info_title_desktop'),
       action: () =>
         openEncryptionInfoDialog({
-          chatId: relatedChat.id,
+          chatId: fullChat.id,
           // https://github.com/chatmail/core/blob/a3328ea2de1e675b1418b4e2ca0c23f88828c558/deltachat-jsonrpc/src/api/types/chat_list.rs#L130-L146
           dmChatContact:
-            relatedChat.chatType === 'Single' &&
-            relatedChat.contactIds.length > 0
-              ? relatedChat.contactIds[0]
+            fullChat.chatType === 'Single' && fullChat.contactIds.length > 0
+              ? fullChat.contactIds[0]
               : null,
         }),
     }
@@ -496,11 +495,11 @@ export function useChatContextMenu(): {
       !isOutBroadcast &&
       relatedChat.chatType !== 'InBroadcast'
 
-    // In the main view, show either "Leave" or "Delete Chat", not both
+    // If a single chat is selected (or in main view),
+    // show either "Leave" or "Delete Chat", not both
     const shouldLeaveBeforeDelete =
-      isMainView &&
-      relatedChat &&
-      shallLeaveBeforeDelete(fullChatToChatListItem(relatedChat))
+      (relatedChat && canLeaveChat(fullChatToChatListItem(relatedChat))) ||
+      (relatedChat && canLeaveChat(relatedChat))
 
     // Build the complete menu
     const menu: (ContextMenuItem | false)[] = [
@@ -537,7 +536,7 @@ export function useChatContextMenu(): {
         action: onClearChat,
         danger: true,
       },
-      // Leave channel or group (shown instead of Delete when shallLeaveBeforeDelete)
+      // Leave channel or group (shown instead of Delete when canLeaveChat is true)
       shouldLeaveBeforeDelete &&
         relatedChat.chatType === 'InBroadcast' && {
           label: tx('menu_leave_channel'),
@@ -549,8 +548,8 @@ export function useChatContextMenu(): {
           label: tx('menu_leave_group'),
           action: () => onLeaveGroupOrChannel(relatedChat),
           danger: true,
-      },
-      // Delete Chat (hidden when shallLeaveBeforeDelete in main view)
+        },
+      // Delete Chat (hidden when canLeaveChat is true)
       !shouldLeaveBeforeDelete && {
         label: isMainView ? tx('menu_delete_chat') : tx('delete'),
         action: onDeleteChats,
