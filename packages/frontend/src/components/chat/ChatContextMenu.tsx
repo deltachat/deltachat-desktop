@@ -532,6 +532,11 @@ export function useChatContextMenu(): {
         action: () => onBlockContact(relatedChat),
         danger: true,
       },
+      isMainView && {
+        label: tx('clear_chat'),
+        action: onClearChat,
+        danger: true,
+      },
       // Leave channel or group (shown instead of Delete when shallLeaveBeforeDelete)
       shouldLeaveBeforeDelete &&
         relatedChat.chatType === 'InBroadcast' && {
@@ -544,16 +549,11 @@ export function useChatContextMenu(): {
           label: tx('menu_leave_group'),
           action: () => onLeaveGroupOrChannel(relatedChat),
           danger: true,
-        },
+      },
       // Delete Chat (hidden when shallLeaveBeforeDelete in main view)
       !shouldLeaveBeforeDelete && {
         label: isMainView ? tx('menu_delete_chat') : tx('delete'),
         action: onDeleteChats,
-        danger: true,
-      },
-      isMainView && {
-        label: tx('clear_chat'),
-        action: onClearChat,
         danger: true,
       },
     ].filter(Boolean) as ContextMenuItem[]
