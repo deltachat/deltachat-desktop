@@ -110,10 +110,14 @@ export default function useChatDialog() {
        */
       chats: Array<
         Pick<
-          T.BasicChat | ChatListItem,
-          'id' | 'name' | 'chatType' | 'isEncrypted'
-        > &
-          Partial<Pick<ChatListItem, 'isSelfInGroup' | 'isContactRequest'>>
+          ChatListItem,
+          | 'id'
+          | 'name'
+          | 'chatType'
+          | 'isEncrypted'
+          | 'isSelfInGroup'
+          | 'isContactRequest'
+        >
       >,
       selectedChatId: number | null
     ) => {
@@ -174,9 +178,12 @@ export default function useChatDialog() {
         }
       )
 
-      if (result !== 'cancel') {
-        BackendRemote.rpc.leaveGroup(accountId, chatId)
+      if (result === 'cancel') {
+        return
       }
+
+      BackendRemote.rpc.leaveGroup(accountId, chatId)
+
       if (result === 'leave-and-delete') {
         unselectChat()
         EffectfulBackendActions.deleteChat(accountId, chatId)
