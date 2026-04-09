@@ -51,7 +51,8 @@ export default function EmojiPicker({
     const shadowRoot = picker?.shadowRoot
     if (!shadowRoot) return
     const style = document.createElement('style')
-    style.textContent = '.category > .sticky { background: none !important; }'
+    style.textContent =
+      '.category > .sticky { background-color: var(--bgPrimary) !important; }'
     shadowRoot.appendChild(style)
     return () => {
       shadowRoot.removeChild(style)
