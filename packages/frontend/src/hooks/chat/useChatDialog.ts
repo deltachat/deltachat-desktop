@@ -175,11 +175,11 @@ export default function useChatDialog() {
       )
 
       if (result !== 'cancel') {
-        await BackendRemote.rpc.leaveGroup(accountId, chatId)
+        BackendRemote.rpc.leaveGroup(accountId, chatId)
       }
       if (result === 'leave-and-delete') {
         unselectChat()
-        await EffectfulBackendActions.deleteChat(accountId, chatId)
+        EffectfulBackendActions.deleteChat(accountId, chatId)
       }
     },
     [openDialog, unselectChat]

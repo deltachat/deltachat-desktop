@@ -45,15 +45,15 @@ export default function LeaveGroupDialog({ isGroup, cb, onClose }: Props) {
           </FooterActionButton>
           <FooterActionButton
             styling='danger'
-            onClick={() => handleResult('leave-and-delete')}
-          >
-            {tx('menu_leave_and_delete')}
-          </FooterActionButton>
-          <FooterActionButton
-            styling='danger'
             onClick={() => handleResult('leave')}
           >
             {isGroup ? tx('menu_leave_group') : tx('menu_leave_channel')}
+          </FooterActionButton>
+          <FooterActionButton
+            styling='danger'
+            onClick={() => handleResult('leave-and-delete')}
+          >
+            {tx('menu_leave_and_delete')}
           </FooterActionButton>
         </FooterActions>
       </DialogFooter>

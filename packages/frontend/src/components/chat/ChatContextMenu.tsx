@@ -27,21 +27,17 @@ const log = getLogger('ChatListContextMenu')
  * When true, the menu shows "Leave" instead of "Delete Chat".
  */
 export function canLeaveChat(
-  chat: Pick<ChatListItem, 'chatType' | 'isEncrypted'> &
-    Partial<Pick<ChatListItem, 'isSelfInGroup' | 'isContactRequest'>>
+  chat: Pick<T.FullChat, 'chatType' | 'isEncrypted' | 'selfInGroup' | 'canSend'>
 ): boolean {
   if (chat.chatType === 'InBroadcast') {
-    return !!chat.isSelfInGroup
+    return !!chat.selfInGroup
   }
-  if (
-    chat.chatType === 'Group' &&
+  return (
+    chat.chatType !== 'Single' &&
+    chat.chatType !== 'OutBroadcast' &&
     chat.isEncrypted &&
-    chat.isSelfInGroup &&
-    !chat.isContactRequest
-  ) {
-    return true
-  }
-  return false
+    chat.canSend
+  )
 }
 
 /**
@@ -497,9 +493,7 @@ export function useChatContextMenu(): {
 
     // If a single chat is selected (or in main view),
     // show either "Leave" or "Delete Chat", not both
-    const shouldLeaveBeforeDelete =
-      (relatedChat && canLeaveChat(fullChatToChatListItem(relatedChat))) ||
-      (relatedChat && canLeaveChat(relatedChat))
+    const shouldLeaveBeforeDelete = relatedChat && canLeaveChat(relatedChat)
 
     // Build the complete menu
     const menu: (ContextMenuItem | false)[] = [
