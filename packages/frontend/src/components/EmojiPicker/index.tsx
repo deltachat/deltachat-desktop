@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import classNames from 'classnames'
 import emojiData from '@emoji-mart/data'
 import { EmojiPicker as Picker } from '@emoji-mart-awesome/react'
@@ -44,11 +44,26 @@ export default function EmojiPicker({
     iconsTheme = 'solid'
   }
 
+  const wrapperRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const picker = wrapperRef.current?.querySelector('em-emoji-picker')
+    const shadowRoot = picker?.shadowRoot
+    if (!shadowRoot) return
+    const style = document.createElement('style')
+    style.textContent = '.category > .sticky { background: none !important; }'
+    shadowRoot.appendChild(style)
+    return () => {
+      shadowRoot.removeChild(style)
+    }
+  }, [])
+
   return (
     <div
       role={role}
       id={id}
       aria-labelledby={labelledBy}
+      ref={wrapperRef}
       className={classNames(styles.emojiPicker, className, {
         [styles.full]: full,
       })}
