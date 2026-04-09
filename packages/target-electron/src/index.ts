@@ -2,6 +2,7 @@
 console.time('init')
 
 import { existsSync, mkdirSync, Stats, watchFile } from 'fs'
+import fsPromises from 'fs/promises'
 import { app as rawApp, dialog, ipcMain, protocol, clipboard } from 'electron'
 import { BrowserWindow } from 'electron/main'
 import rc from './rc.js'
@@ -155,7 +156,7 @@ app.isQuitting = false
 Promise.all([
   new Promise((resolve, _reject) => app.on('ready', resolve)),
   DesktopSettings.load(),
-  initIsWindowsStorePackageVar().then(() => existsSync(getAccountsPath())),
+  initIsWindowsStorePackageVar(),
   webxdcStartUpCleanup(),
 ])
   .then(onReady)
@@ -173,12 +174,17 @@ Also make sure you are not trying to run multiple instances of deltachat.`
 
 let ipc_shutdown_function: (() => void) | null = null
 
-async function onReady([
-  _appReady,
-  _loadedState,
-  accountsPathExists,
-  _webxdc_cleanup,
-]: [any, any, boolean, any]) {
+const accountsPathExistsP = fsPromises
+  .access(getAccountsPath())
+  .then(() => true)
+  .catch(() => false)
+
+async function onReady([_appReady, _loadedState, _appx, _webxdc_cleanup]: [
+  any,
+  any,
+  any,
+  any,
+]) {
   // can fail due to user error so running it first is better (cli argument)
   acceptThemeCLI()
   setLanguage(DesktopSettings.state.locale || app.getLocale().split('-')[0]) // can consist of 2 strings like in en-GB
@@ -186,7 +192,7 @@ async function onReady([
   // Warn users if data exists from a different installation variant
   // (e.g. Mac App Store vs DMG, or Windows Store APPX vs Setup.exe),
   // but only when there are no accounts yet in the current location.
-  if (!accountsPathExists) {
+  if (!(await accountsPathExistsP)) {
     let otherStoreName = 'App Store'
     let otherAccountsPath: string | undefined
 
