@@ -4,6 +4,7 @@ import { debounceWithInit } from '../chat/ChatListHelpers'
 import { BackendRemote, onDCEvent } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import Dialog, { DialogBody, DialogContent, DialogHeader } from '../Dialog'
+import Button from '../Button'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'
@@ -57,9 +58,16 @@ function ConnectivityDialogInner() {
     return onDCEvent(accountId, 'ConnectivityChanged', updateConnectivity)
   }, [accountId, updateConnectivity])
 
+  const onClearAllRelayStorage = async () => {
+    await BackendRemote.rpc.clearAllRelayStorage(selectedAccountId())
+  }
+
   return (
     <DialogBody>
       <DialogContent>
+        <Button onClick={onClearAllRelayStorage}>
+          Clear all relay storage
+        </Button>
         <iframe
           style={{
             border: 0,
