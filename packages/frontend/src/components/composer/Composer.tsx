@@ -417,7 +417,7 @@ const Composer = forwardRef<
         const downloadUrl = AppStoreUrl + appInfo.cache_relname
         const responseP = BackendRemote.rpc.getHttpResponse(
           selectedAccountId(),
-          AppStoreUrl + appInfo.cache_relname
+          downloadUrl
         )
         let response: Awaited<typeof responseP>
         try {
