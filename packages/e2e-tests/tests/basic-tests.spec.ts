@@ -11,6 +11,7 @@ import {
   reloadPage,
   sendMessage,
   test,
+  selectChat,
 } from '../playwright-helper'
 
 /**
@@ -419,6 +420,41 @@ test('add app from picker to chat', async () => {
     .locator('img')
     .count()
   expect(finalAppIconsCount).toBeGreaterThan(initialAppIconsCount)
+})
+
+test('custom app picker URL', async () => {
+  const userA = existingProfiles[0]
+  const userB = existingProfiles[1]
+  await switchToProfile(page, userA.id)
+  await selectChat(page, userB.name)
+
+  // It's the default URL but with different casing.
+  // The behavior will remain the same network-wise,
+  // but this still allows us to check that the setting change is stored
+  // and that the picker still works after that.
+  const newUrl = 'HTTPS://APPS.testRUN.ORG/'
+
+  await page.getByRole('button', { name: 'Settings' }).click()
+  await page.getByRole('button', { name: 'Advanced' }).click()
+  const settingsDialog = page
+    .getByRole('dialog')
+    .filter({ hasText: 'Advanced' })
+
+  await expect(settingsDialog).not.toContainText(newUrl, { ignoreCase: false })
+  await page.getByRole('button', { name: 'App Picker URL' }).click()
+  await page.getByRole('dialog').last().getByRole('textbox').fill(newUrl)
+  await page.keyboard.press('Enter')
+  await expect(settingsDialog).toContainText(newUrl, { ignoreCase: false })
+
+  await page.keyboard.press('Escape')
+  await page.keyboard.press('Escape')
+
+  await page.getByRole('button', { name: 'Attach' }).click()
+  await page.getByRole('menuitem', { name: 'App' }).click()
+  await page.getByRole('button', { name: 'Poll' }).first().click()
+  await page.getByRole('button', { name: 'Add to Chat' }).click()
+  await page.getByRole('button', { name: 'Send', exact: true }).click()
+  await expect(page.locator(`.message`).last()).toContainText('Poll')
 })
 
 test('recent apps context menu', async () => {

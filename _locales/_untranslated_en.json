@@ -64,5 +64,8 @@
   },
   "paste_in_qr_scanner": {
     "message": "Click to paste it in QR scanner"
+  },
+  "webxdc_store_url_explain_2_desktop": {
+    "message": "This is different from the same feature on Android and iOS.\nThis must be the path containing the xdcget-lock.json file."
   }
 }
