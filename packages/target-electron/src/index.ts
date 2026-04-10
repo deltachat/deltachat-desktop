@@ -187,7 +187,7 @@ async function onReady([
   // (e.g. Mac App Store vs DMG, or Windows Store APPX vs Setup.exe),
   // but only when there are no accounts yet in the current location.
   if (!accountsPathExists) {
-    let otherStoreName: string | undefined
+    let otherStoreName = 'App Store'
     let otherAccountsPath: string | undefined
 
     if (process.platform === 'darwin' && !process.mas) {
@@ -197,7 +197,6 @@ async function onReady([
         'Library/Containers/chat.delta.desktop.electron/Data/Library/Application Support/DeltaChat/accounts'
       )
       if (existsSync(sandboxPath)) {
-        otherStoreName = 'Mac App Store'
         otherAccountsPath = sandboxPath
       }
     } else if (process.platform === 'win32') {
@@ -211,7 +210,9 @@ async function onReady([
       if (existsSync(otherPath)) {
         // note that it seems per default if data exists in normalPath it will be used by the appx version
         // but in that case we expect the previous accounts to be used, so this warning will not appear
-        otherStoreName = appx ? 'get.delta.chat' : 'Microsoft Store'
+        if (appx) {
+          otherStoreName = 'get.delta.chat'
+        }
         otherAccountsPath = otherPath
       }
     }
@@ -221,7 +222,7 @@ async function onReady([
         type: 'warning',
         title: tx('warning'),
         message: tx('data_found_other_installation_message', otherStoreName),
-        buttons: [tx('ok'), tx('cancel')],
+        buttons: [tx('perm_continue'), tx('global_menu_file_quit_desktop')],
         defaultId: 0,
         cancelId: 1,
       })
