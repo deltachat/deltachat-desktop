@@ -3,6 +3,8 @@ import classNames from 'classnames'
 import { filesize } from 'filesize'
 import moment from 'moment'
 import { C } from '@deltachat/jsonrpc-client'
+import { useSettingsStore } from '../../stores/settings'
+import { defaultAppStoreBaseUrl } from '@deltachat-desktop/shared/state'
 import { getLogger } from '../../../../shared/logger'
 
 import useTranslationFunction from '../../hooks/useTranslationFunction'
@@ -42,8 +44,6 @@ export interface AppInfo {
   icon_relname: string
 }
 
-const AppStoreUrl = 'https://apps.testrun.org/'
-
 const enum AppCategoryEnum {
   home = 'home',
   tool = 'tool',
@@ -72,6 +72,7 @@ type Props = {
 
 export function AppPicker({ onAppSelected }: Props) {
   const tx = useTranslationFunction()
+  const settingsStore = useSettingsStore()[0]
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState(AppCategoryEnum.home)
   const [selectedAppInfo, setSelectedAppInfo] = useState<AppInfo | null>(null)
@@ -82,15 +83,26 @@ export function AppPicker({ onAppSelected }: Props) {
     AppCategoryEnum.game,
   ]
 
-  const fetchApps = useCallback(async () => {
+  const appStoreUrl: `${string}/` = useMemo(() => {
+    if (settingsStore == undefined) {
+      log.warn('settingsStore not initialized yet, using default appStoreUrl')
+      return defaultAppStoreBaseUrl
+    }
+    const res =
+      settingsStore.desktopSettings.appStoreBaseUrl || defaultAppStoreBaseUrl
+    // Ensure that it ends with a slash.
+    return res.endsWith('/') ? (res as `${string}/`) : (`${res}/` as const)
+  }, [settingsStore])
+
+  const fetchApps = useCallback(async (appStoreUrl: string) => {
     // This may throw, e.g. on network error.
     const response = await BackendRemote.rpc.getHttpResponse(
       selectedAccountId(),
-      AppStoreUrl + 'xdcget-lock.json'
+      appStoreUrl + 'xdcget-lock.json'
     )
     const apps = getJsonFromBase64(response.blob) as AppInfo[]
     if (apps == null) {
-      throw new Error(`Received \`null\` response from ${AppStoreUrl}`)
+      throw new Error(`Received \`null\` response from ${appStoreUrl}`)
     }
     apps.sort((a: AppInfo, b: AppInfo) => {
       const dateA = new Date(a.date)
@@ -106,7 +118,7 @@ export function AppPicker({ onAppSelected }: Props) {
     }
     return apps
   }, [])
-  const appsFetch = useFetch(fetchApps, [])
+  const appsFetch = useFetch(fetchApps, [appStoreUrl])
   const apps = appsFetch.result?.ok ? appsFetch.result.value : null
 
   const appsFetchFailed = appsFetch.result?.ok === false
@@ -134,7 +146,13 @@ export function AppPicker({ onAppSelected }: Props) {
       let count = 0
       for (const app of apps) {
         BackendRemote.rpc
-          .getHttpResponse(selectedAccountId(), AppStoreUrl + app.icon_relname)
+          .getHttpResponse(
+            selectedAccountId(),
+            // Note that here we're still using the default store URL.
+            // This is because we don't expect the custom store to host icons.
+            // We only expect the `xdc-lock.json` file from it.
+            defaultAppStoreBaseUrl + app.icon_relname
+          )
           .then((response: { blob: string }) => {
             if (response?.blob !== undefined) {
               newIcons[app.app_id] = `data:image/png;base64,${response.blob}`
@@ -346,7 +364,18 @@ export function AppPicker({ onAppSelected }: Props) {
                   app={selectedAppInfo}
                   setSelectedAppInfo={setSelectedAppInfo}
                   onSelect={async appInfo => {
-                    const downloadUrl = AppStoreUrl + appInfo.cache_relname
+                    // For the default store we normally utilize
+                    // `cache_relname`, but it it's a custom store
+                    // then we don't expect it to host the .xdc files,
+                    // so load them from app developers directly.
+                    // Also see https://github.com/webxdc/website/issues/135
+                    //
+                    // Maybe it's not nice to have this undocumented behavior.
+                    const downloadUrl =
+                      appStoreUrl === defaultAppStoreBaseUrl
+                        ? appStoreUrl + appInfo.cache_relname
+                        : appInfo.url
+
                     await onAppSelected(appInfo, downloadUrl)
                   }}
                 />

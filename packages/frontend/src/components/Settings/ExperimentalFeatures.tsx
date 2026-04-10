@@ -10,9 +10,25 @@ import SettingsSwitch from './SettingsSwitch'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import useDialog from '../../hooks/dialog/useDialog'
 import AlertDialog from '../dialogs/AlertDialog'
+import Dialog, {
+  DialogBody,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  FooterActionButton,
+  FooterActions,
+} from '../Dialog'
+import { DialogProps } from '../../contexts/DialogContext'
+import { getLogger } from '@deltachat-desktop/shared/logger'
+import { DeltaInput } from '../Login-Styles'
+import SettingsSelector from './SettingsSelector'
+import { defaultAppStoreBaseUrl } from '@deltachat-desktop/shared/state'
+
+const log = getLogger('ExperimentalFeatures')
 
 export function ExperimentalFeatures() {
   const tx = useTranslationFunction()
+  const settingsStore = useSettingsStore()[0]
   const { openDialog } = useDialog()
 
   const showExperimentalInfoDialog = async (
@@ -94,6 +110,17 @@ export function ExperimentalFeatures() {
         />
       )}
       <SyncAllAccountsSwitch />
+      <SettingsSelector
+        onClick={() => openDialog(AppPickerUrlDialog)}
+        currentValue={
+          settingsStore == undefined
+            ? undefined
+            : settingsStore.desktopSettings.appStoreBaseUrl ||
+              defaultAppStoreBaseUrl
+        }
+      >
+        {tx('webxdc_store_url')}
+      </SettingsSelector>
       <DesktopSettingsSwitch
         settingsKey='enableWebxdcDevTools'
         label='Enable Webxdc Devtools'
@@ -130,5 +157,60 @@ export default function SyncAllAccountsSwitch() {
         )
       }}
     />
+  )
+}
+
+function AppPickerUrlDialog({ onClose }: DialogProps) {
+  const tx = useTranslationFunction()
+  const settingsStore = useSettingsStore()[0]
+
+  return (
+    <Dialog onClose={onClose}>
+      <DialogHeader title={tx('webxdc_store_url')} onClose={onClose} />
+      <form
+        action={formData => {
+          const url = formData.get('url')
+          if (typeof url !== 'string') {
+            log.error('App picker URL form submitted, but URL is', url)
+            return
+          }
+          SettingsStoreInstance.effect.setDesktopSetting(
+            'appStoreBaseUrl',
+            url === '' ? undefined : url
+          )
+          onClose()
+        }}
+      >
+        <DialogBody>
+          <DialogContent>
+            {/* Note that this string originates from Android
+            where the entire markup of the app picker gets loaded from that URL,
+            whereas for us (Desktop) it's only the list of apps.
+            So this string might not be entirely correct. */}
+            <p>{tx('webxdc_store_url_explain')}</p>
+            {settingsStore && (
+              <DeltaInput
+                value={undefined}
+                placeholder={defaultAppStoreBaseUrl}
+                onChange={() => {}}
+                type='url'
+                name='url'
+                defaultValue={settingsStore.desktopSettings.appStoreBaseUrl}
+              />
+            )}
+          </DialogContent>
+        </DialogBody>
+        <DialogFooter>
+          <FooterActions>
+            <FooterActionButton onClick={onClose}>
+              {tx('cancel')}
+            </FooterActionButton>
+            <FooterActionButton type='submit' styling='primary'>
+              {tx('save')}
+            </FooterActionButton>
+          </FooterActions>
+        </DialogFooter>
+      </form>
+    </Dialog>
   )
 }
