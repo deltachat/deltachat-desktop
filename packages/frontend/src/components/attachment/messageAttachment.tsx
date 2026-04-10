@@ -222,7 +222,11 @@ export default function Attachment({
         <div
           className='file-icon'
           draggable='true'
-          onDragStart={dragAttachmentOut.bind(null, message.file)}
+          onDragStart={dragAttachmentOut.bind(
+            null,
+            message.file,
+            fileName || ''
+          )}
           title={fileMime || 'null'}
         >
           {extension ? (
@@ -348,7 +352,9 @@ export function DraftAttachment({
         <div
           className='file-icon'
           draggable='true'
-          onDragStart={ev => file && dragAttachmentOut(file, ev)}
+          onDragStart={ev =>
+            file && dragAttachmentOut(file, fileName || '', ev)
+          }
           title={fileMime || 'null'}
         >
           {extension ? (

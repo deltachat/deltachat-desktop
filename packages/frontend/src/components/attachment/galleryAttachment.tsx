@@ -567,7 +567,7 @@ export function FileAttachmentRow({
         <div
           className='file-icon'
           draggable='true'
-          onDragStart={dragAttachmentOut.bind(null, file)}
+          onDragStart={dragAttachmentOut.bind(null, file, fileName || '')}
           title={fileMime || 'null'}
         >
           {extension ? (

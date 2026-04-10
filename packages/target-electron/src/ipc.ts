@@ -20,7 +20,7 @@ import path, {
 } from 'path'
 import { inspect } from 'util'
 import { platform } from 'os'
-import { existsSync } from 'fs'
+import { existsSync, copyFileSync, mkdirSync } from 'fs'
 import { versions } from 'process'
 import { fileURLToPath } from 'url'
 
@@ -111,7 +111,14 @@ export async function init(cwd: string, logHandler: LogHandler) {
     logHandler.log(channel, level, stacktrace, ...args)
   )
 
-  ipcMain.on('ondragstart', (event, filePath) => {
+  ipcMain.on('ondragstart', (event, filePath, realName) => {
+    let tmpFilePath = filePath
+    if (realName !== '') {
+      const tmpDir = join(getDraftTempDir(), `drag-${Date.now()}`)
+      mkdirSync(tmpDir, { recursive: true })
+      tmpFilePath = join(tmpDir, basename(realName))
+      copyFileSync(filePath, tmpFilePath)
+    }
     let icon: NativeImage
     try {
       icon = nativeImage.createFromPath(
@@ -135,7 +142,7 @@ export async function init(cwd: string, logHandler: LogHandler) {
     }
 
     event.sender.startDrag({
-      file: filePath,
+      file: tmpFilePath,
       icon,
     })
   })

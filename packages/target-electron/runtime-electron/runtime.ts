@@ -138,8 +138,8 @@ class ElectronRuntime implements Runtime {
   onShowDialog:
     | ((kind: 'about' | 'keybindings' | 'settings') => void)
     | undefined
-  onDragFileOut(file: string): void {
-    ipcBackend.send('ondragstart', file)
+  onDragFileOut(file: string, realName: string): void {
+    ipcBackend.send('ondragstart', file, realName)
   }
   isDroppedFileFromOutside(file: string): boolean {
     // ".sqlite-blobs" is the old folder name that could still be there in old accounts
