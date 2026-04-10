@@ -93,12 +93,13 @@ export function AppPicker({ onAppSelected }: Props) {
     // Ensure that it ends with a slash.
     return res.endsWith('/') ? (res as `${string}/`) : (`${res}/` as const)
   }, [settingsStore])
+  const appListUrl = appStoreUrl + 'xdcget-lock.json'
 
-  const fetchApps = useCallback(async (appStoreUrl: string) => {
+  const fetchApps = useCallback(async (appListUrl: string) => {
     // This may throw, e.g. on network error.
     const response = await BackendRemote.rpc.getHttpResponse(
       selectedAccountId(),
-      appStoreUrl + 'xdcget-lock.json'
+      appListUrl
     )
     const apps = getJsonFromBase64(response.blob) as AppInfo[]
     if (apps == null) {
@@ -118,7 +119,7 @@ export function AppPicker({ onAppSelected }: Props) {
     }
     return apps
   }, [])
-  const appsFetch = useFetch(fetchApps, [appStoreUrl])
+  const appsFetch = useFetch(fetchApps, [appListUrl])
   const apps = appsFetch.result?.ok ? appsFetch.result.value : null
 
   const appsFetchFailed = appsFetch.result?.ok === false
@@ -353,7 +354,8 @@ export function AppPicker({ onAppSelected }: Props) {
                 ? tx('offline')
                 : tx(
                     'error_x',
-                    'Failed to fetch apps:\n' +
+                    'Failed to fetch apps list:\n' +
+                      `(at ${appListUrl})\n` +
                       unknownErrorToString(appsFetch.result.err)
                   )}
             </div>
