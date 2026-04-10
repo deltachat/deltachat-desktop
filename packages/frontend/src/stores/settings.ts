@@ -75,9 +75,9 @@ class SettingsStore extends Store<SettingsStoreState | null> {
         }
       }, 'setSelfContact')
     },
-    setDesktopSetting: (
-      key: keyof DesktopSettingsType,
-      value: string | number | boolean
+    setDesktopSetting: <T extends keyof DesktopSettingsType>(
+      key: T,
+      value: DesktopSettingsType[T]
     ) => {
       this.setState(state => {
         if (state === null) {
@@ -172,9 +172,9 @@ class SettingsStore extends Store<SettingsStoreState | null> {
         }, 'set')
       }
     },
-    setDesktopSetting: async (
-      key: keyof DesktopSettingsType,
-      value: string | number | boolean
+    setDesktopSetting: async <T extends keyof DesktopSettingsType>(
+      key: T,
+      value: (string | number | boolean) & DesktopSettingsType[T]
     ) => {
       try {
         await runtime.setDesktopSetting(key, value)
