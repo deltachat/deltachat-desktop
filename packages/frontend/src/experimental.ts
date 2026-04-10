@@ -28,10 +28,6 @@ only for debugging:
     window.exp = this
   }
 
-  getAllAccounts() {
-    return BackendRemote.listAccounts()
-  }
-
   async importContacts(contacts: [string, string][]) {
     const accountId = selectedAccountId()
     let error_count = 0
