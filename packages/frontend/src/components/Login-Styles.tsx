@@ -94,7 +94,8 @@ export const DeltaInput = React.memo(
         event: React.FormEvent<HTMLElement> & React.FocusEvent<HTMLInputElement>
       ) => void
       dataTestId?: string
-    }>
+    }> &
+      Pick<React.ComponentProps<'input'>, 'required'>
   ) => {
     const defaultId = useId()
     const id = props.id ?? `delta-input-${defaultId}`
@@ -117,6 +118,7 @@ export const DeltaInput = React.memo(
           value={props.value === null ? '' : props.value}
           onChange={props.onChange}
           placeholder={props.placeholder}
+          required={props.required}
           min={props.min}
           max={props.max}
           disabled={props.disabled}
