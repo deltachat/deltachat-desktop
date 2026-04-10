@@ -42,7 +42,7 @@ export interface AppInfo {
   icon_relname: string
 }
 
-export const AppStoreUrl = 'https://apps.testrun.org/'
+const AppStoreUrl = 'https://apps.testrun.org/'
 
 const enum AppCategoryEnum {
   home = 'home',
@@ -67,7 +67,7 @@ const getJsonFromBase64 = (base64: string): any => {
 }
 
 type Props = {
-  onAppSelected: (app: AppInfo) => Promise<void>
+  onAppSelected: (app: AppInfo, downloadUrl: string) => Promise<void>
 }
 
 export function AppPicker({ onAppSelected }: Props) {
@@ -345,7 +345,10 @@ export function AppPicker({ onAppSelected }: Props) {
                 <AppInfoOverlay
                   app={selectedAppInfo}
                   setSelectedAppInfo={setSelectedAppInfo}
-                  onSelect={onAppSelected}
+                  onSelect={async appInfo => {
+                    const downloadUrl = AppStoreUrl + appInfo.cache_relname
+                    await onAppSelected(appInfo, downloadUrl)
+                  }}
                 />
               )}
               {/* `appsFetch.result.ok === true` implies that
