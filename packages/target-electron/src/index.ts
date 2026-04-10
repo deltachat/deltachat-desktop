@@ -221,7 +221,7 @@ async function onReady([
         type: 'warning',
         title: tx('warning'),
         message: tx('data_found_other_installation_message', otherStoreName),
-        buttons: [tx('perm_continue'), tx('global_menu_file_quit_desktop')],
+        buttons: [tx('ok'), tx('cancel')],
         defaultId: 0,
         cancelId: 1,
       })
