@@ -1,12 +1,14 @@
 import { useCallback } from 'react'
 
 import { Props, EncryptionInfo } from '../../components/dialogs/EncryptionInfo'
+import LeaveGroupDialog from '../../components/dialogs/LeaveGroupDialog'
 import MuteChat from '../../components/dialogs/MuteChat'
 import useChat from './useChat'
 import useConfirmationDialog from '../dialog/useConfirmationDialog'
 import useDialog from '../dialog/useDialog'
 import useTranslationFunction from '../useTranslationFunction'
 import { BackendRemote, EffectfulBackendActions } from '../../backend-com'
+import { canLeaveChat } from '../../components/chat/ChatContextMenu'
 
 import type { T } from '@deltachat/jsonrpc-client'
 import { getLogger } from '@deltachat-desktop/shared/logger'
@@ -106,13 +108,25 @@ export default function useChatDialog() {
       /**
        * Must be of non-0 length.
        */
-      chats: Array<Pick<T.BasicChat | ChatListItem, 'id' | 'name'>>,
+      chats: Array<
+        Pick<
+          ChatListItem,
+          | 'id'
+          | 'name'
+          | 'chatType'
+          | 'isEncrypted'
+          | 'isSelfInGroup'
+          | 'isContactRequest'
+        >
+      >,
       selectedChatId: number | null
     ) => {
       if (chats.length === 0) {
         log.error('openDeleteChatsDialog called with 0 chats')
         return
       }
+
+      const anyNeedLeave = chats.some(chat => canLeaveChat(chat))
 
       const hasUserConfirmed = await openConfirmationDialog({
         message:
@@ -123,7 +137,9 @@ export default function useChatDialog() {
               }) +
               '\n\n' +
               chats.map(c => c.name).join('\n'),
-        confirmLabel: tx('delete'),
+        confirmLabel: anyNeedLeave
+          ? tx('menu_leave_and_delete')
+          : tx('delete_for_me'),
         isConfirmDanger: true,
       })
 
@@ -132,6 +148,9 @@ export default function useChatDialog() {
           chats.map(async chat => {
             if (selectedChatId === chat.id) {
               unselectChat()
+            }
+            if (canLeaveChat(chat)) {
+              await BackendRemote.rpc.leaveGroup(accountId, chat.id)
             }
             await EffectfulBackendActions.deleteChat(accountId, chat.id)
           })
@@ -150,20 +169,27 @@ export default function useChatDialog() {
 
   const openLeaveGroupOrChannelDialog = useCallback(
     async (accountId: number, chatId: number, isGroup: boolean) => {
-      const hasUserConfirmed = await openConfirmationDialog({
-        message: tx('ask_leave_group'),
-        confirmLabel: isGroup
-          ? tx('menu_leave_group')
-          : tx('menu_leave_channel'),
-        isConfirmDanger: true,
-        noMargin: true,
-      })
+      const result = await new Promise<'leave' | 'leave-and-delete' | 'cancel'>(
+        resolve => {
+          openDialog(LeaveGroupDialog, {
+            isGroup,
+            cb: resolve,
+          })
+        }
+      )
 
-      if (hasUserConfirmed) {
-        BackendRemote.rpc.leaveGroup(accountId, chatId)
+      if (result === 'cancel') {
+        return
+      }
+
+      BackendRemote.rpc.leaveGroup(accountId, chatId)
+
+      if (result === 'leave-and-delete') {
+        unselectChat()
+        EffectfulBackendActions.deleteChat(accountId, chatId)
       }
     },
-    [openConfirmationDialog, tx]
+    [openDialog, unselectChat]
   )
 
   const openMuteChatDialog = useCallback(

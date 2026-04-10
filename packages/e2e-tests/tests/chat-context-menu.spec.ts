@@ -148,19 +148,98 @@ test.describe('Main View - 3-Dot Menu', () => {
 
     await openMainViewThreeDotMenu(page)
 
-    // Main view menu items for group chat (encrypted, member)
     await expect(getMenuItems(page)).toHaveText([
       'Search in Chat',
       'Disappearing Messages',
       'Mute Notifications',
       'Archive Chat',
       'Clone Chat',
-      'Leave Group',
       'Clear Chat',
-      'Delete Chat',
+      'Leave Group',
     ])
 
     await closeMenu(page)
+  })
+
+  test('Leave Group opens leave dialog with correct options', async () => {
+    const userA = existingProfiles[0]
+
+    await switchToProfile(page, userA.id)
+    await page
+      .locator('.chat-list .chat-list-item')
+      .filter({ hasText: groupName })
+      .click()
+
+    await openMainViewThreeDotMenu(page)
+    await page.getByRole('menuitem', { name: 'Leave Group' }).click()
+
+    // Verify leave dialog opens with the expected options
+    const dialog = page.getByRole('dialog')
+    await expect(dialog).toContainText('Are you sure you want to leave?')
+    await expect(dialog.getByRole('button', { name: 'Cancel' })).toBeVisible()
+    await expect(
+      dialog.getByRole('button', { name: 'Leave & Delete for Me' })
+    ).toBeVisible()
+    await expect(
+      dialog.getByRole('button', { name: 'Leave Group' })
+    ).toBeVisible()
+
+    // Cancel to preserve state
+    await dialog.getByRole('button', { name: 'Cancel' }).click()
+  })
+
+  test('after leaving group, Delete Chat replaces Leave Group', async () => {
+    const userA = existingProfiles[0]
+    const disposableGroupName = 'Leave Then Delete Group'
+
+    await switchToProfile(page, userA.id)
+
+    // Create a group
+    await page.locator('#new-chat-button').click()
+    await page.getByRole('button', { name: 'New Group' }).click()
+    await page
+      .getByRole('textbox', { name: 'Group Name' })
+      .fill(disposableGroupName)
+    await page.getByTestId('group-create-button').click()
+
+    // Verify the group is selected and Leave Group is shown
+    await openMainViewThreeDotMenu(page)
+    await expect(
+      page.getByRole('menuitem', { name: 'Leave Group' })
+    ).toBeVisible()
+    await expect(
+      page.getByRole('menuitem', { name: 'Delete' })
+    ).not.toBeVisible()
+
+    // Leave the group (without deleting)
+    await page.getByRole('menuitem', { name: 'Leave Group' }).click()
+    await page
+      .getByRole('dialog')
+      .getByRole('button', { name: 'Leave Group' })
+      .click()
+
+    // After leaving, re-open menu: Delete Chat should replace Leave Group
+    await openMainViewThreeDotMenu(page)
+    await expect(
+      page.getByRole('menuitem', { name: 'Delete Chat' })
+    ).toBeVisible()
+    await expect(
+      page.getByRole('menuitem', { name: 'Leave' })
+    ).not.toBeVisible()
+    await closeMenu(page)
+
+    // delete the chat
+    await openMainViewThreeDotMenu(page)
+    await page.getByRole('menuitem', { name: 'Delete Chat' }).click()
+    await page
+      .getByRole('dialog')
+      .getByRole('button', { name: 'Delete' })
+      .click()
+    await expect(
+      page
+        .locator('.chat-list .chat-list-item')
+        .filter({ hasText: disposableGroupName })
+    ).not.toBeVisible()
   })
 
   test('search in chat focuses search input', async () => {
@@ -298,7 +377,7 @@ test.describe('Chat List Context Menu - Single Selection', () => {
       'View Profile',
       'Encryption Info',
       'Block Contact',
-      'Delete Chat',
+      'Delete',
     ])
 
     await closeMenu(page)
@@ -320,7 +399,6 @@ test.describe('Chat List Context Menu - Single Selection', () => {
       'Encryption Info',
       'Clone Chat',
       'Leave Group',
-      'Delete Chat',
     ])
 
     await closeMenu(page)
@@ -404,7 +482,7 @@ test.describe('Removal actions', () => {
 
     await switchToProfile(page, userA.id)
 
-    // Create a disposable chat to delete
+    // Create group to delete
     await page.locator('#new-chat-button').click()
     await page.getByRole('button', { name: 'New Group' }).click()
     await page
@@ -419,15 +497,15 @@ test.describe('Removal actions', () => {
         .filter({ hasText: 'Chat to delete' })
     ).toBeVisible()
 
-    // Delete from main view
+    // "Leave Group" replaces "Delete Chat" in main view.
     await openMainViewThreeDotMenu(page)
-    await page.getByRole('menuitem', { name: 'Delete Chat' }).click()
+    await page.getByRole('menuitem', { name: 'Leave Group' }).click()
 
-    // Confirm deletion
-    await expect(page.getByRole('dialog')).toContainText('Delete')
-    await page
-      .getByRole('dialog')
-      .getByRole('button', { name: 'Delete' })
+    // Confirm leave and delete via the leave dialog
+    const leaveDialog = page.getByRole('dialog')
+    await expect(leaveDialog).toContainText('Are you sure you want to leave?')
+    await leaveDialog
+      .getByRole('button', { name: 'Leave & Delete for Me' })
       .click()
 
     // Verify chat is deleted from list
