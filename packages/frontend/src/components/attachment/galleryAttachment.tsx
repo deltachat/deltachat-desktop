@@ -250,6 +250,12 @@ export function ImageAttachment({
         }
         onContextMenu={openContextMenu}
         aria-haspopup='menu'
+        draggable={!isBroken}
+        onDragStart={
+          !isBroken
+            ? ev => dragAttachmentOut(file, message.fileName || '', ev)
+            : undefined
+        }
         {...rovingTabindexProps}
       >
         {isBroken ? (

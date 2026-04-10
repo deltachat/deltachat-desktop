@@ -76,7 +76,7 @@ export function getExtension({
 export function dragAttachmentOut(
   file: MessageTypeAttachmentSubset['file'],
   fileName: string,
-  dragEvent: React.DragEvent<HTMLDivElement>
+  dragEvent: React.DragEvent<HTMLElement>
 ) {
   dragEvent.preventDefault()
 
