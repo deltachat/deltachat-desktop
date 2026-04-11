@@ -340,20 +340,6 @@ $info-text-max-width: 400px;
     .forwarded-indicator {
       display: none;
     }
-
-    .quote-background {
-      // `.msg-container` background is transparent,
-      // so let's explicitly apply the color just for the quote.
-      background: var(--messageBg);
-
-      padding: 5px;
-      padding-inline-start: 6px;
-      border-radius: 7px;
-
-      & > .quote {
-        margin: 0;
-      }
-    }
   }
 
   .message-attachment-media {
@@ -407,6 +393,25 @@ $info-text-max-width: 400px;
   .status-icon.read,
   .status-icon.delivered {
     background-color: white;
+  }
+}
+
+.message.type-sticker,
+.message.video-only {
+  .msg-container {
+    .quote-background {
+      // `.msg-container` background is transparent or black,
+      // so let's explicitly apply the color just for the quote.
+      background: var(--messageBg);
+
+      padding: 5px;
+      padding-inline-start: 6px;
+      border-radius: 7px;
+
+      & > .quote {
+        margin: 0;
+      }
+    }
   }
 }
 
