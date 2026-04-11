@@ -33,6 +33,10 @@ import classNames from 'classnames'
 import { useRpcFetch } from '../../hooks/useFetch'
 import AlertDialog from '../dialogs/AlertDialog'
 import { unknownErrorToString } from '@deltachat-desktop/shared/unknownErrorToString'
+import useKeyBindingAction from '../../hooks/useKeyBindingAction'
+import { getLogger } from '@deltachat-desktop/shared/logger'
+
+const log = getLogger('AccountListSidebar')
 
 type Props = {
   onAddAccount: () => Promise<number>
@@ -105,6 +109,45 @@ export default function AccountListSidebar({
     /// now this workaround is only used when changing background sync setting
     window.__updateAccountListSidebar = throttledRefreshSyncAllAccounts
   }, [])
+
+  const selectNextOrPrevAcc = (offset: number) => {
+    if (!accountsFetch.lingeringResult?.ok) {
+      return
+    }
+    const list = accountsFetch.lingeringResult.value
+
+    if (selectedAccountId == undefined) {
+      if (list.length > 0) {
+        selectAccount(list[0])
+      }
+      return
+    }
+
+    const currInd = list.indexOf(selectedAccountId)
+    if (currInd === -1) {
+      log.warn(
+        `tried to handle "select next / prev account" keyboard shortcut, but couldn't find the current one (${selectedAccountId}) in the list`,
+        list
+      )
+      return
+    }
+    const newId = list[currInd + offset]
+    if (newId == undefined) {
+      // Out of bounds
+      return
+    }
+
+    selectAccount(newId)
+  }
+  // We probably should have this event handler in a more "global" place,
+  // but we're adding it here because this is one of the places
+  // where we already have the list of account IDs.
+  useKeyBindingAction(KeybindAction.AccountsList_SelectNextAccount, () => {
+    selectNextOrPrevAcc(+1)
+  })
+  useKeyBindingAction(KeybindAction.AccountsList_SelectPreviousAccount, () => {
+    selectNextOrPrevAcc(-1)
+  })
 
   const [accountForHoverInfo, internalSetAccountForHoverInfo] =
     useState<T.Account | null>(null)
