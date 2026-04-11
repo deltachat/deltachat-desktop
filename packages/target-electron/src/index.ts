@@ -1,12 +1,12 @@
 // eslint-disable-next-line no-console
 console.time('init')
 
-import { mkdirSync, Stats, watchFile } from 'fs'
+import { existsSync, mkdirSync, Stats, watchFile } from 'fs'
 import { app as rawApp, dialog, ipcMain, protocol, clipboard } from 'electron'
 import { BrowserWindow } from 'electron/main'
 import rc from './rc.js'
 import contextMenu from './electron-context-menu.js'
-import { initIsWindowsStorePackageVar } from './isAppx.js'
+import { appx, initIsWindowsStorePackageVar } from './isAppx.js'
 import { getHelpMenu } from './help_menu.js'
 import { initialisePowerMonitor } from './resume_from_sleep.js'
 
@@ -155,7 +155,7 @@ app.isQuitting = false
 Promise.all([
   new Promise((resolve, _reject) => app.on('ready', resolve)),
   DesktopSettings.load(),
-  initIsWindowsStorePackageVar(),
+  initIsWindowsStorePackageVar().then(() => existsSync(getAccountsPath())),
   webxdcStartUpCleanup(),
 ])
   .then(onReady)
@@ -173,15 +173,65 @@ Also make sure you are not trying to run multiple instances of deltachat.`
 
 let ipc_shutdown_function: (() => void) | null = null
 
-async function onReady([_appReady, _loadedState, _appx, _webxdc_cleanup]: [
-  any,
-  any,
-  any,
-  any,
-]) {
+async function onReady([
+  _appReady,
+  _loadedState,
+  accountsPathExists,
+  _webxdc_cleanup,
+]: [any, any, boolean, any]) {
   // can fail due to user error so running it first is better (cli argument)
   acceptThemeCLI()
   setLanguage(DesktopSettings.state.locale || app.getLocale().split('-')[0]) // can consist of 2 strings like in en-GB
+
+  // Warn users if data exists from a different installation variant
+  // (e.g. Mac App Store vs DMG, or Windows Store APPX vs Setup.exe),
+  // but only when there are no accounts yet in the current location.
+  if (!accountsPathExists) {
+    let otherStoreName = 'App Store'
+    let otherAccountsPath: string | undefined
+
+    if (process.platform === 'darwin' && !process.mas) {
+      const { homedir } = await import('os')
+      const sandboxPath = join(
+        homedir(),
+        'Library/Containers/chat.delta.desktop.electron/Data/Library/Application Support/DeltaChat/accounts'
+      )
+      if (existsSync(sandboxPath)) {
+        otherAccountsPath = sandboxPath
+      }
+    } else if (process.platform === 'win32') {
+      const { homedir } = await import('os')
+      const normalPath = join(homedir(), 'AppData/Local/DeltaChat/accounts')
+      const appxPath = join(
+        homedir(),
+        'AppData/Local/Packages/merlinux.DeltaChat_v2ry5hvxhdhyy/LocalCache/Local/DeltaChat/accounts'
+      )
+      const otherPath = appx ? normalPath : appxPath
+      if (existsSync(otherPath)) {
+        // note that it seems per default if data exists in normalPath it will be used by the appx version
+        // but in that case we expect the previous accounts to be used, so this warning will not appear
+        if (appx) {
+          otherStoreName = 'get.delta.chat'
+        }
+        otherAccountsPath = otherPath
+      }
+    }
+
+    if (otherStoreName && otherAccountsPath) {
+      const result = await dialog.showMessageBox({
+        type: 'warning',
+        title: tx('warning'),
+        message: tx('data_found_other_installation_message', otherStoreName),
+        buttons: [tx('perm_continue'), tx('global_menu_file_quit_desktop')],
+        defaultId: 0,
+        cancelId: 1,
+      })
+      if (result.response === 1) {
+        app.quit()
+        return
+      }
+    }
+  }
 
   const cwd = getAccountsPath()
   log.info(`cwd ${cwd}`)
