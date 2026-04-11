@@ -269,6 +269,29 @@ export default function AccountItem({
         role='tab'
         aria-selected={isSelected}
         aria-busy={!account && accountFetch.loading}
+        aria-label={
+          account?.kind === 'Configured'
+            ? account.displayName || account.addr || undefined
+            : undefined
+        }
+        aria-description={
+          [
+            account?.kind === 'Configured' && account.displayName
+              ? account.addr
+              : undefined,
+            unreadCount
+              ? tx('chat_n_new_messages', String(unreadCount), {
+                  quantity: unreadCount,
+                })
+              : undefined,
+            muted ? tx('muted') : undefined,
+            bgSyncDisabled && !isSelected
+              ? tx('background_sync_disabled_explaination')
+              : undefined,
+          ]
+            .filter(Boolean)
+            .join(', ') || undefined
+        }
         onClick={() => onSelectAccount(accountId)}
         onContextMenu={onContextMenu}
         aria-haspopup='menu'
@@ -316,7 +339,7 @@ export default function AccountItem({
         )}
         {muted && (
           <div
-            aria-label='Account notifications muted'
+            aria-label={tx('muted')}
             className={styles.accountMutedIconShadow}
           >
             <Icon className={styles.accountMutedIcon} icon='audio-muted' />
