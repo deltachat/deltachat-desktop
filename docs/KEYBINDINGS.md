@@ -2,6 +2,8 @@
 
 > If you are on mac replace alt with the option key.
 
+Switch between accounts: `Ctrl + Alt + PageUp`, `Ctrl + Alt + PageDown`
+
 Switch between chats: `alt + arrow down`, `alt + arrow up`,
 `Ctrl + PageDown`, `Ctrl + PageUp`,
 `Ctrl + Tab`, `Ctrl + Shift + Tab`
