@@ -336,12 +336,12 @@ export class MessageListStore extends Store<MessageListState> {
         // schedule a full message list re-fetch, or would it always
         // be loaded later by other event listeners?
         //
-        // TODO refactor: this warning triggers for "edit request" messages.
+        // This also happens for "edit request" messages
+        // and WebXDC sendUpdate.
         // Those are actual messages, but we don't render them
-        this.log.warn(
+        this.log.info(
           `setMessageState called for message ${messageId}, ` +
-            `state ${messageState}, but it's not loaded. ` +
-            "Ignoring, in hopes that we'll automatically load it later."
+            `state ${messageState}, but it's not loaded`
         )
         return
       }
