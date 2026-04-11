@@ -684,7 +684,7 @@ class TauriRuntime implements Runtime {
     this.onDrop = onDrop
   }
   // TODO: implement handling of second parameter with real file name
-  onDragFileOut(fileName: string, realName?: string): void {
+  onDragFileOut(fileName: string, realName: string | null): void {
     this.log.debug('onDragFileOut', { fileName, realName })
     this.lastDragOutFile = fileName
     invoke('drag_file_out', { fileName })

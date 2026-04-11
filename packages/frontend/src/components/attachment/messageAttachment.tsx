@@ -207,7 +207,7 @@ export default function Attachment({
       </div>
     )
   } else {
-    const { fileName, fileBytes, fileMime } = message
+    const { fileName, fileBytes, fileMime, file } = message
     const extension = getExtension(message)
     return (
       <button
@@ -222,11 +222,7 @@ export default function Attachment({
         <div
           className='file-icon'
           draggable='true'
-          onDragStart={dragAttachmentOut.bind(
-            null,
-            message.file,
-            fileName || ''
-          )}
+          onDragStart={ev => dragAttachmentOut(file, fileName, ev)}
           title={fileMime || 'null'}
         >
           {extension ? (
@@ -352,9 +348,7 @@ export function DraftAttachment({
         <div
           className='file-icon'
           draggable='true'
-          onDragStart={ev =>
-            file && dragAttachmentOut(file, fileName || '', ev)
-          }
+          onDragStart={ev => file && dragAttachmentOut(file, fileName, ev)}
           title={fileMime || 'null'}
         >
           {extension ? (

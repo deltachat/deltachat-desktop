@@ -182,7 +182,7 @@ export interface Runtime {
    * only support this if you have a real implementation for `isDroppedFileFromOutside`
    * file is the name of the hashed file and realName is the original name of the file
    */
-  onDragFileOut(file: string, realName: string): void
+  onDragFileOut(file: string, realName: string | null): void
   /** Set drag listener to handle drag and drop events */
   setDropListener(onDrop: DropListener | null): void
   /** guard function that checks if it is a file from `onDragFileOut`, if so it denies the drop.

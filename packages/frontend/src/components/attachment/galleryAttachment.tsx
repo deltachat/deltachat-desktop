@@ -252,9 +252,7 @@ export function ImageAttachment({
         aria-haspopup='menu'
         draggable={!isBroken}
         onDragStart={
-          !isBroken
-            ? ev => dragAttachmentOut(file, message.fileName || '', ev)
-            : undefined
+          file ? ev => dragAttachmentOut(file, message.fileName, ev) : undefined
         }
         {...rovingTabindexProps}
       >
@@ -572,8 +570,10 @@ export function FileAttachmentRow({
       >
         <div
           className='file-icon'
-          draggable='true'
-          onDragStart={dragAttachmentOut.bind(null, file, fileName || '')}
+          draggable={file !== null}
+          onDragStart={
+            file ? ev => dragAttachmentOut(file, fileName, ev) : undefined
+          }
           title={fileMime || 'null'}
         >
           {extension ? (

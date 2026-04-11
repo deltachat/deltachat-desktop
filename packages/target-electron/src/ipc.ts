@@ -113,7 +113,7 @@ export async function init(cwd: string, logHandler: LogHandler) {
 
   ipcMain.on('ondragstart', (event, filePath, realName) => {
     let tmpFilePath = filePath
-    if (realName !== '') {
+    if (realName && realName !== '') {
       const tmpDir = join(getDraftTempDir(), `drag-${Date.now()}`)
       mkdirSync(tmpDir, { recursive: true })
       tmpFilePath = join(tmpDir, basename(realName))
