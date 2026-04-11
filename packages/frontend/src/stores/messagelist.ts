@@ -324,21 +324,16 @@ export class MessageListStore extends Store<MessageListState> {
     },
     setMessageState: (messageId: number, messageState: number) => {
       if (this.state.messageCache[messageId] == undefined) {
-        // This may happen when sending a message to "Saved Messages"
-        // on a new Chatmail account, where `MsgDelivered` would fire
-        // almost instantly after the send, even before `jumpToMessage`
-        // finishes for the new message.
-        // This results in jumpToMessage thinking that the message
-        // is already loaded, but in fact it would be just a husk
-        // of a Message object, with only the `state` property present.
-        //
-        // TODO should we handle it differently? Should we
-        // schedule a full message list re-fetch, or would it always
-        // be loaded later by other event listeners?
-        //
+        // Normally this can happen when a message state changes
+        // for a pretty old message which is not in view.
         // This also happens for "edit request" messages
         // and WebXDC sendUpdate.
         // Those are actual messages, but we don't render them
+        //
+        // Also this may happen when sending a message to "Saved Messages"
+        // on a new Chatmail account, where `MsgDelivered` would fire
+        // almost instantly after the send, even before `jumpToMessage`
+        // finishes for the new message.
         this.log.info(
           `setMessageState called for message ${messageId}, ` +
             `state ${messageState}, but it's not loaded`
