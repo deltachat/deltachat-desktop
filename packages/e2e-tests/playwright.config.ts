@@ -68,7 +68,7 @@ export default defineConfig<TestOptions>({
   /* Run your local dev server before starting the tests */
   webServer: {
     command: `node ${
-      process.env.CI ? '' : '--env-file .env'
+      process.env.CI ? '' : '--env-file .default.env --env-file-if-exists .env'
     } ../target-browser/dist/server.js`,
     url: baseURL,
     timeout: 120 * 1000,

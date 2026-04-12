@@ -6,7 +6,7 @@ after running `pnpm install`
 
 cd into packages/e2e-tests and run `npx playwright install --with-deps`
 
-Copy packages/e2e-tests/\_env to packages/e2e-tests/.env
+(optional) Copy packages/e2e-tests/.env to override .default.env
 
 A convenient alternative to install and use playwright is the VSCode [plugin](https://playwright.dev/docs/getting-started-vscode). It also provides some functionality for running or recording tests.
 

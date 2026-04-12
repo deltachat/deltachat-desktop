@@ -3,11 +3,17 @@ import path from 'node:path'
 import { expect, test as base, Page } from '@playwright/test'
 
 const envPath = path.join(import.meta.dirname, '.env')
+const defaultEnvPath = path.join(import.meta.dirname, '.default.env')
 
 try {
   process.loadEnvFile?.(envPath)
 } catch (_error) {
-  console.log(`No .env file to load ${envPath}`)
+  console.log(`No .env file to load ${envPath}, will load .default.env`)
+
+  // Note that first calling `loadEnvFile` for the default file
+  // and then for the regular file doesn't seem to make Node
+  // override the values read from `.default.env`
+  process.loadEnvFile?.(defaultEnvPath)
 }
 
 export const chatmailServerDomain = process.env.DC_CHATMAIL_DOMAIN
