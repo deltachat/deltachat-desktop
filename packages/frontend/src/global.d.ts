@@ -50,7 +50,6 @@ declare global {
     __chatlistSetSearch:
       | ((searchTerm: string, chatId: number | null) => void)
       | undefined
-    __refetchChatlist: undefined | (() => void)
     /**
      * Setting this will make the MessageList component `jumpToMessage`
      * as soon as it renders with the chat for `accountId` and `chatId`,
