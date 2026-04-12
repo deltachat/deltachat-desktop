@@ -43,7 +43,7 @@ jobs:
       run: npm install -g pnpm && pnpm install
     - name: Install Playwright Browsers
       working-directory: ./packages/e2e-tests
-      run: npx playwright install --with-deps --only-shell chromium
+      run: pnpm exec playwright install --with-deps --only-shell chromium
     - name: Run e2e tests
       env:
         DC_FRONTEND_NO_TLS: true
