@@ -4,7 +4,7 @@
 
 after running `pnpm install`
 
-cd into packages/e2e-tests and run `npx playwright install --with-deps`
+cd into packages/e2e-tests and run `pnpm exec playwright install --with-deps`
 
 Copy packages/e2e-tests/\_env to packages/e2e-tests/.env
 
