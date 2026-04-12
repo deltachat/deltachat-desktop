@@ -1071,7 +1071,7 @@ function JumpDownButton({
           }}
           // Technically this is not always "to bottom",
           // but perhaps it's good enough.
-          aria-label={tx('menu_scroll_to_bottom')}
+          aria-label={stackIsEmpty ? tx('menu_scroll_to_bottom') : tx('back')}
         >
           <div className={'icon ' + (!stackIsEmpty ? 'back' : 'down')} />
         </button>
