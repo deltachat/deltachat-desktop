@@ -25,10 +25,6 @@ export namespace EffectfulBackendActions {
     runtime.deleteWebxdcAccountData(account_id)
   }
 
-  export async function acceptChat(account_id: number, chatId: number) {
-    await BackendRemote.rpc.acceptChat(account_id, chatId)
-  }
-
   export async function blockChat(accountId: number, chatId: number) {
     await BackendRemote.rpc.blockChat(accountId, chatId)
     clearNotificationsForChat(accountId, chatId)
