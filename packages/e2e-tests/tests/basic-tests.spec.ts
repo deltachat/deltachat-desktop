@@ -445,6 +445,25 @@ test('focuses first visible item on arrow down key on input in create chat dialo
   await expect(page.locator('*:focus')).toContainText('New Contact')
 })
 
+test("closing context menu with Escape doesn't close dialog", async () => {
+  await page.keyboard.press('ControlOrMeta+N')
+  await page
+    .getByRole('dialog')
+    .getByRole('button', { name: 'Bob' })
+    .click({ button: 'right' })
+  await expect(page.getByRole('menuitem')).toHaveText([
+    'View Profile',
+    'Delete Contact',
+  ])
+
+  await expect(page.getByRole('menu')).toBeVisible()
+  await page.keyboard.press('Escape')
+  await expect(page.getByRole('menu')).not.toBeVisible()
+  await expect(page.getByRole('dialog')).toBeVisible()
+  await page.keyboard.press('Escape')
+  await expect(page.getByRole('dialog')).not.toBeVisible()
+})
+
 test('correct handling of changed profile displaynames', async () => {
   const userA = existingProfiles[0]
   const userB = existingProfiles[1]
