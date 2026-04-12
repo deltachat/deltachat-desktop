@@ -30,7 +30,7 @@ export const LOCALES_DIR = join(__dirname, '../../../_locales')
 
 // ENV Vars
 export const ENV_WEB_PASSWORD = process.env['WEB_PASSWORD']
-export const ENV_WEB_PORT = process.env['WEB_PORT'] || 3000 // currently only port 3000 is supported
+export const ENV_WEB_PORT = process.env['WEB_PORT'] || 3000
 // set this to one if you use this behind a proxy
 export const ENV_WEB_TRUST_FIRST_PROXY = Boolean(
   process.env['WEB_TRUST_FIRST_PROXY']

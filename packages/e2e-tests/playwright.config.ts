@@ -2,7 +2,7 @@ import { defineConfig, devices } from '@playwright/test'
 
 import { TestOptions } from './playwright-helper'
 
-const port = process.env.PORT ?? 3000
+const port = process.env.WEB_PORT ?? 3000
 
 const baseURL = `https://localhost:${port}`
 
