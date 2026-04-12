@@ -11,7 +11,6 @@ import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import EmojiPicker from '../EmojiPicker'
-import Button from '../Button'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useMessage from '../../hooks/chat/useMessage'
 
@@ -115,12 +114,6 @@ export const StickerPicker = ({
 }) => {
   const tx = useTranslationFunction()
 
-  const onOpenStickerFolder = async () => {
-    const folder =
-      await BackendRemote.rpc.miscGetStickerFolder(selectedAccountId())
-    runtime.openPath(folder)
-  }
-
   const stickerPackNames = Object.keys(stickers)
 
   return (
@@ -130,35 +123,20 @@ export const StickerPicker = ({
       aria-labelledby={labelledBy}
       className='sticker-picker'
     >
-      {stickerPackNames.length > 0 ? (
-        <>
-          <div className='sticker-container'>
-            {stickerPackNames.map(name => (
-              <DisplayedStickerPack
-                chatId={chatId}
-                key={name}
-                stickerPackName={name}
-                stickerPackImages={stickers[name]}
-                setShowEmojiPicker={setShowEmojiPicker}
-              />
-            ))}
-          </div>
-          <div className='sticker-actions-container'>
-            <Button onClick={onOpenStickerFolder}>
-              {tx('open_sticker_folder')}
-            </Button>
-          </div>
-        </>
-      ) : (
-        <div className='sticker-container'>
-          <div className='no-stickers'>
-            <p className='description'>{tx('add_stickers_instructions')}</p>
-            <Button onClick={onOpenStickerFolder}>
-              {tx('open_sticker_folder')}
-            </Button>
-          </div>
-        </div>
-      )}
+      <div className='sticker-container'>
+        {stickerPackNames.map(name => (
+          <DisplayedStickerPack
+            chatId={chatId}
+            key={name}
+            stickerPackName={name}
+            stickerPackImages={stickers[name]}
+            setShowEmojiPicker={setShowEmojiPicker}
+          />
+        ))}
+      </div>
+      <div className='sticker-hint'>
+        <p className='description'>{tx('sticker_picker_empty_hint')}</p>
+      </div>
     </div>
   )
 }
