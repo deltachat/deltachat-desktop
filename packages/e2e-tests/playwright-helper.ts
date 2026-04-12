@@ -44,7 +44,7 @@ export const test = base.extend<TestOptions>({
 })
 
 export async function reloadPage(page: Page): Promise<void> {
-  await page.goto('https://localhost:3000/')
+  await page.goto(`/`)
 }
 
 export async function clickThroughTestIds(
@@ -325,7 +325,7 @@ export async function deleteAllProfiles(
  * if fixtures are used, and the profiles are already created
  */
 export async function loadExistingProfiles(page: Page): Promise<User[]> {
-  // await page.goto('https://localhost:3000/')
+  // await page.goto('/')
   const existingProfiles: User[] = []
   await page.waitForSelector('.main-container')
   await expect(page.locator('.main-container')).toBeVisible()
