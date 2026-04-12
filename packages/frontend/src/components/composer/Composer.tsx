@@ -561,7 +561,7 @@ const Composer = forwardRef<
           type='button'
           className='contact-request-button accept'
           onClick={() => {
-            EffectfulBackendActions.acceptChat(selectedAccountId(), chatId)
+            BackendRemote.rpc.acceptChat(selectedAccountId(), chatId)
           }}
         >
           {tx('accept')}
