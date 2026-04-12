@@ -215,7 +215,7 @@ if (process.env.PRIVATE_CERTIFICATE_KEY) {
   certificateKey = await readFile(PRIVATE_CERTIFICATE_KEY, 'utf8')
 }
 
-const sslserver = https.createServer(
+const server = https.createServer(
   {
     key: certificateKey,
     cert: certificate,
@@ -251,7 +251,7 @@ wssBackend.on('connection', function connection(ws) {
   log.debug('connected backend socket')
 })
 
-sslserver.on('upgrade', (request, socket, head) => {
+server.on('upgrade', (request, socket, head) => {
   // eslint-disable-next-line no-console
   socket.on('error', console.error)
 
@@ -275,13 +275,13 @@ sslserver.on('upgrade', (request, socket, head) => {
   })
 })
 
-sslserver.listen(ENV_WEB_PORT, () => {
+server.listen(ENV_WEB_PORT, () => {
   log.info(`HTTPS app listening on port ${ENV_WEB_PORT}`)
 })
 
 process.on('exit', () => {
-  sslserver.closeAllConnections()
-  sslserver.close()
+  server.closeAllConnections()
+  server.close()
   shutdownDC()
   logHandler.end()
 })
