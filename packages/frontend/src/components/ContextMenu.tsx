@@ -167,10 +167,7 @@ export function ContextMenuLayer({
     // Prevent default since ContextMenuLayer is only visible
     // when a context menu is already open
     evt?.preventDefault()
-    window.__setContextMenuActive(false)
-    setCurrentItems([])
     layerRef.current?.close()
-    endPromiseRef.current?.()
   }, [])
 
   useEffect(() => {
@@ -184,6 +181,11 @@ export function ContextMenuLayer({
       ref={layerRef}
       className='dc-context-menu-layer'
       onClick={cancel}
+      onClose={() => {
+        window.__setContextMenuActive(false)
+        setCurrentItems([])
+        endPromiseRef.current?.()
+      }}
       onContextMenuCapture={cancel}
       // The `<dialog>` is only used to make sure that the menu is on top
       // of other content, and to trap focus.
@@ -367,9 +369,6 @@ export function ContextMenu(props: {
             keyboardFocus.current = 0
           }
         }
-      } else if (ev.code === 'Escape') {
-        closeCallback()
-        keyboardFocus.current = -1
       }
       // preventDefaultForScrollKeys
       else if (ScrollKeysToBlock.includes(ev.code)) {
@@ -382,7 +381,7 @@ export function ContextMenu(props: {
     return () => {
       document.removeEventListener('keydown', onKeyDown)
     }
-  }, [openSublevels, closeCallback, expandMenu])
+  }, [openSublevels, expandMenu])
 
   return (
     <div>
