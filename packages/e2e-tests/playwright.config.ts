@@ -5,9 +5,12 @@ import { TestOptions } from './playwright-helper'
 
 loadEnv()
 
+export const DC_FRONTEND_NO_TLS: boolean =
+  process.env.DC_FRONTEND_NO_TLS === 'true' ||
+  process.env.DC_FRONTEND_NO_TLS === '1'
 const port = process.env.WEB_PORT ?? 3000
 
-const baseURL = `https://localhost:${port}`
+const baseURL = `${DC_FRONTEND_NO_TLS ? 'http' : 'https'}://localhost:${port}`
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -45,6 +48,7 @@ export default defineConfig<TestOptions>({
     permissions: ['notifications'],
     ignoreHTTPSErrors: true,
     launchOptions: {
+      // Only relevant with TLS.
       args: ['--ignore-certificate-errors'],
     },
   },

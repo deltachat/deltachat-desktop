@@ -29,6 +29,9 @@ export let DC_ACCOUNTS_DIR = join(DATA_DIR, 'accounts')
 export const LOCALES_DIR = join(__dirname, '../../../_locales')
 
 // ENV Vars
+export const DC_FRONTEND_NO_TLS: boolean =
+  process.env['DC_FRONTEND_NO_TLS'] === 'true' ||
+  process.env['DC_FRONTEND_NO_TLS'] === '1'
 export const ENV_WEB_PASSWORD = process.env['WEB_PASSWORD']
 export const ENV_WEB_PORT = process.env['WEB_PORT'] || 3000
 // set this to one if you use this behind a proxy
@@ -57,12 +60,13 @@ if (!existsSync(DATA_DIR)) {
 mkdirSync(LOGS_DIR, { recursive: true })
 
 if (
+  !DC_FRONTEND_NO_TLS &&
   !existsSync(PRIVATE_CERTIFICATE_KEY) &&
   !process.env['PRIVATE_CERTIFICATE_KEY']
 ) {
   // eslint-disable-next-line no-console
   console.log(
-    `\n[ERROR]: Certificate at "${PRIVATE_CERTIFICATE_KEY}" not exist, make sure you follow the steps in the Readme file\n`
+    `\n[ERROR]: Certificate at "${PRIVATE_CERTIFICATE_KEY}" not exist, make sure you follow the steps in the Readme file. Or consider DC_FRONTEND_NO_TLS=true.\n`
   )
   process.exit(1)
 }

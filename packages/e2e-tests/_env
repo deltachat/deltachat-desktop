@@ -1,4 +1,5 @@
 DC_ACCOUNTS_DIR=../../e2e-tests/data/accounts
+DC_FRONTEND_NO_TLS=true
 NODE_ENV=test
 
 # URL of chatmail server

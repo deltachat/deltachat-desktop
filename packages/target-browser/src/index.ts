@@ -1,5 +1,6 @@
 import { basename, dirname, join } from 'path'
 import express from 'express'
+import http from 'http'
 import https from 'https'
 import { readFile, stat, unlink } from 'fs/promises'
 import session from 'express-session'
@@ -23,6 +24,7 @@ import {
   LOCALES_DIR,
   DATA_DIR,
   DC_ACCOUNTS_DIR,
+  DC_FRONTEND_NO_TLS,
 } from './config'
 import { startDeltaChat } from './deltachat-rpc'
 import { helpRoute } from './help'
@@ -61,7 +63,7 @@ const sessionParser = session({
   cookie: {
     sameSite: 'strict',
     priority: 'high',
-    secure: true, // This makes it only work in https
+    secure: !DC_FRONTEND_NO_TLS, // `secure: true` makes it only work in https
     httpOnly: true,
   },
 })
@@ -201,27 +203,32 @@ app.get('/themes.json', async (_req, res) => {
   res.json(await readThemeDir())
 })
 
-let certificate = ''
-if (process.env.PRIVATE_CERTIFICATE_CERT) {
-  certificate = process.env.PRIVATE_CERTIFICATE_CERT
+let server: http.Server | https.Server
+if (DC_FRONTEND_NO_TLS) {
+  server = http.createServer({}, app)
 } else {
-  certificate = await readFile(PRIVATE_CERTIFICATE_CERT, 'utf8')
-}
+  let certificate = ''
+  if (process.env.PRIVATE_CERTIFICATE_CERT) {
+    certificate = process.env.PRIVATE_CERTIFICATE_CERT
+  } else {
+    certificate = await readFile(PRIVATE_CERTIFICATE_CERT, 'utf8')
+  }
 
-let certificateKey = ''
-if (process.env.PRIVATE_CERTIFICATE_KEY) {
-  certificateKey = process.env.PRIVATE_CERTIFICATE_KEY
-} else {
-  certificateKey = await readFile(PRIVATE_CERTIFICATE_KEY, 'utf8')
-}
+  let certificateKey = ''
+  if (process.env.PRIVATE_CERTIFICATE_KEY) {
+    certificateKey = process.env.PRIVATE_CERTIFICATE_KEY
+  } else {
+    certificateKey = await readFile(PRIVATE_CERTIFICATE_KEY, 'utf8')
+  }
 
-const server = https.createServer(
-  {
-    key: certificateKey,
-    cert: certificate,
-  },
-  app
-)
+  server = https.createServer(
+    {
+      key: certificateKey,
+      cert: certificate,
+    },
+    app
+  )
+}
 
 const wssBackend = new WebSocketServer({
   noServer: true,
@@ -276,7 +283,9 @@ server.on('upgrade', (request, socket, head) => {
 })
 
 server.listen(ENV_WEB_PORT, () => {
-  log.info(`HTTPS app listening on port ${ENV_WEB_PORT}`)
+  log.info(
+    `${DC_FRONTEND_NO_TLS ? 'HTTP' : 'HTTPS'} app listening on port ${ENV_WEB_PORT}`
+  )
 })
 
 process.on('exit', () => {
