@@ -16,7 +16,8 @@ Be aware that the tests in each spec file are NOT isolated, so the order they ar
 
 ## Usage
 
-This package depends on the target-browser so make sure you prepared that to run (adding custom certificates). See [README](../packages/target-browser/Readme.md)
+This package depends on the target-browser so consider taking a look at its [README](../packages/target-browser/Readme.md),
+e.g. if you want to enable TLS.
 
 But don't run the browser at the same time, it will be started inside the test routine.
 
