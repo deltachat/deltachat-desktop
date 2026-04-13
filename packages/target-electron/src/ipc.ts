@@ -27,6 +27,7 @@ import { fileURLToPath } from 'url'
 import { getLogger } from '../../shared/logger.js'
 import {
   getTempDir,
+  getAccountsPath,
   getLogsPath,
   htmlDistDir,
   INTERNAL_TMP_DIR_NAME,
@@ -517,9 +518,14 @@ async function removeTempFile(path: string) {
 }
 
 async function deleteSticker(stickerPath: string) {
-  if (!path.isAbsolute(stickerPath) || stickerPath.indexOf('..') !== -1) {
-    log.error('deleteSticker was called with an invalid path: ', stickerPath)
+  const resolved = normalize(stickerPath)
+  const accountsPath = getAccountsPath()
+  if (!resolved.startsWith(accountsPath + sep)) {
+    log.error(
+      'deleteSticker was called with a path outside of the accounts dir: ',
+      stickerPath
+    )
     throw new Error('Invalid sticker path')
   }
-  await shell.trashItem(stickerPath)
+  await shell.trashItem(resolved)
 }

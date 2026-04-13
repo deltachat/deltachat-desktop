@@ -484,6 +484,9 @@ class TauriRuntime implements Runtime {
     }
     return ''
   }
+  deleteSticker(_stickerPath: string): Promise<void> {
+    throw new Error('Method not implemented.103')
+  }
   readClipboardText(): Promise<string> {
     return readText()
   }

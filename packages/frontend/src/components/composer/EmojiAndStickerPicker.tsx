@@ -1,6 +1,7 @@
 import React, {
   useState,
   useEffect,
+  useCallback,
   forwardRef,
   PropsWithChildren,
   useRef,
@@ -103,14 +104,22 @@ function StickersListItem(props: {
       y: ev.clientY,
       items: [
         {
+          label: tx('menu_copy_image_to_clipboard'),
+          action: () => {
+            runtime.writeClipboardImage(filePath.replace('file://', ''))
+          },
+        },
+        { type: 'separator' },
+        {
           label: tx('delete'),
+          danger: true,
           action: async () => {
             const confirmed = await openConfirmationDialog({
               message: tx('ask_delete_sticker'),
               isConfirmDanger: true,
             })
             if (confirmed) {
-              await runtime.deleteSticker(filePath)
+              await runtime.deleteSticker(filePath.replace('file://', ''))
               onStickerDeleted()
             }
           },
@@ -227,19 +236,18 @@ export const EmojiAndStickerPicker = forwardRef<
     [key: string]: string[]
   }>({})
 
-  const refreshStickers = () => {
+  const refreshStickers = useCallback(() => {
     BackendRemote.rpc
       .miscGetStickers(accountId)
       .then(stickers => setStickers(stickers))
-  }
+  }, [accountId])
 
   useEffect(() => {
     if (hideStickerPicker) {
       return
     }
     refreshStickers()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [accountId, hideStickerPicker])
+  }, [refreshStickers, hideStickerPicker])
 
   return (
     <div className={'emoji-sticker-picker'} ref={ref}>
