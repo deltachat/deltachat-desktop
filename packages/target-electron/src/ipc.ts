@@ -120,12 +120,8 @@ export async function init(cwd: string, logHandler: LogHandler) {
       tmpFilePath = join(tmpDir, basename(realName))
       try {
         linkSync(filePath, tmpFilePath)
-      } catch (e: any) {
-        if (e.code === 'EXDEV') {
-          copyFileSync(filePath, tmpFilePath)
-        } else {
-          throw e
-        }
+      } catch {
+        copyFileSync(filePath, tmpFilePath)
       }
     }
     let icon: NativeImage
