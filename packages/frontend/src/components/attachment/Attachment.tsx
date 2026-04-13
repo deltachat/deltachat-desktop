@@ -74,7 +74,7 @@ export function getExtension({
 }
 
 export function dragAttachmentOut(
-  file: string,
+  file: MessageTypeAttachmentSubset['file'] & string,
   fileName: string | null,
   dragEvent: React.DragEvent<HTMLElement>
 ) {

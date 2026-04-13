@@ -20,7 +20,7 @@ import path, {
 } from 'path'
 import { inspect } from 'util'
 import { platform } from 'os'
-import { existsSync, copyFileSync, mkdirSync } from 'fs'
+import { existsSync, copyFileSync, mkdirSync, linkSync } from 'fs'
 import { versions } from 'process'
 import { fileURLToPath } from 'url'
 
@@ -113,11 +113,20 @@ export async function init(cwd: string, logHandler: LogHandler) {
 
   ipcMain.on('ondragstart', (event, filePath, realName) => {
     let tmpFilePath = filePath
+    let tmpDir: string | undefined
     if (realName && realName !== '') {
-      const tmpDir = join(getTempDir(), `drag-${Date.now()}`)
+      tmpDir = join(getTempDir(), `drag-${Date.now()}`)
       mkdirSync(tmpDir, { recursive: true })
       tmpFilePath = join(tmpDir, basename(realName))
-      copyFileSync(filePath, tmpFilePath)
+      try {
+        linkSync(filePath, tmpFilePath)
+      } catch (e: any) {
+        if (e.code === 'EXDEV') {
+          copyFileSync(filePath, tmpFilePath)
+        } else {
+          throw e
+        }
+      }
     }
     let icon: NativeImage
     try {
@@ -145,6 +154,14 @@ export async function init(cwd: string, logHandler: LogHandler) {
       file: tmpFilePath,
       icon,
     })
+    if (tmpDir) {
+      const dirToRemove = tmpDir
+      setTimeout(() => {
+        rm(dirToRemove, { recursive: true }).catch(err =>
+          log.debug('drag tmp dir cleanup: already removed or failed', err)
+        )
+      }, 30_000)
+    }
   })
 
   ipcMain.on('help', async (_ev, locale, anchor?: string) => {
