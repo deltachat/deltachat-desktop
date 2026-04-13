@@ -26,7 +26,7 @@ import { fileURLToPath } from 'url'
 
 import { getLogger } from '../../shared/logger.js'
 import {
-  getDraftTempDir,
+  getTempDir,
   getLogsPath,
   htmlDistDir,
   INTERNAL_TMP_DIR_NAME,
@@ -114,7 +114,7 @@ export async function init(cwd: string, logHandler: LogHandler) {
   ipcMain.on('ondragstart', (event, filePath, realName) => {
     let tmpFilePath = filePath
     if (realName && realName !== '') {
-      const tmpDir = join(getDraftTempDir(), `drag-${Date.now()}`)
+      const tmpDir = join(getTempDir(), `drag-${Date.now()}`)
       mkdirSync(tmpDir, { recursive: true })
       tmpFilePath = join(tmpDir, basename(realName))
       copyFileSync(filePath, tmpFilePath)
@@ -443,8 +443,8 @@ export async function writeTempFileFromBase64(
   name: string,
   content: string
 ): Promise<string> {
-  await mkdir(getDraftTempDir(), { recursive: true })
-  const pathToFile = join(getDraftTempDir(), basename(name))
+  await mkdir(getTempDir(), { recursive: true })
+  const pathToFile = join(getTempDir(), basename(name))
   log.debug(`Writing base64 encoded file ${pathToFile}`)
   await writeFile(pathToFile, Buffer.from(content, 'base64'), 'binary')
   return pathToFile
@@ -461,8 +461,8 @@ export async function writeTempFile(
   name: string,
   content: string
 ): Promise<string> {
-  await mkdir(getDraftTempDir(), { recursive: true })
-  const pathToFile = join(getDraftTempDir(), basename(name))
+  await mkdir(getTempDir(), { recursive: true })
+  const pathToFile = join(getTempDir(), basename(name))
   log.debug(`Writing tmp file ${pathToFile}`)
   await writeFile(pathToFile, Buffer.from(content, 'utf8'), 'binary')
   return pathToFile
