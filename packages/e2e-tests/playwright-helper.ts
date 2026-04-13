@@ -1,14 +1,8 @@
 /* eslint-disable no-console */
-import path from 'node:path'
 import { expect, test as base, Page } from '@playwright/test'
+import { loadEnv } from './load-env'
 
-const envPath = path.join(import.meta.dirname, '.env')
-
-try {
-  process.loadEnvFile?.(envPath)
-} catch (_error) {
-  console.log(`No .env file to load ${envPath}`)
-}
+loadEnv()
 
 export const chatmailServerDomain = process.env.DC_CHATMAIL_DOMAIN
   ? process.env.DC_CHATMAIL_DOMAIN

@@ -1,6 +1,9 @@
 import { defineConfig, devices } from '@playwright/test'
 
+import { loadEnv } from './load-env'
 import { TestOptions } from './playwright-helper'
+
+loadEnv()
 
 const port = process.env.WEB_PORT ?? 3000
 
