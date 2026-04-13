@@ -4,6 +4,7 @@ import React, {
   forwardRef,
   PropsWithChildren,
   useRef,
+  useContext,
 } from 'react'
 import classNames from 'classnames'
 
@@ -13,6 +14,8 @@ import { runtime } from '@deltachat-desktop/runtime-interface'
 import EmojiPicker from '../EmojiPicker'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useMessage from '../../hooks/chat/useMessage'
+import { ContextMenuContext } from '../../contexts/ContextMenuContext'
+import useConfirmationDialog from '../../hooks/dialog/useConfirmationDialog'
 
 import styles from './styles.module.scss'
 
@@ -27,6 +30,7 @@ type Props = {
   stickerPackImages: string[]
   chatId: number
   setShowEmojiPicker: (enabled: boolean) => void
+  onStickerDeleted: () => void
 }
 
 const DisplayedStickerPack = ({
@@ -34,6 +38,7 @@ const DisplayedStickerPack = ({
   stickerPackImages,
   chatId,
   setShowEmojiPicker,
+  onStickerDeleted,
 }: Props) => {
   const { jumpToMessage } = useMessage()
   const accountId = selectedAccountId()
@@ -70,6 +75,7 @@ const DisplayedStickerPack = ({
               key={filePath}
               filePath={filePath}
               onClick={() => onClickSticker(filePath)}
+              onStickerDeleted={onStickerDeleted}
             />
           ))}
         </RovingTabindexProvider>
@@ -78,16 +84,48 @@ const DisplayedStickerPack = ({
   )
 }
 
-function StickersListItem(props: { filePath: string; onClick: () => void }) {
-  const { filePath, onClick } = props
+function StickersListItem(props: {
+  filePath: string
+  onClick: () => void
+  onStickerDeleted: () => void
+}) {
+  const { filePath, onClick, onStickerDeleted } = props
   const ref = useRef<HTMLButtonElement>(null)
   const rovingTabindex = useRovingTabindex(ref)
+  const { openContextMenu } = useContext(ContextMenuContext)
+  const openConfirmationDialog = useConfirmationDialog()
+  const tx = useTranslationFunction()
+
+  const onContextMenu = (ev: React.MouseEvent) => {
+    ev.preventDefault()
+    openContextMenu({
+      x: ev.clientX,
+      y: ev.clientY,
+      items: [
+        {
+          label: tx('delete'),
+          action: async () => {
+            const confirmed = await openConfirmationDialog({
+              message: tx('ask_delete_sticker'),
+              isConfirmDanger: true,
+            })
+            if (confirmed) {
+              await runtime.deleteSticker(filePath)
+              onStickerDeleted()
+            }
+          },
+        },
+      ],
+    })
+  }
+
   return (
     <button
       type='button'
       ref={ref}
       className={'sticker ' + rovingTabindex.className}
       onClick={onClick}
+      onContextMenu={onContextMenu}
       tabIndex={rovingTabindex.tabIndex}
       onKeyDown={rovingTabindex.onKeydown}
       onFocus={rovingTabindex.setAsActiveElement}
@@ -104,6 +142,7 @@ export const StickerPicker = ({
   stickers,
   chatId,
   setShowEmojiPicker,
+  onStickerDeleted,
 }: {
   role: 'tabpanel' | undefined
   id: string
@@ -111,6 +150,7 @@ export const StickerPicker = ({
   stickers: { [key: string]: string[] }
   chatId: number
   setShowEmojiPicker: (enabled: boolean) => void
+  onStickerDeleted: () => void
 }) => {
   const tx = useTranslationFunction()
 
@@ -131,6 +171,7 @@ export const StickerPicker = ({
             stickerPackName={name}
             stickerPackImages={stickers[name]}
             setShowEmojiPicker={setShowEmojiPicker}
+            onStickerDeleted={onStickerDeleted}
           />
         ))}
       </div>
@@ -186,13 +227,18 @@ export const EmojiAndStickerPicker = forwardRef<
     [key: string]: string[]
   }>({})
 
+  const refreshStickers = () => {
+    BackendRemote.rpc
+      .miscGetStickers(accountId)
+      .then(stickers => setStickers(stickers))
+  }
+
   useEffect(() => {
     if (hideStickerPicker) {
       return
     }
-    BackendRemote.rpc
-      .miscGetStickers(accountId)
-      .then(stickers => setStickers(stickers))
+    refreshStickers()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accountId, hideStickerPicker])
 
   return (
@@ -235,6 +281,7 @@ export const EmojiAndStickerPicker = forwardRef<
           chatId={chatId}
           stickers={stickers}
           setShowEmojiPicker={setShowEmojiPicker}
+          onStickerDeleted={refreshStickers}
         />
       )}
     </div>
