@@ -138,7 +138,7 @@ class ElectronRuntime implements Runtime {
   onShowDialog:
     | ((kind: 'about' | 'keybindings' | 'settings') => void)
     | undefined
-  onDragFileOut(file: string, realName: string): void {
+  onDragFileOut(file: string, realName: string | null): void {
     ipcBackend.send('ondragstart', file, realName)
   }
   isDroppedFileFromOutside(file: string): boolean {
