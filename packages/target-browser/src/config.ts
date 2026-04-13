@@ -49,14 +49,13 @@ if (process.env['DC_ACCOUNTS_DIR']) {
 
 export const NODE_ENV = (process.env['NODE_ENV'] ?? 'production').toLowerCase()
 
-if (!existsSync(DATA_DIR)) {
-  // eslint-disable-next-line no-console
-  console.log(
-    '\n[ERROR]: Data dir does not exist, make sure you follow the steps in the Readme file\n'
-  )
-  process.exit(1)
+try {
+  mkdirSync(DATA_DIR)
+} catch (err: any) {
+  if (err.code !== 'EEXIST') {
+    throw err
+  }
 }
-
 mkdirSync(LOGS_DIR, { recursive: true })
 
 if (
