@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file.
 
+<a id="2_49_0"></a>
+## [2.49.0] - 2026-04-13
+
+### Added
+
+- Leave & delete group ([#6153](https://github.com/deltachat/deltachat-desktop/issues/6153))
+
+### Fixed
+
+- Remove title from title bar on macOS ([#6188](https://github.com/deltachat/deltachat-desktop/issues/6188))
+- Add bg for quotes in video msg ([#6212](https://github.com/deltachat/deltachat-desktop/issues/6212))
+- Translate static aria label ([#6170](https://github.com/deltachat/deltachat-desktop/issues/6170))
+
+### Miscellaneous Tasks
+
+- Upgrade Electron to 41.2.0
+- Upgrade core to 2.49.0 ([#6232](https://github.com/deltachat/deltachat-desktop/issues/6232))
+  - Mark a message as delivered only after it has been fully sent out (#8062).
+  - Do not create 1:1 chat on second device when scanning a QR code.
+  - Let search also return hidden contacts if search value is an email address.
+  - Make start messages stick to the top of the chat.
+
+
 <a id="2_48_0"></a>
 ## [2.48.0] - 2026-03-30
 
@@ -4001,7 +4024,8 @@ This section is only relevant to contributors.
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.48.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.49.0...HEAD
+[2.49.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.48.0...v2.49.0
 [2.48.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.47.0...v2.48.0
 [2.47.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.43.0...v2.47.0
 [2.43.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.35.0...v2.43.0
