@@ -598,7 +598,10 @@ function AppIcon({ accountId, app }: { accountId: number; app: T.Message }) {
   const appName = webxdcInfoFetch.loading
     ? tx('loading')
     : webxdcInfoFetch.result.ok
-      ? webxdcInfoFetch.result.value.name
+      ? // Same as in `WebxdcMessageContent`
+        (webxdcInfoFetch.result.value.document
+          ? webxdcInfoFetch.result.value.document + '\n'
+          : '') + webxdcInfoFetch.result.value.name
       : 'Unknown App'
 
   return (
