@@ -121,7 +121,7 @@ export function AvatarFromContact(
       addr={contact.address}
       large={large === true}
       small={small === true}
-      onClick={() => onClick && onClick(contact)}
+      onClick={onClick ? () => onClick(contact) : undefined}
       tabIndex={tabIndex}
       aria-hidden={props['aria-hidden']}
     />
