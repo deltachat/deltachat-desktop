@@ -72,13 +72,13 @@ const none = Symbol()
  * as opposed to `keydown` events with `.code === "Space"`,
  * because we support both keyboard and mouse selection.
  *
- * If items are removed from {@link availableItems},
- * they will not be automatically removed from {@link selectedItems}.
+ * If items are removed from {@linkcode availableItems},
+ * they will not be automatically removed from {@linkcode selectedItems}.
  * Make sure to handle this yourself, to avoid confusing behavior
  * where items are selected, but are not visible on the screen.
  *
- * It is also possible to provide {@link selectedItems} Set
- * that includes items which are not a part of {@link availableItems}.
+ * It is also possible to provide {@linkcode selectedItems} Set
+ * that includes items which are not a part of {@linkcode availableItems}.
  */
 export function useMultiselect<T>(
   /**
