@@ -37,7 +37,6 @@ const none = Symbol()
  *         <button
  *           role='option' // Or 'tab' or whatever.
  *           aria-selected={multiselect.selectedItems.has(id)}
- *           className={multiselect.selectedItems.has(id) ? 'selected' : ''}
  *           onClick={event => {
  *             const shouldPreventDefault = multiselect.onClick(event, id)
  *             if (shouldPreventDefault) {
