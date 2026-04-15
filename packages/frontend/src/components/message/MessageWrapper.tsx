@@ -12,7 +12,7 @@ type RenderMessageProps = {
   chat: T.FullChat
   message: T.Message
   conversationType: ConversationType
-  unreadMessageInViewIntersectionObserver: React.RefObject<IntersectionObserver | null>
+  unreadMessageInViewIntersectionObserver: IntersectionObserver
 }
 
 const log = getLogger('renderer/message/MessageWrapper')
@@ -35,23 +35,18 @@ export function MessageWrapper(props: RenderMessageProps) {
       )
       return
     }
-    if (
-      !props.unreadMessageInViewIntersectionObserver.current ||
-      !props.unreadMessageInViewIntersectionObserver.current.observe
-    ) {
+    if (!props.unreadMessageInViewIntersectionObserver) {
       log.error(
         `MessageWrapper: key: ${props.key2} unreadMessageInViewIntersectionObserver is null. Returning`
       )
       return
     }
 
-    props.unreadMessageInViewIntersectionObserver.current.observe(
-      messageBottomElement
-    )
+    props.unreadMessageInViewIntersectionObserver.observe(messageBottomElement)
     log.debug(`MessageWrapper: key: ${props.key2} Successfully observing ;)`)
 
     return () =>
-      props.unreadMessageInViewIntersectionObserver.current?.unobserve(
+      props.unreadMessageInViewIntersectionObserver.unobserve(
         messageBottomElement
       )
   }, [
