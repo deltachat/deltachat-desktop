@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 import { ActionEmitter, KeybindAction } from '../keybindings'
 import { markChatAsSeen, saveLastChatId } from '../backend/chat'
@@ -166,7 +166,17 @@ export const ChatProvider = ({
   // eslint-disable-next-line react-hooks/refs
   unselectChatRef.current = unselectChat
 
-  if (useHasChanged2(chatNoLinger?.id) && chatNoLinger != undefined) {
+  const isArchivedChecked = useRef(false)
+  if (useHasChanged2(chatId) && chatId != undefined) {
+    // eslint-disable-next-line react-hooks/refs
+    isArchivedChecked.current = false
+  }
+  if (
+    // eslint-disable-next-line react-hooks/refs
+    !isArchivedChecked.current &&
+    chatNoLinger != undefined
+  ) {
+    isArchivedChecked.current = true
     // Switch to "archived" view if selected chat is there
     // @TODO: We probably want this to be part of the UI logic instead
     ActionEmitter.emitAction(
