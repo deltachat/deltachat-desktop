@@ -79,7 +79,6 @@ export function loadTranslations(locale: string): LocaleData {
     log.debug(`No experimental language file (${experimentalFile}) found`)
   }
 
-  log.debug(messages['no_chat_selected_suggestion_desktop'])
   return { messages, locale, dir: metaData?.dir ?? 'ltr' }
 }
 
