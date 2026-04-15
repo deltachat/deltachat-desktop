@@ -339,7 +339,6 @@ export default function MessageList({
     messageListItems.length,
     newestFetchedMessageListItemIndex,
     scheduler,
-    setShowJumpDownButton,
     showJumpDownButton,
   ])
   const onScrollEnd = useCallback((_ev: Event) => {
