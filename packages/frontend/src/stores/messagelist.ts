@@ -554,11 +554,10 @@ export class MessageListStore extends Store<MessageListState> {
             state.oldestFetchedMessageListItemIndex - PAGE_SIZE,
             0
           )
-          const lastMessageIndexOnLastPage =
-            state.oldestFetchedMessageListItemIndex
-          if (lastMessageIndexOnLastPage === 0) {
+          const lastMessageIndex = state.oldestFetchedMessageListItemIndex
+          if (lastMessageIndex === 0) {
             this.log.debug(
-              'FETCH_MORE_MESSAGES: lastMessageIndexOnLastPage is zero, returning'
+              'FETCH_MORE_MESSAGES: lastMessageIndex is zero, returning'
             )
             // Since we haven't changed `viewState`, `MessageList` won't
             // call `unlockScroll()`, so let's unlock it now.
@@ -566,7 +565,7 @@ export class MessageListStore extends Store<MessageListState> {
           }
           const fetchedMessageListItems = state.messageListItems.slice(
             oldestFetchedMessageListItemIndex,
-            lastMessageIndexOnLastPage
+            lastMessageIndex
           )
           if (fetchedMessageListItems.length === 0) {
             this.log.debug(
@@ -582,7 +581,7 @@ export class MessageListStore extends Store<MessageListState> {
               this.accountId,
               state.messageListItems,
               oldestFetchedMessageListItemIndex,
-              lastMessageIndexOnLastPage - 1
+              lastMessageIndex - 1
             ).catch(err => this.log.error('loadMessages failed', err))) || {}
 
           this.reducer.appendMessagesTop({
