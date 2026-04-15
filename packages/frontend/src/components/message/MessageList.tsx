@@ -2,7 +2,6 @@ import React, {
   useRef,
   useCallback,
   useLayoutEffect,
-  RefObject,
   useEffect,
   useState,
   useMemo,
@@ -217,14 +216,19 @@ export default function MessageList({
       }
     })
   }
-  const unreadMessageInViewIntersectionObserver: RefObject<IntersectionObserver> =
-    useRef(
-      new IntersectionObserver(onUnreadMessageInView, {
+  const unreadMessageInViewIntersectionObserver = useRef<IntersectionObserver>(
+    null
+  ) as React.RefObject<IntersectionObserver>
+  if (unreadMessageInViewIntersectionObserver.current == null) {
+    unreadMessageInViewIntersectionObserver.current = new IntersectionObserver(
+      onUnreadMessageInView,
+      {
         root: null,
         rootMargin: '0px',
         threshold: [0, 1],
-      })
+      }
     )
+  }
 
   useEffect(() => {
     const onFocus = onWindowFocus.bind(null, accountId)
@@ -234,7 +238,6 @@ export default function MessageList({
 
   useEffect(() => {
     return () => {
-      // eslint-disable-next-line react-hooks/exhaustive-deps
       unreadMessageInViewIntersectionObserver.current?.disconnect()
     }
   }, [])
