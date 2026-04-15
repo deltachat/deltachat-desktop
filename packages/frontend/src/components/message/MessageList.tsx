@@ -157,78 +157,76 @@ export default function MessageList({
    */
   const maxScrollToBottomDistanceConsideredShort = 10
 
-  const onUnreadMessageInView: IntersectionObserverCallback = entries => {
-    if (!chat) return
-    // Don't mark messages as read if window is not focused
-    if (document.hasFocus() === false) return
+  const onUnreadMessageInView: IntersectionObserverCallback = useCallback(
+    (entries, observer) => {
+      if (!chat?.id) return
+      // Don't mark messages as read if window is not focused
+      if (document.hasFocus() === false) return
 
-    if (scheduler.isLocked('scroll') === true) {
-      //console.log('onScroll: locked, returning')
-      return
-    }
-
-    setTimeout(() => {
-      log.debug(`onUnreadMessageInView: entries.length: ${entries.length}`)
-
-      const messageIdsToMarkAsRead = []
-      for (const entry of entries) {
-        if (!entry.isIntersecting) continue
-        if (!(entry.target instanceof HTMLElement)) {
-          log.error(
-            'onUnreadMessageInView: entry.target is not HTMLElement:',
-            entry.target
-          )
-          continue
-        }
-        const messageId = entry.target.dataset.messageid
-          ? Number.parseInt(entry.target.dataset.messageid)
-          : undefined
-        if (messageId == undefined || !Number.isSafeInteger(messageId)) {
-          log.error(
-            'onUnreadMessageInView: failed to get message id from element',
-            entry.target
-          )
-          continue
-        }
-        const messageHeight = entry.target.clientHeight
-
-        log.debug(
-          `onUnreadMessageInView: messageId ${messageId} height: ${messageHeight} intersectionRate: ${entry.intersectionRatio}`
-        )
-        log.debug(
-          `onUnreadMessageInView: messageId ${messageId} marking as read`
-        )
-
-        messageIdsToMarkAsRead.push(messageId)
-        if (unreadMessageInViewIntersectionObserver.current === null) continue
-        unreadMessageInViewIntersectionObserver.current.unobserve(entry.target)
+      if (scheduler.isLocked('scroll') === true) {
+        //console.log('onScroll: locked, returning')
+        return
       }
 
-      if (messageIdsToMarkAsRead.length > 0) {
-        const chatId = chat?.id
-        if (!chatId) return
-        // FYI we also listen for `MsgsNoticed` event
-        // to update the badge counter,
-        // so `.then(debouncedUpdateBadgeCounter)` is probably not necessary.
-        BackendRemote.rpc
-          .markseenMsgs(accountId, messageIdsToMarkAsRead)
-          .then(throttledUpdateBadgeCounter)
-      }
+      setTimeout(() => {
+        log.debug(`onUnreadMessageInView: entries.length: ${entries.length}`)
+
+        const messageIdsToMarkAsRead = []
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue
+          if (!(entry.target instanceof HTMLElement)) {
+            log.error(
+              'onUnreadMessageInView: entry.target is not HTMLElement:',
+              entry.target
+            )
+            continue
+          }
+          const messageId = entry.target.dataset.messageid
+            ? Number.parseInt(entry.target.dataset.messageid)
+            : undefined
+          if (messageId == undefined || !Number.isSafeInteger(messageId)) {
+            log.error(
+              'onUnreadMessageInView: failed to get message id from element',
+              entry.target
+            )
+            continue
+          }
+          const messageHeight = entry.target.clientHeight
+
+          log.debug(
+            `onUnreadMessageInView: messageId ${messageId} height: ${messageHeight} intersectionRate: ${entry.intersectionRatio}`
+          )
+          log.debug(
+            `onUnreadMessageInView: messageId ${messageId} marking as read`
+          )
+
+          messageIdsToMarkAsRead.push(messageId)
+          observer.unobserve(entry.target)
+        }
+
+        if (messageIdsToMarkAsRead.length > 0) {
+          const chatId = chat?.id
+          if (!chatId) return
+          // FYI we also listen for `MsgsNoticed` event
+          // to update the badge counter,
+          // so `.then(debouncedUpdateBadgeCounter)` is probably not necessary.
+          BackendRemote.rpc
+            .markseenMsgs(accountId, messageIdsToMarkAsRead)
+            .then(throttledUpdateBadgeCounter)
+        }
+      })
+    },
+    [accountId, chat.id, scheduler]
+  )
+  const unreadMessageInViewIntersectionObserver = useMemo(() => {
+    log.debug('Creating unreadMessageInViewIntersectionObserver')
+
+    return new IntersectionObserver(onUnreadMessageInView, {
+      root: null,
+      rootMargin: '0px',
+      threshold: [0, 1],
     })
-  }
-  const unreadMessageInViewIntersectionObserver = useRef<IntersectionObserver>(
-    null
-  ) as React.RefObject<IntersectionObserver>
-  if (unreadMessageInViewIntersectionObserver.current == null) {
-    unreadMessageInViewIntersectionObserver.current = new IntersectionObserver(
-      onUnreadMessageInView,
-      {
-        root: null,
-        rootMargin: '0px',
-        threshold: [0, 1],
-      }
-    )
-  }
+  }, [onUnreadMessageInView])
 
   useEffect(() => {
     const onFocus = onWindowFocus.bind(null, accountId)
@@ -238,9 +236,9 @@ export default function MessageList({
 
   useEffect(() => {
     return () => {
-      unreadMessageInViewIntersectionObserver.current?.disconnect()
+      unreadMessageInViewIntersectionObserver.disconnect()
     }
-  }, [])
+  }, [unreadMessageInViewIntersectionObserver])
 
   const maybeJumpToMessageHack = () => {
     // FYI there is similar code in `messagelist.ts`.
@@ -743,7 +741,7 @@ export const MessageListInner = React.memo(
     messageListRef: React.RefObject<HTMLDivElement | null>
     chat: T.FullChat
     loaded: boolean
-    unreadMessageInViewIntersectionObserver: React.RefObject<IntersectionObserver | null>
+    unreadMessageInViewIntersectionObserver: IntersectionObserver
     loadMissingMessages: () => Promise<void>
   }) => {
     const tx = useTranslationFunction()
