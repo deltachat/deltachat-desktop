@@ -713,9 +713,9 @@ export class MessageListStore extends Store<MessageListState> {
       async (messageId: number) => {
         if (
           messageId > C.DC_MSG_ID_LAST_SPECIAL &&
-          this.state.messageListItems.findIndex(
+          this.state.messageListItems.some(
             m => m.kind === 'message' && m.msg_id === messageId
-          ) !== -1
+          )
         ) {
           this.log.debug(
             'DC_EVENT_MSGS_CHANGED',
