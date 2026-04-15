@@ -141,21 +141,37 @@ export function useMessageList(
         }
       }),
       onDCEvent(accountId, 'MsgsChanged', ({ chatId: eventChatId, msgId }) => {
-        if (msgId === 0 && (eventChatId === 0 || eventChatId === chatId)) {
+        if (eventChatId === 0) {
           store.effect.refresh()
-        } else {
-          store.effect.onEventMessagesChanged(msgId)
+          return
         }
+        if (eventChatId !== chatId) {
+          return
+        }
+        if (msgId === 0) {
+          store.effect.refresh()
+          return
+        }
+
+        store.effect.onEventMessagesChanged(msgId)
       }),
       onDCEvent(
         accountId,
         'ReactionsChanged',
         ({ chatId: eventChatId, msgId }) => {
-          if (msgId === 0 && (eventChatId === 0 || eventChatId === chatId)) {
+          if (eventChatId === 0) {
             store.effect.refresh()
-          } else {
-            store.effect.onEventMessagesChanged(msgId)
+            return
           }
+          if (eventChatId !== chatId) {
+            return
+          }
+          if (msgId === 0) {
+            store.effect.refresh()
+            return
+          }
+
+          store.effect.onEventMessagesChanged(msgId)
         }
       ),
       onDCEvent(accountId, 'MsgFailed', ({ chatId: eventChatId, msgId }) => {
