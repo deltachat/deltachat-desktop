@@ -126,7 +126,7 @@ build['mas'] = {
   extraResources: [
     {
       from: 'build/container-migration.plist',
-      to: '../container-migration.plist',
+      to: 'container-migration.plist',
     },
   ],
 }
