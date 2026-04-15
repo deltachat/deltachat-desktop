@@ -597,13 +597,9 @@ export default function MessageList({
   }, [refComposer, chat.id])
 
   useLayoutEffect(() => {
-    if (!messageListRef.current || !refComposer.current) {
+    if (!messageListRef.current) {
       return
     }
-    const composerTextarea = refComposer.current.querySelector(
-      '.create-or-edit-message-input'
-    )
-    composerTextarea && composerTextarea.focus()
     messageListRef.current.scrollTop = messageListRef.current.scrollHeight
   }, [refComposer])
 
