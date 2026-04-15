@@ -24,9 +24,28 @@ const PAGE_SIZE = 11
 interface MessageListState {
   // chat: Type.FullChat | null
   messageListItems: T.MessageListItem[]
+  /**
+   * Generally this contains a contiguous slice (no with no holes)
+   * of a chat's messages, but we also have `loadMissingMessages`
+   * in case it doesn't.
+   */
   messageCache: { [msgId: number]: T.MessageLoadResult | undefined }
-  newestFetchedMessageListItemIndex: number
-  oldestFetchedMessageListItemIndex: number
+  /**
+   * @see {@linkcode oldestFetchedMessageListItemIndex}
+   */
+  newestFetchedMessageListItemIndex: -1 | number
+  /**
+   * Index in {@linkcode messageListItems} of the oldest message
+   * that we have fetched (i.e. added to {@linkcode messageCache}).
+   *
+   * Yes, this value can be calculated from {@linkcode messageCache}
+   * and is basically a cached value (or duplicate state if you will).
+   *
+   * Might be `-1` when still loading {@linkcode messageCache},
+   * if the chat is empty, and in some other cases.
+   */
+  oldestFetchedMessageListItemIndex: -1 | number
+
   /**
    * This is used as an "event bus". When we need to update the scroll position
    * of the messages list (e.g. `scrollToMessage`), or, instead, keep the
