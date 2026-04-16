@@ -402,15 +402,18 @@ export default class DCWebxdc {
         isBroadcast: webxdcInfo.isBroadcast,
       }
 
-      type PermissionArg = Parameters<
-        Exclude<
-          Parameters<
-            | typeof webxdcWindow.webContents.session.setPermissionCheckHandler
-            | typeof webxdcWindow.webContents.session.setPermissionRequestHandler
-          >[0],
-          null
-        >
-      >[1]
+      type PermissionArg =
+        | Parameters<
+            Exclude<
+              Parameters<
+                | typeof webxdcWindow.webContents.session.setPermissionCheckHandler
+                | typeof webxdcWindow.webContents.session.setPermissionRequestHandler
+              >[0],
+              null
+            >
+          >[1]
+        // Not listed in Electron type definitions, but is a possible value.
+        | 'persistent-storage'
       // TODO some (poorly written?) apps might require a refresh
       // after a permission has been granted,
       // but we don't support it because
@@ -455,6 +458,7 @@ export default class DCWebxdc {
         'midiSysex',
         'notifications',
         'openExternal',
+        'persistent-storage',
         // 'pointerLock', // This is allowed by default
         'serial',
         'speaker-selection',
