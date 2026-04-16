@@ -604,7 +604,10 @@ const Composer = forwardRef<
                   {'text' in draftState.quote && (
                     <Quote quote={draftState.quote} tabIndex={0} />
                   )}
-                  <CloseButton onClick={removeQuote} />
+                  <CloseButton
+                    onClick={removeQuote}
+                    aria-label={tx('remove_quote')}
+                  />
                 </section>
               )}
               {draftState.file && !draftState.vcardContact && (
@@ -616,7 +619,10 @@ const Composer = forwardRef<
                   {/* <p>file: {draftState.file}</p> */}
                   {/* {draftState.viewType} */}
                   <DraftAttachment attachment={draftState} />
-                  <CloseButton onClick={removeFile} />
+                  <CloseButton
+                    onClick={removeFile}
+                    aria-label={tx('remove_attachment')}
+                  />
                 </section>
               )}
               {draftState.vcardContact && (
@@ -627,7 +633,10 @@ const Composer = forwardRef<
                   <VisualVCardComponent
                     vcardContact={draftState.vcardContact}
                   />
-                  <CloseButton onClick={removeFile} />
+                  <CloseButton
+                    onClick={removeFile}
+                    aria-label={tx('remove_attachment')}
+                  />
                 </section>
               )}
             </>
