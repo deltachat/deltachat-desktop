@@ -7,6 +7,27 @@ import { fileURLToPath } from 'url'
 import { Arch } from 'electron-builder'
 import { env } from 'process'
 
+/**
+ * Electron-Builder afterPack Hook
+ *
+ * This file is an afterPack lifecycle hook for electron-builder. It runs automatically
+ * after the application has been packaged into an .app (macOS), executable directory
+ * (Windows/Linux), but before final distribution files (.dmg, .exe, .AppImage) are created.
+ *
+ * Configured in gen-electron-builder-config.js under "build.afterPack" property.
+ *
+ * Build Process Timeline:
+ * 1. electron-builder packages the app with all dependencies
+ * 2. afterPack hook runs (this file) to perform additional processing on the packaged app
+ * 3. electron-builder creates distribution artifacts (installers, etc.)
+ *
+ * Main Responsibilities:
+ * - Clean up unneeded native prebuilds for other architectures (reduces bundle size)
+ * - Package MSVC redistributables for Windows builds
+ * - Copy map XDC files to the correct location in the packaged app
+ * - Apply Electron security fuses to harden the application
+ */
+
 function convertArch(arch) {
   switch (arch) {
     case Arch.arm64:
@@ -44,38 +65,6 @@ export default async context => {
     resources_dir,
     '/app.asar.unpacked/node_modules/@deltachat'
   )
-
-  // #region workaround for including prebuilds
-
-  // workaround for pnpm and electron builder not working together nicely:
-  // copy prebuild packages in manually
-  // currently not needed
-
-  // const stdioServerVersion = JSON.parse(
-  //   await readFile(
-  //     join(source_dir, '/node_modules/@deltachat/stdio-rpc-server/package.json')
-  //   )
-  // ).version
-
-  // const workspaceNodeModules = join(source_dir, '../../node_modules')
-  // const workspacePnpmModules = join(workspaceNodeModules, '.pnpm')
-  // const dcStdioServers = (await readdir(workspacePnpmModules)).filter(
-  //   name =>
-  //     name.startsWith('@deltachat+stdio-rpc-server-') &&
-  //     name.endsWith(stdioServerVersion)
-  // )
-
-  // console.log({ dcStdioServers })
-
-  // for (const serverPackage of dcStdioServers) {
-  //   const name = serverPackage.split('+')[1].split('@')[0]
-  //   await cp(
-  //     join(workspacePnpmModules, serverPackage),
-  //     join(prebuild_dir, name),
-  //     { recursive: true }
-  //   )
-  // }
-  // #endregion
 
   // delete not needed prebuilds
   // ---------------------------------------------------------------------------------
