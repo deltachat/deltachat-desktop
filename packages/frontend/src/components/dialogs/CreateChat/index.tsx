@@ -46,7 +46,6 @@ import {
 } from '../../../utils/lastUsedPaths'
 import { dirname } from 'path'
 import QrCode from '../QrCode'
-import { areAllContactsVerified } from '../../../backend/chat'
 import AlertDialog from '../AlertDialog'
 import { unknownErrorToString } from '../../helpers/unknownErrorToString'
 
@@ -921,11 +920,10 @@ function useCreateGroup<
     let chatId: ChatId
     switch (groupType) {
       case GroupType.REGULAR_GROUP: {
-        const isVerified = await areAllContactsVerified(accountId, groupMembers)
         chatId = await BackendRemote.rpc.createGroupChat(
           accountId,
           groupName,
-          isVerified
+          false
         )
         break
       }

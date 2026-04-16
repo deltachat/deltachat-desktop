@@ -91,23 +91,6 @@ export async function createChatByContactId(
 }
 
 /**
- * Returns true if all contacts of a given list are verified, otherwise false.
- */
-export async function areAllContactsVerified(
-  accountId: number,
-  contactIds: number[]
-): Promise<boolean> {
-  const contacts = await BackendRemote.rpc.getContactsByIds(
-    accountId,
-    contactIds
-  )
-
-  return !contactIds.some(contactId => {
-    return !contacts[contactId].isVerified
-  })
-}
-
-/**
  * Helper method to determine the chat id of the "Device Messages" read-only chat.
  *
  * Note that there's currently no API to retrieve this id from the backend, this
