@@ -281,6 +281,9 @@ const Composer = forwardRef<
             // TODO fix: hypothetically by this point the user
             // could have started typing (and even have sent!)
             // a new message already, so this would override it on the backend.
+            setTimeout(() => {
+              regularMessageInputRef.current?.focus()
+            })
             await BackendRemote.rpc.removeDraft(accountId, chatId)
           }
         }
