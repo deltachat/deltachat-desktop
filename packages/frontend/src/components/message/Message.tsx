@@ -18,7 +18,6 @@ import MessageMetaData, { isMediaWithoutText } from './MessageMetaData'
 import {
   onDownload,
   openAttachmentInShell,
-  openMessageInfo,
   isMessageEditable,
   setQuoteInDraft,
   openMessageHTML,
@@ -68,6 +67,7 @@ import { getLogger } from '@deltachat-desktop/shared/logger'
 import { IconButton } from '../Icon'
 import { useRpcFetch } from '../../hooks/useFetch'
 import ForwardMessage from '../dialogs/ForwardMessage'
+import MessageDetail from '../dialogs/MessageDetail/MessageDetail'
 
 const log = getLogger('Message')
 
@@ -433,7 +433,7 @@ function buildContextMenu(
     // Message Info
     {
       label: tx('info'),
-      action: openMessageInfo.bind(null, openDialog, message),
+      action: () => openDialog(MessageDetail, { id: message.id }),
     },
     { type: 'separator' },
     // Delete message
@@ -994,7 +994,7 @@ export default function Message(props: {
               timestamp={message.timestamp * 1000}
               encrypted={message.showPadlock}
               isSavedMessage={isOrHasSavedMessage}
-              onClickError={openMessageInfo.bind(null, openDialog, message)}
+              onClickError={() => openDialog(MessageDetail, { id: message.id })}
               viewType={message.viewType}
               chatType={chat.chatType}
               tabindexForInteractiveContents={tabindexForInteractiveContents}

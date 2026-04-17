@@ -6,7 +6,6 @@ import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { internalOpenWebxdc } from '../../system-integration/webxdc'
 import ConfirmationDialog from '../dialogs/ConfirmationDialog'
-import MessageDetail from '../dialogs/MessageDetail/MessageDetail'
 
 import type { OpenDialog } from '../../contexts/DialogContext'
 import { C, T } from '@deltachat/jsonrpc-client'
@@ -117,10 +116,6 @@ export function confirmDeleteMessage(
     msg,
     chat,
   })
-}
-
-export function openMessageInfo(openDialog: OpenDialog, message: Type.Message) {
-  openDialog(MessageDetail, { id: message.id })
 }
 
 /**
