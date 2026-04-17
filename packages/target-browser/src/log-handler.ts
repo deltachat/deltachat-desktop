@@ -28,6 +28,10 @@ function logName() {
 export function createLogHandler() {
   const fileName = logName()
   const stream = createWriteStream(fileName, { flags: 'w' })
+  stream.on('error', err => {
+    // eslint-disable-next-line no-console
+    console.error('Log file write error:', err.message)
+  })
   // eslint-disable-next-line no-console
   console.log(`Logfile: ${fileName}`)
   return {

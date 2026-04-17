@@ -29,6 +29,10 @@ function logName() {
 export function createLogHandler() {
   const fileName = logName()
   const stream = createWriteStream(fileName, { flags: 'w' })
+  stream.on('error', err => {
+    // eslint-disable-next-line no-console
+    console.error('Log file write error:', err.message)
+  })
   // eslint-disable-next-line no-console
   console.log(`Logfile: ${fileName}`)
   return {
@@ -50,8 +54,13 @@ export function createLogHandler() {
       line = line.concat(
         [stacktrace, ...args].map(value => JSON.stringify(value))
       )
-      if (stream.writable) {
-        stream.write(`${line.join('\t')}\n`)
+      if (stream.writable && !stream.destroyed) {
+        try {
+          stream.write(`${line.join('\t')}\n`)
+        } catch (_err) {
+          // Silently ignore write errors to prevent app freeze
+          // Error is already logged via stream error handler
+        }
       } else {
         // eslint-disable-next-line no-console
         console.warn('tried to log something after logger shut down', {
