@@ -18,7 +18,6 @@ import MessageMetaData, { isMediaWithoutText } from './MessageMetaData'
 import {
   onDownload,
   openAttachmentInShell,
-  openForwardDialog,
   openMessageInfo,
   isMessageEditable,
   setQuoteInDraft,
@@ -68,6 +67,7 @@ import { avatarInitial } from '@deltachat-desktop/shared/avatarInitial'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 import { IconButton } from '../Icon'
 import { useRpcFetch } from '../../hooks/useFetch'
+import ForwardMessage from '../dialogs/ForwardMessage'
 
 const log = getLogger('Message')
 
@@ -331,7 +331,7 @@ function buildContextMenu(
     // Forward message
     {
       label: tx('forward'),
-      action: openForwardDialog.bind(null, openDialog, message),
+      action: () => openDialog(ForwardMessage, { message }),
     },
     // Save Message
     // For reference, the conditions when it's shown:
