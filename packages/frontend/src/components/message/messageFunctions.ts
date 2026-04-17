@@ -159,10 +159,6 @@ export async function openMessageHTML(messageId: number) {
   )
 }
 
-export async function downloadFullMessage(messageId: number) {
-  await BackendRemote.rpc.downloadFullMessage(selectedAccountId(), messageId)
-}
-
 export async function openWebxdc(
   message: Type.Message,
   webxdcInfo?: T.WebxdcMessageInfo
