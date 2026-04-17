@@ -5,7 +5,6 @@ import styles from './styles.module.scss'
 type Props = {
   displayName: string
   address?: string
-  isVerified?: boolean
 }
 
 export default function ContactName(props: Props) {
