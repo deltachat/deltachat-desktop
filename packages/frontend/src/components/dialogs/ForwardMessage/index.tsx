@@ -120,13 +120,14 @@ export default function ForwardMessage(props: ForwardMessageProps) {
         }
         // get the (new) id of forwarded message
         // and jump to the message
-        const messageIds = await BackendRemote.rpc.getMessageIds(
+        const targetChatMessageIds = await BackendRemote.rpc.getMessageIds(
           targetAccountId,
           chatId,
           false,
           true
         )
-        const lastMessage = messageIds[messageIds.length - 1]
+        const lastMessage =
+          targetChatMessageIds[targetChatMessageIds.length - 1]
         if (lastMessage) {
           if (isCrossAccountForward) {
             // For cross-account, use the internal jump mechanism
