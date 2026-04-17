@@ -26,13 +26,13 @@
     "@deltachat-desktop/runtime-interface": "link:../runtime",
     "@deltachat-desktop/shared": "link:../shared",
     "@deltachat/jsonrpc-client": "catalog:",
-    "@emoji-mart/data": "^1.2.1",
-    "@emoji-mart/react": "^1.1.1",
+    "@emoji-mart-awesome/react": "1.0.0",
+    "@emoji-mart/data": "1.2.1",
     "@jcoreio/async-throttle": "^1.6.1",
     "@types/linkifyjs": "^2.1.7",
     "classnames": "^2.5.1",
     "debounce": "^1.2.1",
-    "emoji-mart": "^5.6.0",
+    "emoji-mart-awesome": "3.0.0",
     "filesize": "^10.1.4",
     "jsqr": "^1.4.0",
     "linkify-plugin-hashtag": "^4.3.2",
@@ -52,7 +52,6 @@
   "devDependencies": {
     "@types/chai": "catalog:",
     "@types/debounce": "^1.2.4",
-    "@types/emoji-mart": "^3.0.14",
     "@types/mime-types": "catalog:",
     "@types/mocha": "catalog:",
     "@types/node": "catalog:",
@@ -67,8 +66,8 @@
     "normalize.css": "^8.0.1",
     "sass": "catalog:",
     "source-map-support": "^0.5.21",
-    "typescript": "catalog:",
     "ts-node": "^10.9.2",
+    "typescript": "catalog:",
     "typescript-plugin-css-modules": "catalog:"
   }
 }

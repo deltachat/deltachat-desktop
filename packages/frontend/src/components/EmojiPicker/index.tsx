@@ -1,21 +1,31 @@
-import Picker from '@emoji-mart/react'
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import classNames from 'classnames'
 import emojiData from '@emoji-mart/data'
+import { EmojiPicker as Picker } from '@emoji-mart-awesome/react'
 
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { useThemeCssVar } from '../../ThemeManager'
 
 import styles from './styles.module.scss'
 
-import type { BaseEmoji } from 'emoji-mart/index'
+export type EmojiMartData = {
+  id: string
+  name: string
+  native: string
+  unified: string
+  shortcodes: string
+  skin?: number
+  keywords?: string[]
+  aliases?: string[]
+  emoticons?: string[]
+}
 
 type Props = {
   role: 'tabpanel' | undefined
   id: string | undefined
   labelledBy: string | undefined
   className?: string
-  onSelect: (emoji: BaseEmoji) => void
+  onSelect: (emoji: EmojiMartData) => void
   full?: boolean
 }
 
@@ -34,11 +44,27 @@ export default function EmojiPicker({
     iconsTheme = 'solid'
   }
 
+  const wrapperRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const picker = wrapperRef.current?.querySelector('em-emoji-picker')
+    const shadowRoot = picker?.shadowRoot
+    if (!shadowRoot) return
+    const style = document.createElement('style')
+    style.textContent =
+      '.category > .sticky { background-color: var(--bgPrimary) !important; }'
+    shadowRoot.appendChild(style)
+    return () => {
+      shadowRoot.removeChild(style)
+    }
+  }, [])
+
   return (
     <div
       role={role}
       id={id}
       aria-labelledby={labelledBy}
+      ref={wrapperRef}
       className={classNames(styles.emojiPicker, className, {
         [styles.full]: full,
       })}
