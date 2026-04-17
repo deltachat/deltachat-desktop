@@ -250,6 +250,10 @@ export function ImageAttachment({
         }
         onContextMenu={openContextMenu}
         aria-haspopup='menu'
+        draggable={!isBroken}
+        onDragStart={
+          file ? ev => dragAttachmentOut(file, message.fileName, ev) : undefined
+        }
         {...rovingTabindexProps}
       >
         {isBroken ? (
@@ -566,8 +570,10 @@ export function FileAttachmentRow({
       >
         <div
           className='file-icon'
-          draggable='true'
-          onDragStart={dragAttachmentOut.bind(null, file)}
+          draggable={file !== null}
+          onDragStart={
+            file ? ev => dragAttachmentOut(file, fileName, ev) : undefined
+          }
           title={fileMime || 'null'}
         >
           {extension ? (

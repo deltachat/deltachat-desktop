@@ -74,11 +74,13 @@ export function getExtension({
 }
 
 export function dragAttachmentOut(
-  file: MessageTypeAttachmentSubset['file'],
-  dragEvent: React.DragEvent<HTMLDivElement>
+  file: MessageTypeAttachmentSubset['file'] & string,
+  fileName: string | null,
+  dragEvent: React.DragEvent<HTMLElement>
 ) {
   dragEvent.preventDefault()
-  if (file) runtime.onDragFileOut(file)
+
+  if (file) runtime.onDragFileOut(file, fileName)
 }
 
 export type MessageTypeAttachmentSubset = Pick<

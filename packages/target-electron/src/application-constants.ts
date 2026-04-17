@@ -65,15 +65,15 @@ export function getCustomThemesPath() {
   return join(getConfigPath(), 'custom-themes')
 }
 
-// this is used for temporary files (because core expects file paths, can not accept blobs directly yet)
-// used when sending file from webxdc and when pasting a file from clipboard
-export function getDraftTempDir() {
+// this is used for temporary files like when sending file
+// from webxdc, pasting a file from clipboard or dragging a file out
+export function getTempDir() {
   // On POSIX (Linux, macOS) the system temp dir is shared between users
   // (e.g. /tmp), so we append the numeric UID to avoid permission conflicts
   // if multiple users use the same tmp dir
   const uid = process.getuid?.()
   const suffix = uid !== undefined ? `-${uid}` : ''
-  return join(app.getPath('temp'), `chat.delta.desktop-draft${suffix}`)
+  return join(app.getPath('temp'), `chat.delta.desktop-temp${suffix}`)
 }
 
 export const supportedURISchemes = [
@@ -97,7 +97,7 @@ export const ALLOWED_STATIC_FOLDERS = [
     join(AppFilesDir, folder)
   ),
   ...ALLOWED_CONFIG_FOLDERS.map(folder => join(getConfigPath(), folder)),
-  getDraftTempDir(),
+  getTempDir(),
 ]
 
 export const ALLOWED_ACCOUNT_FOLDERS = [

@@ -138,12 +138,13 @@ class ElectronRuntime implements Runtime {
   onShowDialog:
     | ((kind: 'about' | 'keybindings' | 'settings') => void)
     | undefined
-  onDragFileOut(file: string): void {
-    ipcBackend.send('ondragstart', file)
+  onDragFileOut(file: string, realName: string | null): void {
+    ipcBackend.send('ondragstart', file, realName)
   }
   isDroppedFileFromOutside(file: string): boolean {
     // ".sqlite-blobs" is the old folder name that could still be there in old accounts
-    const forbiddenPathRegEx = /DeltaChat\/.+?(\.sqlite-blobs|\.db-blobs)\//gi
+    const forbiddenPathRegEx =
+      /DeltaChat\/.+?(\.sqlite-blobs|\.db-blobs)\/|[/\\]drag-\d+[/\\]/gi
     return !forbiddenPathRegEx.test(file.replaceAll('\\', '/'))
   }
   onThemeUpdate: (() => void) | undefined

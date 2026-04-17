@@ -20,13 +20,13 @@ import path, {
 } from 'path'
 import { inspect } from 'util'
 import { platform } from 'os'
-import { existsSync } from 'fs'
+import { existsSync, copyFileSync, mkdirSync, linkSync } from 'fs'
 import { versions } from 'process'
 import { fileURLToPath } from 'url'
 
 import { getLogger } from '../../shared/logger.js'
 import {
-  getDraftTempDir,
+  getTempDir,
   getLogsPath,
   htmlDistDir,
   INTERNAL_TMP_DIR_NAME,
@@ -111,7 +111,19 @@ export async function init(cwd: string, logHandler: LogHandler) {
     logHandler.log(channel, level, stacktrace, ...args)
   )
 
-  ipcMain.on('ondragstart', (event, filePath) => {
+  ipcMain.on('ondragstart', (event, filePath, realName) => {
+    let tmpFilePath = filePath
+    let tmpDir: string | undefined
+    if (realName && realName !== '') {
+      tmpDir = join(getTempDir(), `drag-${Date.now()}`)
+      mkdirSync(tmpDir, { recursive: true })
+      tmpFilePath = join(tmpDir, basename(realName))
+      try {
+        linkSync(filePath, tmpFilePath)
+      } catch {
+        copyFileSync(filePath, tmpFilePath)
+      }
+    }
     let icon: NativeImage
     try {
       icon = nativeImage.createFromPath(
@@ -135,9 +147,17 @@ export async function init(cwd: string, logHandler: LogHandler) {
     }
 
     event.sender.startDrag({
-      file: filePath,
+      file: tmpFilePath,
       icon,
     })
+    if (tmpDir) {
+      const dirToRemove = tmpDir
+      setTimeout(() => {
+        rm(dirToRemove, { recursive: true }).catch(err =>
+          log.debug('drag tmp dir cleanup: already removed or failed', err)
+        )
+      }, 30_000)
+    }
   })
 
   ipcMain.on('help', async (_ev, locale, anchor?: string) => {
@@ -436,8 +456,8 @@ export async function writeTempFileFromBase64(
   name: string,
   content: string
 ): Promise<string> {
-  await mkdir(getDraftTempDir(), { recursive: true })
-  const pathToFile = join(getDraftTempDir(), basename(name))
+  await mkdir(getTempDir(), { recursive: true })
+  const pathToFile = join(getTempDir(), basename(name))
   log.debug(`Writing base64 encoded file ${pathToFile}`)
   await writeFile(pathToFile, Buffer.from(content, 'base64'), 'binary')
   return pathToFile
@@ -454,8 +474,8 @@ export async function writeTempFile(
   name: string,
   content: string
 ): Promise<string> {
-  await mkdir(getDraftTempDir(), { recursive: true })
-  const pathToFile = join(getDraftTempDir(), basename(name))
+  await mkdir(getTempDir(), { recursive: true })
+  const pathToFile = join(getTempDir(), basename(name))
   log.debug(`Writing tmp file ${pathToFile}`)
   await writeFile(pathToFile, Buffer.from(content, 'utf8'), 'binary')
   return pathToFile
