@@ -21,7 +21,6 @@ import {
   isMessageEditable,
   setQuoteInDraft,
   openMessageHTML,
-  downloadFullMessage,
   openWebxdc,
   enterEditMessageMode,
 } from './messageFunctions'
@@ -848,7 +847,9 @@ export default function Message(props: {
         {(downloadState == 'Failure' || downloadState === 'Available') && (
           <button
             type='button'
-            onClick={downloadFullMessage.bind(null, message.id)}
+            onClick={() =>
+              BackendRemote.rpc.downloadFullMessage(accountId, message.id)
+            }
             tabIndex={tabindexForInteractiveContents}
           >
             {tx('download')}
