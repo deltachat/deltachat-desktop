@@ -11,9 +11,9 @@ $emojimart-search-height: 31px + 6px;
   position: fixed;
   z-index: map.get(variables.$z-index, emoji-sticker-picker);
 
-  width: 438px;
+  width: min(438px, 100%);
   height: $esp-height;
-  inset-inline-end: 13px;
+  inset-inline-end: clamp(0px, calc(100vw - 425px), 13px);
   bottom: 50px;
   background-color: var(--picker-Background);
   border-radius: var(--picker-BorderRadius);
