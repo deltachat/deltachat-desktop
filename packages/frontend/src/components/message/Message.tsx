@@ -21,7 +21,6 @@ import {
   isMessageEditable,
   setQuoteInDraft,
   openMessageHTML,
-  confirmDeleteMessage,
   downloadFullMessage,
   openWebxdc,
   enterEditMessageMode,
@@ -68,6 +67,7 @@ import { IconButton } from '../Icon'
 import { useRpcFetch } from '../../hooks/useFetch'
 import ForwardMessage from '../dialogs/ForwardMessage'
 import MessageDetail from '../dialogs/MessageDetail/MessageDetail'
+import ConfirmDeleteMessageDialog from '../dialogs/ConfirmDeleteMessage'
 
 const log = getLogger('Message')
 
@@ -439,13 +439,12 @@ function buildContextMenu(
     // Delete message
     {
       label: tx('delete_message_desktop'),
-      action: confirmDeleteMessage.bind(
-        null,
-        openDialog,
-        accountId,
-        message,
-        chat
-      ),
+      action: () =>
+        openDialog(ConfirmDeleteMessageDialog, {
+          accountId,
+          msg: message,
+          chat,
+        }),
       danger: true,
     },
   ]
@@ -634,7 +633,11 @@ export default function Message(props: {
       ) {
         e.preventDefault()
         e.stopPropagation()
-        confirmDeleteMessage(openDialog, accountId, message, props.chat)
+        openDialog(ConfirmDeleteMessageDialog, {
+          accountId,
+          msg: message,
+          chat,
+        })
         return
       }
 

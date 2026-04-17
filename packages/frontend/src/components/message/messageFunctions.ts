@@ -9,7 +9,6 @@ import ConfirmationDialog from '../dialogs/ConfirmationDialog'
 
 import type { OpenDialog } from '../../contexts/DialogContext'
 import { C, T } from '@deltachat/jsonrpc-client'
-import ConfirmDeleteMessageDialog from '../dialogs/ConfirmDeleteMessage'
 import { unknownErrorToString } from '@deltachat-desktop/shared/unknownErrorToString'
 import AlertDialog from '../dialogs/AlertDialog'
 import type { msgStatus } from '../../types-app'
@@ -103,19 +102,6 @@ export async function confirmForwardMessage(
     }
   }
   return yes
-}
-
-export function confirmDeleteMessage(
-  openDialog: OpenDialog,
-  accountId: number,
-  msg: Type.Message,
-  chat: Type.FullChat
-) {
-  openDialog(ConfirmDeleteMessageDialog, {
-    accountId,
-    msg,
-    chat,
-  })
 }
 
 /**
