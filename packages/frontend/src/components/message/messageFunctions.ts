@@ -5,7 +5,6 @@ import { runtime } from '@deltachat-desktop/runtime-interface'
 import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { internalOpenWebxdc } from '../../system-integration/webxdc'
-import ForwardMessage from '../dialogs/ForwardMessage'
 import ConfirmationDialog from '../dialogs/ConfirmationDialog'
 import MessageDetail from '../dialogs/MessageDetail/MessageDetail'
 
@@ -44,13 +43,6 @@ export async function openAttachmentInShell(msg: Type.Message) {
       "file couldn't be opened, try saving it in a different place and try to open it from there"
     )
   }
-}
-
-export function openForwardDialog(
-  openDialog: OpenDialog,
-  message: Type.Message
-) {
-  openDialog(ForwardMessage, { message })
 }
 
 export function confirmDialog(
