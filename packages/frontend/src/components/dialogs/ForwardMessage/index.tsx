@@ -36,7 +36,7 @@ export default function ForwardMessage(props: ForwardMessageProps) {
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
   const { selectChat } = useChat()
-  const { forwardMessage, jumpToMessage } = useMessage()
+  const { jumpToMessage } = useMessage()
 
   const configuredAccountsFetch = useRpcFetch(getConfiguredAccounts, [])
 
@@ -147,7 +147,11 @@ export default function ForwardMessage(props: ForwardMessageProps) {
             chat.id
           )
         } else {
-          await forwardMessage(currentAccountId, message.id, chat.id)
+          await BackendRemote.rpc.forwardMessages(
+            currentAccountId,
+            [message.id],
+            chat.id
+          )
         }
       } catch (e) {
         void openDialog(AlertDialog, {

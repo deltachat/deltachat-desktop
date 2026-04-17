@@ -55,12 +55,6 @@ export type SendMessage = (
   message: Partial<T.MessageData>
 ) => Promise<void>
 
-export type ForwardMessage = (
-  accountId: number,
-  messageId: number,
-  chatId: number
-) => Promise<void>
-
 export type DeleteMessage = (
   accountId: number,
   messageId: number
@@ -157,13 +151,6 @@ export default function useMessage() {
     [jumpToMessage]
   )
 
-  const forwardMessage = useCallback<ForwardMessage>(
-    async (accountId: number, messageId: number, chatId: number) => {
-      await BackendRemote.rpc.forwardMessages(accountId, [messageId], chatId)
-    },
-    []
-  )
-
   const deleteMessage = useCallback<DeleteMessage>(
     async (accountId: number, messageId: number) => {
       await BackendRemote.rpc.deleteMessages(accountId, [messageId])
@@ -182,7 +169,6 @@ export default function useMessage() {
      */
     jumpToMessage,
     sendMessage,
-    forwardMessage,
     deleteMessage,
   }
 }
