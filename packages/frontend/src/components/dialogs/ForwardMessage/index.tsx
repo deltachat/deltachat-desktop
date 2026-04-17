@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 
+import { getLogger } from '@deltachat-desktop/shared/logger'
 import { BackendRemote } from '../../../backend-com'
 import { selectedAccountId } from '../../../ScreenController'
-import { confirmForwardMessage } from '../../message/messageFunctions'
+import { confirmDialog } from '../../message/messageFunctions'
 import { getConfiguredAccounts } from '../../../backend/account'
 import { saveLastChatId } from '../../../backend/chat'
 import useChat from '../../../hooks/chat/useChat'
@@ -21,6 +22,8 @@ import { useRpcFetch } from '../../../hooks/useFetch'
 import { Avatar } from '../../Avatar'
 import AlertDialog from '../AlertDialog'
 import { unknownErrorToString } from '@deltachat-desktop/shared/unknownErrorToString'
+
+const log = getLogger('ForwardMessage')
 
 type ForwardMessageProps = {
   message: T.Message
@@ -85,14 +88,36 @@ export default function ForwardMessage(props: ForwardMessageProps) {
       if (!isCrossAccountForward) {
         selectChat(currentAccountId, chat.id)
       }
-      const yes = await confirmForwardMessage(
+      const yes = await confirmDialog(
         openDialog,
-        currentAccountId,
-        message,
-        chat,
-        isCrossAccountForward ? targetAccountId : undefined
+        tx('ask_forward', [chat.name]),
+        tx('forward')
       )
       if (yes) {
+        try {
+          if (isCrossAccountForward) {
+            // Cross-account forward
+            await BackendRemote.rpc.forwardMessagesToAccount(
+              currentAccountId,
+              [message.id],
+              targetAccountId,
+              chat.id
+            )
+          } else {
+            // Same-account forward
+            await BackendRemote.rpc.forwardMessages(
+              currentAccountId,
+              [message.id],
+              chat.id
+            )
+          }
+        } catch (e) {
+          log.error('error forwarding message:', e)
+          void openDialog(AlertDialog, {
+            message: unknownErrorToString(e),
+          })
+          return false
+        }
         // get the (new) id of forwarded message
         // and jump to the message
         const messageIds = await BackendRemote.rpc.getMessageIds(

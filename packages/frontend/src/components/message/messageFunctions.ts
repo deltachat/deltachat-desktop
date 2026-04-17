@@ -9,8 +9,6 @@ import ConfirmationDialog from '../dialogs/ConfirmationDialog'
 
 import type { OpenDialog } from '../../contexts/DialogContext'
 import { C, T } from '@deltachat/jsonrpc-client'
-import { unknownErrorToString } from '@deltachat-desktop/shared/unknownErrorToString'
-import AlertDialog from '../dialogs/AlertDialog'
 import type { msgStatus } from '../../types-app'
 
 const log = getLogger('renderer/msgFunctions')
@@ -59,49 +57,6 @@ export function confirmDialog(
       },
     })
   })
-}
-
-export async function confirmForwardMessage(
-  openDialog: OpenDialog,
-  srcAccountId: number,
-  message: Type.Message,
-  chat: Pick<Type.BasicChat, 'name' | 'id'>,
-  dstAccountId?: number
-) {
-  const tx = window.static_translate
-  const yes = await confirmDialog(
-    openDialog,
-    tx('ask_forward', [chat.name]),
-    tx('forward')
-  )
-  if (yes) {
-    const targetAccountId = dstAccountId ?? srcAccountId
-    try {
-      if (targetAccountId !== srcAccountId) {
-        // Cross-account forward
-        await BackendRemote.rpc.forwardMessagesToAccount(
-          srcAccountId,
-          [message.id],
-          targetAccountId,
-          chat.id
-        )
-      } else {
-        // Same-account forward
-        await BackendRemote.rpc.forwardMessages(
-          srcAccountId,
-          [message.id],
-          chat.id
-        )
-      }
-    } catch (e) {
-      log.error('error forwarding message:', e)
-      void openDialog(AlertDialog, {
-        message: unknownErrorToString(e),
-      })
-      return false
-    }
-  }
-  return yes
 }
 
 /**
