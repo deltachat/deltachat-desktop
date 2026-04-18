@@ -141,11 +141,13 @@ export const PlaceholderChatListItem = React.memo(
 
 function ChatListItemArchiveLink({
   onClick,
+  onKeyDown,
   onFocus,
   chatListItem,
   ...rest
 }: {
   onClick: (event: React.MouseEvent) => void
+  onKeyDown?: React.KeyboardEventHandler
   onFocus?: (event: React.FocusEvent) => void
   chatListItem: Type.ChatListItemFetchResult & {
     kind: 'ArchiveLink'
@@ -179,7 +181,10 @@ function ChatListItemArchiveLink({
       {...rest}
       tabIndex={tabIndex}
       onClick={onClick}
-      onKeyDown={tabindexOnKeydown}
+      onKeyDown={e => {
+        onKeyDown?.(e)
+        tabindexOnKeydown(e)
+      }}
       onFocus={e => {
         tabindexSetAsActiveElement()
         onFocus?.(e)
@@ -204,6 +209,7 @@ function ChatListItemArchiveLink({
 function ChatListItemError({
   chatListItem,
   onClick,
+  onKeyDown,
   roleTab,
   onFocus,
   isSelected,
@@ -214,6 +220,7 @@ function ChatListItemError({
     kind: 'Error'
   }
   onClick: (event: React.MouseEvent) => void
+  onKeyDown?: React.KeyboardEventHandler
   onFocus?: (event: React.FocusEvent) => void
   onContextMenu?: (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -241,7 +248,10 @@ function ChatListItemError({
       {...rest}
       tabIndex={tabIndex}
       onClick={onClick}
-      onKeyDown={tabindexOnKeydown}
+      onKeyDown={e => {
+        onKeyDown?.(e)
+        tabindexOnKeydown(e)
+      }}
       onFocus={e => {
         onFocus?.(e)
         tabindexSetAsActiveElement()
@@ -287,6 +297,7 @@ function RegularChatListItem({
   // simply remove it from `rest`.
   chatListItem: _chatListItem,
   onClick,
+  onKeyDown,
   onFocus,
   isSelected,
   roleTab,
@@ -299,6 +310,7 @@ function RegularChatListItem({
   }
   chatListItem?: Type.ChatListItemFetchResult
   onClick: (event: React.MouseEvent) => void
+  onKeyDown?: React.KeyboardEventHandler
   onFocus?: (event: React.FocusEvent) => void
   onContextMenu?: (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -332,7 +344,10 @@ function RegularChatListItem({
       {...rest}
       tabIndex={tabIndex}
       onClick={onClick}
-      onKeyDown={tabindexOnKeydown}
+      onKeyDown={e => {
+        onKeyDown?.(e)
+        tabindexOnKeydown(e)
+      }}
       onFocus={e => {
         onFocus?.(e)
         tabindexSetAsActiveElement()
@@ -388,6 +403,7 @@ function RegularChatListItem({
 type ChatListItemProps = {
   chatListItem: Type.ChatListItemFetchResult | undefined
   onClick: (event: React.MouseEvent) => void
+  onKeyDown: React.KeyboardEventHandler
   onFocus?: (event: React.FocusEvent) => void
   onContextMenu?: (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -427,6 +443,7 @@ const ChatListItem = React.memo<ChatListItemProps>(props => {
         chatListItem={chatListItem}
         onClick={props.onClick}
         onFocus={props.onFocus}
+        onKeyDown={props.onKeyDown}
         aria-posinset={props['aria-posinset']}
         aria-setsize={props['aria-setsize']}
       />

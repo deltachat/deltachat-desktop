@@ -126,6 +126,24 @@ export const ChatListItemRowChat = React.memo<{
   // eslint-disable-next-line react-hooks/refs
   onChatClick2Ref.current = onChatClick2
 
+  const multiselectOnKeyDown = multiselect?.onKeyDown
+  const onKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      let shouldPreventDefault = false
+      if (multiselectOnKeyDown) {
+        shouldPreventDefault = multiselectOnKeyDown?.(e, chatId)
+      }
+      if (shouldPreventDefault) {
+        e.preventDefault()
+        return
+      }
+    },
+    [chatId, multiselectOnKeyDown]
+  )
+  const onKeyDownRef = useRef(onKeyDown)
+  // eslint-disable-next-line react-hooks/refs
+  onKeyDownRef.current = onKeyDown
+
   const onContextMenu = useCallback(
     (event: React.MouseEvent) => {
       // So, do we handle archive link multiselect here?
@@ -253,6 +271,7 @@ export const ChatListItemRowChat = React.memo<{
         }
         chatListItem={chat}
         onClick={useCallback(event => onChatClick2Ref.current(event), [])}
+        onKeyDown={useCallback(event => onKeyDownRef.current(event), [])}
         onFocus={useCallback(
           (event: React.FocusEvent) => onFocusRef.current(event),
           []
