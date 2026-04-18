@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+<a id="2_49_1"></a>
+## [2.49.1] - 2026-04-18
+
+### Fixed
+
+- Prevent crash on MacOS when closing notify twice
+
 <a id="2_49_0"></a>
 ## [2.49.0] - 2026-04-13
 
@@ -4024,7 +4031,8 @@ This section is only relevant to contributors.
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.49.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.49.1...HEAD
+[2.49.1]: https://github.com/deltachat/deltachat-desktop/compare/v2.49.0...v2.49.1
 [2.49.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.48.0...v2.49.0
 [2.48.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.47.0...v2.48.0
 [2.47.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.43.0...v2.47.0
