@@ -101,7 +101,7 @@ const notifications: {
 } = {}
 
 /**
- * Track closed notifications to prevent calling close() on
+ * Track closed notifications on Mac to prevent calling close() on
  * already-closed notifications, which crashes app immediately on macOS.
  */
 const closedNotifications = new WeakSet<Notification>()
@@ -130,13 +130,17 @@ function showNotification(_event: IpcMainInvokeEvent, data: DcNotification) {
           n => n !== notify
         ) || []
       if (!closedNotifications.has(notify)) {
-        closedNotifications.add(notify)
+        if (isMac) {
+          closedNotifications.add(notify)
+        }
         notify.close()
       }
     })
     notify.on('close', () => {
       // Mark as closed to prevent calling close() again later
-      closedNotifications.add(notify)
+      if (isMac) {
+        closedNotifications.add(notify)
+      }
       // on Window and Linux this can be triggered by system time out
       // when the message is moved to notification center so only clear
       // the notification tracking on Mac
@@ -179,7 +183,9 @@ function clearNotificationsForMessage(
   }
   arr.forEach(notify => {
     if (!closedNotifications.has(notify)) {
-      closedNotifications.add(notify)
+      if (isMac) {
+        closedNotifications.add(notify)
+      }
       notify.close()
     }
   })
