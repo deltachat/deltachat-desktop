@@ -83,6 +83,6 @@
     "typescript": "catalog:",
     "typescript-eslint": "^8.51.0",
     "xml-js": "^1.6.11",
-    "yaml": "^2.8.2"
+    "yaml": "^2.8.3"
   }
 }
