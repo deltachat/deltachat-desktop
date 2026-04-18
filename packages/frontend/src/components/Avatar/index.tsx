@@ -15,7 +15,11 @@ export function QRAvatar() {
   return (
     <div className='avatar'>
       <div className='content'>
-        <img className='avatar-qr-code-img' src='./images/icons/qr.svg' />
+        <img
+          className='avatar-qr-code-img'
+          src='./images/icons/qr.svg'
+          aria-hidden='true'
+        />
       </div>
     </div>
   )
@@ -117,8 +121,9 @@ export function AvatarFromContact(
       addr={contact.address}
       large={large === true}
       small={small === true}
-      onClick={() => onClick && onClick(contact)}
+      onClick={onClick ? () => onClick(contact) : undefined}
       tabIndex={tabIndex}
+      aria-hidden={props['aria-hidden']}
     />
   )
 }
