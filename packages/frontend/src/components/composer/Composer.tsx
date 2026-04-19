@@ -815,6 +815,8 @@ const Composer = forwardRef<
             // The way the sticker picker currently works is that
             // it simply sends a message when you click on a sticker.
             hideStickerPicker={messageEditing.isEditingModeActive}
+            draftQuote={draftState.quote}
+            removeQuote={removeQuote}
           />
         )}
       </section>

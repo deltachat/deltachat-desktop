@@ -17,6 +17,7 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useMessage from '../../hooks/chat/useMessage'
 import { ContextMenuContext } from '../../contexts/ContextMenuContext'
 import useConfirmationDialog from '../../hooks/dialog/useConfirmationDialog'
+import type { DraftObject } from '../../hooks/chat/useDraft'
 
 import styles from './styles.module.scss'
 
@@ -32,6 +33,8 @@ type Props = {
   chatId: number
   setShowEmojiPicker: (enabled: boolean) => void
   onStickerDeleted: () => void
+  draftQuote?: DraftObject['quote']
+  removeQuote?: () => void
 }
 
 const DisplayedStickerPack = ({
@@ -40,15 +43,32 @@ const DisplayedStickerPack = ({
   chatId,
   setShowEmojiPicker,
   onStickerDeleted,
+  draftQuote,
+  removeQuote,
 }: Props) => {
-  const { jumpToMessage } = useMessage()
+  const { jumpToMessage, sendMessage } = useMessage()
   const accountId = selectedAccountId()
 
   const listRef = useRef<HTMLDivElement>(null)
 
-  const onClickSticker = (fileName: string) => {
+  const onClickSticker = async (fileName: string) => {
     const stickerPath = fileName.replace('file://', '')
-    BackendRemote.rpc.sendSticker(accountId, chatId, stickerPath).then(msgId =>
+
+    // If there's a quote, send the sticker with the quote
+    if (draftQuote && draftQuote.kind === 'WithMessage') {
+      await sendMessage(accountId, chatId, {
+        file: stickerPath,
+        viewtype: 'Sticker',
+        quotedMessageId: draftQuote.messageId,
+      })
+      removeQuote?.()
+    } else {
+      // No quote, use the existing sendSticker method
+      const msgId = await BackendRemote.rpc.sendSticker(
+        accountId,
+        chatId,
+        stickerPath
+      )
       jumpToMessage({
         accountId,
         msgId,
@@ -56,7 +76,7 @@ const DisplayedStickerPack = ({
         highlight: false,
         focus: false,
       })
-    )
+    }
     setShowEmojiPicker(false)
   }
 
@@ -154,6 +174,8 @@ export const StickerPicker = ({
   chatId,
   setShowEmojiPicker,
   onStickerDeleted,
+  draftQuote,
+  removeQuote,
 }: {
   role: 'tabpanel' | undefined
   id: string
@@ -162,6 +184,8 @@ export const StickerPicker = ({
   chatId: number
   setShowEmojiPicker: (enabled: boolean) => void
   onStickerDeleted: () => void
+  draftQuote?: DraftObject['quote']
+  removeQuote?: () => void
 }) => {
   const tx = useTranslationFunction()
 
@@ -174,21 +198,28 @@ export const StickerPicker = ({
       aria-labelledby={labelledBy}
       className='sticker-picker'
     >
-      <div className='sticker-container'>
-        {stickerPackNames.map(name => (
-          <DisplayedStickerPack
-            chatId={chatId}
-            key={name}
-            stickerPackName={name}
-            stickerPackImages={stickers[name]}
-            setShowEmojiPicker={setShowEmojiPicker}
-            onStickerDeleted={onStickerDeleted}
-          />
-        ))}
-      </div>
-      {stickerPackNames.length === 0 && (
-        <div className='sticker-hint'>
-          <p>{tx('sticker_picker_empty_hint')}</p>
+      {stickerPackNames.length > 0 ? (
+        <>
+          <div className='sticker-container'>
+            {stickerPackNames.map(name => (
+              <DisplayedStickerPack
+                chatId={chatId}
+                key={name}
+                stickerPackName={name}
+                stickerPackImages={stickers[name]}
+                setShowEmojiPicker={setShowEmojiPicker}
+                onStickerDeleted={onStickerDeleted}
+                draftQuote={draftQuote}
+                removeQuote={removeQuote}
+              />
+            ))}
+          </div>
+        </>
+      ) : (
+        <div className='sticker-container'>
+          <div className='no-stickers'>
+            <p className='description'>{tx('add_stickers_instructions')}</p>
+          </div>
         </div>
       )}
     </div>
@@ -227,12 +258,21 @@ export const EmojiAndStickerPicker = forwardRef<
      * This is useful for the message editing mode.
      */
     hideStickerPicker?: boolean
+    draftQuote?: DraftObject['quote']
+    removeQuote?: () => void
   }
 >((props, ref) => {
   const tx = useTranslationFunction()
 
   const accountId = selectedAccountId()
-  const { onEmojiSelect, chatId, setShowEmojiPicker, hideStickerPicker } = props
+  const {
+    onEmojiSelect,
+    chatId,
+    setShowEmojiPicker,
+    hideStickerPicker,
+    draftQuote,
+    removeQuote,
+  } = props
 
   const [_showSticker, setShowSticker] = useState(false)
   const showSticker = hideStickerPicker ? false : _showSticker
@@ -294,6 +334,8 @@ export const EmojiAndStickerPicker = forwardRef<
           stickers={stickers}
           setShowEmojiPicker={setShowEmojiPicker}
           onStickerDeleted={refreshStickers}
+          draftQuote={draftQuote}
+          removeQuote={removeQuote}
         />
       )}
     </div>
