@@ -47,10 +47,11 @@ div.header > div.network-toggle {
 
 div.header > div.network-toggle > button#toggle_network_more_button {
   background-color: transparent;
-  border: 1px grey solid;
-  font-size: 0.8em;
-  border-radius: 2px;
+  border-color: transparent;
+  font-size: 1.5em;
   color: var(--htmlEmail-color);
+  font-weight: bold;
+  cursor: pointer;
 }
 
 div#content {
