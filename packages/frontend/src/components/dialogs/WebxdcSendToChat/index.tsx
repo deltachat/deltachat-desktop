@@ -1,7 +1,6 @@
 import React from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 
-import { selectedAccountId } from '../../../ScreenController'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import { DialogFooter, FooterActionButton, FooterActions } from '../../Dialog'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
@@ -19,10 +18,9 @@ export default function WebxdcSaveToChatDialog(props: Props) {
   const { onClose, messageText, file } = props
 
   const tx = useTranslationFunction()
-  const accountId = selectedAccountId()
   const createDraftMessage = useCreateDraftMessage()
 
-  const onChatClick = async (chatId: number) => {
+  const onChatClick = async (chatId: number, accountId: number) => {
     const file2: Parameters<typeof createDraftMessage>[3] = file
       ? {
           path: await runtime.writeTempFileFromBase64(
@@ -34,8 +32,9 @@ export default function WebxdcSaveToChatDialog(props: Props) {
           // viewType: undefined
         }
       : undefined
-    await createDraftMessage(accountId, chatId, messageText ?? '', file2)
+    // Close dialog before createDraftMessage because it may switch accounts
     onClose()
+    await createDraftMessage(accountId, chatId, messageText ?? '', file2)
   }
 
   const onSaveClick = async () => {
@@ -60,6 +59,7 @@ export default function WebxdcSaveToChatDialog(props: Props) {
       onChatClick={onChatClick}
       onClose={onClose}
       listFlags={C.DC_GCL_FOR_FORWARDING | C.DC_GCL_NO_SPECIALS}
+      enableAccountSwitch
       footer={
         <DialogFooter>
           <FooterActions align='start'>

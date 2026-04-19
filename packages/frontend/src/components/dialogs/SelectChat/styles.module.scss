@@ -34,3 +34,26 @@
   // long title should not make dialog scroll sidewards
   word-break: break-all;
 }
+
+.switchAccountButton {
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 8px 0;
+  background: transparent;
+  color: var(--textPrimary);
+  cursor: pointer;
+}
+
+.switchAccountText {
+  line-height: 1;
+  font-size: 16px;
+}
+
+.switchAccountContainer {
+  display: flex;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}

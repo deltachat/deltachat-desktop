@@ -1,13 +1,20 @@
 import AutoSizer from 'react-virtualized-auto-sizer'
 import React, { useRef, useState } from 'react'
 
+import { BackendRemote } from '../../../backend-com'
+import { selectedAccountId } from '../../../ScreenController'
+import { getConfiguredAccounts } from '../../../backend/account'
 import { ChatListItemRowChat } from '../../chat/ChatListItemRow'
 import { PseudoListItemNoSearchResults } from '../../helpers/PseudoListItem'
 import { ChatListPart, useLogicVirtualChatList } from '../../chat/ChatList'
 import { useChatList } from '../../chat/ChatListHelpers'
 import { useThemeCssVar } from '../../../ThemeManager'
+import { useRpcFetch } from '../../../hooks/useFetch'
 import Dialog, { DialogBody, DialogHeader } from '../../Dialog'
+import useDialog from '../../../hooks/dialog/useDialog'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
+import { Avatar } from '../../Avatar'
+import SelectAccountDialog from '../SelectAccountDialog'
 
 import styles from './styles.module.scss'
 
@@ -17,28 +24,77 @@ import { RovingTabindexProvider } from '../../../contexts/RovingTabindex'
 type Props = {
   onClose: DialogProps['onClose']
   headerTitle: string
-  onChatClick: (chatId: number) => void
+  onChatClick: (chatId: number, accountId: number) => void
   listFlags: number
   footer?: React.ReactElement
-  /** Optional account ID to use instead of the currently selected account */
-  accountId?: number
-  /** Optional account switch button */
-  accountSwitch?: React.ReactNode
+  /** Whether to show the account switch button (when multiple accounts exist) */
+  enableAccountSwitch?: boolean
 }
 
 export default function SelectChat(props: Props) {
   const tx = useTranslationFunction()
+  const currentAccountId = selectedAccountId()
+  const [targetAccountId, setTargetAccountId] = useState(currentAccountId)
+  const { openDialog } = useDialog()
+
+  const accountId = props.enableAccountSwitch
+    ? targetAccountId
+    : currentAccountId
+
+  const configuredAccountsFetch = useRpcFetch(getConfiguredAccounts, [])
+  const hasMultipleAccounts = props.enableAccountSwitch
+    ? configuredAccountsFetch.result?.ok
+      ? configuredAccountsFetch.result.value.length > 1
+      : false
+    : false
+
+  const accountFetch = useRpcFetch(BackendRemote.rpc.getAccountInfo, [
+    accountId,
+  ])
+  const accountInfo = accountFetch.lingeringResult?.ok
+    ? accountFetch.lingeringResult.value
+    : null
+
+  const onSwitchAccount = () => {
+    openDialog(SelectAccountDialog, {
+      onSelect: (newAccountId: number) => {
+        setTargetAccountId(newAccountId)
+      },
+    })
+  }
+
+  const accountSwitch =
+    hasMultipleAccounts && accountInfo?.kind === 'Configured' ? (
+      <div className={styles.switchAccountContainer}>
+        <button
+          type='button'
+          className={styles.switchAccountButton}
+          data-testid='switch-account-button'
+          onClick={onSwitchAccount}
+        >
+          <span className={styles.switchAccountText}>
+            {tx('switch_account')}
+          </span>
+          <Avatar
+            displayName={accountInfo.displayName || ''}
+            avatarPath={accountInfo.profileImage || undefined}
+            color={accountInfo.color || undefined}
+            small
+          />
+        </button>
+      </div>
+    ) : undefined
 
   const [queryStr, setQueryStr] = useState('')
   const { chatListIds } = useChatList(
     props.listFlags,
     queryStr,
     undefined,
-    props.accountId
+    accountId
   )
   const { isChatLoaded, loadChats, chatCache } = useLogicVirtualChatList(
     chatListIds,
-    props.accountId
+    accountId
   )
 
   const chatListRef = useRef<HTMLDivElement>(null)
@@ -61,7 +117,7 @@ export default function SelectChat(props: Props) {
       <DialogBody className={styles.selectChatDialogBody}>
         <div
           className={`${styles.searchRow} ${
-            props.accountSwitch ? styles.withAccountSwitch : ''
+            accountSwitch ? styles.withAccountSwitch : ''
           }`}
         >
           <div className='select-chat-account-input'>
@@ -75,7 +131,7 @@ export default function SelectChat(props: Props) {
               spellCheck={false}
             />
           </div>
-          {props.accountSwitch}
+          {accountSwitch}
         </div>
         <div className='select-chat-list-chat-list' ref={chatListRef}>
           <RovingTabindexProvider wrapperElementRef={chatListRef}>
@@ -99,7 +155,8 @@ export default function SelectChat(props: Props) {
                     itemData={{
                       chatCache,
                       chatListIds,
-                      onChatClick: props.onChatClick,
+                      onChatClick: (chatId: number) =>
+                        props.onChatClick(chatId, accountId),
 
                       activeChatId: null,
                       activeContextMenuChatIds: [],
