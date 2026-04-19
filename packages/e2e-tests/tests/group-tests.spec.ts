@@ -722,6 +722,56 @@ test('accept or decline channel invite', async ({ browserName }) => {
   await expect(channelChatItemC).toBeVisible()
 })
 
+test('add channel description and verify subscriber sees it', async () => {
+  const userA = existingProfiles[0]
+  const userB = existingProfiles[1]
+  const channelDescription = 'This is a test channel description'
+
+  // userA (owner) adds a description to the channel
+  await switchToProfile(page, userA.id)
+  const channelChatItem = page
+    .locator('.chat-list .chat-list-item')
+    .filter({ hasText: channelName })
+  await expect(channelChatItem).toBeVisible()
+  await channelChatItem.click()
+
+  await page.getByTestId('chat-info-button').click()
+  await page.getByTestId('view-group-dialog-header-edit').click()
+
+  await page.locator('#description').fill(channelDescription)
+  await page.getByTestId('ok').click()
+
+  // Description should be visible in the channel profile
+  const descriptionDiv = page.locator('.group-profile-description')
+  await expect(descriptionDiv).toBeVisible()
+  await expect(descriptionDiv).toHaveText(channelDescription)
+
+  await page.getByTestId('view-group-dialog-header-close').click()
+
+  // Verify system message for the owner
+  await expect(
+    page
+      .getByRole('list', { name: 'Messages' })
+      .getByRole('listitem')
+      .filter({ hasText: 'You changed the chat description.' })
+  ).toBeVisible()
+
+  // Verify subscriber (userB) sees the description change message
+  await switchToProfile(page, userB.id)
+  const channelChatItemB = page
+    .locator('.chat-list .chat-list-item')
+    .filter({ hasText: channelName })
+  await expect(channelChatItemB).toBeVisible()
+  await channelChatItemB.click()
+
+  await page.getByTestId('chat-info-button').click()
+  await expect(page.getByTestId('profile-description')).toBeVisible()
+  await expect(page.getByTestId('profile-description')).toHaveText(
+    channelDescription
+  )
+  await page.keyboard.press('Escape')
+})
+
 test('channel main view shows Leave Channel instead of Delete Chat', async () => {
   const userB = existingProfiles[1]
 

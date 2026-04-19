@@ -39,11 +39,11 @@ export default function ProfileInfoHeader({
         />
       </ClickForFullscreenAvatarWrapper>
       <div className={styles.infoContainer}>
-        <p className={styles.displayName} data-test-id='profile-display-name'>
+        <p className={styles.displayName} data-testid='profile-display-name'>
           {displayName}
         </p>
         {description && (
-          <p className={styles.description} data-test-id='profile-description'>
+          <p className={styles.description} data-testid='profile-description'>
             {description}
           </p>
         )}
