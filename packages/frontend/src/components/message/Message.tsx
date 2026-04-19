@@ -330,7 +330,11 @@ function buildContextMenu(
     // Forward message
     {
       label: tx('forward'),
-      action: () => openDialog(ForwardMessage, { message }),
+      action: () =>
+        openDialog(ForwardMessage, {
+          messageIds: [message.id],
+          sourceChatId: message.chatId,
+        }),
     },
     // Save Message
     // For reference, the conditions when it's shown:
