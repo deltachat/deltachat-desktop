@@ -407,6 +407,7 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
     if (chat.chatType === 'InBroadcast' || chat.chatType === 'Mailinglist') {
       openDialog(MailingListProfile, {
         chat: chat as T.FullChat & { chatType: 'InBroadcast' | 'Mailinglist' },
+        accountId,
       })
     } else if (chat.chatType === 'Group' || chat.chatType === 'OutBroadcast') {
       openViewGroupDialog(

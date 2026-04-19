@@ -246,6 +246,7 @@ function buildViewEditMenuItems(
       openViewProfileDialog(accountId, relatedChat.contactIds[0])
     } else {
       openDialog(MailingListProfile, {
+        accountId,
         chat: relatedChat as T.FullChat & {
           chatType: typeof relatedChat.chatType
         },
