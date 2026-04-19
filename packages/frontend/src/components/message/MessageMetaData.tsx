@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import { T } from '@deltachat/jsonrpc-client'
 
 import Timestamp from '../conversations/Timestamp'
-import { isImage, isVideo } from '../attachment/Attachment'
+import { isImage } from '../attachment/Attachment'
 import { msgStatus } from '../../types-app'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { useRpcFetch } from '../../hooks/useFetch'
@@ -37,7 +37,6 @@ export default function MessageMetaData(props: Props) {
   const {
     messageId,
     encrypted,
-    fileMime,
     direction,
     status,
     error,
@@ -56,11 +55,7 @@ export default function MessageMetaData(props: Props) {
   return (
     <div
       className={classNames('metadata', {
-        'with-image-no-caption': isMediaWithoutText(
-          fileMime,
-          hasText,
-          viewType
-        ),
+        'with-image-no-caption': isMediaWithoutText(hasText, viewType),
       })}
     >
       {/* FYI the email doesn't need `aria-live`
@@ -217,12 +212,11 @@ function ViewCount(props: { messageId: number }) {
  * without any further text.
  **/
 export function isMediaWithoutText(
-  fileMime: string | null,
   hasText: boolean,
   viewType: T.Viewtype
 ): boolean {
   const withImageNoCaption = Boolean(
-    !hasText && (isImage(fileMime) || isVideo(fileMime))
+    !hasText && (isImage(viewType) || viewType === 'Video')
   )
 
   return withImageNoCaption || viewType === 'Sticker'

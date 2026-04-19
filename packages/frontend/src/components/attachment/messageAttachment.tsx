@@ -6,8 +6,6 @@ import { openAttachmentInShell } from '../message/messageFunctions'
 import {
   isDisplayableByFullscreenMedia,
   isImage,
-  isVideo,
-  isAudio,
   getExtension,
   dragAttachmentOut,
   MessageTypeAttachmentSubset,
@@ -65,7 +63,7 @@ export default function Attachment({
       }
       return
     }
-    if (isDisplayableByFullscreenMedia(message.fileMime)) {
+    if (isDisplayableByFullscreenMedia(message.viewType)) {
       openDialog(FullscreenMedia, {
         msg: message,
         neighboringMedia: NeighboringMediaMode.Chat,
@@ -141,7 +139,7 @@ export default function Attachment({
   const withCaption = Boolean(text)
   // For attachments which aren't full-frame
   const withContentBelow = withCaption
-  if (isImage(message.fileMime) || message.viewType === 'Sticker') {
+  if (isImage(message.viewType) || message.viewType === 'Sticker') {
     if (!message.file) {
       return (
         <div
@@ -173,7 +171,7 @@ export default function Attachment({
         />
       </button>
     )
-  } else if (isVideo(message.fileMime)) {
+  } else if (message.viewType === 'Video') {
     if (!message.file) {
       return (
         <button
@@ -206,7 +204,7 @@ export default function Attachment({
         />
       </div>
     )
-  } else if (isAudio(message.fileMime)) {
+  } else if (message.viewType === 'Audio' || message.viewType === 'Voice') {
     return (
       <div
         className={classNames(
@@ -314,7 +312,7 @@ export function DraftAttachment({
   if (!attachment) {
     return null
   }
-  if (isImage(attachment.fileMime)) {
+  if (isImage(attachment.viewType)) {
     return (
       <div className={classNames('message-attachment-media')}>
         <img
@@ -323,7 +321,7 @@ export function DraftAttachment({
         />
       </div>
     )
-  } else if (isVideo(attachment.fileMime)) {
+  } else if (attachment.viewType === 'Video') {
     return (
       <div className={classNames('message-attachment-media')}>
         <video
@@ -333,7 +331,10 @@ export function DraftAttachment({
         />
       </div>
     )
-  } else if (isAudio(attachment.fileMime)) {
+  } else if (
+    attachment.viewType === 'Audio' ||
+    attachment.viewType === 'Voice'
+  ) {
     return <AudioPlayer src={runtime.transformBlobURL(attachment.file || '')} />
   } else if (isViewTypeWebxdc) {
     const iconUrl = runtime.getWebxdcIconURL(selectedAccountId(), attachment.id)

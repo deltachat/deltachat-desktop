@@ -6,13 +6,7 @@ import {
   onDownload,
   openWebxdc,
 } from '../message/messageFunctions'
-import {
-  isImage,
-  isVideo,
-  isAudio,
-  getExtension,
-  dragAttachmentOut,
-} from './Attachment'
+import { isImage, getExtension, dragAttachmentOut } from './Attachment'
 import Timestamp from '../conversations/Timestamp'
 import { makeContextMenu, OpenContextMenu } from '../ContextMenu'
 import { runtime } from '@deltachat-desktop/runtime-interface'
@@ -53,7 +47,7 @@ const contextMenuFactory = (
   openDialog: OpenDialog,
   jumpToMessage: JumpToMessage
 ) => {
-  const showCopyImage = message.viewType === 'Image'
+  const showCopyImage = isImage(message.viewType)
   const tx = window.static_translate
   const { id: msgId, viewType } = message
   return [
@@ -235,7 +229,7 @@ export function ImageAttachment({
       accountId
     )
     const { file, fileMime } = message
-    const hasSupportedFormat = isImage(fileMime)
+    const hasSupportedFormat = isImage(message.viewType)
     const isBroken = !file || !hasSupportedFormat
 
     return (
@@ -324,7 +318,7 @@ export function VideoAttachment({
       accountId
     )
     const { file, fileMime } = message
-    const hasSupportedFormat = isVideo(fileMime)
+    const hasSupportedFormat = message.viewType === 'Video'
     const isBroken = !file || !hasSupportedFormat
     return (
       <button
@@ -416,7 +410,8 @@ export function AudioAttachment({
     )
     const { file, fileMime } = message
     const src = runtime.transformBlobURL(file || '')
-    const hasSupportedFormat = isAudio(fileMime)
+    const hasSupportedFormat =
+      message.viewType === 'Audio' || message.viewType === 'Voice'
     const isBroken = !file || !hasSupportedFormat
     return (
       <div

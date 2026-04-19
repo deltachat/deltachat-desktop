@@ -2,7 +2,7 @@ import { appName } from '../../../shared/constants'
 import { getLogger } from '../../../shared/logger'
 import { NOTIFICATION_TYPE } from '../../../shared/constants'
 import { BackendRemote } from '../backend-com'
-import { isImage } from '../components/attachment/Attachment'
+
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import SettingsStoreInstance, {
   mentionsEnabledDefaultVal,
@@ -468,7 +468,7 @@ export function clearAllNotifications() {
 function getNotificationIcon(
   notification: T.MessageNotificationInfo
 ): [icon: string | null, iconIsAvatar: boolean] {
-  if (notification.image && isImage(notification.imageMimeType)) {
+  if (notification.image && notification.imageMimeType?.startsWith('image/')) {
     return [notification.image, false]
   } else if (notification.chatProfileImage) {
     return [notification.chatProfileImage, true]
