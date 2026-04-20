@@ -95,7 +95,8 @@ const contextMenuFactory = (
         )
         openDialog(ConfirmDeleteMessageDialog, {
           accountId,
-          msg: message,
+          messageIds: [message.id],
+          loadedMessages: { [message.id]: message },
           chat,
         })
       },
