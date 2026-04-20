@@ -764,6 +764,14 @@ test('add channel description and verify subscriber sees it', async () => {
   await expect(channelChatItemB).toBeVisible()
   await channelChatItemB.click()
 
+  // Wait for the description change to be received by userB before opening profile
+  await expect(
+    page
+      .getByRole('list', { name: 'Messages' })
+      .getByRole('listitem')
+      .filter({ hasText: 'Chat description changed by' })
+  ).toBeVisible()
+
   await page.getByTestId('chat-info-button').click()
   await expect(page.getByTestId('profile-description')).toBeVisible()
   await expect(page.getByTestId('profile-description')).toHaveText(
