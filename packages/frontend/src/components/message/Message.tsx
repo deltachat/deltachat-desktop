@@ -607,12 +607,19 @@ export default function Message(props: {
     ref,
     tabIndex: focusAndMultiselect.tabIndex,
     onKeyDown: (e: React.KeyboardEvent) => {
+      const messageIds =
+        focusAndMultiselect.selectedItems.size === 0
+          ? new Set([message.id])
+          : focusAndMultiselect.selectedItems
+      const thisMsgSelected = messageIds.has(message.id)
+      const onlyThisMsgSelected = thisMsgSelected && messageIds.size === 1
       // Handle letter shortcuts with Ctrl/Cmd modifier
       const isCtrlOrMetaKeyPress =
         (e.ctrlKey || e.metaKey) && !e.altKey && !e.shiftKey && message
 
       // Check if Ctrl/Cmd+"e" is pressed to enter edit mode
       if (
+        onlyThisMsgSelected &&
         isCtrlOrMetaKeyPress &&
         matchesLetterShortcut(e, 'e') &&
         isMessageEditable(message, props.chat)
@@ -625,6 +632,7 @@ export default function Message(props: {
 
       // Check if Ctrl/Cmd+"r" is pressed to react to message
       if (
+        onlyThisMsgSelected &&
         isCtrlOrMetaKeyPress &&
         matchesLetterShortcut(e, 'r') &&
         showReactionsUi(message, props.chat)
@@ -649,6 +657,7 @@ export default function Message(props: {
       // Check if Ctrl/Cmd+"s" is pressed to save message
       if (
         isCtrlOrMetaKeyPress &&
+        onlyThisMsgSelected &&
         matchesLetterShortcut(e, 's') &&
         !chat.isSelfTalk &&
         message.savedMessageId === null &&
@@ -662,6 +671,7 @@ export default function Message(props: {
 
       // Check if Ctrl/Cmd+Shift+"s" is pressed to unsave message
       if (
+        onlyThisMsgSelected &&
         (e.ctrlKey || e.metaKey) &&
         e.shiftKey &&
         !e.altKey &&
@@ -677,6 +687,7 @@ export default function Message(props: {
 
       // Check if Delete key is pressed to delete message
       if (
+        onlyThisMsgSelected &&
         !e.ctrlKey &&
         !e.metaKey &&
         !e.altKey &&
