@@ -445,7 +445,8 @@ function buildContextMenu(
       action: () =>
         openDialog(ConfirmDeleteMessageDialog, {
           accountId,
-          msg: message,
+          messageIds: [message.id],
+          loadedMessages: { [message.id]: message },
           chat,
         }),
       danger: true,
@@ -454,11 +455,15 @@ function buildContextMenu(
 }
 function buildMultiselectContextMenu(
   {
+    accountId,
     messageIds,
+    message: clickedMessage,
     openDialog,
     chat,
   }: {
+    accountId: number
     messageIds: Array<T.Message['id']>
+    message: T.Message
     openDialog: OpenDialog
     chat: T.FullChat
   },
@@ -473,6 +478,17 @@ function buildMultiselectContextMenu(
           messageIds: messageIds,
           sourceChatId: chat.id,
         }),
+    },
+    {
+      label: tx('delete'),
+      action: () =>
+        openDialog(ConfirmDeleteMessageDialog, {
+          accountId,
+          messageIds,
+          loadedMessages: { [clickedMessage.id]: clickedMessage },
+          chat,
+        }),
+      danger: true,
     },
   ]
 }
@@ -550,6 +566,7 @@ export default function Message(props: {
       const target = ((event as any).t || event.target) as HTMLAnchorElement
       const common = {
         accountId,
+        message,
         text: text || undefined,
         conversationType,
         openDialog,
@@ -566,13 +583,7 @@ export default function Message(props: {
             },
             target
           )
-        : buildContextMenu(
-            {
-              ...common,
-              message,
-            },
-            target
-          )
+        : buildContextMenu(common, target)
 
       openContextMenu({
         ...showContextMenuEventPos,
@@ -687,7 +698,7 @@ export default function Message(props: {
 
       // Check if Delete key is pressed to delete message
       if (
-        onlyThisMsgSelected &&
+        thisMsgSelected &&
         !e.ctrlKey &&
         !e.metaKey &&
         !e.altKey &&
@@ -699,7 +710,8 @@ export default function Message(props: {
         e.stopPropagation()
         openDialog(ConfirmDeleteMessageDialog, {
           accountId,
-          msg: message,
+          messageIds: [...messageIds],
+          loadedMessages: { [message.id]: message },
           chat,
         })
         return
