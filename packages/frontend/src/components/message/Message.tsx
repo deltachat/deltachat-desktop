@@ -476,6 +476,8 @@ export default function Message(props: {
   const openViewGroupDialog = useOpenViewGroupDialog()
   const { jumpToMessage } = useMessage()
   const [messageWidth, setMessageWidth] = useState(0)
+  const ref = useRef<any>(null)
+  const rovingTabindex = useRovingTabindex(ref)
 
   const showContextMenu = useCallback(
     (
@@ -553,8 +555,6 @@ export default function Message(props: {
       tx,
     ]
   )
-  const ref = useRef<any>(null)
-  const rovingTabindex = useRovingTabindex(ref)
   const commonAttrs = {
     ref,
     tabIndex: rovingTabindex.tabIndex,
