@@ -59,7 +59,7 @@ import type { OpenDialog } from '../../contexts/DialogContext'
 import type { PrivateReply } from '../../hooks/chat/usePrivateReply'
 import type { JumpToMessage } from '../../hooks/chat/useMessage'
 import { mouseEventToPosition } from '../../utils/mouseEventToPosition'
-import { useRovingTabindex } from '../../contexts/RovingTabindex'
+import { useMessageFocusAndMultiselect } from './focusAndMultiselect'
 import { avatarInitial } from '@deltachat-desktop/shared/avatarInitial'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 import { IconButton } from '../Icon'
@@ -452,6 +452,30 @@ function buildContextMenu(
     },
   ]
 }
+function buildMultiselectContextMenu(
+  {
+    messageIds,
+    openDialog,
+    chat,
+  }: {
+    messageIds: Array<T.Message['id']>
+    openDialog: OpenDialog
+    chat: T.FullChat
+  },
+  _clickTarget: HTMLAnchorElement | null
+): (false | ContextMenuItem)[] {
+  const tx = window.static_translate
+  return [
+    {
+      label: tx('forward'),
+      action: () =>
+        openDialog(ForwardMessage, {
+          messageIds: messageIds,
+          sourceChatId: chat.id,
+        }),
+    },
+  ]
+}
 
 export default function Message(props: {
   chat: T.FullChat
@@ -475,7 +499,12 @@ export default function Message(props: {
   const { jumpToMessage } = useMessage()
   const [messageWidth, setMessageWidth] = useState(0)
   const ref = useRef<any>(null)
-  const rovingTabindex = useRovingTabindex(ref)
+
+  const focusAndMultiselect = useMessageFocusAndMultiselect(message.id, ref)
+  const resetSelection = focusAndMultiselect.resetSelection
+  const isMultiselectMember =
+    focusAndMultiselect.selectedItems.size > 1 &&
+    focusAndMultiselect.selectedItems.has(message.id)
 
   const showContextMenu = useCallback(
     (
@@ -514,22 +543,36 @@ export default function Message(props: {
         })
       }
 
+      if (!isMultiselectMember) {
+        resetSelection()
+      }
       // the event.t is a workaround for labled links, as they will be able to contain markdown formatting in the label in the future.
       const target = ((event as any).t || event.target) as HTMLAnchorElement
-      const items = buildContextMenu(
-        {
-          accountId,
-          message,
-          text: text || undefined,
-          conversationType,
-          openDialog,
-          privateReply,
-          handleReactClick,
-          chat: props.chat,
-          jumpToMessage,
-        },
-        target
-      )
+      const common = {
+        accountId,
+        text: text || undefined,
+        conversationType,
+        openDialog,
+        privateReply,
+        handleReactClick,
+        chat: props.chat,
+        jumpToMessage,
+      }
+      const items = isMultiselectMember
+        ? buildMultiselectContextMenu(
+            {
+              ...common,
+              messageIds: [...focusAndMultiselect.selectedItems],
+            },
+            target
+          )
+        : buildContextMenu(
+            {
+              ...common,
+              message,
+            },
+            target
+          )
 
       openContextMenu({
         ...showContextMenuEventPos,
@@ -544,6 +587,9 @@ export default function Message(props: {
       props.chat,
       conversationType,
       message,
+      isMultiselectMember,
+      focusAndMultiselect.selectedItems,
+      resetSelection,
       openContextMenu,
       openDialog,
       privateReply,
@@ -553,9 +599,13 @@ export default function Message(props: {
       tx,
     ]
   )
+  const commonClassName = classNames(
+    focusAndMultiselect.className,
+    'multiselectable-message'
+  )
   const commonAttrs = {
     ref,
-    tabIndex: rovingTabindex.tabIndex,
+    tabIndex: focusAndMultiselect.tabIndex,
     onKeyDown: (e: React.KeyboardEvent) => {
       // Handle letter shortcuts with Ctrl/Cmd modifier
       const isCtrlOrMetaKeyPress =
@@ -669,15 +719,17 @@ export default function Message(props: {
         // there would be no way to switch focus to another item
         // using just the keyboard.
         // Again, at the time of writing we do not have such elements.
-        !e.target.classList.contains(rovingTabindex.className)
+        !e.target.classList.contains(focusAndMultiselect.className)
       ) {
         return
       }
 
-      rovingTabindex.onKeydown(e)
+      focusAndMultiselect.onKeyDown(e)
+      // if (e.defaultPrevented)
     },
-    onFocus: rovingTabindex.setAsActiveElement,
-  }
+    onFocus: focusAndMultiselect.onFocus,
+    'aria-selected': focusAndMultiselect.selectedItems.has(message.id),
+  } satisfies React.HTMLAttributes<Element> & React.RefAttributes<Element>
   // When the message is not the active one
   // `rovingTabindex.tabIndex === -1`, we need to set `tabindex="-1"`
   // to all its interactive (otherwise "Tabbable to") elements,
@@ -688,7 +740,7 @@ export default function Message(props: {
   // WhatsApp appears to behave similarly.
   // The implementation is similar to the "Grid" pattern:
   // https://www.w3.org/WAI/ARIA/apg/patterns/grid/#gridNav_inside
-  const tabindexForInteractiveContents = rovingTabindex.tabIndex
+  const tabindexForInteractiveContents = focusAndMultiselect.tabIndex
 
   const messageContainerRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
@@ -739,7 +791,7 @@ export default function Message(props: {
       isProtectionEnabledMsg ||
       isInvalidUnencryptedMail
 
-    let onClick
+    let onClick: undefined | (() => void)
     if (isInteractive) {
       onClick = async () => {
         if (isWebxdcInfo) {
@@ -778,8 +830,14 @@ export default function Message(props: {
         onContextMenu={showContextMenu}
       >
         <TagName
-          className={'bubble ' + rovingTabindex.className}
-          onClick={onClick}
+          className={'bubble ' + commonClassName}
+          onClick={e => {
+            focusAndMultiselect.onClick(e)
+            if (e.defaultPrevented) {
+              return
+            }
+            onClick?.()
+          }}
           {...commonAttrs}
           // Note that the actual `onContextMenu` listener
           // is on the wrapper component.
@@ -886,7 +944,7 @@ export default function Message(props: {
         'message',
         direction,
         styles.message,
-        rovingTabindex.className,
+        commonClassName,
         isWithoutText && isVideo(fileMime) ? 'video-only' : '',
         {
           [styles.withReactions]: message.reactions,
@@ -897,6 +955,12 @@ export default function Message(props: {
         }
       )}
       id={message.id.toString()}
+      onClick={e => {
+        focusAndMultiselect.onClick(e)
+        if (e.defaultPrevented) {
+          return
+        }
+      }}
       {...commonAttrs}
     >
       {showAuthor && direction === 'incoming' && (
