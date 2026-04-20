@@ -31,7 +31,7 @@ import {
   htmlDistDir,
   INTERNAL_TMP_DIR_NAME,
 } from './application-constants.js'
-import { LogHandler } from './log-handler.js'
+import { LogHandler } from '../../shared/log-handler.js'
 import { ExtendedAppMainProcess } from './types.js'
 import * as mainWindow from './windows/main.js'
 import { openHelpWindow } from './windows/help.js'

@@ -25,17 +25,21 @@ import {
   DATA_DIR,
   DC_ACCOUNTS_DIR,
   DC_FRONTEND_NO_TLS,
+  LOGS_DIR,
 } from './config'
 import { startDeltaChat } from './deltachat-rpc'
 import { helpRoute } from './help'
-import { cleanupLogFolder, createLogHandler } from './log-handler'
+import {
+  createLogHandler,
+  cleanupLogFolder,
+} from '@deltachat-desktop/shared/log-handler'
 import { getLogger, setLogHandler } from '@deltachat-desktop/shared/logger'
 import { RCConfig } from './rc-config'
 import { readThemeDir } from './themes'
 
-const logHandler = createLogHandler()
+const logHandler = createLogHandler(LOGS_DIR)
 setLogHandler(logHandler.log, RCConfig)
-cleanupLogFolder()
+cleanupLogFolder(LOGS_DIR)
 const log = getLogger('main')
 
 const app = express()

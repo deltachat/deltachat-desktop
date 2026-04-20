@@ -1,15 +1,15 @@
 import { createWriteStream } from 'fs'
 import { join } from 'path'
-import { getLogsPath } from './application-constants.js'
+import { readdir, lstat, unlink } from 'fs/promises'
 import { stdout, stderr } from 'process'
+import { getLogger, LogHandlerFunction } from './logger.js'
 
 stdout.on('error', () => {})
 stderr.on('error', () => {})
 // ^ Without this, the app will run into infinite exceptions
 // when it can't write to stdout or stderr
 
-function logName() {
-  const dir = getLogsPath()
+function generateLogFileName(logsDir: string) {
   const d = new Date()
   function pad(number: number) {
     return number < 10 ? '0' + number : number
@@ -23,15 +23,21 @@ function logName() {
     `${pad(d.getSeconds())}`,
     '.log',
   ].join('')
-  return join(dir, fileName)
+  return join(logsDir, fileName)
 }
 
-export function createLogHandler() {
-  const fileName = logName()
+export function createLogHandler(logsDir: string) {
+  const fileName = generateLogFileName(logsDir)
   const stream = createWriteStream(fileName, { flags: 'w' })
+  let streamErrored = false
+  let draining = false
   stream.on('error', err => {
+    streamErrored = true
     // eslint-disable-next-line no-console
     console.error('Log file write error:', err.message)
+  })
+  stream.on('drain', () => {
+    draining = false
   })
   // eslint-disable-next-line no-console
   console.log(`Logfile: ${fileName}`)
@@ -52,23 +58,24 @@ export function createLogHandler() {
       const timestamp = new Date().toISOString()
       let line = [timestamp, fillString(channel, 22), level]
       line = line.concat(
-        [stacktrace, ...args].map(value => JSON.stringify(value))
-      )
-      if (stream.writable && !stream.destroyed) {
-        try {
-          stream.write(`${line.join('\t')}\n`)
-        } catch (_err) {
-          // Silently ignore write errors to prevent app freeze
-          // Error is already logged via stream error handler
-        }
-      } else {
-        // eslint-disable-next-line no-console
-        console.warn('tried to log something after logger shut down', {
-          channel,
-          level,
-          args,
-          stacktrace,
+        [stacktrace, ...args].map(value => {
+          try {
+            return JSON.stringify(value)
+          } catch {
+            return '[unserializable]'
+          }
         })
+      )
+      if (streamErrored || draining || !stream.writable || stream.destroyed) {
+        // Drop message: stream is broken, buffer is full, or
+        // stream was closed. Prevents unbounded memory growth
+        return
+      }
+      const flushed = stream.write(`${line.join('\t')}\n`)
+      if (!flushed) {
+        // Backpressure: internal buffer exceeded highWaterMark,
+        // drop subsequent messages until drain
+        draining = true
       }
     }) as LogHandlerFunction,
     end: () => stream.end(),
@@ -77,18 +84,14 @@ export function createLogHandler() {
 }
 export type LogHandler = ReturnType<typeof createLogHandler>
 
-import { readdir, lstat, unlink } from 'fs/promises'
-import { getLogger, LogHandlerFunction } from '../../shared/logger.js'
-
-export async function cleanupLogFolder() {
+export async function cleanupLogFolder(logsDir: string) {
   const log = getLogger('logger/log-cleanup')
-  const logDir = getLogsPath()
 
-  const logDirContent = await readdir(logDir)
+  const logDirContent = await readdir(logsDir)
   const filesWithDates = await Promise.all(
     logDirContent.map(async logFileName => ({
       filename: logFileName,
-      mtime: (await lstat(join(logDir, logFileName))).mtime.getTime(),
+      mtime: (await lstat(join(logsDir, logFileName))).mtime.getTime(),
     }))
   )
 
@@ -99,7 +102,7 @@ export async function cleanupLogFolder() {
     sortedFiles.splice(sortedFiles.length - 11)
 
     const fileCount = await Promise.all(
-      sortedFiles.map(({ filename }) => unlink(join(logDir, filename)))
+      sortedFiles.map(({ filename }) => unlink(join(logsDir, filename)))
     )
 
     log.info(`Successfuly deleted ${fileCount.length} old logfiles`)

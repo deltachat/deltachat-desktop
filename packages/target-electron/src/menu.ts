@@ -9,7 +9,7 @@ import {
 } from '../../shared/constants.js'
 import { getLogger } from '../../shared/logger.js'
 import { getLogsPath } from './application-constants.js'
-import { LogHandler } from './log-handler.js'
+import { LogHandler } from '../../shared/log-handler.js'
 import * as mainWindow from './windows/main.js'
 import { DesktopSettings } from './desktop_settings.js'
 import { getCurrentLocaleDate, tx } from './load-translations.js'

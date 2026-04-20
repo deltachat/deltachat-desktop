@@ -104,9 +104,12 @@ mkdirSync(getLogsPath(), { recursive: true })
 mkdirSync(getCustomThemesPath(), { recursive: true })
 
 // Setup Logger
-import { cleanupLogFolder, createLogHandler } from './log-handler.js'
-const logHandler = createLogHandler()
-import { getLogger, setLogHandler } from '../../shared/logger.js'
+import {
+  createLogHandler,
+  cleanupLogFolder,
+} from '@deltachat-desktop/shared/log-handler.js'
+const logHandler = createLogHandler(getLogsPath())
+import { getLogger, setLogHandler } from '@deltachat-desktop/shared/logger.js'
 const log = getLogger('main/index')
 setLogHandler(logHandler.log, rc)
 log.info(
@@ -263,7 +266,7 @@ async function onReady([_appReady, _loadedState, _appx, _webxdc_cleanup]: [
     )
   }
 
-  cleanupLogFolder().catch(err =>
+  cleanupLogFolder(getLogsPath()).catch(err =>
     log.error('Cleanup of old logfiles failed: ', err)
   )
   cleanupDraftTempDir()
