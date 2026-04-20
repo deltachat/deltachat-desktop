@@ -28,9 +28,15 @@ function logName() {
 export function createLogHandler() {
   const fileName = logName()
   const stream = createWriteStream(fileName, { flags: 'w' })
+  let streamErrored = false
+  let draining = false
   stream.on('error', err => {
+    streamErrored = true
     // eslint-disable-next-line no-console
     console.error('Log file write error:', err.message)
+  })
+  stream.on('drain', () => {
+    draining = false
   })
   // eslint-disable-next-line no-console
   console.log(`Logfile: ${fileName}`)
@@ -51,23 +57,24 @@ export function createLogHandler() {
       const timestamp = new Date().toISOString()
       let line = [timestamp, fillString(channel, 22), level]
       line = line.concat(
-        [stacktrace, ...args].map(value => JSON.stringify(value))
-      )
-      if (stream.writable && !stream.destroyed) {
-        try {
-          stream.write(`${line.join('\t')}\n`)
-        } catch (_err) {
-          // Silently ignore write errors to prevent app freeze
-          // Error is already logged via stream error handler
-        }
-      } else {
-        // eslint-disable-next-line no-console
-        console.warn('tried to log something after logger shut down', {
-          channel,
-          level,
-          args,
-          stacktrace,
+        [stacktrace, ...args].map(value => {
+          try {
+            return JSON.stringify(value)
+          } catch {
+            return '[unserializable]'
+          }
         })
+      )
+      if (streamErrored || draining || !stream.writable || stream.destroyed) {
+        // Drop message: stream is broken, buffer is full, or
+        // stream was closed. Prevents unbounded memory growth
+        return
+      }
+      const flushed = stream.write(`${line.join('\t')}\n`)
+      if (!flushed) {
+        // Backpressure: internal buffer exceeded highWaterMark,
+        // drop subsequent messages until drain
+        draining = true
       }
     }) as LogHandlerFunction,
     end: () => stream.end(),
