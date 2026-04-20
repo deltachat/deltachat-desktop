@@ -101,6 +101,14 @@ export function useMultiselect<T>(
   onSelectionChange: (newSelectedItems: Set<T>) => void,
   logger?: {
     error: (...args: any) => void
+  },
+  options?: {
+    /**
+     * What to do when an item gets clicked without Ctrl or Shift being pressed.
+     *
+     * @default 'resetSelectionToClickedItem'
+     */
+    onNormalClick?: 'resetSelectionToClickedItem' | 'unselectAll'
   }
 ) {
   // TODO feat: a way to set initially active item?
@@ -229,6 +237,7 @@ export function useMultiselect<T>(
     }
   }, [])
 
+  const onNormalClick = options?.onNormalClick ?? 'resetSelectionToClickedItem'
   // Note that `keydown` and `click` events both fire
   // for a single press of "Space" for `<button>`s
   // https://w3c.github.io/uievents/#event-type-keydown
@@ -258,19 +267,34 @@ export function useMultiselect<T>(
         return true // shouldPreventDefault
       }
 
-      if (
-        // Check if it's already selected.
-        !(
-          selectedItemsRef.current.size === 1 &&
-          selectedItemsRef.current.has(item)
-        )
-      ) {
-        onSelectionChange(new Set([item]))
+      switch (onNormalClick) {
+        case 'resetSelectionToClickedItem': {
+          if (
+            selectedItemsRef.current.size === 1 &&
+            selectedItemsRef.current.has(item)
+          ) {
+            // Already selected.
+            break
+          }
+          onSelectionChange(new Set([item]))
+          break
+        }
+        case 'unselectAll': {
+          if (selectedItemsRef.current.size === 0) {
+            // Already unselected
+            break
+          }
+          onSelectionChange(new Set())
+          break
+        }
+        default: {
+          const _assert: never = onNormalClick
+        }
       }
       lastActivatedItem.current = item
       return false
     },
-    [onSelectContiguous, onSelectionChange, toggleItemSelection]
+    [onNormalClick, onSelectContiguous, onSelectionChange, toggleItemSelection]
   )
   const onClick = useCallback(
     (event: React.MouseEvent, item: T) => {
