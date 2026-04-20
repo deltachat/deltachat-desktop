@@ -61,7 +61,12 @@ export function FocusAndMultiselectProvider(
     props.messageIds,
     selectedMessages,
     setSelectedMessages,
-    log
+    log,
+    // Only enter "multi-select mode" on Shift + Click or Ctrl + Click.
+    // Multi-selecting messages is not something that people do all the time.
+    // It's annoying that a message keeps being displayed as selected
+    // even though all you did is click a link inside of it.
+    { onNormalClick: 'unselectAll' }
   )
   return (
     <RovingTabindexProvider wrapperElementRef={props.wrapperElementRef}>
