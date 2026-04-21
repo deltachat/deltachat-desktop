@@ -26,13 +26,25 @@ function generateLogFileName(logsDir: string) {
   return join(logsDir, fileName)
 }
 
-export function createLogHandler(logsDir: string) {
+type CreateLogHandlerOptions = {
+  onWriteError?: (err: Error, logFilePath: string) => void
+}
+
+export function createLogHandler(
+  logsDir: string,
+  options: CreateLogHandlerOptions = {}
+) {
   const fileName = generateLogFileName(logsDir)
   const stream = createWriteStream(fileName, { flags: 'w' })
   let streamErrored = false
   let draining = false
+  let writeErrorReported = false
   stream.on('error', err => {
     streamErrored = true
+    if (!writeErrorReported) {
+      writeErrorReported = true
+      options.onWriteError?.(err, fileName)
+    }
     // eslint-disable-next-line no-console
     console.error('Log file write error:', err.message)
   })

@@ -105,10 +105,17 @@ mkdirSync(getCustomThemesPath(), { recursive: true })
 
 // Setup Logger
 import {
-  createLogHandler,
   cleanupLogFolder,
+  createLogHandler,
 } from '@deltachat-desktop/shared/log-handler.js'
-const logHandler = createLogHandler(getLogsPath())
+const logHandler = createLogHandler(getLogsPath(), {
+  onWriteError: (err, logFilePath) => {
+    throw new Error(
+      `Failed to write to logfile (${logFilePath}): ${err.message}`,
+      { cause: err }
+    )
+  },
+})
 import { getLogger, setLogHandler } from '@deltachat-desktop/shared/logger.js'
 const log = getLogger('main/index')
 setLogHandler(logHandler.log, rc)

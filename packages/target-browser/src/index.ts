@@ -23,15 +23,15 @@ import {
   localStorage,
   LOCALES_DIR,
   DATA_DIR,
+  LOGS_DIR,
   DC_ACCOUNTS_DIR,
   DC_FRONTEND_NO_TLS,
-  LOGS_DIR,
 } from './config'
 import { startDeltaChat } from './deltachat-rpc'
 import { helpRoute } from './help'
 import {
-  createLogHandler,
   cleanupLogFolder,
+  createLogHandler,
 } from '@deltachat-desktop/shared/log-handler'
 import { getLogger, setLogHandler } from '@deltachat-desktop/shared/logger'
 import { RCConfig } from './rc-config'
