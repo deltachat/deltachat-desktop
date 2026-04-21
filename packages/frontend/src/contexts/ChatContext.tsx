@@ -8,7 +8,6 @@ import type { RefObject, PropsWithChildren } from 'react'
 import type { T } from '@deltachat/jsonrpc-client'
 import { useFetch } from '../hooks/useFetch'
 import { getLogger } from '@deltachat-desktop/shared/logger'
-import { useHasChanged2 } from '../hooks/useHasChanged'
 
 const log = getLogger('ChatContext')
 
@@ -166,17 +165,14 @@ export const ChatProvider = ({
   // eslint-disable-next-line react-hooks/refs
   unselectChatRef.current = unselectChat
 
-  const isArchivedChecked = useRef(false)
-  if (useHasChanged2(chatId) && chatId != undefined) {
-    // eslint-disable-next-line react-hooks/refs
-    isArchivedChecked.current = false
-  }
+  const lastArchivedCheckChatId = useRef<number | undefined>(undefined)
   if (
+    chatNoLinger != undefined &&
     // eslint-disable-next-line react-hooks/refs
-    !isArchivedChecked.current &&
-    chatNoLinger != undefined
+    chatId !== lastArchivedCheckChatId.current
   ) {
-    isArchivedChecked.current = true
+    // eslint-disable-next-line react-hooks/refs
+    lastArchivedCheckChatId.current = chatId
     // Switch to "archived" view if selected chat is there
     // @TODO: We probably want this to be part of the UI logic instead
     ActionEmitter.emitAction(
