@@ -116,6 +116,15 @@ const notifications: {
  */
 const closedNotifications = new WeakSet<Notification>()
 
+const closeNotification = (notify: Notification) => {
+  if (!closedNotifications.has(notify)) {
+    if (isMac) {
+      closedNotifications.add(notify)
+    }
+    notify.close()
+  }
+}
+
 /**
  * triggers creation of a notification, adds appropriate
  * callbacks and shows it via electron Notification API
@@ -139,22 +148,15 @@ function showNotification(_event: IpcMainInvokeEvent, data: DcNotification) {
         notifications[accountId]?.[chatId]?.[data.messageId]?.filter(
           n => n !== notify
         ) || []
-      if (!closedNotifications.has(notify)) {
-        if (isMac) {
-          closedNotifications.add(notify)
-        }
-        notify.close()
-      }
+      closeNotification(notify)
     })
     notify.on('close', () => {
-      // Mark as closed to prevent calling close() again later
-      if (isMac) {
-        closedNotifications.add(notify)
-      }
       // on Window and Linux this can be triggered by system time out
       // when the message is moved to notification center so only clear
       // the notification tracking on Mac
       if (isMac) {
+        // Mark as closed to prevent calling close() again later
+        closedNotifications.add(notify)
         notifications[accountId][chatId][data.messageId] =
           notifications[accountId]?.[chatId]?.[data.messageId]?.filter(
             n => n !== notify
@@ -231,12 +233,7 @@ function clearNotificationsForMessage(
     return
   }
   arr.forEach(notify => {
-    if (!closedNotifications.has(notify)) {
-      if (isMac) {
-        closedNotifications.add(notify)
-      }
-      notify.close()
-    }
+    closeNotification(notify)
   })
   delete notifications[accountId][chatId][messageId]
 }
