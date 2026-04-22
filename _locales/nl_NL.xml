@@ -66,10 +66,11 @@
     <string name="show_full_message">Volledig bericht tonen…</string>
     <!-- Stay short here, say ~16 characters. The source string could also be "All Read", maybe that hint can make translations easier :) -->
     <string name="mark_all_as_read">Alles markeren als gelezen</string>
+    <!-- Used as an menu entry or button -->
     <string name="mark_as_read">Markeren als gelezen</string>
-    <!-- Shortest text for "Mark as being read". In english, this could be "Read" (past tense of "to read"), in german, this could be "Gelesen". -->
+    <!-- Used beside an icon with very few space. Shortest text for "Mark as being read". In english, this could be "Read" (past tense of "to read"), in german, this could be "Gelesen". -->
     <string name="mark_as_read_short">Gelezen</string>
-    <!-- Shortest text for "Mark as being unread". In english, this could be "Unread" (past tense of "to unread"), in german, this could be "Ungelesen". -->
+    <!-- Used beside an icon with very few space. Shortest text for "Mark as being unread". In english, this could be "Unread" (past tense of "to unread"), in german, this could be "Ungelesen". -->
     <string name="mark_as_unread_short">Ongelezen</string>
     <!-- Placeholder text when something is loading -->
     <string name="loading">Bezig met laden…</string>
@@ -175,7 +176,9 @@
     <!-- "Stickers" as known from other messengers; in some languages, the English "Sticker" is fine. -->
     <string name="sticker">Sticker</string>
     <string name="add_to_sticker_collection">Toevoegen aan stickerverzameling</string>
+    <!-- deprecated, use sticker_picker_empty_hint instead -->
     <string name="add_stickers_instructions">Stickers toevoegen kan als volgt: druk op ‘Stickermap openen’, maak een onderliggende map aan voor je pakket en plaats afbeeldings- en stickerbestanden in de map.</string>
+    <!-- deprecated -->
     <string name="open_sticker_folder">Stickermap openen</string>
     <string name="ask_add_sticker_to_collection">Wil je deze sticker toevoegen aan je verzameling?</string>
     <string name="ask_delete_sticker">Wil je deze sticker verwijderen?</string>
@@ -416,7 +419,6 @@
     <string name="canceled_call">Afgebroken oproep</string>
     <string name="missed_call">Gemiste oproep</string>
     <string name="already_in_call">Reeds in gesprek</string>
-
     <!-- get confirmations -->
     <!-- confirmation for leaving groups or channels. If a subject is needed, "Are you sure you want to leave the chat?" would work as well -->
     <string name="ask_leave_group">Weet je zeker dat je dit kanaal wilt verlaten?</string>
@@ -530,6 +532,7 @@
     <string name="remove_group_image">Groepsfoto verwijderen</string>
     <string name="change_group_image">Groepsfoto wijzigen</string>
     <string name="group_create_button">Groep aanmaken</string>
+    <!-- deprecated, use please_enter_chat_name -->
     <string name="group_please_enter_group_name">Geef de groep een naam.</string>
     <string name="group_add_members">Deelnemers toevoegen</string>
     <string name="group_self_not_in_group">Om deze actie uit te kunnen voeren moet je deelnemen aan de groep.</string>
@@ -670,7 +673,7 @@
     <string name="hide_from_contacts">Verbergen op contactpersonenlijst</string>
     <string name="hidden_from_contacts">Verborgen op contactpersonenlijst</string>
     <!-- Hint for the list of relays -->
-    <string name="transport_list_hint">Berichten worden op alle relays ontvangen.\n\n⚠️ Als je hier iets wijzigt, doe dat dan alléén als ál je apparaten gebruikmaken van versie 2.48.0, anders kunnen er berichten ontbreken.</string>
+    <string name="transport_list_hint">Berichten worden op alle relays ontvangen.\n\n⚠️ Als je hier iets wijzigt, doe dat dan alléén als ál je apparaten gebruikmaken van versie 2.47.0, anders kunnen er berichten ontbreken.</string>
     <!-- shown if a QR code was scanned that can be used as a relay -->
     <string name="confirm_add_transport">Wil je deze server toevoegen?</string>
     <string name="invalid_transport_qr">De gescande QR-code bevat geen geldige overdrachtsserver.</string>
@@ -1018,7 +1021,6 @@
     <!-- first placeholder is the name of the chat -->
     <string name="confirm_replace_draft">%1$s bevat al een concept. Wil je dit vervangen?</string>
     <string name="mailto_link_could_not_be_decoded">De mailto-link kan niet worden ontcijferd: %1$s</string>
-
     <!-- notifications -->
     <string name="notify_reply_button">Beantwoorden</string>
     <string name="notify_new_message">Nieuw bericht</string>
@@ -1097,7 +1099,6 @@
     <!-- deprecated, used on desktop although there is not spell checker -->
     <string name="no_spellcheck_suggestions_found">Geen suggesties gevonden.</string>
     <string name="show_window">Venster tonen</string>
-
     <!-- title of the "keybindings" dialog (for the keybindings names as such, where possible the normal command strings are used) -->
     <string name="keybindings">Sneltoetsen</string>
     <string name="switch_between_chats">Wisselen van gesprek</string>

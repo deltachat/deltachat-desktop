@@ -65,8 +65,9 @@
     <string name="show_full_message">Prikaži celotno sporočilo...</string>
     <!-- Stay short here, say ~16 characters. The source string could also be "All Read", maybe that hint can make translations easier :) -->
     <string name="mark_all_as_read">Označi vse kot prebrano</string>
+    <!-- Used as an menu entry or button -->
     <string name="mark_as_read">Označi kot prebrano</string>
-    <!-- Shortest text for "Mark as being read". In english, this could be "Read" (past tense of "to read"), in german, this could be "Gelesen". -->
+    <!-- Used beside an icon with very few space. Shortest text for "Mark as being read". In english, this could be "Read" (past tense of "to read"), in german, this could be "Gelesen". -->
     <string name="mark_as_read_short">Prebrano</string>
     <!-- Placeholder text when something is loading -->
     <string name="loading">Nalaganje...</string>
@@ -178,6 +179,7 @@
     <!-- "Stickers" as known from other messengers; in some languages, the English "Sticker" is fine. -->
     <string name="sticker">Nalepka</string>
     <string name="add_to_sticker_collection">Dodaj v zbirko nalepk</string>
+    <!-- deprecated -->
     <string name="open_sticker_folder">Odpri mapo z nalepkami</string>
     <string name="images">Slike</string>
     <!-- a noun, used for "Music" and other "Audio" files -->
