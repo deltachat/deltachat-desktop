@@ -31,9 +31,9 @@ export default defineConfig<TestOptions>({
   // Our tests involve network interaction, so we want a higher timeout
   // for assertions, such as receiving an invitation to a group,
   // as well as whole tests.
-  timeout: 5 * 60 * 1000,
+  timeout: (process.env.CI ? 5 : 1) * 60 * 1000,
   expect: {
-    timeout: 60_000,
+    timeout: process.env.CI ? 60_000 : 20_000,
   },
 
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
