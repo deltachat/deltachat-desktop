@@ -751,16 +751,8 @@ export function useLogicVirtualChatList(
     [id: number]: Type.ChatListItemFetchResult | undefined
   }>({})
 
-  const [cacheForAccountId, setCacheForAccountId] = useState(accountId)
-
   const loadingChatsRef_ = useRef(new Set<T.BasicChat['id']>())
   const loadingChats = loadingChatsRef_.current
-
-  // make sure cache is reset when accountId changes
-  if (cacheForAccountId !== accountId) {
-    setCacheForAccountId(accountId)
-    setChatCache({})
-  }
 
   const isChatLoaded: (index: number) => boolean = index =>
     !!chatCache[chatListIds[index]] || loadingChats.has(chatListIds[index])
@@ -803,9 +795,6 @@ export function useLogicVirtualChatList(
   })
   useEffect(() => {
     const loadingChats = loadingChatsRef_.current
-
-    // reset loadingChats when accountId changes
-    loadingChats.clear()
 
     let debouncingChatlistItemRequests: { [chatid: number]: number } = {}
 

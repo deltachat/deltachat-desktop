@@ -35,7 +35,7 @@ export default function ForwardMessage(props: ForwardMessageProps) {
   const { selectChat } = useChat()
   const { jumpToMessage } = useMessage()
 
-  const onChatClick = async (chatId: number, targetAccountId: number) => {
+  const onChatClick = async (targetAccountId: number, chatId: number) => {
     const isCrossAccountForward = targetAccountId !== currentAccountId
 
     const chat = await BackendRemote.rpc.getBasicChatInfo(

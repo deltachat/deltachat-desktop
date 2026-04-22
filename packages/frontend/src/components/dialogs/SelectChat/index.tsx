@@ -1,5 +1,5 @@
 import AutoSizer from 'react-virtualized-auto-sizer'
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, type ReactElement } from 'react'
 
 import { BackendRemote } from '../../../backend-com'
 import { selectedAccountId } from '../../../ScreenController'
@@ -24,7 +24,7 @@ import { RovingTabindexProvider } from '../../../contexts/RovingTabindex'
 type Props = {
   onClose: DialogProps['onClose']
   headerTitle: string
-  onChatClick: (chatId: number, accountId: number) => void
+  onChatClick: (accountId: number, chatId: number) => void
   listFlags: number
   footer?: React.ReactElement
   /** Whether to show the account switch button (when multiple accounts exist) */
@@ -85,13 +85,43 @@ export default function SelectChat(props: Props) {
       </div>
     ) : undefined
 
-  const [queryStr, setQueryStr] = useState('')
-  const { chatListIds } = useChatList(
-    props.listFlags,
-    queryStr,
-    undefined,
-    accountId
+  return (
+    <Dialog className={styles.selectChatDialog} onClose={props.onClose} fixed>
+      <DialogHeader
+        onClose={props.onClose}
+        title={props.headerTitle}
+        className={styles.header}
+      />
+      <DialogBody className={styles.selectChatDialogBody}>
+        <SelectChatList
+          key={accountId}
+          accountId={accountId}
+          listFlags={props.listFlags}
+          onChatClick={props.onChatClick}
+          accountSwitch={accountSwitch}
+        />
+      </DialogBody>
+      {props.footer}
+    </Dialog>
   )
+}
+
+type SelectChatListProps = {
+  accountId: number
+  listFlags: number
+  onChatClick: (accountId: number, chatId: number) => void
+  accountSwitch: ReactElement | undefined
+}
+
+function SelectChatList({
+  accountId,
+  listFlags,
+  onChatClick,
+  accountSwitch,
+}: SelectChatListProps) {
+  const tx = useTranslationFunction()
+  const [queryStr, setQueryStr] = useState('')
+  const { chatListIds } = useChatList(listFlags, queryStr, undefined, accountId)
   const { isChatLoaded, loadChats, chatCache } = useLogicVirtualChatList(
     chatListIds,
     accountId
@@ -108,70 +138,62 @@ export default function SelectChat(props: Props) {
     Number(useThemeCssVar('--SPECIAL-chatlist-item-chat-height')) || 64
 
   return (
-    <Dialog className={styles.selectChatDialog} onClose={props.onClose} fixed>
-      <DialogHeader
-        onClose={props.onClose}
-        title={props.headerTitle}
-        className={styles.header}
-      />
-      <DialogBody className={styles.selectChatDialogBody}>
-        <div
-          className={`${styles.searchRow} ${
-            accountSwitch ? styles.withAccountSwitch : ''
-          }`}
-        >
-          <div className='select-chat-account-input'>
-            <input
-              className='search-input'
-              data-no-drag-region
-              onChange={onSearchChange}
-              value={queryStr}
-              placeholder={tx('search')}
-              autoFocus
-              spellCheck={false}
-            />
-          </div>
-          {accountSwitch}
+    <>
+      <div
+        className={`${styles.searchRow} ${
+          accountSwitch ? styles.withAccountSwitch : ''
+        }`}
+      >
+        <div className='select-chat-account-input'>
+          <input
+            className='search-input'
+            data-no-drag-region
+            onChange={onSearchChange}
+            value={queryStr}
+            placeholder={tx('search')}
+            autoFocus
+            spellCheck={false}
+          />
         </div>
-        <div className='select-chat-list-chat-list' ref={chatListRef}>
-          <RovingTabindexProvider wrapperElementRef={chatListRef}>
-            {noResults && queryStr && (
-              <PseudoListItemNoSearchResults queryStr={queryStr} />
-            )}
-            <div style={{ height: noResults ? '0px' : '100%' }}>
-              <AutoSizer disableWidth>
-                {({ height }) => (
-                  <ChatListPart
-                    olElementAttrs={{
-                      'aria-label': tx('pref_chats'),
-                    }}
-                    isRowLoaded={isChatLoaded}
-                    loadMoreRows={loadChats}
-                    rowCount={chatListIds.length}
-                    width={'100%'}
-                    height={height}
-                    itemKey={index => 'key' + chatListIds[index]}
-                    itemHeight={CHATLISTITEM_CHAT_HEIGHT}
-                    itemData={{
-                      chatCache,
-                      chatListIds,
-                      onChatClick: (chatId: number) =>
-                        props.onChatClick(chatId, accountId),
+        {accountSwitch}
+      </div>
+      <div className='select-chat-list-chat-list' ref={chatListRef}>
+        <RovingTabindexProvider wrapperElementRef={chatListRef}>
+          {noResults && queryStr && (
+            <PseudoListItemNoSearchResults queryStr={queryStr} />
+          )}
+          <div style={{ height: noResults ? '0px' : '100%' }}>
+            <AutoSizer disableWidth>
+              {({ height }) => (
+                <ChatListPart
+                  olElementAttrs={{
+                    'aria-label': tx('pref_chats'),
+                  }}
+                  isRowLoaded={isChatLoaded}
+                  loadMoreRows={loadChats}
+                  rowCount={chatListIds.length}
+                  width={'100%'}
+                  height={height}
+                  itemKey={index => 'key' + chatListIds[index]}
+                  itemHeight={CHATLISTITEM_CHAT_HEIGHT}
+                  itemData={{
+                    chatCache,
+                    chatListIds,
+                    onChatClick: (chatId: number) =>
+                      onChatClick(accountId, chatId),
 
-                      activeChatId: null,
-                      activeContextMenuChatIds: [],
-                      openContextMenu: async () => {},
-                    }}
-                  >
-                    {ChatListItemRowChat}
-                  </ChatListPart>
-                )}
-              </AutoSizer>
-            </div>
-          </RovingTabindexProvider>
-        </div>
-      </DialogBody>
-      {props.footer}
-    </Dialog>
+                    activeChatId: null,
+                    activeContextMenuChatIds: [],
+                    openContextMenu: async () => {},
+                  }}
+                >
+                  {ChatListItemRowChat}
+                </ChatListPart>
+              )}
+            </AutoSizer>
+          </div>
+        </RovingTabindexProvider>
+      </div>
+    </>
   )
 }

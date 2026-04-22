@@ -17,7 +17,7 @@ export default function MailtoDialog(props: Props & DialogProps) {
   const tx = useTranslationFunction()
   const createDraftMessage = useCreateDraftMessage()
 
-  const onChatClick = async (chatId: number, accountId: number) => {
+  const onChatClick = async (accountId: number, chatId: number) => {
     // Close dialog before createDraftMessage because it may switch accounts
     onClose()
     await createDraftMessage(accountId, chatId, messageText)
