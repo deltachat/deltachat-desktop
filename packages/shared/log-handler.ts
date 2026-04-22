@@ -36,20 +36,14 @@ export function createLogHandler(
 ) {
   const fileName = generateLogFileName(logsDir)
   const stream = createWriteStream(fileName, { flags: 'w' })
-  let streamErrored = false
-  let draining = false
   let writeErrorReported = false
   stream.on('error', err => {
-    streamErrored = true
     if (!writeErrorReported) {
       writeErrorReported = true
       options.onWriteError?.(err, fileName)
     }
     // eslint-disable-next-line no-console
     console.error('Log file write error:', err.message)
-  })
-  stream.on('drain', () => {
-    draining = false
   })
   // eslint-disable-next-line no-console
   console.log(`Logfile: ${fileName}`)
@@ -78,16 +72,16 @@ export function createLogHandler(
           }
         })
       )
-      if (streamErrored || draining || !stream.writable || stream.destroyed) {
-        // Drop message: stream is broken, buffer is full, or
-        // stream was closed. Prevents unbounded memory growth
-        return
-      }
-      const flushed = stream.write(`${line.join('\t')}\n`)
-      if (!flushed) {
-        // Backpressure: internal buffer exceeded highWaterMark,
-        // drop subsequent messages until drain
-        draining = true
+      if (stream.writable) {
+        stream.write(`${line.join('\t')}\n`)
+      } else {
+        // eslint-disable-next-line no-console
+        console.warn('tried to log something after logger shut down', {
+          channel,
+          level,
+          args,
+          stacktrace,
+        })
       }
     }) as LogHandlerFunction,
     end: () => stream.end(),

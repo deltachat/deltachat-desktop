@@ -6,10 +6,10 @@ import {
   gitHubIssuesUrl,
   homePageUrl,
   appWindowTitle,
-} from '../../shared/constants.js'
-import { getLogger } from '../../shared/logger.js'
+} from '@deltachat-desktop/shared/constants.js'
+import { getLogger } from '@deltachat-desktop/shared/logger.js'
 import { getLogsPath } from './application-constants.js'
-import { LogHandler } from '../../shared/log-handler.js'
+import { LogHandler } from '@deltachat-desktop/shared/log-handler.js'
 import * as mainWindow from './windows/main.js'
 import { DesktopSettings } from './desktop_settings.js'
 import { getCurrentLocaleDate, tx } from './load-translations.js'

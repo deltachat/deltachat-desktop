@@ -24,20 +24,23 @@ import { existsSync, copyFileSync, mkdirSync, linkSync } from 'fs'
 import { versions } from 'process'
 import { fileURLToPath } from 'url'
 
-import { getLogger } from '../../shared/logger.js'
+import { getLogger } from '@deltachat-desktop/shared/logger.js'
 import {
   getTempDir,
   getLogsPath,
   htmlDistDir,
   INTERNAL_TMP_DIR_NAME,
 } from './application-constants.js'
-import { LogHandler } from '../../shared/log-handler.js'
+import { LogHandler } from '@deltachat-desktop/shared/log-handler.js'
 import { ExtendedAppMainProcess } from './types.js'
 import * as mainWindow from './windows/main.js'
 import { openHelpWindow } from './windows/help.js'
 import { DesktopSettings } from './desktop_settings.js'
 import { getConfigPath } from './application-constants.js'
-import { DesktopSettingsType, RuntimeInfo } from '../../shared/shared-types.js'
+import {
+  DesktopSettingsType,
+  RuntimeInfo,
+} from '@deltachat-desktop/shared/shared-types.js'
 import { set_has_unread, updateTrayIcon } from './tray.js'
 import { openHtmlEmailWindow } from './windows/html_email.js'
 import { appx, mapPackagePath } from './isAppx.js'
