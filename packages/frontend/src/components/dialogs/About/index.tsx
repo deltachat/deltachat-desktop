@@ -1,7 +1,14 @@
 import React, { useEffect } from 'react'
 
 import { runtime } from '@deltachat-desktop/runtime-interface'
-import { DialogBody, DialogContent, DialogWithHeader } from '../../Dialog'
+import {
+  DialogBody,
+  DialogContent,
+  DialogFooter,
+  DialogWithHeader,
+  FooterActionButton,
+  FooterActions,
+} from '../../Dialog'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import useDialog from '../../../hooks/dialog/useDialog'
 import { LogDialog } from '../Log'
@@ -10,7 +17,6 @@ import styles from './styles.module.scss'
 
 import type { DialogProps } from '../../../contexts/DialogContext'
 import { ClickableLink } from '../../helpers/ClickableLink'
-import Button from '../../Button'
 
 export default function About({ onClose }: DialogProps) {
   const tx = useTranslationFunction()
@@ -62,15 +68,19 @@ export default function About({ onClose }: DialogProps) {
                 {'https://delta.chat'}
               </ClickableLink>
             </div>
-            <div className={styles.buttonContainer}>
-              <Button onClick={() => runtime.openHelpWindow()}>
-                {tx('menu_help')}
-              </Button>
-              <Button onClick={viewLog}>{tx('pref_view_log')}</Button>{' '}
-            </div>
           </div>
         </DialogContent>
       </DialogBody>
+      <DialogFooter>
+        <FooterActions align='spaceBetween'>
+          <FooterActionButton onClick={() => runtime.openHelpWindow()}>
+            {tx('menu_help')}
+          </FooterActionButton>
+          <FooterActionButton onClick={viewLog}>
+            {tx('pref_view_log')}
+          </FooterActionButton>
+        </FooterActions>
+      </DialogFooter>
     </DialogWithHeader>
   )
 }
