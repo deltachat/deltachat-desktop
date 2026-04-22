@@ -124,5 +124,8 @@
   },
   "remove_attachment": {
     "message": "Remove Attachment"
+  },
+  "back_to_last_message": {
+    "message": "Back to last message"
   }
 }

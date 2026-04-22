@@ -1069,7 +1069,11 @@ function JumpDownButton({
               markChatAsSeen(accountId, chat.id)
             }
           }}
-          aria-label={stackIsEmpty ? tx('menu_scroll_to_bottom') : tx('back')}
+          aria-label={
+            stackIsEmpty
+              ? tx('menu_scroll_to_bottom')
+              : tx('back_to_last_message')
+          }
         >
           <div className={'icon ' + (!stackIsEmpty ? 'back' : 'down')} />
         </button>
