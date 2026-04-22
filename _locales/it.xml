@@ -66,10 +66,11 @@
     <string name="show_full_message">Mostra Messaggio Completo…</string>
     <!-- Stay short here, say ~16 characters. The source string could also be "All Read", maybe that hint can make translations easier :) -->
     <string name="mark_all_as_read">Segna Tutti come Letti</string>
+    <!-- Used as an menu entry or button -->
     <string name="mark_as_read">Segna come Letto</string>
-    <!-- Shortest text for "Mark as being read". In english, this could be "Read" (past tense of "to read"), in german, this could be "Gelesen". -->
+    <!-- Used beside an icon with very few space. Shortest text for "Mark as being read". In english, this could be "Read" (past tense of "to read"), in german, this could be "Gelesen". -->
     <string name="mark_as_read_short">Segna Letto</string>
-    <!-- Shortest text for "Mark as being unread". In english, this could be "Unread" (past tense of "to unread"), in german, this could be "Ungelesen". -->
+    <!-- Used beside an icon with very few space. Shortest text for "Mark as being unread". In english, this could be "Unread" (past tense of "to unread"), in german, this could be "Ungelesen". -->
     <string name="mark_as_unread_short">Non Letto</string>
     <!-- Placeholder text when something is loading -->
     <string name="loading">Caricamento…</string>
@@ -185,7 +186,9 @@
     <!-- "Stickers" as known from other messengers; in some languages, the English "Sticker" is fine. -->
     <string name="sticker">Adesivo</string>
     <string name="add_to_sticker_collection">Aggiungi alla Raccolta Adesivi</string>
+    <!-- deprecated, use sticker_picker_empty_hint instead -->
     <string name="add_stickers_instructions">Per aggiungere adesivi, tocca \"Apri Cartella Adesivi\", crea una sottocartella per il tuo pacchetto di adesivi e trascina lì i file di immagini e adesivi</string>
+    <!-- deprecated -->
     <string name="open_sticker_folder">Apri Cartella Adesivi</string>
     <string name="ask_add_sticker_to_collection">Aggiungere questo adesivo alla tua collezione?</string>
     <string name="ask_delete_sticker">Eliminare questo adesivo?</string>
@@ -428,7 +431,6 @@
     <string name="canceled_call">Chiamata annullata</string>
     <string name="missed_call">Chiamata persa</string>
     <string name="already_in_call">Già in chiamata</string>
-
     <!-- get confirmations -->
     <!-- confirmation for leaving groups or channels. If a subject is needed, "Are you sure you want to leave the chat?" would work as well -->
     <string name="ask_leave_group">Sei sicuro di voler abbandonare?</string>
@@ -547,6 +549,7 @@
     <string name="remove_group_image">Rimuovi Immagine Gruppo</string>
     <string name="change_group_image">Cambia Immagine Gruppo</string>
     <string name="group_create_button">Crea Gruppo</string>
+    <!-- deprecated, use please_enter_chat_name -->
     <string name="group_please_enter_group_name">Per piacere inserisci un nome per il gruppo.</string>
     <string name="group_add_members">Aggiungi Membri</string>
     <string name="group_self_not_in_group">Devi essere un membro del gruppo per fare questa azione.</string>
@@ -687,7 +690,7 @@
     <string name="hide_from_contacts">Nascondi dai Contatti</string>
     <string name="hidden_from_contacts">Nascosto dai contatti</string>
     <!-- Hint for the list of relays -->
-    <string name="transport_list_hint">I messaggi vengono ricevuti su tutti i ripetitori.\n\n⚠️ Se modifichi qualcosa qui, assicurati che tutti i tuoi dispositivi abbiano almeno la versione 2.48.0. Altrimenti i dispositivi più vecchi potrebbero non ricevere i messaggi.</string>
+    <string name="transport_list_hint">I messaggi vengono ricevuti su tutti i ripetitori.\n\n⚠️ Se modifichi qualcosa qui, assicurati che tutti i tuoi dispositivi abbiano almeno la versione 2.47.0. Altrimenti i dispositivi più vecchi potrebbero non ricevere i messaggi.</string>
     <!-- shown if a QR code was scanned that can be used as a relay -->
     <string name="confirm_add_transport">Aggiungere questo trasporto?</string>
     <string name="invalid_transport_qr">Il codice QR scansionato non contiene un mezzo di trasporto valido.</string>
@@ -1035,7 +1038,6 @@
     <!-- first placeholder is the name of the chat -->
     <string name="confirm_replace_draft">%1$s ha già una bozza di messaggio, vuoi sostituirla?</string>
     <string name="mailto_link_could_not_be_decoded">Il collegamento mailto non può essere decodificato: %1$s</string>
-
     <!-- notifications -->
     <string name="notify_reply_button">Rispondi</string>
     <string name="notify_new_message">Nuovo messaggio</string>
@@ -1114,7 +1116,6 @@
     <!-- deprecated, used on desktop although there is not spell checker -->
     <string name="no_spellcheck_suggestions_found">Nessun suggerimento ortografico trovato.</string>
     <string name="show_window">Mostra Finestra</string>
-
     <!-- title of the "keybindings" dialog (for the keybindings names as such, where possible the normal command strings are used) -->
     <string name="keybindings">Associazioni tasti</string>
     <string name="switch_between_chats">Passa da una Chat all\'altra</string>

@@ -66,10 +66,11 @@
     <string name="show_full_message">Näita sõnumit täismahus…</string>
     <!-- Stay short here, say ~16 characters. The source string could also be "All Read", maybe that hint can make translations easier :) -->
     <string name="mark_all_as_read">Märgi kõik loetuks</string>
+    <!-- Used as an menu entry or button -->
     <string name="mark_as_read">Märgi loetuks</string>
-    <!-- Shortest text for "Mark as being read". In english, this could be "Read" (past tense of "to read"), in german, this could be "Gelesen". -->
+    <!-- Used beside an icon with very few space. Shortest text for "Mark as being read". In english, this could be "Read" (past tense of "to read"), in german, this could be "Gelesen". -->
     <string name="mark_as_read_short">Märgi loetuks</string>
-    <!-- Shortest text for "Mark as being unread". In english, this could be "Unread" (past tense of "to unread"), in german, this could be "Ungelesen". -->
+    <!-- Used beside an icon with very few space. Shortest text for "Mark as being unread". In english, this could be "Unread" (past tense of "to unread"), in german, this could be "Ungelesen". -->
     <string name="mark_as_unread_short">Märgi mitteloetuks</string>
     <!-- Placeholder text when something is loading -->
     <string name="loading">Laadimisel…</string>
@@ -175,7 +176,9 @@
     <!-- "Stickers" as known from other messengers; in some languages, the English "Sticker" is fine. -->
     <string name="sticker">Kleeps</string>
     <string name="add_to_sticker_collection">Lisa kleepsude kogumikku</string>
+    <!-- deprecated, use sticker_picker_empty_hint instead -->
     <string name="add_stickers_instructions">Kleepsude lisamiseks klõpsi valikut „Ava kleepsude kaust“, loo oma kleepsupaki jaoks sinna alamkaust ning lohista pildi- ja kleepsufailid sinna</string>
+    <!-- deprecated -->
     <string name="open_sticker_folder">Ava kleepsude kaust</string>
     <string name="ask_add_sticker_to_collection">Kas lisad selle kleepsu oma kogumikku?</string>
     <string name="ask_delete_sticker">Kas kustutad selle kleepsu?</string>
@@ -416,7 +419,6 @@
     <string name="canceled_call">katkestatud kõne</string>
     <string name="missed_call">Märkamata kõne</string>
     <string name="already_in_call">Kõne  juba on pooleli</string>
-
     <!-- get confirmations -->
     <!-- confirmation for leaving groups or channels. If a subject is needed, "Are you sure you want to leave the chat?" would work as well -->
     <string name="ask_leave_group">Kas oled kindel, et soovid lahkuda?</string>
@@ -530,6 +532,7 @@
     <string name="remove_group_image">Eemalda grupi tunnuspilti</string>
     <string name="change_group_image">Muuda grupi tunnuspilti</string>
     <string name="group_create_button">Loo grupp</string>
+    <!-- deprecated, use please_enter_chat_name -->
     <string name="group_please_enter_group_name">Palun sisesta grupi nimi.</string>
     <string name="group_add_members">Lisa liikmeid</string>
     <string name="group_self_not_in_group">Selle tegevuse jaoks pead olemagrupi liige.</string>
@@ -669,6 +672,8 @@
     <string name="used_for_sending">Kasutatud saatmiseks</string>
     <string name="hide_from_contacts">Peida kontaktidest</string>
     <string name="hidden_from_contacts">Peidetud kontaktidest</string>
+    <!-- Hint for the list of relays -->
+    <string name="transport_list_hint">Sõnumid saavad kõik alusühendused (edastusserverid).\n\n⚠️ Kui muudad siin midagi, siis palun kontrolli, et kõikides sinu seadmetes on kasutusel vähemalt versioon 2.47.0. Vastasel juhul võivad vanema tarkvaraga seadmetes jääta sõnumid saabumata.</string>
     <!-- shown if a QR code was scanned that can be used as a relay -->
     <string name="confirm_add_transport">Kas lisad selle alusühenduse (edastusserveri)?</string>
     <string name="invalid_transport_qr">Skaneeritud QR-koodis pole korrektset alusühendust (edastusserverid)</string>
@@ -1016,7 +1021,6 @@
     <!-- first placeholder is the name of the chat -->
     <string name="confirm_replace_draft">Vestluses „%1$s“ juba on üks sõnumi kavand, kas sa soovid selle asendada?</string>
     <string name="mailto_link_could_not_be_decoded">mailto lingi dekodeerimine ei õnnestunud: %1$s</string>
-
     <!-- notifications -->
     <string name="notify_reply_button">Vasta</string>
     <string name="notify_new_message">Uus sõnum</string>
@@ -1095,7 +1099,6 @@
     <!-- deprecated, used on desktop although there is not spell checker -->
     <string name="no_spellcheck_suggestions_found">Õigekirjasoovitusi ei leidu.</string>
     <string name="show_window">Näita akent</string>
-
     <!-- title of the "keybindings" dialog (for the keybindings names as such, where possible the normal command strings are used) -->
     <string name="keybindings">Klahvide seosed</string>
     <string name="switch_between_chats">Vaheta vestlusi</string>
