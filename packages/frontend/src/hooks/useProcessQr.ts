@@ -183,7 +183,7 @@ export default function useProcessQR() {
         }
       } else if (qr.kind === 'askJoinBroadcast') {
         const userConfirmed = await openConfirmationDialog({
-          message: tx('instant_onboarding_confirm_channel', qr.name),
+          message: tx('instant_onboarding_confirm_group', qr.name),
           confirmLabel: tx('ok'),
           dataTestid: 'ask-create-profile-and-join-channel',
         })

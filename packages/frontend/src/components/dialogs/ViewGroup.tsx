@@ -614,9 +614,7 @@ export function EditGroupNameDialog({
                 marginBottom: '-18px',
               }}
             >
-              {!isBroadcast
-                ? tx('group_please_enter_group_name')
-                : tx('please_enter_channel_name')}
+              {!tx('please_enter_chat_name')}
             </p>
           )}
           <DeltaTextarea
