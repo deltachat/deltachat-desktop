@@ -143,9 +143,8 @@ $paddingVertical: 20px;
 
 .footerActions {
   display: flex;
-  @media (width <= variables.$dialog-breakpoint) {
-    flex-direction: column;
-  }
+  flex-wrap: wrap;
+  gap: 10px;
 
   &.spaceBetween {
     justify-content: space-between;
@@ -167,13 +166,7 @@ $paddingVertical: 20px;
 .footerActionButton {
   // `.appDownloadingStatus` copy-pated these styles.
   min-width: 100px;
-  margin: 10px 0;
-  & + & {
-    margin-inline-start: 20px;
-  }
-  @media (width <= variables.$dialog-breakpoint) {
-    & + & {
-      margin-inline-start: 0;
-    }
-  }
+  flex: 0 1 auto;
+  margin: 0;
+  white-space: nowrap;
 }
