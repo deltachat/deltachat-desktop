@@ -46,10 +46,9 @@ export default defineConfig<TestOptions>({
     video: 'retain-on-failure',
     screenshot: 'only-on-failure',
     permissions: ['notifications'],
-    ignoreHTTPSErrors: true,
+    ignoreHTTPSErrors: !DC_FRONTEND_NO_TLS,
     launchOptions: {
-      // Only relevant with TLS.
-      args: ['--ignore-certificate-errors'],
+      args: DC_FRONTEND_NO_TLS ? undefined : ['--ignore-certificate-errors'],
     },
   },
 
@@ -79,7 +78,7 @@ export default defineConfig<TestOptions>({
     } ../target-browser/dist/server.js`,
     url: baseURL,
     timeout: 120 * 1000,
-    ignoreHTTPSErrors: true,
+    ignoreHTTPSErrors: !DC_FRONTEND_NO_TLS,
     reuseExistingServer: !process.env.CI,
     stdout: 'pipe',
     stderr: 'pipe',
