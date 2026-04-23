@@ -1,14 +1,15 @@
 import { createWriteStream } from 'fs'
 import { join } from 'path'
-import { LOGS_DIR } from './config'
+import { readdir, lstat, unlink } from 'fs/promises'
 import { stdout, stderr } from 'process'
+import { getLogger, LogHandlerFunction } from './logger.js'
 
 stdout.on('error', () => {})
 stderr.on('error', () => {})
 // ^ Without this, the app will run into infinite exceptions
 // when it can't write to stdout or stderr
 
-function logName() {
+function generateLogFileName(logsDir: string) {
   const d = new Date()
   function pad(number: number) {
     return number < 10 ? '0' + number : number
@@ -22,12 +23,28 @@ function logName() {
     `${pad(d.getSeconds())}`,
     '.log',
   ].join('')
-  return join(LOGS_DIR, fileName)
+  return join(logsDir, fileName)
 }
 
-export function createLogHandler() {
-  const fileName = logName()
+type CreateLogHandlerOptions = {
+  onWriteError?: (err: Error, logFilePath: string) => void
+}
+
+export function createLogHandler(
+  logsDir: string,
+  options: CreateLogHandlerOptions = {}
+) {
+  const fileName = generateLogFileName(logsDir)
   const stream = createWriteStream(fileName, { flags: 'w' })
+  let writeErrorReported = false
+  stream.on('error', err => {
+    if (!writeErrorReported) {
+      writeErrorReported = true
+      options.onWriteError?.(err, fileName)
+    }
+    // eslint-disable-next-line no-console
+    console.error('Log file write error:', err.message)
+  })
   // eslint-disable-next-line no-console
   console.log(`Logfile: ${fileName}`)
   return {
@@ -47,7 +64,13 @@ export function createLogHandler() {
       const timestamp = new Date().toISOString()
       let line = [timestamp, fillString(channel, 22), level]
       line = line.concat(
-        [stacktrace, ...args].map(value => JSON.stringify(value))
+        [stacktrace, ...args].map(value => {
+          try {
+            return JSON.stringify(value)
+          } catch {
+            return '[unserializable]'
+          }
+        })
       )
       if (stream.writable) {
         stream.write(`${line.join('\t')}\n`)
@@ -67,18 +90,14 @@ export function createLogHandler() {
 }
 export type LogHandler = ReturnType<typeof createLogHandler>
 
-import { readdir, lstat, unlink } from 'fs/promises'
-import { getLogger, LogHandlerFunction } from '../../shared/logger.js'
-
-export async function cleanupLogFolder() {
+export async function cleanupLogFolder(logsDir: string) {
   const log = getLogger('logger/log-cleanup')
-  const logDir = LOGS_DIR
 
-  const logDirContent = await readdir(logDir)
+  const logDirContent = await readdir(logsDir)
   const filesWithDates = await Promise.all(
     logDirContent.map(async logFileName => ({
       filename: logFileName,
-      mtime: (await lstat(join(logDir, logFileName))).mtime.getTime(),
+      mtime: (await lstat(join(logsDir, logFileName))).mtime.getTime(),
     }))
   )
 
@@ -89,7 +108,7 @@ export async function cleanupLogFolder() {
     sortedFiles.splice(sortedFiles.length - 11)
 
     const fileCount = await Promise.all(
-      sortedFiles.map(({ filename }) => unlink(join(logDir, filename)))
+      sortedFiles.map(({ filename }) => unlink(join(logsDir, filename)))
     )
 
     log.info(`Successfuly deleted ${fileCount.length} old logfiles`)
