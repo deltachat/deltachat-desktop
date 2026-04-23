@@ -10,7 +10,7 @@ type Props = {
   confirmLabel?: string
   disableOK?: boolean
   onCancel: () => void
-  onOk: () => void
+  onOk: (() => void) | 'submit'
 }
 
 export default function OkCancelFooterAction({
@@ -35,7 +35,8 @@ export default function OkCancelFooterAction({
           styling='primary'
           disabled={disableOK}
           data-testid='ok'
-          onClick={onOk}
+          onClick={onOk === 'submit' ? undefined : onOk}
+          type={onOk === 'submit' ? 'submit' : undefined}
         >
           {confirmLabel}
         </FooterActionButton>
