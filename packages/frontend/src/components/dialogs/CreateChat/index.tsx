@@ -846,24 +846,19 @@ export const ChatSettingsSetNameAndProfileImage = ({
   }
 
   let inputLabel: string
-  let missingNameErrorText: string
+  const missingNameErrorText = tx('please_enter_chat_name')
   switch (groupType) {
     case GroupType.REGULAR_GROUP:
       inputLabel = tx('group_name')
-      missingNameErrorText = tx('please_enter_chat_name')
       break
     case GroupType.PLAIN_EMAIL:
       inputLabel = tx('subject')
-      missingNameErrorText = tx('please_enter_chat_name')
       break
     case GroupType.BROADCAST_LIST:
       inputLabel = tx('name_desktop')
-      missingNameErrorText = tx('please_enter_chat_name')
       break
     default: {
-      const _assert: never = groupType
       inputLabel = tx('group_name')
-      missingNameErrorText = tx('please_enter_chat_name')
       break
     }
   }
