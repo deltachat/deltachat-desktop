@@ -295,7 +295,7 @@ export function ViewProfileInner({
             {contact.isBlocked && (
               <div>
                 <i className='material-svg-icon material-icon-blocked' />
-                {tx('contact_is_blocked')}
+                {tx('contact_blocked')}
               </div>
             )}
           </div>

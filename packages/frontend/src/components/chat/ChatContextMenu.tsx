@@ -276,7 +276,7 @@ function buildViewEditMenuItems(
     },
     // Edit Channel
     relatedChat.chatType === 'OutBroadcast' && {
-      label: tx('edit_channel'),
+      label: tx('menu_view_profile'),
       action: onViewGroup,
     },
   ]

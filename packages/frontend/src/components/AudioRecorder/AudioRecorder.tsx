@@ -182,7 +182,7 @@ export const AudioRecorder = ({
     return (
       <button
         type='button'
-        aria-label={tx('voice_send')}
+        aria-label={tx('voice_message')}
         className={styles.microphoneButton}
         onClick={() => onRecordingStart()}
       >
