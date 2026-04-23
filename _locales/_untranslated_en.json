@@ -55,5 +55,11 @@
   },
   "who_can_call_me_toggle": {
     "message": "Show call screen on incoming calls"
+  },
+  "react_more_emojis" : {
+    "message": "More emojis..."
+  },
+  "edit_channel": {
+    "message": "Edit Channel"
   }
 }

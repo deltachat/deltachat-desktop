@@ -95,6 +95,7 @@
     <string name="offline">Offline</string>
     <!-- For the next view or as "continue". Should be as short as possible. -->
     <string name="next">Weiter</string>
+    <string name="warning">Warnung</string>
     <string name="error">Fehler</string>
     <string name="error_x">Fehler: %1$s</string>
     <string name="no_app_to_handle_data">Keine passende App zum Öffnen dieses Dateityps gefunden</string>
@@ -423,6 +424,9 @@
     <string name="canceled_call">Abgebrochener Anruf</string>
     <string name="missed_call">Verpasster Anruf</string>
     <string name="already_in_call">Bereits im Anruf</string>
+    <string name="call_answered_elsewhere">Anruf auf einem anderen Gerät beantwortet</string>
+    <string name="call_requires_mic_permission">Mikrofonzugriff für Anrufe erforderlich</string>
+
     <!-- get confirmations -->
     <!-- confirmation for leaving groups or channels. If a subject is needed, "Are you sure you want to leave the chat?" would work as well -->
     <string name="ask_leave_group">Diesen Chat verlassen?</string>
@@ -524,8 +528,11 @@
     <!-- search -->
     <string name="search">Suchen</string>
     <string name="search_in_chat">Im Chat suchen</string>
+    <!-- Placeholder will be replaced by the chat name -->
+    <string name="search_in">In \\"%1$s\\" suchen</string>
     <string name="search_files">Dateien suchen</string>
     <string name="search_explain">Suche nach Chats, Kontakten und Nachrichten</string>
+    <string name="search_result_for_x">Ergebnis für \"%1$s\"</string>
     <string name="search_no_result_for_x">Keine Ergebnisse für \"%s\" gefunden.</string>
     <!-- Adjective, as in "Show Unread Messages" -->
     <string name="search_unread">Ungelesen</string>
@@ -538,6 +545,7 @@
     <string name="group_create_button">Gruppe erstellen</string>
     <!-- deprecated, use please_enter_chat_name -->
     <string name="group_please_enter_group_name">Bitte einen Gruppennamen eingeben.</string>
+    <string name="please_enter_chat_name">Bitte einen Namen eingeben.</string>
     <string name="group_add_members">Mitglied hinzufügen</string>
     <string name="group_self_not_in_group">Du must ein Mitglied der Gruppe sein, um diese Aktion durchführen zu können.</string>
     <string name="profile_encryption">Verschlüsselung</string>
@@ -774,6 +782,8 @@
     <string name="pref_incognito_keyboard_explain">Deaktivierung des personalisierten Lernens der Tastatur anfordern.</string>
     <string name="pref_read_receipts">Lesebestätigungen</string>
     <string name="pref_read_receipts_explain">Wenn Lesebestätigungen ausgeschaltet sind, werden auch keine Lesebestätigungen von anderen angezeigt. </string>
+    <!-- Title above a list of contacts who read a message -->
+    <string name="read_by">Gelesen von</string>
     <string name="pref_server">Server</string>
     <string name="pref_encryption">Verschlüsselung</string>
     <string name="pref_manage_keys">Schlüssel verwalten</string>
@@ -886,9 +896,12 @@
     <string name="group_name_changed_by_you">Du hast den Gruppennamen von \"%1$s\" zu \"%2$s\" geändert.</string>
     <!-- %1$s will be replaced by the old group name, %2$s will be replaced by the new group name, %3$s will be replaced by name and address of the contact who did the action. -->
     <string name="group_name_changed_by_other">Gruppenname geändert von \"%1$s\" zu \"%2$s\" von %3$s.</string>
+    <!-- %1$s will be replaced by the old channel name, %2$s will be replaced by the new channel name -->
+    <string name="channel_name_changed">Kanalname geändert von \"%1$s\" zu \"%2$s\".</string>
     <string name="group_image_changed_by_you">Du hast das Gruppenbild geändert.</string>
     <!-- %1$s will be replaced by name of the contact who did the action -->
     <string name="group_image_changed_by_other">Gruppenbild geändert von %1$s.</string>
+    <string name="channel_image_changed">Kanalbild geändert.</string>
     <string name="chat_description_changed_by_you">Du hast die Chat-Beschreibung geändert.</string>
     <!-- %1$s will be replaced by name of the contact who did the action -->
     <string name="chat_description_changed_by_other">Chat-Beschreibung geändert von %1$s.</string>
