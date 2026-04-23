@@ -222,6 +222,10 @@ const Composer = forwardRef<
     messageEditing.isEditingModeActive || draftIsLoading
       ? null
       : async () => {
+          // Focus message input
+          setTimeout(() => {
+            regularMessageInputRef.current?.focus()
+          })
           if (chatId === null) {
             throw new Error('chat id is undefined')
           }
@@ -229,7 +233,6 @@ const Composer = forwardRef<
             log.debug(`Empty message: don't send it...`)
             return
           }
-
           const preSendDraftState = draftState
           const sendMessagePromise = sendMessage(accountId, chatId, {
             text: draftState.text,
@@ -281,9 +284,6 @@ const Composer = forwardRef<
             // TODO fix: hypothetically by this point the user
             // could have started typing (and even have sent!)
             // a new message already, so this would override it on the backend.
-            setTimeout(() => {
-              regularMessageInputRef.current?.focus()
-            })
             await BackendRemote.rpc.removeDraft(accountId, chatId)
           }
         }
