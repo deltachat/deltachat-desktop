@@ -67,6 +67,7 @@ import { useRpcFetch } from '../../hooks/useFetch'
 import ForwardMessage from '../dialogs/ForwardMessage'
 import MessageDetail from '../dialogs/MessageDetail/MessageDetail'
 import ConfirmDeleteMessageDialog from '../dialogs/ConfirmDeleteMessage'
+import AlertDialog from '../dialogs/AlertDialog'
 
 const log = getLogger('Message')
 
@@ -998,7 +999,13 @@ export default function Message(props: {
               timestamp={message.timestamp * 1000}
               encrypted={message.showPadlock}
               isSavedMessage={isOrHasSavedMessage}
-              onClickError={() => openDialog(MessageDetail, { id: message.id })}
+              onClickError={() =>
+                openDialog(AlertDialog, {
+                  message: message.error
+                    ? tx('error_x', message.error)
+                    : tx('ok'),
+                })
+              }
               viewType={message.viewType}
               chatType={chat.chatType}
               tabindexForInteractiveContents={tabindexForInteractiveContents}
