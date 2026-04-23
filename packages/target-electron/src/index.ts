@@ -125,8 +125,10 @@ process.on('uncaughtException', err => {
   }
   dialog.showErrorBox(
     'Error - uncaughtException',
-    `See the logfile (${logHandler.logFilePath()}) for details and contact the developers about this issue:\n` +
-      JSON.stringify(error)
+    `See the logfile (${logHandler.logFilePath()}) for details and contact the developers about this issue:\n\n` +
+      error.message +
+      '\n\n' +
+      error.stack
   )
 })
 
