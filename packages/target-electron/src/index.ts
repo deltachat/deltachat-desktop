@@ -110,6 +110,7 @@ import {
 } from '@deltachat-desktop/shared/log-handler.js'
 const logHandler = createLogHandler(getLogsPath(), {
   onWriteError: (err, logFilePath) => {
+    // Trigger our `uncaughtException` listener.
     throw new Error(
       `Failed to write to logfile (${logFilePath}): ${err.message}`,
       { cause: err }
