@@ -1989,7 +1989,7 @@ dependencies = [
 
 [[package]]
 name = "deltachat-tauri"
-version = "2.48.0"
+version = "2.49.1"
 dependencies = [
  "anyhow",
  "ashpd",
@@ -2007,7 +2007,7 @@ dependencies = [
  "mime_guess",
  "notify",
  "percent-encoding",
- "png 0.18.0",
+ "png 0.17.16",
  "rand 0.9.3",
  "regex",
  "register-default-handler",
@@ -6004,9 +6004,9 @@ dependencies = [
 
 [[package]]
 name = "openssl"
-version = "0.10.75"
+version = "0.10.78"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "08838db121398ad17ab8531ce9de97b244589089e290a384c900cb9ff7434328"
+checksum = "f38c4372413cdaaf3cc79dd92d29d7d9f5ab09b51b10dded508fb90bb70b9222"
 dependencies = [
  "bitflags 2.10.0",
  "cfg-if",
@@ -6045,9 +6045,9 @@ dependencies = [
 
 [[package]]
 name = "openssl-sys"
-version = "0.9.111"
+version = "0.9.114"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "82cab2d520aa75e3c58898289429321eb788c3106963d0dc886ec7a5f4adc321"
+checksum = "13ce1245cd07fcc4cfdb438f7507b0c7e4f3849a69fd84d52374c66d83741bb6"
 dependencies = [
  "cc",
  "libc",
