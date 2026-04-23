@@ -397,7 +397,15 @@ test('Edit group profile from context menu and rename group', async () => {
   await page.getByTestId('edit-group').click({ force: true })
   // open edit group profile dialog
   await page.getByTestId('view-group-dialog-header-edit').click()
+
+  // Group name is required
+  await expect(page.locator('#groupname:invalid')).not.toBeVisible()
+  await page.locator('#groupname').clear()
+  await page.locator('#groupname').press('Enter')
+  await expect(page.locator('#groupname:invalid')).toBeVisible()
+
   await page.locator('#groupname').fill(groupName + ' edited')
+  await expect(page.locator('#groupname:invalid')).not.toBeVisible()
   await page.getByTestId('ok').click()
   await expect(page.locator('.styles_module_displayName')).toHaveText(
     groupName + ' edited'

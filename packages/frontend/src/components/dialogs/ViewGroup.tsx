@@ -317,10 +317,7 @@ function ViewGroupInner(
         groupDescription: string,
         groupImage: string | null
       ) => {
-        // TODO this check should be way earlier, you should not be able to "OK" the dialog if there is no group name
-        if (groupName.length > 1) {
-          setGroupName(groupName)
-        }
+        setGroupName(groupName)
         // Description can be empty, so always set it
         setGroupDescription(groupDescription)
         setGroupImage(groupImage)
@@ -604,20 +601,8 @@ export function EditGroupNameDialog({
               ) => {
                 setGroupName(event.target.value)
               }}
+              required
             />
-            {groupName === '' && (
-              <p
-                style={{
-                  color: 'var(--colorDanger)',
-                  marginLeft: '80px',
-                  position: 'relative',
-                  top: '-10px',
-                  marginBottom: '-18px',
-                }}
-              >
-                {!tx('please_enter_chat_name')}
-              </p>
-            )}
             <DeltaTextarea
               id='description'
               placeholder={tx('chat_description')}
