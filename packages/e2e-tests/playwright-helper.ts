@@ -534,6 +534,11 @@ export const createGroupChat = async (
   await expect(chatUserB).toBeVisible()
   await page.locator('#new-chat-button').click()
   await page.locator('#newgroup button').click()
+
+  // Name is required
+  await page.locator('.group-name-input').press('Enter')
+  await expect(page.locator('.group-name-input:invalid')).toBeVisible()
+
   await page.locator('.group-name-input').fill(groupName)
   await page.locator('#addmember button').click()
   const addMemberDialog = page.getByTestId('add-member-dialog')

@@ -619,8 +619,6 @@ export function CreateGroup(props: CreateGroupProps) {
     groupMembers
   )
 
-  const [errorMissingGroupName, setErrorMissingGroupName] = useState(false)
-
   const groupMemberContactListWrapperRef = useRef<HTMLDivElement>(null)
 
   const groupContactsFetch = useRpcFetch(BackendRemote.rpc.getContactsByIds, [
@@ -672,10 +670,6 @@ export function CreateGroup(props: CreateGroupProps) {
 
   const submitForm = (ev: React.FormEvent) => {
     ev.preventDefault()
-    if (groupName === '') {
-      setErrorMissingGroupName(true)
-      return
-    }
     finishCreateGroup()
       .then(groupId => {
         if (groupId) {
@@ -697,8 +691,6 @@ export function CreateGroup(props: CreateGroupProps) {
             onUnsetGroupImage={onUnsetGroupImage}
             chatName={groupName}
             setChatName={setGroupName}
-            errorMissingChatName={errorMissingGroupName}
-            setErrorMissingChatName={setErrorMissingGroupName}
             groupType={groupType}
           />
         </DialogContent>
@@ -764,15 +756,8 @@ function CreateBroadcastList(props: CreateBroadcastListProps) {
   const [broadcastName, setBroadcastName] = useState<string>('')
   const finishCreateBroadcast = useCreateBroadcast(broadcastName, onClose)
 
-  const [errorMissingChatName, setErrorMissingChatName] =
-    useState<boolean>(false)
-
   const submitForm = (ev: React.FormEvent) => {
     ev.preventDefault()
-    if (broadcastName === '') {
-      setErrorMissingChatName(true)
-      return
-    }
     finishCreateBroadcast()
   }
 
@@ -789,8 +774,6 @@ function CreateBroadcastList(props: CreateBroadcastListProps) {
             <ChatSettingsSetNameAndProfileImage
               chatName={broadcastName}
               setChatName={setBroadcastName}
-              errorMissingChatName={errorMissingChatName}
-              setErrorMissingChatName={setErrorMissingChatName}
               groupType={GroupType.BROADCAST_LIST}
             />
           </DialogContent>
@@ -816,8 +799,6 @@ export const ChatSettingsSetNameAndProfileImage = ({
   onUnsetGroupImage,
   chatName,
   setChatName,
-  errorMissingChatName,
-  setErrorMissingChatName,
   color,
   groupType,
 }: {
@@ -826,16 +807,10 @@ export const ChatSettingsSetNameAndProfileImage = ({
   onUnsetGroupImage?: () => void
   chatName: string
   setChatName: (newGroupName: string) => void
-  errorMissingChatName: boolean
-  setErrorMissingChatName: React.Dispatch<React.SetStateAction<boolean>>
   color?: string
   groupType: GroupType
 }) => {
   const tx = useTranslationFunction()
-  const onChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
-    if (target.value.length > 0) setErrorMissingChatName(false)
-    setChatName(target.value)
-  }
   if (
     groupType === GroupType.REGULAR_GROUP &&
     !(onSetGroupImage && onUnsetGroupImage)
@@ -846,24 +821,19 @@ export const ChatSettingsSetNameAndProfileImage = ({
   }
 
   let inputLabel: string
-  let missingNameErrorText: string
   switch (groupType) {
     case GroupType.REGULAR_GROUP:
       inputLabel = tx('group_name')
-      missingNameErrorText = tx('please_enter_chat_name')
       break
     case GroupType.PLAIN_EMAIL:
       inputLabel = tx('subject')
-      missingNameErrorText = tx('please_enter_chat_name')
       break
     case GroupType.BROADCAST_LIST:
       inputLabel = tx('name_desktop')
-      missingNameErrorText = tx('please_enter_chat_name')
       break
     default: {
       const _assert: never = groupType
       inputLabel = tx('group_name')
-      missingNameErrorText = tx('please_enter_chat_name')
       break
     }
   }
@@ -889,13 +859,13 @@ export const ChatSettingsSetNameAndProfileImage = ({
             data-testid='group-name-input'
             placeholder={inputLabel}
             value={chatName}
-            onChange={onChange}
+            onChange={({ target }) => {
+              setChatName(target.value)
+            }}
+            required
             autoFocus
             spellCheck={false}
           />
-          {errorMissingChatName && (
-            <p className='input-error'>{missingNameErrorText}</p>
-          )}
         </div>
       </div>
     </>

@@ -600,6 +600,11 @@ test('create channel and add members', async ({ browserName }) => {
   // Create a channel
   await page.locator('#new-chat-button').click()
   await page.locator('#newbroadcastlist button').click()
+
+  // Name is required
+  await page.locator('.group-name-input').press('Enter')
+  await expect(page.locator('.group-name-input:invalid')).toBeVisible()
+
   await page.locator('.group-name-input').fill(channelName)
   await page.getByRole('button', { name: 'Create' }).click()
 
