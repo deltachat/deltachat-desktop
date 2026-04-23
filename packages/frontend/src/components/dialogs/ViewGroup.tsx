@@ -580,57 +580,59 @@ export function EditGroupNameDialog({
           !isBroadcast ? tx('menu_group_name_and_image') : tx('channel_name')
         }
       />
-      <DialogBody>
-        <DialogContent>
-          <div
-            className='profile-image-username center'
-            style={{ marginBottom: '30px' }}
-          >
-            <GroupImageSelector
-              groupName={groupName}
-              groupColor={groupColor}
-              groupImage={groupImage}
-              setGroupImage={setGroupImage}
-            />
-          </div>
-          <DeltaInput
-            id='groupname'
-            placeholder={!isBroadcast ? tx('group_name') : tx('channel_name')}
-            value={groupName}
-            onChange={(
-              event: React.FormEvent<HTMLElement> &
-                React.ChangeEvent<HTMLInputElement>
-            ) => {
-              setGroupName(event.target.value)
-            }}
-          />
-          {groupName === '' && (
-            <p
-              style={{
-                color: 'var(--colorDanger)',
-                marginLeft: '80px',
-                position: 'relative',
-                top: '-10px',
-                marginBottom: '-18px',
-              }}
+      <form action={onClickOk}>
+        <DialogBody>
+          <DialogContent>
+            <div
+              className='profile-image-username center'
+              style={{ marginBottom: '30px' }}
             >
-              {!tx('please_enter_chat_name')}
-            </p>
-          )}
-          <DeltaTextarea
-            id='description'
-            placeholder={tx('chat_description')}
-            value={groupDescription}
-            onChange={(
-              event: React.FormEvent<HTMLElement> &
-                React.ChangeEvent<HTMLTextAreaElement>
-            ) => {
-              setGroupDescription(event.target.value)
-            }}
-          />
-        </DialogContent>
-      </DialogBody>
-      <OkCancelFooterAction onCancel={onClickCancel} onOk={onClickOk} />
+              <GroupImageSelector
+                groupName={groupName}
+                groupColor={groupColor}
+                groupImage={groupImage}
+                setGroupImage={setGroupImage}
+              />
+            </div>
+            <DeltaInput
+              id='groupname'
+              placeholder={!isBroadcast ? tx('group_name') : tx('channel_name')}
+              value={groupName}
+              onChange={(
+                event: React.FormEvent<HTMLElement> &
+                  React.ChangeEvent<HTMLInputElement>
+              ) => {
+                setGroupName(event.target.value)
+              }}
+            />
+            {groupName === '' && (
+              <p
+                style={{
+                  color: 'var(--colorDanger)',
+                  marginLeft: '80px',
+                  position: 'relative',
+                  top: '-10px',
+                  marginBottom: '-18px',
+                }}
+              >
+                {!tx('please_enter_chat_name')}
+              </p>
+            )}
+            <DeltaTextarea
+              id='description'
+              placeholder={tx('chat_description')}
+              value={groupDescription}
+              onChange={(
+                event: React.FormEvent<HTMLElement> &
+                  React.ChangeEvent<HTMLTextAreaElement>
+              ) => {
+                setGroupDescription(event.target.value)
+              }}
+            />
+          </DialogContent>
+        </DialogBody>
+        <OkCancelFooterAction onCancel={onClickCancel} onOk='submit' />
+      </form>
     </Dialog>
   )
 }
