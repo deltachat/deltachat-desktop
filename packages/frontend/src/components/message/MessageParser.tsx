@@ -13,6 +13,7 @@ import { selectedAccountId } from '../../ScreenController'
 import { MessagesDisplayContext } from '../../contexts/MessagesDisplayContext'
 import useChat from '../../hooks/chat/useChat'
 import useCreateChatByEmail from '../../hooks/chat/useCreateChatByEmail'
+import useDialog from '../../hooks/dialog/useDialog'
 
 const log = getLogger('renderer/message-parser')
 
@@ -163,6 +164,7 @@ function EmailLink({
   const accountId = selectedAccountId()
   const createChatByEmail = useCreateChatByEmail()
   const { selectChat } = useChat()
+  const { closeAllDialogs } = useDialog()
 
   const handleClick: React.MouseEventHandler<HTMLAnchorElement> = async ev => {
     ev.preventDefault()
@@ -170,6 +172,7 @@ function EmailLink({
     const chatId = await createChatByEmail(accountId, email)
     if (chatId) {
       selectChat(accountId, chatId)
+      closeAllDialogs()
     }
   }
 

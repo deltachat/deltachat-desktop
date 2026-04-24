@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { Avatar, ClickForFullscreenAvatarWrapper } from '../Avatar'
+import { parseAndRenderMessage } from '../message/MessageParser'
 
 import styles from './styles.module.scss'
 
@@ -44,7 +45,7 @@ export default function ProfileInfoHeader({
         </p>
         {description && (
           <p className={styles.description} data-testid='profile-description'>
-            {description}
+            {parseAndRenderMessage(description, false, 0)}
           </p>
         )}
       </div>

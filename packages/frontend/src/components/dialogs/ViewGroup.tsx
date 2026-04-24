@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState, useRef } from 'react'
+import { parseAndRenderMessage } from '../message/MessageParser'
 import { C } from '@deltachat/jsonrpc-client'
 import type { T } from '@deltachat/jsonrpc-client'
 
@@ -402,7 +403,7 @@ function ViewGroupInner(
               </div>
               {groupDescription && (
                 <div className='group-profile-description'>
-                  {groupDescription}
+                  {parseAndRenderMessage(groupDescription, false, 0)}
                 </div>
               )}
             </DialogContent>
