@@ -83,7 +83,7 @@ export function VisualVCardComponent({
       >
         {profileImage ? (
           <img
-            alt={displayName}
+            alt=''
             className='content'
             src={'data:image/jpeg;base64,' + profileImage}
           />
