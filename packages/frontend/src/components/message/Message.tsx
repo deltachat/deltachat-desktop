@@ -1229,7 +1229,7 @@ function WebxdcMessageContent({
     <div className='webxdc'>
       <img
         src={runtime.getWebxdcIconURL(selectedAccountId(), message.id)}
-        alt={`icon of ${info.name}`}
+        alt=''
         // No need to turn this element into a `<button>` for a11y,
         // because there is a button below that does the same.
         onClick={() => openWebxdc(message, webxdcInfo ?? undefined)}

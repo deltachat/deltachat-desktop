@@ -339,7 +339,7 @@ export function DraftAttachment({
     const iconUrl = runtime.getWebxdcIconURL(selectedAccountId(), attachment.id)
     return (
       <div className='media-attachment-webxdc'>
-        <img className='icon' src={iconUrl} alt='app icon' />
+        <img className='icon' src={iconUrl} alt='' />
         <div className='text-part'>
           <div className='name'>
             {/* `webxdcInfoFetch` is never `null` here, but TypeScript
