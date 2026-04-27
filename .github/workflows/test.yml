@@ -8,6 +8,8 @@ on:
       - 'README_ASSETS/**'
       - 'README.md'
 
+permissions: {}
+
 jobs:
   test:
     name: Tests #and E2E Tests
@@ -17,7 +19,10 @@ jobs:
         os: [ubuntu-latest, windows-latest] # macos-latest doesn't work currently: ERROR UnableToAccessScreenRecordingAPIError: The find-window process cannot access the Screen Recording API.
       fail-fast: false # don't fail fast, because some tests can be flaky so better we get all results
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v6
+      with:
+        show-progerss: false
+        persist-credentials: false
     - name: Use Node.js 22.x
       uses: actions/setup-node@v1
       with:

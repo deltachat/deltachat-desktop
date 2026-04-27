@@ -7,6 +7,8 @@ on:
     paths-ignore:
       - 'docs/**'  # only trigger build if a file outside of /docs was changed
 
+permissions: {}
+
 jobs:
   delete:
 
@@ -23,12 +25,14 @@ jobs:
         mkdir preview
         # create empty file to copy it over the outdated deliverable on download.delta.chat
         echo "This preview build is outdated and has been removed." > empty
-        cp empty preview/deltachat-desktop.${{ steps.getid.outputs.branch }}.AppImage
-        cp empty preview/deltachat-desktop.${{ steps.getid.outputs.branch }}.portable.exe
-        cp empty preview/deltachat-desktop.${{ steps.getid.outputs.branch }}.dmg
-        cp empty preview/deltachat-desktop-mas.${{ steps.getid.outputs.branch }}.zip
+        cp empty preview/deltachat-desktop.${STEPS_GETID_OUTPUTS_BRANCH}.AppImage
+        cp empty preview/deltachat-desktop.${STEPS_GETID_OUTPUTS_BRANCH}.portable.exe
+        cp empty preview/deltachat-desktop.${STEPS_GETID_OUTPUTS_BRANCH}.dmg
+        cp empty preview/deltachat-desktop-mas.${STEPS_GETID_OUTPUTS_BRANCH}.zip
+      env:
+        STEPS_GETID_OUTPUTS_BRANCH: ${{ steps.getid.outputs.branch }}
     - name: Replace builds with dummy files
-      uses: horochx/deploy-via-scp@v1.0.1
+      uses: horochx/deploy-via-scp@bf9a636d9a475a714e375ba1cc455d1c5c861aef # v1.0.1
       with:
         user: ${{ secrets.USERNAME }}
         key: ${{ secrets.KEY }}
