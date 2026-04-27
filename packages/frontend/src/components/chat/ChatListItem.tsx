@@ -12,6 +12,7 @@ import { useContextMenuWithActiveState } from '../ContextMenu'
 import { selectedAccountId } from '../../ScreenController'
 import { parseAndRenderMessage } from '../message/MessageParser'
 import { useRovingTabindex } from '../../contexts/RovingTabindex'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { shouldHideDeliveryStatus } from '../message/messageFunctions'
 
 const log = getLogger('renderer/chatlist/item')
@@ -23,8 +24,8 @@ function FreshMessageCounter({
   counter: number
   visible: boolean
 }) {
+  const tx = useTranslationFunction()
   if (counter === 0) return null
-  const tx = window.static_translate
   if (visible) {
     return (
       <span className='fresh-message-counter' aria-hidden={true}>
@@ -57,7 +58,7 @@ function Header({
   ChatListItemType,
   'lastUpdated' | 'name' | 'isPinned' | 'isMuted' | 'freshMessageCounter'
 >) {
-  const tx = window.static_translate
+  const tx = useTranslationFunction()
   return (
     <div className='header'>
       <div className='name'>
@@ -110,7 +111,7 @@ const Message = React.memo<
     summaryStatus === C.DC_STATE_IN_NOTICED
 
   const status = isIncoming ? '' : mapCoreMsgStatus2String(summaryStatus)
-
+  const tx = useTranslationFunction()
   return (
     <div className='chat-list-item-message'>
       <div className='text'>
@@ -126,15 +127,9 @@ const Message = React.memo<
         {parseAndRenderMessage(summaryText2 || '', true, -1)}
       </div>
       {isContactRequest && (
-        <div className='label'>
-          {window.static_translate('chat_request_label')}
-        </div>
+        <div className='label'>{tx('chat_request_label')}</div>
       )}
-      {isArchived && (
-        <div className='label'>
-          {window.static_translate('chat_archived_label')}
-        </div>
-      )}
+      {isArchived && <div className='label'>{tx('chat_archived_label')}</div>}
       {!isArchived &&
         !isContactRequest &&
         !shouldHideDeliveryStatus(chatType, status) &&
@@ -170,7 +165,7 @@ function ChatListItemArchiveLink({
 } & Required<
   Pick<React.HTMLAttributes<HTMLDivElement>, 'aria-setsize' | 'aria-posinset'>
 >) {
-  const tx = window.static_translate
+  const tx = useTranslationFunction()
   const { onContextMenu, isContextMenuActive } = useContextMenuWithActiveState([
     {
       label: tx('mark_all_as_read'),
@@ -516,7 +511,7 @@ export const ChatListItemMessageResult = React.memo<
     setAsActiveElement: tabindexSetAsActiveElement,
     className: tabindexClassName,
   } = useRovingTabindex(ref)
-
+  const tx = useTranslationFunction()
   if (typeof msr === 'undefined') return <PlaceholderChatListItem />
 
   return (
@@ -582,14 +577,10 @@ export const ChatListItemMessageResult = React.memo<
           <div className='message-result-author-line'>
             <div className='author-name'>{msr.authorName}</div>
             {msr.isChatContactRequest && (
-              <div className='label'>
-                {window.static_translate('chat_request_label')}
-              </div>
+              <div className='label'>{tx('chat_request_label')}</div>
             )}
             {msr.isChatArchived && (
-              <div className='label'>
-                {window.static_translate('chat_archived_label')}
-              </div>
+              <div className='label'>{tx('chat_archived_label')}</div>
             )}
           </div>
         )}
