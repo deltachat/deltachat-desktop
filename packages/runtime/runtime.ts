@@ -93,7 +93,7 @@ export interface Runtime {
   transformBlobURL(blob: string): string
   transformStickerURL(sticker_path: string): string
   /** Moves a sticker file to the system trash. The path must be an absolute
-   * filesystem path (without `file://`) inside the user's sticker folder. */
+   * filesystem path inside the user's sticker folder. */
   deleteSticker(stickerPath: string): Promise<void>
   readClipboardText(): Promise<string>
   /**

@@ -106,7 +106,7 @@ function StickersListItem(props: {
         {
           label: tx('menu_copy_image_to_clipboard'),
           action: () => {
-            runtime.writeClipboardImage(filePath.replace('file://', ''))
+            runtime.writeClipboardImage(filePath)
           },
         },
         { type: 'separator' },
@@ -116,10 +116,11 @@ function StickersListItem(props: {
           action: async () => {
             const confirmed = await openConfirmationDialog({
               message: tx('ask_delete_sticker'),
+              confirmLabel: tx('delete'),
               isConfirmDanger: true,
             })
             if (confirmed) {
-              await runtime.deleteSticker(filePath.replace('file://', ''))
+              await runtime.deleteSticker(filePath)
               onStickerDeleted()
             }
           },
@@ -135,6 +136,7 @@ function StickersListItem(props: {
       className={'sticker ' + rovingTabindex.className}
       onClick={onClick}
       onContextMenu={onContextMenu}
+      aria-haspopup='menu'
       tabIndex={rovingTabindex.tabIndex}
       onKeyDown={rovingTabindex.onKeydown}
       onFocus={rovingTabindex.setAsActiveElement}
@@ -185,7 +187,7 @@ export const StickerPicker = ({
         ))}
       </div>
       <div className='sticker-hint'>
-        <p className='description'>{tx('sticker_picker_empty_hint')}</p>
+        <p>{tx('sticker_picker_empty_hint')}</p>
       </div>
     </div>
   )

@@ -520,7 +520,10 @@ async function removeTempFile(path: string) {
 async function deleteSticker(stickerPath: string) {
   const resolved = normalize(stickerPath)
   const accountsPath = getAccountsPath()
-  if (!resolved.startsWith(accountsPath + sep)) {
+  if (
+    !resolved.startsWith(accountsPath + sep) ||
+    !resolved.includes('stickers')
+  ) {
     log.error(
       'deleteSticker was called with a path outside of the accounts dir: ',
       stickerPath
