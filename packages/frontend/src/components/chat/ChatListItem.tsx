@@ -17,20 +17,31 @@ import { shouldHideDeliveryStatus } from '../message/messageFunctions'
 
 const log = getLogger('renderer/chatlist/item')
 
-function FreshMessageCounter({ counter }: { counter: number }) {
+function FreshMessageCounter({
+  counter,
+  visible,
+}: {
+  counter: number
+  visible: boolean
+}) {
   const tx = useTranslationFunction()
-
   if (counter === 0) return null
-  return (
-    <span
-      className='fresh-message-counter'
-      aria-label={tx('chat_n_new_messages', String(counter), {
-        quantity: counter,
-      })}
-    >
-      {counter}
-    </span>
-  )
+  if (visible) {
+    return (
+      <span className='fresh-message-counter' aria-hidden={true}>
+        {counter}
+      </span>
+    )
+  } else {
+    return (
+      <span className='visually-hidden'>
+        {' ' +
+          tx('chat_n_new_messages', String(counter), {
+            quantity: counter,
+          })}
+      </span>
+    )
+  }
 }
 
 type ChatListItemType = Type.ChatListItemFetchResult & {
@@ -42,13 +53,18 @@ function Header({
   name,
   isPinned,
   isMuted,
-}: Pick<ChatListItemType, 'lastUpdated' | 'name' | 'isPinned' | 'isMuted'>) {
-  const tx = window.static_translate
+  freshMessageCounter,
+}: Pick<
+  ChatListItemType,
+  'lastUpdated' | 'name' | 'isPinned' | 'isMuted' | 'freshMessageCounter'
+>) {
+  const tx = useTranslationFunction()
   return (
     <div className='header'>
       <div className='name'>
         <span>
           <span className='truncated'>{name}</span>
+          <FreshMessageCounter counter={freshMessageCounter} visible={false} />
         </span>
       </div>
       {isMuted && <div className='mute_icon' aria-label={tx('mute')} />}
@@ -95,7 +111,7 @@ const Message = React.memo<
     summaryStatus === C.DC_STATE_IN_NOTICED
 
   const status = isIncoming ? '' : mapCoreMsgStatus2String(summaryStatus)
-
+  const tx = useTranslationFunction()
   return (
     <div className='chat-list-item-message'>
       <div className='text'>
@@ -111,21 +127,15 @@ const Message = React.memo<
         {parseAndRenderMessage(summaryText2 || '', true, -1)}
       </div>
       {isContactRequest && (
-        <div className='label'>
-          {window.static_translate('chat_request_label')}
-        </div>
+        <div className='label'>{tx('chat_request_label')}</div>
       )}
-      {isArchived && (
-        <div className='label'>
-          {window.static_translate('chat_archived_label')}
-        </div>
-      )}
+      {isArchived && <div className='label'>{tx('chat_archived_label')}</div>}
       {!isArchived &&
         !isContactRequest &&
         !shouldHideDeliveryStatus(chatType, status) &&
         status && <div className={classNames('status-icon', status)} />}
       {!isContactRequest && (
-        <FreshMessageCounter counter={freshMessageCounter} />
+        <FreshMessageCounter counter={freshMessageCounter} visible={true} />
       )}
     </div>
   )
@@ -155,7 +165,7 @@ function ChatListItemArchiveLink({
 } & Required<
   Pick<React.HTMLAttributes<HTMLDivElement>, 'aria-setsize' | 'aria-posinset'>
 >) {
-  const tx = window.static_translate
+  const tx = useTranslationFunction()
   const { onContextMenu, isContextMenuActive } = useContextMenuWithActiveState([
     {
       label: tx('mark_all_as_read'),
@@ -201,7 +211,15 @@ function ChatListItemArchiveLink({
       <div className='content'>
         <div className='archive-link'>{tx('chat_archived_chats_title')}</div>
       </div>
-      <FreshMessageCounter counter={chatListItem.freshMessageCounter} />
+      {/* 2 calls to achieve same output as above (one hidden, one visible) */}
+      <FreshMessageCounter
+        counter={chatListItem.freshMessageCounter}
+        visible={false}
+      />
+      <FreshMessageCounter
+        counter={chatListItem.freshMessageCounter}
+        visible={true}
+      />
     </button>
   )
 }
@@ -384,8 +402,8 @@ function RegularChatListItem({
           name={chat.name}
           isPinned={chat.isPinned}
           isMuted={chat.isMuted}
+          freshMessageCounter={chat.freshMessageCounter}
         />
-
         <Message
           chatType={chat.chatType}
           summaryStatus={chat.summaryStatus}
@@ -493,7 +511,7 @@ export const ChatListItemMessageResult = React.memo<
     setAsActiveElement: tabindexSetAsActiveElement,
     className: tabindexClassName,
   } = useRovingTabindex(ref)
-
+  const tx = useTranslationFunction()
   if (typeof msr === 'undefined') return <PlaceholderChatListItem />
 
   return (
@@ -559,14 +577,10 @@ export const ChatListItemMessageResult = React.memo<
           <div className='message-result-author-line'>
             <div className='author-name'>{msr.authorName}</div>
             {msr.isChatContactRequest && (
-              <div className='label'>
-                {window.static_translate('chat_request_label')}
-              </div>
+              <div className='label'>{tx('chat_request_label')}</div>
             )}
             {msr.isChatArchived && (
-              <div className='label'>
-                {window.static_translate('chat_archived_label')}
-              </div>
+              <div className='label'>{tx('chat_archived_label')}</div>
             )}
           </div>
         )}
