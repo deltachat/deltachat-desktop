@@ -27,6 +27,7 @@ import { fileURLToPath } from 'url'
 import { getLogger } from '@deltachat-desktop/shared/logger.js'
 import {
   getTempDir,
+  getAccountsPath,
   getLogsPath,
   htmlDistDir,
   INTERNAL_TMP_DIR_NAME,
@@ -350,6 +351,7 @@ export async function init(cwd: string, logHandler: LogHandler) {
     return copyFileToInternalTmpDir(name, pathToFile)
   })
   ipcMain.handle('app.removeTempFile', (_ev, path) => removeTempFile(path))
+  ipcMain.handle('app.deleteSticker', (_ev, path) => deleteSticker(path))
 
   ipcMain.handle('electron.shell.openExternal', (_ev, url) =>
     shell.openExternal(url)
@@ -516,4 +518,20 @@ async function removeTempFile(path: string) {
     throw new Error('Path is outside of the temp folder')
   }
   await rm(path)
+}
+
+async function deleteSticker(stickerPath: string) {
+  const resolved = normalize(stickerPath)
+  const accountsPath = getAccountsPath()
+  if (
+    !resolved.startsWith(accountsPath + sep) ||
+    !resolved.includes('stickers')
+  ) {
+    log.error(
+      'deleteSticker was called with a path outside of the accounts dir: ',
+      stickerPath
+    )
+    throw new Error('Invalid sticker path')
+  }
+  await shell.trashItem(resolved)
 }

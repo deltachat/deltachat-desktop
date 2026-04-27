@@ -20,6 +20,7 @@ import FullscreenMedia, {
 } from '../dialogs/FullscreenMedia'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/dialog/useDialog'
+import useConfirmationDialog from '../../hooks/dialog/useConfirmationDialog'
 import { AudioPlayer } from '../AudioPlayer'
 import { NextVoiceMessagePlayerContext } from '../../contexts/NextVoiceMessagePlayerContext'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -43,13 +44,27 @@ export default function Attachment({
 }: AttachmentProps) {
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
+  const openConfirmationDialog = useConfirmationDialog()
   if (!message.file) {
     return null
   }
   const direction = getDirection(message)
-  const onClickAttachment = (ev: any) => {
-    if (message.viewType === 'Sticker') return
+  const onClickAttachment = async (ev: any) => {
     ev.stopPropagation()
+    if (message.viewType === 'Sticker') {
+      const confirmed = await openConfirmationDialog({
+        message: tx('ask_add_sticker_to_collection'),
+        confirmLabel: tx('add_to_sticker_collection'),
+      })
+      if (confirmed) {
+        BackendRemote.rpc.miscSaveSticker(
+          selectedAccountId(),
+          message.id,
+          tx('saved')
+        )
+      }
+      return
+    }
     if (isDisplayableByFullscreenMedia(message.fileMime)) {
       openDialog(FullscreenMedia, {
         msg: message,

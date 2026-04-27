@@ -654,6 +654,9 @@ class BrowserRuntime implements Runtime {
   transformStickerURL(_sticker_path: string): string {
     throw new Error('sticker picker is not implemented yet for browser')
   }
+  async deleteSticker(_stickerPath: string): Promise<void> {
+    throw new Error('sticker picker is not implemented yet for browser')
+  }
   async showOpenFileDialog(
     options: RuntimeOpenDialogOptions
   ): Promise<string[]> {

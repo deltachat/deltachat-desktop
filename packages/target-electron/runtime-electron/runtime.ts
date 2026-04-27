@@ -262,6 +262,10 @@ class ElectronRuntime implements Runtime {
     return ipcBackend.invoke('app.removeTempFile', path)
   }
 
+  deleteSticker(stickerPath: string): Promise<void> {
+    return ipcBackend.invoke('app.deleteSticker', stickerPath)
+  }
+
   private notificationCallback: (data: {
     accountId: number
     chatId: number

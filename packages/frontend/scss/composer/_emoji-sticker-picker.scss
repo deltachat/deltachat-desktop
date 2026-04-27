@@ -81,19 +81,6 @@ $emojimart-search-height: 31px + 6px;
       scroll-padding-top: $pack-title-font-size * $pack-title-line-height +
         $pack-title-vertical-padding * 2;
 
-      .no-stickers {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        flex: 1;
-
-        & > .description {
-          font-size: large;
-          text-align: center;
-        }
-      }
-
       .sticker-pack {
         & > .title {
           padding: $pack-title-vertical-padding 0px;
@@ -142,10 +129,9 @@ $emojimart-search-height: 31px + 6px;
         }
       }
     }
-
-    .sticker-actions-container {
-      border-top: 1px solid $esp-border-color;
-      padding: 0px 12px;
+    .sticker-hint {
+      font-size: large;
+      text-align: center;
     }
   }
 }
