@@ -186,9 +186,11 @@ export const StickerPicker = ({
           />
         ))}
       </div>
-      <div className='sticker-hint'>
-        <p>{tx('sticker_picker_empty_hint')}</p>
-      </div>
+      {stickerPackNames.length === 0 && (
+        <div className='sticker-hint'>
+          <p>{tx('sticker_picker_empty_hint')}</p>
+        </div>
+      )}
     </div>
   )
 }
