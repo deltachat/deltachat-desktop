@@ -27,7 +27,7 @@ jobs:
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - uses: dtolnay/rust-toolchain@3c5f7ea28cd621ae0bf5283f0e981fb97b8a7af9
         with:
-          toolchain: 1.88
+          toolchain: 1.89
           components: rustfmt
       - run: cargo fmt --all -- --check
 
@@ -53,7 +53,7 @@ jobs:
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - uses: dtolnay/rust-toolchain@3c5f7ea28cd621ae0bf5283f0e981fb97b8a7af9
         with:
-          toolchain: 1.88
+          toolchain: 1.89
           components: clippy
           cache: false
       - name: fake html dist dir to make it build
@@ -87,7 +87,7 @@ jobs:
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - uses: dtolnay/rust-toolchain@3c5f7ea28cd621ae0bf5283f0e981fb97b8a7af9
         with:
-          toolchain: 1.88
+          toolchain: 1.89
       - name: fake html dist dir to make it build
         run: |
           mkdir packages/target-tauri/html-dist

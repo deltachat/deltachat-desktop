@@ -69,7 +69,6 @@ export async function updateCoreStrings() {
     [C.DC_STR_SENDING]: tx('sending'),
     [C.DC_STR_LAST_MSG_SENT_SUCCESSFULLY]: tx('last_msg_sent_successfully'),
     [C.DC_STR_ERROR]: tx('error_x'),
-    [C.DC_STR_NOT_SUPPORTED_BY_PROVIDER]: tx('not_supported_by_provider'),
     [C.DC_STR_MESSAGES]: tx('messages'),
     [C.DC_STR_BROADCAST_LIST]: tx('channel'),
     [C.DC_STR_PART_OF_TOTAL_USED]: tx('part_of_total_used'),

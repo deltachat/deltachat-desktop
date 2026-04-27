@@ -208,9 +208,7 @@ export default function Settings({ onClose }: DialogProps) {
             dataTestid='settings-advanced'
           />
           <DialogBody>
-            {settingsStore != null && (
-              <Advanced onClose={onClose} settingsStore={settingsStore} />
-            )}
+            {settingsStore != null && <Advanced onClose={onClose} />}
             <SettingsEndSeparator />
           </DialogBody>
         </>
