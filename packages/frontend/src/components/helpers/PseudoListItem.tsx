@@ -177,11 +177,28 @@ export const PseudoListItemAddContactOrGroupFromInviteLink = ({
       subText={tx('join_group')}
       onClick={onClick}
     />
+  ) : parsedQr?.kind === 'askJoinBroadcast' ? (
+    <PseudoListItem
+      id='newbroadcastfrominvitelink'
+      cutoff='+'
+      text={parsedQr.name}
+      subText={tx('join_channel')}
+      onClick={onClick}
+    />
+  ) : parsedQr !== null ? (
+    // Other valid QR kinds (e.g. account, login, backup2):
+    // hint the user to paste the URL in the scanner dialog.
+    <PseudoListItem
+      id='otherinvitelinkaction'
+      cutoff='+'
+      text={tx('qr_link_pasted')}
+      subText={tx('paste_in_qr_scanner')}
+      onClick={onClick}
+    >
+      <QRAvatar />
+    </PseudoListItem>
   ) : (
-    // There are many kinds of QRs. For example, if you paste an invite link
-    // of a group that you created yourself, you'll get
-    // `parsedQr.kind === "withdrawVerifyGroup"`.
-    // TODO we probably want to better handle such cases.
+    // parsedQr is null: still loading or unrecognised content.
     <PseudoListItem
       id='otherinvitelinkaction'
       cutoff='+'
