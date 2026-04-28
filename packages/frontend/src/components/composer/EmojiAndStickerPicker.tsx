@@ -14,10 +14,8 @@ import { selectedAccountId } from '../../ScreenController'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import EmojiPicker from '../EmojiPicker'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
-import useMessage from '../../hooks/chat/useMessage'
 import { ContextMenuContext } from '../../contexts/ContextMenuContext'
 import useConfirmationDialog from '../../hooks/dialog/useConfirmationDialog'
-import type { DraftObject } from '../../hooks/chat/useDraft'
 
 import styles from './styles.module.scss'
 
@@ -30,53 +28,23 @@ import {
 type Props = {
   stickerPackName: string
   stickerPackImages: string[]
-  chatId: number
   setShowEmojiPicker: (enabled: boolean) => void
   onStickerDeleted: () => void
-  draftQuote?: DraftObject['quote']
-  removeQuote?: () => void
+  onStickerClick: (stickerPath: string) => void
 }
 
 const DisplayedStickerPack = ({
   stickerPackName,
   stickerPackImages,
-  chatId,
   setShowEmojiPicker,
   onStickerDeleted,
-  draftQuote,
-  removeQuote,
+  onStickerClick,
 }: Props) => {
-  const { jumpToMessage, sendMessage } = useMessage()
-  const accountId = selectedAccountId()
-
   const listRef = useRef<HTMLDivElement>(null)
 
-  const onClickSticker = async (fileName: string) => {
+  const onClickSticker = (fileName: string) => {
     const stickerPath = fileName.replace('file://', '')
-
-    // If there's a quote, send the sticker with the quote
-    if (draftQuote && draftQuote.kind === 'WithMessage') {
-      await sendMessage(accountId, chatId, {
-        file: stickerPath,
-        viewtype: 'Sticker',
-        quotedMessageId: draftQuote.messageId,
-      })
-      removeQuote?.()
-    } else {
-      // No quote, use the existing sendSticker method
-      const msgId = await BackendRemote.rpc.sendSticker(
-        accountId,
-        chatId,
-        stickerPath
-      )
-      jumpToMessage({
-        accountId,
-        msgId,
-        msgChatId: chatId,
-        highlight: false,
-        focus: false,
-      })
-    }
+    onStickerClick(stickerPath)
     setShowEmojiPicker(false)
   }
 
@@ -171,21 +139,17 @@ export const StickerPicker = ({
   id,
   labelledBy,
   stickers,
-  chatId,
   setShowEmojiPicker,
   onStickerDeleted,
-  draftQuote,
-  removeQuote,
+  onStickerClick,
 }: {
   role: 'tabpanel' | undefined
   id: string
   labelledBy: string
   stickers: { [key: string]: string[] }
-  chatId: number
   setShowEmojiPicker: (enabled: boolean) => void
   onStickerDeleted: () => void
-  draftQuote?: DraftObject['quote']
-  removeQuote?: () => void
+  onStickerClick: (stickerPath: string) => void
 }) => {
   const tx = useTranslationFunction()
 
@@ -203,14 +167,12 @@ export const StickerPicker = ({
           <div className='sticker-container'>
             {stickerPackNames.map(name => (
               <DisplayedStickerPack
-                chatId={chatId}
                 key={name}
                 stickerPackName={name}
                 stickerPackImages={stickers[name]}
                 setShowEmojiPicker={setShowEmojiPicker}
                 onStickerDeleted={onStickerDeleted}
-                draftQuote={draftQuote}
-                removeQuote={removeQuote}
+                onStickerClick={onStickerClick}
               />
             ))}
           </div>
@@ -258,8 +220,7 @@ export const EmojiAndStickerPicker = forwardRef<
      * This is useful for the message editing mode.
      */
     hideStickerPicker?: boolean
-    draftQuote?: DraftObject['quote']
-    removeQuote?: () => void
+    onStickerClick: (stickerPath: string) => void
   }
 >((props, ref) => {
   const tx = useTranslationFunction()
@@ -267,11 +228,9 @@ export const EmojiAndStickerPicker = forwardRef<
   const accountId = selectedAccountId()
   const {
     onEmojiSelect,
-    chatId,
     setShowEmojiPicker,
     hideStickerPicker,
-    draftQuote,
-    removeQuote,
+    onStickerClick,
   } = props
 
   const [_showSticker, setShowSticker] = useState(false)
@@ -330,12 +289,10 @@ export const EmojiAndStickerPicker = forwardRef<
           role='tabpanel'
           id='emoji-sticker-picker-tabpanel-sticker'
           labelledBy='emoji-sticker-picker-tab-sticker'
-          chatId={chatId}
           stickers={stickers}
           setShowEmojiPicker={setShowEmojiPicker}
           onStickerDeleted={refreshStickers}
-          draftQuote={draftQuote}
-          removeQuote={removeQuote}
+          onStickerClick={onStickerClick}
         />
       )}
     </div>
