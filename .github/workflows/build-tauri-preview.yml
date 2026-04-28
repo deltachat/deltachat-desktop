@@ -5,6 +5,8 @@ on:
     paths:
       - packages/target-tauri/**
 
+permissions: {}
+
 jobs:
   build-tauri:
     permissions:
@@ -28,7 +30,10 @@ jobs:
 
     runs-on: ${{ matrix.platform }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
+        with:
+          show-progress: false
+          persist-credentials: false
       - uses: actions/cache@v4
         with:
           path: |
@@ -45,7 +50,7 @@ jobs:
           node-version: lts/*
 
       - name: install Rust stable
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@aad518f59d88bae90133242f9ddac7f8bbc5dddf # 1.94.1
         with:
           # Those targets are only used on macos runners so it's in an `if` to slightly speed up windows and linux builds.
           targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
@@ -63,7 +68,7 @@ jobs:
           npm i -g pnpm
           pnpm install
 
-      - uses: tauri-apps/tauri-action@v0
+      - uses: tauri-apps/tauri-action@84b9d35b5fc46c1e45415bdb6144030364f7ebc5 # v0.6.2
         id: build
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -90,7 +95,7 @@ jobs:
         id: pathsWin
         run: |
           mkdir out
-          $jsonString = '${{ steps.build.outputs.artifactPaths }}'
+          $jsonString = '$env:STEPS_BUILD_OUTPUTS_ARTIFACTPATHS'
           $filePaths = ConvertFrom-Json $jsonString
           foreach ($path in $filePaths) {
             if (Test-Path $path -PathType Leaf) {
@@ -99,6 +104,8 @@ jobs:
             }
           }
         shell: pwsh
+        env:
+          STEPS_BUILD_OUTPUTS_ARTIFACTPATHS: ${{ steps.build.outputs.artifactPaths }}
 
       - uses: actions/upload-artifact@v4
         with:
@@ -109,7 +116,10 @@ jobs:
     name: check the list of denied web permissions for webxdc
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
+        with:
+          show-progress: false
+          persist-credentials: false
       - name: check the list of denied web permissions for webxdc
         working-directory: packages/target-tauri
         run: node ../../bin/webxdc-check-permissions-policy-count.js

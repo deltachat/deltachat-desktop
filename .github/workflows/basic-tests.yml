@@ -11,13 +11,18 @@ on:
       - '.prettierrc.yml'
       - '.vscode/**'
 
+permissions: {}
+
 jobs:
   check:
     name: Code Validation
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v6
+      with:
+        show-progress: false
+        persist-credentials: false
     - name: Use Node.js 22.x
       uses: actions/setup-node@v1
       with:
@@ -34,7 +39,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v6
+      with:
+        show-progress: false
+        persist-credentials: false
+        # Make `git describe` work
+        fetch-depth: 0
     - name: Use Node.js 22.x
       uses: actions/setup-node@v1
       with:

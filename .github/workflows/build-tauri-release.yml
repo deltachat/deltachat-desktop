@@ -5,6 +5,8 @@ on:
     tags:
       - 'v*'
 
+permissions: {}
+
 jobs:
   build-tauri:
     permissions:
@@ -23,20 +25,17 @@ jobs:
 
     runs-on: ${{ matrix.platform }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/cache@v4
+      - uses: actions/checkout@v6
         with:
-          path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            packages/target-tauri/src-tauri/target/
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          show-progress: false
+          persist-credentials: false
 
       - name: setup node
         uses: actions/setup-node@v4
         with:
+          # Disable cache for release builds.
+          # This makes <https://docs.zizmor.sh/audits/#cache-poisoning> happy.
+          package-manager-cache: false
           node-version: lts/*
 
       - name: install dependencies (ubuntu only)
@@ -50,7 +49,7 @@ jobs:
           npm i -g pnpm
           pnpm install
 
-      - uses: tauri-apps/tauri-action@v0
+      - uses: tauri-apps/tauri-action@84b9d35b5fc46c1e45415bdb6144030364f7ebc5 # v0.6.2
         id: build
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
