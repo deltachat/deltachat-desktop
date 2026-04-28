@@ -86,7 +86,12 @@ test('shows warning when scanning backups that are newer than supported', async 
 
   await sendBackupDialog.getByRole('button', { name: 'Continue' }).click()
 
-  await sendBackupDialog.getByRole('button', { name: 'Copy' }).click()
+  // The "Copy" button will not appear in the context menu
+  // if we don't wait for the QR to appear.
+  await expect(sendBackupDialog.locator('img')).toBeVisible()
+
+  await sendBackupDialog.getByTestId('dialog-header-context-menu').click()
+  await page.getByRole('menuitem', { name: 'Copy' }).click()
   await page.getByTestId('alert-ok').click()
 
   const clipboardContent = await page.evaluate(async () => {
