@@ -305,6 +305,23 @@ const Composer = forwardRef<
   })
 
   const onEmojiIconClick = () => setShowEmojiPicker(!showEmojiPicker)
+  const onStickerClick = useCallback(
+    async (stickerPath: string) => {
+      const quotedMessageId =
+        draftState.quote?.kind === 'WithMessage'
+          ? draftState.quote.messageId
+          : null
+      await sendMessage(accountId, chatId, {
+        file: stickerPath,
+        viewtype: 'Sticker',
+        quotedMessageId,
+      })
+      if (quotedMessageId) {
+        removeQuote()
+      }
+    },
+    [accountId, chatId, draftState.quote, removeQuote, sendMessage]
+  )
   const shiftPressed = useRef(false)
   const onEmojiSelect = (emoji: EmojiMartData) => {
     log.debug(`EmojiPicker: Selected ${emoji.id}`)
@@ -815,6 +832,7 @@ const Composer = forwardRef<
             // The way the sticker picker currently works is that
             // it simply sends a message when you click on a sticker.
             hideStickerPicker={messageEditing.isEditingModeActive}
+            onStickerClick={onStickerClick}
           />
         )}
       </section>
