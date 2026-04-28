@@ -24,6 +24,13 @@ jobs:
     name: Upload Preview
     env:
       IS_PREVIEW: true
+
+    outputs:
+      branch: ${{ steps.prepare.outputs.branch }}
+      upload_outcome: ${{ steps.upload.outcome }}
+      artifact_outcome: ${{ steps.upload-github.outcome }}
+      artifact_url: ${{ steps.upload-github.outputs.artifact-url }}
+
     steps:
       # Preperation
       - uses: actions/checkout@v6
@@ -118,12 +125,7 @@ jobs:
           chmod 600 __TEMP_INPUT_KEY_FILE
           scp -o StrictHostKeyChecking=no -v -i __TEMP_INPUT_KEY_FILE -P "22" -r packages/target-electron/dist/preview/* "${{ secrets.USERNAME }}"@"download.delta.chat":"/var/www/html/download/desktop/preview/"
         continue-on-error: true
-      - name: 'Post links to details'
-        if: steps.upload.outcome == 'success'
-        run: node ./bin/github-actions/postLinksToDetails.js
-        env:
-          PR_BRANCH: ${{ steps.prepare.outputs.branch }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Upload result to artifacts
         if: contains(github.event.pull_request.body, '#public-preview') == false || contains(github.event.pull_request.title, 'prepare release') == false || steps.upload.outcome == 'failure'
         id: upload-github
@@ -131,9 +133,28 @@ jobs:
         with:
           name: ${{ matrix.os }} output
           path: packages/target-electron/dist/preview/
-      - name: 'Post links to GitHub artifact to details'
-        if: steps.upload-github.outcome == 'success'
+
+  post-links:
+    name: Post links to details
+    needs: upload-preview
+    runs-on: ubuntu-latest
+
+    permissions:
+      statuses: write
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: 'Post links to details'
+        if: needs.upload-preview.outputs.upload_outcome == 'success'
         run: node ./bin/github-actions/postLinksToDetails.js
         env:
-          FULL_ARTIFACT_URL: ${{ steps.upload-github.outputs.artifact-url }}
+          PR_BRANCH: ${{ needs.upload-preview.outputs.branch }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 'Post links to GitHub artifact to details'
+        if: needs.upload-preview.outputs.artifact_outcome == 'success'
+        run: node ./bin/github-actions/postLinksToDetails.js
+        env:
+          FULL_ARTIFACT_URL: ${{ needs.upload-preview.outputs.artifact_url }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
