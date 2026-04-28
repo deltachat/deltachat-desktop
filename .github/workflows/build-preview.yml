@@ -63,10 +63,12 @@ jobs:
       - name: LINUX renaming / upload Preperation
         if: runner.os == 'Linux'
         working-directory: packages/target-electron
+        env:
+          BRANCH: ${{ steps.prepare.outputs.branch }}
         run: |
           cd dist
           mkdir preview
-          mv *.AppImage preview/deltachat-desktop.${{ steps.prepare.outputs.branch }}.AppImage
+          mv *.AppImage preview/deltachat-desktop.$BRANCH.AppImage
           ls preview
           cd ..
       - name: MAC electron builder
@@ -85,27 +87,33 @@ jobs:
       - name: MAC renaming / upload Preperation
         if: runner.os == 'macOS'
         working-directory: packages/target-electron
+        env:
+          BRANCH: ${{ steps.prepare.outputs.branch }}
         run: |
           ls -lah dist
           mkdir -p dist/preview
-          zip -r dist/preview/deltachat-desktop-mas.${{ steps.prepare.outputs.branch }}.zip dist/mas-universal
+          zip -r dist/preview/deltachat-desktop-mas.$BRANCH.zip dist/mas-universal
           cd dist
-          mv *.dmg preview/deltachat-desktop.${{ steps.prepare.outputs.branch }}.dmg || true
+          mv *.dmg preview/deltachat-desktop.$BRANCH.dmg || true
           cd ..
           ls dist/preview
       - name: WINDOWS electron builder
         if: runner.os == 'Windows'
+        env:
+          BRANCH: ${{ steps.prepare.outputs.branch }}
         run: |
           cd packages/target-electron
           set DEBUG=electron-builder
-          pnpm electron-builder --win portable --config.artifactName="deltachat-desktop.${{ steps.prepare.outputs.branch }}.portable.exe"
+          pnpm electron-builder --win portable --config.artifactName="deltachat-desktop.$env:BRANCH.portable.exe"
       - name: WINDOWS renaming / upload Preperation
         if: runner.os == 'Windows'
         working-directory: packages/target-electron/dist
+        env:
+          BRANCH: ${{ steps.prepare.outputs.branch }}
         run: |
           dir
           mkdir preview
-          move Delta*Chat*.exe preview/deltachat-desktop.${{ steps.prepare.outputs.branch }}.portable.exe
+          move Delta*Chat*.exe preview/deltachat-desktop.$env:BRANCH.portable.exe
           dir preview
           cd ..
       # Upload Step
