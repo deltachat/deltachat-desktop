@@ -11,12 +11,10 @@ import {
   MessageTypeAttachmentSubset,
 } from './Attachment'
 import { runtime } from '@deltachat-desktop/runtime-interface'
-import { getDirection } from '../../utils/getDirection'
 import { Type } from '../../backend-com'
 import FullscreenMedia, {
   NeighboringMediaMode,
 } from '../dialogs/FullscreenMedia'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/dialog/useDialog'
 import useConfirmationDialog from '../../hooks/dialog/useConfirmationDialog'
 import { AudioPlayer } from '../AudioPlayer'
@@ -28,6 +26,7 @@ import { selectedAccountId } from '../../ScreenController'
 import { BackendRemote } from '../../backend-com'
 import { useRpcFetch } from '../../hooks/useFetch'
 import { useHasChanged2 } from '../../hooks/useHasChanged'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 type AttachmentProps = {
   text?: string
@@ -40,13 +39,12 @@ export default function Attachment({
   message,
   tabindexForInteractiveContents,
 }: AttachmentProps) {
-  const tx = useTranslationFunction()
   const { openDialog } = useDialog()
   const openConfirmationDialog = useConfirmationDialog()
+  const tx = useTranslationFunction()
   if (!message.file) {
     return null
   }
-  const direction = getDirection(message)
   const onClickAttachment = async (ev: any) => {
     ev.stopPropagation()
     if (message.viewType === 'Sticker') {
@@ -140,15 +138,6 @@ export default function Attachment({
   // For attachments which aren't full-frame
   const withContentBelow = withCaption
   if (isImage(message.viewType) || message.viewType === 'Sticker') {
-    if (!message.file) {
-      return (
-        <div
-          className={classNames('message-attachment-broken-media', direction)}
-        >
-          {tx('attachment_failed_to_load')}
-        </div>
-      )
-    }
     return (
       <button
         type='button'
@@ -172,19 +161,6 @@ export default function Attachment({
       </button>
     )
   } else if (message.viewType === 'Video') {
-    if (!message.file) {
-      return (
-        <button
-          type='button'
-          onClick={onClickAttachment}
-          tabIndex={tabindexForInteractiveContents}
-          style={{ cursor: 'pointer' }}
-          className={classNames('message-attachment-broken-media', direction)}
-        >
-          {tx('attachment_failed_to_load')}
-        </button>
-      )
-    }
     // the native fullscreen option is better right now so we don't need to open our own one
     return (
       <div
