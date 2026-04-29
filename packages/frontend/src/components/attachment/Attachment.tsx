@@ -10,9 +10,9 @@ export function hasAttachment(attachment: MessageTypeAttachmentSubset | null) {
   return attachment && attachment.file
 }
 
-// note that we rely on the viewTypes from core here to make sure all Deltachat clients
+// note that we rely on the viewTypes from core here to make sure all Delta Chat clients
 // display the same attachment types in the same way - although this could result in not
-// showing some attachments even if we could show them (like svg for example)
+// showing some attachments as files even if we could show them as media (like svg for example)
 // see guess_msgtype_from_path_suffix in https://github.com/chatmail/core/blob/main/src/message.rs
 const MEDIA_VIEW_TYPES = ['Image', 'Gif', 'Video', 'Audio', 'Voice'] as const
 
