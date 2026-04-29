@@ -178,7 +178,7 @@ $paddingVertical: 20px;
   }
   @media (width <= variables.$default-dialog-width) {
     & + & {
-      margin-inline-start: 10px;
+      margin-inline-start: 0;
     }
   }
 }
