@@ -12,7 +12,9 @@ on:
       - '.prettierrc.yml'
       - '.vscode/**'
 
-permissions: {}
+permissions:
+  # For `postLinksToDetails.js`.
+  statuses: write
 
 jobs:
   upload-preview:
