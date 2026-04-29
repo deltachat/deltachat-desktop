@@ -173,7 +173,7 @@ export default class ScreenController extends Component {
       return
     }
 
-    // Now that we automatically invalidate `chatId` when `accountId` changes
+    // Since we automatically invalidate `chatId` when `accountId` changes
     // in `ChatContext`, one might think that it's not necessary
     // to explicitly `unselectChat()` here.
     // But apparently without this we still get `chatId` leaking between
