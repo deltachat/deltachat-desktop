@@ -887,6 +887,10 @@ export const MessageListInner = React.memo(
         ref={messageListRef}
         onScroll={onScroll2}
         onWheel={onWheel}
+        className={classNames({
+          'multiselected-one-or-more':
+            focusAndMultiselectContextValue.selectedItems.size >= 1,
+        })}
       >
         <ol aria-label={tx('messages')}>
           <RovingTabindexProvider wrapperElementRef={messageListRef}>
