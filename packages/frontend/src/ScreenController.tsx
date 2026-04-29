@@ -173,6 +173,14 @@ export default class ScreenController extends Component {
       return
     }
 
+    // Since we automatically invalidate `chatId` when `accountId` changes
+    // in `ChatContext`, one might think that it's not necessary
+    // to explicitly `unselectChat()` here.
+    // But apparently without this we still get `chatId` leaking between
+    // different `accountId`s, namely when loading recent app icons
+    // while rapidly switching accounts.
+    // Maybe this has to do with us using `window.__selectedAccountId`
+    // in some places and the `accountId` prop in others.
     this.unselectChatRef.current?.()
 
     const previousAccountId = this.selectedAccountId
