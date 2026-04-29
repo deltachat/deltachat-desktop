@@ -20,7 +20,13 @@ export default function WebxdcSaveToChatDialog(props: Props) {
   const tx = useTranslationFunction()
   const createDraftMessage = useCreateDraftMessage()
 
-  const onChatClick = async (chatId: number, accountId: number) => {
+  const onChatClick = async ({
+    targetAccountId,
+    chatId,
+  }: {
+    targetAccountId: number
+    chatId: number
+  }) => {
     const file2: Parameters<typeof createDraftMessage>[3] = file
       ? {
           path: await runtime.writeTempFileFromBase64(
@@ -34,7 +40,7 @@ export default function WebxdcSaveToChatDialog(props: Props) {
       : undefined
     // Close dialog before createDraftMessage because it may switch accounts
     onClose()
-    await createDraftMessage(accountId, chatId, messageText ?? '', file2)
+    await createDraftMessage(targetAccountId, chatId, messageText ?? '', file2)
   }
 
   const onSaveClick = async () => {

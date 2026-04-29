@@ -206,7 +206,13 @@ function ShareProfileDialog(
   const currentAccountId = selectedAccountId()
   const createDraftMessage = useCreateDraftMessage()
 
-  const onChatClick = async (targetAccountId: number, chatId: number) => {
+  const onChatClick = async ({
+    targetAccountId,
+    chatId,
+  }: {
+    targetAccountId: number
+    chatId: number
+  }) => {
     // Close dialogs before createDraftMessage because it may switch accounts
     onClose()
     onParentClose()

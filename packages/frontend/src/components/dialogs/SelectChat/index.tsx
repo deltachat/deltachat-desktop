@@ -24,7 +24,13 @@ import { RovingTabindexProvider } from '../../../contexts/RovingTabindex'
 type Props = {
   onClose: DialogProps['onClose']
   headerTitle: string
-  onChatClick: (accountId: number, chatId: number) => void
+  onChatClick: ({
+    targetAccountId,
+    chatId,
+  }: {
+    targetAccountId: number
+    chatId: number
+  }) => void
   listFlags: number
   footer?: React.ReactElement
   /** Whether to show the account switch button (when multiple accounts exist) */
@@ -97,7 +103,9 @@ export default function SelectChat(props: Props) {
           key={accountId}
           accountId={accountId}
           listFlags={props.listFlags}
-          onChatClick={chatId => props.onChatClick(accountId, chatId)}
+          onChatClick={chatId =>
+            props.onChatClick({ targetAccountId: accountId, chatId })
+          }
           accountSwitch={accountSwitch}
         />
       </DialogBody>
