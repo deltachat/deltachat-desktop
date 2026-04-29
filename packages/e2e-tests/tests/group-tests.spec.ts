@@ -425,9 +425,7 @@ test('Add group description', async () => {
   // Open group profile
   await page.getByTestId('chat-info-button').click()
 
-  // Description should not be visible initially
   const descriptionDiv = page.locator('.group-profile-description')
-  await expect(descriptionDiv).not.toBeVisible()
 
   // Open edit dialog
   await page.getByTestId('view-group-dialog-header-edit').click()
