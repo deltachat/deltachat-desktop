@@ -16,6 +16,10 @@ export type Props = {
   message: string
   okBtnLabel?: string
   dataTestid?: string
+  dialogComponentProps?: Omit<
+    Parameters<typeof Dialog>[0],
+    'dataTestid' | 'onClose'
+  >
 } & DialogProps
 
 export default function AlertDialog({
@@ -24,6 +28,7 @@ export default function AlertDialog({
   cb,
   okBtnLabel,
   dataTestid,
+  dialogComponentProps,
 }: Props) {
   const tx = useTranslationFunction()
 
@@ -34,7 +39,8 @@ export default function AlertDialog({
 
   return (
     <Dialog
-      width={350}
+      {...dialogComponentProps}
+      width={dialogComponentProps?.width ?? 350}
       onClose={() => {
         cb && cb()
         onClose()

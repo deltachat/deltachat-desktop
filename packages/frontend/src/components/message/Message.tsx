@@ -1004,6 +1004,9 @@ export default function Message(props: {
                   message: message.error
                     ? tx('error_x', message.error)
                     : tx('ok'),
+                  dialogComponentProps: {
+                    width: 500,
+                  },
                 })
               }
               viewType={message.viewType}
