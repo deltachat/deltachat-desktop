@@ -97,7 +97,7 @@ export default function SelectChat(props: Props) {
           key={accountId}
           accountId={accountId}
           listFlags={props.listFlags}
-          onChatClick={props.onChatClick}
+          onChatClick={chatId => props.onChatClick(accountId, chatId)}
           accountSwitch={accountSwitch}
         />
       </DialogBody>
@@ -109,7 +109,7 @@ export default function SelectChat(props: Props) {
 type SelectChatListProps = {
   accountId: number
   listFlags: number
-  onChatClick: (accountId: number, chatId: number) => void
+  onChatClick: (chatId: number) => void
   accountSwitch: ReactElement | undefined
 }
 
@@ -179,8 +179,7 @@ function SelectChatList({
                   itemData={{
                     chatCache,
                     chatListIds,
-                    onChatClick: (chatId: number) =>
-                      onChatClick(accountId, chatId),
+                    onChatClick,
 
                     activeChatId: null,
                     activeContextMenuChatIds: [],
