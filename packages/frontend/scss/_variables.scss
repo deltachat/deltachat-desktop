@@ -55,4 +55,4 @@ $z-index: (
 // setting z-index to 0 creates a new scope for children without changing the ordering of the parent element
 $z-index-new-local-scope: 0;
 
-$default-dialog-width: 500px;
+$dialog-breakpoint: 500px;
