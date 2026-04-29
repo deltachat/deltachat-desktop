@@ -16,10 +16,10 @@ export function defaultCredentials(credentials?: Credentials): Credentials {
   const defaultCredentials: Credentials = {
     addr: '',
     imapUser: null,
-    imapFolder: null,
     password: '',
     imapServer: null,
     imapPort: null,
+    imapFolder: '',
     imapSecurity: null,
     certificateChecks: null,
     smtpUser: null,
