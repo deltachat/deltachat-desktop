@@ -24,6 +24,7 @@ jobs:
     name: Upload Preview
     env:
       IS_PREVIEW: true
+      BRANCH: ${{ steps.prepare.outputs.branch }}
     steps:
       # Preperation
       - uses: actions/checkout@v6
@@ -63,8 +64,6 @@ jobs:
       - name: LINUX renaming / upload Preperation
         if: runner.os == 'Linux'
         working-directory: packages/target-electron
-        env:
-          BRANCH: ${{ steps.prepare.outputs.branch }}
         run: |
           cd dist
           mkdir preview
@@ -87,8 +86,6 @@ jobs:
       - name: MAC renaming / upload Preperation
         if: runner.os == 'macOS'
         working-directory: packages/target-electron
-        env:
-          BRANCH: ${{ steps.prepare.outputs.branch }}
         run: |
           ls -lah dist
           mkdir -p dist/preview
@@ -99,8 +96,6 @@ jobs:
           ls dist/preview
       - name: WINDOWS electron builder
         if: runner.os == 'Windows'
-        env:
-          BRANCH: ${{ steps.prepare.outputs.branch }}
         run: |
           cd packages/target-electron
           set DEBUG=electron-builder
@@ -108,8 +103,6 @@ jobs:
       - name: WINDOWS renaming / upload Preperation
         if: runner.os == 'Windows'
         working-directory: packages/target-electron/dist
-        env:
-          BRANCH: ${{ steps.prepare.outputs.branch }}
         run: |
           dir
           mkdir preview
