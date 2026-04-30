@@ -32,42 +32,7 @@ import {
 } from '../../contexts/RovingTabindex'
 import { marknoticedChat } from '../../backend/chat'
 
-const onWindowFocus = (accountId: number) => {
-  log.debug('window focused')
-  const messageElements: HTMLElement[] = Array.prototype.slice.call(
-    document.querySelectorAll('#message-list .message-observer-bottom')
-  )
-
-  const visibleElements = messageElements.filter(el => {
-    const rect = el.getBoundingClientRect()
-    return (
-      rect.top >= 0 &&
-      rect.left >= 0 &&
-      rect.bottom <=
-        (window.innerHeight || document.documentElement.clientHeight) &&
-      rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-    )
-  })
-
-  const messageIdsToMarkAsRead = visibleElements
-    .map(el =>
-      el.dataset.messageid ? Number.parseInt(el.dataset.messageid) : undefined
-    )
-    .filter(id => id != undefined)
-
-  if (messageIdsToMarkAsRead.length !== 0) {
-    log.debug(
-      `window was focused: marking ${messageIdsToMarkAsRead.length} visible messages as read`,
-      messageIdsToMarkAsRead
-    )
-    // FYI we also listen for `MsgsNoticed` event
-    // to update the badge counter,
-    // so `.then(debouncedUpdateBadgeCounter)` is probably not necessary.
-    BackendRemote.rpc
-      .markseenMsgs(accountId, messageIdsToMarkAsRead)
-      .then(throttledUpdateBadgeCounter)
-  }
-}
+// markVisibleMessagesAsRead and onWindowFocus moved inside MessageList component
 
 /**
  * Returns a "live" version of `FullChat.freshMessageCounter`.
@@ -228,11 +193,57 @@ export default function MessageList({
     })
   }, [onUnreadMessageInView])
 
+  const markVisibleMessagesAsRead = useCallback(
+    (reason: string) => {
+      const messageElements: HTMLElement[] = Array.prototype.slice.call(
+        document.querySelectorAll('#message-list .message-observer-bottom')
+      )
+
+      const visibleElements = messageElements.filter(el => {
+        const rect = el.getBoundingClientRect()
+        return (
+          rect.top >= 0 &&
+          rect.left >= 0 &&
+          rect.bottom <=
+            (window.innerHeight || document.documentElement.clientHeight) &&
+          rect.right <=
+            (window.innerWidth || document.documentElement.clientWidth)
+        )
+      })
+
+      const messageIdsToMarkAsRead = visibleElements
+        .map(el => {
+          const id = el.dataset.messageid
+            ? Number.parseInt(el.dataset.messageid)
+            : undefined
+          if (id != undefined) {
+            unreadMessageInViewIntersectionObserver.unobserve(el)
+          }
+          return id
+        })
+        .filter(id => id != undefined) as number[]
+
+      if (messageIdsToMarkAsRead.length !== 0) {
+        log.debug(
+          `${reason}: marking ${messageIdsToMarkAsRead.length} visible messages as read`,
+          messageIdsToMarkAsRead
+        )
+        // FYI we also listen for `MsgsNoticed` event
+        // to update the badge counter,
+        // so `.then(debouncedUpdateBadgeCounter)` is probably not necessary.
+        BackendRemote.rpc
+          .markseenMsgs(accountId, messageIdsToMarkAsRead)
+          .then(throttledUpdateBadgeCounter)
+      }
+    },
+    [accountId, unreadMessageInViewIntersectionObserver]
+  )
+
   useEffect(() => {
-    const onFocus = onWindowFocus.bind(null, accountId)
+    const onFocus = () => markVisibleMessagesAsRead('window focused')
     window.addEventListener('focus', onFocus)
     return () => window.removeEventListener('focus', onFocus)
-  }, [accountId])
+  }, [markVisibleMessagesAsRead])
 
   useEffect(() => {
     return () => {
@@ -574,6 +585,11 @@ export default function MessageList({
         // let's invoke `onScroll`, e.g. to load more messages if we're close
         // to top / bottom
         onScroll()
+        // Also, since we just unlocked the scroll, let's mark visible messages
+        // as read, because they might have been rendered while the scroll
+        // was locked, in which case `onUnreadMessageInView` would have
+        // ignored them.
+        markVisibleMessagesAsRead('scroll unlocked')
       }, 0)
     }, 0)
   }, [
@@ -584,6 +600,7 @@ export default function MessageList({
     viewState.lastKnownScrollHeight,
     viewState.scrollTo,
     isReactionsBarShown,
+    markVisibleMessagesAsRead,
   ])
 
   useLayoutEffect(() => {
