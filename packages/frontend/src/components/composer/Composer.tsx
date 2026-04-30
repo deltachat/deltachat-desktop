@@ -222,7 +222,7 @@ const Composer = forwardRef<
     messageEditing.isEditingModeActive || draftIsLoading
       ? null
       : async () => {
-          // Focus message input
+          // Focus message input to handle touch / mouse click
           setTimeout(() => {
             regularMessageInputRef.current?.focus()
           })
