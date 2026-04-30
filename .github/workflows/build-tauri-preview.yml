@@ -80,9 +80,11 @@ jobs:
       - name: run move artifacts
         if: matrix.platform != 'windows-latest'
         id: paths
+        env:
+          ARTIFACT_PATHS: ${{ steps.build.outputs.artifactPaths }}
         run: |
           mkdir out
-          paths=$(echo '${{ steps.build.outputs.artifactPaths }}' | jq -c '.[]' | sed 's/"//g')
+          paths=$(echo "$ARTIFACT_PATHS" | jq -c '.[]' | sed 's/"//g')
           for fn in $paths; do
             if [[ -f $fn ]]; then
               echo "copy $fn"

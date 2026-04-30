@@ -25,16 +25,11 @@ jobs:
             ~/.cargo/git/db/
             target/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-      - uses: actions-rs/toolchain@16499b5e05bf2e26879000db0c1d13f7e13fa3af # v1.0.7
+      - uses: dtolnay/rust-toolchain@3c5f7ea28cd621ae0bf5283f0e981fb97b8a7af9
         with:
-          profile: minimal
           toolchain: 1.88
-          override: true
-      - run: rustup component add rustfmt
-      - uses: actions-rs/cargo@844f36862e911db73fe0815f00a4a2602c279505 # v1.0.3
-        with:
-          command: fmt
-          args: --all -- --check
+          components: rustfmt
+      - run: cargo fmt --all -- --check
 
   run_clippy:
     runs-on: ubuntu-22.04
@@ -56,21 +51,19 @@ jobs:
             ~/.cargo/git/db/
             target/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-      - uses: actions-rs/toolchain@16499b5e05bf2e26879000db0c1d13f7e13fa3af # v1.0.7
+      - uses: dtolnay/rust-toolchain@3c5f7ea28cd621ae0bf5283f0e981fb97b8a7af9
         with:
           toolchain: 1.88
           components: clippy
-          override: true
+          cache: false
       - name: fake html dist dir to make it build
         run: |
           mkdir packages/target-tauri/html-dist
           touch packages/target-tauri/html-dist/tauri_main.html
-      - uses: actions-rs/clippy-check@b5b5f21f4797c02da247df37026fcd0a5024aa4d # v1.0.7
+      - name: Run clippy
         env:
           VERSION_INFO_GIT_REF: ${{ github.ref }}
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          args: --workspace --tests --examples
+        run: cargo clippy --workspace --tests --examples
 
   run_tests:
     runs-on: ubuntu-22.04
@@ -92,11 +85,9 @@ jobs:
             ~/.cargo/git/db/
             target/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-      - uses: actions-rs/toolchain@16499b5e05bf2e26879000db0c1d13f7e13fa3af # v1.0.7
+      - uses: dtolnay/rust-toolchain@3c5f7ea28cd621ae0bf5283f0e981fb97b8a7af9
         with:
           toolchain: 1.88
-          components: clippy
-          override: true
       - name: fake html dist dir to make it build
         run: |
           mkdir packages/target-tauri/html-dist
