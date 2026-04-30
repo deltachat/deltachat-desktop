@@ -616,7 +616,7 @@ export function EditGroupNameDialog({
                   marginBottom: '-18px',
                 }}
               >
-                {!tx('please_enter_chat_name')}
+                {tx('please_enter_chat_name')}
               </p>
             )}
             <DeltaTextarea
