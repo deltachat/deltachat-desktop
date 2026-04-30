@@ -1005,7 +1005,7 @@ export default function Message(props: {
                     ? tx('error_x', message.error)
                     : tx('ok'),
                   dialogComponentProps: {
-                    width: 500,
+                    width: 600,
                   },
                 })
               }
