@@ -105,13 +105,11 @@ export function QrCodeShowQrInner({
   qrCodeSVG,
   description,
   onClose,
-  onBack,
 }: {
   qrCode: string
   qrCodeSVG?: string
   description: string
   onClose?: todo
-  onBack?: todo
 }) {
   const { userFeedback } = useContext(ScreenContext)
   const tx = useTranslationFunction()
@@ -169,7 +167,7 @@ export function QrCodeShowQrInner({
           accountId,
           qrCode,
           SCAN_CONTEXT_TYPE.DEFAULT, // no need to set a specific context here
-          onBack || onClose
+          onClose
         ),
       dataTestid: 'withdraw-qr-code',
     },
@@ -224,7 +222,7 @@ export function QrCodeShowQrInner({
         </DialogContent>
       </DialogBody>
       <DialogFooter>
-        <FooterActions align={!onClose && !onBack ? 'center' : 'spaceBetween'}>
+        <FooterActions align={!onClose ? 'center' : 'spaceBetween'}>
           <FooterActionButton data-testid='copy-qr-code' onClick={onCopy}>
             <div className='copy-link-icon'></div>
             {tx('menu_copy_link_to_clipboard')}
@@ -232,11 +230,6 @@ export function QrCodeShowQrInner({
           {onClose && (
             <FooterActionButton onClick={onClose} data-testid='close'>
               {tx('close')}
-            </FooterActionButton>
-          )}
-          {onBack && (
-            <FooterActionButton onClick={onBack} data-testid='back'>
-              {tx('back')}
             </FooterActionButton>
           )}
         </FooterActions>
