@@ -213,7 +213,7 @@ function ShareProfileDialog(
     targetAccountId: number
     chatId: number
   }) => {
-    // Close dialogs before createDraftMessage because it may switch accounts
+    // Close dialogs before createDraftMessage
     onClose()
     onParentClose()
 

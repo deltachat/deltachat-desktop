@@ -47,17 +47,21 @@ export default function SelectChat(props: Props) {
     ? targetAccountId
     : currentAccountId
 
-  const configuredAccountsFetch = useRpcFetch(getConfiguredAccounts, [])
+  const configuredAccountsFetch = useRpcFetch(
+    getConfiguredAccounts,
+    props.enableAccountSwitch ? [] : null
+  )
   const hasMultipleAccounts = props.enableAccountSwitch
-    ? configuredAccountsFetch.result?.ok
-      ? configuredAccountsFetch.result.value.length > 1
+    ? configuredAccountsFetch?.result?.ok
+      ? configuredAccountsFetch?.result.value.length > 1
       : false
     : false
 
-  const accountFetch = useRpcFetch(BackendRemote.rpc.getAccountInfo, [
-    accountId,
-  ])
-  const accountInfo = accountFetch.lingeringResult?.ok
+  const accountFetch = useRpcFetch(
+    BackendRemote.rpc.getAccountInfo,
+    props.enableAccountSwitch ? [accountId] : null
+  )
+  const accountInfo = accountFetch?.lingeringResult?.ok
     ? accountFetch.lingeringResult.value
     : null
 
