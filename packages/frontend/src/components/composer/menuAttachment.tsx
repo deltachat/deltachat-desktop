@@ -92,10 +92,12 @@ export default function MenuAttachment({
       setLastPath(dirname(files[0]))
       // for Audio, Video & Vcard set a ViewType that has a preview here
       let viewType = 'File' as T.Viewtype
-      if (AUDIO_EXTENSIONS.some(ext => files[0].toLowerCase().endsWith(ext))) {
+      if (
+        AUDIO_EXTENSIONS.some(ext => files[0].toLowerCase().endsWith('.' + ext))
+      ) {
         viewType = 'Audio'
       } else if (
-        VIDEO_EXTENSIONS.some(ext => files[0].toLowerCase().endsWith(ext))
+        VIDEO_EXTENSIONS.some(ext => files[0].toLowerCase().endsWith('.' + ext))
       ) {
         viewType = 'Video'
       } else if (files[0].toLowerCase().endsWith('.vcf')) {
