@@ -1,9 +1,13 @@
+/*
+  Audio player styles.
+
+  The component uses theme-aware CSS variables so the message container can
+  provide colors for different chat themes. When those variables are not set,
+  the player falls back to inherited text color and neutral defaults to remain
+  readable in both light and dark themes.
+*/
+
 .audioPlayer {
-  /*
-    Theme-aware variables:
-    بهتره والد/بابِل پیام این‌ها رو ست کنه.
-    اگر ست نشدن، از رنگ متن ارث‌بری می‌کنیم تا توی تم سفید/تیره بهتر کار کنه.
-  */
   --text: var(--message-fg, var(--dc-message-fg, currentColor));
   --muted: var(--message-muted, var(--dc-message-muted, rgba(128, 128, 128, 0.78)));
   --accent: var(--message-accent, var(--dc-message-accent, currentColor));

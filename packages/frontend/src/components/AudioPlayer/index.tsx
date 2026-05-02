@@ -1,3 +1,14 @@
+/**
+ * Provides audio playback UI and resolves display metadata from multiple sources.
+ *
+ * Priority order:
+ * 1. Explicit component props
+ * 2. Native audio element metadata
+ * 3. `music-metadata` blob parsing
+ * 4. File name inference
+ *
+ * This keeps the component resilient without relying on a custom metadata decoder.
+ */
 import React, {
   useCallback,
   useEffect,
@@ -5,12 +16,9 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import { parseBlob } from 'music-metadata';
 import styles from './styles.module.scss';
 import ForceMutedAudioPlayer from './ForceMutedAudioPlayer';
-import {
-  extractAudioMetadata,
-  type ExtractedAudioMetadata,
-} from './extractAudioMetadata';
 
 export type AudioPlayerProps = {
   src: string;
@@ -29,6 +37,13 @@ export type AudioPlayerProps = {
   onTimeUpdate?: React.ReactEventHandler<HTMLAudioElement>;
   onLoadedMetadata?: React.ReactEventHandler<HTMLAudioElement>;
   onDurationChange?: React.ReactEventHandler<HTMLAudioElement>;
+};
+
+type ExtractedAudioMetadata = {
+  title?: string;
+  artist?: string;
+  coverUrl?: string;
+  duration?: number;
 };
 
 function formatTime(seconds: number): string {
@@ -74,10 +89,14 @@ function getFileNameFromSrc(src?: string): string | undefined {
 }
 
 function removeAudioExtension(fileName: string): string {
-  return fileName.replace(/\.(mp3|m4a|aac|ogg|opus|wav|flac|webm|amr|mpeg)$/i, '').trim();
+  return fileName
+    .replace(/\.(mp3|m4a|aac|ogg|opus|wav|flac|webm|amr|mpeg)$/i, '')
+    .trim();
 }
 
-function guessMetadataFromFileName(fileName?: string): { title?: string; artist?: string } {
+function guessMetadataFromFileName(
+  fileName?: string
+): { title?: string; artist?: string } {
   if (!fileName) return {};
   const fileNameWithoutQuery = fileName.split('?')[0].split('#')[0];
   if (isProbablyHashLike(fileNameWithoutQuery)) return {};
@@ -122,6 +141,53 @@ function getInitials(title?: string): string {
   return `${words[0].slice(0, 1)}${words[1].slice(0, 1)}`.toUpperCase();
 }
 
+function uint8ArrayToBlob(data: Uint8Array, mimeType?: string): Blob {
+  return new Blob([data], {
+    type: mimeType || 'image/jpeg',
+  });
+}
+
+async function extractAudioMetadataWithMusicMetadata(
+  src: string
+): Promise<ExtractedAudioMetadata> {
+  const response = await fetch(src);
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch audio source: ${response.status}`);
+  }
+
+  const blob = await response.blob();
+  const metadata = await parseBlob(blob);
+
+  const title = cleanText(metadata.common.title);
+  const artist = cleanText(metadata.common.artist);
+  const duration =
+    typeof metadata.format.duration === 'number' &&
+    Number.isFinite(metadata.format.duration) &&
+    metadata.format.duration > 0
+      ? metadata.format.duration
+      : undefined;
+
+  const picture = metadata.common.picture?.[0];
+
+  let coverUrl: string | undefined;
+
+  if (picture?.data) {
+    const imageBlob = uint8ArrayToBlob(
+      picture.data,
+      picture.format || 'image/jpeg'
+    );
+    coverUrl = URL.createObjectURL(imageBlob);
+  }
+
+  return {
+    title,
+    artist,
+    coverUrl,
+    duration,
+  };
+}
+
 export function AudioPlayer({
   src,
   title: propTitle,
@@ -152,7 +218,8 @@ export function AudioPlayer({
   const [internalDuration, setInternalDuration] = useState(propDuration ?? 0);
   const [seekPreview, setSeekPreview] = useState<number | null>(null);
 
-  const [extractedMetadata, setExtractedMetadata] = useState<ExtractedAudioMetadata>({});
+  const [extractedMetadata, setExtractedMetadata] =
+    useState<ExtractedAudioMetadata>({});
   const [isMetadataLoading, setIsMetadataLoading] = useState(false);
 
   useEffect(() => {
@@ -181,7 +248,7 @@ export function AudioPlayer({
       setIsMetadataLoading(true);
 
       try {
-        const metadata = await extractAudioMetadata(src);
+        const metadata = await extractAudioMetadataWithMusicMetadata(src);
 
         if (cancelled) {
           if (metadata.coverUrl) {
@@ -200,6 +267,17 @@ export function AudioPlayer({
         }
 
         setExtractedMetadata(metadata);
+
+        if (
+          typeof metadata.duration === 'number' &&
+          Number.isFinite(metadata.duration) &&
+          metadata.duration > 0
+        ) {
+          setInternalDuration((prev) => {
+            if (propDuration && propDuration > 0) return prev;
+            return metadata.duration as number;
+          });
+        }
       } catch (error) {
         console.warn('Failed to extract audio metadata:', error);
 
@@ -218,7 +296,7 @@ export function AudioPlayer({
     return () => {
       cancelled = true;
     };
-  }, [src]);
+  }, [src, propDuration]);
 
   useEffect(() => {
     return () => {
@@ -249,15 +327,18 @@ export function AudioPlayer({
     cleanText(extractedMetadata.artist) ||
     guessed.artist;
 
-  const resolvedCoverUrl =
-    propCoverUrl ||
-    extractedMetadata.coverUrl;
+  const resolvedCoverUrl = propCoverUrl || extractedMetadata.coverUrl;
 
-  const resolvedDuration = propDuration ?? internalDuration ?? 0;
+  const resolvedDuration =
+    propDuration ??
+    internalDuration ??
+    extractedMetadata.duration ??
+    0;
 
-  const progressPercent = resolvedDuration > 0
-    ? clamp(((seekPreview ?? currentTime) / resolvedDuration) * 100, 0, 100)
-    : 0;
+  const progressPercent =
+    resolvedDuration > 0
+      ? clamp(((seekPreview ?? currentTime) / resolvedDuration) * 100, 0, 100)
+      : 0;
 
   const displayedCurrentTime = seekPreview ?? currentTime;
 
@@ -360,19 +441,30 @@ export function AudioPlayer({
     [onError]
   );
 
-  const handleSeekChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    const nextValue = Number(event.target.value);
-    setSeekPreview(nextValue);
-  }, []);
+  const handleSeekChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const nextValue = Number(event.target.value);
+      setSeekPreview(nextValue);
+    },
+    []
+  );
 
   const commitSeek = useCallback((value: number) => {
     const audio = audioRef.current;
     if (!audio) return;
 
-    audio.currentTime = value;
-    setCurrentTime(value);
+    const duration =
+      Number.isFinite(audio.duration) && audio.duration > 0
+        ? audio.duration
+        : resolvedDuration;
+
+    const safeValue =
+      duration > 0 ? clamp(value, 0, duration) : Math.max(0, value);
+
+    audio.currentTime = safeValue;
+    setCurrentTime(safeValue);
     setSeekPreview(null);
-  }, []);
+  }, [resolvedDuration]);
 
   const handleSeekStart = useCallback(() => {
     setIsSeeking(true);
@@ -492,7 +584,7 @@ export function AudioPlayer({
 
         {hasError ? (
           <div className={styles.errorText}>
-            فایل صوتی قابل پخش نیست.
+            Audio file cannot be played.
           </div>
         ) : null}
       </div>
