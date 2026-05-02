@@ -47,7 +47,7 @@ const contextMenuFactory = (
   openDialog: OpenDialog,
   jumpToMessage: JumpToMessage
 ) => {
-  const showCopyImage = isImage(message.viewType)
+  const showCopyImage = isImage(message.viewType) && message.viewType !== 'Gif'
   const tx = window.static_translate
   const { id: msgId, viewType } = message
   return [

@@ -288,7 +288,8 @@ function buildContextMenu(
   }
 
   const showAttachmentOptions = !!message.file
-  const showCopyImage = !!message.file && isImage(message.viewType)
+  const showCopyImage =
+    !!message.file && isImage(message.viewType) && message.viewType !== 'Gif'
   const showResend =
     message.sender.id === C.DC_CONTACT_ID_SELF && message.viewType !== 'Call'
 
