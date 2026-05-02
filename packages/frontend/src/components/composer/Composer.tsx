@@ -773,6 +773,7 @@ const Composer = forwardRef<
               disabled={sendButtonAction == null}
               onClick={sendButtonAction ?? (() => {})}
               aria-label={tx('menu_send')}
+              data-testid='send-button'
               aria-keyshortcuts={ariaSendShortcut}
             >
               <div className='paper-plane'></div>
