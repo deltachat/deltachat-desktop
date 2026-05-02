@@ -1,11 +1,442 @@
 .audioPlayer {
-  min-width: 300px;
-  // width: 100%; // does not work in tauri. for now not completely filling is fine, in future we want a fully custom audio element. (one of the forum posts for more background info https://support.delta.chat/t/audio-attachment-design/3391/2)
+  /*
+    Theme-aware variables:
+    بهتره والد/بابِل پیام این‌ها رو ست کنه.
+    اگر ست نشدن، از رنگ متن ارث‌بری می‌کنیم تا توی تم سفید/تیره بهتر کار کنه.
+  */
+  --text: var(--message-fg, var(--dc-message-fg, currentColor));
+  --muted: var(--message-muted, var(--dc-message-muted, rgba(128, 128, 128, 0.78)));
+  --accent: var(--message-accent, var(--dc-message-accent, currentColor));
+  --progress-bg: var(--message-progress-bg, rgba(128, 128, 128, 0.24));
+  --progress-fill: var(--message-progress-fill, var(--accent));
+  --danger: var(--message-danger, #ff6b6b);
 
-  // Overwrite user agent styles to make it look a tiny bit better but the real
-  // solution would be using a custom player
-  &::-webkit-media-controls-panel,
-  &::-webkit-media-controls-enclosure {
-    background-color: rgba(200, 200, 200, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  width: 100%;
+  min-width: 0;
+
+  padding: 0;
+  margin: 0;
+
+  color: var(--text);
+
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+
+  box-sizing: border-box;
+}
+
+.isPlaying {
+}
+
+.hasError {
+}
+
+.isMetadataLoading {
+}
+
+.cover {
+  position: relative;
+
+  flex: 0 0 auto;
+
+  width: 42px;
+  height: 42px;
+
+  padding: 0;
+  margin: 0;
+
+  border: 0;
+  outline: 0;
+  border-radius: 50%;
+
+  overflow: hidden;
+  background: rgba(128, 128, 128, 0.16);
+
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  appearance: none;
+  -webkit-appearance: none;
+
+  user-select: none;
+}
+
+.cover:focus {
+  outline: none;
+}
+
+.cover:focus-visible {
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+.coverImage {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+  object-fit: cover;
+
+  border-radius: 50%;
+
+  user-select: none;
+  pointer-events: none;
+}
+
+.coverFallback {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: linear-gradient(135deg, #3b82f6, #0ea5e9);
+  color: #ffffff;
+
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+
+  pointer-events: none;
+}
+
+.coverOverlayButton {
+  position: absolute;
+  inset: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: rgba(0, 0, 0, 0.18);
+  color: #ffffff;
+
+  pointer-events: none;
+
+  transition:
+    background-color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.cover:hover .coverOverlayButton {
+  background: rgba(0, 0, 0, 0.26);
+}
+
+.cover:active .coverOverlayButton {
+  transform: scale(0.96);
+}
+
+.playIcon {
+  width: 0;
+  height: 0;
+
+  margin-left: 3px;
+
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-left: 12px solid #ffffff;
+
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.25));
+}
+
+.pauseIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+
+  width: 18px;
+  height: 18px;
+
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.25));
+
+  span {
+    width: 4px;
+    height: 16px;
+
+    border-radius: 999px;
+    background: #ffffff;
+  }
+}
+
+.loader {
+  width: 18px;
+  height: 18px;
+
+  border: 2px solid rgba(255, 255, 255, 0.38);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+
+  animation: spin 0.75s linear infinite;
+}
+
+.main {
+  flex: 1 1 auto;
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.textRow {
+  min-width: 0;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 8px;
+}
+
+.meta {
+  flex: 1 1 auto;
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.title {
+  max-width: 100%;
+
+  color: var(--text);
+
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.2;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  text-shadow: none;
+}
+
+.artist {
+  max-width: 100%;
+
+  margin: 0;
+
+  color: var(--muted);
+
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.2;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.timeBlock {
+  flex: 0 0 auto;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+
+  margin-top: 1px;
+
+  color: var(--muted);
+
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1;
+
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.currentTime,
+.duration,
+.timeDivider {
+  white-space: nowrap;
+}
+
+.timeDivider {
+  opacity: 0.7;
+}
+
+.progressRow {
+  width: 100%;
+  min-width: 0;
+
+  margin-top: 1px;
+}
+
+.progressTrack {
+  position: relative;
+
+  width: 100%;
+  height: 2px;
+
+  border-radius: 999px;
+  background: var(--progress-bg);
+
+  overflow: visible;
+}
+
+.progressFill {
+  position: absolute;
+  left: 0;
+  top: 0;
+
+  height: 100%;
+
+  border-radius: 999px;
+  background: var(--progress-fill);
+
+  pointer-events: none;
+}
+
+.progressInput {
+  position: absolute;
+  left: 0;
+  top: 50%;
+
+  width: 100%;
+  height: 18px;
+
+  margin: 0;
+  padding: 0;
+
+  transform: translateY(-50%);
+
+  background: transparent;
+  cursor: pointer;
+
+  appearance: none;
+  -webkit-appearance: none;
+
+  opacity: 0;
+  z-index: 2;
+
+  &::-webkit-slider-runnable-track {
+    height: 2px;
+    background: transparent;
+  }
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+
+    width: 12px;
+    height: 12px;
+
+    border: 0;
+    border-radius: 50%;
+
+    background: var(--progress-fill);
+  }
+
+  &::-moz-range-track {
+    height: 2px;
+    background: transparent;
+  }
+
+  &::-moz-range-progress {
+    height: 2px;
+    background: transparent;
+  }
+
+  &::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+
+    border: 0;
+    border-radius: 50%;
+
+    background: var(--progress-fill);
+  }
+}
+
+.errorText {
+  margin-top: 3px;
+
+  color: var(--danger);
+
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.playButton {
+  display: none;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 640px) {
+  .audioPlayer {
+    gap: 7px;
+  }
+
+  .cover {
+    width: 38px;
+    height: 38px;
+  }
+
+  .coverFallback {
+    font-size: 14px;
+  }
+
+  .playIcon {
+    margin-left: 3px;
+
+    border-top-width: 7px;
+    border-bottom-width: 7px;
+    border-left-width: 11px;
+  }
+
+  .pauseIcon {
+    width: 16px;
+    height: 16px;
+    gap: 3px;
+
+    span {
+      width: 4px;
+      height: 14px;
+    }
+  }
+
+  .loader {
+    width: 16px;
+    height: 16px;
+    border-width: 2px;
+  }
+
+  .title {
+    font-size: 13px;
+  }
+
+  .artist {
+    font-size: 10.5px;
+  }
+
+  .timeBlock {
+    font-size: 10.5px;
+  }
+
+  .progressInput {
+    height: 18px;
   }
 }
