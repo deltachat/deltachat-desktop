@@ -7,8 +7,13 @@
  * 3. `music-metadata` blob parsing
  * 4. File name inference
  *
- * This keeps the component resilient without relying on a custom metadata decoder.
+ * Metadata extraction is intentionally non-blocking so the player UI can render
+ * immediately and update later only when extra metadata becomes available.
+ *
+ * Playback is handled by a module-level persistent audio element so audio keeps
+ * playing even when this component unmounts, for example when leaving a chat.
  */
+
 import React, {
   useCallback,
   useEffect,
@@ -16,7 +21,6 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { parseBlob } from 'music-metadata';
 import styles from './styles.module.scss';
 import ForceMutedAudioPlayer from './ForceMutedAudioPlayer';
 
@@ -45,6 +49,75 @@ type ExtractedAudioMetadata = {
   coverUrl?: string;
   duration?: number;
 };
+
+type PersistentAudioState = {
+  audio: HTMLAudioElement | null;
+  currentSrc?: string;
+};
+
+const persistentAudioState: PersistentAudioState = {
+  audio: null,
+  currentSrc: undefined,
+};
+
+function getPersistentAudioElement(): HTMLAudioElement | null {
+  if (typeof window === 'undefined') return null;
+
+  if (!persistentAudioState.audio) {
+    const audio = new Audio();
+
+    audio.preload = 'metadata';
+    audio.controls = false;
+
+    /*
+     * We intentionally do not append it to the React tree.
+     * This element must survive component unmounts.
+     */
+    persistentAudioState.audio = audio;
+  }
+
+  return persistentAudioState.audio;
+}
+
+function pauseOtherMediaElementsExcept(current: HTMLMediaElement) {
+  if (typeof document === 'undefined') return;
+
+  const mediaElements = document.querySelectorAll('audio, video');
+
+  mediaElements.forEach((element) => {
+    if (
+      element instanceof HTMLMediaElement &&
+      element !== current &&
+      !element.paused
+    ) {
+      element.pause();
+    }
+  });
+}
+
+function createSyntheticLikeAudioEvent(
+  audio: HTMLAudioElement,
+  type: string
+): React.SyntheticEvent<HTMLAudioElement> {
+  return {
+    currentTarget: audio,
+    target: audio,
+    type,
+    nativeEvent: new Event(type),
+    bubbles: false,
+    cancelable: false,
+    defaultPrevented: false,
+    eventPhase: 0,
+    isTrusted: true,
+    timeStamp: Date.now(),
+
+    preventDefault: () => {},
+    isDefaultPrevented: () => false,
+    stopPropagation: () => {},
+    isPropagationStopped: () => false,
+    persist: () => {},
+  } as unknown as React.SyntheticEvent<HTMLAudioElement>;
+}
 
 function formatTime(seconds: number): string {
   if (!Number.isFinite(seconds) || seconds < 0) return '0:00';
@@ -77,7 +150,8 @@ function getFileNameFromSrc(src?: string): string | undefined {
   if (!src) return undefined;
 
   try {
-    const withoutHash = src.split('#')[0];
+    const normalizedSrc = src.replace(/\\/g, '/');
+    const withoutHash = normalizedSrc.split('#')[0];
     const withoutQuery = withoutHash.split('?')[0];
     const lastPart = withoutQuery.split('/').pop();
     if (!lastPart) return undefined;
@@ -86,6 +160,21 @@ function getFileNameFromSrc(src?: string): string | undefined {
   } catch {
     return undefined;
   }
+}
+
+function getAudioExtension(fileName?: string): string | undefined {
+  if (!fileName) return undefined;
+  const match = fileName
+    .split('?')[0]
+    .split('#')[0]
+    .match(/\.([a-z0-9]+)$/i);
+
+  return match?.[1]?.toLowerCase();
+}
+
+function getAudioFormatLabel(extension?: string): string | undefined {
+  if (!extension) return undefined;
+  return `${extension.toUpperCase()} file`;
 }
 
 function removeAudioExtension(fileName: string): string {
@@ -148,15 +237,17 @@ function uint8ArrayToBlob(data: Uint8Array, mimeType?: string): Blob {
 }
 
 async function extractAudioMetadataWithMusicMetadata(
-  src: string
+  src: string,
+  signal?: AbortSignal
 ): Promise<ExtractedAudioMetadata> {
-  const response = await fetch(src);
+  const response = await fetch(src, { signal });
 
   if (!response.ok) {
     throw new Error(`Failed to fetch audio source: ${response.status}`);
   }
 
   const blob = await response.blob();
+  const { parseBlob } = await import('music-metadata');
   const metadata = await parseBlob(blob);
 
   const title = cleanText(metadata.common.title);
@@ -169,7 +260,6 @@ async function extractAudioMetadataWithMusicMetadata(
       : undefined;
 
   const picture = metadata.common.picture?.[0];
-
   let coverUrl: string | undefined;
 
   if (picture?.data) {
@@ -205,8 +295,7 @@ export function AudioPlayer({
   onLoadedMetadata,
   onDurationChange,
 }: AudioPlayerProps) {
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const progressRef = useRef<HTMLInputElement | null>(null);
+  const metadataAudioRef = useRef<HTMLAudioElement | null>(null);
   const metadataCoverUrlRef = useRef<string | undefined>(undefined);
 
   const [isPlaying, setIsPlaying] = useState(false);
@@ -220,18 +309,33 @@ export function AudioPlayer({
 
   const [extractedMetadata, setExtractedMetadata] =
     useState<ExtractedAudioMetadata>({});
-  const [isMetadataLoading, setIsMetadataLoading] = useState(false);
+
+  const isThisSourceActive = useCallback(() => {
+    return persistentAudioState.currentSrc === src;
+  }, [src]);
 
   useEffect(() => {
-    setCurrentTime(0);
-    setIsPlaying(false);
-    setIsSeeking(false);
-    setIsLoading(false);
-    setHasError(false);
     setSeekPreview(null);
+    setIsSeeking(false);
+    setHasError(false);
     setInternalDuration(propDuration ?? 0);
     setExtractedMetadata({});
-    setIsMetadataLoading(false);
+
+    const audio = getPersistentAudioElement();
+
+    if (audio && persistentAudioState.currentSrc === src) {
+      setCurrentTime(audio.currentTime || 0);
+      setIsPlaying(!audio.paused && !audio.ended);
+      setIsLoading(false);
+
+      if (Number.isFinite(audio.duration) && audio.duration > 0) {
+        setInternalDuration(audio.duration);
+      }
+    } else {
+      setCurrentTime(0);
+      setIsPlaying(false);
+      setIsLoading(false);
+    }
 
     if (metadataCoverUrlRef.current) {
       URL.revokeObjectURL(metadataCoverUrlRef.current);
@@ -239,64 +343,108 @@ export function AudioPlayer({
     }
   }, [src, propDuration]);
 
+  const fallbackFileName = useMemo(() => {
+    return cleanText(propFileName) || getFileNameFromSrc(src);
+  }, [propFileName, src]);
+
+  const displayFileName = useMemo(() => {
+    if (!fallbackFileName) return undefined;
+
+    const fileNameWithoutQuery = fallbackFileName.split('?')[0].split('#')[0];
+
+    const cleanName = removeAudioExtension(fileNameWithoutQuery)
+      .replace(/[_]+/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+
+    return cleanText(cleanName);
+  }, [fallbackFileName]);
+
+  const guessed = useMemo(() => {
+    return guessMetadataFromFileName(fallbackFileName);
+  }, [fallbackFileName]);
+
+  const fileExtension = useMemo(() => {
+    return getAudioExtension(cleanText(propFileName) || src || fallbackFileName);
+  }, [propFileName, src, fallbackFileName]);
+
+  const isMp3Like = fileExtension === 'mp3';
+
+  const hasEnoughDisplayMetadata = useMemo(() => {
+    const hasTitle = !!cleanText(propTitle) || !!guessed.title;
+    const hasArtist = !!cleanText(propArtist) || !!guessed.artist;
+    const hasCover = !!propCoverUrl;
+    const hasDuration = typeof propDuration === 'number' && propDuration > 0;
+
+    return hasTitle && hasArtist && hasCover && hasDuration;
+  }, [propTitle, propArtist, propCoverUrl, propDuration, guessed]);
+
   useEffect(() => {
-    let cancelled = false;
-
-    async function loadMetadata() {
-      if (!src) return;
-
-      setIsMetadataLoading(true);
-
-      try {
-        const metadata = await extractAudioMetadataWithMusicMetadata(src);
-
-        if (cancelled) {
-          if (metadata.coverUrl) {
-            URL.revokeObjectURL(metadata.coverUrl);
-          }
-          return;
-        }
-
-        if (metadataCoverUrlRef.current) {
-          URL.revokeObjectURL(metadataCoverUrlRef.current);
-          metadataCoverUrlRef.current = undefined;
-        }
-
-        if (metadata.coverUrl) {
-          metadataCoverUrlRef.current = metadata.coverUrl;
-        }
-
-        setExtractedMetadata(metadata);
-
-        if (
-          typeof metadata.duration === 'number' &&
-          Number.isFinite(metadata.duration) &&
-          metadata.duration > 0
-        ) {
-          setInternalDuration((prev) => {
-            if (propDuration && propDuration > 0) return prev;
-            return metadata.duration as number;
-          });
-        }
-      } catch (error) {
-        console.warn('Failed to extract audio metadata:', error);
-
-        if (!cancelled) {
-          setExtractedMetadata({});
-        }
-      } finally {
-        if (!cancelled) {
-          setIsMetadataLoading(false);
-        }
-      }
+    if (!src || hasEnoughDisplayMetadata) {
+      return;
     }
 
-    loadMetadata();
+    const controller = new AbortController();
+    let cancelled = false;
+
+    const timeoutId = window.setTimeout(() => {
+      void (async () => {
+        try {
+          const metadata = await extractAudioMetadataWithMusicMetadata(
+            src,
+            controller.signal
+          );
+
+          if (cancelled) {
+            if (metadata.coverUrl) {
+              URL.revokeObjectURL(metadata.coverUrl);
+            }
+            return;
+          }
+
+          if (metadataCoverUrlRef.current) {
+            URL.revokeObjectURL(metadataCoverUrlRef.current);
+            metadataCoverUrlRef.current = undefined;
+          }
+
+          if (metadata.coverUrl) {
+            metadataCoverUrlRef.current = metadata.coverUrl;
+          }
+
+          setExtractedMetadata((prev) => ({
+            title: prev.title || metadata.title,
+            artist: prev.artist || metadata.artist,
+            coverUrl: prev.coverUrl || metadata.coverUrl,
+            duration: prev.duration || metadata.duration,
+          }));
+
+          if (
+            !propDuration &&
+            typeof metadata.duration === 'number' &&
+            Number.isFinite(metadata.duration) &&
+            metadata.duration > 0
+          ) {
+            setInternalDuration(metadata.duration);
+          }
+        } catch (error) {
+          if (
+            error instanceof DOMException &&
+            error.name === 'AbortError'
+          ) {
+            return;
+          }
+
+          console.warn('Failed to extract audio metadata:', error);
+        }
+      })();
+    }, 250);
 
     return () => {
       cancelled = true;
+      controller.abort();
+      window.clearTimeout(timeoutId);
     };
-  }, [src, propDuration]);
+  }, [src, propDuration, hasEnoughDisplayMetadata]);
 
   useEffect(() => {
     return () => {
@@ -307,32 +455,215 @@ export function AudioPlayer({
     };
   }, []);
 
-  const fallbackFileName = useMemo(() => {
-    return cleanText(propFileName) || getFileNameFromSrc(src);
-  }, [propFileName, src]);
+  useEffect(() => {
+    const audio = getPersistentAudioElement();
+    if (!audio) return;
 
-  const guessed = useMemo(() => {
-    return guessMetadataFromFileName(fallbackFileName);
-  }, [fallbackFileName]);
+    const handleLoadedMetadataNative = () => {
+      if (!isThisSourceActive()) return;
 
-  const resolvedTitle =
-    cleanText(propTitle) ||
-    cleanText(extractedMetadata.title) ||
-    guessed.title ||
-    fallbackFileName ||
-    'Audio';
+      if (Number.isFinite(audio.duration) && audio.duration > 0) {
+        setInternalDuration(audio.duration);
+      }
 
-  const resolvedArtist =
-    cleanText(propArtist) ||
-    cleanText(extractedMetadata.artist) ||
-    guessed.artist;
+      onLoadedMetadata?.(
+        createSyntheticLikeAudioEvent(audio, 'loadedmetadata')
+      );
+    };
+
+    const handleDurationChangeNative = () => {
+      if (!isThisSourceActive()) return;
+
+      if (Number.isFinite(audio.duration) && audio.duration > 0) {
+        setInternalDuration(audio.duration);
+      }
+
+      onDurationChange?.(
+        createSyntheticLikeAudioEvent(audio, 'durationchange')
+      );
+    };
+
+    const handleTimeUpdateNative = () => {
+      if (!isThisSourceActive()) return;
+
+      if (!isSeeking) {
+        setCurrentTime(audio.currentTime || 0);
+      }
+
+      onTimeUpdate?.(
+        createSyntheticLikeAudioEvent(audio, 'timeupdate')
+      );
+    };
+
+    const handlePlayNative = () => {
+      if (!isThisSourceActive()) return;
+
+      setIsPlaying(true);
+      setIsLoading(false);
+      setHasError(false);
+
+      onPlay?.(createSyntheticLikeAudioEvent(audio, 'play'));
+    };
+
+    const handlePauseNative = () => {
+      if (!isThisSourceActive()) return;
+
+      setIsPlaying(false);
+      setIsLoading(false);
+
+      onPause?.(createSyntheticLikeAudioEvent(audio, 'pause'));
+    };
+
+    const handleEndedNative = () => {
+      if (!isThisSourceActive()) return;
+
+      setIsPlaying(false);
+      setIsLoading(false);
+      setCurrentTime(0);
+      setSeekPreview(null);
+
+      onEnded?.(createSyntheticLikeAudioEvent(audio, 'ended'));
+    };
+
+    const handleErrorNative = () => {
+      if (!isThisSourceActive()) return;
+
+      setHasError(true);
+      setIsPlaying(false);
+      setIsLoading(false);
+
+      onError?.(createSyntheticLikeAudioEvent(audio, 'error'));
+    };
+
+    audio.addEventListener('loadedmetadata', handleLoadedMetadataNative);
+    audio.addEventListener('durationchange', handleDurationChangeNative);
+    audio.addEventListener('timeupdate', handleTimeUpdateNative);
+    audio.addEventListener('play', handlePlayNative);
+    audio.addEventListener('pause', handlePauseNative);
+    audio.addEventListener('ended', handleEndedNative);
+    audio.addEventListener('error', handleErrorNative);
+
+    return () => {
+      audio.removeEventListener('loadedmetadata', handleLoadedMetadataNative);
+      audio.removeEventListener('durationchange', handleDurationChangeNative);
+      audio.removeEventListener('timeupdate', handleTimeUpdateNative);
+      audio.removeEventListener('play', handlePlayNative);
+      audio.removeEventListener('pause', handlePauseNative);
+      audio.removeEventListener('ended', handleEndedNative);
+      audio.removeEventListener('error', handleErrorNative);
+
+      /*
+       * Important:
+       * Do not pause the persistent audio here.
+       * This is exactly what lets audio keep playing after leaving the chat.
+       */
+    };
+  }, [
+    src,
+    isSeeking,
+    isThisSourceActive,
+    onPlay,
+    onPause,
+    onEnded,
+    onError,
+    onTimeUpdate,
+    onLoadedMetadata,
+    onDurationChange,
+  ]);
+
+  const explicitTitle = cleanText(propTitle);
+  const explicitArtist = cleanText(propArtist);
+  const extractedTitle = cleanText(extractedMetadata.title);
+  const extractedArtist = cleanText(extractedMetadata.artist);
+
+  const hasRealMetadata = !!(
+    explicitTitle ||
+    explicitArtist ||
+    extractedTitle ||
+    extractedArtist
+  );
+
+  const isVoiceMessage = useMemo(() => {
+    if (hasRealMetadata) return false;
+
+    // If we have any usable file name or extension, treat it as a regular audio file,
+    // not a voice message. This fixes attached WAV/OGG/FLAC files being hidden.
+    if (fallbackFileName && !fallbackFileName.includes('\\')) {
+      return false;
+    }
+
+    if (fileExtension) {
+      return false;
+    }
+
+    return true;
+  }, [hasRealMetadata, fallbackFileName, fileExtension]);
+
+  const formatLabel = useMemo(() => {
+    return getAudioFormatLabel(fileExtension);
+  }, [fileExtension]);
+
+  const resolvedTitle = useMemo(() => {
+    if (isVoiceMessage) return undefined;
+
+    if (!isMp3Like) {
+      return (
+        explicitTitle ||
+        extractedTitle ||
+        displayFileName ||
+        guessed.title
+      );
+    }
+
+    return (
+      explicitTitle ||
+      extractedTitle ||
+      guessed.title ||
+      displayFileName ||
+      fallbackFileName
+    );
+  }, [
+    isVoiceMessage,
+    isMp3Like,
+    explicitTitle,
+    extractedTitle,
+    displayFileName,
+    guessed.title,
+    fallbackFileName,
+  ]);
+
+  const resolvedArtist = useMemo(() => {
+    if (isVoiceMessage) return undefined;
+
+    if (!isMp3Like) {
+      return (
+        explicitArtist ||
+        extractedArtist ||
+        guessed.artist ||
+        formatLabel
+      );
+    }
+
+    return (
+      explicitArtist ||
+      extractedArtist ||
+      guessed.artist
+    );
+  }, [
+    isVoiceMessage,
+    isMp3Like,
+    explicitArtist,
+    extractedArtist,
+    guessed.artist,
+    formatLabel,
+  ]);
 
   const resolvedCoverUrl = propCoverUrl || extractedMetadata.coverUrl;
 
   const resolvedDuration =
-    propDuration ??
-    internalDuration ??
-    extractedMetadata.duration ??
+    propDuration ||
+    internalDuration ||
+    extractedMetadata.duration ||
     0;
 
   const progressPercent =
@@ -343,13 +674,23 @@ export function AudioPlayer({
   const displayedCurrentTime = seekPreview ?? currentTime;
 
   const handleTogglePlay = useCallback(async () => {
-    const audio = audioRef.current;
+    const audio = getPersistentAudioElement();
     if (!audio) return;
 
     try {
-      if (audio.paused) {
+      if (persistentAudioState.currentSrc !== src) {
+        persistentAudioState.currentSrc = src;
+        audio.src = src;
+        audio.currentTime = 0;
+        setCurrentTime(0);
+      }
+
+      if (audio.paused || audio.ended) {
         setHasError(false);
         setIsLoading(true);
+
+        pauseOtherMediaElementsExcept(audio);
+
         await audio.play();
       } else {
         audio.pause();
@@ -360,111 +701,70 @@ export function AudioPlayer({
       setIsLoading(false);
       setIsPlaying(false);
     }
-  }, []);
+  }, [src]);
 
-  const handleLoadedMetadata = useCallback(
+  const handleMetadataAudioLoadedMetadata = useCallback(
     (event: React.SyntheticEvent<HTMLAudioElement>) => {
       const audio = event.currentTarget;
 
-      if (Number.isFinite(audio.duration) && audio.duration > 0) {
+      if (
+        !isThisSourceActive() &&
+        Number.isFinite(audio.duration) &&
+        audio.duration > 0
+      ) {
         setInternalDuration(audio.duration);
       }
-
-      onLoadedMetadata?.(event);
     },
-    [onLoadedMetadata]
+    [isThisSourceActive]
   );
 
-  const handleDurationChange = useCallback(
+  const handleMetadataAudioDurationChange = useCallback(
     (event: React.SyntheticEvent<HTMLAudioElement>) => {
       const audio = event.currentTarget;
 
-      if (Number.isFinite(audio.duration) && audio.duration > 0) {
+      if (
+        !isThisSourceActive() &&
+        Number.isFinite(audio.duration) &&
+        audio.duration > 0
+      ) {
         setInternalDuration(audio.duration);
       }
-
-      onDurationChange?.(event);
     },
-    [onDurationChange]
-  );
-
-  const handleTimeUpdate = useCallback(
-    (event: React.SyntheticEvent<HTMLAudioElement>) => {
-      const audio = event.currentTarget;
-
-      if (!isSeeking) {
-        setCurrentTime(audio.currentTime);
-      }
-
-      onTimeUpdate?.(event);
-    },
-    [isSeeking, onTimeUpdate]
-  );
-
-  const handlePlay = useCallback(
-    (event: React.SyntheticEvent<HTMLAudioElement>) => {
-      setIsPlaying(true);
-      setIsLoading(false);
-      setHasError(false);
-      onPlay?.(event);
-    },
-    [onPlay]
-  );
-
-  const handlePause = useCallback(
-    (event: React.SyntheticEvent<HTMLAudioElement>) => {
-      setIsPlaying(false);
-      setIsLoading(false);
-      onPause?.(event);
-    },
-    [onPause]
-  );
-
-  const handleEnded = useCallback(
-    (event: React.SyntheticEvent<HTMLAudioElement>) => {
-      setIsPlaying(false);
-      setIsLoading(false);
-      setCurrentTime(0);
-      setSeekPreview(null);
-      onEnded?.(event);
-    },
-    [onEnded]
-  );
-
-  const handleError = useCallback(
-    (event: React.SyntheticEvent<HTMLAudioElement>) => {
-      setHasError(true);
-      setIsPlaying(false);
-      setIsLoading(false);
-      onError?.(event);
-    },
-    [onError]
+    [isThisSourceActive]
   );
 
   const handleSeekChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
-      const nextValue = Number(event.target.value);
-      setSeekPreview(nextValue);
+      setSeekPreview(Number(event.target.value));
     },
     []
   );
 
-  const commitSeek = useCallback((value: number) => {
-    const audio = audioRef.current;
-    if (!audio) return;
+  const commitSeek = useCallback(
+    (value: number) => {
+      const audio = getPersistentAudioElement();
+      if (!audio) return;
 
-    const duration =
-      Number.isFinite(audio.duration) && audio.duration > 0
-        ? audio.duration
-        : resolvedDuration;
+      if (persistentAudioState.currentSrc !== src) {
+        persistentAudioState.currentSrc = src;
+        audio.src = src;
+        audio.currentTime = 0;
+      }
 
-    const safeValue =
-      duration > 0 ? clamp(value, 0, duration) : Math.max(0, value);
+      const duration =
+        Number.isFinite(audio.duration) && audio.duration > 0
+          ? audio.duration
+          : resolvedDuration;
 
-    audio.currentTime = safeValue;
-    setCurrentTime(safeValue);
-    setSeekPreview(null);
-  }, [resolvedDuration]);
+      const safeValue =
+        duration > 0 ? clamp(value, 0, duration) : Math.max(0, value);
+
+      audio.currentTime = safeValue;
+      setCurrentTime(safeValue);
+      setSeekPreview(null);
+    },
+    [src, resolvedDuration]
+  );
 
   const handleSeekStart = useCallback(() => {
     setIsSeeking(true);
@@ -482,7 +782,7 @@ export function AudioPlayer({
     styles.audioPlayer,
     isPlaying ? styles.isPlaying : '',
     hasError ? styles.hasError : '',
-    isMetadataLoading ? styles.isMetadataLoading : '',
+    isVoiceMessage ? styles.isVoiceMessage : '',
     className || '',
   ]
     .filter(Boolean)
@@ -490,16 +790,19 @@ export function AudioPlayer({
 
   return (
     <div className={rootClassName}>
+      {/*
+        This stays here only for compatibility with your existing architecture
+        and metadata preload behavior.
+
+        Real playback is NOT done by this element anymore, because this element
+        will unmount when leaving the chat. Real playback is handled by the
+        persistent audio element above.
+      */}
       <ForceMutedAudioPlayer
-        ref={audioRef}
+        ref={metadataAudioRef}
         src={src}
-        onLoadedMetadata={handleLoadedMetadata}
-        onDurationChange={handleDurationChange}
-        onTimeUpdate={handleTimeUpdate}
-        onPlay={handlePlay}
-        onPause={handlePause}
-        onEnded={handleEnded}
-        onError={handleError}
+        onLoadedMetadata={handleMetadataAudioLoadedMetadata}
+        onDurationChange={handleMetadataAudioDurationChange}
       />
 
       <button
@@ -511,12 +814,14 @@ export function AudioPlayer({
         {resolvedCoverUrl ? (
           <img
             src={resolvedCoverUrl}
-            alt={resolvedTitle}
+            alt={isVoiceMessage ? '' : 'Audio file'}
             className={styles.coverImage}
             draggable={false}
           />
         ) : (
-          <div className={styles.coverFallback}>{getInitials(resolvedTitle)}</div>
+          <div className={styles.coverFallback}>
+            {isVoiceMessage ? '' : getInitials(resolvedTitle || '')}
+          </div>
         )}
 
         <span className={styles.coverOverlayButton}>
@@ -535,17 +840,21 @@ export function AudioPlayer({
 
       <div className={styles.main}>
         <div className={styles.textRow}>
-          <div className={styles.meta}>
-            <div className={styles.title} title={resolvedTitle}>
-              {resolvedTitle}
-            </div>
-
-            {!hideArtist && resolvedArtist ? (
-              <div className={styles.artist} title={resolvedArtist}>
-                {resolvedArtist}
+          {!isVoiceMessage ? (
+            <div className={styles.meta}>
+              <div className={styles.title} title={resolvedTitle}>
+                {resolvedTitle}
               </div>
-            ) : null}
-          </div>
+
+              {!hideArtist && resolvedArtist ? (
+                <div className={styles.artist} title={resolvedArtist}>
+                  {resolvedArtist}
+                </div>
+              ) : null}
+            </div>
+          ) : (
+            <div className={styles.metaSpacer} />
+          )}
 
           <div className={styles.timeBlock}>
             <span className={styles.currentTime}>
@@ -566,7 +875,6 @@ export function AudioPlayer({
             />
 
             <input
-              ref={progressRef}
               type="range"
               min={0}
               max={resolvedDuration || 0}
