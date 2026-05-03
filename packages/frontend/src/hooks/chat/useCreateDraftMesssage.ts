@@ -1,10 +1,11 @@
 import { useCallback } from 'react'
 
 import useChat from './useChat'
+import { saveLastChatId } from '../../backend/chat'
+import { selectedAccountId } from '../../ScreenController'
 import { getLogger } from '@deltachat-desktop/shared/logger'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 import type { T } from '@deltachat/jsonrpc-client'
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import type { runtime } from '@deltachat-desktop/runtime-interface'
 
 const log = getLogger('useCreateDraftMessage')
 
@@ -36,7 +37,22 @@ export default function useCreateDraftMessage() {
 
   return useCallback<CreateDraftMessage>(
     async (accountId, chatId, messageText, file) => {
-      selectChat(accountId, chatId)
+      const isCrossAccount = accountId !== selectedAccountId()
+
+      if (isCrossAccount) {
+        try {
+          await saveLastChatId(accountId, chatId)
+          await window.__selectAccount(accountId)
+        } catch (error) {
+          log.error('failed to switch account for draft message', error)
+          if (file?.deleteTempFileWhenDone) {
+            runtime.removeTempFile(file.path)
+          }
+          return
+        }
+      } else {
+        selectChat(accountId, chatId)
+      }
 
       if (window.__setDraftRequest != undefined) {
         log.error('previous createDraftMessage has not worked?')

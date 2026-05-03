@@ -1,7 +1,6 @@
 import React from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 
-import { selectedAccountId } from '../../../ScreenController'
 import useCreateDraftMessage from '../../../hooks/chat/useCreateDraftMesssage'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 
@@ -17,11 +16,17 @@ export default function MailtoDialog(props: Props & DialogProps) {
 
   const tx = useTranslationFunction()
   const createDraftMessage = useCreateDraftMessage()
-  const accountId = selectedAccountId()
 
-  const onChatClick = async (chatId: number) => {
-    createDraftMessage(accountId, chatId, messageText)
+  const onChatClick = async ({
+    targetAccountId,
+    chatId,
+  }: {
+    targetAccountId: number
+    chatId: number
+  }) => {
+    // Close dialog before createDraftMessage because it may switch accounts
     onClose()
+    await createDraftMessage(targetAccountId, chatId, messageText)
   }
 
   return (
@@ -30,6 +35,7 @@ export default function MailtoDialog(props: Props & DialogProps) {
       onChatClick={onChatClick}
       onClose={onClose}
       listFlags={C.DC_GCL_FOR_FORWARDING | C.DC_GCL_NO_SPECIALS}
+      enableAccountSwitch
     />
   )
 }
