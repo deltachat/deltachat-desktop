@@ -26,10 +26,11 @@ import EmptyChatMessage from './EmptyChatMessage'
 const log = getLogger('renderer/components/message/MessageList')
 
 import type { T } from '@deltachat/jsonrpc-client'
+import { useRovingTabindex } from '../../contexts/RovingTabindex'
 import {
-  RovingTabindexProvider,
-  useRovingTabindex,
-} from '../../contexts/RovingTabindex'
+  FocusAndMultiselectProvider,
+  useMessageFocusAndMultiselect,
+} from './focusAndMultiselect'
 import { marknoticedChat } from '../../backend/chat'
 
 const onWindowFocus = (accountId: number) => {
@@ -864,6 +865,12 @@ export const MessageListInner = React.memo(
       // over the lifetime of this component.
     })
 
+    const messageIds = useMemo(
+      () =>
+        messageListItems.filter(v => v.kind !== 'dayMarker').map(v => v.msg_id),
+      [messageListItems]
+    )
+
     if (!loaded) {
       return (
         <div
@@ -885,7 +892,10 @@ export const MessageListInner = React.memo(
         onWheel={onWheel}
       >
         <ol aria-label={tx('messages')}>
-          <RovingTabindexProvider wrapperElementRef={messageListRef}>
+          <FocusAndMultiselectProvider
+            messageIds={messageIds}
+            wrapperElementRef={messageListRef}
+          >
             {messageListItems.length === 0 && <EmptyChatMessage chat={chat} />}
             {activeView.map(messageId => {
               if (messageId.kind === 'dayMarker') {
@@ -927,7 +937,7 @@ export const MessageListInner = React.memo(
                 }
               }
             })}
-          </RovingTabindexProvider>
+          </FocusAndMultiselectProvider>
         </ol>
       </div>
     )
@@ -952,19 +962,25 @@ function MessageLoadingError({
   message: T.MessageLoadResult
 }) {
   const ref = useRef<HTMLDivElement>(null)
-  const rovingTabindex = useRovingTabindex(ref)
+  const focusAndMultiselect = useMessageFocusAndMultiselect(
+    messageId.msg_id,
+    ref
+  )
 
   return (
     <div className='info-message' id={String(messageId.msg_id)}>
       <div
         ref={ref}
-        className={'bubble ' + rovingTabindex.className}
+        className={
+          'bubble multiselectable-message ' + focusAndMultiselect.className
+        }
         style={{
           backgroundColor: 'rgba(55,0,0,0.5)',
         }}
-        tabIndex={rovingTabindex.tabIndex}
-        onKeyDown={rovingTabindex.onKeydown}
-        onFocus={rovingTabindex.setAsActiveElement}
+        tabIndex={focusAndMultiselect.tabIndex}
+        onClick={focusAndMultiselect.onClick}
+        onKeyDown={focusAndMultiselect.onKeyDown}
+        onFocus={focusAndMultiselect.onFocus}
       >
         loading message {messageId.msg_id} failed: {message.error}
       </div>
@@ -977,19 +993,25 @@ function MessageLoading({
   messageId: T.MessageListItem & { kind: 'message' }
 }) {
   const ref = useRef<HTMLDivElement>(null)
-  const rovingTabindex = useRovingTabindex(ref)
+  const focusAndMultiselect = useMessageFocusAndMultiselect(
+    messageId.msg_id,
+    ref
+  )
 
   return (
     <div className='info-message' id={String(messageId.msg_id)}>
       <div
         ref={ref}
-        className={'bubble ' + rovingTabindex.className}
+        className={
+          'bubble multiselectable-message ' + focusAndMultiselect.className
+        }
         style={{
           backgroundColor: 'rgba(55,0,0,0.5)',
         }}
-        tabIndex={rovingTabindex.tabIndex}
-        onKeyDown={rovingTabindex.onKeydown}
-        onFocus={rovingTabindex.setAsActiveElement}
+        tabIndex={focusAndMultiselect.tabIndex}
+        onClick={focusAndMultiselect.onClick}
+        onKeyDown={focusAndMultiselect.onKeyDown}
+        onFocus={focusAndMultiselect.onFocus}
       >
         Loading Message {messageId.msg_id}
       </div>
@@ -1085,6 +1107,9 @@ export function DayMarker(props: { timestamp: number }) {
   // See https://github.com/deltachat/deltachat-desktop/issues/2141
   // > Also make the divider items proper list items that can be focused,
   // > so users know when they traverse to the next/previous date.
+  //
+  // We usually utilize `useMessageFocusAndMultiselect()` for messages
+  // but here we only need a part of its functionality.
   const rovingTabindex = useRovingTabindex(ref)
 
   return (
