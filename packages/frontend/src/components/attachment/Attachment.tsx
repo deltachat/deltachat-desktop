@@ -2,60 +2,30 @@ import mimeTypes from 'mime-types'
 import { Type } from '../../backend-com'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 
-/* Section - Data Copied in part from Signal */
-// Supported media types in google chrome
-// See: https://en.wikipedia.org/wiki/Comparison_of_web_browsers#Image_format_support
-const SUPPORTED_IMAGE_MIME_TYPES = Object.freeze([
-  'image/bmp',
-  'image/gif',
-  'image/jpeg',
-  'image/jpg',
-  'image/svg+xml',
-  'image/webp',
-  'image/x-xbitmap',
-  // ICO
-  'image/vnd.microsoft.icon',
-  'image/ico',
-  'image/icon',
-  'image/x-icon',
-  // PNG
-  'image/apng',
-  'image/png',
-  // for opening avatars
-  'image/x',
-])
-// See: https://www.chromium.org/audio-video
-const SUPPORTED_VIDEO_MIME_TYPES = Object.freeze([
-  'video/mp4',
-  'video/ogg',
-  'video/webm',
-  'video/quicktime',
-])
-/* EndSection - Data Copied in part from Signal */
-
-export function isImage(filemime: string | null) {
-  return SUPPORTED_IMAGE_MIME_TYPES.includes(filemime || '')
+export function isImage(viewType: Type.Viewtype | null) {
+  return viewType === 'Image' || viewType === 'Gif'
 }
 
 export function hasAttachment(attachment: MessageTypeAttachmentSubset | null) {
   return attachment && attachment.file
 }
 
-export function isVideo(filemime: string | null) {
-  return SUPPORTED_VIDEO_MIME_TYPES.includes(filemime || '')
+// note that we rely on the viewTypes from core here to make sure all Delta Chat clients
+// display the same attachment types in the same way - although this could result in not
+// showing some attachments as files even if we could show them as media (like svg for example)
+// see guess_msgtype_from_path_suffix in https://github.com/chatmail/core/blob/main/src/message.rs
+const MEDIA_VIEW_TYPES = ['Image', 'Gif', 'Video', 'Audio', 'Voice'] as const
+
+export function isDisplayableByFullscreenMedia(viewType: Type.Viewtype | null) {
+  return MEDIA_VIEW_TYPES.includes(
+    viewType as (typeof MEDIA_VIEW_TYPES)[number]
+  )
 }
 
-export function isAudio(filemime: string | null) {
-  if (!filemime) return false
-  return filemime.startsWith('audio/')
-}
-
-export function isDisplayableByFullscreenMedia(filemime: string | null) {
-  return isImage(filemime) || isAudio(filemime) || isVideo(filemime)
-}
-
-export function isGenericAttachment(filemime: string | null) {
-  return !(isImage(filemime) || isVideo(filemime) || isAudio(filemime))
+export function isGenericAttachment(viewType: Type.Viewtype | null) {
+  return !MEDIA_VIEW_TYPES.includes(
+    viewType as (typeof MEDIA_VIEW_TYPES)[number]
+  )
 }
 
 export function getExtension({

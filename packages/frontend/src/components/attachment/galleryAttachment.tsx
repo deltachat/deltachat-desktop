@@ -6,13 +6,7 @@ import {
   onDownload,
   openWebxdc,
 } from '../message/messageFunctions'
-import {
-  isImage,
-  isVideo,
-  isAudio,
-  getExtension,
-  dragAttachmentOut,
-} from './Attachment'
+import { isImage, getExtension, dragAttachmentOut } from './Attachment'
 import Timestamp from '../conversations/Timestamp'
 import { makeContextMenu, OpenContextMenu } from '../ContextMenu'
 import { runtime } from '@deltachat-desktop/runtime-interface'
@@ -53,7 +47,7 @@ const contextMenuFactory = (
   openDialog: OpenDialog,
   jumpToMessage: JumpToMessage
 ) => {
-  const showCopyImage = message.viewType === 'Image'
+  const showCopyImage = isImage(message.viewType) && message.viewType !== 'Gif'
   const tx = window.static_translate
   const { id: msgId, viewType } = message
   return [
@@ -159,17 +153,10 @@ function getBrokenMediaContextMenu(
   )
 }
 
-function squareBrokenMediaContent(
-  hasSupportedFormat: boolean,
-  contentType: string | null
-) {
+function squareBrokenMediaContent() {
   const tx = window.static_translate
   return (
-    <div className='attachment-content'>
-      {hasSupportedFormat
-        ? tx('attachment_failed_to_load')
-        : tx('cannot_display_unsuported_file_type', contentType || 'null')}
-    </div>
+    <div className='attachment-content'>{tx('attachment_failed_to_load')}</div>
   )
 }
 
@@ -186,7 +173,6 @@ export function ImageAttachment({
   openFullscreenMedia: (message: T.Message) => void
 }) {
   const { openDialog } = useDialog()
-  const tx = useTranslationFunction()
   const contextMenu = useContext(ContextMenuContext)
   const { jumpToMessage, deleteMessage } = useMessage()
   const accountId = selectedAccountId()
@@ -220,9 +206,7 @@ export function ImageAttachment({
         aria-haspopup='menu'
         {...rovingTabindexProps}
       >
-        <div className='attachment-content'>
-          {tx('attachment_failed_to_load')}
-        </div>
+        {squareBrokenMediaContent()}
       </div>
     )
   } else {
@@ -234,9 +218,8 @@ export function ImageAttachment({
       message,
       accountId
     )
-    const { file, fileMime } = message
-    const hasSupportedFormat = isImage(fileMime)
-    const isBroken = !file || !hasSupportedFormat
+    const { file } = message
+    const isBroken = !file
 
     return (
       <button
@@ -257,7 +240,7 @@ export function ImageAttachment({
         {...rovingTabindexProps}
       >
         {isBroken ? (
-          squareBrokenMediaContent(hasSupportedFormat, fileMime)
+          squareBrokenMediaContent()
         ) : (
           <img
             className='attachment-content'
@@ -278,7 +261,6 @@ export function VideoAttachment({
   openFullscreenMedia: (message: T.Message) => void
 }) {
   const { openDialog } = useDialog()
-  const tx = useTranslationFunction()
   const contextMenu = useContext(ContextMenuContext)
   const { deleteMessage, jumpToMessage } = useMessage()
   const accountId = selectedAccountId()
@@ -309,9 +291,7 @@ export function VideoAttachment({
         aria-haspopup='menu'
         {...rovingTabindexProps}
       >
-        <div className='attachment-content'>
-          {tx('attachment_failed_to_load')}
-        </div>
+        {squareBrokenMediaContent()}
       </div>
     )
   } else {
@@ -323,8 +303,8 @@ export function VideoAttachment({
       message,
       accountId
     )
-    const { file, fileMime } = message
-    const hasSupportedFormat = isVideo(fileMime)
+    const { file } = message
+    const hasSupportedFormat = message.viewType === 'Video'
     const isBroken = !file || !hasSupportedFormat
     return (
       <button
@@ -341,7 +321,7 @@ export function VideoAttachment({
         {...rovingTabindexProps}
       >
         {isBroken ? (
-          squareBrokenMediaContent(hasSupportedFormat, fileMime || '')
+          squareBrokenMediaContent()
         ) : (
           <>
             <video
@@ -365,7 +345,6 @@ export function AudioAttachment({
   loadResult,
 }: GalleryAttachmentElementProps) {
   const { openDialog } = useDialog()
-  const tx = useTranslationFunction()
   const nextVoiceMessagePlayerCtx = useContext(NextVoiceMessagePlayerContext)
   const contextMenu = useContext(ContextMenuContext)
   const { deleteMessage, jumpToMessage } = useMessage()
@@ -400,9 +379,7 @@ export function AudioAttachment({
           <div className='name'>? Error ?</div>
           <span className='date'>?</span>
         </div>
-        <div className='attachment-content'>
-          {tx('attachment_failed_to_load')}
-        </div>
+        {squareBrokenMediaContent()}
       </div>
     )
   } else {
@@ -414,10 +391,9 @@ export function AudioAttachment({
       message,
       accountId
     )
-    const { file, fileMime } = message
+    const { file } = message
     const src = runtime.transformBlobURL(file || '')
-    const hasSupportedFormat = isAudio(fileMime)
-    const isBroken = !file || !hasSupportedFormat
+    const isBroken = !file
     return (
       <div
         ref={interactiveElRef}
@@ -467,7 +443,9 @@ export function AudioAttachment({
             module='date'
           />
         </div>
-        {hasSupportedFormat ? (
+        {isBroken ? (
+          squareBrokenMediaContent()
+        ) : (
           <AudioPlayer
             src={src}
             // Despite the element having multiple interactive
@@ -482,13 +460,6 @@ export function AudioAttachment({
               })
             }
           />
-        ) : (
-          <div>
-            {window.static_translate(
-              'cannot_display_unsuported_file_type',
-              fileMime || 'null'
-            )}
-          </div>
         )}
       </div>
     )

@@ -2,7 +2,11 @@ import React, { useContext } from 'react'
 import { dirname, basename } from 'path'
 
 import { runtime } from '@deltachat-desktop/runtime-interface'
-import { IMAGE_EXTENSIONS } from '../../../../shared/constants'
+import {
+  AUDIO_EXTENSIONS,
+  IMAGE_EXTENSIONS,
+  VIDEO_EXTENSIONS,
+} from '../../../../shared/constants'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/dialog/useDialog'
 import SelectContactDialog from '../dialogs/SelectContact'
@@ -86,7 +90,20 @@ export default function MenuAttachment({
 
     if (files.length === 1) {
       setLastPath(dirname(files[0]))
-      addFileToDraft(files[0], basename(files[0]), 'File')
+      // for Audio, Video & Vcard set a ViewType that has a preview here
+      let viewType = 'File' as T.Viewtype
+      if (
+        AUDIO_EXTENSIONS.some(ext => files[0].toLowerCase().endsWith('.' + ext))
+      ) {
+        viewType = 'Audio'
+      } else if (
+        VIDEO_EXTENSIONS.some(ext => files[0].toLowerCase().endsWith('.' + ext))
+      ) {
+        viewType = 'Video'
+      } else if (files[0].toLowerCase().endsWith('.vcf')) {
+        viewType = 'Vcard'
+      }
+      addFileToDraft(files[0], basename(files[0]), viewType)
     } else if (files.length > 1) {
       confirmSendMultipleFiles(files, 'File')
     }
