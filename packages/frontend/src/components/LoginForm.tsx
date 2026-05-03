@@ -106,6 +106,7 @@ export default function LoginForm({
     password,
     imapServer,
     imapPort,
+    imapFolder,
     imapSecurity,
     certificateChecks,
     smtpUser,
@@ -196,6 +197,16 @@ export default function LoginForm({
               min='0'
               max='65535'
               value={imapPort}
+              onChange={handleCredentialsChange}
+            />
+
+            <DeltaInput
+              key='imapFolder'
+              id='imapFolder'
+              label={tx('login_imap_folder')}
+              placeholder={tx('def')}
+              type='text'
+              value={imapFolder}
               onChange={handleCredentialsChange}
             />
 
