@@ -33,6 +33,7 @@ export type AudioPlayerProps = {
   duration?: number;
   hideArtist?: boolean;
   className?: string;
+  tabIndex?: number;
 
   onPlay?: React.ReactEventHandler<HTMLAudioElement>;
   onPause?: React.ReactEventHandler<HTMLAudioElement>;
@@ -41,6 +42,13 @@ export type AudioPlayerProps = {
   onTimeUpdate?: React.ReactEventHandler<HTMLAudioElement>;
   onLoadedMetadata?: React.ReactEventHandler<HTMLAudioElement>;
   onDurationChange?: React.ReactEventHandler<HTMLAudioElement>;
+
+  /**
+   * Called only when playback is started by the user's interaction with this UI.
+   * This must not be forwarded to the native <audio> element because it is not
+   * a valid HTML audio prop.
+   */
+  onPlayNonProgrammatic?: () => void;
 };
 
 type ExtractedAudioMetadata = {
@@ -231,9 +239,12 @@ function getInitials(title?: string): string {
 }
 
 function uint8ArrayToBlob(data: Uint8Array, mimeType?: string): Blob {
-  return new Blob([data], {
-    type: mimeType || 'image/jpeg',
-  });
+  const arrayBuffer = new ArrayBuffer(data.byteLength);
+  const view = new Uint8Array(arrayBuffer);
+
+  view.set(data);
+
+  return new Blob([arrayBuffer], { type: mimeType || 'image/jpeg' });
 }
 
 async function extractAudioMetadataWithMusicMetadata(
@@ -287,6 +298,7 @@ export function AudioPlayer({
   duration: propDuration,
   hideArtist = false,
   className,
+  tabIndex,
   onPlay,
   onPause,
   onEnded,
@@ -294,6 +306,7 @@ export function AudioPlayer({
   onTimeUpdate,
   onLoadedMetadata,
   onDurationChange,
+  onPlayNonProgrammatic,
 }: AudioPlayerProps) {
   const metadataAudioRef = useRef<HTMLAudioElement | null>(null);
   const metadataCoverUrlRef = useRef<string | undefined>(undefined);
@@ -427,10 +440,7 @@ export function AudioPlayer({
             setInternalDuration(metadata.duration);
           }
         } catch (error) {
-          if (
-            error instanceof DOMException &&
-            error.name === 'AbortError'
-          ) {
+          if (error instanceof DOMException && error.name === 'AbortError') {
             return;
           }
 
@@ -689,6 +699,7 @@ export function AudioPlayer({
         setHasError(false);
         setIsLoading(true);
 
+        onPlayNonProgrammatic?.();
         pauseOtherMediaElementsExcept(audio);
 
         await audio.play();
@@ -701,7 +712,7 @@ export function AudioPlayer({
       setIsLoading(false);
       setIsPlaying(false);
     }
-  }, [src]);
+  }, [src, onPlayNonProgrammatic]);
 
   const handleMetadataAudioLoadedMetadata = useCallback(
     (event: React.SyntheticEvent<HTMLAudioElement>) => {
@@ -809,6 +820,7 @@ export function AudioPlayer({
         type="button"
         className={styles.cover}
         onClick={handleTogglePlay}
+        tabIndex={tabIndex}
         aria-label={isPlaying ? 'Pause audio' : 'Play audio'}
       >
         {resolvedCoverUrl ? (

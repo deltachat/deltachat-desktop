@@ -39,6 +39,7 @@
     "linkifyjs": "^4.3.2",
     "mime-types": "catalog:",
     "moment": "^2.30.1",
+    "music-metadata": "^11.12.3",
     "path-browserify": "^1.0.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
