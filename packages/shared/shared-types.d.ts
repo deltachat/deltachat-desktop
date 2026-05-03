@@ -1,3 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import type { defaultAppStoreBaseUrl } from './state.ts'
+
 export type PromiseType<T> = T extends Promise<infer U> ? U : any
 
 type Bounds = {
@@ -83,6 +86,12 @@ export interface DesktopSettingsType {
   autostart: boolean
   /** whether to start Electron with system on supported platforms */
   autostartElectron: boolean
+  /**
+   * URL relative to which to fetch the `xdc-lock.json` file.
+   * If `undefined` or an empty string then we default to
+   * {@linkcode defaultAppStoreBaseUrl}.
+   */
+  appStoreBaseUrl?: string
 }
 
 export interface RC_Config {

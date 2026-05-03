@@ -32,5 +32,8 @@ export function getDefaultState(): DesktopSettingsType {
     inChatSoundsVolume: 0.5,
     autostart: true,
     autostartElectron: false,
+    appStoreBaseUrl: undefined,
   }
 }
+
+export const defaultAppStoreBaseUrl = 'https://apps.testrun.org/'
