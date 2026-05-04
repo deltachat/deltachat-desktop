@@ -13,6 +13,7 @@
     "resolveJsonModule": true,
     "strictNullChecks": true,
     "strict": true,
+    "noUncheckedIndexedAccess": true,
     "plugins": [{ "name": "typescript-plugin-css-modules" }]
   }
 }
