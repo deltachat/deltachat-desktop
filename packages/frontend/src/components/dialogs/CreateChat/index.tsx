@@ -200,9 +200,7 @@ function CreateChatMain(props: CreateChatMainProps) {
   const isChatmail = settingsStore?.settings.is_chatmail === '1'
 
   const showAddGroup = queryStr.length === 0
-  const showAddBroadcastList =
-    queryStr.length === 0 &&
-    (settingsStore?.desktopSettings.enableBroadcastLists ?? false)
+  const showAddBroadcastList = queryStr.length === 0
   const showAddContactQRScan = queryStr.length === 0
 
   // Chatmail accounts can't send unencrypted emails. See

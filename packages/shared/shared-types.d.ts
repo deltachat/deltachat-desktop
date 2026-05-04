@@ -26,12 +26,15 @@ export interface DesktopSettingsType {
    */
   enableAVCalls?: boolean
   /**
-   * The new version of video calls.
-   * @see https://github.com/orgs/deltachat/projects/81
-   * @see also {@linkcode enableAVCalls}
+   * @deprecated calls are no longer behind an experimental flag; the field
+   * may still be present in persisted user JSON but is not read anymore.
    */
-  enableAVCallsV2: boolean
-  enableBroadcastLists: boolean
+  enableAVCallsV2?: boolean
+  /**
+   * @deprecated channels are no longer behind an experimental flag; the
+   * field may still be present in persisted user JSON but is not read anymore.
+   */
+  enableBroadcastLists?: boolean
   enableOnDemandLocationStreaming: boolean
   enterKeySends: boolean
   locale: string | null

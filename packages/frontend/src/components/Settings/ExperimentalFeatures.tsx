@@ -18,9 +18,7 @@ export function ExperimentalFeatures() {
   const showExperimentalInfoDialog = async (
     settingsKey: keyof Pick<
       SettingsStoreState['desktopSettings'],
-      | 'enableAVCallsV2'
-      | 'enableBroadcastLists'
-      | 'enableOnDemandLocationStreaming'
+      'enableOnDemandLocationStreaming'
     >,
     updatedValue: boolean
   ) => {
@@ -32,17 +30,6 @@ export function ExperimentalFeatures() {
     // https://github.com/deltachat/deltachat-android/blob/2385b236c7ed9eb0e26ef819d8274936877b7023/src/main/java/org/thoughtcrime/securesms/preferences/AdvancedPreferenceFragment.java
 
     switch (settingsKey) {
-      case 'enableAVCallsV2':
-        message =
-          'Thanks for helping to debug "Calls"!\n\n' +
-          '• You can now debug calls using the "phone" icon in one-to-one-chats' +
-          "\n\n• The experiment is about making decentralised calls work and reliable at all, not about options or UI. We're happy about focused feedback at support.delta.chat"
-        break
-      case 'enableBroadcastLists':
-        message =
-          'Thanks for trying out "Channels"!\n\n' +
-          '• You can now create "Channels" from the "New Chat" dialog'
-        break
       case 'enableOnDemandLocationStreaming':
         message =
           'Thanks for trying out "On-Demand Location Streaming"\n\n' +
@@ -61,24 +48,6 @@ export function ExperimentalFeatures() {
 
   return (
     <>
-      {runtime.getRuntimeInfo().target === 'electron' && (
-        <DesktopSettingsSwitch
-          settingsKey='enableAVCallsV2'
-          label={'Debug Calls'}
-          description='Work in progress…'
-          callback={value =>
-            showExperimentalInfoDialog('enableAVCallsV2', value)
-          }
-        />
-      )}
-      <DesktopSettingsSwitch
-        settingsKey='enableBroadcastLists'
-        label={tx('channels')}
-        description={tx('chat_new_channel_hint')}
-        callback={value =>
-          showExperimentalInfoDialog('enableBroadcastLists', value)
-        }
-      />
       <DesktopSettingsSwitch
         settingsKey='enableOnDemandLocationStreaming'
         label={tx('pref_on_demand_location_streaming')}

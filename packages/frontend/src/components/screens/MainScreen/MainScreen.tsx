@@ -553,9 +553,9 @@ function ChatNavButtons({
           <Icon coloring='navbar' icon='map' size={18} />
         </Button>
       )}
-      {/* Note that the `enableAVCallsV2` setting itself is hidden
-        on unsupported targets (Tauri, Browser). */}
-      {settingsStore?.desktopSettings.enableAVCallsV2 &&
+      {/* Calls are only implemented on Electron; Tauri and Browser
+        runtimes do not implement `startOutgoingVideoCall`. */}
+      {runtime.getRuntimeInfo().target === 'electron' &&
         chat.canSend &&
         chat.isEncrypted &&
         // Core only allows placing calls in chats of type "single"
