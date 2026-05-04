@@ -32,43 +32,6 @@ import {
 } from '../../contexts/RovingTabindex'
 import { marknoticedChat } from '../../backend/chat'
 
-const onWindowFocus = (accountId: number) => {
-  log.debug('window focused')
-  const messageElements: HTMLElement[] = Array.prototype.slice.call(
-    document.querySelectorAll('#message-list .message-observer-bottom')
-  )
-
-  const visibleElements = messageElements.filter(el => {
-    const rect = el.getBoundingClientRect()
-    return (
-      rect.top >= 0 &&
-      rect.left >= 0 &&
-      rect.bottom <=
-        (window.innerHeight || document.documentElement.clientHeight) &&
-      rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-    )
-  })
-
-  const messageIdsToMarkAsRead = visibleElements
-    .map(el =>
-      el.dataset.messageid ? Number.parseInt(el.dataset.messageid) : undefined
-    )
-    .filter(id => id != undefined)
-
-  if (messageIdsToMarkAsRead.length !== 0) {
-    log.debug(
-      `window was focused: marking ${messageIdsToMarkAsRead.length} visible messages as read`,
-      messageIdsToMarkAsRead
-    )
-    // FYI we also listen for `MsgsNoticed` event
-    // to update the badge counter,
-    // so `.then(debouncedUpdateBadgeCounter)` is probably not necessary.
-    BackendRemote.rpc
-      .markseenMsgs(accountId, messageIdsToMarkAsRead)
-      .then(throttledUpdateBadgeCounter)
-  }
-}
-
 /**
  * Returns a "live" version of `FullChat.freshMessageCounter`.
  * When the `chat` reference updates, we consider it to be the most up-to-date
@@ -228,11 +191,30 @@ export default function MessageList({
     })
   }, [onUnreadMessageInView])
 
+  // re-initializes the observer on all messages that are currently in the
+  // viewport and unread, so that they get marked as read if they are still
+  // in the viewport after the lock is released or the window regains focus.
+  // This is needed since on some conditions (e.g. window not focused, scroll
+  // lock) the `onUnreadMessageInView` callback returns early without marking
+  // messages as read, even if they are in view.
+  const reInvokeAllUnreadObservations = useCallback(() => {
+    const elements = document.querySelectorAll(
+      '#message-list .message-observer-bottom'
+    )
+    for (const el of elements) {
+      // Calling `unobserve()` followed by `observe()` invokes the
+      // IntersectionObserver callback with the current intersection status
+      // of the element,
+      unreadMessageInViewIntersectionObserver.unobserve(el)
+      unreadMessageInViewIntersectionObserver.observe(el)
+    }
+  }, [unreadMessageInViewIntersectionObserver])
+
   useEffect(() => {
-    const onFocus = onWindowFocus.bind(null, accountId)
-    window.addEventListener('focus', onFocus)
-    return () => window.removeEventListener('focus', onFocus)
-  }, [accountId])
+    window.addEventListener('focus', reInvokeAllUnreadObservations)
+    return () =>
+      window.removeEventListener('focus', reInvokeAllUnreadObservations)
+  }, [reInvokeAllUnreadObservations])
 
   useEffect(() => {
     return () => {
@@ -574,6 +556,11 @@ export default function MessageList({
         // let's invoke `onScroll`, e.g. to load more messages if we're close
         // to top / bottom
         onScroll()
+        // By the time this nested `setTimeout` runs, the
+        // `setTimeout(scheduler.unlock, 0)` queued by `unlockScroll()`
+        // above has already fired, so re-invoking the observer now schedules
+        // a fresh delivery with the lock released.
+        reInvokeAllUnreadObservations()
       }, 0)
     }, 0)
   }, [
@@ -584,6 +571,7 @@ export default function MessageList({
     viewState.lastKnownScrollHeight,
     viewState.scrollTo,
     isReactionsBarShown,
+    reInvokeAllUnreadObservations,
   ])
 
   useLayoutEffect(() => {
