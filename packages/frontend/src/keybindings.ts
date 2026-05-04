@@ -3,6 +3,8 @@ import { getLogger } from '../../shared/logger'
 const log = getLogger('renderer/keybindings')
 
 export enum KeybindAction {
+  AccountsList_SelectNextAccount = 'accountslist:select-next-chat',
+  AccountsList_SelectPreviousAccount = 'accountslist:select-previous-chat',
   ChatList_SelectNextChat = 'chatlist:select-next-chat',
   ChatList_SelectPreviousChat = 'chatlist:select-previous-chat',
   ChatList_ScrollToSelectedChat = 'chatlist:scroll-to-selected-chat',
@@ -145,9 +147,17 @@ export function keyDownEvent2Action(
     } else if (ev.altKey && ev.code === 'ArrowUp') {
       return KeybindAction.ChatList_SelectPreviousChat
     } else if (ev.ctrlKey && ev.code === 'PageDown') {
-      return KeybindAction.ChatList_SelectNextChat
+      if (ev.altKey) {
+        return KeybindAction.AccountsList_SelectNextAccount
+      } else {
+        return KeybindAction.ChatList_SelectNextChat
+      }
     } else if (ev.ctrlKey && ev.code === 'PageUp') {
-      return KeybindAction.ChatList_SelectPreviousChat
+      if (ev.altKey) {
+        return KeybindAction.AccountsList_SelectPreviousAccount
+      } else {
+        return KeybindAction.ChatList_SelectPreviousChat
+      }
     } else if (ev.ctrlKey && ev.code === 'Tab') {
       return !ev.shiftKey
         ? KeybindAction.ChatList_SelectNextChat
@@ -225,9 +235,17 @@ export function keyDownEvent2Action(
   } else {
     // fire continuesly as long as button is pressed
     if (ev.ctrlKey && ev.code === 'PageDown') {
-      return KeybindAction.ChatList_SelectNextChat
+      if (ev.altKey) {
+        return KeybindAction.AccountsList_SelectNextAccount
+      } else {
+        return KeybindAction.ChatList_SelectNextChat
+      }
     } else if (ev.ctrlKey && ev.code === 'PageUp') {
-      return KeybindAction.ChatList_SelectPreviousChat
+      if (ev.altKey) {
+        return KeybindAction.AccountsList_SelectPreviousAccount
+      } else {
+        return KeybindAction.ChatList_SelectPreviousChat
+      }
     } else if (ev.code === 'PageUp') {
       if (
         (ev.target as HTMLElement)?.classList.contains(

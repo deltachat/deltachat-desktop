@@ -176,6 +176,13 @@ export function getKeybindings(
         ],
       },
       {
+        title: tx('switch_account'),
+        keyBindings: [
+          ['Control', 'Alt', 'PageUp'],
+          ['Control', 'Alt', 'PageDown'],
+        ],
+      },
+      {
         title: tx('scroll_messages'),
         keyBindings: [['PageUp'], ['PageDown']],
       },
