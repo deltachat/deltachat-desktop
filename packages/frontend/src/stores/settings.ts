@@ -36,7 +36,6 @@ const settingsKeys = [
   'mdns_enabled',
   'bcc_self',
   'delete_device_after',
-  'delete_server_after',
   'download_limit',
   'media_quality',
   'is_chatmail',
