@@ -313,6 +313,10 @@ All notable changes to this project will be documented in this file.
 - Calls: add "P2P" / "non-P2P" text
 
 
+### Fixed
+- accessibility: announce when the draft's quoted message and attachments change (as a result of user actions) (make it a live region) #4693
+
+
 <a id="2_22_0"></a>
 
 ## [2.22.0] - 2025-10-17
