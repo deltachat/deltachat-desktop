@@ -191,27 +191,30 @@ export default function MessageList({
     })
   }, [onUnreadMessageInView])
 
-  // re-initializes the observer on all messages that are currently in the viewport
-  // and unread, so that they get marked as read if they are still in the viewport after
-  // the lock is released or the window regains focus. This is needed since on some
-  // conditions (e.g. window not focused, scroll lock) the `onUnreadMessageInView`
-  // callback returns early without marking messages as read, even if they are in view.
-  const reArmAllUnreadObservations = useCallback(() => {
+  // re-initializes the observer on all messages that are currently in the
+  // viewport and unread, so that they get marked as read if they are still
+  // in the viewport after the lock is released or the window regains focus.
+  // This is needed since on some conditions (e.g. window not focused, scroll
+  // lock) the `onUnreadMessageInView` callback returns early without marking
+  // messages as read, even if they are in view.
+  const reInvokeAllUnreadObservations = useCallback(() => {
     const elements = document.querySelectorAll(
       '#message-list .message-observer-bottom'
     )
     for (const el of elements) {
-      // Calling `unobserve()` followed by `observe()` schedules a fresh entry
-      // for the next IntersectionObserver delivery with the current state.
+      // Calling `unobserve()` followed by `observe()` invokes the
+      // IntersectionObserver callback with the current intersection status
+      // of the element,
       unreadMessageInViewIntersectionObserver.unobserve(el)
       unreadMessageInViewIntersectionObserver.observe(el)
     }
   }, [unreadMessageInViewIntersectionObserver])
 
   useEffect(() => {
-    window.addEventListener('focus', reArmAllUnreadObservations)
-    return () => window.removeEventListener('focus', reArmAllUnreadObservations)
-  }, [reArmAllUnreadObservations])
+    window.addEventListener('focus', reInvokeAllUnreadObservations)
+    return () =>
+      window.removeEventListener('focus', reInvokeAllUnreadObservations)
+  }, [reInvokeAllUnreadObservations])
 
   useEffect(() => {
     return () => {
@@ -553,10 +556,11 @@ export default function MessageList({
         // let's invoke `onScroll`, e.g. to load more messages if we're close
         // to top / bottom
         onScroll()
-        // By the time this nested `setTimeout` runs, the `setTimeout(scheduler.unlock, 0)`
-        // queued by `unlockScroll()` above has already fired, so re-arming the
-        // observer now schedules a fresh delivery with the lock released.
-        reArmAllUnreadObservations()
+        // By the time this nested `setTimeout` runs, the
+        // `setTimeout(scheduler.unlock, 0)` queued by `unlockScroll()`
+        // above has already fired, so re-invoking the observer now schedules
+        // a fresh delivery with the lock released.
+        reInvokeAllUnreadObservations()
       }, 0)
     }, 0)
   }, [
@@ -567,7 +571,7 @@ export default function MessageList({
     viewState.lastKnownScrollHeight,
     viewState.scrollTo,
     isReactionsBarShown,
-    reArmAllUnreadObservations,
+    reInvokeAllUnreadObservations,
   ])
 
   useLayoutEffect(() => {
