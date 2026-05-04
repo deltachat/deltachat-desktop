@@ -25,7 +25,7 @@ import {
   enterEditMessageMode,
 } from './messageFunctions'
 import Attachment from '../attachment/messageAttachment'
-import { isGenericAttachment, isImage, isVideo } from '../attachment/Attachment'
+import { isGenericAttachment, isImage } from '../attachment/Attachment'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import { ConversationType } from './MessageList'
 import { getDirection } from '../../utils/getDirection'
@@ -289,7 +289,8 @@ function buildContextMenu(
   }
 
   const showAttachmentOptions = !!message.file
-  const showCopyImage = !!message.file && message.viewType === 'Image'
+  const showCopyImage =
+    !!message.file && isImage(message.viewType) && message.viewType !== 'Gif'
   const showResend =
     message.sender.id === C.DC_CONTACT_ID_SELF && message.viewType !== 'Call'
 
@@ -389,7 +390,7 @@ function buildContextMenu(
     // Open Attachment
     showAttachmentOptions &&
       message.viewType !== 'Webxdc' &&
-      isGenericAttachment(message.fileMime) && {
+      isGenericAttachment(message.viewType) && {
         label: tx('open_attachment'),
         action: openAttachmentInShell.bind(null, message),
       },
@@ -695,7 +696,8 @@ export default function Message(props: {
         // set message width which is used by reaction component
         // to adapt the number of visible reactions
         if (
-          (message.fileMime && isImage(message.fileMime)) ||
+          isImage(message.viewType) ||
+          message.viewType === 'Sticker' ||
           window.innerWidth < 900
         ) {
           // image messages have a defined width
@@ -715,7 +717,7 @@ export default function Message(props: {
     return () => {
       window.removeEventListener('resize', resizeHandler)
     }
-  }, [message.fileMime])
+  }, [message.viewType])
 
   // Info Message
   if (message.isInfo) {
@@ -869,7 +871,7 @@ export default function Message(props: {
 
   const hasText = text !== null && text !== ''
   const fileMime = message.fileMime || null
-  const isWithoutText = isMediaWithoutText(fileMime, hasText, message.viewType)
+  const isWithoutText = isMediaWithoutText(hasText, message.viewType)
   const showAttachment = (message: T.Message) =>
     message.file &&
     message.viewType !== 'Webxdc' &&
@@ -884,7 +886,7 @@ export default function Message(props: {
         direction,
         styles.message,
         rovingTabindex.className,
-        isWithoutText && isVideo(fileMime) ? 'video-only' : '',
+        isWithoutText && viewType === 'Video' ? 'video-only' : '',
         {
           [styles.withReactions]: message.reactions,
           'type-sticker': viewType === 'Sticker',

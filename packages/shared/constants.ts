@@ -27,7 +27,23 @@ export const enum AutodeleteDuration {
   ONE_YEAR = Timespans.ONE_YEAR_IN_SECONDS,
 }
 
-export const IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'apng', 'gif', 'webp']
+// see fn guess_msgtype_from_path_suffix in https://github.com/chatmail/core/blob/main/src/message.rs
+
+export const IMAGE_EXTENSIONS = [
+  'jpg',
+  'jpeg',
+  'jpe',
+  'png',
+  'apng',
+  'gif',
+  'webp',
+  'heic',
+  'heif',
+]
+
+export const VIDEO_EXTENSIONS = ['mp4', 'mov', 'avi', 'wmv', '3gp']
+
+export const AUDIO_EXTENSIONS = ['mp3', 'wav', 'aac', 'flac', 'ogg', 'oga']
 
 export const enum NOTIFICATION_TYPE {
   MESSAGE,

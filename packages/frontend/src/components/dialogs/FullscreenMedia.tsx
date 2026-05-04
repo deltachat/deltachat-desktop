@@ -6,7 +6,7 @@ import Dialog from '../Dialog'
 import { IconButton } from '../Icon'
 import { onDownload } from '../message/messageFunctions'
 import { runtime } from '@deltachat-desktop/runtime-interface'
-import { isImage, isVideo, isAudio } from '../attachment/Attachment'
+
 import { getLogger } from '../../../../shared/logger'
 import { gitHubIssuesUrl } from '../../../../shared/constants'
 import { useInitEffect } from '../helpers/hooks'
@@ -18,6 +18,7 @@ import useMessage from '../../hooks/chat/useMessage'
 import { useZoomKeyboardShortcuts } from '../../hooks/useZoomKeyboardShortcuts'
 
 import type { DialogProps } from '../../contexts/DialogContext'
+import { isImage } from '../attachment/Attachment'
 
 const log = getLogger('renderer/fullscreen_media')
 
@@ -68,12 +69,11 @@ export default function FullscreenMedia(props: Props & DialogProps) {
       } else {
         const { viewType, chatId } = props.msg
         // workaround to get gifs and images into the same media list
-        let additionalViewType: Type.Viewtype | null = null
-        if (props.msg.viewType === 'Image') {
-          additionalViewType = 'Gif'
-        } else if (props.msg.viewType === 'Gif') {
-          additionalViewType = 'Image'
-        }
+        const additionalViewType: Type.Viewtype | null = isImage(viewType)
+          ? viewType === 'Image'
+            ? 'Gif'
+            : 'Image'
+          : null
         const scope =
           props.neighboringMedia === NeighboringMediaMode.Global ? null : chatId
         BackendRemote.rpc
@@ -128,7 +128,7 @@ export default function FullscreenMedia(props: Props & DialogProps) {
 
   let elm = null
 
-  if (isImage(fileMime)) {
+  if (isImage(msg.viewType)) {
     const imageHeight =
       msg.dimensionsHeight < 300 ? 2 * msg.dimensionsHeight : ''
     elm = (
@@ -178,9 +178,9 @@ export default function FullscreenMedia(props: Props & DialogProps) {
         </TransformWrapper>
       </div>
     )
-  } else if (isAudio(fileMime)) {
+  } else if (msg.viewType === 'Audio' || msg.viewType === 'Voice') {
     elm = <audio src={runtime.transformBlobURL(file)} controls />
-  } else if (isVideo(fileMime)) {
+  } else if (msg.viewType === 'Video') {
     elm = <video src={runtime.transformBlobURL(file)} controls autoPlay />
   } else if (!fileMime) {
     // no file mime
