@@ -355,6 +355,7 @@ export function ViewProfileInner({
             <div className={styles.contactAttributesBottom}>
               {verifier && (
                 <VerificationTag
+                  type='button'
                   className={styles.verification}
                   onClick={verifier.action}
                   style={{ display: 'flex' }}
