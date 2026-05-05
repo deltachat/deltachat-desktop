@@ -25,7 +25,7 @@ import useMessage from '../../hooks/chat/useMessage'
 type Props = {
   addFileToDraft: (file: string, fileName: string, viewType: T.Viewtype) => void
   showAppPicker: (show: boolean) => void
-  selectedChat: Pick<T.BasicChat, 'name' | 'id'> | null
+  selectedChat: Pick<T.BasicChat, 'name' | 'id' | 'chatType'> | null
 }
 
 // Main component that creates the menu and popover
@@ -172,12 +172,6 @@ export default function MenuAttachment({
       action: selectContact.bind(null),
     },
     {
-      icon: 'apps',
-      label: tx('webxdc_app'),
-      action: selectAppPicker.bind(null),
-      dataTestid: 'open-app-picker',
-    },
-    {
       icon: 'upload-file',
       label: tx('file'),
       action: addFilenameFile.bind(null),
@@ -189,6 +183,16 @@ export default function MenuAttachment({
       action: addFilenameMedia.bind(null),
     },
   ]
+
+  if (selectedChat?.chatType !== 'OutBroadcast') {
+    // apps don't work (yet) well for channels
+    menu.splice(1, 0, {
+      icon: 'apps',
+      label: tx('webxdc_app'),
+      action: selectAppPicker.bind(null),
+      dataTestid: 'open-app-picker',
+    })
+  }
 
   const onClickAttachmentMenu = (event: React.MouseEvent<any, MouseEvent>) => {
     const attachmentMenuButtonElement = document.querySelector(
