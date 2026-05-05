@@ -97,7 +97,7 @@ jobs:
         id: pathsWin
         run: |
           mkdir out
-          $jsonString = '$env:STEPS_BUILD_OUTPUTS_ARTIFACTPATHS'
+          $jsonString = $env:STEPS_BUILD_OUTPUTS_ARTIFACTPATHS
           $filePaths = ConvertFrom-Json $jsonString
           foreach ($path in $filePaths) {
             if (Test-Path $path -PathType Leaf) {
