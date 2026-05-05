@@ -777,6 +777,7 @@ export default function Message(props: {
         onContextMenu={showContextMenu}
       >
         <TagName
+          type='button'
           className={'bubble ' + rovingTabindex.className}
           onClick={onClick}
           {...commonAttrs}
@@ -1094,7 +1095,12 @@ export const Quote = ({
   const Tag = onClick ? 'button' : 'div'
 
   return (
-    <Tag className='quote-background' onClick={onClick} tabIndex={tabIndex}>
+    <Tag
+      type='button'
+      className='quote-background'
+      onClick={onClick}
+      tabIndex={tabIndex}
+    >
       <div
         className={`quote ${hasMessage && 'has-message'}`}
         style={borderStyle}

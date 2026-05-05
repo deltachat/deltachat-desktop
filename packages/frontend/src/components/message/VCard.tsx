@@ -73,6 +73,7 @@ export function VisualVCardComponent({
   const Tag = onClick ? 'button' : 'div'
   return (
     <Tag
+      type='button'
       onClick={onClick}
       tabIndex={tabindexForInteractiveContents}
       className={styles.vcard}
