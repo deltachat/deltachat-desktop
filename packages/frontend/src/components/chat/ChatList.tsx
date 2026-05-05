@@ -361,6 +361,13 @@ export default function ChatList(props: {
   // Render --------------------
   const tx = useTranslationFunction()
 
+  let showChatResults = true
+
+  if (chatListIds.length === 0 && queryStr && isInviteLink(queryStr)) {
+    // Don't show "0 chats" when the query is an invite link
+    showChatResults = false
+  }
+
   if (queryChatId) {
     return (
       <SearchInChatResults
@@ -379,7 +386,7 @@ export default function ChatList(props: {
       <AutoSizer disableWidth>
         {({ height }) => (
           <>
-            {isSearchActive && (
+            {isSearchActive && showChatResults && (
               <div
                 id='search-result-divider-chats'
                 className='search-result-divider'
@@ -648,6 +655,19 @@ function ContactAndMessageSearchResults({
       isSingleChatSearch: queryChatId != null, // `false`
     }
   }, [messageResultIds, messageCache, queryStr, queryChatId])
+
+  if (
+    showPseudoListItemAddContactFromInviteLink &&
+    contactIds.length === 0 &&
+    messageResultIds.length === 0
+  ) {
+    return (
+      <PseudoListItemAddContactOrGroupFromInviteLink
+        inviteLink={queryStr!}
+        accountId={accountId}
+      />
+    )
+  }
 
   return (
     <>

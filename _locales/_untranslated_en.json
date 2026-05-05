@@ -61,5 +61,11 @@
   },
   "edit_channel": {
     "message": "Edit Channel"
+  },
+  "qr_link_pasted": {
+    "message": "QR link detected"
+  },
+  "paste_in_qr_scanner": {
+    "message": "Click to paste it in QR scanner"
   }
 }
