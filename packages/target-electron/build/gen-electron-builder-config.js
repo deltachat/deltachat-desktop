@@ -148,16 +148,16 @@ build['dmg'] = {
 }
 build['linux'] = {
   target: ['AppImage', 'deb'],
-  category: 'Network;Chat;InstantMessaging;',
+  category: 'Communication;Chat;InstantMessaging;',
   desktop: {
     entry: {
-      Comment: 'Delta Chat email-based messenger',
-      Keywords: 'dc;chat;delta;messaging;messenger;email',
+      Comment: 'Decentralized Private Messenger (https://delta.chat)',
+      Keywords: 'delta chat;chat;deltachat;messaging;messenger;privacy',
     },
   },
   files: [...files, PREBUILD_FILTERS.NOT_MAC, PREBUILD_FILTERS.NOT_WINDOWS],
   icon: 'build/icon.icns', // electron builder gets the icon out of the mac icon archive
-  description: 'The Email messenger (https://delta.chat)',
+  description: 'Decentralized Private Messenger (https://delta.chat)',
 }
 
 build['appImage'] = {
