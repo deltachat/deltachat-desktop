@@ -18,6 +18,7 @@ import SettingsStoreInstance, {
 } from '../../stores/settings'
 import useDialog from '../../hooks/dialog/useDialog'
 import CoreSettingsSwitch from './CoreSettingsSwitch'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 
 type Props = {
   desktopSettings: DesktopSettingsType
@@ -88,7 +89,8 @@ export default function Notifications({ desktopSettings }: Props) {
       </SettingsSelector>
       <SettingsSeparator></SettingsSeparator>
       <SettingsHeading>{tx('current_profile')}</SettingsHeading>
-      {desktopSettings.enableAVCallsV2 && (
+      {runtime.getRuntimeInfo().target === 'electron' && (
+        // Calls are only implemented on Electron.
         // https://github.com/deltachat/deltachat-desktop/pull/6044#issuecomment-3977395069
         <SettingsSwitch
           label={tx('who_can_call_me_toggle')}

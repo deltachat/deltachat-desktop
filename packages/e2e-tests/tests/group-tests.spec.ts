@@ -585,18 +585,6 @@ test('create channel and add members', async ({ browserName }) => {
 
   await switchToProfile(page, userA.id)
 
-  // Enable the experimental Channels feature in settings (if not already enabled)
-  await page.getByTestId('open-settings-button').click()
-  await page.getByTestId('open-advanced-settings').click()
-  const channelsLabel = page.locator('label').filter({ hasText: 'Channels' })
-  await expect(channelsLabel).toBeVisible()
-  const channelsCheckbox = channelsLabel.locator('input[type="checkbox"]')
-  if (!(await channelsCheckbox.isChecked())) {
-    await channelsCheckbox.click({ force: true })
-    await page.getByTestId('alert-ok').click()
-  }
-  await page.getByTestId('settings-advanced-close').click()
-
   // Create a channel
   await page.locator('#new-chat-button').click()
   await page.locator('#newbroadcastlist button').click()
