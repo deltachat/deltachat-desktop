@@ -993,7 +993,7 @@ function useCreateGroup<
         BackendRemote.rpc.setChatProfileImage(accountId, chatId, groupImage),
       description !== '' &&
         BackendRemote.rpc.setChatDescription(accountId, chatId, description),
-      groupMembers.map(contactId => {
+      ...groupMembers.map(contactId => {
         if (contactId === C.DC_CONTACT_ID_SELF) {
           return
         }
