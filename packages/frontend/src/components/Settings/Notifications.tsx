@@ -9,7 +9,6 @@ import AccountNotificationStoreInstance, {
 } from '../../stores/accountNotifications'
 import { selectedAccountId } from '../../ScreenController'
 import SettingsSwitch from './SettingsSwitch'
-import SettingsHeading from './SettingsHeading'
 import SettingsSelector from './SettingsSelector'
 import SmallSelectDialog from '../SmallSelectDialog'
 import SettingsStoreInstance, {
