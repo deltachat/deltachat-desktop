@@ -714,7 +714,7 @@ export function CreateGroup(props: CreateGroupProps) {
             description={groupDescription}
             setDescription={setGroupDescription}
             {...(groupType === GroupType.PLAIN_EMAIL
-              ? { groupType: GroupType.PLAIN_EMAIL }
+              ? { groupType }
               : {
                   groupType,
                   groupImage,
@@ -987,22 +987,19 @@ function useCreateGroup<
       }
     }
 
-    if (groupImage && groupImage !== '') {
-      await BackendRemote.rpc.setChatProfileImage(accountId, chatId, groupImage)
-    }
-
-    if (description !== '') {
-      await BackendRemote.rpc.setChatDescription(accountId, chatId, description)
-    }
-
-    await Promise.all(
+    await Promise.all([
+      groupImage &&
+        groupImage !== '' &&
+        BackendRemote.rpc.setChatProfileImage(accountId, chatId, groupImage),
+      description !== '' &&
+        BackendRemote.rpc.setChatDescription(accountId, chatId, description),
       groupMembers.map(contactId => {
         if (contactId === C.DC_CONTACT_ID_SELF) {
           return
         }
         return BackendRemote.rpc.addContactToChat(accountId, chatId, contactId)
-      })
-    )
+      }),
+    ])
 
     return chatId
   }, [accountId, description, groupImage, groupMembers, groupName, groupType])
@@ -1036,15 +1033,14 @@ const useCreateBroadcast = (
   const createBroadcastList = async () => {
     const chatId = await BackendRemote.rpc.createBroadcast(accountId, groupName)
 
-    await BackendRemote.rpc.setChatName(accountId, chatId, groupName)
-
-    if (groupImage && groupImage !== '') {
-      await BackendRemote.rpc.setChatProfileImage(accountId, chatId, groupImage)
-    }
-
-    if (description !== '') {
-      await BackendRemote.rpc.setChatDescription(accountId, chatId, description)
-    }
+    await Promise.all([
+      BackendRemote.rpc.setChatName(accountId, chatId, groupName),
+      groupImage &&
+        groupImage !== '' &&
+        BackendRemote.rpc.setChatProfileImage(accountId, chatId, groupImage),
+      description !== '' &&
+        BackendRemote.rpc.setChatDescription(accountId, chatId, description),
+    ])
 
     return chatId
   }
