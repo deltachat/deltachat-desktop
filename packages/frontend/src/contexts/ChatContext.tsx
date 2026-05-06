@@ -202,12 +202,7 @@ export const ChatProvider = ({
   unselectChatRef.current = unselectChat
 
   const lastArchivedCheckChatId = useRef<number | undefined>(undefined)
-  if (
-    chatNoLinger != undefined &&
-    // eslint-disable-next-line react-hooks/refs
-    chatId !== lastArchivedCheckChatId.current
-  ) {
-    // eslint-disable-next-line react-hooks/refs
+  if (chatNoLinger != undefined && chatId !== lastArchivedCheckChatId.current) {
     lastArchivedCheckChatId.current = chatId
     // Switch to "archived" view if selected chat is there
     // @TODO: We probably want this to be part of the UI logic instead
