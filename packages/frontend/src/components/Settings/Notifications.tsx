@@ -93,7 +93,8 @@ export default function Notifications({ desktopSettings }: Props) {
         // Calls are only implemented on Electron.
         // https://github.com/deltachat/deltachat-desktop/pull/6044#issuecomment-3977395069
         <SettingsSwitch
-          label={tx('who_can_call_me_toggle')}
+          label={tx('pref_calls')}
+          description={tx('pref_calls_explain')}
           value={
             settingsStore?.settings.who_can_call_me !== WhoCanCallMe.Nobody
           }

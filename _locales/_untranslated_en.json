@@ -53,9 +53,6 @@
   "prevent_dialog_spam_checkbox": {
     "message": "Don't allow the app to open this dialog again"
   },
-  "who_can_call_me_toggle": {
-    "message": "Show call screen on incoming calls"
-  },
   "react_more_emojis" : {
     "message": "More emojis..."
   },
