@@ -71,24 +71,21 @@ export default function Notifications({ desktopSettings }: Props) {
 
   return (
     <>
-      <SettingsHeading>{tx('all_profiles')}</SettingsHeading>
-      <DesktopSettingsSwitch
-        settingsKey='notifications'
-        label={tx('pref_notifications_explain')}
-      />
-      <DesktopSettingsSwitch
-        settingsKey='showNotificationContent'
-        label={tx('pref_show_notification_content_explain')}
+      <SettingsSwitch
+        label={tx('menu_mute')}
+        value={isMuted}
         disabled={!desktopSettings['notifications']}
+        onChange={() => {
+          AccountNotificationStoreInstance.effect.setMuted(accountId, !isMuted)
+        }}
       />
-      <SettingsSelector
-        onClick={onOpenInChatSoundsVolumeDialog.bind(null)}
-        currentValue={volumeNumberToString(desktopSettings.inChatSoundsVolume)}
-      >
-        {tx('pref_in_chat_sounds')}
-      </SettingsSelector>
-      <SettingsSeparator></SettingsSeparator>
-      <SettingsHeading>{tx('current_profile')}</SettingsHeading>
+      <CoreSettingsSwitch
+        settingsKey='ui.mentions_enabled'
+        label={tx('pref_mention_notifications')}
+        description={tx('pref_mention_notifications_explain')}
+        disabled={isMuted || !desktopSettings['notifications']}
+        disabledValue={false}
+      />
       {runtime.getRuntimeInfo().target === 'electron' && (
         // Calls are only implemented on Electron.
         // https://github.com/deltachat/deltachat-desktop/pull/6044#issuecomment-3977395069
@@ -107,20 +104,21 @@ export default function Notifications({ desktopSettings }: Props) {
           }}
         />
       )}
-      <SettingsSwitch
-        label={tx('menu_mute')}
-        value={isMuted}
+      <SettingsSeparator></SettingsSeparator>
+      <SettingsSelector
+        onClick={onOpenInChatSoundsVolumeDialog.bind(null)}
+        currentValue={volumeNumberToString(desktopSettings.inChatSoundsVolume)}
+      >
+        {tx('pref_in_chat_sounds')}
+      </SettingsSelector>
+      <DesktopSettingsSwitch
+        settingsKey='showNotificationContent'
+        label={tx('pref_show_notification_content')}
         disabled={!desktopSettings['notifications']}
-        onChange={() => {
-          AccountNotificationStoreInstance.effect.setMuted(accountId, !isMuted)
-        }}
       />
-      <CoreSettingsSwitch
-        settingsKey='ui.mentions_enabled'
-        label={tx('pref_mention_notifications')}
-        description={tx('pref_mention_notifications_explain')}
-        disabled={isMuted || !desktopSettings['notifications']}
-        disabledValue={false}
+      <DesktopSettingsSwitch
+        settingsKey='notifications'
+        label={tx('pref_notifications_explain')}
       />
     </>
   )
