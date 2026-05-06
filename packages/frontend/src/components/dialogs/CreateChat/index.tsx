@@ -920,6 +920,17 @@ export const ChatSettingsSetNameAndProfileImage = ({
               color={color}
             />
           )}
+        {(groupType === GroupType.REGULAR_GROUP ||
+          groupType === GroupType.BROADCAST_LIST) && (
+          <GroupImage
+            style={{ float: 'left' }}
+            groupImage={groupImage}
+            onSetGroupImage={onSetGroupImage}
+            onUnsetGroupImage={onUnsetGroupImage}
+            groupName={chatName}
+            color={color}
+          />
+        )}
         <div className='group-name-input-wrapper'>
           <input
             className='group-name-input'
