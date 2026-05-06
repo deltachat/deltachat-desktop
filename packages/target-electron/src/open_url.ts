@@ -87,7 +87,7 @@ async function handleWebxdcFileOpen(path: string) {
   if (!frontend_ready) {
     await new Promise(res => ipcMain.once('frontendReady', res))
   }
-  window?.webContents.send(
+  send(
     'webxdc.sendToChat',
     { file_name: basename(path), file_content: buffer.toString('base64') },
     null

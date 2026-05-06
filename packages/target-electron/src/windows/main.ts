@@ -34,6 +34,11 @@ type ExtendedBrowserWindow = BrowserWindow & {
 
 export let window: ExtendedBrowserWindow | null = null
 
+let rendererGone = false
+let lastRendererReloadAttempt = 0
+let crashDialogOpen = false
+const RENDERER_RELOAD_COOLDOWN_MS = 30_000
+
 export function init(options: { hidden: boolean }) {
   if (window) {
     return window.show()
@@ -99,6 +104,43 @@ export function init(options: { hidden: boolean }) {
     // Prevent drag-and-drop from navigating the Electron window, which can happen
     // before our drag-and-drop handlers have been initialized.
     e.preventDefault()
+  })
+
+  // Recover from a dead renderer (like OOM-killed) by reloading once.
+  // Without this the BrowserWindow stays up but its frame is gone, so every
+  // subsequent webContents.send throws "Render frame was disposed".
+  // See https://github.com/deltachat/deltachat-desktop/issues/3592
+  mainWindow.webContents.on('render-process-gone', (_event, details) => {
+    log.error('renderer process gone', details)
+    if (details.reason === 'clean-exit') {
+      // Normal shutdown
+      return
+    }
+    rendererGone = true
+    const now = Date.now()
+    if (now - lastRendererReloadAttempt < RENDERER_RELOAD_COOLDOWN_MS) {
+      log.warn('renderer process gone again within cooldown, prompting user')
+      promptUserAfterRendererCrash(mainWindow, details)
+      return
+    }
+    lastRendererReloadAttempt = now
+    log.info('attempting one-shot reload to recover renderer')
+    // Defer the reload: without the defer webContents.reload()
+    // crashed the main process
+    setImmediate(() => {
+      if (mainWindow.isDestroyed()) {
+        return
+      }
+      try {
+        mainWindow.webContents.reload()
+      } catch (error) {
+        log.error('failed to reload renderer:', error)
+      }
+    })
+  })
+
+  mainWindow.webContents.on('did-finish-load', () => {
+    rendererGone = false
   })
 
   const saveBounds = debounce(() => {
@@ -227,6 +269,47 @@ export function hide() {
   window?.hide()
 }
 
+async function promptUserAfterRendererCrash(
+  win: BrowserWindow,
+  details: electron.RenderProcessGoneDetails
+) {
+  if (crashDialogOpen) {
+    return
+  }
+  crashDialogOpen = true
+  try {
+    const { response } = await electron.dialog.showMessageBox(win, {
+      type: 'warning',
+      title: 'Delta Chat had a problem',
+      message:
+        'The window stopped responding and could not recover automatically. Reload to try again, or quit the app.',
+      detail: `Reason: ${details.reason} (exit code ${details.exitCode})`,
+      buttons: ['Reload', 'Quit'],
+      defaultId: 0,
+      cancelId: 1,
+    })
+    if (response === 1) {
+      electron.app.quit()
+      return
+    }
+    // Reset cooldown so the next crash gets one more automatic recovery
+    // attempt before re-prompting.
+    lastRendererReloadAttempt = 0
+    if (win.isDestroyed()) {
+      return
+    }
+    try {
+      win.webContents.reload()
+    } catch (error) {
+      log.error('failed to reload renderer after user prompt:', error)
+    }
+  } catch (error) {
+    log.error('failed to show renderer-crash dialog:', error)
+  } finally {
+    crashDialogOpen = false
+  }
+}
+
 export function send(channel: string, ...args: any[]) {
   if (!window) {
     log.warn("window not defined, can't send ipc to renderer")
@@ -234,6 +317,13 @@ export function send(channel: string, ...args: any[]) {
   }
   if (window.isDestroyed()) {
     log.info('window is destroyed. not sending message', args)
+    return
+  }
+  if (rendererGone) {
+    // Drop quietly until the reload finishes (or, if reload was suppressed by
+    // the cooldown, until the user restarts the app). Otherwise every menu
+    // click would throw "Render frame was disposed" again.
+    log.info('renderer process is gone, not sending message', { channel })
     return
   }
   try {
@@ -335,7 +425,7 @@ export function toggleDevTools() {
 }
 
 export function chooseLanguage(locale: string) {
-  window?.webContents.send('chooseLanguage', locale)
+  send('chooseLanguage', locale)
 }
 
 export function setZoomFactor(factor: number) {

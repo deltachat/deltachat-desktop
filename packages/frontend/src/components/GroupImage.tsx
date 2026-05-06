@@ -47,7 +47,6 @@ export default function GroupImage(props: Props) {
   return (
     <div className='group-image-wrapper'>
       <AvatarTag
-        type='button'
         className='group-image'
         onClick={() => groupImage && showAvatarFullscreen()}
         {...(groupImage ? { 'aria-label': tx('group_avatar') } : {})}
