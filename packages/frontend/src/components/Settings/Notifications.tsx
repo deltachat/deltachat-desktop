@@ -72,8 +72,8 @@ export default function Notifications({ desktopSettings }: Props) {
   return (
     <>
       <SettingsSwitch
-        label={tx('menu_mute')}
-        value={isMuted}
+        label={tx('pref_notifications')}
+        value={!isMuted}
         disabled={!desktopSettings['notifications']}
         onChange={() => {
           AccountNotificationStoreInstance.effect.setMuted(accountId, !isMuted)
