@@ -696,8 +696,8 @@ export default function Message(props: {
     const update = () => {
       if (
         isImage(message.viewType) ||
-          message.viewType === 'Sticker' ||
-          window.innerWidth < 900
+        message.viewType === 'Sticker' ||
+        window.innerWidth < 900
       ) {
         setMessageWidth(el.clientWidth)
       } else {

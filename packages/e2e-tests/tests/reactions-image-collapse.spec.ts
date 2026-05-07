@@ -180,6 +180,14 @@ test('reactions on image messages are not collapsed after image loads', async ()
     'image should not be loaded yet due to route delay'
   ).toHaveJSProperty('naturalWidth', 0, { timeout: 200 })
 
+  // While the image is still loading the container width is unknown, so the
+  // reactions should be in their initial collapsed state — not all three
+  // individual emojis should be visible at the same time.
+  await expect(
+    reloadedMessage.getByText(/\+\d+/),
+    'reactions should be collapsed while image has not loaded yet'
+  ).toBeVisible({ timeout: 200 })
+
   // Wait for the image to finish loading (naturalWidth > 0 means the browser
   // has decoded the image dimensions and the container has its final width)
   await expect(
