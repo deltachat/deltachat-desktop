@@ -690,33 +690,28 @@ export default function Message(props: {
 
   const messageContainerRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
-    const resizeHandler = () => {
-      if (messageContainerRef.current) {
-        let messageWidth = 0
-        // set message width which is used by reaction component
-        // to adapt the number of visible reactions
-        if (
-          isImage(message.viewType) ||
-          message.viewType === 'Sticker' ||
-          window.innerWidth < 900
-        ) {
-          // image messages have a defined width
-          messageWidth = messageContainerRef.current.clientWidth
-        } else {
-          // text messages might be smaller than min width but
-          // they can be extended to at least max image width
-          // so we pass that value to the reaction calculation
-          messageWidth = 450
-        }
-        setMessageWidth(messageWidth)
+    const el = messageContainerRef.current
+    if (!el) return
+
+    const update = () => {
+      if (
+        isImage(message.viewType) ||
+        message.viewType === 'Sticker' ||
+        window.innerWidth < 900
+      ) {
+        setMessageWidth(el.clientWidth)
+      } else {
+        // Text messages may be narrower than the max image width, but reactions
+        // can always spread to that width, so pass a fixed value.
+        setMessageWidth(450)
       }
     }
-    window.addEventListener('resize', resizeHandler)
-    // call once on first render
-    resizeHandler()
-    return () => {
-      window.removeEventListener('resize', resizeHandler)
-    }
+
+    // ResizeObserver catches both window resizes and post-image-load reflows,
+    const ro = new ResizeObserver(update)
+    ro.observe(el)
+    update()
+    return () => ro.disconnect()
   }, [message.viewType])
 
   // Info Message
