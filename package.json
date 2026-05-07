@@ -36,7 +36,14 @@
   "engineStrict": true,
   "engines": {
     "node": "^22",
-    "pnpm": ">=9.6.0"
+    "pnpm": ">=9.6.0 <11"
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": ">=9.6.0 <11",
+      "onFail": "download"
+    }
   },
   "pnpm": {
     "supportedArchitectures": {
