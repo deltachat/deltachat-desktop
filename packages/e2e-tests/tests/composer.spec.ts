@@ -216,7 +216,15 @@ test.describe('draft', () => {
       .getByRole('button', { name: 'Add attachment' })
       .click()
     await page.getByRole('menuitem', { name: 'Contact' }).click()
-    await page.getByRole('dialog').getByRole('button', { name: 'Me' }).click()
+    const dialog = page.getByRole('dialog')
+    // Filter by current accounts display name so only the
+    // self-contact ("Me") remains.
+    await dialog.locator('input').fill('Alice')
+    const selfContactItem = dialog
+      .getByRole('listitem')
+      .filter({ hasText: 'Me' })
+    await expect(selfContactItem).toBeVisible()
+    await selfContactItem.getByRole('button').click()
   }
   async function testDraftHasFile() {
     const myName = 'Alice'
@@ -292,18 +300,17 @@ test.describe('draft', () => {
     await testDraftIsEmpty()
 
     // Switch the chat back and forth.
-    const currChat = await chatList
+    const currChatHandle = await chatList
       .getByRole('tab', { selected: true })
       .elementHandle()
-    await chatList
+    const otherChatTab = chatList
       .getByRole('tab', { selected: false, name: 'Some chat' })
       .first()
-      .click()
-    // Make sure that we have actually switched the chat
-    // and loaded its draft.
-    await textarea.fill('foo')
-    await currChat!.click()
-    await expect(textarea).toBeEmpty()
+    await otherChatTab.click()
+    // Wait for the other chat to fully load before going back.
+    await expect(textarea).not.toBeDisabled()
+    await currChatHandle!.click()
+    await expect(composerSection).toHaveText('')
 
     await testDraftIsEmpty()
   }
@@ -579,6 +586,7 @@ test.describe('Ctrl + Up shortcut', () => {
   })
 
   test('removes quote on Ctrl + Down', async () => {
+    await textarea.focus()
     await up()
     await expectQuote(9)
     await down()
