@@ -87,5 +87,6 @@
     "typescript-eslint": "^8.51.0",
     "xml-js": "^1.6.11",
     "yaml": "^2.8.3"
-  }
+  },
+  "packageManager": "pnpm@10.33.2"
 }
