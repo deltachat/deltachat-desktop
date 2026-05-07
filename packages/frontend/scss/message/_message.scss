@@ -558,6 +558,10 @@ $info-text-max-width: 400px;
     text-overflow: ellipsis;
   }
 
+  .quote-author {
+    white-space: nowrap;
+  }
+
   .quoted-text {
     font-size: 12px;
     line-height: 12px;
