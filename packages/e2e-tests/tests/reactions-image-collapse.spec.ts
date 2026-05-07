@@ -172,11 +172,18 @@ test('reactions on image messages are not collapsed after image loads', async ()
   await selectChat(page, testGroupName)
 
   const reloadedMessage = page.locator('.message.outgoing').last()
+  const imgLocator = reloadedMessage.locator('.msg-body img.attachment-content')
+
+  // Confirm the route delay is actually holding the image back
+  await expect(
+    imgLocator,
+    'image should not be loaded yet due to route delay'
+  ).toHaveJSProperty('naturalWidth', 0, { timeout: 200 })
 
   // Wait for the image to finish loading (naturalWidth > 0 means the browser
   // has decoded the image dimensions and the container has its final width)
   await expect(
-    reloadedMessage.locator('.msg-body img.attachment-content'),
+    imgLocator,
     'image should become visible after the delayed load'
   ).toBeVisible({ timeout: 15_000 })
 
