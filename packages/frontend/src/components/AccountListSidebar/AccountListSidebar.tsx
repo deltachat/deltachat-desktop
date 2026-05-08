@@ -148,9 +148,13 @@ export default function AccountListSidebar({
     return <div></div>
   }
 
+  const isMac = runtime.getRuntimeInfo().isMac
+
   return (
-    <div className={styles.accountListSidebar}>
-      {runtime.getRuntimeInfo().isMac && !smallScreenMode && (
+    <div
+      className={`${styles.accountListSidebar}${isMac ? ` ${styles.accountListSidebarMac}` : ''}`}
+    >
+      {isMac && !smallScreenMode && (
         <div
           className={styles.macOSTrafficLightBackground}
           data-tauri-drag-region

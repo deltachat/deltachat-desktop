@@ -44,6 +44,10 @@
   min-width: 68px;
   overflow: hidden;
 
+  &.accountListSidebarMac {
+    min-width: 76px;
+  }
+
   .accountListNav {
     flex-grow: 1;
     overflow-y: scroll;
