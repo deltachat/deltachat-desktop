@@ -48,16 +48,16 @@ export function BasicMessageInfo(props: BasicMessageInfoProps) {
     : []
 
   // Format sent timestamp
-  const sentTimestamp = moment(message.timestamp * 1000)
-  const sentFormatted = sentTimestamp.format('lll')
+  const sentFormatted =
+    message.timestamp === 0
+      ? tx('unknown_time')
+      : moment(message.timestamp * 1000).format('lll')
 
   // Format received timestamp
-  const receivedTimestamp = message.receivedTimestamp
-    ? moment(message.receivedTimestamp * 1000)
-    : null
-  const receivedFormatted = receivedTimestamp
-    ? receivedTimestamp.format('lll')
-    : null
+  const receivedFormatted =
+    message.receivedTimestamp === 0
+      ? tx('unknown_time')
+      : moment(message.receivedTimestamp * 1000).format('lll')
 
   return (
     <div className={styles.formattedMessageInfo}>

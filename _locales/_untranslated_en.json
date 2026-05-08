@@ -64,5 +64,8 @@
   },
   "paste_in_qr_scanner": {
     "message": "Click to paste it in QR scanner"
+  },
+  "unknown_time": {
+    "message": "Unknown time"
   }
 }
