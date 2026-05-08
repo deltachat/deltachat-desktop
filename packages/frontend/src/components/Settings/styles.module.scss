@@ -153,6 +153,7 @@ $settingsHeight: 40px;
   width: 100%;
   border: none;
   background-color: transparent;
+  text-align: start;
 }
 
 .profileDetails {
@@ -166,7 +167,6 @@ $settingsHeight: 40px;
 .profileDisplayName {
   font-size: 18px;
   font-weight: 200;
-  text-align: start;
 }
 
 .profileBio {
