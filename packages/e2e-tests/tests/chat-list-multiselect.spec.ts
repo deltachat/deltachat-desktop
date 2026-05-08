@@ -26,11 +26,18 @@ let page: Page
 
 let chatList: Locator
 let selectedChats: Locator
+const makeChatNameRegex = (chatNum: number) =>
+  new RegExp(`^\\w?Some chat ${chatNum}(?!\\d)`)
 const getChat = (chatNum: number) =>
-  chatList.getByRole('tab', { name: `Some chat ${chatNum}` })
+  chatList.getByRole('tab', { name: makeChatNameRegex(chatNum) })
 const expectSelectedChats = async (chatNums: number[]) => {
-  await expect(selectedChats).toContainText(
-    chatNums.map(chatNum => `Some chat ${chatNum}`)
+  await expect(selectedChats).toHaveText(
+    chatNums.map(chatNum => makeChatNameRegex(chatNum))
+  )
+}
+const expectChats = async (chatNums: number[]) => {
+  await expect(chatList.getByRole('tab', { name: 'Some chat ' })).toHaveText(
+    chatNums.map(chatNum => makeChatNameRegex(chatNum))
   )
 }
 
@@ -523,9 +530,7 @@ test('when chats get removed from the list, they get unselected', async () => {
   // there is a moment when it shows 0 chats before the results get loaded,
   // resulting in all chats getting unselected, which we don't want.
   await page.getByRole('textbox', { name: 'Search' }).fill('5')
-  await expect(chatList.getByRole('tab', { name: 'Some chat ' })).toContainText(
-    ['Some chat 5']
-  )
+  await expectChats([5])
   await page.getByRole('textbox', { name: 'Search' }).clear()
 
   await getChat(9).click()
@@ -536,9 +541,7 @@ test('when chats get removed from the list, they get unselected', async () => {
   await expectSelectedChats([9, 8, 7, 6, 5, 4, 3, 2, 1])
 
   await page.getByRole('textbox', { name: 'Search' }).fill('5')
-  await expect(chatList.getByRole('tab', { name: 'Some chat ' })).toContainText(
-    ['Some chat 5']
-  )
+  await expectChats([5])
   await expectSelectedChats([5])
 
   // Check that the action only affects a single chat.
@@ -618,8 +621,6 @@ test('delete several', async () => {
       'Some chat 2'
   )
   await page.getByRole('dialog').getByRole('button', { name: 'Delete' }).click()
-  await expect(chatList.getByRole('tab', { name: 'Some chat ' })).toContainText(
-    ['Some chat 9', 'Some chat 8', 'Some chat 4', 'Some chat 3', 'Some chat 1']
-  )
+  await expectChats([9, 8, 4, 3, 1])
   await expectSelectedChats([])
 })
