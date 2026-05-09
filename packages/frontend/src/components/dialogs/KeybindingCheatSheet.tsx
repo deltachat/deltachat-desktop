@@ -28,10 +28,13 @@ export default function KeybindingCheatSheet(props: DialogProps) {
       <DialogBody className='shortcuts-dialog-body'>
         <div className='shortcuts-grid'>
           {settingsStore &&
-            getKeybindings(settingsStore.desktopSettings).map(entry => {
+            getKeybindings(settingsStore.desktopSettings).map((entry, index) => {
               if (entry.type === 'header') {
                 return (
-                  <div key={entry.title} className='shortcuts-section-title'>
+                  <div
+                    key={`header-${index}-${entry.title}`}
+                    className='shortcuts-section-title'
+                  >
                     <h4>{entry.title}</h4>
                   </div>
                 )
@@ -41,7 +44,7 @@ export default function KeybindingCheatSheet(props: DialogProps) {
                   <ShortcutGroup
                     title={action.title}
                     keyBindings={action.keyBindings}
-                    key={action.title}
+                    key={`shortcut-${index}-${action.title}`}
                   />
                 )
               }
