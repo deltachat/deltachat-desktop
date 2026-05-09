@@ -56,7 +56,7 @@ pub(crate) async fn open_html_window(
     is_contact_request: bool,
     subject: &str,
     sender: &str, // this is called "from" in electron edition
-    receive_time: &str,
+    sent_time: &str,
     content: &str,
 ) -> Result<(), Error> {
     use crate::settings::StoreExtBoolExt;
@@ -102,7 +102,7 @@ pub(crate) async fn open_html_window(
                 is_contact_request,
                 subject: subject.to_owned(),
                 sender: sender.to_owned(),
-                receive_time: receive_time.to_owned(),
+                sent_time: sent_time.to_owned(),
                 html_content: content.to_owned(),
                 network_allow_state: toggle_network_initial_state,
                 blocked_by_proxy,

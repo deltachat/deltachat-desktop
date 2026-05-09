@@ -45,7 +45,7 @@ const open_windows: { [window_id: string]: BrowserWindow } = {}
  * @param isContactRequest
  * @param subject
  * @param from
- * @param receiveTime
+ * @param sentTime
  * @param htmlEmail
  */
 export function openHtmlEmailWindow(
@@ -54,7 +54,7 @@ export function openHtmlEmailWindow(
   isContactRequest: boolean,
   subject: string,
   from: string,
-  receiveTime: string,
+  sentTime: string,
   htmlEmail: string
 ) {
   const window_id = `${account_id}.${message_id}`
@@ -113,7 +113,7 @@ export function openHtmlEmailWindow(
   window.webContents.ipc.handle('html_email:get_info', _ => ({
     subject,
     from,
-    receiveTime,
+    sentTime,
   }))
 
   nativeTheme.on('updated', () => {

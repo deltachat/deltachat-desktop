@@ -413,7 +413,7 @@ export async function init(cwd: string, logHandler: LogHandler) {
       isContactRequest: boolean,
       subject: string,
       sender: string,
-      receiveTime: string,
+      sentTime: string,
       content: string
     ) => {
       openHtmlEmailWindow(
@@ -422,7 +422,7 @@ export async function init(cwd: string, logHandler: LogHandler) {
         isContactRequest,
         subject,
         sender,
-        receiveTime,
+        sentTime,
         content
       )
     }

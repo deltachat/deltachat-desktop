@@ -51,7 +51,7 @@ export interface Runtime {
     isContactRequest: boolean,
     subject: string,
     sender: string,
-    receiveTime: string,
+    sentTime: string,
     content: string
   ): void
   getDesktopSettings(): Promise<DesktopSettingsType>

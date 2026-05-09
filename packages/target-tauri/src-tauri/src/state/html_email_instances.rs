@@ -15,7 +15,7 @@ pub(crate) struct InnerHtmlEmailInstanceData {
     pub(crate) is_contact_request: bool,
     pub(crate) subject: String,
     pub(crate) sender: String, // this is called "from" in electron edition
-    pub(crate) receive_time: String,
+    pub(crate) sent_time: String,
     pub(crate) network_allow_state: bool,
     pub(crate) html_content: String,
     pub(crate) blocked_by_proxy: bool,
