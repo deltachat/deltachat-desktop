@@ -96,9 +96,14 @@ export async function openMessageHTML(messageId: number) {
     sender: { displayName },
     subject,
     chatId,
+    fromId,
+    timestamp,
     receivedTimestamp,
   } = await BackendRemote.rpc.getMessage(accountId, messageId)
-  const receiveTime = moment(receivedTimestamp * 1000).format('LLLL')
+  const isFromSelf = fromId === C.DC_CONTACT_ID_SELF
+  const receiveTime = moment(
+    (isFromSelf ? timestamp : receivedTimestamp) * 1000
+  ).format('LLLL')
   const { isContactRequest } = await BackendRemote.rpc.getBasicChatInfo(
     accountId,
     chatId
