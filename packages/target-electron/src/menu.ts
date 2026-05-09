@@ -346,6 +346,12 @@ function getMenuTemplate(
           type: 'separator',
         },
         {
+          role: 'togglefullscreen',
+        },
+        {
+          type: 'separator',
+        },
+        {
           label: tx('pref_language'),
           submenu: getAvailableLanguages(),
         },
