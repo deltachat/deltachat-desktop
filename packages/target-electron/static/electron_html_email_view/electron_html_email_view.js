@@ -1,14 +1,12 @@
 const subjectElement = document.getElementById('subject')
 const fromElement = document.getElementById('sender')
-const receiveTimeElement = document.getElementById('receive-time')
+const sentTimeElement = document.getElementById('sent-time')
 const networkMoreButton = document.getElementById('toggle_network_more_button')
 
-let promise = window.htmlview
-  .getInfo()
-  .then(({ subject, from, receiveTime }) => {
-    ;((subjectElement.innerText = subject), (fromElement.innerText = from))
-    receiveTimeElement.innerText = receiveTime
-  })
+let promise = window.htmlview.getInfo().then(({ subject, from, sentTime }) => {
+  ;((subjectElement.innerText = subject), (fromElement.innerText = from))
+  sentTimeElement.innerText = sentTime
+})
 
 networkMoreButton.onclick = ev => {
   /** @type {MouseEvent} */

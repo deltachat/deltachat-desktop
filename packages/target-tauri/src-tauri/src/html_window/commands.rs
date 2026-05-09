@@ -136,7 +136,7 @@ pub(crate) fn html_email_open_menu(
 pub(crate) struct HtmlEmailInfo {
     subject: String,
     sender: String, // this is called "from" in electron edition
-    receive_time: String,
+    sent_time: String,
     toggle_network: bool,
     network_button_label_text: String,
     blocked_by_proxy: bool,
@@ -164,7 +164,7 @@ pub(crate) fn get_html_window_info(
     Ok(HtmlEmailInfo {
         subject: instance.subject,
         sender: instance.sender,
-        receive_time: instance.receive_time,
+        sent_time: instance.sent_time,
         toggle_network: instance.network_allow_state,
         network_button_label_text,
         blocked_by_proxy: instance.blocked_by_proxy,

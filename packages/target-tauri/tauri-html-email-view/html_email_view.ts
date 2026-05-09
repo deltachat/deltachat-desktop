@@ -3,7 +3,7 @@ import type { Theme } from '@deltachat-desktop/shared/shared-types'
 
 const subjectElement = document.getElementById('subject')!
 const fromElement = document.getElementById('sender')!
-const receiveTimeElement = document.getElementById('receive-time')!
+const sentTimeElement = document.getElementById('sent-time')!
 const networkCheckbox = document.getElementById(
   'toggle_network'
 )! as HTMLInputElement
@@ -17,7 +17,7 @@ let network_enabled = false
 type HtmlInfoType = {
   subject: string
   sender: string
-  receiveTime: string
+  sentTime: string
   toggleNetwork: boolean
   networkButtonLabelText: string
   blockedByProxy: boolean
@@ -27,7 +27,7 @@ invoke<HtmlInfoType>('get_html_window_info').then(
   ({
     subject,
     sender,
-    receiveTime,
+    sentTime,
     toggleNetwork,
     networkButtonLabelText,
     blockedByProxy,
@@ -41,7 +41,7 @@ invoke<HtmlInfoType>('get_html_window_info').then(
     fromElement.innerText = sender
     networkButtonLabel.innerText = networkButtonLabelText
     networkCheckbox.checked = network_enabled = toggleNetwork
-    receiveTimeElement.innerText = receiveTime
+    sentTimeElement.innerText = sentTime
   }
 )
 

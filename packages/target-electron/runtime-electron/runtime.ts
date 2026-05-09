@@ -167,7 +167,7 @@ class ElectronRuntime implements Runtime {
     isContactRequest: boolean,
     subject: string,
     sender: string,
-    receiveTime: string,
+    sentTime: string,
     content: string
   ): void {
     ipcBackend.invoke(
@@ -177,7 +177,7 @@ class ElectronRuntime implements Runtime {
       isContactRequest,
       subject,
       sender,
-      receiveTime,
+      sentTime,
       content
     )
   }
