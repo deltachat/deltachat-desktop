@@ -92,3 +92,6 @@ default.nix
 target
 packages/target-tauri/src-tauri/target
 packages/target-tauri/src-tauri/gen/schemas
+
+# macOS .DS_Store files
+.DS_Store
