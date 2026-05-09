@@ -28,27 +28,29 @@ export default function KeybindingCheatSheet(props: DialogProps) {
       <DialogBody className='shortcuts-dialog-body'>
         <div className='shortcuts-grid'>
           {settingsStore &&
-            getKeybindings(settingsStore.desktopSettings).map((entry, index) => {
-              if (entry.type === 'header') {
-                return (
-                  <div
-                    key={`header-${index}-${entry.title}`}
-                    className='shortcuts-section-title'
-                  >
-                    <h4>{entry.title}</h4>
-                  </div>
-                )
-              } else {
-                const { action } = entry
-                return (
-                  <ShortcutGroup
-                    title={action.title}
-                    keyBindings={action.keyBindings}
-                    key={`shortcut-${index}-${action.title}`}
-                  />
-                )
+            getKeybindings(settingsStore.desktopSettings).map(
+              (entry, index) => {
+                if (entry.type === 'header') {
+                  return (
+                    <div
+                      key={`header-${index}-${entry.title}`}
+                      className='shortcuts-section-title'
+                    >
+                      <h4>{entry.title}</h4>
+                    </div>
+                  )
+                } else {
+                  const { action } = entry
+                  return (
+                    <ShortcutGroup
+                      title={action.title}
+                      keyBindings={action.keyBindings}
+                      key={`shortcut-${index}-${action.title}`}
+                    />
+                  )
+                }
               }
-            })}
+            )}
         </div>
       </DialogBody>
     </Dialog>
