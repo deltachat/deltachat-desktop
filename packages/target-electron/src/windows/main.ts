@@ -282,7 +282,7 @@ async function promptUserAfterRendererCrash(
       type: 'warning',
       title: 'Delta Chat had a problem',
       message:
-        'The window stopped responding and could not recover automatically. Reload to try again, or quit the app.',
+        'The window stopped responding and could not recover automatically.',
       detail: `Reason: ${details.reason} (exit code ${details.exitCode})`,
       buttons: ['Reload', 'Quit'],
       defaultId: 0,
