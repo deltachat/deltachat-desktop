@@ -906,19 +906,6 @@ export const ChatSettingsSetNameAndProfileImage = ({
     <>
       <div className='group-settings-container'>
         {(groupType === GroupType.REGULAR_GROUP ||
-          groupType === GroupType.BROADCAST_LIST) &&
-          onUnsetGroupImage &&
-          onSetGroupImage && (
-            <GroupImage
-              style={{ float: 'left' }}
-              groupImage={groupImage}
-              onSetGroupImage={onSetGroupImage}
-              onUnsetGroupImage={onUnsetGroupImage}
-              groupName={chatName}
-              color={color}
-            />
-          )}
-        {(groupType === GroupType.REGULAR_GROUP ||
           groupType === GroupType.BROADCAST_LIST) && (
           <GroupImage
             style={{ float: 'left' }}
