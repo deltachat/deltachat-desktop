@@ -68,6 +68,7 @@ import ForwardMessage from '../dialogs/ForwardMessage'
 import MessageDetail from '../dialogs/MessageDetail/MessageDetail'
 import ConfirmDeleteMessageDialog from '../dialogs/ConfirmDeleteMessage'
 import AlertDialog from '../dialogs/AlertDialog'
+import ConfirmationDialog from '../dialogs/ConfirmationDialog'
 
 const log = getLogger('Message')
 
@@ -472,24 +473,44 @@ function buildMultiselectContextMenu(
   _clickTarget: HTMLAnchorElement | null
 ): (false | ContextMenuItem)[] {
   const tx = window.static_translate
+  const confirmIfMany = () =>
+    new Promise((res, _rej) => {
+      if (messageIds.length <= 100) {
+        res(true)
+        return
+      }
+
+      openDialog(ConfirmationDialog, {
+        cb: res,
+        message: tx('n_selected', messageIds.length.toString(), {
+          quantity: messageIds.length,
+        }),
+        confirmLabel: tx('perm_continue'),
+      })
+    })
+
   return [
     {
       label: tx('forward'),
-      action: () =>
+      action: async () => {
+        if (!(await confirmIfMany())) return
         openDialog(ForwardMessage, {
           messageIds: messageIds,
           sourceChatId: chat.id,
-        }),
+        })
+      },
     },
     {
       label: tx('delete'),
-      action: () =>
+      action: async () => {
+        if (!(await confirmIfMany())) return
         openDialog(ConfirmDeleteMessageDialog, {
           accountId,
           messageIds,
           loadedMessages: { [clickedMessage.id]: clickedMessage },
           chat,
-        }),
+        })
+      },
       danger: true,
     },
   ]
