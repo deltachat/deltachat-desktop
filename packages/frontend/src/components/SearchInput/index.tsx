@@ -6,6 +6,7 @@ import useDialog from '../../hooks/dialog/useDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 
 import styles from './styles.module.scss'
 import { SCAN_CONTEXT_TYPE } from '../../hooks/useProcessQr'
@@ -26,6 +27,7 @@ export default function SearchInput(props: Props) {
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
   const { onChange, value, id, onClear } = props
+  const searchShortcut = runtime.getRuntimeInfo().isMac ? 'Meta+F' : 'Control+F'
 
   const handleClear = () => {
     onChange({ target: { value: '' } })
@@ -69,8 +71,8 @@ export default function SearchInput(props: Props) {
           // eslint-disable-next-line react-hooks/refs
           ref={props.inputRef}
           spellCheck={false}
-          // FYI there is also Ctrl + Shift + F to search in chat.
-          aria-keyshortcuts='Control+F'
+          // FYI there is also Ctrl/Cmd + Shift + F to search in chat.
+          aria-keyshortcuts={searchShortcut}
         />
         {hasValue && (
           <SearchInputButton

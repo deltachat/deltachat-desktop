@@ -291,6 +291,22 @@ export function getHelpMenu(
   }
 }
 
+function getMacWindowMenu(): Electron.MenuItemConstructorOptions {
+  return {
+    // macOS requires a top-level menu item with role:'window' so that native
+    // window management shortcuts (Cmd+M to minimize, fn+Ctrl+Arrow tiling, …)
+    // are routed correctly to the app.
+    label: 'Window',
+    role: 'window',
+    submenu: [
+      { role: 'minimize', accelerator: 'Command+M' },
+      { role: 'zoom' },
+      { type: 'separator' },
+      { role: 'front' },
+    ],
+  }
+}
+
 function getMenuTemplate(
   logHandler: LogHandler
 ): Electron.MenuItemConstructorOptions[] {
@@ -329,6 +345,12 @@ function getMenuTemplate(
           type: 'separator',
         },
         {
+          role: 'togglefullscreen',
+        },
+        {
+          type: 'separator',
+        },
+        {
           label: tx('pref_language'),
           submenu: getAvailableLanguages(),
         },
@@ -362,6 +384,7 @@ function getMenuTemplate(
         },
       ],
     },
+    ...(isMac ? [getMacWindowMenu()] : []),
     getHelpMenu(isMac),
   ]
 }
