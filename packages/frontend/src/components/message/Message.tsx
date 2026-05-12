@@ -523,6 +523,7 @@ export default function Message(props: {
   const isMultiselectMember =
     focusAndMultiselect.selectedItems.size > 1 &&
     focusAndMultiselect.selectedItems.has(message.id)
+  const isMultiselectMode = focusAndMultiselect.selectedItems.size > 0
 
   const showContextMenu = useCallback(
     (
@@ -985,141 +986,152 @@ export default function Message(props: {
       }}
       {...commonAttrs}
     >
-      {showAuthor && direction === 'incoming' && (
-        <Avatar
-          contact={message.sender}
-          onContactClick={onContactClick}
-          // The avatar doesn't need to be a tab stop, because
-          // the author name is a tab stop and clicking on it does the same.
-          tabIndex={-1}
-        />
-      )}
       <div
-        className='msg-container'
-        style={{ borderColor: message.sender.color }}
-        ref={messageContainerRef}
+        // Make links, images, etc, unclickable
+        // so that it's harder to accidentally activate them
+        // while actually trying to simply Ctrl + Click the message.
+        // Especially usefult for images, which occupy the majority
+        // of the message bubble's area.
+        inert={isMultiselectMode}
+        style={{ display: 'contents' }}
       >
-        {message.isForwarded && (
-          <ForwardedTitle
+        {showAuthor && direction === 'incoming' && (
+          <Avatar
             contact={message.sender}
             onContactClick={onContactClick}
-            direction={direction}
-            conversationType={conversationType}
-            overrideSenderName={message.overrideSenderName}
-            tabIndex={tabindexForInteractiveContents}
+            // The avatar doesn't need to be a tab stop, because
+            // the author name is a tab stop and clicking on it does the same.
+            tabIndex={-1}
           />
         )}
-        {!message.isForwarded && (
-          <div
-            className={classNames('author-wrapper', {
-              'can-hide':
-                (!message.overrideSenderName && direction === 'outgoing') ||
-                !showAuthor,
-            })}
-          >
-            <AuthorName
+        <div
+          className='msg-container'
+          style={{ borderColor: message.sender.color }}
+          ref={messageContainerRef}
+        >
+          {message.isForwarded && (
+            <ForwardedTitle
               contact={message.sender}
               onContactClick={onContactClick}
+              direction={direction}
+              conversationType={conversationType}
               overrideSenderName={message.overrideSenderName}
               tabIndex={tabindexForInteractiveContents}
             />
-          </div>
-        )}
-        <div
-          className={classNames('msg-body', {
-            call: message.viewType === 'Call',
-          })}
-        >
-          {message.quote !== null && (
-            <Quote
-              quote={message.quote}
-              msgParentId={message.id}
-              // FYI the quote is not always interactive,
-              // e.g. when `quote.kind === 'JustText'`.
-              tabIndex={tabindexForInteractiveContents}
-            />
           )}
-          {showAttachment(message) && (
-            <Attachment
-              text={text || undefined}
-              message={message}
-              tabindexForInteractiveContents={tabindexForInteractiveContents}
-            />
-          )}
-          {message.viewType === 'Webxdc' && (
-            <WebxdcMessageContent
-              tabindexForInteractiveContents={tabindexForInteractiveContents}
-              message={message}
-            ></WebxdcMessageContent>
-          )}
-          {message.viewType === 'Vcard' && (
-            <VCardComponent
-              message={message}
-              tabindexForInteractiveContents={tabindexForInteractiveContents}
-            ></VCardComponent>
-          )}
-          {content}
-          {hasHtml && (
-            <button
-              type='button'
-              onClick={openMessageHTML.bind(null, message.id)}
-              className='show-html'
-              tabIndex={tabindexForInteractiveContents}
+          {!message.isForwarded && (
+            <div
+              className={classNames('author-wrapper', {
+                'can-hide':
+                  (!message.overrideSenderName && direction === 'outgoing') ||
+                  !showAuthor,
+              })}
             >
-              {tx('show_full_message')}
-            </button>
+              <AuthorName
+                contact={message.sender}
+                onContactClick={onContactClick}
+                overrideSenderName={message.overrideSenderName}
+                tabIndex={tabindexForInteractiveContents}
+              />
+            </div>
           )}
-          <footer
-            className={classNames(styles.messageFooter, {
-              [styles.onlyMedia]: isWithoutText,
-              [styles.withReactionsNoText]: isWithoutText && message.reactions,
+          <div
+            className={classNames('msg-body', {
+              call: message.viewType === 'Call',
             })}
           >
-            <MessageMetaData
-              messageId={message.id}
-              fileMime={fileMime}
-              direction={direction}
-              status={status}
-              error={message.error || null}
-              downloadState={downloadState}
-              isEdited={message.isEdited}
-              hasText={hasText}
-              hasLocation={hasLocation}
-              timestamp={message.timestamp * 1000}
-              encrypted={message.showPadlock}
-              isSavedMessage={isOrHasSavedMessage}
-              onClickError={() =>
-                openDialog(AlertDialog, {
-                  message: message.error
-                    ? tx('error_x', message.error)
-                    : tx('ok'),
-                  dialogComponentProps: {
-                    width: 600,
-                  },
-                })
-              }
-              viewType={message.viewType}
-              chatType={chat.chatType}
-              tabindexForInteractiveContents={tabindexForInteractiveContents}
-            />
-            <div
-              // TODO the "+1" count aria-live announcment is perhaps not great
-              // out of context.
-              // Also the "show ReactionsDialog" button gets announced.
-              aria-live='polite'
-              aria-relevant='all'
+            {message.quote !== null && (
+              <Quote
+                quote={message.quote}
+                msgParentId={message.id}
+                // FYI the quote is not always interactive,
+                // e.g. when `quote.kind === 'JustText'`.
+                tabIndex={tabindexForInteractiveContents}
+              />
+            )}
+            {showAttachment(message) && (
+              <Attachment
+                text={text || undefined}
+                message={message}
+                tabindexForInteractiveContents={tabindexForInteractiveContents}
+              />
+            )}
+            {message.viewType === 'Webxdc' && (
+              <WebxdcMessageContent
+                tabindexForInteractiveContents={tabindexForInteractiveContents}
+                message={message}
+              ></WebxdcMessageContent>
+            )}
+            {message.viewType === 'Vcard' && (
+              <VCardComponent
+                message={message}
+                tabindexForInteractiveContents={tabindexForInteractiveContents}
+              ></VCardComponent>
+            )}
+            {content}
+            {hasHtml && (
+              <button
+                type='button'
+                onClick={openMessageHTML.bind(null, message.id)}
+                className='show-html'
+                tabIndex={tabindexForInteractiveContents}
+              >
+                {tx('show_full_message')}
+              </button>
+            )}
+            <footer
+              className={classNames(styles.messageFooter, {
+                [styles.onlyMedia]: isWithoutText,
+                [styles.withReactionsNoText]:
+                  isWithoutText && message.reactions,
+              })}
             >
-              {message.reactions && (
-                <Reactions
-                  reactions={message.reactions}
-                  tabindexForInteractiveContents={
-                    tabindexForInteractiveContents
-                  }
-                  messageWidth={messageWidth}
-                />
-              )}
-            </div>
-          </footer>
+              <MessageMetaData
+                messageId={message.id}
+                fileMime={fileMime}
+                direction={direction}
+                status={status}
+                error={message.error || null}
+                downloadState={downloadState}
+                isEdited={message.isEdited}
+                hasText={hasText}
+                hasLocation={hasLocation}
+                timestamp={message.timestamp * 1000}
+                encrypted={message.showPadlock}
+                isSavedMessage={isOrHasSavedMessage}
+                onClickError={() =>
+                  openDialog(AlertDialog, {
+                    message: message.error
+                      ? tx('error_x', message.error)
+                      : tx('ok'),
+                    dialogComponentProps: {
+                      width: 600,
+                    },
+                  })
+                }
+                viewType={message.viewType}
+                chatType={chat.chatType}
+                tabindexForInteractiveContents={tabindexForInteractiveContents}
+              />
+              <div
+                // TODO the "+1" count aria-live announcment is perhaps not great
+                // out of context.
+                // Also the "show ReactionsDialog" button gets announced.
+                aria-live='polite'
+                aria-relevant='all'
+              >
+                {message.reactions && (
+                  <Reactions
+                    reactions={message.reactions}
+                    tabindexForInteractiveContents={
+                      tabindexForInteractiveContents
+                    }
+                    messageWidth={messageWidth}
+                  />
+                )}
+              </div>
+            </footer>
+          </div>
         </div>
       </div>
       <ShortcutMenu

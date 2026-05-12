@@ -1,4 +1,5 @@
 import { expect, type Page } from '@playwright/test'
+import path from 'path'
 
 import {
   createProfiles,
@@ -38,7 +39,9 @@ const getMessage = (messageNum: number) =>
   page
     .getByRole('list', { name: 'Messages' })
     .getByRole('listitem')
-    .getByText(new RegExp(`Some message ${messageNum}(?!\\d)`))
+    .locator('.message', {
+      hasText: new RegExp(`Some message ${messageNum}(?!\\d)`),
+    })
 const expectSelectedMessages = async (messageNums: number[]) => {
   await expect(
     page
@@ -55,6 +58,9 @@ const expectMessages = async (messageNums: number[]) => {
       .filter({ hasText: 'Some message' })
   ).toHaveText(messageNums.map(n => makeMessageRegex(n)))
 }
+
+const fixturesPath = path.join(import.meta.dirname, '..', 'fixtures')
+const imagePath = path.join(fixturesPath, 'Deltachat-Logo.png')
 
 test.beforeAll(async ({ browser, isChatmail }) => {
   const contextForProfileCreation = await browser.newContext()
@@ -146,6 +152,75 @@ test.describe('Ctrl + Click', () => {
     await page.keyboard.press('ControlOrMeta+Space')
     await expectSelectedMessages([4, 6])
   })
+})
+
+test('interactive elements inside a message are not clickable in multiselect mode', async () => {
+  await getMessage(4).click()
+  await expectSelectedMessages([])
+
+  const fileChooserPromise = page.waitForEvent('filechooser')
+  await page.getByRole('button', { name: 'Attach' }).click()
+  await page.getByRole('menuitem', { name: 'Image' }).click()
+  const fileChooser = await fileChooserPromise
+  await fileChooser.setFiles(imagePath)
+  await textarea().fill(
+    getMessageText(42) + '\nhttps://localhost/somepage.html'
+  )
+  await textarea().press('ControlOrMeta+Enter')
+
+  // Normally clicking the image opens the "View Image" dialog
+  const image = getMessage(42).getByRole('img')
+  const link = getMessage(42).getByRole('link', {
+    name: 'https://localhost/somepage.html',
+  })
+  await image.click()
+  const closeButton = page
+    .getByRole('dialog')
+    .getByRole('button', { name: 'Close' })
+  await closeButton.click()
+
+  await getMessage(2).click({
+    modifiers: ['ControlOrMeta'],
+  })
+  await expectSelectedMessages([2])
+
+  await image.click({
+    modifiers: ['ControlOrMeta'],
+    // The wrapper is `inert`, so withour `force` the click would fail.
+    force: true,
+  })
+  await expectSelectedMessages([2, 42])
+  // If a dialog has been opened then the rest should not work,
+  // because the dialog makes outside content inert.
+  await image.click({
+    modifiers: ['ControlOrMeta'],
+    force: true,
+  })
+  await expectSelectedMessages([2])
+
+  await link.click({
+    modifiers: ['ControlOrMeta'],
+    force: true,
+  })
+  await expectSelectedMessages([2, 42])
+
+  await link.click({ force: true })
+  await expectSelectedMessages([])
+  await expect(closeButton).not.toBeVisible()
+
+  await image.click()
+  await closeButton.click()
+
+  // Clean up.
+  await image.click({
+    button: 'right',
+  })
+  await page.getByRole('menuitem', { name: 'Delete' }).click()
+  await page
+    .getByRole('dialog')
+    .getByRole('button', { name: 'Delete' })
+    .last()
+    .click()
 })
 
 test('delete several', async () => {

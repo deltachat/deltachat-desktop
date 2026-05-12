@@ -232,7 +232,7 @@ $navbarBgLight: $borderColor;
   background-color: var(--messageMetadataIconColorIncoming);
 }
 
-.message > .author-avatar {
+.message .author-avatar {
   display: none;
 }
 .message .msg-container .msg-body > .text {
