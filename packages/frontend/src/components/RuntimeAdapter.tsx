@@ -29,7 +29,7 @@ export default function RuntimeAdapter({
 }: PropsWithChildren<Props>) {
   const processQr = useProcessQr()
   const { jumpToMessage } = useMessage()
-  const { selectChat } = useChat()
+  const { selectChat, unselectChat } = useChat()
 
   const { closeDialog, openDialog, closeAllDialogs } = useDialog()
   const openSendToDialogId = useRef<string | undefined>(undefined)
@@ -73,6 +73,10 @@ export default function RuntimeAdapter({
         }
       }
     )
+
+    runtime.onHide = () => {
+      unselectChat()
+    }
 
     runtime.onShowDialog = kind => {
       if (kind === 'about') {
