@@ -138,9 +138,7 @@ test('forward message to another chat (same account, with confirmation)', async 
   // Confirmation dialog should appear
   const confirmDialog = page.getByTestId('confirm-dialog')
   await expect(confirmDialog).toBeVisible()
-  await expect(confirmDialog).toContainText(
-    `Forward messages to ${userB.name}?`
-  )
+  await expect(confirmDialog).toContainText(`Forward message to ${userB.name}?`)
 
   // Confirm the forward
   await confirmDialog.getByTestId('confirm').click()
