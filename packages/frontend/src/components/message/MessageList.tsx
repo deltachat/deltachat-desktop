@@ -26,10 +26,14 @@ import EmptyChatMessage from './EmptyChatMessage'
 const log = getLogger('renderer/components/message/MessageList')
 
 import type { T } from '@deltachat/jsonrpc-client'
-import { useRovingTabindex } from '../../contexts/RovingTabindex'
 import {
-  FocusAndMultiselectProvider,
+  RovingTabindexProvider,
+  useRovingTabindex,
+} from '../../contexts/RovingTabindex'
+import {
   useMessageFocusAndMultiselect,
+  MessageMultiselectContext,
+  useMessageFocusAndMultiselectContextValue,
 } from './focusAndMultiselect'
 import { marknoticedChat } from '../../backend/chat'
 
@@ -858,6 +862,11 @@ export const MessageListInner = React.memo(
         messageListItems.filter(v => v.kind !== 'dayMarker').map(v => v.msg_id),
       [messageListItems]
     )
+    const focusAndMultiselectContextValue =
+      useMessageFocusAndMultiselectContextValue({
+        messageIds,
+        wrapperElementRef: messageListRef,
+      })
 
     if (!loaded) {
       return (
@@ -880,52 +889,55 @@ export const MessageListInner = React.memo(
         onWheel={onWheel}
       >
         <ol aria-label={tx('messages')}>
-          <FocusAndMultiselectProvider
-            messageIds={messageIds}
-            wrapperElementRef={messageListRef}
-          >
-            {messageListItems.length === 0 && <EmptyChatMessage chat={chat} />}
-            {activeView.map(messageId => {
-              if (messageId.kind === 'dayMarker') {
-                return (
-                  <DayMarker
-                    key={`daymarker-${messageId.timestamp}`}
-                    timestamp={messageId.timestamp}
-                  />
-                )
-              }
-
-              if (messageId.kind === 'message') {
-                const message = messageCache[messageId.msg_id]
-                if (message?.kind === 'message') {
+          <RovingTabindexProvider wrapperElementRef={messageListRef}>
+            <MessageMultiselectContext.Provider
+              value={focusAndMultiselectContextValue}
+            >
+              {messageListItems.length === 0 && (
+                <EmptyChatMessage chat={chat} />
+              )}
+              {activeView.map(messageId => {
+                if (messageId.kind === 'dayMarker') {
                   return (
-                    <MessageWrapper
-                      key={messageId.msg_id}
-                      key2={`${messageId.msg_id}`}
-                      chat={chat}
-                      message={message}
-                      conversationType={conversationType}
-                      unreadMessageInViewIntersectionObserver={
-                        unreadMessageInViewIntersectionObserver
-                      }
+                    <DayMarker
+                      key={`daymarker-${messageId.timestamp}`}
+                      timestamp={messageId.timestamp}
                     />
                   )
-                } else if (message?.kind === 'loadingError') {
-                  return (
-                    <MessageLoadingError
-                      messageId={messageId}
-                      message={message}
-                    />
-                  )
-                } else {
-                  // setTimeout tells it to call method in next event loop iteration, so after rendering
-                  // it is debounced later so we can call it here multiple times and it's ok
-                  setTimeout(loadMissingMessages)
-                  return <MessageLoading messageId={messageId} />
                 }
-              }
-            })}
-          </FocusAndMultiselectProvider>
+
+                if (messageId.kind === 'message') {
+                  const message = messageCache[messageId.msg_id]
+                  if (message?.kind === 'message') {
+                    return (
+                      <MessageWrapper
+                        key={messageId.msg_id}
+                        key2={`${messageId.msg_id}`}
+                        chat={chat}
+                        message={message}
+                        conversationType={conversationType}
+                        unreadMessageInViewIntersectionObserver={
+                          unreadMessageInViewIntersectionObserver
+                        }
+                      />
+                    )
+                  } else if (message?.kind === 'loadingError') {
+                    return (
+                      <MessageLoadingError
+                        messageId={messageId}
+                        message={message}
+                      />
+                    )
+                  } else {
+                    // setTimeout tells it to call method in next event loop iteration, so after rendering
+                    // it is debounced later so we can call it here multiple times and it's ok
+                    setTimeout(loadMissingMessages)
+                    return <MessageLoading messageId={messageId} />
+                  }
+                }
+              })}
+            </MessageMultiselectContext.Provider>
+          </RovingTabindexProvider>
         </ol>
       </div>
     )

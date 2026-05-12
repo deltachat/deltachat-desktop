@@ -14,7 +14,7 @@ type MessageMultiselectContextValue = ReturnType<
 > & {
   resetSelection: () => void
 }
-const MessageMultiselectContext =
+export const MessageMultiselectContext =
   React.createContext<MessageMultiselectContextValue>({
     onClick: () => false,
     onFocus: () => {},
@@ -23,14 +23,12 @@ const MessageMultiselectContext =
     resetSelection: () => {},
   })
 
-export function FocusAndMultiselectProvider(
-  props: React.PropsWithChildren<{
-    wrapperElementRef: Parameters<
-      typeof RovingTabindexProvider
-    >[0]['wrapperElementRef']
-    messageIds: Array<T.Message['id']>
-  }>
-) {
+export function useMessageFocusAndMultiselectContextValue(props: {
+  wrapperElementRef: Parameters<
+    typeof RovingTabindexProvider
+  >[0]['wrapperElementRef']
+  messageIds: Array<T.Message['id']>
+}) {
   const [selectedMessages_, setSelectedMessages] = useState(
     new Set<T.Message['id']>()
   )
@@ -68,15 +66,7 @@ export function FocusAndMultiselectProvider(
     // even though all you did is click a link inside of it.
     { onNormalClick: 'unselectAll' }
   )
-  return (
-    <RovingTabindexProvider wrapperElementRef={props.wrapperElementRef}>
-      <MessageMultiselectContext.Provider
-        value={{ ...multiselect, resetSelection }}
-      >
-        {props.children}
-      </MessageMultiselectContext.Provider>
-    </RovingTabindexProvider>
-  )
+  return { ...multiselect, resetSelection }
 }
 
 export function useMessageFocusAndMultiselect(
