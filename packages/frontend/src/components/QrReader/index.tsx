@@ -68,7 +68,7 @@ export const QrReader = forwardRef<QrCodeScanRef, Props>(
     const [videoDevices, setVideoDevices] = useState<MediaDeviceInfo[]>([])
     const [deviceId, setDeviceId] = useState<string | undefined>(undefined)
     const [processingFile, setProcessingFile] = useState(false)
-
+    const [flipped, setFlipped] = useState(false)
     const workerRef = useRef<Worker | null>(null)
     const workerClipBoardRef = useRef<Worker | null>(null)
     // Only create the worker once per component instance.
@@ -381,6 +381,14 @@ export const QrReader = forwardRef<QrCodeScanRef, Props>(
           activeStream = stream
 
           const settings = videoTracks[0].getSettings()
+          let flipped = true;
+          if (settings.facingMode != undefined) {
+            flipped = !(settings.facingMode == 'environment')
+          } else {
+            flipped = !(videoTracks[0].label.toLowerCase().includes('back'))
+          }
+          setFlipped(flipped)
+
           if (settings.deviceId) {
             setDeviceId(settings.deviceId)
           }
@@ -508,6 +516,7 @@ export const QrReader = forwardRef<QrCodeScanRef, Props>(
         <video
           className={classNames(styles.qrReaderVideo, {
             [styles.visible]: ready && !cameraAccessError && !processingFile,
+            [styles.flipped]: flipped,
           })}
           autoPlay
           muted
