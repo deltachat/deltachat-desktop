@@ -70,7 +70,9 @@ export default function ForwardMessage(props: ForwardMessageProps) {
       }
       const yes = await confirmDialog(
         openDialog,
-        tx('ask_forward', [chat.name]),
+        tx('ask_forward_messages', [messageIds.length.toString(), chat.name], {
+          quantity: messageIds.length,
+        }),
         tx('forward')
       )
       if (yes) {
