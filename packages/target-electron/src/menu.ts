@@ -315,7 +315,6 @@ function getMenuTemplate(
     ...(isMac ? [getAppMenu(mainWindow.window)] : []),
     getFileMenu(mainWindow.window, isMac),
     getEditMenu(),
-    ...(isMac ? [getMacWindowMenu()] : []),
     {
       label: tx('global_menu_view_desktop'),
       submenu: [
@@ -385,6 +384,7 @@ function getMenuTemplate(
         },
       ],
     },
+    ...(isMac ? [getMacWindowMenu()] : []),
     getHelpMenu(isMac),
   ]
 }
