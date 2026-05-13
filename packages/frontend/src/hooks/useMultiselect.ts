@@ -155,14 +155,6 @@ export function useMultiselect<T>(
       const from = prevLastActivatedItem
       const to = toItem
 
-      let fromInd = availableItemsRef.current.indexOf(from)
-      if (fromInd === -1) {
-        // This could happen if `availableItems` got updated
-        // such that `prevLastActivatedItem` is no longer a member of it.
-        // Maybe there is a more graceful way to handle this.
-        onSelectionChange(new Set([from]))
-        return
-      }
       // `lastIndexOf` is functionally equivalent to `indexOf`
       // given that all items are unique,
       // but this has higher performance when selecting down,
@@ -175,7 +167,15 @@ export function useMultiselect<T>(
           'is not a member of availableItems',
           availableItemsRef.current
         )
-        onSelectionChange(new Set([from]))
+        return
+      }
+      let fromInd = availableItemsRef.current.indexOf(from)
+      if (fromInd === -1) {
+        // This could happen if `availableItems` got updated
+        // such that `prevLastActivatedItem` is no longer a member of it.
+        // Maybe there is a more graceful way to handle this.
+        onSelectionChange(new Set([to]))
+        return
       }
 
       ;[fromInd, toInd] = [Math.min(fromInd, toInd), Math.max(fromInd, toInd)]

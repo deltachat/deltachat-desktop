@@ -8,6 +8,7 @@ import {
   reloadPage,
   test,
   createNDummyChats,
+  createDummyChat,
 } from '../playwright-helper'
 
 test.describe.configure({
@@ -198,6 +199,25 @@ test.describe('Shift + Click', () => {
     await page.keyboard.press('Shift+ArrowUp')
     // This is the topmost chat: do nothing.
     await expectSelectedChats([9, 8, 7])
+  })
+
+  test('handles selection start chat getting removed', async () => {
+    const chatName = 'Chat to be removed'
+    await createDummyChat(page, chatName)
+    const chat = chatList.getByRole('tab', { name: chatName })
+    await chat.click()
+    await expect(selectedChats).toContainText([chatName])
+
+    await chat.click({ button: 'right' })
+    await page.getByRole('menuitem', { name: 'Leave' }).click()
+    await page
+      .getByRole('dialog')
+      .getByRole('button', { name: 'Delete' })
+      .click()
+    await expectSelectedChats([])
+
+    await getChat(3).click({ modifiers: ['Shift'] })
+    await expectSelectedChats([3])
   })
 })
 
