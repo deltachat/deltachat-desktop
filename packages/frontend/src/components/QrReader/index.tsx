@@ -381,13 +381,13 @@ export const QrReader = forwardRef<QrCodeScanRef, Props>(
           activeStream = stream
 
           const settings = videoTracks[0].getSettings()
-          let flipped = true;
-          if (settings.facingMode != undefined) {
-            flipped = !(settings.facingMode == 'environment')
+          let isFacingUser = true
+          if (settings.facingMode !== undefined) {
+            isFacingUser = settings.facingMode === 'user'
           } else {
-            flipped = !(videoTracks[0].label.toLowerCase().includes('back'))
+            isFacingUser = !(videoTracks[0].label.toLowerCase().includes('back'))
           }
-          setFlipped(flipped)
+          setFlipped(isFacingUser)
 
           if (settings.deviceId) {
             setDeviceId(settings.deviceId)
