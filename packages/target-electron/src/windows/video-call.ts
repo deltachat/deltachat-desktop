@@ -22,12 +22,33 @@ import { setContentProtection } from '../content-protection'
 
 const log = getLogger('windows/video-call')
 
+/**
+ * Tracks open call windows by "accountId-chatId" key.
+ * Used to focus an existing call window when the user clicks a call bubble.
+ */
+const openCallWindows = new Map<string, BrowserWindow>()
+
+function callWindowKey(accountId: number, chatId: number): string {
+  return `${accountId}-${chatId}`
+}
+
 export function startOutgoingVideoCall(
   accountId: number,
   chatId: number,
   param: { startWithCameraEnabled: boolean }
 ) {
   log.info('starting outgoing video call', { accountId, chatId })
+
+  // If a call window for this chat is already open (e.g. a call is active),
+  // raise it instead of starting a new call.
+  const existingWin = openCallWindows.get(callWindowKey(accountId, chatId))
+  if (existingWin && !existingWin.isDestroyed()) {
+    if (existingWin.isMinimized()) {
+      existingWin.restore()
+    }
+    existingWin.focus()
+    return
+  }
 
   const { offerPromise, windowClosed, closeWindow } = openVideoCallWindow(
     accountId,
@@ -136,6 +157,17 @@ export function openIncomingVideoCallWindow({
     callMessageId,
     startWithCameraEnabled,
   })
+
+  // If a call window for this chat is already open bring it to the
+  // foreground instead of opening a second window.
+  const existingWin = openCallWindows.get(callWindowKey(accountId, chatId))
+  if (existingWin && !existingWin.isDestroyed()) {
+    if (existingWin.isMinimized()) {
+      existingWin.restore()
+    }
+    existingWin.focus()
+    return
+  }
 
   const { answerPromise, windowClosed, closeWindow } = openVideoCallWindow(
     accountId,
@@ -259,8 +291,14 @@ function openVideoCallWindow<D extends CallDirection>(
   // Maybe we could add a setting for this, i.e. "Allow calls to bypass VPN".
   // win.webContents.setWebRTCIPHandlingPolicy()
 
+  const windowKey = callWindowKey(accountId, chatId)
+  openCallWindows.set(windowKey, win)
+
   const abortController = new AbortController()
-  win.once('closed', () => abortController.abort('window closed'))
+  win.once('closed', () => {
+    openCallWindows.delete(windowKey)
+    abortController.abort('window closed')
+  })
 
   chatInfoPromise.then(chat => {
     if (win.isDestroyed()) {
