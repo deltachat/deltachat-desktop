@@ -200,6 +200,7 @@
       .text {
         display: inline-block;
         max-width: fit-content;
+        unicode-bidi: plaintext;
       }
     }
   }

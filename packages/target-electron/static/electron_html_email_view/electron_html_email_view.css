@@ -31,10 +31,12 @@ div.header > .title p {
 
 #subject {
   font-size: 1em;
+  unicode-bidi: plaintext;
 }
 
 div.header > .title > p.details {
   font-size: 0.8em;
+  unicode-bidi: plaintext;
 }
 
 div.header > div.network-toggle {
