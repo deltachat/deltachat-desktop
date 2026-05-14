@@ -512,9 +512,6 @@ function makeBrowserView(
   sandboxedView.webContents.insertCSS(`:root {
       color: black;
       background-color: white;
-    }
-    body {
-      unicode-bidi: plaintext;
     }`)
 
   const openLink = (url: string) => {
