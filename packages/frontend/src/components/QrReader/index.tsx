@@ -383,7 +383,7 @@ export const QrReader = forwardRef<QrCodeScanRef, Props>(
           const settings = videoTracks[0].getSettings()
           let isFacingUser = true
           if (settings.facingMode !== undefined) {
-            isFacingUser = settings.facingMode === 'user'
+            isFacingUser = settings.facingMode !== 'environment'
           } else {
             isFacingUser = !videoTracks[0].label.toLowerCase().includes('back')
           }
