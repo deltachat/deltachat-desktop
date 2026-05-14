@@ -529,6 +529,7 @@ test('gets focused after clicking/touching send message button', async () => {
 
   const msg = 'Msg' + Math.random()
   await textarea.fill(msg)
+  await page.getByRole('button', { name: 'Send' }).focus()
   await page.getByRole('button', { name: 'Send' }).click()
 
   await expect(textarea).toBeFocused()
