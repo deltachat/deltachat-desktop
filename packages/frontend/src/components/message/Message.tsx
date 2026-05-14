@@ -1285,31 +1285,40 @@ function CallIconButton({
   const refresh = useEffectEvent(callInfoFetch.refresh)
   useEffect(() => {
     return onDCEvent(accountId, 'MsgsChanged', event => {
+      // MsgsChanged event is fired when the call state changes
       if (event.msgId !== messageId) {
         return
       }
+      // update the call info
       refresh()
     })
   }, [accountId, messageId])
 
-  const onClickParams:
-    | undefined
-    | Parameters<typeof runtime.openIncomingVideoCallWindow>[0] =
-    callInfoFetch.result?.ok &&
-    callInfoFetch.result.value.state.kind === 'Alerting'
-      ? {
-          accountId,
-          chatId,
-          callMessageId: messageId,
-          callerWebrtcOffer: callInfoFetch.result.value.sdpOffer,
-          startWithCameraEnabled: callInfoFetch.result.value.hasVideo,
-        }
-      : undefined
-  // TODO fix: don't open a second window if one is already open
-  // for this message (this should be done in the main process).
-  const onClick = onClickParams
-    ? () => runtime.openIncomingVideoCallWindow(onClickParams)
+  const callInfo = callInfoFetch.result?.ok
+    ? callInfoFetch.result.value
     : undefined
+
+  const callWindowParams = callInfo
+    ? {
+        accountId,
+        chatId,
+        callMessageId: messageId,
+        callerWebrtcOffer: callInfo.sdpOffer,
+        startWithCameraEnabled: callInfo.hasVideo,
+      }
+    : undefined
+
+  const onClick =
+    callInfo == undefined
+      ? undefined
+      : callInfo.state.kind === 'Alerting' || callInfo.state.kind === 'Active'
+        ? // Focus the existing window (if any) or open the incoming call dialog.
+          () => runtime.openIncomingVideoCallWindow(callWindowParams!)
+        : // Terminated state (Completed, Missed, Declined, Canceled): start a new outgoing call.
+          () =>
+            runtime.startOutgoingVideoCall(accountId, chatId, {
+              startWithCameraEnabled: callInfo.hasVideo,
+            })
 
   return (
     <IconButton
