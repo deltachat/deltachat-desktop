@@ -385,7 +385,7 @@ export const QrReader = forwardRef<QrCodeScanRef, Props>(
           if (settings.facingMode !== undefined) {
             isFacingUser = settings.facingMode === 'user'
           } else {
-            isFacingUser = !(videoTracks[0].label.toLowerCase().includes('back'))
+            isFacingUser = !videoTracks[0].label.toLowerCase().includes('back')
           }
           setFlipped(isFacingUser)
 
