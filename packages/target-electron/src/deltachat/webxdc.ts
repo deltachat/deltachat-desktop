@@ -25,7 +25,7 @@ import { truncateText } from '@deltachat-desktop/shared/util.js'
 import { tx } from '../load-translations.js'
 import { Bounds, DcOpenWebxdcParameters } from '../../../shared/shared-types.js'
 import { DesktopSettings } from '../desktop_settings.js'
-import { window as main_window } from '../windows/main.js'
+import { window as main_window, send } from '../windows/main.js'
 import { writeTempFileFromBase64 } from '../ipc.js'
 import {
   getAppMenu,
@@ -758,12 +758,7 @@ export default class DCWebxdc {
           return
         }
         // forward to main window
-        main_window?.webContents.send(
-          'webxdc.sendToChat',
-          file,
-          text,
-          app.accountId
-        )
+        send('webxdc.sendToChat', file, text, app.accountId)
         main_window?.focus()
       }
     )

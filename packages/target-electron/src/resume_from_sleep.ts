@@ -1,9 +1,9 @@
 import { powerMonitor } from 'electron'
 
-import { window } from './windows/main.js'
+import { send } from './windows/main.js'
 
 function onResumeFromSleep() {
-  window?.webContents.send('onResumeFromSleep')
+  send('onResumeFromSleep')
 }
 
 export function initialisePowerMonitor() {
