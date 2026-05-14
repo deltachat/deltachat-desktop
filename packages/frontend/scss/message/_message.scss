@@ -110,6 +110,7 @@ $info-text-max-width: 400px;
         font-size: 14px;
         line-height: 18px;
         text-align: start;
+        unicode-bidi: plaintext;
 
         overflow-wrap: break-word;
         word-wrap: break-word;
@@ -564,6 +565,7 @@ $info-text-max-width: 400px;
     font-size: 12px;
     line-height: 12px;
     margin: 0;
+    unicode-bidi: plaintext;
     max-height: 40px;
     overflow: hidden;
     line-clamp: 3;
