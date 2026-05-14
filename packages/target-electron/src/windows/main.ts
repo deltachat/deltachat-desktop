@@ -129,6 +129,7 @@ export function init(options: { hidden: boolean }) {
     // crashed the main process
     setImmediate(() => {
       if (mainWindow.isDestroyed()) {
+        log.warn('skipping renderer reload: its window is destroyed')
         return
       }
       try {
