@@ -69,6 +69,7 @@ export const QrReader = forwardRef<QrCodeScanRef, Props>(
     const [deviceId, setDeviceId] = useState<string | undefined>(undefined)
     const [processingFile, setProcessingFile] = useState(false)
     const [flipped, setFlipped] = useState(false)
+
     const workerRef = useRef<Worker | null>(null)
     const workerClipBoardRef = useRef<Worker | null>(null)
     // Only create the worker once per component instance.
