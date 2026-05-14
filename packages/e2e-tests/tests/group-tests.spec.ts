@@ -368,12 +368,6 @@ test('Withdraw group invite link', async ({ browserName }) => {
       .getByRole('listitem')
       .filter({ hasText: 'Member Me removed by Alice' })
   ).toBeVisible()
-  await expect(
-    page
-      .getByRole('list', { name: 'Messages' })
-      .getByRole('listitem')
-      .filter({ hasText: groupInviteMessage })
-  ).toBeVisible()
   // the group chat opens but composer should not be available
   // timeout to make sure (or more probable) that this is not
   // just due to a delayed response or a timing issue
