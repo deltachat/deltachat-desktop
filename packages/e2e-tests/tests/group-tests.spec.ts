@@ -349,6 +349,13 @@ test('Withdraw group invite link', async ({ browserName }) => {
   // note the withdrawn code is still in clipboard
   // now userB tries to readd himself by pasting the old invite link
   await switchToProfile(page, userB.id)
+  await page.getByLabel('Chats').getByRole('tab', { name: groupName }).click()
+  // Wait until we get removed from the group,
+  // because scanning the invite link to a group that we're already a member of
+  // might just not do anything, even if the link is revoked.
+  await expect(
+    page.getByRole('list', { name: 'Messages' }).getByRole('listitem').last()
+  ).toContainText('Member Me removed by Alice')
   await clickThroughTestIds(page, ['qr-scan-button', 'show-qr-scan', 'paste'])
 
   const confirmJoinGroupDialog = page.getByTestId('confirm-join-group')
