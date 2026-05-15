@@ -45,9 +45,6 @@ export default function FullscreenAvatar(
             wheel={{
               wheelDisabled: true,
             }}
-            panning={{
-              wheelPanning: true,
-            }}
           >
             {utils => {
               zoomInRef.current = () => utils.zoomIn()

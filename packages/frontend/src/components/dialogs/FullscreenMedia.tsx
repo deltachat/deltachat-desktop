@@ -138,9 +138,6 @@ export default function FullscreenMedia(props: Props & DialogProps) {
           wheel={{
             wheelDisabled: true,
           }}
-          panning={{
-            wheelPanning: true,
-          }}
         >
           {utils => {
             zoomInRef.current = () => utils.zoomIn()
