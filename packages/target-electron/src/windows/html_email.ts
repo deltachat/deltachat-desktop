@@ -3,7 +3,6 @@ import electron, {
   dialog,
   Menu,
   MenuItem,
-  MenuItemConstructorOptions,
   nativeTheme,
   session,
   WebContents,
@@ -246,60 +245,66 @@ export function openHtmlEmailWindow(
   let context_menu_handle = createContextMenu(window, sandboxedView.webContents)
 
   window.webContents.ipc.handle('html-view:more-menu', (_ev, { x, y }) => {
-    const menuItems: {
-      [key: string]: () => MenuItemConstructorOptions
-    } = {
-      separator: () => ({ type: 'separator' }),
-      load_remote_images: () => ({
-        id: 'load_remote_images',
-        type: 'checkbox',
+    const menu = electron.Menu.buildFromTemplate([
+      {
+        id: 'load_remote_content',
         label: tx('load_remote_content'),
-        checked: loadRemoteContent,
         click() {
-          update_restrictions(!loadRemoteContent)
+          const isAlways =
+            !isContactRequest &&
+            DesktopSettings.state.HTMLEmailAlwaysLoadRemoteContent
+          const isOnce = loadRemoteContent && !isAlways
+          const isNever = !loadRemoteContent
+          const mark = (active: boolean, label: string) =>
+            (active ? '✅ ' : '') + label
+          // needed to close the dialog if the window is closed while it's open
+          const abortController = new AbortController()
+          const onClose = () => abortController.abort()
+          window.once('close', onClose)
+          dialog
+            .showMessageBox(window, {
+              message: tx('load_remote_content_ask'),
+              buttons: [
+                mark(isNever, tx('never')),
+                mark(isOnce, tx('once')),
+                mark(isAlways, tx('always')),
+              ],
+              type: 'none',
+              icon: '',
+              defaultId: isAlways ? 2 : isOnce ? 1 : 0,
+              cancelId: 0,
+              signal: abortController.signal,
+            })
+            .then(({ response }) => {
+              window.off('close', onClose)
+              if (response === 0) {
+                // Never: disable for this session, clear persistent setting
+                if (DesktopSettings.state.HTMLEmailAlwaysLoadRemoteContent) {
+                  DesktopSettings.update({
+                    HTMLEmailAlwaysLoadRemoteContent: false,
+                  })
+                }
+                update_restrictions(false)
+              } else if (response === 1) {
+                // Once: enable for this session only
+                update_restrictions(true)
+              } else if (response === 2) {
+                // Always: enable + persist (only for non-contact requests)
+                if (!isContactRequest) {
+                  DesktopSettings.update({
+                    HTMLEmailAlwaysLoadRemoteContent: true,
+                  })
+                }
+                update_restrictions(true)
+              }
+            })
+            .catch(() => {
+              // dialog was closed because the window was closed (AbortError)
+              window.off('close', onClose)
+            })
         },
-      }),
-      always_show: () => ({
-        id: 'always_show',
-        type: 'checkbox',
-        label: tx('always_load_remote_images'),
-        checked: DesktopSettings.state.HTMLEmailAlwaysLoadRemoteContent,
-        click() {
-          const newValue =
-            !DesktopSettings.state.HTMLEmailAlwaysLoadRemoteContent
-          DesktopSettings.update({
-            HTMLEmailAlwaysLoadRemoteContent: newValue,
-          })
-          // apply change
-          update_restrictions(newValue, true)
-        },
-      }),
-      dont_ask: () => ({
-        id: 'show_warning',
-        type: 'checkbox',
-        label: tx('show_warning'),
-        checked: DesktopSettings.state.HTMLEmailAskForRemoteLoadingConfirmation,
-        click() {
-          DesktopSettings.update({
-            HTMLEmailAskForRemoteLoadingConfirmation:
-              !DesktopSettings.state.HTMLEmailAskForRemoteLoadingConfirmation,
-          })
-        },
-      }),
-    }
-    let menu: Electron.Menu
-    if (isContactRequest) {
-      menu = electron.Menu.buildFromTemplate([
-        menuItems.load_remote_images(),
-        menuItems.dont_ask(),
-      ])
-    } else {
-      menu = electron.Menu.buildFromTemplate([
-        menuItems.load_remote_images(),
-        menuItems.always_show(),
-        menuItems.dont_ask(),
-      ])
-    }
+      },
+    ])
     menu.popup({ window, x, y })
   })
 
@@ -332,59 +337,7 @@ export function openHtmlEmailWindow(
     DesktopSettings.update({ HTMLEmailWindowBounds: window_bounds })
   })
 
-  const update_restrictions = async (
-    allow_network: boolean,
-    skip_sideeffects = false
-  ) => {
-    if (
-      !skip_sideeffects &&
-      !isContactRequest &&
-      !allow_network &&
-      DesktopSettings.state.HTMLEmailAlwaysLoadRemoteContent
-    ) {
-      // revert always loading when turning the toggle switch
-      DesktopSettings.update({
-        HTMLEmailAlwaysLoadRemoteContent: false,
-      })
-    }
-
-    if (
-      !skip_sideeffects &&
-      allow_network &&
-      DesktopSettings.state.HTMLEmailAskForRemoteLoadingConfirmation
-    ) {
-      const buttons = [
-        {
-          label: tx('no'),
-          action: () => {
-            throw new Error('user denied')
-          },
-        },
-        { label: tx('yes'), action: () => {} },
-        // isContactRequest || {
-        //   label: tx('pref_html_always_load_remote_content'),
-        //   action: () => {
-        //     DesktopSettings.update({
-        //       HTMLEmailAlwaysLoadRemoteContent: true,
-        //     })
-        //   },
-        // },
-      ].filter(item => typeof item === 'object') as {
-        label: string
-        action: () => void
-      }[]
-
-      const result = await dialog.showMessageBox(window, {
-        message: tx('load_remote_content_ask'),
-        buttons: buttons.map(b => b.label),
-        type: 'none',
-        icon: '',
-        defaultId: 0,
-        cancelId: 0,
-      })
-      buttons[result.response].action()
-    }
-
+  const update_restrictions = async (allow_network: boolean) => {
     loadRemoteContent = allow_network
     const bounds = sandboxedView?.getBounds()
     window.contentView.removeChildView(sandboxedView)
