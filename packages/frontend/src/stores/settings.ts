@@ -18,6 +18,7 @@ export interface SettingsStoreState {
       bcc_self: string
       delete_device_after: string
       download_limit: string
+      force_encryption: '0' | '1'
       media_quality: string
       is_chatmail: '0' | '1'
       who_can_call_me: WhoCanCallMe
@@ -36,6 +37,7 @@ const settingsKeys = [
   'bcc_self',
   'delete_device_after',
   'download_limit',
+  'force_encryption',
   'media_quality',
   'is_chatmail',
   'who_can_call_me',
@@ -130,6 +132,10 @@ class SettingsStore extends Store<SettingsStoreState | null> {
 
       if (settings['ui.mentions_enabled'] == null) {
         settings['ui.mentions_enabled'] = mentionsEnabledDefaultVal
+      }
+
+      if (settings['force_encryption'] == null) {
+        settings['force_encryption'] = '1'
       }
 
       const rc = runtime.getRC_Config()

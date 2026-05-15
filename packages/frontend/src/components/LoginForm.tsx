@@ -12,6 +12,8 @@ import { I18nContext } from '../contexts/I18nContext'
 const log = getLogger('renderer/loginForm')
 
 import type { Credentials } from './Settings/DefaultCredentials'
+import SettingsStoreInstance, { useSettingsStore } from '../stores/settings'
+import Switch from './Switch'
 
 const Socket = {
   automatic: 'automatic',
@@ -42,6 +44,8 @@ export default function LoginForm({
   const [providerInfo, setProviderInfo] = useState<
     Type.ProviderInfo | undefined
   >()
+  const settingsStore = useSettingsStore()[0]
+  const forceEncryption = settingsStore?.settings['force_encryption'] !== '0'
 
   const handleCredentialsChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -260,7 +264,22 @@ export default function LoginForm({
               <option value={Socket.starttls}>STARTTLS</option>
               <option value={Socket.plain}>{tx('off')}</option>
             </DeltaSelect>
-
+            <div className='delta-form-group delta-switch'>
+              <label>
+                <span>{tx('enforce_e2ee')}</span>
+                {/** be aware that this setting applies to all relays! */}
+                <Switch
+                  checked={forceEncryption}
+                  disabled={settingsStore == null}
+                  onChange={() =>
+                    SettingsStoreInstance.effect.setCoreSetting(
+                      'force_encryption',
+                      forceEncryption ? '0' : '1'
+                    )
+                  }
+                />
+              </label>
+            </div>
             <DeltaSelect
               id='certificateChecks'
               label={tx('login_certificate_checks')}
