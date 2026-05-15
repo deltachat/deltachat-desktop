@@ -53,7 +53,7 @@
   "prevent_dialog_spam_checkbox": {
     "message": "Don't allow the app to open this dialog again"
   },
-  "react_more_emojis" : {
+  "react_more_emojis": {
     "message": "More emojis..."
   },
   "edit_channel": {
@@ -64,5 +64,8 @@
   },
   "paste_in_qr_scanner": {
     "message": "Click to paste it in QR scanner"
+  },
+  "enforce_e2ee": {
+    "message": "Enforce Encryption"
   }
 }

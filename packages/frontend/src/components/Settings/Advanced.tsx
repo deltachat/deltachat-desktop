@@ -90,6 +90,10 @@ export default function Advanced({ onClose }: Props) {
         description={tx('pref_multidevice_explain')}
         beforeChange={confirmDisableMultiDevice}
       />
+      <CoreSettingsSwitch
+        label={tx('enforce_e2ee')}
+        settingsKey='force_encryption'
+      />
 
       <SettingsSeparator />
 
