@@ -102,7 +102,6 @@ const Composer = forwardRef<
   const { openDialog } = useDialog()
   const { sendMessage } = useMessage()
   const { unselectChat } = useChat()
-  const { smallScreenMode } = useContext(ScreenContext)
 
   // The philosophy of the editing mode is as follows.
   // The edit mode can be thought of as a dialog,
@@ -371,14 +370,13 @@ const Composer = forwardRef<
             regularMessageInputRef.current?.focus()
           })
         } else {
-          // No picker/edit mode/quote to close
-          if (smallScreenMode) {
-            // In small screen mode, unselect the chat to go back to chatlist
-            ActionEmitter.emitAction(KeybindAction.Chat_Unselect)
-          } else {
-            // Focus the chatlist item to enable arrow key navigation between chats
-            ActionEmitter.emitAction(KeybindAction.ChatList_FocusItems)
-          }
+          // No picker/edit mode/quote to close.
+          // Unselecting the chat goes back to chatlist in small screen mode.
+          // But it's also good in "regular" mode.
+          ActionEmitter.emitAction(KeybindAction.Chat_Unselect)
+          // Focus the chatlist item to enable arrow key navigation between chats
+          // TODO fix: doesn't work in small screen mode.
+          ActionEmitter.emitAction(KeybindAction.ChatList_FocusItems)
         }
         ev.stopPropagation()
       }
@@ -397,7 +395,6 @@ const Composer = forwardRef<
     shiftPressed,
     messageEditing,
     regularMessageInputRef,
-    smallScreenMode,
     showEmojiPicker,
     showAppPicker,
     draftState.quote,
