@@ -27,7 +27,10 @@ export function windowDefaults() {
     screen.getPrimaryDisplay().workAreaSize
   const headerHeight = 38
   // NOTE(maxph): we have a padding of 66px on the left of the buttons
-  const defaultHeight = Math.min(802 + headerHeight, screenHeight)
+  // A multiplier to make space for the taskbar and the window header.
+  // Remember that the taskbar could also be placed vertically.
+  const defaultHeight = Math.min(802 + headerHeight, screenHeight * 0.75)
+  defaultWidth = Math.min(defaultWidth, screenWidth * 0.75)
 
   const x = (screenWidth - defaultWidth) / 2
   const y = (screenHeight - defaultHeight) / 2
