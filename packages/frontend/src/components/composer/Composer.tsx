@@ -222,6 +222,13 @@ const Composer = forwardRef<
     messageEditing.isEditingModeActive || draftIsLoading
       ? null
       : async () => {
+
+          // Focus message input in case the message was sent
+          // with the "Send" button touch / mouse click and not Ctrl + Enter.
+          setTimeout(() => {
+            regularMessageInputRef.current?.focus()
+          })
+
           if (chatId === null) {
             throw new Error('chat id is undefined')
           }
