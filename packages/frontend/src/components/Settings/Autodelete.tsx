@@ -57,8 +57,6 @@ export default function Autodelete({
   const accountId = selectedAccountId()
   const tx = useTranslationFunction()
 
-  const isChatMail = settingsStore.settings.is_chatmail === '1'
-
   const AUTODELETE_DURATION_OPTIONS_DEVICE = [
     AutodeleteDuration.NEVER,
     AutodeleteDuration.ONE_HOUR,
@@ -71,55 +69,30 @@ export default function Autodelete({
       [String(value), durationToString(value, false)] as SelectDialogOption
   )
 
-  const AUTODELETE_DURATION_OPTIONS_SERVER = [
-    AutodeleteDuration.NEVER,
-    AutodeleteDuration.AT_ONCE,
-    // These do not make sense for Chatmail servers.
-    // See https://github.com/deltachat/deltachat-desktop/issues/4113
-    ...(isChatMail
-      ? []
-      : [
-          AutodeleteDuration.ONE_HOUR,
-          AutodeleteDuration.ONE_DAY,
-          AutodeleteDuration.ONE_WEEK,
-          AutodeleteDuration.FIVE_WEEKS,
-          AutodeleteDuration.ONE_YEAR,
-        ]),
-  ].map(
-    value =>
-      [String(value), durationToString(value, isChatMail)] as SelectDialogOption
-  )
-
-  const onOpenDialog = async (fromServer: boolean) => {
+  const onOpenDialog = async () => {
     openDialog(SmallSelectDialog, {
-      values: fromServer
-        ? AUTODELETE_DURATION_OPTIONS_SERVER
-        : AUTODELETE_DURATION_OPTIONS_DEVICE,
-      initialSelectedValue: fromServer
-        ? settingsStore.settings['delete_server_after']
-        : settingsStore.settings['delete_device_after'],
-      title: fromServer
-        ? tx('autodel_server_title')
-        : tx('autodel_device_title'),
+      values: AUTODELETE_DURATION_OPTIONS_DEVICE,
+      initialSelectedValue: settingsStore.settings['delete_device_after'],
+      title: tx('autodel_device_title'),
       onSave: async (_seconds: string) => {
         const seconds = Number(_seconds)
         const estimateCount = await BackendRemote.rpc.estimateAutoDeletionCount(
           accountId,
-          fromServer,
+          false,
           seconds
         )
 
         if (seconds === 0) {
           // No need to have a confirmation dialog on disabling
           SettingsStoreInstance.effect.setCoreSetting(
-            fromServer ? 'delete_server_after' : 'delete_device_after',
+            'delete_device_after',
             seconds.toString()
           )
           return
         }
 
         openDialog(AutodeleteConfirmationDialog, {
-          fromServer,
+          fromServer: false,
           estimateCount,
           seconds,
         })
@@ -130,7 +103,7 @@ export default function Autodelete({
   return (
     <>
       <SettingsSelector
-        onClick={onOpenDialog.bind(null, false)}
+        onClick={onOpenDialog}
         currentValue={durationToString(
           settingsStore.settings['delete_device_after'],
           false
@@ -138,17 +111,6 @@ export default function Autodelete({
       >
         {tx('autodel_device_title')}
       </SettingsSelector>
-      {!isChatMail && (
-        <SettingsSelector
-          onClick={onOpenDialog.bind(null, true)}
-          currentValue={durationToString(
-            settingsStore.settings['delete_server_after'],
-            isChatMail
-          )}
-        >
-          {tx('autodel_server_title')}
-        </SettingsSelector>
-      )}
     </>
   )
 }
@@ -169,7 +131,7 @@ function AutodeleteConfirmationDialog({
   const onOk = () => {
     if (isConfirmed === false) return
     SettingsStoreInstance.effect.setCoreSetting(
-      fromServer ? 'delete_server_after' : 'delete_device_after',
+      'delete_device_after',
       seconds.toString()
     )
     onClose()

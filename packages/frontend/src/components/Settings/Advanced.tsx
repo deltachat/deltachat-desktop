@@ -1,8 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react'
 
-import type { SettingsStoreState } from '../../stores/settings'
 import { ExperimentalFeatures } from './ExperimentalFeatures'
-import ImapFolderHandling from './ImapFolderHandling'
 import SettingsHeading from './SettingsHeading'
 import SettingsSeparator from './SettingsSeparator'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
@@ -21,13 +19,12 @@ import { DialogProps } from '../../contexts/DialogContext'
 import { getLogger } from '../../../../shared/logger'
 
 type Props = {
-  settingsStore: SettingsStoreState
   onClose: DialogProps['onClose']
 }
 
 const log = getLogger('renderer/settings/advanced')
 
-export default function Advanced({ onClose, settingsStore }: Props) {
+export default function Advanced({ onClose }: Props) {
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
   const openProxySettings = () => {
@@ -93,6 +90,10 @@ export default function Advanced({ onClose, settingsStore }: Props) {
         description={tx('pref_multidevice_explain')}
         beforeChange={confirmDisableMultiDevice}
       />
+      <CoreSettingsSwitch
+        label={tx('enforce_e2ee')}
+        settingsKey='force_encryption'
+      />
 
       <SettingsSeparator />
 
@@ -103,14 +104,6 @@ export default function Advanced({ onClose, settingsStore }: Props) {
         <>
           <SettingsSeparator />
           <SettingsAutoStart />
-        </>
-      )}
-
-      {settingsStore.settings.is_chatmail === '0' && (
-        <>
-          <SettingsSeparator />
-          <SettingsHeading>Legacy Options</SettingsHeading>
-          <ImapFolderHandling settingsStore={settingsStore} />
         </>
       )}
     </>
