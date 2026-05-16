@@ -464,6 +464,20 @@ test("closing context menu with Escape doesn't close dialog", async () => {
   await expect(page.getByRole('dialog')).not.toBeVisible()
 })
 
+test('Escape closes the chat', async () => {
+  await page.getByLabel('Chats').getByRole('tab').first().click()
+  await expect(
+    page.locator('textarea.create-or-edit-message-input')
+  ).toBeFocused()
+  await page.keyboard.press('Escape')
+  await expect(
+    page.locator('textarea.create-or-edit-message-input')
+  ).not.toBeVisible()
+  await expect(
+    page.getByLabel('Chats').getByRole('tab', { selected: true })
+  ).toHaveCount(0)
+})
+
 test('correct handling of changed profile displaynames', async () => {
   const userA = existingProfiles[0]
   const userB = existingProfiles[1]
