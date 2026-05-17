@@ -93,6 +93,9 @@ test('check "New E-Mail" option is shown and a chat can be created', async () =>
   await newEmailButton.click()
 
   await page.getByTestId('group-name-input').fill(unencryptedGroupSubject1)
+  await expect(
+    page.getByRole('dialog').getByRole('textbox', { name: 'description' })
+  ).not.toBeVisible()
   await page.locator('#addmember').click()
 
   await page.getByTestId('add-member-search').fill(emailUserB)
