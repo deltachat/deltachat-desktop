@@ -471,7 +471,10 @@ const Composer = forwardRef<
           appInfo.cache_relname,
           response.blob
         )
+
         setShowAppPicker(false)
+        setTimeout(() => focusMessageInput())
+
         await addFileToDraft(path, appInfo.cache_relname, 'File')
         await runtime.removeTempFile(path)
       }
@@ -527,12 +530,15 @@ const Composer = forwardRef<
 
   const settingsStore = useSettingsStore()[0]
 
-  useLayoutEffect(() => {
-    // focus composer on chat change
+  const focusMessageInput = useCallback(() => {
     // Only one of these is actually rendered at any given moment.
     regularMessageInputRef.current?.focus()
     editMessageInputRef.current?.focus()
-  }, [chatId, editMessageInputRef, regularMessageInputRef])
+  }, [editMessageInputRef, regularMessageInputRef])
+  useLayoutEffect(() => {
+    // focus composer on chat change
+    focusMessageInput()
+  }, [chatId, focusMessageInput])
 
   const ariaSendShortcut: string = useMemo(() => {
     if (settingsStore == undefined) {
@@ -712,6 +718,7 @@ const Composer = forwardRef<
           {!messageEditing.isEditingModeActive && !recording && (
             <MenuAttachment
               addFileToDraft={addFileToDraft}
+              focusMessageInput={focusMessageInput}
               showAppPicker={setShowAppPicker}
               selectedChat={selectedChat}
             />
@@ -803,6 +810,7 @@ const Composer = forwardRef<
               recording={recording}
               setRecording={setRecording}
               saveVoiceAsDraft={saveVoiceAsDraft}
+              focusMessageInput={focusMessageInput}
               onError={onAudioError}
             />
           )}

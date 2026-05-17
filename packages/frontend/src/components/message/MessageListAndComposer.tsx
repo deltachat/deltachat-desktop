@@ -257,14 +257,13 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     },
     [hasOpenDialogs]
   )
-
   useEffect(() => {
-    window.addEventListener('mouseup', onMouseUp)
-
     // Only one of these is actually rendered at any given moment.
     regularMessageInputRef.current?.focus()
     editMessageInputRef.current?.focus()
-
+  }, [])
+  useEffect(() => {
+    window.addEventListener('mouseup', onMouseUp)
     return () => {
       window.removeEventListener('mouseup', onMouseUp)
     }
