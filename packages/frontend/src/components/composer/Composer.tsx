@@ -527,12 +527,15 @@ const Composer = forwardRef<
 
   const settingsStore = useSettingsStore()[0]
 
-  useLayoutEffect(() => {
-    // focus composer on chat change
+  const focusMessageInput = useCallback(() => {
     // Only one of these is actually rendered at any given moment.
     regularMessageInputRef.current?.focus()
     editMessageInputRef.current?.focus()
-  }, [chatId, editMessageInputRef, regularMessageInputRef])
+  }, [editMessageInputRef, regularMessageInputRef])
+  useLayoutEffect(() => {
+    // focus composer on chat change
+    focusMessageInput()
+  }, [chatId, focusMessageInput])
 
   const ariaSendShortcut: string = useMemo(() => {
     if (settingsStore == undefined) {
