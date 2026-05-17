@@ -398,6 +398,14 @@ export async function createDummyChat(page: Page, chatName: string) {
   await page.getByRole('textbox', { name: 'Group Name' }).fill(chatName)
   await page.getByTestId('group-create-button').click()
 }
+export async function deleteChat(page: Page, chatName: string | RegExp) {
+  await page
+    .getByLabel('Chats')
+    .getByRole('tab', { name: chatName })
+    .click({ button: 'right' })
+  await page.getByRole('menuitem', { name: /.*(Delete|Leave).*/ }).click()
+  await page.getByRole('button', { name: 'Delete' }).click()
+}
 export async function createNDummyChats(
   page: Page,
   n: number,
