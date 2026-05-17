@@ -468,7 +468,10 @@ const Composer = forwardRef<
           appInfo.cache_relname,
           response.blob
         )
+
         setShowAppPicker(false)
+        setTimeout(() => focusMessageInput())
+
         await addFileToDraft(path, appInfo.cache_relname, 'File')
         await runtime.removeTempFile(path)
       }
@@ -712,6 +715,7 @@ const Composer = forwardRef<
           {!messageEditing.isEditingModeActive && !recording && (
             <MenuAttachment
               addFileToDraft={addFileToDraft}
+              focusMessageInput={focusMessageInput}
               showAppPicker={setShowAppPicker}
               selectedChat={selectedChat}
             />
@@ -803,6 +807,7 @@ const Composer = forwardRef<
               recording={recording}
               setRecording={setRecording}
               saveVoiceAsDraft={saveVoiceAsDraft}
+              focusMessageInput={focusMessageInput}
               onError={onAudioError}
             />
           )}
