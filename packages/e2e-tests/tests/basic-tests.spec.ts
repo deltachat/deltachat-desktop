@@ -398,6 +398,7 @@ test('add app from picker to chat', async () => {
   await page.getByTestId('add-app-to-chat').click()
   const appDraft = page.locator('.attachment-quote-section .text-part')
   await expect(appDraft).toContainText(appName)
+  await expect(page.locator('.create-or-edit-message-input')).toBeFocused()
   await page.locator('button.send-button').click()
   const webxdcMessage = page.locator('.msg-body .webxdc')
   await expect(webxdcMessage).toContainText(appName)
