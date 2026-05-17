@@ -21,12 +21,16 @@ import { unknownErrorToString } from '@deltachat-desktop/shared/unknownErrorToSt
 const log = getLogger('ForwardMessage')
 
 type ForwardMessageProps = {
-  message: T.Message
+  messageIds: Array<T.Message['id']>
+  /**
+   * ID of the chat that the {@linkcode messageIds} belong to.
+   */
+  sourceChatId: T.Message['chatId'] | T.BasicChat['id']
   onClose: DialogProps['onClose']
 }
 
 export default function ForwardMessage(props: ForwardMessageProps) {
-  const { message, onClose } = props
+  const { messageIds, sourceChatId, onClose } = props
 
   const currentAccountId = selectedAccountId()
 
@@ -75,7 +79,7 @@ export default function ForwardMessage(props: ForwardMessageProps) {
             // Cross-account forward
             await BackendRemote.rpc.forwardMessagesToAccount(
               currentAccountId,
-              [message.id],
+              messageIds,
               targetAccountId,
               chat.id
             )
@@ -83,7 +87,7 @@ export default function ForwardMessage(props: ForwardMessageProps) {
             // Same-account forward
             await BackendRemote.rpc.forwardMessages(
               currentAccountId,
-              [message.id],
+              messageIds,
               chat.id
             )
           }
@@ -96,13 +100,14 @@ export default function ForwardMessage(props: ForwardMessageProps) {
         }
         // get the (new) id of forwarded message
         // and jump to the message
-        const messageIds = await BackendRemote.rpc.getMessageIds(
+        const targetChatMessageIds = await BackendRemote.rpc.getMessageIds(
           targetAccountId,
           chatId,
           false,
           true
         )
-        const lastMessage = messageIds[messageIds.length - 1]
+        const lastMessage =
+          targetChatMessageIds[targetChatMessageIds.length - 1]
         if (lastMessage) {
           if (isCrossAccountForward) {
             // For cross-account, use the internal jump mechanism
@@ -131,10 +136,10 @@ export default function ForwardMessage(props: ForwardMessageProps) {
       } else {
         // If user cancels and we switched accounts, go back to original account and chat
         if (isCrossAccountForward) {
-          await saveLastChatId(currentAccountId, message.chatId)
+          await saveLastChatId(currentAccountId, sourceChatId)
           await window.__selectAccount(currentAccountId)
         } else {
-          selectChat(currentAccountId, message.chatId)
+          selectChat(currentAccountId, sourceChatId)
         }
       }
     } else {
@@ -143,14 +148,14 @@ export default function ForwardMessage(props: ForwardMessageProps) {
         if (isCrossAccountForward) {
           await BackendRemote.rpc.forwardMessagesToAccount(
             currentAccountId,
-            [message.id],
+            messageIds,
             targetAccountId,
             chat.id
           )
         } else {
           await BackendRemote.rpc.forwardMessages(
             currentAccountId,
-            [message.id],
+            messageIds,
             chat.id
           )
         }

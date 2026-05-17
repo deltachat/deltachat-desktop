@@ -174,6 +174,31 @@
           background-color: transparent;
         }
       }
+
+      &:has(.multiselectable-message[aria-selected='true']) {
+        background-color: var(--messageHightlightColor);
+
+        // Don't play the color fade animation in case the message is both
+        // `.highlight`ed and selected.
+        -webkit-animation: none;
+        -moz-animation: none;
+      }
+    }
+
+    // If you Shift+Click some messages then their text
+    // also gets selected, which looks pretty ugly.
+    // However, some people might still want to select text this way,
+    // so let's keep a really faint color for them.
+    //
+    // We apply this to the whole `<ol>` and not `<li>`
+    // because otherwise daymarkers are not affected by this
+    // (because they're not selectable).
+    &:has(.multiselectable-message[aria-selected='true'])::selection {
+      background-color: color-mix(
+        in srgb,
+        var(--messageHightlightColor) 5%,
+        transparent
+      );
     }
   }
 }
