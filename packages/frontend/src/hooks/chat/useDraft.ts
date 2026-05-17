@@ -309,7 +309,13 @@ export function useDraft(
       if (debouncedSaveAndRefetchDraft == null || saveAndRefetchDraft == null) {
         return
       }
+
+      // This is most likely not needed anymore
+      // as we try to focus the composer in more concrete places
+      // where `addFileToDraft()` is used.
+      // Related: https://github.com/deltachat/deltachat-desktop/issues/4590.
       inputRef.current?.focus()
+
       const newDraftState: typeof draftState = {
         ...draftState,
         file,
