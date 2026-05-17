@@ -709,16 +709,18 @@ export function CreateGroup(props: CreateGroupProps) {
             setChatName={setGroupName}
             errorMissingChatName={errorMissingGroupName}
             setErrorMissingChatName={setErrorMissingGroupName}
-            description={groupDescription}
-            setDescription={setGroupDescription}
-            {...(groupType === GroupType.PLAIN_EMAIL
+            {...((groupType === GroupType.PLAIN_EMAIL
               ? { groupType }
               : {
                   groupType,
                   groupImage,
                   onSetGroupImage: onSetGroupImage!,
                   onUnsetGroupImage: onUnsetGroupImage!,
-                })}
+                  description: groupDescription,
+                  setDescription: setGroupDescription,
+                }) satisfies Partial<
+              Parameters<typeof ChatSettingsSetNameAndProfileImage>[0]
+            >)}
           />
         </DialogContent>
         <div id='create-group-members-title' className='group-separator'>
