@@ -9,6 +9,7 @@ import {
   test,
   createNDummyChats,
   createDummyChat,
+  deleteChat,
   makeDummyContactInviteLink,
   selectChat as selectChatByName,
 } from '../playwright-helper'
@@ -723,5 +724,47 @@ test.describe('Ctrl + Up shortcut', () => {
     await expect(
       page.getByLabel('Messages').getByRole('listitem').filter({ hasText: msg })
     ).toContainText(getMessageText(8))
+  })
+})
+
+test.describe('Emoji picker', () => {
+  test.beforeAll(async () => {
+    await createDummyChat(page, 'Chat for emoji picker tests')
+  })
+  test.afterAll(async () => {
+    await deleteChat(page, 'Chat for emoji picker tests')
+  })
+
+  test('adds emoji to draft', async () => {
+    await textarea.focus()
+    await textarea.fill('12345')
+    await page.keyboard.press('ArrowLeft')
+    await page.keyboard.press('ArrowLeft')
+    await page.keyboard.press('Tab')
+    await page.keyboard.press('Space')
+    await expect(
+      page.getByRole('tabpanel', { name: 'Emoji' }).getByRole('searchbox')
+    ).toBeFocused()
+    await page.keyboard.type('thumbs up')
+    await page.keyboard.press('Enter')
+    await expect(
+      page.getByRole('tabpanel', { name: 'Emoji' })
+    ).not.toBeVisible()
+    await expect(textarea).toBeFocused()
+    await expect(textarea).toHaveText('123👍45')
+  })
+  test('focuses composer when closed with Escape', async () => {
+    await textarea.focus()
+    await page.keyboard.press('Tab')
+    await page.keyboard.press('Space')
+    await expect(
+      page.getByRole('tabpanel', { name: 'Emoji' }).getByRole('searchbox')
+    ).toBeFocused()
+    await page.keyboard.press('Escape')
+    await expect(
+      page.getByRole('tabpanel', { name: 'Emoji' })
+    ).not.toBeVisible()
+    await expect(textarea).toBeFocused()
+    await expect(textarea).toBeEmpty()
   })
 })
