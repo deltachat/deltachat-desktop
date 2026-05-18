@@ -579,6 +579,29 @@ test('Clear group description', async () => {
   await page.getByTestId('view-group-dialog-header-close').click()
 })
 
+test('Go to 1:1 chat with a member', async () => {
+  const userA = existingProfiles[0]
+  const userB = existingProfiles[1]
+
+  await switchToProfile(page, userA.id)
+  await page.getByLabel('Chats').getByRole('tab', { name: groupName }).click()
+  await page.getByTestId('chat-info-button').click()
+  await page
+    .getByRole('dialog')
+    .getByRole('listitem')
+    .getByRole('button', { name: userB.name })
+    .click()
+  await page
+    .getByRole('dialog')
+    .last()
+    .getByRole('button', { name: 'Send message' })
+    .click()
+  await expect(page.getByRole('dialog')).toHaveCount(0)
+  await expect(
+    page.getByLabel('Chats').getByRole('tab', { selected: true })
+  ).toContainText(userB.name)
+})
+
 const channelName = 'TestChannel'
 
 test('create channel and add members', async ({ browserName }) => {
