@@ -1,10 +1,8 @@
 import { expect, type Page, type Locator } from '@playwright/test'
 
 import {
-  createProfiles,
-  User,
-  loadExistingProfiles,
-  deleteAllProfiles,
+  importDummyProfileFromBackup,
+  deleteSelectedProfile,
   reloadPage,
   test,
   createNDummyChats,
@@ -21,10 +19,6 @@ test.describe.configure({
 expect.configure({ timeout: 5_000 })
 test.setTimeout(30_000)
 
-let existingProfiles: User[] = []
-
-const numberOfProfiles = 1
-
 // https://playwright.dev/docs/next/test-retries#reuse-single-page-between-tests
 let page: Page
 
@@ -37,30 +31,10 @@ const getChatName = (chatNum: number) => `Some chat ${chatNum}`
 const selectChat = (chatNum: number) =>
   selectChatByName(page, getChatName(chatNum))
 
-test.beforeAll(async ({ browser, isChatmail }) => {
-  const contextForProfileCreation = await browser.newContext()
-  const pageForProfileCreation = await contextForProfileCreation.newPage()
-
-  console.log(
-    `Running multiselect tests with ${isChatmail ? 'isChatmail' : 'plain email'} profiles`
-  )
-
-  await reloadPage(pageForProfileCreation)
-
-  existingProfiles =
-    (await loadExistingProfiles(pageForProfileCreation)) ?? existingProfiles
-
-  await createProfiles(
-    numberOfProfiles,
-    existingProfiles,
-    pageForProfileCreation,
-    browser.browserType().name(),
-    isChatmail
-  )
-
-  await contextForProfileCreation.close()
+test.beforeAll(async ({ browser }) => {
   page = await browser.newPage()
   await reloadPage(page)
+  await importDummyProfileFromBackup(page)
 
   chatList = page.getByLabel('Chats').getByRole('tablist')
   textarea = page.locator('textarea.create-or-edit-message-input')
@@ -114,7 +88,7 @@ test.afterAll(async ({ browser }) => {
   const context = await browser.newContext()
   const pageForProfileDeletion = await context.newPage()
   await reloadPage(pageForProfileDeletion)
-  await deleteAllProfiles(pageForProfileDeletion, existingProfiles)
+  await deleteSelectedProfile(pageForProfileDeletion)
   await context.close()
 })
 
