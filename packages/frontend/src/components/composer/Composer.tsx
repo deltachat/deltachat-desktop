@@ -35,7 +35,7 @@ import useKeyBindingAction from '../../hooks/useKeyBindingAction'
 import { CloseButton } from '../Dialog'
 import { enterKeySendsKeyboardShortcuts } from '../KeyboardShortcutHint'
 import { AppPicker } from '../AppPicker'
-import { AppInfo, AppStoreUrl } from '../AppPicker'
+import { AppInfo } from '../AppPicker'
 import OutsideClickHelper from '../OutsideClickHelper'
 import { useHasChanged2 } from '../../hooks/useHasChanged'
 import { ScreenContext } from '../../contexts/ScreenContext'
@@ -436,9 +436,8 @@ const Composer = forwardRef<
 
   const onAppSelected = messageEditing.isEditingModeActive
     ? null
-    : async (appInfo: AppInfo) => {
+    : async (appInfo: AppInfo, downloadUrl: string) => {
         log.debug('App selected', appInfo)
-        const downloadUrl = AppStoreUrl + appInfo.cache_relname
         const responseP = BackendRemote.rpc.getHttpResponse(
           selectedAccountId(),
           downloadUrl

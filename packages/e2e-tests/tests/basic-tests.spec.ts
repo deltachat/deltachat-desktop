@@ -420,6 +420,34 @@ test('add app from picker to chat', async () => {
   expect(finalAppIconsCount).toBeGreaterThan(initialAppIconsCount)
 })
 
+test('custom app picker URL', async () => {
+  // It's the default URL but still let's check if things work.
+  // Change casing to check if changing the setting value works
+  const newUrl = 'HTTPS://APPS.TESTRUN.ORG/'
+
+  await page.getByRole('button', { name: 'Settings' }).click()
+  await page.getByRole('button', { name: 'Advanced' }).click()
+  const settingsDialog = page
+    .getByRole('dialog')
+    .filter({ hasText: 'Advanced' })
+
+  await expect(settingsDialog).not.toContainText(newUrl, { ignoreCase: false })
+  await page.getByRole('button', { name: 'App Picker URL' }).click()
+  await page.getByRole('dialog').last().getByRole('textbox').fill(newUrl)
+  await page.keyboard.press('Enter')
+  await expect(settingsDialog).toContainText(newUrl, { ignoreCase: false })
+
+  await page.keyboard.press('Escape')
+  await page.keyboard.press('Escape')
+
+  await page.getByRole('button', { name: 'Attach' }).click()
+  await page.getByRole('menuitem', { name: 'App' }).click()
+  await page.getByRole('button', { name: 'Poll' }).first().click()
+  await page.getByRole('button', { name: 'Add to Chat' }).click()
+  await page.getByRole('button', { name: 'Send', exact: true }).click()
+  await expect(page.locator(`.message`).last()).toContainText('Poll')
+})
+
 test('recent apps context menu', async () => {
   await page
     .getByTestId('last-used-apps')
