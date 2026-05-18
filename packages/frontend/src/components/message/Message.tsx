@@ -977,9 +977,15 @@ export default function Message(props: {
         }
       )}
       id={message.id.toString()}
-      onClick={e => {
+      // `capture` together with `stopPropagation` makes it harder
+      // to accidentally activate links, images, etc. inside the message
+      // while actually trying to simply Ctrl + Click the message.
+      // Especially usefult for images, which occupy the majority
+      // of the message bubble's area.
+      onClickCapture={e => {
         focusAndMultiselect.onClick(e)
         if (e.defaultPrevented) {
+          e.stopPropagation()
           return
         }
       }}
