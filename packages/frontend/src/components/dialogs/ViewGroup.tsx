@@ -361,148 +361,143 @@ function ViewGroupInner(
     })
   }
 
-  const [profileContact, setProfileContact] = useState<T.Contact | null>(null)
+  const showViewContactDialog = useCallback(
+    (contact: T.Contact) => {
+      openDialog(ViewProfile, {
+        contact,
+        // On "Send Message" click and such.
+        onAction: onClose,
+      })
+    },
+    [onClose, openDialog]
+  )
 
   return (
     <>
-      {!profileContact && (
-        <>
-          {allowEdit && (
-            <DialogHeader
-              title={!isBroadcast ? tx('tab_group') : tx('channel')}
-              onClickEdit={onClickEdit}
-              onClose={onClose}
-              dataTestid='view-group-dialog-header'
-            />
-          )}
-          {!allowEdit && (
-            <DialogHeader
-              title={tx('tab_group')}
-              onClose={onClose}
-              dataTestid='view-group-dialog-header'
-            />
-          )}
-          <DialogBody>
-            <DialogContent>
-              <ProfileInfoHeader
-                avatarPath={groupImage ? groupImage : undefined}
-                color={chat.color}
-                displayName={groupName}
-                disableFullscreen={shouldDisableFullscreenAvatar(chat)}
-              />
-              <div className='group-profile-subtitle'>
-                {!isBroadcast
-                  ? group.contactIds.length > 1 || group.selfInGroup
-                    ? tx('n_members', group.contactIds.length.toString(), {
-                        quantity: group.contactIds.length,
-                      })
-                    : ''
-                  : tx('n_recipients', group.contactIds.length.toString(), {
-                      quantity: group.contactIds.length,
-                    })}
-              </div>
-              {groupDescription && (
-                <div className='group-profile-description'>
-                  {parseAndRenderMessage(groupDescription, false, 0)}
-                </div>
-              )}
-            </DialogContent>
-            <div
-              className='group-member-contact-list-wrapper'
-              ref={groupMemberContactListWrapperRef}
-              data-testid='group-member-list'
-            >
-              <RovingTabindexProvider
-                wrapperElementRef={groupMemberContactListWrapperRef}
-              >
-                {!chatDisabled && group.isEncrypted && (
-                  <>
-                    {!isBroadcast && (
-                      <PseudoListItemAddMember
-                        onClick={() => showAddMemberDialog()}
-                      />
-                    )}
-                    <PseudoListItemShowQrCode onClick={() => showQRDialog()} />
-                  </>
-                )}
-                {group.contactIds.length != 0 && groupContacts.length == 0 && (
-                  <div /* placeholder to keep layout from jumping around while contact info is loaded */
-                    style={{
-                      height:
-                        group.contactIds.length *
-                        64 /* 64px is the height of a contact list item */,
-                    }}
-                    aria-busy
-                  ></div>
-                )}
-                <ContactList
-                  contacts={groupContacts}
-                  showRemove={!chatDisabled && group.isEncrypted}
-                  onClick={contact => {
-                    if (contact.id === C.DC_CONTACT_ID_SELF) {
-                      return
-                    }
-                    setProfileContact(contact)
-                  }}
-                  onRemoveClick={showRemoveGroupMemberConfirmationDialog}
-                  olElementAttrs={{
-                    'aria-labelledby': 'group-profile-subtitle',
-                  }}
-                />
-              </RovingTabindexProvider>
+      {allowEdit && (
+        <DialogHeader
+          title={!isBroadcast ? tx('tab_group') : tx('channel')}
+          onClickEdit={onClickEdit}
+          onClose={onClose}
+          dataTestid='view-group-dialog-header'
+        />
+      )}
+      {!allowEdit && (
+        <DialogHeader
+          title={tx('tab_group')}
+          onClose={onClose}
+          dataTestid='view-group-dialog-header'
+        />
+      )}
+      <DialogBody>
+        <DialogContent>
+          <ProfileInfoHeader
+            avatarPath={groupImage ? groupImage : undefined}
+            color={chat.color}
+            displayName={groupName}
+            disableFullscreen={shouldDisableFullscreenAvatar(chat)}
+          />
+          <div className='group-profile-subtitle'>
+            {!isBroadcast
+              ? group.contactIds.length > 1 || group.selfInGroup
+                ? tx('n_members', group.contactIds.length.toString(), {
+                    quantity: group.contactIds.length,
+                  })
+                : ''
+              : tx('n_recipients', group.contactIds.length.toString(), {
+                  quantity: group.contactIds.length,
+                })}
+          </div>
+          {groupDescription && (
+            <div className='group-profile-description'>
+              {parseAndRenderMessage(groupDescription, false, 0)}
             </div>
-            {group.pastContactIds.length != 0 && pastContacts.length == 0 && (
+          )}
+        </DialogContent>
+        <div
+          className='group-member-contact-list-wrapper'
+          ref={groupMemberContactListWrapperRef}
+          data-testid='group-member-list'
+        >
+          <RovingTabindexProvider
+            wrapperElementRef={groupMemberContactListWrapperRef}
+          >
+            {!chatDisabled && group.isEncrypted && (
+              <>
+                {!isBroadcast && (
+                  <PseudoListItemAddMember
+                    onClick={() => showAddMemberDialog()}
+                  />
+                )}
+                <PseudoListItemShowQrCode onClick={() => showQRDialog()} />
+              </>
+            )}
+            {group.contactIds.length != 0 && groupContacts.length == 0 && (
               <div /* placeholder to keep layout from jumping around while contact info is loaded */
                 style={{
                   height:
-                    group.pastContactIds.length *
+                    group.contactIds.length *
                     64 /* 64px is the height of a contact list item */,
                 }}
                 aria-busy
               ></div>
             )}
-            {pastContacts.length > 0 && (
-              <>
-                <div
-                  id='view-group-past-members-title'
-                  className='group-separator'
-                >
-                  {tx('past_members')}
-                </div>
-                <div
-                  className='group-member-contact-list-wrapper'
-                  ref={groupPastMemberContactListWrapperRef}
-                >
-                  <RovingTabindexProvider
-                    wrapperElementRef={groupPastMemberContactListWrapperRef}
-                  >
-                    <ContactList
-                      contacts={pastContacts}
-                      showRemove={false}
-                      onClick={contact => {
-                        if (contact.id === C.DC_CONTACT_ID_SELF) {
-                          return
-                        }
-                        setProfileContact(contact)
-                      }}
-                      olElementAttrs={{
-                        'aria-labelledby': 'view-group-past-members-title',
-                      }}
-                    />
-                  </RovingTabindexProvider>
-                </div>
-              </>
-            )}
-          </DialogBody>
-        </>
-      )}
-      {profileContact && (
-        <ViewProfile
-          onBack={() => setProfileContact(null)}
-          onClose={onClose}
-          contact={profileContact}
-        />
-      )}
+            <ContactList
+              contacts={groupContacts}
+              showRemove={!chatDisabled && group.isEncrypted}
+              onClick={contact => {
+                if (contact.id === C.DC_CONTACT_ID_SELF) {
+                  return
+                }
+                showViewContactDialog(contact)
+              }}
+              onRemoveClick={showRemoveGroupMemberConfirmationDialog}
+              olElementAttrs={{
+                'aria-labelledby': 'group-profile-subtitle',
+              }}
+            />
+          </RovingTabindexProvider>
+        </div>
+        {group.pastContactIds.length != 0 && pastContacts.length == 0 && (
+          <div /* placeholder to keep layout from jumping around while contact info is loaded */
+            style={{
+              height:
+                group.pastContactIds.length *
+                64 /* 64px is the height of a contact list item */,
+            }}
+            aria-busy
+          ></div>
+        )}
+        {pastContacts.length > 0 && (
+          <>
+            <div id='view-group-past-members-title' className='group-separator'>
+              {tx('past_members')}
+            </div>
+            <div
+              className='group-member-contact-list-wrapper'
+              ref={groupPastMemberContactListWrapperRef}
+            >
+              <RovingTabindexProvider
+                wrapperElementRef={groupPastMemberContactListWrapperRef}
+              >
+                <ContactList
+                  contacts={pastContacts}
+                  showRemove={false}
+                  onClick={contact => {
+                    if (contact.id === C.DC_CONTACT_ID_SELF) {
+                      return
+                    }
+                    showViewContactDialog(contact)
+                  }}
+                  olElementAttrs={{
+                    'aria-labelledby': 'view-group-past-members-title',
+                  }}
+                />
+              </RovingTabindexProvider>
+            </div>
+          </>
+        )}
+      </DialogBody>
     </>
   )
 }
