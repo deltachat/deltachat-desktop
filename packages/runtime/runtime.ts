@@ -199,6 +199,7 @@ export interface Runtime {
   /** backend notifies ui to reload theme,
    * either because system theme changed or the theme changed that was watched by --theme-watch  */
   onThemeUpdate: (() => void) | undefined
+  onHide: (() => void) | undefined
   onShowDialog:
     | ((kind: 'about' | 'keybindings' | 'settings') => void)
     | undefined

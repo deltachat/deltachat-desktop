@@ -141,6 +141,7 @@ class BrowserRuntime implements Runtime {
       ) => void)
     | undefined
   onThemeUpdate: (() => void) | undefined //!!!TODO!!!
+  onHide: (() => void) | undefined
 
   // not used in browser, there is no menu to trigger these
   onChooseLanguage: ((locale: string) => Promise<void>) | undefined

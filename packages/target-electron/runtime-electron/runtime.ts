@@ -148,6 +148,7 @@ class ElectronRuntime implements Runtime {
     return !forbiddenPathRegEx.test(file.replaceAll('\\', '/'))
   }
   onThemeUpdate: (() => void) | undefined
+  onHide: (() => void) | undefined
   onChooseLanguage: ((locale: string) => Promise<void>) | undefined
   onToggleNotifications: (() => void) | undefined
   emitUIFullyReady(): void {
@@ -444,6 +445,9 @@ class ElectronRuntime implements Runtime {
     ipcBackend.on('chooseLanguage', (_ev, locale) => {
       this.onChooseLanguage?.(locale)
       ipcBackend.send('reload-main-window')
+    })
+    ipcBackend.on('deltachat-hidden', () => {
+      this.onHide?.()
     })
     ipcBackend.on('theme-update', () => this.onThemeUpdate?.())
     ipcBackend.on('showAboutDialog', () => this.onShowDialog?.('about'))

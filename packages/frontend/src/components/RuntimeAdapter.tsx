@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useContext, useEffect, useRef } from 'react'
 
 import useMessage from '../hooks/chat/useMessage'
 import useProcessQr from '../hooks/useProcessQr'
@@ -10,6 +10,7 @@ import { ActionEmitter, KeybindAction } from '../keybindings'
 import useDialog from '../hooks/dialog/useDialog'
 import WebxdcSaveToChatDialog from './dialogs/WebxdcSendToChat'
 import { saveLastChatId } from '../backend/chat'
+import { ScreenContext } from '../contexts/ScreenContext'
 import useChat from '../hooks/chat/useChat'
 import SettingsStoreInstance from '../stores/settings'
 import { SCAN_CONTEXT_TYPE } from '../hooks/useProcessQr'
@@ -29,7 +30,8 @@ export default function RuntimeAdapter({
 }: PropsWithChildren<Props>) {
   const processQr = useProcessQr()
   const { jumpToMessage } = useMessage()
-  const { selectChat } = useChat()
+  const { smallScreenMode } = useContext(ScreenContext)
+  const { selectChat, unselectChat } = useChat()
 
   const { closeDialog, openDialog, closeAllDialogs } = useDialog()
   const openSendToDialogId = useRef<string | undefined>(undefined)
@@ -73,6 +75,12 @@ export default function RuntimeAdapter({
         }
       }
     )
+
+    runtime.onHide = () => {
+      if (smallScreenMode) {
+        unselectChat()
+      }
+    }
 
     runtime.onShowDialog = kind => {
       if (kind === 'about') {

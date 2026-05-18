@@ -59,6 +59,7 @@ export function hideDeltaChat() {
   if (!mainWindow.window) {
     throw new Error('window does not exist, this should never happen')
   }
+  mainWindow.window.webContents.send('deltachat-hidden')
   mainWindow.window.hide()
   if (process.platform === 'linux') tray?.setContextMenu(getTrayMenu() as Menu)
 }
