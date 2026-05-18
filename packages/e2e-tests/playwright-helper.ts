@@ -1,4 +1,5 @@
 import { expect, test as base, Page } from '@playwright/test'
+import path from 'path'
 import { loadEnv } from './load-env'
 
 loadEnv()
@@ -35,6 +36,8 @@ export const test = base.extend<TestOptions>({
   // can be overriden in the config.
   isChatmail: [true, { option: true }],
 })
+
+const fixturesPath = path.join(import.meta.dirname, 'fixtures')
 
 export async function reloadPage(page: Page): Promise<void> {
   await page.goto(`/`)
@@ -229,6 +232,21 @@ export async function createNewProfile(
   }
 }
 
+/**
+ * Assumes that the "Add Profile" dialog is already open
+ * (which is the case if there are no accounts).
+ */
+export async function importDummyProfileFromBackup(page: Page) {
+  await page.getByRole('button', { name: 'I Already Have a Profile' }).click()
+
+  const fileChooserPromise = page.waitForEvent('filechooser')
+  await page.getByRole('button', { name: 'Restore from Backup' }).click()
+  const fileChooser = await fileChooserPromise
+  await fileChooser.setFiles(
+    path.join(fixturesPath, 'dummy-account-backup.tar')
+  )
+}
+
 export async function getProfile(
   page: Page,
   accountId: string,
@@ -389,6 +407,20 @@ export async function deleteProfile(
     return userName
   }
   return null
+}
+
+export async function deleteSelectedProfile(page: Page) {
+  const selectedProfile = page
+    .getByRole('navigation', { name: /Profiles?/ })
+    .getByRole('tab', { selected: true })
+  await selectedProfile.click({ button: 'right' })
+  await page.getByRole('menuitem', { name: 'Delete' }).click()
+  await page
+    .getByRole('dialog')
+    .filter({ hasText: 'Delete Profile' })
+    .getByRole('button', { name: 'Delete' })
+    .click()
+  await expect(selectedProfile).not.toBeVisible()
 }
 
 export async function createDummyChat(page: Page, chatName: string) {
