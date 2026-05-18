@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { expect, test as base, Page } from '@playwright/test'
 import { loadEnv } from './load-env'
 

@@ -45,7 +45,7 @@ export default defineConfig(
       },
     },
     {
-      files: ['packages/e2e-tests/**/*spec.ts'],
+      files: ['packages/e2e-tests/**/*.{js,mjs,cjs,ts,jsx,tsx}'],
       languageOptions: {
         parserOptions: {
           project: 'packages/e2e-tests/tsconfig.json',
