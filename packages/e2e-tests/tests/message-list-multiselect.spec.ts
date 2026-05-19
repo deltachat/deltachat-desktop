@@ -148,6 +148,27 @@ test.describe('Ctrl + Click', () => {
   })
 })
 
+test('Click on dead space', async () => {
+  await getMessage(5).click()
+  await expectSelectedMessages([])
+
+  await getMessage(5).click({
+    modifiers: ['ControlOrMeta'],
+  })
+  await expectSelectedMessages([5])
+
+  // Space between message bubbles.
+  const deadSpace = page
+    .getByRole('list', { name: 'Messages' })
+    .filter({ has: page.getByText(makeMessageRegex(5)) })
+  await deadSpace.click({ modifiers: ['ControlOrMeta'] })
+  await expectSelectedMessages([5])
+  await deadSpace.click({ modifiers: ['Shift'] })
+  await expectSelectedMessages([5])
+  await deadSpace.click({ modifiers: [] })
+  await expectSelectedMessages([])
+})
+
 test('delete several', async () => {
   await getMessage(7).click()
   await getMessage(5).click({

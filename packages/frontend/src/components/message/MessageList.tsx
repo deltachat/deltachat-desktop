@@ -887,6 +887,23 @@ export const MessageListInner = React.memo(
         ref={messageListRef}
         onScroll={onScroll2}
         onWheel={onWheel}
+        onClick={e => {
+          // If clicked on dead space, reset selection.
+
+          if (e.ctrlKey || e.shiftKey || e.metaKey || e.altKey) {
+            return
+          }
+          if (!(e.target instanceof HTMLElement)) {
+            return
+          }
+          if (e.target.closest('.multiselectable-message') != null) {
+            // Clicked on a message. This is handled
+            // by the message click handler.
+            return
+          }
+
+          focusAndMultiselectContextValue.resetSelection()
+        }}
       >
         <ol aria-label={tx('messages')}>
           <RovingTabindexProvider wrapperElementRef={messageListRef}>
