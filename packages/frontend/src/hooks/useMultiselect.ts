@@ -46,7 +46,7 @@ const none = Symbol()
  *             // The "regular", non-multiselect click action.
  *             myOnClick(id)
  *           }}
- *           onFocus={() => multiselect.onFocus(id)}
+ *           onFocus={(event) => multiselect.onFocus(event, id)}
  *         >
  *           Item {id}
  *         </button>
@@ -289,9 +289,25 @@ export function useMultiselect<T>(
     [onClickOrKeyDown]
   )
 
+  const prevFocusedListMemberElRef = useRef<Element>(null)
   // Handle Shift + ArrowDown, Shift + End.
   const onFocus = useCallback(
-    (item: T) => {
+    (event: React.FocusEvent, item: T) => {
+      const prevFocusedEl = prevFocusedListMemberElRef.current
+      prevFocusedListMemberElRef.current = event.target
+
+      const elLosingFocus = event.relatedTarget
+      // Without this, pressing Shift + Tab, which is usually supposed to
+      // only change focus, could also change selection.
+      //
+      // Just FYI, instead of comparing to `prevFocusedEl`
+      // we could have checked whether the element is a member of the list,
+      // but that would require the user of this hook
+      // to specify the checking function.
+      if (elLosingFocus == null || elLosingFocus !== prevFocusedEl) {
+        return
+      }
+
       if (shiftPressed.current) {
         onSelectContiguous(item)
       } else {
