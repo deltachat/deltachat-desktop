@@ -240,8 +240,8 @@ export const ChatListItemRowChat = React.memo<{
 
   const multiselectOnFocus = multiselect?.onFocus
   const onFocus = useCallback(
-    (_e: React.FocusEvent) => {
-      multiselectOnFocus?.(chatId)
+    (e: React.FocusEvent) => {
+      multiselectOnFocus?.(e, chatId)
     },
     [chatId, multiselectOnFocus]
   )
