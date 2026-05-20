@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useCallback } from 'react'
 
 import { useSettingsStore } from '../../stores/settings'
 import { SendBackupDialog } from '../dialogs/SetupMultiDevice'
@@ -21,40 +21,16 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 import type { DialogProps } from '../../contexts/DialogContext'
 
 type SettingsView =
-  | 'main'
   | 'chats_and_media'
   | 'notifications'
   | 'appearance'
   | 'advanced'
 
 export default function Settings({ onClose }: DialogProps) {
-  const { openDialog, closeDialog, openDialogIds } = useDialog()
+  const { openDialog } = useDialog()
 
   const settingsStore = useSettingsStore()[0]
   const tx = useTranslationFunction()
-  const [settingsMode, setSettingsMode] = useState<SettingsView>('main')
-
-  useEffect(() => {
-    const handler = (evt: KeyboardEvent) => {
-      if (
-        settingsMode !== 'main' &&
-        window.__settingsOpened &&
-        evt.key === 'Escape'
-      ) {
-        evt.preventDefault()
-        if (openDialogIds.length > 1) {
-          // if there is an open dialog on top of settings dialog
-          // (like Backup or Password & Account dialog) close that
-          closeDialog(openDialogIds[openDialogIds.length - 1].toString())
-        } else {
-          // switch back to main Settings dialog
-          setSettingsMode('main')
-        }
-      }
-    }
-    document.addEventListener('keydown', handler)
-    return () => document.removeEventListener('keydown', handler)
-  }, [settingsMode, openDialogIds, closeDialog])
 
   useEffect(() => {
     if (window.__settingsOpened) {
@@ -68,95 +44,122 @@ export default function Settings({ onClose }: DialogProps) {
     }
   }, [])
 
+  const openSettingsSectionDialog = useCallback(
+    (settingsMode: SettingsView) => {
+      openDialog(SettingsSectionDialog, {
+        settingsMode,
+        closeParentDialog: onClose,
+      })
+    },
+    [onClose, openDialog]
+  )
+
   return (
     <Dialog onClose={onClose} fixed width={400} dataTestid='settings-dialog'>
-      {settingsMode === 'main' && (
-        <>
-          <DialogHeader
-            title={tx('menu_settings')}
-            onClose={onClose}
-            dataTestid='settings'
+      <DialogHeader
+        title={tx('menu_settings')}
+        onClose={onClose}
+        dataTestid='settings'
+      />
+      <DialogBody>
+        {settingsStore != null && (
+          <Profile
+            settingsStore={settingsStore}
+            onStatusClick={() => {
+              if (settingsStore == null) {
+                return
+              }
+              openDialog(EditProfileDialog, {
+                settingsStore,
+              })
+            }}
           />
-          <DialogBody>
-            {settingsStore != null && (
-              <Profile
-                settingsStore={settingsStore}
-                onStatusClick={() => {
-                  if (settingsStore == null) {
-                    return
-                  }
-                  openDialog(EditProfileDialog, {
-                    settingsStore,
-                  })
-                }}
-              />
-            )}
-            <SettingsSeparator />
-            <SettingsIconButton
-              icon='forum'
-              onClick={() => setSettingsMode('chats_and_media')}
-            >
-              {tx('pref_chats')}
-            </SettingsIconButton>
-            <SettingsIconButton
-              icon='bell'
-              onClick={() => setSettingsMode('notifications')}
-            >
-              {tx('pref_notifications')}
-            </SettingsIconButton>
-            <SettingsIconButton
-              icon='brightness-6'
-              onClick={() => setSettingsMode('appearance')}
-            >
-              {tx('pref_appearance')}
-            </SettingsIconButton>
-            <SettingsIconButton
-              icon='devices'
-              onClick={() => {
-                openDialog(SendBackupDialog)
-                onClose()
-              }}
-            >
-              {tx('multidevice_title')}
-            </SettingsIconButton>
-            <ConnectivityButton />
-            <SettingsIconButton
-              icon='code-tags'
-              onClick={() => setSettingsMode('advanced')}
-              dataTestid='open-advanced-settings'
-            >
-              {tx('menu_advanced')}
-            </SettingsIconButton>
-            <SettingsSeparator />
-            {!runtime.getRuntimeInfo().isMac && (
-              <SettingsIconButton
-                icon='favorite'
-                onClick={() => runtime.openLink(donationUrl)}
-                isLink
-              >
-                {tx('donate')}
-              </SettingsIconButton>
-            )}
-            <SettingsIconButton
-              icon='question_mark'
-              onClick={() => runtime.openHelpWindow()}
-            >
-              {tx('menu_help')}
-            </SettingsIconButton>
-            <SettingsIconButton icon='info' onClick={() => openDialog(About)}>
-              {tx('global_menu_help_about_desktop')}
-            </SettingsIconButton>
-            <SettingsEndSeparator />
-          </DialogBody>
-        </>
-      )}
+        )}
+        <SettingsSeparator />
+        <SettingsIconButton
+          icon='forum'
+          onClick={() => openSettingsSectionDialog('chats_and_media')}
+        >
+          {tx('pref_chats')}
+        </SettingsIconButton>
+        <SettingsIconButton
+          icon='bell'
+          onClick={() => openSettingsSectionDialog('notifications')}
+        >
+          {tx('pref_notifications')}
+        </SettingsIconButton>
+        <SettingsIconButton
+          icon='brightness-6'
+          onClick={() => openSettingsSectionDialog('appearance')}
+        >
+          {tx('pref_appearance')}
+        </SettingsIconButton>
+        <SettingsIconButton
+          icon='devices'
+          onClick={() => {
+            openDialog(SendBackupDialog)
+            onClose()
+          }}
+        >
+          {tx('multidevice_title')}
+        </SettingsIconButton>
+        <ConnectivityButton />
+        <SettingsIconButton
+          icon='code-tags'
+          onClick={() => openSettingsSectionDialog('advanced')}
+          dataTestid='open-advanced-settings'
+        >
+          {tx('menu_advanced')}
+        </SettingsIconButton>
+        <SettingsSeparator />
+        {!runtime.getRuntimeInfo().isMac && (
+          <SettingsIconButton
+            icon='favorite'
+            onClick={() => runtime.openLink(donationUrl)}
+            isLink
+          >
+            {tx('donate')}
+          </SettingsIconButton>
+        )}
+        <SettingsIconButton
+          icon='question_mark'
+          onClick={() => runtime.openHelpWindow()}
+        >
+          {tx('menu_help')}
+        </SettingsIconButton>
+        <SettingsIconButton icon='info' onClick={() => openDialog(About)}>
+          {tx('global_menu_help_about_desktop')}
+        </SettingsIconButton>
+        <SettingsEndSeparator />
+      </DialogBody>
+    </Dialog>
+  )
+}
+
+function SettingsSectionDialog(
+  props: {
+    settingsMode: SettingsView
+    closeParentDialog: () => void
+  } & DialogProps
+) {
+  const { settingsMode, onClose: closeThisDialog } = props
+  const tx = useTranslationFunction()
+  const settingsStore = useSettingsStore()[0]
+
+  const closeThisAndParent = useCallback(() => {
+    closeThisDialog()
+    props.closeParentDialog()
+  }, [closeThisDialog, props])
+  const commonHeaderProps = {
+    onClickBack: closeThisDialog,
+    onClose: closeThisAndParent,
+  } as const satisfies Partial<Parameters<typeof DialogHeader>[0]>
+
+  return (
+    <Dialog onClose={closeThisDialog} fixed width={400}>
       {settingsMode === 'chats_and_media' && (
         <>
-          <DialogHeader
-            title={tx('pref_chats')}
-            onClickBack={() => setSettingsMode('main')}
-            onClose={onClose}
-          />
+          <DialogHeader title={tx('pref_chats')} {...commonHeaderProps} />
           <DialogBody>
             {settingsStore != null && (
               <ChatsAndMedia settingsStore={settingsStore} />
@@ -169,8 +172,7 @@ export default function Settings({ onClose }: DialogProps) {
         <>
           <DialogHeader
             title={tx('pref_notifications')}
-            onClickBack={() => setSettingsMode('main')}
-            onClose={onClose}
+            {...commonHeaderProps}
           />
           <DialogBody>
             {settingsStore != null && (
@@ -182,11 +184,7 @@ export default function Settings({ onClose }: DialogProps) {
       )}
       {settingsMode === 'appearance' && (
         <>
-          <DialogHeader
-            title={tx('pref_appearance')}
-            onClickBack={() => setSettingsMode('main')}
-            onClose={onClose}
-          />
+          <DialogHeader title={tx('pref_appearance')} {...commonHeaderProps} />
           <DialogBody>
             {settingsStore != null && (
               <Appearance
@@ -203,12 +201,11 @@ export default function Settings({ onClose }: DialogProps) {
         <>
           <DialogHeader
             title={tx('menu_advanced')}
-            onClickBack={() => setSettingsMode('main')}
-            onClose={onClose}
+            {...commonHeaderProps}
             dataTestid='settings-advanced'
           />
           <DialogBody>
-            <Advanced onClose={onClose} />
+            <Advanced onClose={closeThisAndParent} />
             <SettingsEndSeparator />
           </DialogBody>
         </>
