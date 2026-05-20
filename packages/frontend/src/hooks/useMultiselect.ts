@@ -280,13 +280,21 @@ export function useMultiselect<T>(
   )
   const onKeyDown = useCallback(
     (event: React.KeyboardEvent, item: T) => {
+      if (event.code === 'Escape') {
+        if (selectedItemsRef.current.size === 0) {
+          return false
+        }
+        onSelectionChange(new Set())
+        return true
+      }
+
       if (event.code !== 'Space') {
         return false
       }
 
       return onClickOrKeyDown(event, item)
     },
-    [onClickOrKeyDown]
+    [onClickOrKeyDown, onSelectionChange]
   )
 
   // Handle Shift + ArrowDown, Shift + End.
