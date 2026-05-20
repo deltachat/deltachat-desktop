@@ -195,6 +195,54 @@ test.describe('Shift + Click', () => {
   })
 })
 
+test.describe('Escape unselects chats', () => {
+  test('if multiple are selected', async () => {
+    await getChat(7).click()
+    await getChat(7).focus()
+    await page.keyboard.press('Shift+ArrowDown')
+    await page.keyboard.press('Shift+ArrowDown')
+    await expectSelectedChats([7, 6, 5])
+    await page.keyboard.press('Escape')
+    await expectSelectedChats([])
+    await page.keyboard.press('Escape')
+    await expectSelectedChats([])
+
+    await getChat(7).click()
+    await getChat(3).click({
+      modifiers: ['ControlOrMeta'],
+    })
+    await expectSelectedChats([7, 3])
+    await getChat(9).focus()
+    await page.keyboard.press('Escape')
+    await expectSelectedChats([])
+  })
+  // This behavior is perhaps not very useful
+  // for people who don't use multiselect often,
+  // but I can come up with at least one example
+  // where not behaving this way could be problematic:
+  // user trying to unselect all chats with Escape
+  // while they're scrolled way below the active chat:
+  // then they would not be able to see that Escape
+  // didn't actually unselect all chats but left just one (the active one).
+  test('if only the active is selected', async () => {
+    await getChat(7).click()
+    await getChat(7).focus()
+    await expectSelectedChats([7])
+    await expect(getChat(7)).toBeFocused()
+    await page.keyboard.press('Escape')
+    await expectSelectedChats([])
+
+    await getChat(5).click()
+    await getChat(5).focus()
+    await expectSelectedChats([5])
+    await page.keyboard.press('ArrowDown')
+    await page.keyboard.press('ArrowDown')
+    await expect(getChat(3)).toBeFocused()
+    await page.keyboard.press('Escape')
+    await expectSelectedChats([])
+  })
+})
+
 test.describe('context menu', () => {
   test('opens', async () => {
     await getChat(7).click()
