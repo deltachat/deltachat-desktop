@@ -62,11 +62,11 @@ test.beforeAll(async ({ browser, isChatmail }) => {
   await setupPage.locator('.group-name-input').fill(testGroupName)
   await setupPage.locator('#addmember button').click()
   const addMemberDialog = setupPage.getByTestId('add-member-dialog')
-  await setupPage
+  await addMemberDialog
     .locator('.contact-list-item')
     .filter({ hasText: userB.name })
     .click()
-  await setupPage
+  await addMemberDialog
     .locator('.contact-list-item')
     .filter({ hasText: userC.name })
     .click()

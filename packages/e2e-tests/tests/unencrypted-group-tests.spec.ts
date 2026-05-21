@@ -148,11 +148,11 @@ test('check appropriate members are shown for new encrypted group', async () => 
   await expect(contactList).toHaveCount(2)
   // TODO: this should show the contact by name but it fails with a
   // screenshot showing the mail address instead of the name ??
-  await page
+  await addMemberDialog
     .locator('.contact-list-item')
     .filter({ hasText: userD.address })
     .click()
-  const contactShouldNotBeListed = page
+  const contactShouldNotBeListed = addMemberDialog
     .locator('.contact-list-item')
     .filter({ hasText: userB.name })
   await expect(contactShouldNotBeListed).not.toBeVisible()
@@ -177,15 +177,15 @@ test('check appropriate members are shown for new unencrypted group', async () =
   const contactList = page.getByTestId('add-member-dialog').locator('li button')
   // only self and the non verified users should be visible
   await expect(contactList).toHaveCount(3)
-  await page
+  await addMemberDialog
     .locator('.contact-list-item')
     .filter({ hasText: userB.address })
     .click()
-  const contactShouldNotBeListedByName = page
+  const contactShouldNotBeListedByName = addMemberDialog
     .locator('.contact-list-item')
     .filter({ hasText: userD.name })
   await expect(contactShouldNotBeListedByName).not.toBeVisible()
-  const contactShouldNotBeListedByAddress = page
+  const contactShouldNotBeListedByAddress = addMemberDialog
     .locator('.contact-list-item')
     .filter({ hasText: userD.address })
   await expect(contactShouldNotBeListedByAddress).not.toBeVisible()

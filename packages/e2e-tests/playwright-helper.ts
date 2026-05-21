@@ -577,7 +577,7 @@ export const createGroupChat = async (
   await page.getByPlaceholder('Description').fill('Test group description')
   await page.locator('#addmember button').click()
   const addMemberDialog = page.getByTestId('add-member-dialog')
-  await page
+  await addMemberDialog
     .locator('.contact-list-item')
     .filter({ hasText: member.name })
     .click()
