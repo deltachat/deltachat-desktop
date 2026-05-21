@@ -179,8 +179,8 @@ export const StickerPicker = ({
         </>
       ) : (
         <div className='sticker-container'>
-          <div className='no-stickers'>
-            <p className='description'>{tx('sticker_picker_empty_hint')}</p>
+          <div className='sticker-hint'>
+            <p>{tx('sticker_picker_empty_hint')}</p>
           </div>
         </div>
       )}
