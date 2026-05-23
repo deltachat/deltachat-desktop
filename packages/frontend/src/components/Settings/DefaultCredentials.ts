@@ -19,6 +19,7 @@ export function defaultCredentials(credentials?: Credentials): Credentials {
     password: '',
     imapServer: null,
     imapPort: null,
+    imapFolder: null,
     imapSecurity: null,
     certificateChecks: null,
     smtpUser: null,

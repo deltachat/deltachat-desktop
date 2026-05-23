@@ -7,8 +7,6 @@ export function mapCoreMsgStatus2String(state: number): msgStatus {
       return 'error'
     case C.DC_STATE_OUT_PENDING:
       return 'sending'
-    case C.DC_STATE_OUT_PREPARING:
-      return 'sending'
     case C.DC_STATE_OUT_DRAFT:
       return 'draft'
     case C.DC_STATE_OUT_DELIVERED:
