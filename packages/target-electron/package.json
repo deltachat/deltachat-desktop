@@ -61,7 +61,7 @@
     "escape-html": "^1.0.3",
     "mime-types": "catalog:",
     "sass": "catalog:",
-    "ws": "7.5.10"
+    "ws": "7.5.11"
   },
   "devDependencies": {
     "@deltachat-desktop/runtime-interface": "link:../runtime",
