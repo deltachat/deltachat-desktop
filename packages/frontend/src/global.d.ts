@@ -13,8 +13,6 @@ declare global {
     readonly __selectedAccountId: number | undefined
     __selectedChatId: number | undefined
     __screen: Screens
-    readonly __contextMenuActive: boolean
-    __setContextMenuActive: (newVal: boolean) => void
     __settingsOpened: boolean
     __keybindingsDialogOpened: boolean
     __aboutDialogOpened: boolean

@@ -127,12 +127,30 @@ export function matchesNonLetterShortcut(
   return !isPrintableAscii && ev.code === code
 }
 
+function haveOpenDialogs(): boolean {
+  return document.querySelector('dialog:modal') != null
+}
+
 export function keyDownEvent2Action(
   ev: KeyboardEvent
 ): KeybindAction | undefined {
   const { isMac } = runtime.getRuntimeInfo()
 
-  if (window.__contextMenuActive) {
+  // If a dialog is open, disable shortcuts.
+  // This also applies to a context menu being open.
+  //
+  // Perhaps there are some shortcuts that we don't strictly need to disable
+  // when a dialog is open, such as `Settings_Open` and `Debug_MaybeNetwork`,
+  // but it's probably not important to support that,
+  // so let's not complicate things yet.
+  if (
+    (ev.target instanceof HTMLElement && ev.target.closest('dialog') != null) ||
+    // `ev.target.closest('dialog')` doesn't always work as of writing
+    // because of `allowDefaultFocus` in `Dialog.tsx`,
+    // which `.blur()`s the element inside the dialog
+    // and thus makes `<body>` the event target.
+    haveOpenDialogs()
+  ) {
     return
   }
   // Don't capture keys during IME composition (Chinese, Japanese, Korean input)
