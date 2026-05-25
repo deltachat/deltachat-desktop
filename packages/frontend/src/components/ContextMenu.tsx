@@ -114,7 +114,6 @@ export function ContextMenuLayer({
 
       // Get required information
       setCurrentItems(items)
-      window.__setContextMenuActive(true)
       setCurrentAriaAttrs(ariaAttrs)
 
       await new Promise<void>((resolve, _reject) => {
@@ -180,7 +179,6 @@ export function ContextMenuLayer({
       className='dc-context-menu-layer'
       onClick={cancel}
       onClose={() => {
-        window.__setContextMenuActive(false)
         setCurrentItems([])
         endPromiseRef.current?.()
       }}
@@ -502,11 +500,4 @@ export function useContextMenuWithActiveState(
       setIsContextMenuActive(false)
     },
   }
-}
-
-window.__setContextMenuActive = (newVal: boolean): void => {
-  type Writable<T> = {
-    -readonly [P in keyof T]: T[P]
-  }
-  ;(window as Writable<typeof window>).__contextMenuActive = newVal
 }
