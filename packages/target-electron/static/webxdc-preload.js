@@ -239,7 +239,14 @@ class RealtimeListener {
   }
 
   contextBridge.exposeInMainWorld('webxdc_internal', {
-    setup: (selfAddr, selfName, sendUpdateInterval, sendUpdateMaxSize) => {
+    setup: (
+      selfAddr,
+      selfName,
+      sendUpdateInterval,
+      sendUpdateMaxSize,
+      isAppSender,
+      isBroadcast
+    ) => {
       if (is_ready) {
         return
       }
@@ -247,6 +254,8 @@ class RealtimeListener {
       api.selfName = Buffer.from(selfName, 'base64').toString('utf-8')
       api.sendUpdateInterval = sendUpdateInterval
       api.sendUpdateMaxSize = sendUpdateMaxSize
+      api.isAppSender = isAppSender
+      api.isBroadcast = isBroadcast
 
       // be sure that webxdc.js was included
       contextBridge.exposeInMainWorld('webxdc', api)

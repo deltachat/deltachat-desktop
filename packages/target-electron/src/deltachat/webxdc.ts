@@ -48,11 +48,15 @@ type AppInstance = {
   msgId: number
   accountId: number
   internet_access: boolean
-  selfAddr: string
   displayName: string
-  sendUpdateInterval: number
-  sendUpdateMaxSize: number
-}
+} & Pick<
+  T.WebxdcMessageInfo,
+  | 'selfAddr'
+  | 'sendUpdateInterval'
+  | 'sendUpdateMaxSize'
+  | 'isAppSender'
+  | 'isBroadcast'
+>
 const open_apps: {
   [instanceId: string]: AppInstance
 } = {}
@@ -384,6 +388,8 @@ export default class DCWebxdc {
         displayName: p.displayname || webxdcInfo.selfAddr || 'unknown',
         sendUpdateInterval: webxdcInfo.sendUpdateInterval,
         sendUpdateMaxSize: webxdcInfo.sendUpdateMaxSize,
+        isAppSender: webxdcInfo.isAppSender,
+        isBroadcast: webxdcInfo.isBroadcast,
       }
 
       const isMac = platform() === 'darwin'
@@ -1188,7 +1194,10 @@ async function webxdcProtocolHandler(
       body: Buffer.from(
         `window.webxdc_internal.setup("${selfAddr}","${displayName}", ${Number(
           open_apps[id].sendUpdateInterval
-        )}, ${Number(open_apps[id].sendUpdateMaxSize)})`
+        )}, ${Number(open_apps[id].sendUpdateMaxSize)},
+          ${Boolean(open_apps[id].isAppSender)},
+          ${Boolean(open_apps[id].isBroadcast)},
+        )`
       ),
       responseInit: {},
       mime_type: mimeType,
