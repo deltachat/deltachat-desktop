@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import path from 'node:path'
 
 const envPath = path.join(import.meta.dirname, '.env')

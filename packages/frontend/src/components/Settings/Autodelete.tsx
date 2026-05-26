@@ -70,10 +70,9 @@ export default function Autodelete({
       title: tx('autodel_device_title'),
       onSave: async (_seconds: string) => {
         const seconds = Number(_seconds)
-        const fromServer = false
         const estimateCount = await BackendRemote.rpc.estimateAutoDeletionCount(
           accountId,
-          fromServer,
+          false, // fromServer
           seconds
         )
 
