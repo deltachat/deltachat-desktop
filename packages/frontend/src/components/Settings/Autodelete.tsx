@@ -72,7 +72,7 @@ export default function Autodelete({
         const seconds = Number(_seconds)
         const estimateCount = await BackendRemote.rpc.estimateAutoDeletionCount(
           accountId,
-          false,
+          false, // fromServer
           seconds
         )
 
