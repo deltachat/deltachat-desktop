@@ -23,11 +23,11 @@ function resolvePath(path: string): string {
 export const DIST_DIR = join(__dirname)
 export const DATA_DIR = join(__dirname, '../data')
 export const LOGS_DIR = join(DATA_DIR, 'logs')
-export const PRIVATE_CERTIFICATE_KEY = join(
-  DATA_DIR,
-  'certificate/cert.key.pem'
-)
-export const PRIVATE_CERTIFICATE_CERT = join(DATA_DIR, 'certificate/cert.pem')
+const privateCertPath = process.env['PRIVATE_CERTIFICATE_PATH']
+  ? resolvePath(process.env['PRIVATE_CERTIFICATE_PATH'])
+  : join(DATA_DIR, 'certificate')
+export const PRIVATE_CERTIFICATE_KEY = join(privateCertPath, 'cert.key.pem')
+export const PRIVATE_CERTIFICATE_CERT = join(privateCertPath, 'cert.pem')
 export const DC_ACCOUNTS_DIR = process.env['DC_ACCOUNTS_DIR']
   ? resolvePath(process.env['DC_ACCOUNTS_DIR'])
   : join(DATA_DIR, 'accounts')
