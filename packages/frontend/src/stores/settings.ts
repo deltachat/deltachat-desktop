@@ -134,10 +134,6 @@ class SettingsStore extends Store<SettingsStoreState | null> {
         settings['ui.mentions_enabled'] = mentionsEnabledDefaultVal
       }
 
-      if (settings['force_encryption'] == null) {
-        settings['force_encryption'] = '1'
-      }
-
       const rc = runtime.getRC_Config()
       this.reducer.setState({
         settings,

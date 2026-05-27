@@ -153,6 +153,8 @@ div.delta-form-group {
   }
 
   &.delta-switch {
+    overflow: visible;
+
     > label {
       display: flex;
       flex-direction: row;
@@ -165,6 +167,7 @@ div.delta-form-group {
       cursor: pointer;
       color: var(--deltaChatPrimaryFgLight);
       padding-inline-end: 5px;
+      padding-block-end: 4px;
     }
   }
 

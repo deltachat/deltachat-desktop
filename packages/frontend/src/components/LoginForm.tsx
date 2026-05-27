@@ -31,6 +31,8 @@ const CertificateChecks = {
 type LoginProps = React.PropsWithChildren<{
   credentials: Credentials
   setCredentials: (credentials: Credentials) => void
+  forceEncryption?: boolean
+  setForceEncryption?: (forceEncryption: boolean) => void
   /** whether editing existing account */
   isEdit?: true
 }>
@@ -38,6 +40,8 @@ type LoginProps = React.PropsWithChildren<{
 export default function LoginForm({
   credentials,
   setCredentials,
+  forceEncryption: forceEncryptionProp,
+  setForceEncryption,
   isEdit,
 }: LoginProps) {
   const [uiShowAdvanced, setUiShowAdvanced] = useState<boolean>(false)
@@ -45,7 +49,8 @@ export default function LoginForm({
     Type.ProviderInfo | undefined
   >()
   const settingsStore = useSettingsStore()[0]
-  const forceEncryption = settingsStore?.settings['force_encryption'] !== '0'
+  const forceEncryption =
+    forceEncryptionProp ?? settingsStore?.settings['force_encryption'] === '1'
 
   const handleCredentialsChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -264,22 +269,6 @@ export default function LoginForm({
               <option value={Socket.starttls}>STARTTLS</option>
               <option value={Socket.plain}>{tx('off')}</option>
             </DeltaSelect>
-            <div className='delta-form-group delta-switch'>
-              <label>
-                <span>{tx('enforce_e2ee')}</span>
-                {/** be aware that this setting applies to all relays! */}
-                <Switch
-                  checked={forceEncryption}
-                  disabled={settingsStore == null}
-                  onChange={() =>
-                    SettingsStoreInstance.effect.setCoreSetting(
-                      'force_encryption',
-                      forceEncryption ? '0' : '1'
-                    )
-                  }
-                />
-              </label>
-            </div>
             <DeltaSelect
               id='certificateChecks'
               label={tx('login_certificate_checks')}
@@ -294,6 +283,26 @@ export default function LoginForm({
                 {tx('accept_invalid_certificates')}
               </option>
             </DeltaSelect>
+            <div className='delta-form-group delta-switch'>
+              <label>
+                <span>{tx('enforce_e2ee')}</span>
+                {/** be aware that this setting applies to all relays! */}
+                <Switch
+                  checked={forceEncryption}
+                  disabled={settingsStore == null}
+                  onChange={() => {
+                    if (setForceEncryption) {
+                      setForceEncryption(!forceEncryption)
+                      return
+                    }
+                    SettingsStoreInstance.effect.setCoreSetting(
+                      'force_encryption',
+                      forceEncryption ? '0' : '1'
+                    )
+                  }}
+                />
+              </label>
+            </div>
           </Collapse>
           <br />
         </div>
