@@ -41,8 +41,9 @@
   background-color: var(--accountSidebarBg);
   display: flex;
   flex-direction: column;
-  min-width: 68px;
+  min-width: 76px;
   overflow: hidden;
+  padding-top: 4px;
 
   .accountListNav {
     flex-grow: 1;
@@ -53,8 +54,8 @@
     }
 
     .accountList {
-      --als-avatar-size: 42px;
-      --als-avatar-margin: 5px;
+      --als-avatar-size: 48px;
+      --als-avatar-margin: 7px;
       --als-active-indicator-color: white;
 
       margin: 0;
@@ -142,13 +143,13 @@
     &:hover,
     &.context-menu-active {
       .avatar::before {
-        --als-active-indicator-height: 32px;
+        --als-active-indicator-height: 15px;
 
         background: var(--als-active-indicator-color);
         border-radius: 20px;
         content: ' ';
         height: var(--als-active-indicator-height);
-        margin-inline-start: -16.5px;
+        margin-inline-start: -18px;
         overflow: hidden;
         pointer-events: none;
         position: absolute;
@@ -157,7 +158,7 @@
               var(--als-active-indicator-height) / 2
             )
         );
-        width: 8px;
+        width: 10px;
       }
 
       .avatar {
@@ -165,9 +166,10 @@
       }
     }
 
-    &:hover {
+    &.active,
+    &.context-menu-active {
       .avatar::before {
-        --als-active-indicator-height: 15px;
+        --als-active-indicator-height: 36px;
       }
     }
 
