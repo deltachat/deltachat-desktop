@@ -64,7 +64,7 @@ function EditAccountInner({
   const [accountSettings, setAccountSettings] =
     useState<Credentials>(defaultCredentials())
   const [forceEncryption, setForceEncryption] = useState<boolean>(
-    settingsStore?.settings['force_encryption'] !== '0'
+    settingsStore?.settings['force_encryption'] === '1'
   )
 
   const { openDialog } = useDialog()

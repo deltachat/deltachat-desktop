@@ -12,7 +12,7 @@ import { I18nContext } from '../contexts/I18nContext'
 const log = getLogger('renderer/loginForm')
 
 import type { Credentials } from './Settings/DefaultCredentials'
-import SettingsStoreInstance, { useSettingsStore } from '../stores/settings'
+import { useSettingsStore } from '../stores/settings'
 import Switch from './Switch'
 
 const Socket = {
@@ -295,10 +295,6 @@ export default function LoginForm({
                       setForceEncryption(!forceEncryption)
                       return
                     }
-                    SettingsStoreInstance.effect.setCoreSetting(
-                      'force_encryption',
-                      forceEncryption ? '0' : '1'
-                    )
                   }}
                 />
               </label>

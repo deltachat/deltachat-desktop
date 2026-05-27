@@ -35,7 +35,7 @@ export default function AccountSetupScreen({
     useState<Credentials>(defaultCredentials())
   const settingsStore = useSettingsStore()[0]
   const [forceEncryption, setForceEncryption] = useState<boolean>(
-    settingsStore?.settings['force_encryption'] !== '0'
+    settingsStore?.settings['force_encryption'] === '1'
   )
 
   const onClickLogin = useCallback(() => {
