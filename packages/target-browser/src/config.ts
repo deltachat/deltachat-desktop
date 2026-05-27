@@ -28,7 +28,9 @@ export const PRIVATE_CERTIFICATE_KEY = join(
   'certificate/cert.key.pem'
 )
 export const PRIVATE_CERTIFICATE_CERT = join(DATA_DIR, 'certificate/cert.pem')
-export let DC_ACCOUNTS_DIR = join(DATA_DIR, 'accounts')
+export const DC_ACCOUNTS_DIR = process.env['DC_ACCOUNTS_DIR']
+  ? resolvePath(process.env['DC_ACCOUNTS_DIR'])
+  : join(DATA_DIR, 'accounts')
 
 export const LOCALES_DIR = join(__dirname, '../../../_locales')
 
@@ -42,10 +44,6 @@ export const ENV_WEB_PORT = process.env['WEB_PORT'] || 3000
 export const ENV_WEB_TRUST_FIRST_PROXY = Boolean(
   process.env['WEB_TRUST_FIRST_PROXY']
 )
-
-if (process.env['DC_ACCOUNTS_DIR']) {
-  DC_ACCOUNTS_DIR = resolvePath(process.env['DC_ACCOUNTS_DIR'])
-}
 
 export const NODE_ENV = (process.env['NODE_ENV'] ?? 'production').toLowerCase()
 
