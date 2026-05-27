@@ -21,7 +21,9 @@ function resolvePath(path: string): string {
 
 // Directories & Files
 export const DIST_DIR = join(__dirname)
-export const DATA_DIR = join(__dirname, '../data')
+export const DATA_DIR = process.env['DATA_DIR']
+  ? resolvePath(process.env['DATA_DIR'])
+  : join(__dirname, '../data')
 export const LOGS_DIR = join(DATA_DIR, 'logs')
 const privateCertPath = process.env['PRIVATE_CERTIFICATE_PATH']
   ? resolvePath(process.env['PRIVATE_CERTIFICATE_PATH'])
@@ -47,13 +49,7 @@ export const ENV_WEB_TRUST_FIRST_PROXY = Boolean(
 
 export const NODE_ENV = (process.env['NODE_ENV'] ?? 'production').toLowerCase()
 
-try {
-  mkdirSync(DATA_DIR)
-} catch (err: any) {
-  if (err.code !== 'EEXIST') {
-    throw err
-  }
-}
+mkdirSync(DATA_DIR, { recursive: true })
 mkdirSync(LOGS_DIR, { recursive: true })
 
 if (
