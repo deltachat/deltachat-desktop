@@ -15,6 +15,10 @@ try {
   console.error(`Failed to load ${envPath}`, error)
 }
 
+function resolvePath(path: string): string {
+  return isAbsolute(path) ? path : join(__dirname, path)
+}
+
 // Directories & Files
 export const DIST_DIR = join(__dirname)
 export const DATA_DIR = join(__dirname, '../data')
@@ -40,11 +44,7 @@ export const ENV_WEB_TRUST_FIRST_PROXY = Boolean(
 )
 
 if (process.env['DC_ACCOUNTS_DIR']) {
-  if (isAbsolute(process.env['DC_ACCOUNTS_DIR'])) {
-    DC_ACCOUNTS_DIR = process.env['DC_ACCOUNTS_DIR']
-  } else {
-    DC_ACCOUNTS_DIR = join(__dirname, process.env['DC_ACCOUNTS_DIR'])
-  }
+  DC_ACCOUNTS_DIR = resolvePath(process.env['DC_ACCOUNTS_DIR'])
 }
 
 export const NODE_ENV = (process.env['NODE_ENV'] ?? 'production').toLowerCase()
