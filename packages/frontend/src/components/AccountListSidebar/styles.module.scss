@@ -69,8 +69,8 @@
       li:has(.accountWrapper.isSticky) {
         // Styles for the li element when it contains a sticky account
         position: sticky;
-        bottom: var(--als-avatar-margin);
-        top: var(--als-avatar-margin);
+        bottom: 0;
+        top: 0;
         // Only needed when this account is scrolled _above_ the visible region.
         z-index: map.get(
           variables.$z-index,
@@ -109,7 +109,7 @@
     // to the margins so that
     // if there is another `.isSticky` account, then that account does not
     // cover the account that we want to scroll into view.
-    // And another extra `2 * var(--als-avatar-margin)` so that it's obvious that
+    // And another extra `var(--als-avatar-margin)` so that it's obvious that
     // the other sticky account really is sticky, to make it obviously overlay
     // on top of another account, and be positioned perfectly on top of it.
     //
@@ -117,10 +117,10 @@
     // `var(--als-avatar-margin)` in case there is no sticky account above.
     // This should be achievable with CSS.
     scroll-margin-bottom: calc(
-      5 * var(--als-avatar-margin) + var(--als-avatar-size)
+      3 * var(--als-avatar-margin) + var(--als-avatar-size)
     );
     scroll-margin-top: calc(
-      5 * var(--als-avatar-margin) + var(--als-avatar-size)
+      3 * var(--als-avatar-margin) + var(--als-avatar-size)
     );
 
     position: relative;
