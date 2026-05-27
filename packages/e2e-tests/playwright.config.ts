@@ -1,16 +1,10 @@
 import { defineConfig, devices } from '@playwright/test'
 
 import { loadEnv } from './load-env'
-import { TestOptions } from './playwright-helper'
+import type { TestOptions } from './playwright-helper'
+import { baseURL, DC_FRONTEND_NO_TLS } from './playwright-helper'
 
 loadEnv()
-
-export const DC_FRONTEND_NO_TLS: boolean =
-  process.env.DC_FRONTEND_NO_TLS === 'true' ||
-  process.env.DC_FRONTEND_NO_TLS === '1'
-const port = process.env.WEB_PORT ?? 3000
-
-const baseURL = `${DC_FRONTEND_NO_TLS ? 'http' : 'https'}://localhost:${port}`
 
 /**
  * See https://playwright.dev/docs/test-configuration.

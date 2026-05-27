@@ -4,6 +4,13 @@ import { loadEnv } from './load-env'
 
 loadEnv()
 
+export const DC_FRONTEND_NO_TLS: boolean =
+  process.env.DC_FRONTEND_NO_TLS === 'true' ||
+  process.env.DC_FRONTEND_NO_TLS === '1'
+const port = process.env.WEB_PORT ?? 3000
+
+export const baseURL = `${DC_FRONTEND_NO_TLS ? 'http' : 'https'}://localhost:${port}`
+
 export const chatmailServerDomain = process.env.DC_CHATMAIL_DOMAIN
   ? process.env.DC_CHATMAIL_DOMAIN
   : // Use fallback so that the tests can run on people's forks
