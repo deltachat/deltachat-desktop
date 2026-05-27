@@ -1,4 +1,3 @@
-DC_ACCOUNTS_DIR=../../e2e-tests/data/accounts
 DC_FRONTEND_NO_TLS=true
 PRIVATE_CERTIFICATE_PATH=
 NODE_ENV=test

@@ -1,4 +1,10 @@
-import { expect, test as base, Page } from '@playwright/test'
+import {
+  expect,
+  test as base,
+  Browser,
+  BrowserContext,
+  Page,
+} from '@playwright/test'
 import path from 'path'
 import { loadEnv } from './load-env'
 
@@ -7,9 +13,24 @@ loadEnv()
 export const DC_FRONTEND_NO_TLS: boolean =
   process.env.DC_FRONTEND_NO_TLS === 'true' ||
   process.env.DC_FRONTEND_NO_TLS === '1'
-const port = process.env.WEB_PORT ?? 3000
-
-export const baseURL = `${DC_FRONTEND_NO_TLS ? 'http' : 'https'}://localhost:${port}`
+export const NUM_APP_INSTANCES = 2
+type InstanceInd = 0 | 1
+export function instancePort(index: InstanceInd): number {
+  return 3000 + index
+}
+export function instanceBaseURL(index: InstanceInd): string {
+  const protocol = DC_FRONTEND_NO_TLS ? 'http' : 'https'
+  return `${protocol}://localhost:${instancePort(index)}`
+}
+export async function openInstancePage(
+  browser: Browser,
+  index: InstanceInd
+): Promise<{ context: BrowserContext; page: Page }> {
+  const context = await browser.newContext({ baseURL: instanceBaseURL(index) })
+  const page = await context.newPage()
+  await page.goto('/')
+  return { context, page }
+}
 
 export const chatmailServerDomain = process.env.DC_CHATMAIL_DOMAIN
   ? process.env.DC_CHATMAIL_DOMAIN

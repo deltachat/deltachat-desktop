@@ -19,8 +19,6 @@ Be aware that the tests in each spec file are NOT isolated, so the order they ar
 This package depends on the target-browser so consider taking a look at its [README](../packages/target-browser/Readme.md),
 e.g. if you want to enable TLS.
 
-But don't run the browser at the same time, it will be started inside the test routine.
-
 ```sh
 pnpm -w e2e
 ```
@@ -55,14 +53,19 @@ pnpm -w --filter e2e-tests e2e:report
 
 to show the last report
 
-The account dir for tests is in _packages/e2e-tests/data/accounts_ (configurable in .env)
+The account dirs for tests are _packages/e2e-tests/data/app-instance-\*/accounts_
 
-It can be deleted after running tests and will be recreated in the next run.
+The whole _data/_ dir can be deleted after running tests
+and will be recreated in the next run.
+
+## Writing multi-app-instance tests
+
+Utilize `openInstancePage()`. Use the "add a second device" test as an example.
 
 ## Troubleshooting
 
 Make sure that there are no accounts left after fail.
-`rm -r packages/e2e-tests/data/accounts`
+`rm -r packages/e2e-tests/data/app-instance-*/accounts`
 
 After failing tests or stopping tests with Ctrl + C sometimes either the rpc-server process is still running or the used port is still blocked by a process
 To find the related process pid (on Linux) run:
