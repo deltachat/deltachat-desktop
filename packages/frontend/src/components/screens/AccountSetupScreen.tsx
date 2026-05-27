@@ -16,6 +16,7 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/dialog/useDialog'
 import { DialogId } from '../../contexts/DialogContext'
 import AlertDialog from '../dialogs/AlertDialog'
+import SettingsStoreInstance, { useSettingsStore } from '../../stores/settings'
 
 import type ScreenController from '../../ScreenController'
 
@@ -32,24 +33,42 @@ export default function AccountSetupScreen({
 
   const [credentials, setCredentials] =
     useState<Credentials>(defaultCredentials())
-
-  const onClickLogin = useCallback(
-    () =>
-      openDialog(ConfigureProgressDialog, {
-        credentials,
-        onSuccess: () => {
-          selectAccount(accountId)
-        },
-        onFail: (error: string) =>
-          setPromptDialogId(
-            openDialog(AlertDialog, {
-              message: error,
-              cb: () => setPromptDialogId(null),
-            })
-          ),
-      }),
-    [accountId, openDialog, selectAccount, credentials]
+  const settingsStore = useSettingsStore()[0]
+  const [forceEncryption, setForceEncryption] = useState<boolean>(
+    settingsStore?.settings['force_encryption'] === '1'
   )
+
+  const onClickLogin = useCallback(() => {
+    openDialog(ConfigureProgressDialog, {
+      credentials,
+      onSuccess: async () => {
+        const forceEncryptionValue = forceEncryption ? '1' : '0'
+        if (
+          settingsStore?.settings['force_encryption'] !== forceEncryptionValue
+        ) {
+          await SettingsStoreInstance.effect.setCoreSetting(
+            'force_encryption',
+            forceEncryptionValue
+          )
+        }
+        selectAccount(accountId)
+      },
+      onFail: (error: string) =>
+        setPromptDialogId(
+          openDialog(AlertDialog, {
+            message: error,
+            cb: () => setPromptDialogId(null),
+          })
+        ),
+    })
+  }, [
+    accountId,
+    credentials,
+    forceEncryption,
+    openDialog,
+    selectAccount,
+    settingsStore,
+  ])
 
   // TODO(maxph): we're now using <dialog> and can submit result via input
   // and not an explicit keyboard handling
@@ -88,6 +107,8 @@ export default function AccountSetupScreen({
             <LoginForm
               credentials={credentials}
               setCredentials={setCredentials}
+              forceEncryption={forceEncryption}
+              setForceEncryption={setForceEncryption}
             />
           </DialogContent>
         </DialogBody>

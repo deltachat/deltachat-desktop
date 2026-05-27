@@ -12,6 +12,8 @@ import { I18nContext } from '../contexts/I18nContext'
 const log = getLogger('renderer/loginForm')
 
 import type { Credentials } from './Settings/DefaultCredentials'
+import { useSettingsStore } from '../stores/settings'
+import Switch from './Switch'
 
 const Socket = {
   automatic: 'automatic',
@@ -29,6 +31,8 @@ const CertificateChecks = {
 type LoginProps = React.PropsWithChildren<{
   credentials: Credentials
   setCredentials: (credentials: Credentials) => void
+  forceEncryption?: boolean
+  setForceEncryption?: (forceEncryption: boolean) => void
   /** whether editing existing account */
   isEdit?: true
 }>
@@ -36,12 +40,17 @@ type LoginProps = React.PropsWithChildren<{
 export default function LoginForm({
   credentials,
   setCredentials,
+  forceEncryption: forceEncryptionProp,
+  setForceEncryption,
   isEdit,
 }: LoginProps) {
   const [uiShowAdvanced, setUiShowAdvanced] = useState<boolean>(false)
   const [providerInfo, setProviderInfo] = useState<
     Type.ProviderInfo | undefined
   >()
+  const settingsStore = useSettingsStore()[0]
+  const forceEncryption =
+    forceEncryptionProp ?? settingsStore?.settings['force_encryption'] === '1'
 
   const handleCredentialsChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -260,7 +269,6 @@ export default function LoginForm({
               <option value={Socket.starttls}>STARTTLS</option>
               <option value={Socket.plain}>{tx('off')}</option>
             </DeltaSelect>
-
             <DeltaSelect
               id='certificateChecks'
               label={tx('login_certificate_checks')}
@@ -275,6 +283,22 @@ export default function LoginForm({
                 {tx('accept_invalid_certificates')}
               </option>
             </DeltaSelect>
+            <div className='delta-form-group delta-switch'>
+              <label>
+                <span>{tx('enforce_e2ee')}</span>
+                {/** be aware that this setting applies to all relays! */}
+                <Switch
+                  checked={forceEncryption}
+                  disabled={settingsStore == null}
+                  onChange={() => {
+                    if (setForceEncryption) {
+                      setForceEncryption(!forceEncryption)
+                      return
+                    }
+                  }}
+                />
+              </label>
+            </div>
           </Collapse>
           <br />
         </div>
