@@ -7,7 +7,8 @@ import session from 'express-session'
 import { FileStore } from './session-store'
 import { authMiddleWare, CORSMiddleWare } from './middlewares'
 import resolvePath from 'resolve-path'
-import { WebSocketServer } from 'ws'
+import ws from 'ws'
+import type { WebSocket } from 'ws'
 import { BackendApiRoute } from './backendApi'
 import { MessageToBackend } from './runtime-ws-protocol'
 
@@ -234,7 +235,7 @@ if (DC_FRONTEND_NO_TLS) {
   )
 }
 
-const wssBackend = new WebSocketServer({
+const wssBackend = new ws.WebSocketServer({
   noServer: true,
   perMessageDeflate: true,
 })
@@ -275,13 +276,18 @@ server.on('upgrade', (request, socket, head) => {
     }
     const { pathname } = new URL(request.url || '', 'wss://base.url')
     if (pathname === '/ws/dc') {
-      wssDC.handleUpgrade(request, socket, head, function (ws) {
-        wssDC.emit('connection', ws, request)
+      wssDC.handleUpgrade(request, socket, head, function (socket: WebSocket) {
+        wssDC.emit('connection', socket, request)
       })
     } else if (pathname === '/ws/backend') {
-      wssBackend.handleUpgrade(request, socket, head, function (ws) {
-        wssBackend.emit('connection', ws, request)
-      })
+      wssBackend.handleUpgrade(
+        request,
+        socket,
+        head,
+        function (socket: WebSocket) {
+          wssBackend.emit('connection', socket, request)
+        }
+      )
     }
   })
 })

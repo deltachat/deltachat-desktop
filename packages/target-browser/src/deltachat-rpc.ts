@@ -2,7 +2,8 @@ import { ChildProcessWithoutNullStreams, spawn } from 'child_process'
 import { DC_ACCOUNTS_DIR } from './config'
 import { getRPCServerPath } from '@deltachat/stdio-rpc-server'
 import { BaseDeltaChat, yerpc } from '@deltachat/jsonrpc-client'
-import { WebSocket, WebSocketServer } from 'ws'
+import ws from 'ws'
+import type { WebSocket, WebSocketServer } from 'ws'
 import { RCConfig } from './rc-config'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 import { join } from 'path'
@@ -200,7 +201,10 @@ export async function startDeltaChat(): Promise<
     method: 'error_other_client_stole_dc_connection',
   })
 
-  const wssDC = new WebSocketServer({ noServer: true, perMessageDeflate: true })
+  const wssDC = new ws.WebSocketServer({
+    noServer: true,
+    perMessageDeflate: true,
+  })
   wssDC.on('connection', function connection(ws) {
     // eslint-disable-next-line no-console
     ws.on('error', console.error)
