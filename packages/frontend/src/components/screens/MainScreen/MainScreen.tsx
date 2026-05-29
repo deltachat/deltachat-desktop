@@ -241,6 +241,10 @@ export default function MainScreen({ accountId }: Props) {
   // after an unconfigured account becomes a configured one,
   // i.e. after login or backup import,
   // which correlates with `MainScreen` becoming rendered.
+  //
+  // TODO perf: this causes settings to load twice
+  // if they are still loading as a result of
+  // `ScreenController.selectAccount()`.
   useEffect(() => {
     if (
       SettingsStoreInstance.state?.accountId === accountId &&
