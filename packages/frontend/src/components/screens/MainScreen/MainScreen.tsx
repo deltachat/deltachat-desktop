@@ -14,7 +14,9 @@ import ChatList from '../../chat/ChatList'
 import { Avatar } from '../../Avatar'
 import ConnectivityToast from '../../ConnectivityToast'
 import MailingListProfile from '../../dialogs/MailingListProfile'
-import { useSettingsStore } from '../../../stores/settings'
+import SettingsStoreInstance, {
+  useSettingsStore,
+} from '../../../stores/settings'
 import { BackendRemote, onDCEvent, Type } from '../../../backend-com'
 import Button from '../../Button'
 import Icon from '../../Icon'
@@ -233,6 +235,26 @@ export default function MainScreen({ accountId }: Props) {
       lastUsedAppsFetch?.refresh()
     })
   }, [accountId, lastUsedAppsFetch])
+
+  // There is another `load()` in `ScreenController.selectAccount()`,
+  // but that is not enough because we also need to reload settings
+  // after an unconfigured account becomes a configured one,
+  // i.e. after login or backup import,
+  // which correlates with `MainScreen` becoming rendered.
+  //
+  // TODO perf: this causes settings to load twice
+  // if they are still loading as a result of
+  // `ScreenController.selectAccount()`.
+  useEffect(() => {
+    if (
+      SettingsStoreInstance.state?.accountId === accountId &&
+      SettingsStoreInstance.state?.settings.configured_addr
+    ) {
+      log.debug('account is already configured, skipping settings reload')
+      return
+    }
+    SettingsStoreInstance.effect.load()
+  }, [accountId])
 
   const isSearchActive = queryStr.length > 0 || queryChatId !== null
   const showArchivedChats = !isSearchActive && archivedChatsSelected
