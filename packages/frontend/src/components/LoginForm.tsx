@@ -210,15 +210,15 @@ export default function LoginForm({
             />
             {imapFolder !== null && (
               <>
-                <p>{tx('pref_imap_folder_warn_disable_defaults')}</p>
                 <DeltaInput
                   key='imapFolder'
                   id='imapFolder'
                   placeholder={tx('automatic')}
-                  label={tx('imap_folder')}
+                  label='IMAP Folder'
                   type='text'
                   value={imapFolder}
                   onChange={handleCredentialsChange}
+                  disabled
                 />
               </>
             )}

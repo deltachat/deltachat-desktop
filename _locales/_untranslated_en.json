@@ -64,8 +64,5 @@
   },
   "paste_in_qr_scanner": {
     "message": "Click to paste it in QR scanner"
-  },
-  "imap_folder": {
-    "message": "IMAP Folder"
   }
 }
