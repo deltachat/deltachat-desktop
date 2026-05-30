@@ -115,6 +115,7 @@ export default function LoginForm({
     password,
     imapServer,
     imapPort,
+    imapFolder,
     imapSecurity,
     certificateChecks,
     smtpUser,
@@ -207,6 +208,20 @@ export default function LoginForm({
               value={imapPort}
               onChange={handleCredentialsChange}
             />
+            {imapFolder !== null && (
+              <>
+                <DeltaInput
+                  key='imapFolder'
+                  id='imapFolder'
+                  placeholder={tx('automatic')}
+                  label='IMAP Folder'
+                  type='text'
+                  value={imapFolder}
+                  onChange={handleCredentialsChange}
+                  disabled
+                />
+              </>
+            )}
 
             <DeltaSelect
               id='imapSecurity'
