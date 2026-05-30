@@ -1,6 +1,6 @@
 [package]
 name = "deltachat-tauri"
-version = "2.49.1"
+version = "2.51.0"
 description = "Delta Chat Desktop: Tauri Edition. Secure, cross-platform, decentralized super-app messenger."
 authors = ["DeltaChat Contributors"]
 edition = "2021"
@@ -22,8 +22,8 @@ tauri-build = { version = "2", features = ["config-json5"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 tokio = "1.43.1"
-deltachat = { git = "https://github.com/chatmail/core", tag = "v2.50.0", version = "2.50.0" }
-deltachat-jsonrpc = { git = "https://github.com/chatmail/core", tag = "v2.50.0", version = "2.50.0" }
+deltachat = { git = "https://github.com/chatmail/core", tag = "v2.51.0", version = "2.51.0" }
+deltachat-jsonrpc = { git = "https://github.com/chatmail/core", tag = "v2.51.0", version = "2.51.0" }
 log = "0.4.22"
 anyhow = "1.0.93"
 futures-lite = "2.5.0"
