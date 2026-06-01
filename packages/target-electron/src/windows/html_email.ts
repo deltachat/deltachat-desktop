@@ -249,56 +249,56 @@ export function openHtmlEmailWindow(
   }))
 
   window.webContents.ipc.handle('html-view:load-remote-content', () => {
-    const isAlways =
+    const currentState =
       !isContactRequest &&
       DesktopSettings.state.HTMLEmailAlwaysLoadRemoteContent
-    const isOnce = loadRemoteContent && !isAlways
-    const isNever = !loadRemoteContent
-    const mark = (active: boolean, label: string) =>
-      (active ? '✅ ' : '') + label
-    // needed to close the dialog if the window is closed while it's open
+        ? 'always'
+        : loadRemoteContent
+          ? 'once'
+          : 'never'
+    const possibleStates: Array<'never' | 'once' | 'always'> = isContactRequest
+      ? ['never', 'once']
+      : ['never', 'once', 'always']
+    const currentIndex = possibleStates.indexOf(currentState)
+    // needed to close the dialog if the window is closed while the dialog is opened
     const abortController = new AbortController()
     const onClose = () => abortController.abort()
     window.once('close', onClose)
-    const buttons = [mark(isNever, tx('never')), mark(isOnce, tx('once'))]
-    if (!isContactRequest) {
-      buttons.push(mark(isAlways, tx('always')))
-    }
+    const buttons = possibleStates.map(
+      state => (state === currentState ? '✅ ' : '') + tx(state)
+    )
     dialog
       .showMessageBox(window, {
         message: tx('load_remote_content_ask'),
-        buttons: buttons,
+        buttons,
         type: 'none',
         icon: '',
-        defaultId: isAlways ? 2 : isOnce ? 1 : 0,
-        cancelId: 0,
+        defaultId: currentIndex,
+        cancelId: currentIndex,
         signal: abortController.signal,
       })
       .then(({ response }) => {
         window.off('close', onClose)
-        if (response === 0) {
-          // Never: disable for this session, clear persistent setting
+        const selected = possibleStates[response]
+        if (selected === currentState) return // no-op (also covers Escape)
+        if (selected === 'never') {
           if (DesktopSettings.state.HTMLEmailAlwaysLoadRemoteContent) {
             DesktopSettings.update({
               HTMLEmailAlwaysLoadRemoteContent: false,
             })
           }
           update_restrictions(false)
-        } else if (response === 1) {
-          // Once: enable for this session only, clear persistent setting
+        } else if (selected === 'once') {
           if (DesktopSettings.state.HTMLEmailAlwaysLoadRemoteContent) {
             DesktopSettings.update({
               HTMLEmailAlwaysLoadRemoteContent: false,
             })
           }
           update_restrictions(true)
-        } else if (response === 2) {
-          // Always: enable + persist (only for non-contact requests)
-          if (!isContactRequest) {
-            DesktopSettings.update({
-              HTMLEmailAlwaysLoadRemoteContent: true,
-            })
-          }
+        } else {
+          const _assert: 'always' = selected
+          // 'always' — only selectable for non-contact requests
+          DesktopSettings.update({ HTMLEmailAlwaysLoadRemoteContent: true })
           update_restrictions(true)
         }
       })
