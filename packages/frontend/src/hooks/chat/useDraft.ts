@@ -309,6 +309,7 @@ export function useDraft(
       if (debouncedSaveAndRefetchDraft == null || saveAndRefetchDraft == null) {
         return
       }
+
       inputRef.current?.focus()
       const newDraftState: typeof draftState = {
         ...draftState,

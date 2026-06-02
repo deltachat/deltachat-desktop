@@ -34,6 +34,13 @@ type AttachmentProps = {
   tabindexForInteractiveContents: -1 | 0
 }
 
+/**
+ * Images whose uncompressed pixel count exceeds this threshold are
+ * not rendered inline since they cause severe UI slowness.
+ * We set 50 MP as limit, which should be fine in most cases
+ */
+export const LARGE_IMAGE_PIXEL_THRESHOLD = 50_000_000
+
 export default function Attachment({
   text,
   message,
@@ -137,7 +144,18 @@ export default function Attachment({
   const withCaption = Boolean(text)
   // For attachments which aren't full-frame
   const withContentBelow = withCaption
-  if (isImage(message.viewType) || message.viewType === 'Sticker') {
+
+  const isOversizedImage =
+    isImage(message.viewType) &&
+    message.dimensionsWidth > 0 &&
+    message.dimensionsHeight > 0 &&
+    message.dimensionsWidth * message.dimensionsHeight >
+      LARGE_IMAGE_PIXEL_THRESHOLD
+
+  if (
+    (isImage(message.viewType) || message.viewType === 'Sticker') &&
+    !isOversizedImage
+  ) {
     return (
       <button
         type='button'
@@ -195,38 +213,39 @@ export default function Attachment({
         />
       </div>
     )
-  } else {
-    const { fileName, fileBytes, fileMime, file } = message
-    const extension = getExtension(message)
-    return (
-      <button
-        type='button'
-        className={classNames(
-          'message-attachment-generic',
-          withContentBelow ? 'content-below' : null
-        )}
-        onClick={onClickAttachment}
-        tabIndex={tabindexForInteractiveContents}
-      >
-        <div
-          className='file-icon'
-          draggable='true'
-          onDragStart={ev => dragAttachmentOut(file, fileName, ev)}
-          title={fileMime || 'null'}
-        >
-          {extension ? (
-            <div className='file-extension'>
-              {fileMime === 'application/octet-stream' ? '' : extension}
-            </div>
-          ) : null}
-        </div>
-        <div className='text-part'>
-          <div className='name'>{fileName}</div>
-          <div className='size'>{filesize(fileBytes ?? 0)}</div>
-        </div>
-      </button>
-    )
   }
+
+  // Generic file renderer - (also used for oversized images)
+  const { fileName, fileBytes, fileMime, file } = message
+  const extension = getExtension(message)
+  return (
+    <button
+      type='button'
+      className={classNames(
+        'message-attachment-generic',
+        withContentBelow ? 'content-below' : null
+      )}
+      onClick={onClickAttachment}
+      tabIndex={tabindexForInteractiveContents}
+    >
+      <div
+        className='file-icon'
+        draggable='true'
+        onDragStart={ev => dragAttachmentOut(file, fileName, ev)}
+        title={fileMime || 'null'}
+      >
+        {extension ? (
+          <div className='file-extension'>
+            {fileMime === 'application/octet-stream' ? '' : extension}
+          </div>
+        ) : null}
+      </div>
+      <div className='text-part'>
+        <div className='name'>{fileName}</div>
+        <div className='size'>{filesize(fileBytes ?? 0)}</div>
+      </div>
+    </button>
+  )
 }
 /**
  * @see also {@linkcode GalleryAudioAttachment}.
