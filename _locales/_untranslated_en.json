@@ -64,5 +64,8 @@
   },
   "paste_in_qr_scanner": {
     "message": "Click to paste it in QR scanner"
+  },
+  "large_image_warning_body": {
+    "message": "Warning: this image is very large (%1$s × %2$s pixels). It cannot be compressed for sending and will not be rendered as an image in the chat."
   }
 }

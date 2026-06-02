@@ -6,6 +6,13 @@ export function isImage(viewType: Type.Viewtype | null) {
   return viewType === 'Image' || viewType === 'Gif'
 }
 
+/**
+ * Images whose uncompressed pixel count exceeds this threshold are not rendered
+ * inline since they cause severe UI slowness.
+ * Let's set 50 MP as limit, which should be fine in most cases
+ */
+export const LARGE_IMAGE_PIXEL_THRESHOLD = 50_000_000
+
 export function hasAttachment(attachment: MessageTypeAttachmentSubset | null) {
   return attachment && attachment.file
 }

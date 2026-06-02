@@ -9,6 +9,7 @@ import {
   getExtension,
   dragAttachmentOut,
   MessageTypeAttachmentSubset,
+  LARGE_IMAGE_PIXEL_THRESHOLD,
 } from './Attachment'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import { Type } from '../../backend-com'
@@ -137,7 +138,18 @@ export default function Attachment({
   const withCaption = Boolean(text)
   // For attachments which aren't full-frame
   const withContentBelow = withCaption
-  if (isImage(message.viewType) || message.viewType === 'Sticker') {
+
+  const isOversizedImage =
+    isImage(message.viewType) &&
+    message.dimensionsWidth > 0 &&
+    message.dimensionsHeight > 0 &&
+    message.dimensionsWidth * message.dimensionsHeight >
+      LARGE_IMAGE_PIXEL_THRESHOLD
+
+  if (
+    (isImage(message.viewType) || message.viewType === 'Sticker') &&
+    !isOversizedImage
+  ) {
     return (
       <button
         type='button'
@@ -195,38 +207,39 @@ export default function Attachment({
         />
       </div>
     )
-  } else {
-    const { fileName, fileBytes, fileMime, file } = message
-    const extension = getExtension(message)
-    return (
-      <button
-        type='button'
-        className={classNames(
-          'message-attachment-generic',
-          withContentBelow ? 'content-below' : null
-        )}
-        onClick={onClickAttachment}
-        tabIndex={tabindexForInteractiveContents}
-      >
-        <div
-          className='file-icon'
-          draggable='true'
-          onDragStart={ev => dragAttachmentOut(file, fileName, ev)}
-          title={fileMime || 'null'}
-        >
-          {extension ? (
-            <div className='file-extension'>
-              {fileMime === 'application/octet-stream' ? '' : extension}
-            </div>
-          ) : null}
-        </div>
-        <div className='text-part'>
-          <div className='name'>{fileName}</div>
-          <div className='size'>{filesize(fileBytes ?? 0)}</div>
-        </div>
-      </button>
-    )
   }
+
+  // Generic file renderer - (also used for oversized images)
+  const { fileName, fileBytes, fileMime, file } = message
+  const extension = getExtension(message)
+  return (
+    <button
+      type='button'
+      className={classNames(
+        'message-attachment-generic',
+        withContentBelow ? 'content-below' : null
+      )}
+      onClick={onClickAttachment}
+      tabIndex={tabindexForInteractiveContents}
+    >
+      <div
+        className='file-icon'
+        draggable='true'
+        onDragStart={ev => dragAttachmentOut(file, fileName, ev)}
+        title={fileMime || 'null'}
+      >
+        {extension ? (
+          <div className='file-extension'>
+            {fileMime === 'application/octet-stream' ? '' : extension}
+          </div>
+        ) : null}
+      </div>
+      <div className='text-part'>
+        <div className='name'>{fileName}</div>
+        <div className='size'>{filesize(fileBytes ?? 0)}</div>
+      </div>
+    </button>
+  )
 }
 /**
  * @see also {@linkcode GalleryAudioAttachment}.

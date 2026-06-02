@@ -10,6 +10,7 @@ import { T } from '@deltachat/jsonrpc-client'
 
 import { getLogger } from '../../../../shared/logger'
 import { BackendRemote, Type } from '../../backend-com'
+import { LARGE_IMAGE_PIXEL_THRESHOLD } from '../../components/attachment/Attachment'
 import { MessageTypeAttachmentSubset } from '../../components/attachment/Attachment'
 import { KeybindAction } from '../../keybindings'
 import useMessage from './useMessage'
@@ -22,6 +23,35 @@ import useConfirmationDialog from '../dialog/useConfirmationDialog'
 import useAlertDialog from '../dialog/useAlertDialog'
 
 const log = getLogger('renderer/composer')
+
+/**
+ * Returns the pixel dimensions of an image file using the browser's native
+ * image decoder, or `null` if the file cannot be read or is not a recognised
+ * image format.
+ */
+function getImageDimensions(
+  filePath: string
+): Promise<{ width: number; height: number } | null> {
+  return new Promise(resolve => {
+    const img = new Image()
+    // 5 s timeout guards against hanging on malformed files.
+    const timer = setTimeout(() => resolve(null), 5000)
+    const done = (result: { width: number; height: number } | null) => {
+      clearTimeout(timer)
+      resolve(result)
+    }
+    img.onload = () =>
+      done({ width: img.naturalWidth, height: img.naturalHeight })
+    img.onerror = () => done(null)
+    // Build a file:// URL.  On Unix the path already starts with '/' so we
+    // get exactly three slashes: file:// + /path = file:///path.
+    // On Windows paths look like C:/... so we prepend an extra slash.
+    const normalized = filePath.replace(/\\/g, '/')
+    img.src = normalized.startsWith('/')
+      ? `file://${normalized}`
+      : `file:///${normalized}`
+  })
+}
 
 export type DraftObject = { chatId: number } & Pick<
   Type.Message,
@@ -309,6 +339,27 @@ export function useDraft(
       if (debouncedSaveAndRefetchDraft == null || saveAndRefetchDraft == null) {
         return
       }
+
+      // Warn the user when attaching a very large image: core cannot compress
+      // it (OOM) and the image will be displayed without scaling, which may
+      // cause UI slowness on the recipient's side.
+      // TODO: when the core issue is fixed, we could propose to send the image
+      // as a file instead or show no warning at all if core can handle it well.
+      if (viewType === 'Image') {
+        const dims = await getImageDimensions(file)
+        if (
+          dims !== null &&
+          dims.width * dims.height > LARGE_IMAGE_PIXEL_THRESHOLD
+        ) {
+          await openAlertDialog({
+            message: tx('large_image_warning_body', [
+              String(dims.width),
+              String(dims.height),
+            ]),
+          })
+        }
+      }
+
       inputRef.current?.focus()
       const newDraftState: typeof draftState = {
         ...draftState,
@@ -324,7 +375,14 @@ export function useDraft(
       debouncedSaveAndRefetchDraft?.clear()
       return saveAndRefetchDraft(newDraftState)
     },
-    [draftState, inputRef, saveAndRefetchDraft, debouncedSaveAndRefetchDraft]
+    [
+      draftState,
+      inputRef,
+      saveAndRefetchDraft,
+      debouncedSaveAndRefetchDraft,
+      openAlertDialog,
+      tx,
+    ]
   )
 
   const quoteMessage = useMemo(
