@@ -14,6 +14,10 @@
     nixpkgs,
     rust-overlay,
   }: let
+    inherit (nixpkgs) lib;
+    electronVersionSpec = (lib.importJSON ./packages/target-electron/package.json).devDependencies.electron;
+    electronVersion = lib.removePrefix "^" electronVersionSpec;
+
     supportedSystems = ["x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin"];
     forEachSupportedSystem = f:
       nixpkgs.lib.genAttrs supportedSystems (system:
@@ -46,7 +50,7 @@
           cargo
           cargo-tauri
           nodejs_22 # what project defines
-          electron_41 # electron version should be same as defined in packages/target-electron/package.json
+          pkgs."electron_${lib.versions.major electronVersion}"
         ];
 
         buildInputs = with pkgs; [
