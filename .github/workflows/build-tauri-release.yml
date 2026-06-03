@@ -2,8 +2,8 @@ name: Build Tauri Release
 
 on:
   push:
-    tags:
-      - 'v*'
+    branches:
+      - '*prepare-release*'
 
 permissions: {}
 
@@ -49,11 +49,17 @@ jobs:
           npm i -g pnpm
           pnpm install
 
+      - name: set version ref
+        shell: bash
+        run: |
+          VERSION=$(jq -r .version package.json)
+          echo "VERSION_INFO_GIT_REF=v${VERSION}" >> "$GITHUB_ENV"
+
       - uses: tauri-apps/tauri-action@84b9d35b5fc46c1e45415bdb6144030364f7ebc5 # v0.6.2
         id: build
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VERSION_INFO_GIT_REF: ${{ github.ref }}
+          VERSION_INFO_GIT_REF: ${{ env.VERSION_INFO_GIT_REF }}
         with:
           projectPath: packages/target-tauri
           args: ${{ matrix.args }}
