@@ -19,7 +19,7 @@ import {
   shouldHandleLinkInMainApp,
   truncateText,
 } from '@deltachat-desktop/shared/util.js'
-import { tx } from '../load-translations.js'
+import { tx, getCurrentLocaleDate } from '../load-translations.js'
 import { open_url } from '../open_url.js'
 import { loadTheme } from '../themes.js'
 import { getDCJsonrpcRemote } from '../ipc.js'
@@ -114,6 +114,7 @@ export function openHtmlEmailWindow(
     subject,
     from,
     sentTime,
+    locale: getCurrentLocaleDate().locale,
   }))
 
   nativeTheme.on('updated', () => {
