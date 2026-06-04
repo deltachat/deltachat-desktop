@@ -3,10 +3,15 @@ const fromElement = document.getElementById('sender')
 const sentTimeElement = document.getElementById('sent-time')
 const networkMoreButton = document.getElementById('toggle_network_more_button')
 
-let promise = window.htmlview.getInfo().then(({ subject, from, sentTime }) => {
-  ;((subjectElement.innerText = subject), (fromElement.innerText = from))
-  sentTimeElement.innerText = sentTime
-})
+let promise = window.htmlview
+  .getInfo()
+  .then(({ subject, from, sentTime, locale }) => {
+    ;((subjectElement.innerText = subject), (fromElement.innerText = from))
+    sentTimeElement.innerText = sentTime
+    if (locale) {
+      document.documentElement.lang = locale.replace('_', '-')
+    }
+  })
 
 networkMoreButton.onclick = ev => {
   /** @type {MouseEvent} */

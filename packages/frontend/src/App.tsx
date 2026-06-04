@@ -69,6 +69,7 @@ function I18nContextWrapper({ children }: { children: React.ReactElement }) {
     setLocaleData(localeData)
     moment.locale(localeData.locale)
     updateCoreStrings()
+    document.documentElement.lang = localeData.locale.replace('_', '-')
   }
 
   useLayoutEffect(() => {
