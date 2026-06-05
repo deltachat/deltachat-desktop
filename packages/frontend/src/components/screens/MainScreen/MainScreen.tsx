@@ -39,6 +39,7 @@ import { useWebxdcMessageSentListener } from '../../../hooks/useWebxdcMessageSen
 
 import type { T } from '@deltachat/jsonrpc-client'
 import CreateChat from '../../dialogs/CreateChat'
+import CommandPalette from '../../dialogs/CommandPalette'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import asyncThrottle from '@jcoreio/async-throttle'
 import { useFetch, useRpcFetch } from '../../../hooks/useFetch'
@@ -153,6 +154,19 @@ export default function MainScreen({ accountId }: Props) {
   useKeyBindingAction(KeybindAction.NewChat_Open, () => {
     // Same as `onCreateChat` in ChatList.
     openDialog(CreateChat)
+  })
+
+  const paletteOpenRef = useRef(false)
+  useKeyBindingAction(KeybindAction.CommandPalette_Open, () => {
+    if (paletteOpenRef.current) {
+      return
+    }
+    paletteOpenRef.current = true
+    openDialog(CommandPalette, {
+      onClose: () => {
+        paletteOpenRef.current = false
+      },
+    })
   })
 
   useKeyBindingAction(KeybindAction.Chat_Unselect, () => {
