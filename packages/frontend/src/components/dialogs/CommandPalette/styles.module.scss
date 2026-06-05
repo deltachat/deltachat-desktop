@@ -1,0 +1,137 @@
+.commandPalette {
+  display: flex;
+  flex-direction: column;
+  height: min(560px, 75vh);
+  max-height: 75vh;
+  overflow: hidden;
+}
+
+.searchRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-block-end: 1px solid var(--separatorColor);
+}
+
+.searchIcon {
+  flex: none;
+  opacity: 0.5;
+}
+
+.crumb {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex: none;
+  max-width: 30%;
+  font-weight: 500;
+}
+
+.crumbLabel {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.crumbSep {
+  opacity: 0.4;
+  margin-inline-start: 2px;
+}
+
+.searchInput {
+  flex: 1;
+  min-width: 80px;
+  box-sizing: border-box;
+  font-size: 1.1em;
+  border: none;
+  background: transparent;
+}
+
+.clearButton {
+  flex: none;
+  display: flex;
+  align-items: center;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  opacity: 0.6;
+  padding: 2px;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding-block: 6px;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px 2px;
+  font-size: 0.75em;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.5;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 16px;
+  border: none;
+  background: transparent;
+  color: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.itemActive {
+  background-color: var(
+    --commandPaletteSelectedBg,
+    var(--chatListItemSelectedBg)
+  );
+
+  .dimmed {
+    opacity: 0.85;
+  }
+}
+
+.itemText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.itemLabel {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.itemSubtitle {
+  font-size: 0.85em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dimmed {
+  opacity: 0.6;
+}
+
+.empty {
+  padding: 24px 16px;
+  text-align: center;
+  opacity: 0.6;
+}
