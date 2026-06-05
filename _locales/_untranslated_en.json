@@ -1,4 +1,7 @@
 {
+  "command_palette_placeholder": {
+    "message": "Search chats, contacts and messages…"
+  },
   "pref_background_sync_disabled": {
     "message": "Only Synchronize Selected Profile"
   },
