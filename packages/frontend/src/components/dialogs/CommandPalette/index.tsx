@@ -66,11 +66,10 @@ export default function CommandPalette({ onClose }: Props) {
   // Breadcrumb scope, opens with current account account showing the chatlist
   // Tab adds the highlighted chat to the breadcrumb , Backspace on an empty
   // query pops one crumb off
-  // TODO: show some hint to the user about this behaviour
   const [scope, setScope] = useState<PaletteScope>('account')
   // When set (after Tab on an account in root scope) the palette browses this
   // account instead of the active one, *without* switching to it. The switch
-  // only happens once a chat/message there is actually opened.
+  // only happens once a chat/message is actually opened with enter
   const [scopedAccount, setScopedAccount] = useState<PaletteAccountRef | null>(
     null
   )
@@ -421,6 +420,11 @@ export default function CommandPalette({ onClose }: Props) {
                         </span>
                       )}
                     </span>
+                    {isActive && (item.chatScope || item.accountScope) && (
+                      <span className={styles.tabHint} aria-hidden>
+                        {tx('command_palette_tab_to_search')}
+                      </span>
+                    )}
                   </div>
                 )
               })}
