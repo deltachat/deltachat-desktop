@@ -97,6 +97,15 @@ export function usePaletteItems({
               color: account.color,
               addr: account.addr ?? undefined,
             },
+            // Enter switches to the account; Tab drills into it to browse its
+            // chats/messages without switching (until a chat/message is opened).
+            accountScope: {
+              id: account.id,
+              name: label,
+              avatarPath: account.profileImage,
+              color: account.color,
+              addr: account.addr ?? undefined,
+            },
             run: async () => {
               await actionsRef.current.switchAccount(account.id)
               actionsRef.current.close()

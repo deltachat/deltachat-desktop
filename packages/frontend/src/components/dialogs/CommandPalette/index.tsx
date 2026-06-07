@@ -10,12 +10,24 @@ import useMessage from '../../../hooks/chat/useMessage'
 import useCreateChatByContactId from '../../../hooks/chat/useCreateChatByContactId'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import { useRpcFetch } from '../../../hooks/useFetch'
+import {
+  saveLastChatId,
+  createChatByContactId as createChatByContactIdBackend,
+} from '../../../backend/chat'
 import { usePaletteItems, type PaletteActions } from './usePaletteItems'
+import { getLogger } from '@deltachat-desktop/shared/logger'
 
 import styles from './styles.module.scss'
 
 import type { DialogProps } from '../../../contexts/DialogContext'
-import type { PaletteItem, PaletteScope, PaletteSection } from './types'
+import type {
+  PaletteAccountRef,
+  PaletteItem,
+  PaletteScope,
+  PaletteSection,
+} from './types'
+
+const log = getLogger('renderer/CommandPalette')
 
 type Props = {
   onClose: DialogProps['onClose']
@@ -56,6 +68,12 @@ export default function CommandPalette({ onClose }: Props) {
   // query pops one crumb off
   // TODO: show some hint to the user about this behaviour
   const [scope, setScope] = useState<PaletteScope>('account')
+  // When set (after Tab on an account in root scope) the palette browses this
+  // account instead of the active one, *without* switching to it. The switch
+  // only happens once a chat/message there is actually opened.
+  const [scopedAccount, setScopedAccount] = useState<PaletteAccountRef | null>(
+    null
+  )
   const [scopedChat, setScopedChat] = useState<{
     id: number
     name: string
@@ -64,6 +82,10 @@ export default function CommandPalette({ onClose }: Props) {
   const [activeIndex, setActiveIndex] = useState(0)
   const listRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+
+  // The account the chats/contacts/messages are searched in: the peeked
+  // account when browsing another one, otherwise the active account.
+  const effectiveAccountId = scopedAccount?.id ?? accountId
 
   const accountFetch = useRpcFetch(BackendRemote.rpc.getAccountInfo, [
     accountId,
@@ -74,7 +96,11 @@ export default function CommandPalette({ onClose }: Props) {
   let accountName = ''
   let avatarPath: string | undefined = undefined
   let accountColor: string | undefined = undefined
-  if (accountInfo?.kind === 'Configured') {
+  if (scopedAccount) {
+    accountName = scopedAccount.name
+    avatarPath = scopedAccount.avatarPath || undefined
+    accountColor = scopedAccount.color || undefined
+  } else if (accountInfo?.kind === 'Configured') {
     accountName = accountInfo.displayName || accountInfo.addr || ''
     avatarPath = accountInfo.profileImage || undefined
     accountColor = accountInfo.color || undefined
@@ -83,24 +109,71 @@ export default function CommandPalette({ onClose }: Props) {
 
   const actions: PaletteActions = useMemo(
     () => ({
-      selectChat,
-      jumpToMessage: (accId, cId, msgId) =>
-        jumpToMessage({
-          accountId: accId,
-          msgId,
-          msgChatId: cId,
-          focus: false,
-          scrollIntoViewArg: { block: 'center' },
-        }),
-      createChatByContactId,
+      selectChat: async (accId, cId) => {
+        if (accId === accountId) {
+          selectChat(accId, cId)
+          return
+        }
+        try {
+          await saveLastChatId(accId, cId)
+          await window.__selectAccount(accId)
+        } catch (error) {
+          log.error('failed to open chat in other account', error)
+        }
+      },
+      jumpToMessage: async (accId, cId, msgId) => {
+        if (accId === accountId) {
+          jumpToMessage({
+            accountId: accId,
+            msgId,
+            msgChatId: cId,
+            focus: false,
+            scrollIntoViewArg: { block: 'center' },
+          })
+          return
+        }
+        try {
+          // `jumpToMessage` can't cross accounts, so switch first and then jump
+          // once the target account's message list mounts.
+          await saveLastChatId(accId, cId)
+          await window.__selectAccount(accId)
+          window.__internal_jump_to_message_asap = {
+            accountId: accId,
+            chatId: cId,
+            jumpToMessageArgs: [
+              { msgId, scrollIntoViewArg: { block: 'center' }, focus: false },
+            ],
+          }
+          window.__internal_check_jump_to_message?.()
+        } catch (error) {
+          log.error('failed to jump to message in other account', error)
+        }
+      },
+      createChatByContactId: async (accId, contactId) => {
+        if (accId === accountId) {
+          await createChatByContactId(accId, contactId)
+          return
+        }
+        try {
+          const cId = await createChatByContactIdBackend(accId, contactId)
+          const chat = await BackendRemote.rpc.getBasicChatInfo(accId, cId)
+          if (chat.archived) {
+            await BackendRemote.rpc.setChatVisibility(accId, cId, 'Normal')
+          }
+          await saveLastChatId(accId, cId)
+          await window.__selectAccount(accId)
+        } catch (error) {
+          log.error('failed to open contact chat in other account', error)
+        }
+      },
       switchAccount: window.__selectAccount,
       close: onClose,
     }),
-    [selectChat, jumpToMessage, createChatByContactId, onClose]
+    [accountId, selectChat, jumpToMessage, createChatByContactId, onClose]
   )
 
   const { items, isLoading } = usePaletteItems({
-    accountId,
+    accountId: effectiveAccountId,
     scope,
     chatId: scopedChat?.id,
     query,
@@ -132,12 +205,21 @@ export default function CommandPalette({ onClose }: Props) {
       setScopedChat(null)
     } else if (scope === 'account') {
       setScope('root')
+      // Leaving the peeked account goes back to the account list.
+      setScopedAccount(null)
     }
   }
 
   const enterChatScope = (chat: { id: number; name: string }) => {
     setScope('chat')
     setScopedChat(chat)
+    setQuery('')
+  }
+
+  const enterAccountScope = (account: PaletteAccountRef) => {
+    setScope('account')
+    setScopedAccount(account)
+    setScopedChat(null)
     setQuery('')
   }
 
@@ -152,11 +234,15 @@ export default function CommandPalette({ onClose }: Props) {
       e.preventDefault()
       runItem(items[activeIndex])
     } else if (e.key === 'Tab') {
-      // Tab drills into the highlighted chat to search within it.
-      const chat = items[activeIndex]?.chatScope
-      if (chat) {
+      // Tab enters into the highlighted items scope: a chat to search within it,
+      // or (in root scope) an account to browse without switching to it.
+      const item = items[activeIndex]
+      if (item?.chatScope) {
         e.preventDefault()
-        enterChatScope(chat)
+        enterChatScope(item.chatScope)
+      } else if (item?.accountScope) {
+        e.preventDefault()
+        enterAccountScope(item.accountScope)
       }
     } else if (e.key === 'Backspace' && query === '' && scope !== 'root') {
       e.preventDefault()
