@@ -18,7 +18,7 @@ If version `X.Y.Z` hasn't yet been published to `npm`, then ask another maintain
 
 GitHub CI builds and publishes [stdio-rpc-server](https://github.com/chatmail/core/actions/workflows/deltachat-rpc-server.yml) and [jsonrpc-client](https://github.com/chatmail/core/actions/workflows/jsonrpc-client-npm-package.yml) to npm.
 
-> bash shortcut `node ./bin/link_core/link_version.js 1.142.2`
+> bash shortcut `node ./bin/link_core/link_version.js 2.49.0`
 
 > make sure you are in the repository root, otherwise the command will not work
 
@@ -62,14 +62,11 @@ very useful for development.
 
 But be aware: there might be **migrations** that are applied to your accounts databases and there is no way back, unless you have a **backup**!
 
-If you already have a core git checkout, you can skip the first step. Set the environment variable CORE_REPO_CHECKOUT to point to your core repository (as a relative path to deltachat-desktop) if it's not "../core" or "../deltachat-core-rust".
+If you already have a core git checkout, you can skip the first step.
 
 1. clone the core repo: `git clone git@github.com:chatmail/core.git`
 2. cd into desktop and run `python ./bin/link_core/build_and_link_local_core.py ../path_to_local_core_repo`
 
 Note that you need to run the script again after each change to core sourcecode.
 
-> to reset to normal run `./bin/link_core/link_catalog.sh` [^1]
-> maybe you have to run ' git checkout' to restore the original package.json
-
-[^1]: for window look inside of the script to learn what to do and please write one for powershell
+To reset to normal run `git checkout` to restore the original package.json files and then `pnpm i`

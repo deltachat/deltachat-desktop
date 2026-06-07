@@ -178,6 +178,25 @@ def check_required_tools(desktop_path, core_path):
     print()
 
 
+def set_links_in_package_json(package_json_path, links):
+    with open(package_json_path, "r") as f:
+        data = json.load(f)
+
+    sections = ("dependencies", "devDependencies")
+    linked = []
+    for dep_name, link_spec in links.items():
+        for section in sections:
+            if dep_name in data.get(section, {}):
+                data[section][dep_name] = link_spec
+                linked.append(dep_name)
+                break
+
+    with open(package_json_path, "w") as f:
+        json.dump(data, f, indent=2)
+        f.write("\n")
+    print(f">>> Linked {', '.join(linked)} in {package_json_path}")
+
+
 def main():
     if len(sys.argv) != 2:
         print(f"Usage: {sys.argv[0]} <core_path>")
@@ -210,36 +229,36 @@ def main():
     # Step 3: npm run build in deltachat-jsonrpc/typescript/
     run_command("npm run build", cwd=jsonrpc_ts_dir)
 
-    # Step 4: Link core packages to desktop packages
+    # Step 4: Replace dependencies with local link in all desktop packages
+    #
+    # note: it is necessary to edit every package.json instead of `pnpm add ...@link:` per package. 
+    # Running `pnpm add` made the lockfile internally inconsistent: some importers
+    # kept resolving @deltachat/jsonrpc-client to the registry node (e.g. 2.51.0(ws@8.21.0))
+    # Now we run pnpm install only once after all package.json files are updated
     jsonrpc_path = os.path.join(core_path, "deltachat-jsonrpc", "typescript")
     stdio_rpc_path = os.path.join(core_path, "deltachat-rpc-server", "npm-package")
-    jsonrpc_link = f"@deltachat/jsonrpc-client@link:{jsonrpc_path}"
-    stdio_rpc_link = f"@deltachat/stdio-rpc-server@link:{stdio_rpc_path}"
+    links = {
+        "@deltachat/jsonrpc-client": f"link:{jsonrpc_path}",
+        "@deltachat/stdio-rpc-server": f"link:{stdio_rpc_path}",
+    }
 
-    run_command(
-        f"pnpm add {jsonrpc_link} {stdio_rpc_link}",
-        cwd=os.path.join(desktop_path, "packages", "target-electron")
-    )
+    packages_to_link = [
+        "target-electron",
+        "target-browser",
+        "frontend",
+        "runtime",
+        "target-tauri",
+        "shared",
+    ]
+    for pkg in packages_to_link:
+        set_links_in_package_json(
+            os.path.join(desktop_path, "packages", pkg, "package.json"),
+            links,
+        )
 
-    run_command(
-        f"pnpm add {jsonrpc_link} {stdio_rpc_link}",
-        cwd=os.path.join(desktop_path, "packages", "target-browser")
-    )
+    # Step 5: Run pnpm install in desktop_path to re-resolve all links and update the lockfile.
 
-    run_command(
-        f"pnpm add {jsonrpc_link}",
-        cwd=os.path.join(desktop_path, "packages", "frontend")
-    )
-
-    run_command(
-        f"pnpm add {jsonrpc_link}",
-        cwd=os.path.join(desktop_path, "packages", "runtime")
-    )
-
-    run_command(
-        f"pnpm add {jsonrpc_link}",
-        cwd=os.path.join(desktop_path, "packages", "target-tauri")
-    )
+    run_command("pnpm install --force", cwd=desktop_path)
 
     tauri_src_dir = os.path.join(desktop_path, "packages", "target-tauri", "src-tauri")
     deltachat_jsonrpc_path = os.path.join(core_path, "deltachat-jsonrpc")
