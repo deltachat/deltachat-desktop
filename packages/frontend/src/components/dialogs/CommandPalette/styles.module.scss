@@ -113,6 +113,18 @@
   flex: 1;
 }
 
+// `flex: none` makes `.itemText` shrink
+// (and ellipsize) to leave room for the hint.
+.tabHint {
+  flex: none;
+  margin-inline-start: 8px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.75em;
+  white-space: nowrap;
+  background-color: var(--commandPaletteTabHintBg);
+}
+
 .itemLabel {
   white-space: nowrap;
   overflow: hidden;
