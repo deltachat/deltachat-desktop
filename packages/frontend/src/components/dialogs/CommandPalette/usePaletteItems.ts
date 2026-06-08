@@ -4,7 +4,7 @@ import { getLogger } from '@deltachat-desktop/shared/logger'
 import { BackendRemote } from '../../../backend-com'
 import { getConfiguredAccounts } from '../../../backend/account'
 import moment from 'moment'
-import type { PaletteItem, PaletteScope } from './types'
+import type { PaletteFilter, PaletteItem, PaletteScope } from './types'
 
 const log = getLogger('renderer/CommandPalette')
 
@@ -15,6 +15,11 @@ const MAX_PER_SECTION = {
   contacts: 5,
   messages: 8,
 }
+
+/**
+ * Core's `is:unread` filter token, can also be triggered by `:unread`
+ */
+const IS_UNREAD_QUERY = 'is:unread'
 
 /**
  * Possible navigation actions the items call when selected.
@@ -38,6 +43,7 @@ export type UsePaletteItemsParams = {
   scope: PaletteScope
   chatId: number | undefined // Only relevant for the `chat` scope
   query: string
+  filter: PaletteFilter | null
   actions: PaletteActions
 }
 
@@ -46,10 +52,11 @@ export function usePaletteItems({
   scope,
   chatId,
   query,
+  filter,
   actions,
 }: UsePaletteItemsParams): { items: PaletteItem[]; isLoading: boolean } {
-  // `forKey` records which (scope, account, chat, query) the items belong to.
-  const currentKey = `${scope}\n${accountId}\n${chatId ?? ''}\n${query.trim()}`
+  // `forKey` records which (scope, account, chat, query, filter) the items belong to.
+  const currentKey = `${scope}\n${accountId}\n${chatId ?? ''}\n${filter ?? ''}\n${query.trim()}`
   const [results, setResults] = useState<{
     forKey: string | null
     items: PaletteItem[]
@@ -117,10 +124,23 @@ export function usePaletteItems({
     // --- Chats (pinned/recent list when query is empty, filtered while typing) ----------
     const loadChats = async (): Promise<PaletteItem[]> => {
       const items: PaletteItem[] = []
+      // The `unread` filter just uses core's `is:unread` query token,
+      // Core strips the token and returns only chats
+      // that have fresh messages (matching the text, if any)
+      //
+      // Rewrite the `:unread` alias to `is:unread`
+      const normalizedQuery =
+        filter == null ? trimmed.replace(/^:unread\b/gi, 'is:unread') : trimmed
+      const queryParts = [
+        filter === 'unread' ? IS_UNREAD_QUERY : '',
+        normalizedQuery,
+      ].filter(part => part !== '')
+      const queryString = queryParts.length > 0 ? queryParts.join(' ') : null
+
       const entries = await BackendRemote.rpc.getChatlistEntries(
         accountId,
         0,
-        trimmed !== '' ? trimmed : null,
+        queryString,
         null
       )
       const chatIds = entries.slice(0, MAX_PER_SECTION.chats)
@@ -143,6 +163,8 @@ export function usePaletteItems({
             avatarPath: item.avatarPath,
             color: item.color,
           },
+          freshMessageCounter: item.freshMessageCounter,
+          isMuted: item.isMuted,
           // Enter opens the chat; Tab drills into it to search within
           // tbd: maybe show a hint: tab to search within (like github does)
           chatScope: { id: item.id, name: item.name },
@@ -264,6 +286,7 @@ export function usePaletteItems({
 
       const hasQuery = trimmed !== ''
       const inChatScope = scope === 'chat'
+      const hasFilter = scope === 'account' && filter != null
 
       const [chats, contacts, messages] = await Promise.all([
         scope === 'account'
@@ -273,13 +296,15 @@ export function usePaletteItems({
             })
           : Promise.resolve([]),
         // Contacts and messages only make sense when there is a query.
-        scope === 'account' && hasQuery
+        scope === 'account' && hasQuery && !hasFilter
           ? loadContacts().catch(error => {
               log.error('failed to search contacts', error)
               return []
             })
           : Promise.resolve([]),
-        (scope === 'account' || (inChatScope && chatId != null)) && hasQuery
+        (scope === 'account' || (inChatScope && chatId != null)) &&
+        hasQuery &&
+        !hasFilter
           ? loadMessages().catch(error => {
               log.error('failed to search messages', error)
               return []

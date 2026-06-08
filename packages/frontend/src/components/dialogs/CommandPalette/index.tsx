@@ -21,13 +21,22 @@ import styles from './styles.module.scss'
 
 import type { DialogProps } from '../../../contexts/DialogContext'
 import type {
-  AccountPartial,
+  PaletteFilter,
   PaletteItem,
   PaletteScope,
   PaletteSection,
+  AccountPartial,
 } from './types'
 
 const log = getLogger('renderer/CommandPalette')
+
+/**
+ * Tokens that activate the unread filter.
+ * `is:unread` is an existing filter in core
+ * `:unread` as convenience alias.
+ * Adding a space creates a filter badge See {@link PaletteFilter}.
+ */
+const UNREAD_FILTER_TRIGGER = /^(?:is)?:unread\s/i
 
 type Props = {
   onClose: DialogProps['onClose']
@@ -78,6 +87,9 @@ export default function CommandPalette({ onClose }: Props) {
     name: string
   } | null>(null)
   const [query, setQuery] = useState('')
+  // Active filter keyword (e.g. `:unread`), shown as a badge.
+  // cleared when the scope changes
+  const [filter, setFilter] = useState<PaletteFilter | null>(null)
   const [activeIndex, setActiveIndex] = useState(0)
   const listRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -192,6 +204,7 @@ export default function CommandPalette({ onClose }: Props) {
     scope,
     chatId: scopedChat?.id,
     query,
+    filter: scope === 'account' ? filter : null,
     actions,
   })
 
@@ -214,6 +227,23 @@ export default function CommandPalette({ onClose }: Props) {
     void item?.run()
   }
 
+  // If a filter token is detected add it as filter badge
+  // For now filters only apply in the `account` scope
+  const onQueryChange = (value: string) => {
+    if (
+      filter == null &&
+      scope === 'account' &&
+      UNREAD_FILTER_TRIGGER.test(value)
+    ) {
+      setFilter('unread')
+      setQuery(
+        value.replace(UNREAD_FILTER_TRIGGER, ' ').replace(/\s+/g, ' ').trim()
+      )
+      return
+    }
+    setQuery(value)
+  }
+
   const popScope = () => {
     if (scope === 'chat') {
       setScope('account')
@@ -222,6 +252,7 @@ export default function CommandPalette({ onClose }: Props) {
       setScope('root')
       // Leaving the peeked account goes back to the account list.
       setScopedAccount(null)
+      setFilter(null)
     }
   }
 
@@ -229,6 +260,7 @@ export default function CommandPalette({ onClose }: Props) {
     setScope('chat')
     setScopedChat(chat)
     setQuery('')
+    setFilter(null)
   }
 
   const enterAccountScope = (account: AccountPartial) => {
@@ -236,6 +268,7 @@ export default function CommandPalette({ onClose }: Props) {
     setScopedAccount(account)
     setScopedChat(null)
     setQuery('')
+    setFilter(null)
   }
 
   const onInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -259,6 +292,10 @@ export default function CommandPalette({ onClose }: Props) {
         e.preventDefault()
         enterAccountScope(item.accountScope)
       }
+    } else if (e.key === 'Backspace' && query === '' && filter != null) {
+      // The filter crumb is innermost, so remove it before popping the scope.
+      e.preventDefault()
+      setFilter(null)
     } else if (e.key === 'Backspace' && query === '' && scope !== 'root') {
       e.preventDefault()
       popScope()
@@ -272,7 +309,8 @@ export default function CommandPalette({ onClose }: Props) {
         ? tx('search_in_chat')
         : tx('search_explain')
 
-  const showNoResults = !isLoading && items.length === 0 && query.trim() !== ''
+  const showNoResults =
+    !isLoading && items.length === 0 && (query.trim() !== '' || filter != null)
 
   // concerning accessibility this implementation tries to follow the recommendations of
   // https://www.w3.org/WAI/ARIA/apg/patterns/combobox/examples/combobox-autocomplete-list/
@@ -333,6 +371,24 @@ export default function CommandPalette({ onClose }: Props) {
             <span className={styles.crumbSep}>/</span>
           </span>
         )}
+        {scope === 'account' && filter === 'unread' && (
+          <span className={styles.filterCrumb}>
+            <span className={styles.crumbLabel}>
+              {tx('command_palette_filter_unread')}
+            </span>
+            <button
+              type='button'
+              className={styles.crumbRemove}
+              aria-label={tx('remove_desktop')}
+              onClick={() => {
+                setFilter(null)
+                inputRef.current?.focus()
+              }}
+            >
+              <Icon icon='cross' size={14} />
+            </button>
+          </span>
+        )}
         <input
           id='command-palette-search'
           ref={inputRef}
@@ -342,7 +398,7 @@ export default function CommandPalette({ onClose }: Props) {
           spellCheck={false}
           placeholder={placeholder}
           value={query}
-          onChange={e => setQuery(e.target.value)}
+          onChange={e => onQueryChange(e.target.value)}
           onKeyDown={onInputKeyDown}
           aria-label={tx('search')}
           role='combobox'
@@ -371,8 +427,12 @@ export default function CommandPalette({ onClose }: Props) {
       <div className={styles.list} ref={listRef}>
         <div role='status' style={{ display: 'contents' }}>
           {showNoResults && (
-            <div className={styles.empty}>
-              {tx('search_no_result_for_x', query)}
+            <div className={styles.empty} role='status'>
+              {query.trim() !== ''
+                ? tx('search_no_result_for_x', query)
+                : filter === 'unread'
+                  ? tx('command_palette_no_unread')
+                  : tx('search_no_result_for_x', query)}
             </div>
           )}
         </div>
@@ -441,6 +501,20 @@ export default function CommandPalette({ onClose }: Props) {
                         </span>
                       )}
                     </span>
+                    {item.freshMessageCounter ? (
+                      <span
+                        className={`${styles.freshMessageCounter} ${
+                          item.isMuted ? styles.freshMessageCounterMuted : ''
+                        }`}
+                        aria-label={tx(
+                          'chat_n_new_messages',
+                          String(item.freshMessageCounter),
+                          { quantity: item.freshMessageCounter }
+                        )}
+                      >
+                        {item.freshMessageCounter}
+                      </span>
+                    ) : null}
                     {isActive && (item.chatScope || item.accountScope) && (
                       <span className={styles.tabHint} aria-hidden>
                         {tx('command_palette_tab_to_search')}
