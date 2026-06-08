@@ -21,7 +21,7 @@ import styles from './styles.module.scss'
 
 import type { DialogProps } from '../../../contexts/DialogContext'
 import type {
-  PaletteAccountRef,
+  AccountPartial,
   PaletteItem,
   PaletteScope,
   PaletteSection,
@@ -58,7 +58,7 @@ function sectionLabel(
 
 export default function CommandPalette({ onClose }: Props) {
   const tx = useTranslationFunction()
-  const accountId = selectedAccountId()
+  const currentAccountId = selectedAccountId()
   const { selectChat } = useChat()
   const { jumpToMessage } = useMessage()
   const createChatByContactId = useCreateChatByContactId()
@@ -70,7 +70,7 @@ export default function CommandPalette({ onClose }: Props) {
   // When set (after Tab on an account in root scope) the palette browses this
   // account instead of the active one, *without* switching to it. The switch
   // only happens once a chat/message is actually opened with enter
-  const [scopedAccount, setScopedAccount] = useState<PaletteAccountRef | null>(
+  const [scopedAccount, setScopedAccount] = useState<AccountPartial | null>(
     null
   )
   const [scopedChat, setScopedChat] = useState<{
@@ -84,10 +84,10 @@ export default function CommandPalette({ onClose }: Props) {
 
   // The account the chats/contacts/messages are searched in: the peeked
   // account when browsing another one, otherwise the active account.
-  const effectiveAccountId = scopedAccount?.id ?? accountId
+  const effectiveAccountId = scopedAccount?.id ?? currentAccountId
 
   const accountFetch = useRpcFetch(BackendRemote.rpc.getAccountInfo, [
-    accountId,
+    currentAccountId,
   ])
   const accountInfo = accountFetch?.lingeringResult?.ok
     ? accountFetch.lingeringResult.value
@@ -108,22 +108,22 @@ export default function CommandPalette({ onClose }: Props) {
 
   const actions: PaletteActions = useMemo(
     () => ({
-      selectChat: async (accId, cId) => {
-        if (accId === accountId) {
-          selectChat(accId, cId)
+      selectChat: async (scopeAccountId, cId) => {
+        if (scopeAccountId === currentAccountId) {
+          selectChat(scopeAccountId, cId)
           return
         }
         try {
-          await saveLastChatId(accId, cId)
-          await window.__selectAccount(accId)
+          await saveLastChatId(scopeAccountId, cId)
+          await window.__selectAccount(scopeAccountId)
         } catch (error) {
           log.error('failed to open chat in other account', error)
         }
       },
-      jumpToMessage: async (accId, cId, msgId) => {
-        if (accId === accountId) {
+      jumpToMessage: async (scopeAccountId, cId, msgId) => {
+        if (scopeAccountId === currentAccountId) {
           jumpToMessage({
-            accountId: accId,
+            accountId: scopeAccountId,
             msgId,
             msgChatId: cId,
             focus: false,
@@ -134,10 +134,10 @@ export default function CommandPalette({ onClose }: Props) {
         try {
           // `jumpToMessage` can't cross accounts, so switch first and then jump
           // once the target account's message list mounts.
-          await saveLastChatId(accId, cId)
-          await window.__selectAccount(accId)
+          await saveLastChatId(scopeAccountId, cId)
+          await window.__selectAccount(scopeAccountId)
           window.__internal_jump_to_message_asap = {
-            accountId: accId,
+            accountId: scopeAccountId,
             chatId: cId,
             jumpToMessageArgs: [
               { msgId, scrollIntoViewArg: { block: 'center' }, focus: false },
@@ -148,19 +148,29 @@ export default function CommandPalette({ onClose }: Props) {
           log.error('failed to jump to message in other account', error)
         }
       },
-      createChatByContactId: async (accId, contactId) => {
-        if (accId === accountId) {
-          await createChatByContactId(accId, contactId)
+      createChatByContactId: async (scopeAccountId, contactId) => {
+        if (scopeAccountId === currentAccountId) {
+          await createChatByContactId(scopeAccountId, contactId)
           return
         }
         try {
-          const cId = await createChatByContactIdBackend(accId, contactId)
-          const chat = await BackendRemote.rpc.getBasicChatInfo(accId, cId)
+          const cId = await createChatByContactIdBackend(
+            scopeAccountId,
+            contactId
+          )
+          const chat = await BackendRemote.rpc.getBasicChatInfo(
+            scopeAccountId,
+            cId
+          )
           if (chat.archived) {
-            await BackendRemote.rpc.setChatVisibility(accId, cId, 'Normal')
+            await BackendRemote.rpc.setChatVisibility(
+              scopeAccountId,
+              cId,
+              'Normal'
+            )
           }
-          await saveLastChatId(accId, cId)
-          await window.__selectAccount(accId)
+          await saveLastChatId(scopeAccountId, cId)
+          await window.__selectAccount(scopeAccountId)
         } catch (error) {
           log.error('failed to open contact chat in other account', error)
         }
@@ -168,7 +178,13 @@ export default function CommandPalette({ onClose }: Props) {
       switchAccount: window.__selectAccount,
       close: onClose,
     }),
-    [accountId, selectChat, jumpToMessage, createChatByContactId, onClose]
+    [
+      currentAccountId,
+      selectChat,
+      jumpToMessage,
+      createChatByContactId,
+      onClose,
+    ]
   )
 
   const { items, isLoading } = usePaletteItems({
@@ -215,7 +231,7 @@ export default function CommandPalette({ onClose }: Props) {
     setQuery('')
   }
 
-  const enterAccountScope = (account: PaletteAccountRef) => {
+  const enterAccountScope = (account: AccountPartial) => {
     setScope('account')
     setScopedAccount(account)
     setScopedChat(null)
@@ -254,7 +270,7 @@ export default function CommandPalette({ onClose }: Props) {
       ? tx('switch_account')
       : scope === 'chat'
         ? tx('search_in_chat')
-        : tx('command_palette_placeholder')
+        : tx('search_explain')
 
   const showNoResults = !isLoading && items.length === 0 && query.trim() !== ''
 
@@ -271,18 +287,21 @@ export default function CommandPalette({ onClose }: Props) {
   const activeOptionIndex = Math.max(0, Math.min(activeIndex, items.length - 1))
 
   // Group items by their `section` so we can render section headers
-  const groups: {
-    section: PaletteSection
-    entries: { item: PaletteItem; index: number }[]
-  }[] = []
-  items.forEach((item, index) => {
-    const last = groups[groups.length - 1]
-    if (last && last.section === item.section) {
-      last.entries.push({ item, index })
-    } else {
-      groups.push({ section: item.section, entries: [{ item, index }] })
-    }
-  })
+  const groups = useMemo(() => {
+    const groups: {
+      section: PaletteSection
+      entries: { item: PaletteItem; index: number }[]
+    }[] = []
+    items.forEach((item, index) => {
+      const last = groups[groups.length - 1]
+      if (last && last.section === item.section) {
+        last.entries.push({ item, index })
+      } else {
+        groups.push({ section: item.section, entries: [{ item, index }] })
+      }
+    })
+    return groups
+  }, [items])
 
   return (
     <Dialog
@@ -350,11 +369,13 @@ export default function CommandPalette({ onClose }: Props) {
         )}
       </div>
       <div className={styles.list} ref={listRef}>
-        {showNoResults && (
-          <div className={styles.empty} role='status'>
-            {tx('search_no_result_for_x', query)}
-          </div>
-        )}
+        <div role='status' style={{ display: 'contents' }}>
+          {showNoResults && (
+            <div className={styles.empty}>
+              {tx('search_no_result_for_x', query)}
+            </div>
+          )}
+        </div>
         <div role='listbox' id={listboxId} aria-label={tx('search_explain')}>
           {groups.map(group => (
             <div

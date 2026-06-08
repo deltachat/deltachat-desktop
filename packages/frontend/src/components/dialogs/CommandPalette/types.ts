@@ -3,7 +3,7 @@ export type PaletteSection = 'accounts' | 'chats' | 'contacts' | 'messages'
 export type PaletteScope = 'root' | 'account' | 'chat'
 
 /** Enough info to scope the palette to (and label the crumb for) an account. */
-export type PaletteAccountRef = {
+export type AccountPartial = {
   id: number
   name: string
   avatarPath?: string | null
@@ -29,7 +29,7 @@ export type PaletteItem = {
   chatScope?: { id: number; name: string }
   // Set on account items (root scope): Tab drills into that account to
   // browse its chats/messages without switching to it yet.
-  accountScope?: PaletteAccountRef
+  accountScope?: AccountPartial
   // inside a chat (message search results), the message text (subtitle)
   // is the most important part so we render it stronger than the label and the author
   labelDimmed?: boolean
