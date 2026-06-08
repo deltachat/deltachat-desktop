@@ -39,6 +39,33 @@
   margin-inline-start: 2px;
 }
 
+.filterCrumb {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex: none;
+  padding: 2px 4px 2px 8px;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.9em;
+  background-color: var(--commandPaletteTabHintBg);
+}
+
+.crumbRemove {
+  display: flex;
+  align-items: center;
+  border: none;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  padding: 0;
+  opacity: 0.6;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
 .searchInput {
   flex: 1;
   min-width: 80px;
@@ -123,6 +150,24 @@
   font-size: 0.75em;
   white-space: nowrap;
   background-color: var(--commandPaletteTabHintBg);
+}
+
+.freshMessageCounter {
+  flex: none;
+  margin-inline-start: 8px;
+  color: var(--unreadCountLabel);
+  background-color: var(--unreadCountBg);
+  text-align: center;
+  font-size: 9pt;
+  height: 20px;
+  padding: 0 5pt;
+  line-height: 20px;
+  border-radius: 10px;
+  font-weight: bold;
+}
+
+.freshMessageCounterMuted {
+  background-color: var(--unreadCountBgMuted);
 }
 
 .itemLabel {

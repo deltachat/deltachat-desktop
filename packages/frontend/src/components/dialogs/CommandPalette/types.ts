@@ -2,6 +2,8 @@ export type PaletteSection = 'accounts' | 'chats' | 'contacts' | 'messages'
 
 export type PaletteScope = 'root' | 'account' | 'chat'
 
+export type PaletteFilter = 'unread'
+
 /** Enough info to scope the palette to (and label the crumb for) an account. */
 export type AccountPartial = {
   id: number
@@ -26,6 +28,8 @@ export type PaletteItem = {
   subtitle?: string
   subtitleAuthor?: string
   avatar?: PaletteAvatar
+  freshMessageCounter?: number
+  isMuted?: boolean
   chatScope?: { id: number; name: string }
   // Set on account items (root scope): Tab drills into that account to
   // browse its chats/messages without switching to it yet.

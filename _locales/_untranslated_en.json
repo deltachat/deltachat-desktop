@@ -2,6 +2,12 @@
   "command_palette_tab_to_search": {
     "message": "Tab to search"
   },
+  "command_palette_filter_unread": {
+    "message": "Unread"
+  },
+  "command_palette_no_unread": {
+    "message": "No unread chats"
+  },
   "pref_background_sync_disabled": {
     "message": "Only Synchronize Selected Profile"
   },
