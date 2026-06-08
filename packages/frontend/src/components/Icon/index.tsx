@@ -21,6 +21,7 @@ export type IconName =
   | 'favorite'
   | 'forum'
   | 'image'
+  | 'icon-archive'
   | 'image_outline'
   | 'info'
   | 'lead-pencil'
@@ -44,6 +45,7 @@ export type IconName =
   | 'settings'
   | 'swap_vert'
   | 'swap_hor'
+  | 'trash'
   | 'upload-file'
   | 'visibility'
 

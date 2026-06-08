@@ -84,8 +84,32 @@ const enum GroupType {
   BROADCAST_LIST = 'broadcast_list',
 }
 
-export default function CreateChat(props: DialogProps) {
-  const { onClose } = props
+/** Lets callers (e.g. the command palette) open CreateChat in a specific view. */
+export type CreateChatInitialAction = 'new-group' | 'new-channel'
+
+export default function CreateChat(
+  props: DialogProps & { initialAction?: CreateChatInitialAction }
+) {
+  const { onClose, initialAction } = props
+  const { openDialog } = useDialog()
+
+  // When opened with an `initialAction` (e.g. from the command palette),
+  // immediately open the corresponding creation dialog on top of "New Chat".
+  // Closing it (Escape) returns to "New Chat"; finishing closes both.
+  useEffect(() => {
+    if (initialAction === 'new-group') {
+      openDialog(CreateGroup, {
+        groupType: GroupType.REGULAR_GROUP as const,
+        onFinish: onClose,
+      })
+    } else if (initialAction === 'new-channel') {
+      openDialog(CreateBroadcastList, {
+        onFinish: onClose,
+      })
+    }
+    // Only run once on mount.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <Dialog width={400} onClose={onClose} fixed dataTestid='create-chat-dialog'>
