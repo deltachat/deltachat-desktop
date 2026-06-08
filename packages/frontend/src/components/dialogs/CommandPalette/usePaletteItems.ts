@@ -16,6 +16,8 @@ const MAX_PER_SECTION = {
   messages: 8,
 }
 
+const EMPTY_ITEMS: PaletteItem[] = []
+
 /**
  * Core's `is:unread` filter token, can also be triggered by `:unread`
  */
@@ -45,6 +47,8 @@ export type UsePaletteItemsParams = {
   query: string
   filter: PaletteFilter | null
   actions: PaletteActions
+  /** When false, no search runs (e.g. while in command mode). */
+  enabled: boolean
 }
 
 export function usePaletteItems({
@@ -54,9 +58,12 @@ export function usePaletteItems({
   query,
   filter,
   actions,
+  enabled,
 }: UsePaletteItemsParams): { items: PaletteItem[]; isLoading: boolean } {
   // `forKey` records which (scope, account, chat, query, filter) the items belong to.
-  const currentKey = `${scope}\n${accountId}\n${chatId ?? ''}\n${filter ?? ''}\n${query.trim()}`
+  const currentKey = enabled
+    ? `${scope}\n${accountId}\n${chatId ?? ''}\n${filter ?? ''}\n${query.trim()}`
+    : 'disabled'
   const [results, setResults] = useState<{
     forKey: string | null
     items: PaletteItem[]
@@ -69,6 +76,9 @@ export function usePaletteItems({
   }, [actions])
 
   useEffect(() => {
+    if (!enabled) {
+      return
+    }
     let cancelled = false
     const trimmed = query.trim()
     const needle = trimmed.toLowerCase()
@@ -330,5 +340,8 @@ export function usePaletteItems({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentKey])
 
+  if (!enabled) {
+    return { items: EMPTY_ITEMS, isLoading: false }
+  }
   return { items: results.items, isLoading: results.forKey !== currentKey }
 }

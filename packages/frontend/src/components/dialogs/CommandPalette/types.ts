@@ -1,4 +1,11 @@
-export type PaletteSection = 'accounts' | 'chats' | 'contacts' | 'messages'
+import type { IconName } from '../../Icon'
+
+export type PaletteSection =
+  | 'commands'
+  | 'accounts'
+  | 'chats'
+  | 'contacts'
+  | 'messages'
 
 export type PaletteScope = 'root' | 'account' | 'chat'
 
@@ -30,6 +37,11 @@ export type PaletteItem = {
   avatar?: PaletteAvatar
   freshMessageCounter?: number
   isMuted?: boolean
+  /** Leading icon, used by command items that have no avatar. */
+  icon?: IconName
+  /** Override the leading icon size (px) — some glyphs read small by default. */
+  iconSize?: number
+  requiresTarget?: 'chat' | 'contact'
   chatScope?: { id: number; name: string }
   // Set on account items (root scope): Tab drills into that account to
   // browse its chats/messages without switching to it yet.

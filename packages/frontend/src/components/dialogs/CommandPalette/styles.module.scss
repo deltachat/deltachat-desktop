@@ -133,6 +133,17 @@
   }
 }
 
+.itemIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  // Match the footprint of `Avatar small` so labels line up across rows.
+  inline-size: 32px;
+  block-size: 32px;
+  flex: none;
+  opacity: 0.7;
+}
+
 .itemText {
   display: flex;
   flex-direction: column;
