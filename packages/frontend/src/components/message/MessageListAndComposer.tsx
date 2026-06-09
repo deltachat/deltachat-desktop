@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useCallback, useEffectEvent } from 'react'
+import React, { useRef, useEffect, useEffectEvent } from 'react'
 import { join, parse, ParsedPath } from 'path'
 import { T } from '@deltachat/jsonrpc-client'
 
@@ -205,69 +205,11 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     e.stopPropagation()
   }
 
-  const onMouseUp = useCallback(
-    (e: MouseEvent) => {
-      const selection = window.getSelection()
-
-      if (selection?.type === 'Range' && selection.rangeCount > 0) {
-        return
-      }
-      const targetTagName = (e.target as unknown as any)?.tagName
-
-      if (targetTagName === 'INPUT' || targetTagName === 'TEXTAREA') {
-        return
-      }
-
-      // don't force focus on the message input as long as the emoji picker is open
-      if (
-        document.querySelector(':focus')?.tagName?.toLowerCase() ===
-        'em-emoji-picker'
-      ) {
-        return
-      }
-
-      // TODO this function pretty much never works, because of this condition.
-      // trying to focus the composer while a dialog is open
-      // is impossible, because the dialog will keep focus inside of it.
-      //
-      // The condition was probably meant to be the opposite
-      // (i.e. do nothing if a dialog is open),
-      // but it only incidentally fixed the bug that it was intended to fix
-      // (https://github.com/deltachat/deltachat-desktop/issues/3286),
-      // while at the same time breaking the function.
-      //
-      // However, we probably should not fix this function
-      // and remove it instead, for accessibility reasons, laid out here:
-      // https://github.com/deltachat/deltachat-desktop/issues/4590.
-      //
-      // The same goes for the check in
-      // `ComposerMessageInput.componentDidUpdate`.
-      if (!hasOpenDialogs) {
-        return
-      }
-
-      e.preventDefault()
-      e.stopPropagation()
-
-      // Only one of these is actually rendered at any given moment.
-      regularMessageInputRef.current?.focus()
-      editMessageInputRef.current?.focus()
-
-      return false
-    },
-    [hasOpenDialogs]
-  )
   useEffect(() => {
     // Only one of these is actually rendered at any given moment.
     regularMessageInputRef.current?.focus()
     editMessageInputRef.current?.focus()
   }, [])
-  useEffect(() => {
-    window.addEventListener('mouseup', onMouseUp)
-    return () => {
-      window.removeEventListener('mouseup', onMouseUp)
-    }
-  }, [onMouseUp])
 
   const settingsStore = useSettingsStore()[0]
   // If you want to update this, don't forget to update

@@ -126,6 +126,20 @@ export function matchesNonLetterShortcut(
   const isPrintableAscii = ev.key.length === 1 && ev.key >= ' ' && ev.key <= '~'
   return !isPrintableAscii && ev.code === code
 }
+const regexIsPrintable = /\S| /
+function isPrintableCharacter(str: KeyboardEvent['key']): boolean {
+  // From https://www.w3.org/WAI/ARIA/apg/patterns/combobox/
+  return str.length === 1 && regexIsPrintable.test(str)
+}
+
+function isInput(el: HTMLElement): boolean {
+  return (
+    el.tagName === 'TEXTAREA' ||
+    el.tagName === 'INPUT' ||
+    el.tagName === 'SELECT' ||
+    el.isContentEditable
+  )
+}
 
 function haveOpenDialogs(): boolean {
   return document.querySelector('dialog:modal') != null
@@ -245,6 +259,46 @@ export function keyDownEvent2Action(
       matchesNonLetterShortcut(ev, '/', 'Slash')
     ) {
       return KeybindAction.KeybindingCheatSheet_Open
+    } else if (
+      // When the user tries to type but the composer is not focused, focus it.
+      //
+      // Accessibility-wise this should be OK, because
+      // https://www.w3.org/WAI/ARIA/apg/patterns/combobox/
+      // has similar behavior, see the "Printable Characters" part.
+      //
+      // See also similar code in Element
+      // https://github.com/element-hq/element-web/blob/c57d66bb45a89451efefc1fcb2c3131040670da6/apps/web/src/components/structures/LoggedInView.tsx#L680-L706
+      //
+      // Don't check Shift (uppercase), and apparently Alt
+      // also needs to be skipped, because it's a common accent modifier.
+      !ev.ctrlKey &&
+      !ev.metaKey &&
+      !(
+        document.activeElement instanceof HTMLElement &&
+        isInput(document.activeElement)
+      ) &&
+      // Regular keyboard "click".
+      ev.code !== 'Space' &&
+      ev.code !== 'Enter' &&
+      isPrintableCharacter(ev.key)
+    ) {
+      // Not `Composer_Focus` because that focuses the composer
+      // only after a `setTimeout`, which would not result
+      // in this keystroke getting typed.
+      const composer = document.getElementsByClassName(
+        'create-or-edit-message-input'
+      )[0]
+      if (!(composer instanceof HTMLElement)) {
+        // Could happen if the composer is not displayed,
+        // e.g. for read-only chats (e.g. channels).
+        log.info(
+          "Tried to focus composer on typing start, but it's not present",
+          composer
+        )
+        return
+      }
+
+      composer.focus()
     }
   } else {
     // fire continuesly as long as button is pressed

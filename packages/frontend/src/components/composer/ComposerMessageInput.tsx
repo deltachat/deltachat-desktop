@@ -98,7 +98,8 @@ export default class ComposerMessageInput extends React.Component<
         // Focus on the current selection, hack for focusing on newlines
         // TODO this pretty much doesn't work,
         // because you can't focus an element that is covered by a dialog.
-        // See the comment in `onMouseUp` in `MessageListAndComposer`.
+        // See the comment added in 0c1de2505731b6fc420c8d30cc683a57606d4a4b
+        // (https://github.com/deltachat/deltachat-desktop/pull/5127).
         if (this.context.hasOpenDialogs) {
           this.textareaRef.current.blur()
           this.textareaRef.current.focus()
