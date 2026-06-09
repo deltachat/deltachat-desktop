@@ -96,9 +96,7 @@ export function usePaletteCommands({
       commands.push({
         id: 'cmd-archive',
         section: 'commands',
-        icon: 'icon-archive',
-        // The archive glyph reads small at the default size, so render it bigger.
-        iconSize: 40,
+        icon: 'archive',
         label: chatItem.isArchived
           ? tx('menu_unarchive_chat')
           : tx('menu_archive_chat'),
