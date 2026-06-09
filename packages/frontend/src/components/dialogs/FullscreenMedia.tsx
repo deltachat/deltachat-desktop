@@ -253,13 +253,8 @@ export default function FullscreenMedia(props: Props & DialogProps) {
     }
   }, [previousNextMessageId, setMsg, zoomResetRef])
 
-  useEffect(() => {
-    // use events directly for now
-    // this will need adjustment to the keybindings manager once we have proper screen management
-    // where we can know exactly which screen / menu / dialog is focused
-    // and only send the context dependend keys to there
-    // for now limit only to left/right arrow to not mess up Escape-handling for dialog
-    const listener = (ev: KeyboardEvent) => {
+  const onKeyDown = useCallback(
+    (ev: React.KeyboardEvent) => {
       if (ev.repeat) {
         return
       }
@@ -275,61 +270,65 @@ export default function FullscreenMedia(props: Props & DialogProps) {
       } else if (right) {
         nextImage()
       }
-    }
-    document.addEventListener('keydown', listener)
-    return () => document.removeEventListener('keydown', listener)
-  }, [previousImage, nextImage])
+    },
+    [previousImage, nextImage]
+  )
 
   if (!msg || !msg.file) return elm
 
   return (
     <Dialog unstyled onClose={onClose}>
-      <div className='attachment-view'>{elm}</div>
-      {runtime.getRuntimeInfo().isMac && (
-        <div className='attachment-view-drag-bar' data-tauri-drag-region></div>
-      )}
-      {elm && (
-        <div className='btn-wrapper' data-no-drag-region>
-          <IconButton
-            onClick={onDownload.bind(null, msg)}
-            icon='download'
-            size={32}
-            coloring='fullscreenControls'
-            aria-label={tx('save')}
-          />
-          <IconButton
-            onClick={onClose}
-            icon='cross'
-            size={32}
-            coloring='fullscreenControls'
-            aria-label={tx('close')}
-          />
-        </div>
-      )}
-      {showPreviousNextMessageButtons.previous && (
-        <div className='media-previous-button'>
-          <IconButton
-            // eslint-disable-next-line react-hooks/refs
-            onClick={preventDefault(previousImage)}
-            icon='chevron-left'
-            coloring='fullscreenControls'
-            size={60}
-            aria-label='⬅️'
-          />
-        </div>
-      )}
-      {showPreviousNextMessageButtons.next && (
-        <div className='media-next-button'>
-          <IconButton
-            // eslint-disable-next-line react-hooks/refs
-            onClick={preventDefault(nextImage)}
-            icon='chevron-right'
-            coloring='fullscreenControls'
-            size={60}
-            aria-label='➡️'
-          />
-        </div>
-      )}
+      <div style={{ display: 'contents' }} onKeyDown={onKeyDown}>
+        <div className='attachment-view'>{elm}</div>
+        {runtime.getRuntimeInfo().isMac && (
+          <div
+            className='attachment-view-drag-bar'
+            data-tauri-drag-region
+          ></div>
+        )}
+        {elm && (
+          <div className='btn-wrapper' data-no-drag-region>
+            <IconButton
+              onClick={onDownload.bind(null, msg)}
+              icon='download'
+              size={32}
+              coloring='fullscreenControls'
+              aria-label={tx('save')}
+            />
+            <IconButton
+              onClick={onClose}
+              icon='cross'
+              size={32}
+              coloring='fullscreenControls'
+              aria-label={tx('close')}
+            />
+          </div>
+        )}
+        {showPreviousNextMessageButtons.previous && (
+          <div className='media-previous-button'>
+            <IconButton
+              // eslint-disable-next-line react-hooks/refs
+              onClick={preventDefault(previousImage)}
+              icon='chevron-left'
+              coloring='fullscreenControls'
+              size={60}
+              aria-label='⬅️'
+            />
+          </div>
+        )}
+        {showPreviousNextMessageButtons.next && (
+          <div className='media-next-button'>
+            <IconButton
+              // eslint-disable-next-line react-hooks/refs
+              onClick={preventDefault(nextImage)}
+              icon='chevron-right'
+              coloring='fullscreenControls'
+              size={60}
+              aria-label='➡️'
+            />
+          </div>
+        )}
+      </div>
     </Dialog>
   )
 }
