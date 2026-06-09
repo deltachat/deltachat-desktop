@@ -22,6 +22,7 @@ export enum KeybindAction {
   Composer_CancelReply = 'composer:cancel-reply',
   NewChat_Open = 'new-chat:open',
   CommandPalette_Open = 'command-palette:open',
+  CommandPalette_OpenSearch = 'command-palette:open-search',
   Settings_Open = 'settings:open',
   KeybindingCheatSheet_Open = 'keybindinginfo:open',
   MessageList_PageUp = 'msglist:pageup',
@@ -172,6 +173,8 @@ export function keyDownEvent2Action(
     } else if ((ev.metaKey || ev.ctrlKey) && matchesLetterShortcut(ev, 'n')) {
       return KeybindAction.NewChat_Open
     } else if ((ev.metaKey || ev.ctrlKey) && matchesLetterShortcut(ev, 'k')) {
+      return KeybindAction.CommandPalette_OpenSearch
+    } else if ((ev.metaKey || ev.ctrlKey) && matchesLetterShortcut(ev, 'p')) {
       return KeybindAction.CommandPalette_Open
     } else if (ev.ctrlKey && matchesLetterShortcut(ev, 'm')) {
       return KeybindAction.Composer_Focus

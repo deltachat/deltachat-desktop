@@ -34,7 +34,7 @@ export type PaletteActions = {
   close: () => void
 }
 
-export type UsePaletteItemsParams = {
+export type UsePaletteSearchParams = {
   accountId: number
   /**
    * Scope for the current query, which determines what is shown in the list:
@@ -51,7 +51,7 @@ export type UsePaletteItemsParams = {
   enabled: boolean
 }
 
-export function usePaletteItems({
+export function usePaletteSearch({
   accountId,
   scope,
   chatId,
@@ -59,7 +59,7 @@ export function usePaletteItems({
   filter,
   actions,
   enabled,
-}: UsePaletteItemsParams): { items: PaletteItem[]; isLoading: boolean } {
+}: UsePaletteSearchParams): { items: PaletteItem[]; isLoading: boolean } {
   // `forKey` records which (scope, account, chat, query, filter) the items belong to.
   const currentKey = enabled
     ? `${scope}\n${accountId}\n${chatId ?? ''}\n${filter ?? ''}\n${query.trim()}`
