@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+<a id="2_52_0"></a>
+## [2.52.0] - 2026-06-09
+
+### Miscellaneous Tasks
+- Upgrade core to 2.52.0
+
 <a id="2_51_0"></a>
 ## [2.51.0] - 2026-05-30
 
@@ -4100,7 +4106,8 @@ This section is only relevant to contributors.
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.51.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.52.0...HEAD
+[2.52.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.51.0...v2.52.0
 [2.51.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.49.1...v2.51.0
 [2.49.1]: https://github.com/deltachat/deltachat-desktop/compare/v2.49.0...v2.49.1
 [2.49.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.48.0...v2.49.0
