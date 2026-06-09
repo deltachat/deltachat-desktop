@@ -10,26 +10,38 @@ import useMessage from '../../../hooks/chat/useMessage'
 import useCreateChatByContactId from '../../../hooks/chat/useCreateChatByContactId'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import { useRpcFetch } from '../../../hooks/useFetch'
+import useAlertDialog from '../../../hooks/dialog/useAlertDialog'
 import {
   saveLastChatId,
   createChatByContactId as createChatByContactIdBackend,
 } from '../../../backend/chat'
-import { usePaletteItems, type PaletteActions } from './usePaletteItems'
+import { usePaletteSearch, type PaletteActions } from './usePaletteSearch'
+import { usePaletteCommands } from './usePaletteCommands'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 
 import styles from './styles.module.scss'
 
 import type { DialogProps } from '../../../contexts/DialogContext'
 import type {
-  AccountPartial,
+  PaletteFilter,
   PaletteItem,
   PaletteScope,
   PaletteSection,
+  AccountPartial,
 } from './types'
 
 const log = getLogger('renderer/CommandPalette')
 
+/**
+ * Tokens that activate the unread filter.
+ * `is:unread` is an existing filter in core
+ * `:unread` as convenience alias.
+ * Adding a space creates a filter badge See {@link PaletteFilter}.
+ */
+const UNREAD_FILTER_TRIGGER = /^(?:is)?:unread\s/i
+
 type Props = {
+  mode?: 'search' | 'command'
   onClose: DialogProps['onClose']
 }
 
@@ -38,6 +50,7 @@ const SECTION_ICON: Record<PaletteSection, IconName> = {
   chats: 'forum',
   contacts: 'person',
   messages: 'chat_bubble',
+  commands: 'settings',
 }
 
 function sectionLabel(
@@ -53,15 +66,18 @@ function sectionLabel(
       return tx('contacts_headline')
     case 'messages':
       return tx('messages')
+    case 'commands':
+      return tx('command_palette_commands_section')
   }
 }
 
-export default function CommandPalette({ onClose }: Props) {
+export default function CommandPalette({ mode = 'search', onClose }: Props) {
   const tx = useTranslationFunction()
   const currentAccountId = selectedAccountId()
-  const { selectChat } = useChat()
+  const { selectChat, chatId: openChatId } = useChat()
   const { jumpToMessage } = useMessage()
   const createChatByContactId = useCreateChatByContactId()
+  const openAlertDialog = useAlertDialog()
 
   // Breadcrumb scope, opens with current account account showing the chatlist
   // Tab adds the highlighted chat to the breadcrumb , Backspace on an empty
@@ -77,7 +93,11 @@ export default function CommandPalette({ onClose }: Props) {
     id: number
     name: string
   } | null>(null)
-  const [query, setQuery] = useState('')
+  // when opened in command mode `>` is added to the input
+  const [query, setQuery] = useState(mode === 'command' ? '>' : '')
+  // Active filter keyword (e.g. `:unread`), shown as a badge.
+  // cleared when the scope changes
+  const [filter, setFilter] = useState<PaletteFilter | null>(null)
   const [activeIndex, setActiveIndex] = useState(0)
   const listRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -187,13 +207,36 @@ export default function CommandPalette({ onClose }: Props) {
     ]
   )
 
-  const { items, isLoading } = usePaletteItems({
+  // Command mode: typing `>` switches from search to command mode
+  const isCommandMode = query.startsWith('>') && !filter
+  const commandFilter = isCommandMode ? query.slice(1).trim().toLowerCase() : ''
+
+  const commands = usePaletteCommands({
+    accountId: effectiveAccountId,
+    scopedChat,
+    selectedChatId: openChatId ?? null,
+    close: onClose,
+  })
+
+  const { items: searchItems, isLoading } = usePaletteSearch({
     accountId: effectiveAccountId,
     scope,
     chatId: scopedChat?.id,
     query,
+    filter: scope === 'account' ? filter : null,
     actions,
+    enabled: !isCommandMode,
   })
+
+  const items = useMemo(() => {
+    if (!isCommandMode) {
+      return searchItems
+    }
+    if (commandFilter === '') {
+      return commands
+    }
+    return commands.filter(c => c.label.toLowerCase().includes(commandFilter))
+  }, [isCommandMode, commandFilter, commands, searchItems])
 
   // Reset the highlight to the top whenever the result set changes
   const [itemsForActive, setItemsForActive] = useState(items)
@@ -214,6 +257,33 @@ export default function CommandPalette({ onClose }: Props) {
     void item?.run()
   }
 
+  const onQueryChange = (value: string) => {
+    if (value.startsWith('>') && !isCommandMode && scopedAccount !== null) {
+      // command mode should only apply to current active account
+      // so we lock the `>` trigger and show a warning if in another scope
+      openAlertDialog({
+        message: tx('commands_in_current_account_only'),
+      }).then(() => {
+        setTimeout(() => inputRef.current?.focus(), 0)
+      })
+      return
+    }
+    // If a filter token is detected add it as filter badge
+    // For now filters only apply in the `account` scope
+    if (
+      filter == null &&
+      scope === 'account' &&
+      UNREAD_FILTER_TRIGGER.test(value)
+    ) {
+      setFilter('unread')
+      setQuery(
+        value.replace(UNREAD_FILTER_TRIGGER, ' ').replace(/\s+/g, ' ').trim()
+      )
+      return
+    }
+    setQuery(value)
+  }
+
   const popScope = () => {
     if (scope === 'chat') {
       setScope('account')
@@ -222,6 +292,7 @@ export default function CommandPalette({ onClose }: Props) {
       setScope('root')
       // Leaving the peeked account goes back to the account list.
       setScopedAccount(null)
+      setFilter(null)
     }
   }
 
@@ -229,6 +300,7 @@ export default function CommandPalette({ onClose }: Props) {
     setScope('chat')
     setScopedChat(chat)
     setQuery('')
+    setFilter(null)
   }
 
   const enterAccountScope = (account: AccountPartial) => {
@@ -236,6 +308,7 @@ export default function CommandPalette({ onClose }: Props) {
     setScopedAccount(account)
     setScopedChat(null)
     setQuery('')
+    setFilter(null)
   }
 
   const onInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -259,6 +332,10 @@ export default function CommandPalette({ onClose }: Props) {
         e.preventDefault()
         enterAccountScope(item.accountScope)
       }
+    } else if (e.key === 'Backspace' && query === '' && filter != null) {
+      // The filter crumb is innermost, so remove it before popping the scope.
+      e.preventDefault()
+      setFilter(null)
     } else if (e.key === 'Backspace' && query === '' && scope !== 'root') {
       e.preventDefault()
       popScope()
@@ -272,7 +349,8 @@ export default function CommandPalette({ onClose }: Props) {
         ? tx('search_in_chat')
         : tx('search_explain')
 
-  const showNoResults = !isLoading && items.length === 0 && query.trim() !== ''
+  const showNoResults =
+    !isLoading && items.length === 0 && (query.trim() !== '' || filter != null)
 
   // concerning accessibility this implementation tries to follow the recommendations of
   // https://www.w3.org/WAI/ARIA/apg/patterns/combobox/examples/combobox-autocomplete-list/
@@ -333,6 +411,24 @@ export default function CommandPalette({ onClose }: Props) {
             <span className={styles.crumbSep}>/</span>
           </span>
         )}
+        {scope === 'account' && filter === 'unread' && (
+          <span className={styles.filterCrumb}>
+            <span className={styles.crumbLabel}>
+              {tx('command_palette_filter_unread')}
+            </span>
+            <button
+              type='button'
+              className={styles.crumbRemove}
+              aria-label={tx('remove_desktop')}
+              onClick={() => {
+                setFilter(null)
+                inputRef.current?.focus()
+              }}
+            >
+              <Icon icon='cross' size={14} />
+            </button>
+          </span>
+        )}
         <input
           id='command-palette-search'
           ref={inputRef}
@@ -342,7 +438,7 @@ export default function CommandPalette({ onClose }: Props) {
           spellCheck={false}
           placeholder={placeholder}
           value={query}
-          onChange={e => setQuery(e.target.value)}
+          onChange={e => onQueryChange(e.target.value)}
           onKeyDown={onInputKeyDown}
           aria-label={tx('search')}
           role='combobox'
@@ -371,8 +467,14 @@ export default function CommandPalette({ onClose }: Props) {
       <div className={styles.list} ref={listRef}>
         <div role='status' style={{ display: 'contents' }}>
           {showNoResults && (
-            <div className={styles.empty}>
-              {tx('search_no_result_for_x', query)}
+            <div className={styles.empty} role='status'>
+              {isCommandMode
+                ? tx('search_no_result_for_x', commandFilter)
+                : query.trim() !== ''
+                  ? tx('search_no_result_for_x', query)
+                  : filter === 'unread'
+                    ? tx('command_palette_no_unread')
+                    : tx('search_no_result_for_x', query)}
             </div>
           )}
         </div>
@@ -406,15 +508,21 @@ export default function CommandPalette({ onClose }: Props) {
                     onClick={() => runItem(item)}
                     title={item.subtitle ? `${item.subtitle}` : item.label}
                   >
-                    {item.avatar && (
-                      <Avatar
-                        small
-                        displayName={item.avatar.displayName}
-                        avatarPath={item.avatar.avatarPath || undefined}
-                        color={item.avatar.color}
-                        addr={item.avatar.addr}
-                        aria-hidden
-                      />
+                    {item.icon ? (
+                      <span className={styles.itemIcon}>
+                        <Icon icon={item.icon} size={item.iconSize ?? 20} />
+                      </span>
+                    ) : (
+                      item.avatar && (
+                        <Avatar
+                          small
+                          displayName={item.avatar.displayName}
+                          avatarPath={item.avatar.avatarPath || undefined}
+                          color={item.avatar.color}
+                          addr={item.avatar.addr}
+                          aria-hidden
+                        />
+                      )
                     )}
                     <span className={styles.itemText}>
                       <span
@@ -441,6 +549,20 @@ export default function CommandPalette({ onClose }: Props) {
                         </span>
                       )}
                     </span>
+                    {item.freshMessageCounter ? (
+                      <span
+                        className={`${styles.freshMessageCounter} ${
+                          item.isMuted ? styles.freshMessageCounterMuted : ''
+                        }`}
+                        aria-label={tx(
+                          'chat_n_new_messages',
+                          String(item.freshMessageCounter),
+                          { quantity: item.freshMessageCounter }
+                        )}
+                      >
+                        {item.freshMessageCounter}
+                      </span>
+                    ) : null}
                     {isActive && (item.chatScope || item.accountScope) && (
                       <span className={styles.tabHint} aria-hidden>
                         {tx('command_palette_tab_to_search')}

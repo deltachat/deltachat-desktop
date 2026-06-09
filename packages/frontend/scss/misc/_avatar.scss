@@ -89,6 +89,10 @@
   img.content {
     object-fit: cover;
   }
+  &.archive-avatar img.content {
+    /* the archive avatar is an icon and should not cover the whole area */
+    object-fit: scale-down;
+  }
 }
 
 .avatar.small {

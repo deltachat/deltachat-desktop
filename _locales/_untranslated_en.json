@@ -2,6 +2,18 @@
   "command_palette_tab_to_search": {
     "message": "Tab to search"
   },
+  "command_palette_filter_unread": {
+    "message": "Unread"
+  },
+  "command_palette_no_unread": {
+    "message": "No unread chats"
+  },
+  "command_palette_commands_section": {
+    "message": "Commands"
+  },
+  "commands_in_current_account_only": {
+    "message": "Command mode is only available for the current active account."
+  },
   "pref_background_sync_disabled": {
     "message": "Only Synchronize Selected Profile"
   },

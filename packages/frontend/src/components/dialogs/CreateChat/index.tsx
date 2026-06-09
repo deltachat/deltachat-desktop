@@ -86,11 +86,22 @@ const enum GroupType {
 
 type ViewMode = 'main_' | GroupType
 
-export default function CreateChat(props: DialogProps) {
+/** Lets callers (e.g. the command palette) open CreateChat in a specific view. */
+export type CreateChatInitialAction = 'new-group' | 'new-channel'
+
+export default function CreateChat(
+  props: DialogProps & { initialAction?: CreateChatInitialAction }
+) {
   const { onClose } = props
   const tx = useTranslationFunction()
 
-  const [viewMode, setViewMode] = useState<ViewMode>('main_')
+  const [viewMode, setViewMode] = useState<ViewMode>(
+    props.initialAction === 'new-group'
+      ? GroupType.REGULAR_GROUP
+      : props.initialAction === 'new-channel'
+        ? GroupType.BROADCAST_LIST
+        : 'main_'
+  )
 
   return (
     <Dialog
