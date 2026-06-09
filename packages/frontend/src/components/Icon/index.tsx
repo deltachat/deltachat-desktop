@@ -5,6 +5,7 @@ import styles from './styles.module.scss'
 
 export type IconName =
   | 'apps'
+  | 'archive'
   | 'arrow-left'
   | 'audio-muted'
   | 'bell'
@@ -21,7 +22,6 @@ export type IconName =
   | 'favorite'
   | 'forum'
   | 'image'
-  | 'icon-archive'
   | 'image_outline'
   | 'info'
   | 'lead-pencil'
