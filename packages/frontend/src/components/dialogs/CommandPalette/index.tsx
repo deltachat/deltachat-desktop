@@ -15,7 +15,7 @@ import {
   saveLastChatId,
   createChatByContactId as createChatByContactIdBackend,
 } from '../../../backend/chat'
-import { usePaletteItems, type PaletteActions } from './usePaletteItems'
+import { usePaletteSearch, type PaletteActions } from './usePaletteSearch'
 import { usePaletteCommands } from './usePaletteCommands'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 
@@ -41,6 +41,7 @@ const log = getLogger('renderer/CommandPalette')
 const UNREAD_FILTER_TRIGGER = /^(?:is)?:unread\s/i
 
 type Props = {
+  mode?: 'search' | 'command'
   onClose: DialogProps['onClose']
 }
 
@@ -70,7 +71,7 @@ function sectionLabel(
   }
 }
 
-export default function CommandPalette({ onClose }: Props) {
+export default function CommandPalette({ mode = 'search', onClose }: Props) {
   const tx = useTranslationFunction()
   const currentAccountId = selectedAccountId()
   const { selectChat, chatId: openChatId } = useChat()
@@ -92,7 +93,8 @@ export default function CommandPalette({ onClose }: Props) {
     id: number
     name: string
   } | null>(null)
-  const [query, setQuery] = useState('')
+  // when opened in command mode `>` is added to the input
+  const [query, setQuery] = useState(mode === 'command' ? '>' : '')
   // Active filter keyword (e.g. `:unread`), shown as a badge.
   // cleared when the scope changes
   const [filter, setFilter] = useState<PaletteFilter | null>(null)
@@ -205,10 +207,8 @@ export default function CommandPalette({ onClose }: Props) {
     ]
   )
 
-  // Command mode: typing `>` switches from search to a context-aware list of
-  // actions (New contact/group/channel, plus chat actions when a chat is in
-  // the breadcrumb).
-  const isCommandMode = query.startsWith('>')
+  // Command mode: typing `>` switches from search to command mode
+  const isCommandMode = query.startsWith('>') && !filter
   const commandFilter = isCommandMode ? query.slice(1).trim().toLowerCase() : ''
 
   const commands = usePaletteCommands({
@@ -218,7 +218,7 @@ export default function CommandPalette({ onClose }: Props) {
     close: onClose,
   })
 
-  const { items: searchItems, isLoading } = usePaletteItems({
+  const { items: searchItems, isLoading } = usePaletteSearch({
     accountId: effectiveAccountId,
     scope,
     chatId: scopedChat?.id,

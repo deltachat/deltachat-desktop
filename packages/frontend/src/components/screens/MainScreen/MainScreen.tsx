@@ -157,12 +157,26 @@ export default function MainScreen({ accountId }: Props) {
   })
 
   const paletteOpenRef = useRef(false)
+  useKeyBindingAction(KeybindAction.CommandPalette_OpenSearch, () => {
+    if (paletteOpenRef.current) {
+      return
+    }
+    paletteOpenRef.current = true
+    openDialog(CommandPalette, {
+      mode: 'search' as const,
+      onClose: () => {
+        paletteOpenRef.current = false
+      },
+    })
+  })
+
   useKeyBindingAction(KeybindAction.CommandPalette_Open, () => {
     if (paletteOpenRef.current) {
       return
     }
     paletteOpenRef.current = true
     openDialog(CommandPalette, {
+      mode: 'command' as const,
       onClose: () => {
         paletteOpenRef.current = false
       },
