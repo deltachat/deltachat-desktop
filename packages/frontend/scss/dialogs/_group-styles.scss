@@ -78,3 +78,13 @@ input.group-name-input {
   padding-top: 6px;
   margin-bottom: 10px;
 }
+
+.group-member-filter {
+  padding-block: 0 10px;
+  padding-inline: 20px 10px;
+  margin-top: 10px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--separatorColor);
+}

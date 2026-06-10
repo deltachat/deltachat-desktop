@@ -2,38 +2,43 @@ import React, { useCallback, useEffect, useState, useRef } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 import type { T } from '@deltachat/jsonrpc-client'
 
-import { QrCodeShowQrInner } from './QrCode'
-import { ContactList } from '../contact/ContactList'
+import { QrCodeShowQrInner } from '../QrCode'
+import { ContactList } from '../../contact/ContactList'
 import {
   PseudoListItemShowQrCode,
   PseudoListItemAddMember,
-} from '../helpers/PseudoListItem'
-import ViewProfile from './ViewProfile'
+} from '../../helpers/PseudoListItem'
+import ViewProfile from '../ViewProfile'
 import { avatarInitial } from '@deltachat-desktop/shared/avatarInitial'
-import { shouldDisableClickForFullscreen as shouldDisableFullscreenAvatar } from '../Avatar'
-import { DeltaInput, DeltaTextarea } from '../Login-Styles'
-import { BackendRemote, onDCEvent } from '../../backend-com'
-import { selectedAccountId } from '../../ScreenController'
+import { shouldDisableClickForFullscreen as shouldDisableFullscreenAvatar } from '../../Avatar'
+import { DeltaInput, DeltaTextarea } from '../../Login-Styles'
+import { BackendRemote, onDCEvent } from '../../../backend-com'
+import { selectedAccountId } from '../../../ScreenController'
 import Dialog, {
   DialogBody,
   DialogContent,
   DialogHeader,
   OkCancelFooterAction,
-} from '../Dialog'
-import useConfirmationDialog from '../../hooks/dialog/useConfirmationDialog'
-import useDialog from '../../hooks/dialog/useDialog'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
-import { LastUsedSlot } from '../../utils/lastUsedPaths'
-import ProfileInfoHeader from '../ProfileInfoHeader'
-import ImageSelector from '../ImageSelector'
-import { modifyGroup } from '../../backend/group'
+} from '../../Dialog'
+import HeaderButton from '../../Dialog/HeaderButton'
+import useConfirmationDialog from '../../../hooks/dialog/useConfirmationDialog'
+import useDialog from '../../../hooks/dialog/useDialog'
+import useTranslationFunction from '../../../hooks/useTranslationFunction'
+import { LastUsedSlot } from '../../../utils/lastUsedPaths'
+import ProfileInfoHeader from '../../ProfileInfoHeader'
+import ImageSelector from '../../ImageSelector'
+import { modifyGroup } from '../../../backend/group'
 
-import type { DialogProps } from '../../contexts/DialogContext'
-import ImageCropper from '../ImageCropper'
-import { AddMemberDialog } from './AddMember/AddMemberDialog'
-import { RovingTabindexProvider } from '../../contexts/RovingTabindex'
-import { copyToBlobDir } from '../../utils/copyToBlobDir'
-import AlertDialog from './AlertDialog'
+import type { DialogProps } from '../../../contexts/DialogContext'
+import ImageCropper from '../../ImageCropper'
+import { AddMemberDialog } from '../AddMember/AddMemberDialog'
+import { RovingTabindexProvider } from '../../../contexts/RovingTabindex'
+import { copyToBlobDir } from '../../../utils/copyToBlobDir'
+import AlertDialog from '../AlertDialog'
+import GroupSearchInput from './GroupSearchInput'
+import useViewGroupMenu from './ViewGroupMenu'
+import { matchesLetterShortcut } from '../../../keybindings'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 import { unknownErrorToString } from '@deltachat-desktop/shared/unknownErrorToString'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 const log = getLogger('ViewGroup')
@@ -270,6 +275,8 @@ function ViewGroupInner(
   const groupMemberContactListWrapperRef = useRef<HTMLDivElement>(null)
   const groupPastMemberContactListWrapperRef = useRef<HTMLDivElement>(null)
 
+  const [memberFilter, setMemberFilter] = useState('')
+
   const {
     group,
     groupName,
@@ -283,6 +290,42 @@ function ViewGroupInner(
     removeMember,
     setGroupImage,
   } = useGroup(accountId, chat)
+
+  const [showMemberFilter, setShowMemberFilter] = useState(false)
+
+  // Open the member filter with Ctrl+F (Cmd+F on macOS)
+  // The global keybinding handler is disabled while a dialog is open
+  useEffect(() => {
+    const onKeyDown = (ev: KeyboardEvent) => {
+      // copied from
+      const { isMac } = runtime.getRuntimeInfo()
+      const modifierPressed = isMac ? ev.metaKey && !ev.ctrlKey : ev.ctrlKey
+      if (
+        ev.repeat ||
+        ev.isComposing ||
+        ev.shiftKey ||
+        !modifierPressed ||
+        !matchesLetterShortcut(ev, 'f')
+      ) {
+        return
+      }
+
+      // to be specific, only react when this
+      // dialog is the topmost modal dialog
+      const dialogEl =
+        groupMemberContactListWrapperRef.current?.closest('dialog')
+      const modals = document.querySelectorAll('dialog:modal')
+      if (!dialogEl || modals[modals.length - 1] !== dialogEl) {
+        return
+      }
+
+      ev.preventDefault()
+      setShowMemberFilter(true)
+    }
+
+    document.addEventListener('keydown', onKeyDown)
+    return () => document.removeEventListener('keydown', onKeyDown)
+  }, [])
 
   const showRemoveGroupMemberConfirmationDialog = useCallback(
     async (contact: T.Contact) => {
@@ -371,23 +414,46 @@ function ViewGroupInner(
     [onClose, openDialog]
   )
 
+  const onClickViewGroupMenu = useViewGroupMenu({
+    chat,
+    allowEdit,
+    isBroadcast,
+    onClickEdit,
+    showMemberFilter,
+    onShowMemberFilter: () => setShowMemberFilter(true),
+  })
+
+  const filterContacts = useCallback(
+    (contacts: T.Contact[]) => {
+      if (!showMemberFilter || memberFilter === '') {
+        return contacts
+      }
+      const needle = memberFilter.toLowerCase()
+      return contacts.filter(
+        contact =>
+          contact.displayName.toLowerCase().includes(needle) ||
+          contact.address.toLowerCase().includes(needle)
+      )
+    },
+    [showMemberFilter, memberFilter]
+  )
+
   return (
     <>
-      {allowEdit && (
-        <DialogHeader
-          title={!isBroadcast ? tx('tab_group') : tx('channel')}
-          onClickEdit={onClickEdit}
-          onClose={onClose}
-          dataTestid='view-group-dialog-header'
+      <DialogHeader
+        title={!isBroadcast ? tx('tab_group') : tx('channel')}
+        onClose={onClose}
+        dataTestid='view-group-dialog-header'
+      >
+        <HeaderButton
+          id='view-group-menu'
+          data-testid='view-group-menu'
+          onClick={onClickViewGroupMenu}
+          icon='more_vert'
+          iconSize={24}
+          aria-label={tx('menu_more_options')}
         />
-      )}
-      {!allowEdit && (
-        <DialogHeader
-          title={tx('tab_group')}
-          onClose={onClose}
-          dataTestid='view-group-dialog-header'
-        />
-      )}
+      </DialogHeader>
       <DialogBody>
         <DialogContent>
           <ProfileInfoHeader
@@ -411,6 +477,19 @@ function ViewGroupInner(
             description={groupDescription ?? undefined}
           />
         </DialogContent>
+        {showMemberFilter && (
+          <div className='group-member-filter'>
+            <GroupSearchInput
+              id='group-member-filter'
+              onChange={setMemberFilter}
+              value={memberFilter}
+              onCollapse={() => {
+                setShowMemberFilter(false)
+                setMemberFilter('')
+              }}
+            />
+          </div>
+        )}
         <div
           className='group-member-contact-list-wrapper'
           ref={groupMemberContactListWrapperRef}
@@ -419,7 +498,7 @@ function ViewGroupInner(
           <RovingTabindexProvider
             wrapperElementRef={groupMemberContactListWrapperRef}
           >
-            {!chatDisabled && group.isEncrypted && (
+            {!chatDisabled && group.isEncrypted && memberFilter === '' && (
               <>
                 {!isBroadcast && (
                   <PseudoListItemAddMember
@@ -440,7 +519,7 @@ function ViewGroupInner(
               ></div>
             )}
             <ContactList
-              contacts={groupContacts}
+              contacts={filterContacts(groupContacts)}
               showRemove={!chatDisabled && group.isEncrypted}
               onClick={contact => {
                 if (contact.id === C.DC_CONTACT_ID_SELF) {
@@ -478,7 +557,7 @@ function ViewGroupInner(
                 wrapperElementRef={groupPastMemberContactListWrapperRef}
               >
                 <ContactList
-                  contacts={pastContacts}
+                  contacts={filterContacts(pastContacts)}
                   showRemove={false}
                   onClick={contact => {
                     if (contact.id === C.DC_CONTACT_ID_SELF) {
