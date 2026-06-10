@@ -13,13 +13,23 @@ test.describe.configure({
 
 expect.configure({ timeout: 5_000 })
 
+// Why so many? Mainly for the "switch account" shortcuts.
+const numberOfProfiles = 4
+
 // https://playwright.dev/docs/next/test-retries#reuse-single-page-between-tests
 let page: Page
 
 test.beforeAll(async ({ browser }) => {
   page = await browser.newPage()
   await reloadPage(page)
+
+  let i = 0
   await importDummyProfileFromBackup(page)
+  i++
+  for (; i < numberOfProfiles; i++) {
+    await page.getByRole('button', { name: 'Add Profile' }).click()
+    await importDummyProfileFromBackup(page)
+  }
 
   // Shortcuts don't seem to work otherwise. Maybe a Playwright issue.
   await page.locator('body').click()
@@ -39,7 +49,14 @@ test.afterAll(async ({ browser }) => {
   const context = await browser.newContext()
   const pageForProfileDeletion = await context.newPage()
   await reloadPage(pageForProfileDeletion)
-  await deleteSelectedProfile(pageForProfileDeletion)
+  for (let i = 0; i < numberOfProfiles; i++) {
+    await pageForProfileDeletion
+      .getByLabel('Switch Profile')
+      .getByRole('tab')
+      .last()
+      .click()
+    await deleteSelectedProfile(pageForProfileDeletion)
+  }
   await context.close()
 })
 
@@ -84,4 +101,48 @@ test.describe('keyboard shortcuts', () => {
 
     await page.keyboard.press('Escape')
   })
+})
+
+test('Ctrl + Alt + PageUp/PageDown to switch accounts', async () => {
+  const accs = page.getByLabel('Switch Profile').getByRole('tab')
+  async function expectSelected(ind: number) {
+    await expect(accs.nth(ind)).toHaveAttribute('aria-selected', 'true')
+  }
+
+  await accs.first().click()
+  await expectSelected(0)
+
+  await page.keyboard.press('ControlOrMeta+Alt+PageDown')
+  await expectSelected(1)
+  await page.keyboard.press('ControlOrMeta+Alt+PageDown')
+  await expectSelected(2)
+  await page.keyboard.press('ControlOrMeta+Alt+PageDown')
+  await expectSelected(3)
+  await page.keyboard.press('ControlOrMeta+Alt+PageDown')
+  await expectSelected(3)
+
+  await page.keyboard.press('ControlOrMeta+Alt+PageUp')
+  await expectSelected(2)
+  await page.keyboard.press('ControlOrMeta+Alt+PageUp')
+  await expectSelected(1)
+  await page.keyboard.press('ControlOrMeta+Alt+PageUp')
+  await expectSelected(0)
+  await page.keyboard.press('ControlOrMeta+Alt+PageUp')
+  await expectSelected(0)
+
+  await page.keyboard.press('ControlOrMeta+Alt+PageDown')
+  await expectSelected(1)
+  // Having a dialog disables the shortcut.
+  await page.keyboard.press('ControlOrMeta+N')
+  await expect(page.getByRole('dialog')).toHaveCount(1)
+  await page.keyboard.press('ControlOrMeta+Alt+PageDown')
+  await expectSelected(1)
+  await page.keyboard.press('ControlOrMeta+Alt+PageUp')
+  await expectSelected(1)
+
+  // Dialog closed, shortcut works again.
+  await page.keyboard.press('Escape')
+  await expect(page.getByRole('dialog')).toHaveCount(0)
+  await page.keyboard.press('ControlOrMeta+Alt+PageUp')
+  await expectSelected(0)
 })
