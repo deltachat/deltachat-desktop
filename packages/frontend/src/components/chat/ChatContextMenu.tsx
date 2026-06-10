@@ -284,33 +284,6 @@ function buildViewEditMenuItems(
 }
 
 /**
- * Builds encryption info menu item
- */
-function buildEncryptionInfoMenuItem(
-  fullChat: T.FullChat,
-  tx: ReturnType<typeof useTranslationFunction>,
-  openEncryptionInfoDialog: ReturnType<
-    typeof useChatDialog
-  >['openEncryptionInfoDialog']
-): ContextMenuItem | false {
-  return (
-    !fullChat.isDeviceChat &&
-    !fullChat.isSelfTalk && {
-      label: tx('encryption_info_title_desktop'),
-      action: () =>
-        openEncryptionInfoDialog({
-          chatId: fullChat.id,
-          // https://github.com/chatmail/core/blob/a3328ea2de1e675b1418b4e2ca0c23f88828c558/deltachat-jsonrpc/src/api/types/chat_list.rs#L130-L146
-          dmChatContact:
-            fullChat.chatType === 'Single' && fullChat.contactIds.length > 0
-              ? fullChat.contactIds[0]
-              : null,
-        }),
-    }
-  )
-}
-
-/**
  * provides a context menu for chat list items
  * and for the 3dot menu in main chat view
  */
@@ -329,7 +302,6 @@ export function useChatContextMenu(): {
   const { openDialog } = useDialog()
   const {
     openBlockFirstContactOfChatDialog,
-    openEncryptionInfoDialog,
     openDeleteChatsDialog,
     openLeaveGroupOrChannelDialog,
     openClearChatDialog,
@@ -475,13 +447,6 @@ export function useChatContextMenu(): {
             tx
           )
 
-    // Encryption info is only shown in chatlist and
-    // only if a single chat is selected
-    const encryptionInfoItem =
-      relatedChat !== undefined
-        ? buildEncryptionInfoMenuItem(relatedChat, tx, openEncryptionInfoDialog)
-        : null
-
     const ephemeralMessagesMenuItem = isMainView &&
       relatedChat &&
       relatedChat.canSend &&
@@ -540,9 +505,9 @@ export function useChatContextMenu(): {
       archive,
       { type: 'separator' },
       ...(!isMainView ? viewEditMenuItems : []),
-      !isMainView && encryptionInfoItem,
       // Clone Group
-      relatedChat &&
+      isMainView &&
+        relatedChat &&
         isGroup && {
           label: tx('clone_chat'),
           action: () => {
