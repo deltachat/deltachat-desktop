@@ -39,6 +39,8 @@ import { useWebxdcMessageSentListener } from '../../../hooks/useWebxdcMessageSen
 
 import type { T } from '@deltachat/jsonrpc-client'
 import CreateChat from '../../dialogs/CreateChat'
+import ProxyConfiguration from '../../dialogs/ProxyConfiguration'
+import { Proxy } from '../../Settings/DefaultCredentials'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import asyncThrottle from '@jcoreio/async-throttle'
 import { useFetch, useRpcFetch } from '../../../hooks/useFetch'
@@ -550,6 +552,34 @@ function ChatNavButtons({
     })
   }, [openDialog, chatId])
 
+  const openProxyDialog = useCallback(() => {
+    openDialog(ProxyConfiguration, {
+      accountId: selectedAccountId(),
+      configured: true,
+    })
+  }, [openDialog])
+
+  const accountId = selectedAccountId()
+  const proxyEnabled = settingsStore?.settings.proxy_enabled === Proxy.ENABLED
+
+  const connectivityFetch = useRpcFetch(
+    BackendRemote.rpc.getConnectivity,
+    proxyEnabled ? [accountId] : null
+  )
+  const refreshConnectivity = connectivityFetch?.refresh
+  useEffect(() => {
+    if (!proxyEnabled || !refreshConnectivity) {
+      return
+    }
+    return onDCEvent(accountId, 'ConnectivityChanged', refreshConnectivity)
+  }, [accountId, proxyEnabled, refreshConnectivity])
+
+  // When a proxy is enabled, show an icon in the chat navbar
+  // indicating the current connectivity status (green/orange)
+  const proxyConnected =
+    connectivityFetch?.lingeringResult?.ok === true &&
+    connectivityFetch.lingeringResult.value >= C.DC_CONNECTIVITY_WORKING
+
   return (
     <div className='views' data-no-drag-region>
       {lastUsedApps && lastUsedApps.length > 0 && (
@@ -587,6 +617,21 @@ function ChatNavButtons({
         chat.contactIds.some(id => id > C.DC_CONTACT_ID_LAST_SPECIAL) && (
           <CallButton chat={chat} />
         )}
+      {proxyEnabled && (
+        <Button
+          onClick={openProxyDialog}
+          aria-label={tx('proxy_settings')}
+          title={tx('proxy_settings')}
+          className='navbar-button'
+          styling='borderless'
+        >
+          <Icon
+            coloring={proxyConnected ? 'success' : 'warning'}
+            icon='proxy'
+            size={18}
+          />
+        </Button>
+      )}
       <Button
         id='three-dot-menu-button'
         className='navbar-button'

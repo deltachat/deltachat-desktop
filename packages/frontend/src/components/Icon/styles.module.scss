@@ -32,6 +32,14 @@
       background-color: #bf0000;
     }
   }
+
+  &.success {
+    background-color: #34c759;
+  }
+
+  &.warning {
+    background-color: #ff9500;
+  }
 }
 .iconButton {
   @include mixins.button-reset;

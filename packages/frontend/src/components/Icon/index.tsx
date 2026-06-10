@@ -33,6 +33,7 @@ export type IconName =
   | 'person-filled'
   | 'phone'
   | 'plus'
+  | 'proxy'
   | 'rotate-right'
   | 'qr'
   | 'question_mark'
@@ -51,6 +52,8 @@ type IconColoring =
   | 'fullscreenControls'
   | 'appearanceSelector'
   | 'remove'
+  | 'success'
+  | 'warning'
 
 type PropsBase = {
   className?: string
