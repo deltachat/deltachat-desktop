@@ -13,7 +13,7 @@ import { useInitEffect } from '../helpers/hooks'
 import { BackendRemote, onDCEvent, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
-import { useContextMenuWithActiveState } from '../ContextMenu'
+import useContextMenu from '../../hooks/useContextMenu'
 import useMessage from '../../hooks/chat/useMessage'
 import { useZoomKeyboardShortcuts } from '../../hooks/useZoomKeyboardShortcuts'
 
@@ -100,7 +100,7 @@ export default function FullscreenMedia(props: Props & DialogProps) {
     throw new Error('file attribute not set')
   }
 
-  const { isContextMenuActive, onContextMenu } = useContextMenuWithActiveState([
+  const onContextMenu = useContextMenu([
     {
       label: tx('menu_copy_image_to_clipboard'),
       action: () => {
@@ -263,12 +263,6 @@ export default function FullscreenMedia(props: Props & DialogProps) {
       if (ev.repeat) {
         return
       }
-      if (ev.code === 'Escape' && isContextMenuActive) {
-        // Only close the context menu, instead of closing both
-        // the context menu and the whole FullscreenMedia dialog.
-        ev.preventDefault()
-        return
-      }
       const left = ev.code === 'ArrowLeft'
       const right = ev.code === 'ArrowRight'
       if (!left && !right) {
@@ -284,7 +278,7 @@ export default function FullscreenMedia(props: Props & DialogProps) {
     }
     document.addEventListener('keydown', listener)
     return () => document.removeEventListener('keydown', listener)
-  }, [previousImage, nextImage, isContextMenuActive])
+  }, [previousImage, nextImage])
 
   if (!msg || !msg.file) return elm
 
