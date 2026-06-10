@@ -194,7 +194,7 @@ test.describe('Shift + Click', () => {
     await expectSelectedChats([9, 8, 7])
   })
 
-  test('handles selection start chat getting removed', async () => {
+  test("doesn't break if the item at the start of the selection gets removed", async () => {
     const chatName = 'Chat to be removed'
     await createDummyChat(page, chatName)
     const chat = chatList.getByRole('tab', { name: chatName })
