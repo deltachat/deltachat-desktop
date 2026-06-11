@@ -907,6 +907,8 @@ export const MessageListInner = React.memo(
         className={classNames({
           'multiselected-one-or-more':
             focusAndMultiselectContextValue.selectedItems.size >= 1,
+          'multiselected-two-or-more':
+            focusAndMultiselectContextValue.selectedItems.size >= 2,
         })}
       >
         <ol aria-label={tx('messages')}>
