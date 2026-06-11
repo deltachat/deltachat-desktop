@@ -91,7 +91,7 @@ function onClickNotification(
   msgId: number,
   _ev: Electron.Event
 ) {
-  mainWindow.send('ClickOnNotification', {
+  mainWindow.send('clickOnNotification', {
     accountId,
     chatId,
     msgId,

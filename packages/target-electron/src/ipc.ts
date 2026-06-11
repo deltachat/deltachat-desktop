@@ -73,7 +73,6 @@ export const DCJsonrpcRemoteInitializedP = new Promise<
 
 /** returns shutdown function */
 export async function init(cwd: string, logHandler: LogHandler) {
-  const main = mainWindow
   dcController = new DeltaChatController(cwd)
 
   try {
@@ -107,9 +106,6 @@ export async function init(cwd: string, logHandler: LogHandler) {
     app.ipcReady = true
     app.emit('ipcReady')
   })
-
-  ipcMain.on('show', () => main.show())
-  // ipcMain.on('setAllowNav', (e, ...args) => menu.setAllowNav(...args))
 
   ipcMain.on('handleLogMessage', (_e, channel, level, stacktrace, ...args) =>
     logHandler.log(channel, level, stacktrace, ...args)
@@ -353,9 +349,19 @@ export async function init(cwd: string, logHandler: LogHandler) {
   ipcMain.handle('app.removeTempFile', (_ev, path) => removeTempFile(path))
   ipcMain.handle('app.deleteSticker', (_ev, path) => deleteSticker(path))
 
-  ipcMain.handle('electron.shell.openExternal', (_ev, url) =>
-    shell.openExternal(url)
-  )
+  ipcMain.handle('electron.shell.openExternal', (_ev, url) => {
+    if (
+      url.toLowerCase().startsWith('http:') ||
+      url.toLowerCase().startsWith('https:')
+    ) {
+      shell.openExternal(url)
+    } else {
+      log.error('tried to open a non http/https external link', {
+        url,
+      })
+    }
+  })
+
   ipcMain.handle('electron.shell.openPath', (_ev, path) => {
     // map sandbox path if on Windows
     return shell.openPath(mapPackagePath(path))
