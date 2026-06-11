@@ -114,7 +114,12 @@
     // We apply this to the whole `<ol>` and not `<li>`
     // because otherwise daymarkers are not affected by this
     // (because they're not selectable).
-    &.multiselected-one-or-more::selection {
+    //
+    // Only apply this if two or more are selected because if the user
+    // tries to simply select text in a message with Shift + Click
+    // then that will select the message,
+    // in which case we should not faint the color.
+    &.multiselected-two-or-more::selection {
       background-color: color-mix(
         in srgb,
         var(--messageHightlightColor) 5%,
