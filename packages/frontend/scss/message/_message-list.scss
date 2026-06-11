@@ -105,6 +105,22 @@
     &::-webkit-scrollbar-track {
       background: transparent;
     }
+
+    // If you Shift+Click some messages then their text
+    // also gets selected, which looks pretty ugly.
+    // However, some people might still want to select text this way,
+    // so let's keep a really faint color for them.
+    //
+    // We apply this to the whole `<ol>` and not `<li>`
+    // because otherwise daymarkers are not affected by this
+    // (because they're not selectable).
+    &.multiselected-one-or-more::selection {
+      background-color: color-mix(
+        in srgb,
+        var(--messageHightlightColor) 5%,
+        transparent
+      );
+    }
   }
 
   ol {
@@ -183,22 +199,6 @@
         -webkit-animation: none;
         -moz-animation: none;
       }
-    }
-
-    // If you Shift+Click some messages then their text
-    // also gets selected, which looks pretty ugly.
-    // However, some people might still want to select text this way,
-    // so let's keep a really faint color for them.
-    //
-    // We apply this to the whole `<ol>` and not `<li>`
-    // because otherwise daymarkers are not affected by this
-    // (because they're not selectable).
-    &:has(.multiselectable-message[aria-selected='true'])::selection {
-      background-color: color-mix(
-        in srgb,
-        var(--messageHightlightColor) 5%,
-        transparent
-      );
     }
   }
 }

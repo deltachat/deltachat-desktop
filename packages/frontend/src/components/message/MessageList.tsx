@@ -904,6 +904,10 @@ export const MessageListInner = React.memo(
 
           focusAndMultiselectContextValue.resetSelection()
         }}
+        className={classNames({
+          'multiselected-one-or-more':
+            focusAndMultiselectContextValue.selectedItems.size >= 1,
+        })}
       >
         <ol aria-label={tx('messages')}>
           <RovingTabindexProvider wrapperElementRef={messageListRef}>
