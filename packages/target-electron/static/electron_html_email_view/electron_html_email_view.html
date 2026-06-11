@@ -26,7 +26,14 @@
         </p>
       </div>
       <div class="network-toggle">
-        <button id="toggle_network_more_button">⋮</button>
+        <button
+          id="toggle_network_more_button"
+          aria-haspopup="menu"
+          aria-expanded="false"
+        >⋮</button>
+        <div id="more-menu-dropdown" class="more-menu-dropdown" hidden role="menu">
+          <button id="load-remote-content-btn" class="more-menu-item" role="menuitem"></button>
+        </div>
       </div>
     </div>
     <div id="content"></div>
