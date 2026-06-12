@@ -99,6 +99,13 @@ $scrollbarTransparency: 0.34 !default;
       1% + $hover-contrast-change
     )};
   --chatListItemSelectedText: #{$bgPrimary};
+  /* Command palette selection: in light theme chatListItemSelectedBg has too strong contrast */
+  @if $themeDarkOrLight == light {
+    --commandPaletteSelectedBg: #4c6e7d4a;
+    --commandPaletteTabHintBg: rgb(247, 241, 241);
+  } @else {
+    --commandPaletteTabHintBg: rgba(255, 255, 255, 0.18);
+  }
   --chatListItemBgHover: #{changeContrast($bgPrimary, $hover-contrast-change)};
   --chatListItemBgPinned: #{changeContrast($bgPrimary, 7%)};
   --chatListItemBgPinnedHover: #{changeContrast(

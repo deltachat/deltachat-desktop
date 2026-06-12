@@ -1,4 +1,7 @@
 {
+  "command_palette_tab_to_search": {
+    "message": "Tab to search"
+  },
   "pref_background_sync_disabled": {
     "message": "Only Synchronize Selected Profile"
   },
