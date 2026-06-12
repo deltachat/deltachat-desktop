@@ -755,6 +755,31 @@ test.describe('edit message', () => {
     ).toBeVisible()
     await expect(textareaNonEdit()).toBeFocused()
   })
+  test("don't enter edit mode on ArrowUp if input is not empty", async () => {
+    await expect(textareaNonEdit()).toBeEmpty()
+
+    // Check that normally we can enter the edit mode.
+    await page.keyboard.press('ArrowUp')
+    await expect(textareaEdit()).toHaveText('M 3')
+    await expect(textareaEdit()).toBeFocused()
+    await page.keyboard.press('Escape')
+
+    await textareaNonEdit().fill('123')
+    await page.keyboard.press('ArrowUp')
+    await expect(textareaNonEdit()).toHaveText('123')
+    await expect(composerSection).not.toContainText('Edit Message')
+    await page.keyboard.press('ArrowUp')
+    await page.keyboard.press('ArrowUp')
+    await expect(textareaNonEdit()).toHaveText('123')
+
+    // All-whitespace is also considered non-empty.
+    // Here ArrowUp is supposed to move the cursor and not enter the edit mode.
+    await textareaNonEdit().fill('\n\n\n\n\n')
+    await page.keyboard.press('ArrowUp')
+    await page.keyboard.press('ArrowUp')
+    await expect(textareaNonEdit()).toHaveText('\n\n\n\n\n')
+    await expect(composerSection).not.toContainText('Edit Message')
+  })
 })
 
 test.describe('Emoji picker', () => {
