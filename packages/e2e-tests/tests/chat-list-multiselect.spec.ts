@@ -198,6 +198,7 @@ test.describe('Shift + Click', () => {
 test.describe('Escape unselects chats', () => {
   test('if multiple are selected', async () => {
     await getChat(7).click()
+    await expectSelectedChats([7])
     await getChat(7).focus()
     await page.keyboard.press('Shift+ArrowDown')
     await page.keyboard.press('Shift+ArrowDown')
@@ -226,15 +227,15 @@ test.describe('Escape unselects chats', () => {
   // didn't actually unselect all chats but left just one (the active one).
   test('if only the active is selected', async () => {
     await getChat(7).click()
-    await getChat(7).focus()
     await expectSelectedChats([7])
+    await getChat(7).focus()
     await expect(getChat(7)).toBeFocused()
     await page.keyboard.press('Escape')
     await expectSelectedChats([])
 
     await getChat(5).click()
-    await getChat(5).focus()
     await expectSelectedChats([5])
+    await getChat(5).focus()
     await page.keyboard.press('ArrowDown')
     await page.keyboard.press('ArrowDown')
     await expect(getChat(3)).toBeFocused()
