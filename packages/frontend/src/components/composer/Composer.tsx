@@ -224,7 +224,7 @@ const Composer = forwardRef<
           if (chatId === null) {
             throw new Error('chat id is undefined')
           }
-          if (!(draftState.text.length > 0) && !draftState.file) {
+          if (!(draftState.text.trim().length > 0) && !draftState.file) {
             log.debug(`Empty message: don't send it...`)
             return
           }

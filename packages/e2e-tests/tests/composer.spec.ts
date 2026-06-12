@@ -103,6 +103,44 @@ async function typeText(text: string) {
   await expect(textarea).toHaveText(text)
 }
 
+test("doesn't send empty message", async () => {
+  await createDummyChat(page, 'empty message test')
+  await selectChatByName(page, 'empty message test')
+  await textarea.fill('123')
+  await page.getByRole('button', { name: 'Send' }).click()
+  const messages = page
+    .getByRole('list', { name: 'Messages' })
+    .getByRole('listitem')
+    .filter({ hasNotText: 'Messages are end-to-end encrypted' })
+    .filter({ hasNotText: 'Others will only see this group after you sent a' })
+    .filter({ hasNotText: 'Today' })
+  await expect(messages).toHaveCount(1)
+
+  await textarea.fill('     ')
+  await textarea.press('ControlOrMeta+Enter')
+  await textarea.press('ControlOrMeta+Enter')
+  await textarea.press('ControlOrMeta+Enter')
+  await page.getByRole('button', { name: 'Send' }).click()
+  await page.getByRole('button', { name: 'Send' }).click()
+  await page.getByRole('button', { name: 'Send' }).click()
+  await expect(textarea).toHaveText('     ')
+  await expect(messages).toHaveCount(1)
+
+  await textarea.fill('\n')
+  await textarea.press('ControlOrMeta+Enter')
+  await page.getByRole('button', { name: 'Send' }).click()
+  await expect(textarea).toHaveText('\n')
+  await expect(messages).toHaveCount(1)
+
+  await textarea.fill('\na')
+  await textarea.press('ControlOrMeta+Enter')
+  await expect(textarea).toBeEmpty()
+  await expect(messages).toHaveCount(2)
+
+  // Clean up
+  await deleteChat(page, 'empty message test')
+})
+
 test("doesn't send the same message twice on multiple clicks", async () => {
   await selectChat(1)
   const messageText = `somee messageee foo ${Math.random()}`
