@@ -376,7 +376,6 @@ test.describe('Chat List Context Menu - Single Selection', () => {
       'Mute Notifications',
       'Archive Chat',
       'View Profile',
-      'Encryption Info',
       'Block Contact',
       'Delete',
     ])
@@ -398,8 +397,6 @@ test.describe('Chat List Context Menu - Single Selection', () => {
       'Mute Notifications',
       'Archive Chat',
       'View Profile',
-      'Encryption Info',
-      'Clone Chat',
       'Leave Group',
     ])
 
@@ -452,12 +449,14 @@ test.describe('Chat List Context Menu - Single Selection', () => {
     await switchToProfile(page, userA.id)
 
     await openChatListContextMenu(page, userB.name)
-    await page.getByRole('menuitem', { name: 'Encryption Info' }).click()
+    await page.getByRole('menuitem', { name: 'View Profile' }).click()
+    await page.locator('#view-profile-menu').click()
+    await page.getByTestId('encryption-info').click()
 
     // Verify encryption info dialog opens
-    await expect(page.getByRole('dialog')).toBeVisible()
-    await expect(page.getByRole('dialog')).toContainText('Encryption')
+    await expect(page.getByRole('dialog').last()).toContainText('Encryption')
 
+    await page.keyboard.press('Escape')
     await page.keyboard.press('Escape')
   })
 
@@ -467,13 +466,16 @@ test.describe('Chat List Context Menu - Single Selection', () => {
     await switchToProfile(page, userA.id)
 
     await openChatListContextMenu(page, groupName)
-    await page.getByRole('menuitem', { name: 'Clone Chat' }).click()
+    await page.getByRole('menuitem', { name: 'View Profile' }).click()
+    await page.getByTestId('view-group-menu').click()
+    await page.getByTestId('clone-chat').click()
 
-    // Verify clone chat dialog opens
-    await expect(page.getByRole('dialog')).toBeVisible()
-    // The clone dialog should show create group interface
+    // Verify clone chat dialog opens,
     await expect(page.locator('.group-name-input')).toBeVisible()
+    // it should show the create group interface
 
+    // close clone dialog and group profile dialog
+    await page.keyboard.press('Escape')
     await page.keyboard.press('Escape')
   })
 })

@@ -439,8 +439,6 @@ test.describe('context menu', () => {
       'Mute Notifications',
       'Archive Chat',
       'View Profile',
-      'Encryption Info',
-      'Clone Chat',
       'Leave Group',
     ])
     await page.keyboard.press('Escape')
