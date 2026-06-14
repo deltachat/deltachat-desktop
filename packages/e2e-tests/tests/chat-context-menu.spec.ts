@@ -492,7 +492,7 @@ test.describe('Removal actions', () => {
     await page.getByRole('textbox', { name: 'Group Name' }).fill(leaveGroupName)
     await page.locator('#addmember button').click()
     const addMemberDialog = page.getByTestId('add-member-dialog')
-    await page
+    await addMemberDialog
       .locator('.contact-list-item')
       .filter({ hasText: userB.name })
       .click()
