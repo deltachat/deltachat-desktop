@@ -206,4 +206,18 @@
       }
     }
   }
+
+  .num-selected-messages-status {
+    position: absolute;
+    bottom: 0;
+    inset-inline-start: 0;
+    border-start-end-radius: 0.25rem;
+    $borderColor: color-mix(in srgb, var(--contextMenuBorder) 50%, transparent);
+    border-block-start: 1px solid $borderColor;
+    border-inline-end: 1px solid $borderColor;
+
+    background: var(--composerBg);
+    padding: 0.5rem 0.625rem;
+    line-height: 1;
+  }
 }
