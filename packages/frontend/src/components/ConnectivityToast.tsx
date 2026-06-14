@@ -8,9 +8,12 @@ import { debounceWithInit } from './chat/ChatListHelpers'
 import { BackendRemote, onDCEvent } from '../backend-com'
 import { selectedAccountId } from '../ScreenController'
 import ConnectivityDialog from './dialogs/ConnectivityDialog'
+import Icon from './Icon'
 import useDialog from '../hooks/dialog/useDialog'
 import useTranslationFunction from '../hooks/useTranslationFunction'
 import useKeyBindingAction from '../hooks/useKeyBindingAction'
+import { useSettingsStore } from '../stores/settings'
+import { Proxy } from './Settings/DefaultCredentials'
 
 const log = getLogger('renderer/components/ConnectivityToast')
 
@@ -164,6 +167,9 @@ export default function ConnectivityToast() {
 
   const tx = useTranslationFunction()
 
+  const settingsStore = useSettingsStore()[0]
+  const proxyEnabled = settingsStore?.settings.proxy_enabled === Proxy.ENABLED
+
   if (networkState[0] === Connectivity.CONNECTED) {
     return null
   }
@@ -179,6 +185,17 @@ export default function ConnectivityToast() {
         className='showInfoButton'
         aria-label={tx('connectivity')}
       ></button>
+
+      {proxyEnabled && (
+        <Icon
+          icon='proxy'
+          size={16}
+          coloring={
+            networkState[0] === Connectivity.WORKING ? 'success' : 'warning'
+          }
+          className='proxyIcon'
+        />
+      )}
 
       {networkState[0] === Connectivity.NOT_CONNECTED && (
         <>

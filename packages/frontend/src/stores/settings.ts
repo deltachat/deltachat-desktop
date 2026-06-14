@@ -23,6 +23,7 @@ export interface SettingsStoreState {
       is_chatmail: '0' | '1'
       who_can_call_me: WhoCanCallMe
       'ui.mentions_enabled': '0' | '1'
+      proxy_enabled: '0' | '1'
     }[P]
   }
   desktopSettings: DesktopSettingsType
@@ -42,6 +43,7 @@ const settingsKeys = [
   'is_chatmail',
   'who_can_call_me',
   'ui.mentions_enabled',
+  'proxy_enabled',
 ] as const
 
 export const enum WhoCanCallMe {
