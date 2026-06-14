@@ -909,6 +909,7 @@ export default function Message(props: {
           accountId={accountId}
           chatId={message.chatId}
           messageId={message.id}
+          tabIndex={tabindexForInteractiveContents}
         />
       )}
     </div>
@@ -1370,10 +1371,12 @@ function CallIconButton({
   accountId,
   chatId,
   messageId,
+  tabIndex,
 }: {
   accountId: number
   chatId: number
   messageId: number
+  tabIndex: -1 | 0
 }) {
   const callInfoFetch = useRpcFetch(BackendRemote.rpc.callInfo, [
     accountId,
@@ -1423,6 +1426,7 @@ function CallIconButton({
       onClick={onClick}
       aria-busy={callInfoFetch.loading}
       disabled={onClick == undefined}
+      tabIndex={tabIndex}
       icon='phone'
       className='phone-icon'
       coloring='currentColor'
