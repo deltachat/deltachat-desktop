@@ -20,7 +20,7 @@ catalog:
   sass: ^1.86.3
   typescript: ^5.9.3
   typescript-plugin-css-modules: ^5.2.0
-  esbuild: ^0.25.0
+  esbuild: ^0.28.1
   '@types/node': ^22.15.33
   '@types/mocha': ^10.0.7
   '@types/chai': ^4.3.17

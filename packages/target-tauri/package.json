@@ -34,7 +34,7 @@
     "@tauri-apps/plugin-dialog": "^2.7.1",
     "@webxdc/types": "catalog:",
     "@types/node": "catalog:",
-    "esbuild": "^0.25.0",
+    "esbuild": "^0.28.1",
     "typescript": "^5.2.2"
   }
 }
