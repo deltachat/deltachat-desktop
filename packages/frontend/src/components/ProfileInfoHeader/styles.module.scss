@@ -21,6 +21,12 @@
   user-select: text;
 }
 
+.description {
+  // Copy-pasted from `.group-profile-description` and `.statusText`.
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
 .address {
   color: #565656;
   margin-top: 0.25rem;
