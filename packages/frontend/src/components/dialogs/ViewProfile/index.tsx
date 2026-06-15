@@ -257,6 +257,7 @@ export function ViewProfileInner({
           color={contact.color}
           displayName={displayName}
           wasSeenRecently={contact.wasSeenRecently}
+          description={undefined}
           disableFullscreen={
             isSelfChat ||
             isDeviceChat ||

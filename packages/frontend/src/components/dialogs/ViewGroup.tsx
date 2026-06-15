@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState, useRef } from 'react'
-import { parseAndRenderMessage } from '../message/MessageParser'
 import { C } from '@deltachat/jsonrpc-client'
 import type { T } from '@deltachat/jsonrpc-client'
 
@@ -396,23 +395,21 @@ function ViewGroupInner(
             color={chat.color}
             displayName={groupName}
             disableFullscreen={shouldDisableFullscreenAvatar(chat)}
+            subtitle={
+              <div className='group-profile-subtitle'>
+                {!isBroadcast
+                  ? group.contactIds.length > 1 || group.selfInGroup
+                    ? tx('n_members', group.contactIds.length.toString(), {
+                        quantity: group.contactIds.length,
+                      })
+                    : ''
+                  : tx('n_recipients', group.contactIds.length.toString(), {
+                      quantity: group.contactIds.length,
+                    })}
+              </div>
+            }
+            description={groupDescription ?? undefined}
           />
-          <div className='group-profile-subtitle'>
-            {!isBroadcast
-              ? group.contactIds.length > 1 || group.selfInGroup
-                ? tx('n_members', group.contactIds.length.toString(), {
-                    quantity: group.contactIds.length,
-                  })
-                : ''
-              : tx('n_recipients', group.contactIds.length.toString(), {
-                  quantity: group.contactIds.length,
-                })}
-          </div>
-          {groupDescription && (
-            <div className='group-profile-description'>
-              {parseAndRenderMessage(groupDescription, false, 0)}
-            </div>
-          )}
         </DialogContent>
         <div
           className='group-member-contact-list-wrapper'
