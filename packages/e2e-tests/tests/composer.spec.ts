@@ -499,6 +499,17 @@ test('gets focused when selecting a chat', async () => {
   await expect(textarea).toBeFocused()
 })
 
+test('gets focused after clicking/touching send message button', async () => {
+  await selectChat(1)
+
+  const msg = 'Msg' + Math.random()
+  await textarea.fill(msg)
+  await page.getByRole('button', { name: 'Send' }).focus()
+  await page.getByRole('button', { name: 'Send' }).click()
+
+  await expect(textarea).toBeFocused()
+})
+
 test.describe('Ctrl + Up shortcut', () => {
   test.describe.configure({
     mode: 'serial',
