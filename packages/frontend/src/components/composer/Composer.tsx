@@ -373,7 +373,9 @@ const Composer = forwardRef<
         if (handled) {
           // after all cases above you want to focus composer input again
           setTimeout(() => {
-            currentComposerMessageInputRef.current?.focus()
+            // Only one of these is actually rendered at any given moment.
+            regularMessageInputRef.current?.focus()
+            editMessageInputRef.current?.focus()
           })
         } else {
           // No picker/edit mode/quote to close.
@@ -400,7 +402,8 @@ const Composer = forwardRef<
   }, [
     shiftPressed,
     messageEditing,
-    currentComposerMessageInputRef,
+    regularMessageInputRef,
+    editMessageInputRef,
     showEmojiPicker,
     showAppPicker,
     draftState.quote,

@@ -10,6 +10,7 @@ import {
   deleteChat,
   makeDummyContactInviteLink,
   selectChat as selectChatByName,
+  sendMessage,
 } from '../playwright-helper'
 
 test.describe.configure({
@@ -61,7 +62,15 @@ async function testDraftIsEmpty() {
   await expect(composerSection.locator('.upper-bar')).toBeEmpty()
 }
 
+// Maybe it would be more proper to have properly-skoped `afterEach`,
+// but this works.
+let skipDraftClear = false
 test.afterEach(async () => {
+  if (skipDraftClear) {
+    skipDraftClear = false // Don't skip for the next test
+    return
+  }
+
   for (let i = 1; i <= numDummyChats; i++) {
     await selectChat(i)
     // Just send a/the message to make sure the draft is cleared.
@@ -709,6 +718,53 @@ test.describe('Ctrl + Up shortcut', () => {
     await expect(
       page.getByLabel('Messages').getByRole('listitem').filter({ hasText: msg })
     ).toContainText(getMessageText(8))
+  })
+})
+
+test.describe('edit message', () => {
+  const textareaEdit = () => page.locator('#composer-textarea-edit')
+  const textareaNonEdit = () => page.locator('#composer-textarea-non-edit')
+  const editMessageSection = () =>
+    page.getByRole('region', { name: 'Edit Message' })
+
+  test.beforeAll(async () => {
+    await createDummyChat(page, 'Chat for ArrowUp tests')
+
+    await sendMessage(page, 'Chat for ArrowUp tests', 'M 1')
+    await sendMessage(page, 'Chat for ArrowUp tests', 'M 2')
+    await sendMessage(page, 'Chat for ArrowUp tests', 'M 3')
+  })
+  test.afterEach(async () => {
+    skipDraftClear = true
+  })
+  test.afterAll(async () => {
+    await deleteChat(page, 'Chat for ArrowUp tests')
+  })
+
+  test('enter edit mode with ArrowUp', async () => {
+    await textarea.focus()
+    await expect(textarea).toBeEmpty()
+
+    await page.keyboard.press('ArrowUp')
+
+    await expect(textarea).toHaveText('M 3')
+    await expect(editMessageSection()).toContainText('Edit Message')
+    await expect(editMessageSection()).toContainText('M 3')
+    await expect(
+      page.getByRole('button', { name: 'Add Attachment' })
+    ).not.toBeVisible()
+    await expect(textareaEdit()).toBeFocused()
+  })
+  test('exit edit mode with Escape', async () => {
+    await page.keyboard.press('Escape')
+
+    await expect(textarea).toBeEmpty()
+    await expect(composerSection).not.toContainText('Edit Message')
+    await expect(composerSection).not.toContainText('M 3')
+    await expect(
+      composerSection.getByRole('button', { name: 'Add Attachment' })
+    ).toBeVisible()
+    await expect(textareaNonEdit()).toBeFocused()
   })
 })
 
