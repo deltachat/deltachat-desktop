@@ -422,6 +422,12 @@ test('add app from picker to chat', async () => {
 })
 
 test('recent apps context menu', async () => {
+  const userB = existingProfiles[1]
+  await page
+    .locator('.chat-list .chat-list-item')
+    .filter({ hasText: userB.name })
+    .click()
+
   await page
     .getByTestId('last-used-apps')
     .getByRole('button')
