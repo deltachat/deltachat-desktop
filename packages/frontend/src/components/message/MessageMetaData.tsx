@@ -176,7 +176,7 @@ function ViewCount(props: { messageId: number }) {
 
   const refreshViewCount = useEffectEvent(() => viewCountFetch?.refresh())
   useEffect(() => {
-    return onDCEvent(selectedAccountId(), 'MsgRead', event => {
+    return onDCEvent(selectedAccountId(), 'MsgReadCountChanged', event => {
       if (event.msgId !== props.messageId) {
         return
       }
