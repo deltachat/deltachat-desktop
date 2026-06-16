@@ -20,7 +20,7 @@ function useMessageReadReceipts(messageId: number) {
 
   useEffect(
     () =>
-      onDCEvent(accountId, 'MsgRead', ({ msgId }) => {
+      onDCEvent(accountId, 'MsgReadCountChanged', ({ msgId }) => {
         if (msgId === messageId) {
           refresh()
         }
