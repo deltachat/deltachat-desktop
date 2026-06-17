@@ -568,11 +568,7 @@ export function EditGroupNameDialog({
 
   return (
     <Dialog onClose={onClose} canOutsideClickClose={!haveUnsavedChanges} fixed>
-      <DialogHeader
-        title={
-          !isBroadcast ? tx('menu_group_name_and_image') : tx('channel_name')
-        }
-      />
+      <DialogHeader title={!isBroadcast ? tx('tab_group') : tx('channel')} />
       <form action={onClickOk}>
         <DialogBody>
           <DialogContent>
