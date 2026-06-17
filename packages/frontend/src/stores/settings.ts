@@ -20,7 +20,6 @@ export interface SettingsStoreState {
       download_limit: string
       force_encryption: '0' | '1'
       media_quality: string
-      is_chatmail: '0' | '1'
       who_can_call_me: WhoCanCallMe
       'ui.mentions_enabled': '0' | '1'
     }[P]
@@ -39,7 +38,6 @@ const settingsKeys = [
   'download_limit',
   'force_encryption',
   'media_quality',
-  'is_chatmail',
   'who_can_call_me',
   'ui.mentions_enabled',
 ] as const

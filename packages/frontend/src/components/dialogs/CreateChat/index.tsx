@@ -170,20 +170,19 @@ function CreateChatMain(props: CreateChatMainProps) {
     onClose()
   }
   const settingsStore = useSettingsStore()[0]
-  const isChatmail = settingsStore?.settings.is_chatmail === '1'
+  const forceEncryption = settingsStore?.settings.force_encryption !== '0'
 
   const showAddGroup = queryStr.length === 0
   const showAddBroadcastList = queryStr.length === 0
   const showAddContactQRScan = queryStr.length === 0
 
-  // Chatmail accounts can't send unencrypted emails. See
-  // - https://github.com/deltachat/deltachat-desktop/issues/5294#issuecomment-3089552788
-  // - https://github.com/deltachat/deltachat-ios/blob/a0043be425d9c14f4039561957adb82ef1ab2adb/deltachat-ios/Controller/NewChatViewController.swift#L76-L78
+  // Don't offer the classic email / add-contact options if
+  // forceEncryption is set (default)
 
-  const showNewEmail = !isChatmail && queryStr.length === 0
+  const showNewEmail = !forceEncryption && queryStr.length === 0
 
   const showAddContact = !(
-    isChatmail ||
+    forceEncryption ||
     queryStr === '' ||
     (contactIds.length === 1 &&
       contactCache[contactIds[0]]?.address.toLowerCase() ===

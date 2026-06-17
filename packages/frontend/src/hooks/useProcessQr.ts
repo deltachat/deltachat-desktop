@@ -109,7 +109,7 @@ export default function useProcessQR() {
   const { secureJoin } = useSecureJoin()
 
   const settingsStore = useSettingsStore()[0]
-  const isChatmail = settingsStore?.settings.is_chatmail === '1'
+  const forceEncryption = settingsStore?.settings.force_encryption !== '0'
   const { selectChat } = useChat()
 
   /**
@@ -253,8 +253,8 @@ export default function useProcessQR() {
 
       // Scanned string is actually a link to an email address
       if (url.toLowerCase().startsWith('mailto:')) {
-        if (isChatmail) {
-          // on chatmail server simple email can't be used
+        if (forceEncryption) {
+          // accounts that enforce encryption can't send unencrypted email
           await openAlertDialog({
             message: tx('invalid_unencrypted_explanation'),
           })
@@ -454,7 +454,7 @@ export default function useProcessQR() {
       processQrCode,
       startInstantOnboarding,
       selectChat,
-      isChatmail,
+      forceEncryption,
       multiDeviceMode,
       addTransportDialog,
       tx,

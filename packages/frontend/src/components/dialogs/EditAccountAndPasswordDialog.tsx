@@ -36,13 +36,15 @@ export default function EditAccountAndPasswordDialog({
   const tx = useTranslationFunction()
 
   const settingsStore = useSettingsStore()[0]
-  const isChatmail = settingsStore?.settings.is_chatmail === '1'
+  const forceEncryption = settingsStore?.settings.force_encryption !== '0'
 
   return (
     <Dialog canOutsideClickClose={false} onClose={onClose}>
       <DialogHeader
         title={
-          isChatmail ? tx('edit_transport') : tx('manual_account_setup_option')
+          forceEncryption
+            ? tx('edit_transport')
+            : tx('manual_account_setup_option')
         }
       />
       <EditAccountInner {...{ onClose, addr }} />
