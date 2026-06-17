@@ -11,10 +11,6 @@ const MAX_BYTE_SIZE_OF_EMOJI = 10 /* 10 is maybe already too generous? */
 const MAX_STRING_LENGTH_FOR_BIG_EMOJI =
   MAX_BIG_EMOJI_COUNT * MAX_BYTE_SIZE_OF_EMOJI
 
-// Created once at module load instead of on every message render:
-// constructing an `Intl.Segmenter` is relatively expensive, and
-// `countEmojisIfOnlyContainsEmoji` runs for every (short) message.
-// `granularity: 'grapheme'` is locale-independent, so the locale is irrelevant.
 // See `avatarInitial.ts` for the same pattern.
 const graphemeSegmenter = new Intl.Segmenter(undefined, {
   // Split the input into segments at grapheme cluster
