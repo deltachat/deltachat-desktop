@@ -3,7 +3,6 @@
     "declaration": true,
     "sourceMap": true,
     "module": "NodeNext",
-    "target": "es2022",
     "allowJs": false,
     "moduleResolution": "NodeNext"
   }

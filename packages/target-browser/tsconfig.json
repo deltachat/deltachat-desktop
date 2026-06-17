@@ -3,7 +3,6 @@
     "noEmit": true,
     "sourceMap": true,
     "module": "preserve",
-    "target": "es2022",
     "lib": [],
     "allowJs": false,
     "esModuleInterop": true,

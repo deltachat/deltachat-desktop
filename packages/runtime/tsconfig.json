@@ -3,7 +3,6 @@
     "rootDir": ".",
     "sourceMap": true,
     "module": "preserve",
-    "target": "es2018",
     "allowJs": false,
     "esModuleInterop": true
   }

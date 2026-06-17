@@ -3,7 +3,7 @@
     "noEmit": true,
     "sourceMap": true,
     "module": "esnext",
-    "target": "es2022",
+    "target": "es2025",
     "allowJs": false,
     "esModuleInterop": true,
     "moduleResolution": "bundler"

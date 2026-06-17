@@ -3,7 +3,6 @@
     "noEmit": true,
     "sourceMap": true,
     "module": "nodenext",
-    "target": "ES2022",
     "allowJs": false,
     "esModuleInterop": true
   },
