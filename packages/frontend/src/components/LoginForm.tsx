@@ -4,7 +4,7 @@ import { useDebouncedCallback } from 'use-debounce/lib'
 
 import { DeltaInput, DeltaSelect } from './Login-Styles'
 import { ClickableLink } from './helpers/ClickableLink'
-import { getLogger } from '../../../shared/logger'
+import { getLogger } from '@deltachat-desktop/shared/logger'
 import { BackendRemote, Type } from '../backend-com'
 import Collapse from './Collapse'
 import { I18nContext } from '../contexts/I18nContext'

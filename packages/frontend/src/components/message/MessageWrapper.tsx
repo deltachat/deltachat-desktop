@@ -3,7 +3,7 @@ import { C } from '@deltachat/jsonrpc-client'
 
 import Message from './Message'
 import { ConversationType } from './MessageList'
-import { getLogger } from '../../../../shared/logger'
+import { getLogger } from '@deltachat-desktop/shared/logger'
 
 import type { T } from '@deltachat/jsonrpc-client'
 

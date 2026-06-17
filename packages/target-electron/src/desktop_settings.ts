@@ -1,6 +1,6 @@
-import { getLogger } from '../../shared/logger.js'
-import { DesktopSettingsType } from '../../shared/shared-types.js'
-import { getDefaultState } from '../../shared/state.js'
+import { getLogger } from '@deltachat-desktop/shared/logger.js'
+import { DesktopSettingsType } from '@deltachat-desktop/shared/shared-types.js'
+import { getDefaultState } from '@deltachat-desktop/shared/state.js'
 import appConfig from './application-config.js'
 import debounce from 'debounce'
 const log = getLogger('main/state')

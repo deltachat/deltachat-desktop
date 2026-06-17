@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { ActionEmitter, KeybindAction } from '../../keybindings'
-import { getLogger } from '../../../../shared/logger'
+import { getLogger } from '@deltachat-desktop/shared/logger'
 import { DialogContext } from '../../contexts/DialogContext'
 import { I18nContext } from '../../contexts/I18nContext'
 

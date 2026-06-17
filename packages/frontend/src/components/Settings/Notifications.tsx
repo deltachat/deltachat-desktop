@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { DesktopSettingsType } from '../../../../shared/shared-types'
+import { DesktopSettingsType } from '@deltachat-desktop/shared/shared-types'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import DesktopSettingsSwitch from './DesktopSettingsSwitch'
 import SettingsSeparator from './SettingsSeparator'

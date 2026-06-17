@@ -1,5 +1,5 @@
 import rc from 'rc'
-import type { RC_Config } from '../../shared/shared-types.js'
+import type { RC_Config } from '@deltachat-desktop/shared/shared-types.js'
 
 const defaults: RC_Config = {
   'log-debug': false,

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Timespans } from '../../../../shared/constants'
+import { Timespans } from '@deltachat-desktop/shared/constants'
 import { selectedAccountId } from '../../ScreenController'
 import { BackendRemote, Type } from '../../backend-com'
 import SmallSelectDialog, { SelectDialogOption } from '../SmallSelectDialog'

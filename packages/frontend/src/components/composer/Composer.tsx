@@ -13,7 +13,7 @@ import { extension } from 'mime-types'
 
 import MenuAttachment from './menuAttachment'
 import ComposerMessageInput from './ComposerMessageInput'
-import { getLogger } from '../../../../shared/logger'
+import { getLogger } from '@deltachat-desktop/shared/logger'
 import { EmojiAndStickerPicker } from './EmojiAndStickerPicker'
 import { Quote } from '../message/Message'
 import { DraftAttachment } from '../attachment/messageAttachment'

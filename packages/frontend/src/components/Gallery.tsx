@@ -17,7 +17,7 @@ import {
   VideoAttachment,
   WebxdcAttachment,
 } from './attachment/galleryAttachment'
-import { getLogger } from '../../../shared/logger'
+import { getLogger } from '@deltachat-desktop/shared/logger'
 import { BackendRemote, onDCEvent, Type } from '../backend-com'
 import { selectedAccountId } from '../ScreenController'
 import SettingsStoreInstance, { SettingsStoreState } from '../stores/settings'

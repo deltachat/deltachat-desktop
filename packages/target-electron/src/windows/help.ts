@@ -4,8 +4,8 @@ import { stat } from 'fs/promises'
 import { platform } from 'os'
 
 import { appIcon, htmlDistDir } from '../application-constants.js'
-import { getLogger } from '../../../shared/logger.js'
-import { appWindowTitle } from '../../../shared/constants.js'
+import { getLogger } from '@deltachat-desktop/shared/logger.js'
+import { appWindowTitle } from '@deltachat-desktop/shared/constants.js'
 import { tx } from '../load-translations.js'
 import { window as main_window } from './main.js'
 import {

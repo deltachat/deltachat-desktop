@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { appWindowTitle } from '../../../shared/constants'
+import { appWindowTitle } from '@deltachat-desktop/shared/constants'
 
 /** because the window is borderless and the traffic lights hover over the document on MacOS,
  *  we need some more space so the traffic lights (close, minimize fullscreen buttons)

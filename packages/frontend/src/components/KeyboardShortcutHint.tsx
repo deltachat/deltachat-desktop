@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { DesktopSettingsType } from '../../../shared/shared-types'
+import { DesktopSettingsType } from '@deltachat-desktop/shared/shared-types'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 
 function getLabel(keyboardKey: string) {

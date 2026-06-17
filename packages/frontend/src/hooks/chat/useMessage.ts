@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 
 import useChat from './useChat'
 import { BackendRemote } from '../../backend-com'
-import { getLogger } from '../../../../shared/logger'
+import { getLogger } from '@deltachat-desktop/shared/logger'
 import { notifyWebxdcMessageSent } from '../useWebxdcMessageSent'
 
 import type { T } from '@deltachat/jsonrpc-client'

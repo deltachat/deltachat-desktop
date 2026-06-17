@@ -48,7 +48,7 @@ import type {
   ChatListContactItemData,
   ChatListMessageItemData,
 } from './ChatListItemRow'
-import { isInviteLink } from '../../../../shared/util'
+import { isInviteLink } from '@deltachat-desktop/shared/util'
 import { RovingTabindexProvider } from '../../contexts/RovingTabindex'
 import { useRpcFetch } from '../../hooks/useFetch'
 import { useSettingsStore } from '../../stores/settings'

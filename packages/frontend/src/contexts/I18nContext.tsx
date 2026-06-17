@@ -1,6 +1,6 @@
 import { createContext } from 'react'
 
-import { getMessageFunction } from '../../../shared/localize'
+import { getMessageFunction } from '@deltachat-desktop/shared/localize'
 
 export const I18nContext = createContext<{
   tx: getMessageFunction

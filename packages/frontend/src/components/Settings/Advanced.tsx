@@ -16,7 +16,7 @@ import { selectedAccountId } from '../../ScreenController'
 import TransportsDialog from '../dialogs/Transports'
 import { LogDialog } from '../dialogs/Log'
 import { DialogProps } from '../../contexts/DialogContext'
-import { getLogger } from '../../../../shared/logger'
+import { getLogger } from '@deltachat-desktop/shared/logger'
 
 type Props = {
   onClose: DialogProps['onClose']

@@ -1,7 +1,7 @@
 import { app as rawApp, ipcMain } from 'electron'
 import { readFile } from 'fs/promises'
 import { basename } from 'path'
-import { getLogger } from '../../shared/logger.js'
+import { getLogger } from '@deltachat-desktop/shared/logger.js'
 import { supportedURISchemes } from './application-constants.js'
 import { showDeltaChat } from './tray.js'
 import { ExtendedAppMainProcess } from './types.js'

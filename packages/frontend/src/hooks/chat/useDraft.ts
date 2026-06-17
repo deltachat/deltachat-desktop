@@ -8,7 +8,7 @@ import {
 } from 'react'
 import { T } from '@deltachat/jsonrpc-client'
 
-import { getLogger } from '../../../../shared/logger'
+import { getLogger } from '@deltachat-desktop/shared/logger'
 import { BackendRemote, Type } from '../../backend-com'
 import { MessageTypeAttachmentSubset } from '../../components/attachment/Attachment'
 import { KeybindAction } from '../../keybindings'

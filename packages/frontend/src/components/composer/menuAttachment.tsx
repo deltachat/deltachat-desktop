@@ -6,7 +6,7 @@ import {
   AUDIO_EXTENSIONS,
   IMAGE_EXTENSIONS,
   VIDEO_EXTENSIONS,
-} from '../../../../shared/constants'
+} from '@deltachat-desktop/shared/constants'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/dialog/useDialog'
 import SelectContactDialog from '../dialogs/SelectContact'
