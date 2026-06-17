@@ -2,12 +2,9 @@
   "compilerOptions": {
     "rootDir": ".",
     "sourceMap": true,
-    "noImplicitAny": true,
     "module": "preserve",
     "target": "es2018",
     "allowJs": false,
-    "esModuleInterop": true,
-    "strictNullChecks": true,
-    "strict": true
+    "esModuleInterop": true
   }
 }

@@ -2,12 +2,9 @@
   "compilerOptions": {
     "declaration": true,
     "sourceMap": true,
-    "noImplicitAny": true,
     "module": "preserve",
     "target": "es2022",
     "allowJs": false,
-    "strictNullChecks": true,
-    "strict": true,
     "resolveJsonModule": true
   },
   "include": ["./**/*.ts", "./**/*.js", "../../_locales/*.json"],

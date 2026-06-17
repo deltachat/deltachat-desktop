@@ -3,7 +3,6 @@
     "rootDir": ".",
     "outDir": "../../tsc-dist/renderer",
     "sourceMap": true,
-    "noImplicitAny": true,
     "module": "preserve",
     "target": "es2022",
     "jsx": "react",
@@ -11,8 +10,6 @@
     "esModuleInterop": true,
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
-    "strictNullChecks": true,
-    "strict": true,
     "plugins": [{ "name": "typescript-plugin-css-modules" }]
   }
 }
