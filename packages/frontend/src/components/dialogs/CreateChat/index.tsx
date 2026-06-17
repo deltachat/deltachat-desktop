@@ -887,7 +887,7 @@ export const ChatSettingsSetNameAndProfileImage = ({
       inputLabel = tx('subject')
       break
     case GroupType.BROADCAST_LIST:
-      inputLabel = tx('name_desktop')
+      inputLabel = tx('channel_name')
       break
     default: {
       inputLabel = tx('group_name')
