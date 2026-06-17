@@ -273,7 +273,7 @@ class BrowserRuntime implements Runtime {
       }
     }
     return {
-      locale: 'en',
+      locale,
       messages: { ...localeMessages, ...untranslated },
       dir: 'ltr',
     }
