@@ -4,7 +4,6 @@
     "outDir": "../../tsc-dist/renderer",
     "sourceMap": true,
     "module": "preserve",
-    "target": "es2022",
     "jsx": "react",
     "allowJs": false,
     "esModuleInterop": true,
