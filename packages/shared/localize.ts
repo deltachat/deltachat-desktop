@@ -51,7 +51,7 @@ export function translate(
     raw_opts?: 'other' | getMessageOptions
   ) {
     const translationKey = key as string
-    let opts: getMessageOptions = {}
+    let opts: getMessageOptions
     if (typeof raw_opts === 'string') opts = { quantity: raw_opts }
     else opts = Object.assign({}, raw_opts)
 

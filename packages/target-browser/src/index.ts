@@ -212,14 +212,14 @@ let server: http.Server | https.Server
 if (DC_FRONTEND_NO_TLS) {
   server = http.createServer({}, app)
 } else {
-  let certificate = ''
+  let certificate: string
   if (process.env.PRIVATE_CERTIFICATE_CERT) {
     certificate = process.env.PRIVATE_CERTIFICATE_CERT
   } else {
     certificate = await readFile(PRIVATE_CERTIFICATE_CERT, 'utf8')
   }
 
-  let certificateKey = ''
+  let certificateKey: string
   if (process.env.PRIVATE_CERTIFICATE_KEY) {
     certificateKey = process.env.PRIVATE_CERTIFICATE_KEY
   } else {

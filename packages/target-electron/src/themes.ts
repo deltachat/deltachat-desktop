@@ -91,7 +91,7 @@ function systemDefault() {
 export function resolveThemeAddress(address: string): string {
   const addressParts =
     address != 'system' ? address.split(':') : systemDefault()
-  let realPath = ''
+  let realPath: string
   if (addressParts.length != 2)
     throw 'not an theme address, must have the format [location]:[themename]'
   if (addressParts[0] == 'dc') {
@@ -127,7 +127,8 @@ If you did not specify this, ask the person which installed deltachat for you to
 
 If they are not available find the shortcut/.desktop file yourself and edit it to not contain the "--theme" argument.
 Using --theme is for developers and theme creators ONLY and should not be used by normal users
-If you have question or need help, feel free to ask in our forum https://support.delta.chat.`
+If you have question or need help, feel free to ask in our forum https://support.delta.chat.`,
+        { cause: error }
       )
     }
     DesktopSettings.update({ activeTheme: app.rc['theme'] })

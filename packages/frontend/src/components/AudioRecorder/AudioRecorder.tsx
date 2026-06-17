@@ -106,9 +106,8 @@ export const AudioRecorder = ({
   }, [openDialog, tx])
 
   const onRecordingStart = async () => {
-    let access = 'unknown'
     try {
-      access = await runtime.checkMediaAccess('microphone')
+      const access = await runtime.checkMediaAccess('microphone')
       log.debug('checkMediaAccess', { access })
       if (access === 'denied') {
         onAccessDenied()

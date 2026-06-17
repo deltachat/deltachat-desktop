@@ -126,7 +126,7 @@ export default function FullscreenMedia(props: Props & DialogProps) {
     },
   ])
 
-  let elm = null
+  let elm: React.ReactElement
 
   if (isImage(msg.viewType)) {
     const imageHeight =
