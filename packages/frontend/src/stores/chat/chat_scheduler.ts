@@ -80,9 +80,7 @@ export class ChatStoreScheduler {
         return
       }
 
-      // Use `shift()` (not `pop()`) so effects run in FIFO order,
-      // i.e. the order they were queued in, as documented for
-      // `queuedEffect`/`lockedQueuedEffect`. `pop()` would run them LIFO.
+      // Use shift() to run effects in strict FIFO order
       const effect = this.effectQueue.shift()
       if (!effect) {
         throw new Error(
