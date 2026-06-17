@@ -21,6 +21,12 @@ $info-text-max-width: 400px;
   align-items: stretch;
   max-width: 75%;
 
+  // Messages in the "Saved Messages" might
+  // have an extra "show in chat" button
+  &.has-original-msg-button {
+    --shortcut-menu-width: 110px;
+  }
+
   & > .author-avatar {
     @include mixins.button-reset;
 
@@ -79,6 +85,9 @@ $info-text-max-width: 400px;
     position: relative;
     display: inline-block;
     max-width: 100%;
+    // Flexible column: allow it to shrink below its content's intrinsic width
+    // so the fixed avatar and shortcut-menu columns always fit within the row.
+    min-width: 0;
     border-radius: 16px;
     --msg-container-padding-horizontal: 12px;
     --msg-container-padding-top: 10px;
@@ -642,7 +651,7 @@ $info-text-max-width: 400px;
     @include mixins.button-reset;
 
     display: inline-block;
-    max-width: 40vw;
+    max-width: 100%;
     font-size: 13px;
     font-weight: 300;
     line-height: 18px;
