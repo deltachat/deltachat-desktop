@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import { filesize } from 'filesize'
 import moment from 'moment'
 import { C } from '@deltachat/jsonrpc-client'
-import { getLogger } from '../../../../shared/logger'
+import { getLogger } from '@deltachat-desktop/shared/logger'
 
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 

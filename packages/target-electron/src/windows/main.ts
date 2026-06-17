@@ -5,8 +5,8 @@ import { platform } from 'os'
 import { fileURLToPath } from 'url'
 import { Session } from 'electron/main'
 
-import { appWindowTitle } from '../../../shared/constants.js'
-import { getLogger } from '../../../shared/logger.js'
+import { appWindowTitle } from '@deltachat-desktop/shared/constants.js'
+import { getLogger } from '@deltachat-desktop/shared/logger.js'
 import {
   appIcon,
   windowDefaults,

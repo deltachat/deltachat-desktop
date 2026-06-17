@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url'
 
 import * as mainWindow from './windows/main.js'
 import { ExtendedAppMainProcess } from './types.js'
-import { getLogger } from '../../shared/logger.js'
+import { getLogger } from '@deltachat-desktop/shared/logger.js'
 import { DesktopSettings } from './desktop_settings.js'
 import { tx } from './load-translations.js'
 import { htmlDistDir } from './application-constants.js'

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import { AutodeleteDuration } from '../../../../shared/constants'
+import { AutodeleteDuration } from '@deltachat-desktop/shared/constants'
 import { DeltaCheckbox } from '../contact/ContactListItem'
 import SettingsStoreInstance, {
   SettingsStoreState,

@@ -11,7 +11,7 @@ import moment from 'moment'
 import { debounce } from 'debounce'
 
 import { MessageWrapper } from './MessageWrapper'
-import { getLogger } from '../../../../shared/logger'
+import { getLogger } from '@deltachat-desktop/shared/logger'
 import { KeybindAction } from '../../keybindings'
 import { useMessageList, type MessageListStore } from '../../stores/messagelist'
 import { BackendRemote, onDCEvent } from '../../backend-com'

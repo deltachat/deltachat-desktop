@@ -5,7 +5,7 @@ import { C } from '@deltachat/jsonrpc-client'
 import Icon from '../Icon'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { BackendRemote, onDCEvent } from '../../backend-com'
-import { getLogger } from '../../../../shared/logger'
+import { getLogger } from '@deltachat-desktop/shared/logger'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 
 import styles from './styles.module.scss'

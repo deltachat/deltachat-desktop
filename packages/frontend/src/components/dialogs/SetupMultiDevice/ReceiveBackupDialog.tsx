@@ -7,7 +7,7 @@ import useProcessQr from '../../../hooks/useProcessQr'
 import { selectedAccountId } from '../../../ScreenController'
 import { DialogWithHeader } from '../../Dialog'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
-import { getLogger } from '../../../../../shared/logger'
+import { getLogger } from '@deltachat-desktop/shared/logger'
 
 import styles from './styles.module.scss'
 

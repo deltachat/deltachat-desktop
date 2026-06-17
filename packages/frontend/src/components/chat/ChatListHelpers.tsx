@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
-import { getLogger } from '../../../../shared/logger'
+import { getLogger } from '@deltachat-desktop/shared/logger'
 import { debounce } from 'debounce'
 import { BackendRemote, onDCEvent } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'

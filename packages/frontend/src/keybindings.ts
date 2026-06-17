@@ -1,4 +1,4 @@
-import { getLogger } from '../../shared/logger'
+import { getLogger } from '@deltachat-desktop/shared/logger'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 
 const log = getLogger('renderer/keybindings')

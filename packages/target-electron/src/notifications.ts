@@ -4,8 +4,8 @@ import { dialog } from 'electron/main'
 
 import * as mainWindow from './windows/main.js'
 import { appIcon } from './application-constants.js'
-import type { DcNotification } from '../../shared/shared-types.js'
-import { getLogger } from '../../shared/logger.js'
+import type { DcNotification } from '@deltachat-desktop/shared/shared-types.js'
+import { getLogger } from '@deltachat-desktop/shared/logger.js'
 
 import type { NativeImage, IpcMainInvokeEvent } from 'electron'
 import { DCJsonrpcRemoteInitializedP } from './ipc.js'

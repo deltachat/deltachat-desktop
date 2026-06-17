@@ -4,7 +4,7 @@ import { DcEventType } from '@deltachat/jsonrpc-client'
 import { throttle } from '@deltachat-desktop/shared/util'
 
 import MainScreen from './components/screens/MainScreen/MainScreen'
-import { getLogger } from '../../shared/logger'
+import { getLogger } from '@deltachat-desktop/shared/logger'
 import AccountSetupScreen from './components/screens/AccountSetupScreen'
 import WelcomeScreen from './components/screens/WelcomeScreen'
 import { BackendRemote, EffectfulBackendActions } from './backend-com'

@@ -8,7 +8,7 @@ import {
 } from '@deltachat/jsonrpc-client'
 import { getRPCServerPath } from '@deltachat/stdio-rpc-server'
 
-import { getLogger } from '../../../shared/logger.js'
+import { getLogger } from '@deltachat-desktop/shared/logger.js'
 import * as mainWindow from '../windows/main.js'
 import { ExtendedAppMainProcess } from '../types.js'
 import DCWebxdc from './webxdc.js'

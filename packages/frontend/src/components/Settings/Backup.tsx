@@ -3,7 +3,7 @@ import { basename } from 'path'
 
 import { DeltaProgressBar } from '../Login-Styles'
 import { runtime } from '@deltachat-desktop/runtime-interface'
-import { getLogger } from '../../../../shared/logger'
+import { getLogger } from '@deltachat-desktop/shared/logger'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import SettingsButton from './SettingsButton'

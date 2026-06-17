@@ -1,4 +1,4 @@
-import { Theme } from '../../shared/shared-types'
+import { Theme } from '@deltachat-desktop/shared/shared-types'
 import React, { useContext, useMemo } from 'react'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 

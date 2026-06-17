@@ -1,7 +1,7 @@
 import { app } from 'electron'
 import { mkdir, readdir, rm, rmdir } from 'fs/promises'
 import { join } from 'path'
-import { getLogger } from '../../shared/logger.js'
+import { getLogger } from '@deltachat-desktop/shared/logger.js'
 import {
   getTempDir,
   getAccountsPath,

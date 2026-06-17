@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useContext } from 'react'
 
-import { getLogger } from '../../../../../shared/logger'
+import { getLogger } from '@deltachat-desktop/shared/logger'
 import { BackendRemote, onDCEvent } from '../../../backend-com'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import { selectedAccountId } from '../../../ScreenController'

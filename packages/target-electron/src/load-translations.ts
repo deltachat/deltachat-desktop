@@ -2,12 +2,12 @@ import path from 'path'
 import fs from 'fs'
 import { ipcMain } from 'electron'
 
-import { getLogger } from '../../shared/logger.js'
+import { getLogger } from '@deltachat-desktop/shared/logger.js'
 import {
   getMessageFunction,
   LocaleData,
   translate as getTranslateFunction,
-} from '../../shared/localize.js'
+} from '@deltachat-desktop/shared/localize.js'
 import { languages, refresh as refreshMenu } from './menu.js'
 import { getLocaleDirectoryPath } from './getLocaleDirectory.js'
 

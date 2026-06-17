@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback, useMemo, useRef } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 import { debounce } from 'debounce'
 
-import { getLogger } from '../../../shared/logger'
+import { getLogger } from '@deltachat-desktop/shared/logger'
 import { KeybindAction } from '../keybindings'
 import { debounceWithInit } from './chat/ChatListHelpers'
 import { BackendRemote, onDCEvent } from '../backend-com'

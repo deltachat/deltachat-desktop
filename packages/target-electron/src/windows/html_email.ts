@@ -22,7 +22,7 @@ import { tx, getCurrentLocaleDate } from '../load-translations.js'
 import { open_url } from '../open_url.js'
 import { loadTheme } from '../themes.js'
 import { getDCJsonrpcRemote } from '../ipc.js'
-import { getLogger } from '../../../shared/logger.js'
+import { getLogger } from '@deltachat-desktop/shared/logger.js'
 
 import * as mainWindow from './main.js'
 import {

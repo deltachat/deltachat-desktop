@@ -1,7 +1,7 @@
 import { DcEventType } from '@deltachat/jsonrpc-client'
 import React, { useEffect, useState } from 'react'
 
-import { getLogger } from '../../../../../shared/logger'
+import { getLogger } from '@deltachat-desktop/shared/logger'
 import { BackendRemote } from '../../../backend-com'
 import { selectedAccountId } from '../../../ScreenController'
 import { DeltaProgressBar } from '../../Login-Styles'

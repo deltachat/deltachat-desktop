@@ -1,5 +1,8 @@
 import { C } from '@deltachat/jsonrpc-client'
-import { DesktopSettingsType, RC_Config } from '../../../shared/shared-types'
+import {
+  DesktopSettingsType,
+  RC_Config,
+} from '@deltachat-desktop/shared/shared-types'
 import { BackendRemote, Type } from '../backend-com'
 import { onReady } from '../onready'
 import { runtime } from '@deltachat-desktop/runtime-interface'

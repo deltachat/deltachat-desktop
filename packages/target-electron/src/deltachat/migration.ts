@@ -4,7 +4,7 @@
 import { startDeltaChat } from '@deltachat/stdio-rpc-server'
 import { existsSync, lstatSync } from 'fs'
 import { join } from 'path'
-import { Logger } from '../../../shared/logger.js'
+import { Logger } from '@deltachat-desktop/shared/logger.js'
 import { mkdir, readdir, rename, rm, rmdir, stat } from 'fs/promises'
 import type { DcEvent } from '@deltachat/jsonrpc-client'
 
