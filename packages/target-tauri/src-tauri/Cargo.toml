@@ -22,8 +22,8 @@ tauri-build = { version = "2", features = ["config-json5"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 tokio = "1.43.1"
-deltachat = { git = "https://github.com/chatmail/core", tag = "v2.52.0", version = "2.52.0" }
-deltachat-jsonrpc = { git = "https://github.com/chatmail/core", tag = "v2.52.0", version = "2.52.0" }
+deltachat = { git = "https://github.com/chatmail/core", tag = "v2.53.0", version = "2.53.0" }
+deltachat-jsonrpc = { git = "https://github.com/chatmail/core", tag = "v2.53.0", version = "2.53.0" }
 log = "0.4.22"
 anyhow = "1.0.93"
 futures-lite = "2.5.0"
