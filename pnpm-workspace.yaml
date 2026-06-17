@@ -18,7 +18,7 @@ catalog:
 
   # tools / dev dependencies
   sass: ^1.86.3
-  typescript: ^5.9.3
+  typescript: ^6.0.3
   typescript-plugin-css-modules: ^5.2.0
   esbuild: ^0.25.0
   '@types/node': ^22.15.33

@@ -3,7 +3,7 @@
     "declaration": true,
     "sourceMap": true,
     "noImplicitAny": true,
-    "module": "es2015",
+    "module": "preserve",
     "target": "es2018",
     "allowJs": false,
     "strictNullChecks": true,
