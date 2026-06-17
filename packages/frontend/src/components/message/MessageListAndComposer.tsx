@@ -15,7 +15,6 @@ import ConfirmSendingFiles from '../dialogs/ConfirmSendingFiles'
 import { ReactionsBarProvider } from '../ReactionsBar'
 import useDialog from '../../hooks/dialog/useDialog'
 import useMessage from '../../hooks/chat/useMessage'
-import { Viewtype } from '@deltachat/jsonrpc-client/dist/generated/types'
 import { useMessageList } from '../../stores/messagelist'
 import { IMAGE_EXTENSIONS } from '@deltachat-desktop/shared/constants'
 
@@ -154,7 +153,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     // send single file
     if (sanitized.length == 1) {
       const file = sanitized[0]
-      const msgViewType: Viewtype = isImage(file.parsed) ? 'Image' : 'File'
+      const msgViewType: T.Viewtype = isImage(file.parsed) ? 'Image' : 'File'
       await addFileToDraft(
         file.pathStr,
         file.parsed.name + file.parsed.ext,
@@ -174,7 +173,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
           }
 
           for (const file of sanitized) {
-            const msgViewType: Viewtype = isImage(file.parsed)
+            const msgViewType: T.Viewtype = isImage(file.parsed)
               ? 'Image'
               : 'File'
             sendMessage(accountId, chat.id, {

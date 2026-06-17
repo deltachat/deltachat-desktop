@@ -3,13 +3,12 @@
     "declaration": true,
     "sourceMap": true,
     "noImplicitAny": true,
-    "module": "NodeNext",
+    "module": "preserve",
     "target": "es2022",
     "allowJs": false,
     "strictNullChecks": true,
     "strict": true,
-    "resolveJsonModule": true,
-    "moduleResolution": "NodeNext"
+    "resolveJsonModule": true
   },
   "include": ["./**/*.ts", "./**/*.js", "../../_locales/*.json"],
   "exclude": ["./ts-compiled-for-tests"]

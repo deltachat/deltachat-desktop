@@ -1,15 +1,15 @@
 {
   "compilerOptions": {
+    "rootDir": ".",
     "outDir": "../../tsc-dist/renderer",
-    "rootDirs": [".", "../shared"],
     "sourceMap": true,
     "noImplicitAny": true,
-    "module": "es6",
+    "module": "preserve",
     "target": "es2022",
     "jsx": "react",
     "allowJs": false,
     "esModuleInterop": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "strictNullChecks": true,
     "strict": true,

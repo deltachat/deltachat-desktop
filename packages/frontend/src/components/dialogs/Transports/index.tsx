@@ -18,7 +18,7 @@ import Button from '../../Button'
 
 import styles from './styles.module.scss'
 
-import { TransportListEntry } from '@deltachat/jsonrpc-client/dist/generated/types'
+import { T } from '@deltachat/jsonrpc-client'
 import classNames from 'classnames'
 import useDialog from '../../../hooks/dialog/useDialog'
 import useAddTransportDialog from '../../../hooks/dialog/useAddTransportDialog'
@@ -39,7 +39,7 @@ export default function TransportsDialog(
 
   // used in  new transport form
   const [transports, setTransports] = useState<
-    (TransportListEntry & { isDefault: boolean })[]
+    (T.TransportListEntry & { isDefault: boolean })[]
   >([])
 
   const getTransports = useCallback(() => {
@@ -69,7 +69,7 @@ export default function TransportsDialog(
   }, [accountId, getTransports])
 
   const changeDefaultTransport = useCallback(
-    async (transport: TransportListEntry) => {
+    async (transport: T.TransportListEntry) => {
       // optimistically update UI
       setTransports(prev =>
         prev.map(t => ({
@@ -128,7 +128,7 @@ export default function TransportsDialog(
   }, [getTransports])
 
   const deleteTransport = useCallback(
-    (transport: TransportListEntry) => {
+    (transport: T.TransportListEntry) => {
       openDialog(RemoveOrHideTransportDialog, {
         accountId,
         transport,
@@ -139,7 +139,7 @@ export default function TransportsDialog(
   )
 
   const editTransport = useCallback(
-    (transport: TransportListEntry) => {
+    (transport: T.TransportListEntry) => {
       openDialog(EditAccountAndPasswordDialog, {
         addr: transport.param.addr,
       })
@@ -262,7 +262,7 @@ export default function TransportsDialog(
 function RemoveOrHideTransportDialog(
   props: DialogProps & {
     accountId: number
-    transport: TransportListEntry
+    transport: T.TransportListEntry
     onAction: () => void
   }
 ) {

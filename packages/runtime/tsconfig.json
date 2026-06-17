@@ -3,11 +3,10 @@
     "rootDir": ".",
     "sourceMap": true,
     "noImplicitAny": true,
-    "module": "es6",
+    "module": "preserve",
     "target": "es2018",
     "allowJs": false,
     "esModuleInterop": true,
-    "moduleResolution": "node",
     "strictNullChecks": true,
     "strict": true
   }

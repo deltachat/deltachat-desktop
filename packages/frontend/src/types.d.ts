@@ -1,5 +1,8 @@
 declare module '@mapbox/geojson-extent'
 declare module '@deltachat/react-qr-reader'
+// Shut up the TypeScript error
+// https://www.typescriptlang.org/tsconfig/#noUncheckedSideEffectImports.
+declare module 'moment/min/locales'
 
 // Tell tsc that CSS modules are alright
 declare module '*.module.css'
