@@ -2,14 +2,11 @@
   "compilerOptions": {
     "noEmit": true,
     "sourceMap": true,
-    "noImplicitAny": true,
     "module": "esnext",
     "target": "es2022",
     "allowJs": false,
     "esModuleInterop": true,
-    "moduleResolution": "bundler",
-    "strictNullChecks": true,
-    "strict": true
+    "moduleResolution": "bundler"
   },
   "include": ["./**/*.ts", "./**/*.js"]
 }

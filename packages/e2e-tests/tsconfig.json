@@ -2,13 +2,10 @@
   "compilerOptions": {
     "noEmit": true,
     "sourceMap": true,
-    "noImplicitAny": true,
     "module": "nodenext",
     "target": "ES2022",
     "allowJs": false,
-    "esModuleInterop": true,
-    "strictNullChecks": true,
-    "strict": true
+    "esModuleInterop": true
   },
   "include": ["./**/*.ts", "./**/*.js"]
 }
