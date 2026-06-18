@@ -6,7 +6,7 @@ import useDialog from '../../../hooks/dialog/useDialog'
 import useChat from '../../../hooks/chat/useChat'
 import useChatDialog from '../../../hooks/chat/useChatDialog'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
-import CreateChat from '../CreateChat'
+import { CreateGroup, CreateBroadcastList, GroupType } from '../CreateChat'
 import QrCode from '../QrCode'
 import { SCAN_CONTEXT_TYPE } from '../../../hooks/useProcessQr'
 
@@ -152,7 +152,10 @@ export function usePaletteCommands({
         icon: 'forum',
         label: tx('menu_new_group'),
         run: () => {
-          openDialog(CreateChat, { initialAction: 'new-group' })
+          openDialog(CreateGroup, {
+            groupType: GroupType.REGULAR_GROUP as const,
+            onFinish: () => {},
+          })
           close()
         },
       },
@@ -162,7 +165,9 @@ export function usePaletteCommands({
         icon: 'chat_bubble',
         label: tx('new_channel'),
         run: () => {
-          openDialog(CreateChat, { initialAction: 'new-channel' })
+          openDialog(CreateBroadcastList, {
+            onFinish: () => {},
+          })
           close()
         },
       },
@@ -172,7 +177,7 @@ export function usePaletteCommands({
         icon: 'settings',
         label: tx('menu_settings'),
         run: () => {
-          openDialog(Settings, { initialAction: 'open-settings' })
+          openDialog(Settings, {})
           close()
         },
       }

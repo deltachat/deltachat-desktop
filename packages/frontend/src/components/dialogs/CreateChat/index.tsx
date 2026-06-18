@@ -66,7 +66,9 @@ import { I18nContext } from '../../../contexts/I18nContext'
 import { SCAN_CONTEXT_TYPE } from '../../../hooks/useProcessQr'
 import { IMAGE_EXTENSIONS } from '@deltachat-desktop/shared/constants'
 
-const enum GroupType {
+// Exported (and a regular `enum` rather than `const enum`) so that callers like
+// the command palette can open `CreateGroup` directly with a `groupType`.
+export enum GroupType {
   /**
    * Regular group, chat.
    * @see {@link BackendRemote.rpc.createGroupChat}.
@@ -84,32 +86,8 @@ const enum GroupType {
   BROADCAST_LIST = 'broadcast_list',
 }
 
-/** Lets callers (e.g. the command palette) open CreateChat in a specific view. */
-export type CreateChatInitialAction = 'new-group' | 'new-channel'
-
-export default function CreateChat(
-  props: DialogProps & { initialAction?: CreateChatInitialAction }
-) {
-  const { onClose, initialAction } = props
-  const { openDialog } = useDialog()
-
-  // When opened with an `initialAction` (e.g. from the command palette),
-  // immediately open the corresponding creation dialog on top of "New Chat".
-  // Closing it (Escape) returns to "New Chat"; finishing closes both.
-  useEffect(() => {
-    if (initialAction === 'new-group') {
-      openDialog(CreateGroup, {
-        groupType: GroupType.REGULAR_GROUP as const,
-        onFinish: onClose,
-      })
-    } else if (initialAction === 'new-channel') {
-      openDialog(CreateBroadcastList, {
-        onFinish: onClose,
-      })
-    }
-    // Only run once on mount.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+export default function CreateChat(props: DialogProps) {
+  const { onClose } = props
 
   return (
     <Dialog width={400} onClose={onClose} fixed dataTestid='create-chat-dialog'>
@@ -791,7 +769,7 @@ type CreateBroadcastListProps = {
   onClose: DialogProps['onClose']
 }
 
-function CreateBroadcastList(props: CreateBroadcastListProps) {
+export function CreateBroadcastList(props: CreateBroadcastListProps) {
   const { onFinish, onClose } = props
   const tx = useTranslationFunction()
 
