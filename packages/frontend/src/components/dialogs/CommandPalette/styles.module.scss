@@ -19,6 +19,24 @@
   opacity: 0.5;
 }
 
+// Hint shown at the right end of the input bar
+.hint {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75em;
+  white-space: nowrap;
+  opacity: 0.5;
+}
+
+.hintKey {
+  padding: 0 5px;
+  border-radius: 4px;
+  font-family: monospace;
+  background-color: var(--chatListItemBgPinned);
+}
+
 .crumb {
   display: flex;
   align-items: center;
@@ -26,6 +44,11 @@
   flex: none;
   max-width: 30%;
   font-weight: 500;
+
+  :global(.avatar.small) {
+    --local-avatar-size: 20px;
+    --local-avatar-font-size: 12px;
+  }
 }
 
 .crumbLabel {
@@ -48,7 +71,7 @@
   border-radius: 6px;
   font-weight: 500;
   font-size: 0.9em;
-  background-color: var(--commandPaletteTabHintBg);
+  background-color: var(--chatListItemBgPinned);
 }
 
 .crumbRemove {
@@ -66,13 +89,13 @@
   }
 }
 
-.searchInput {
+input.searchInput {
   flex: 1;
   min-width: 80px;
   box-sizing: border-box;
-  font-size: 1.1em;
   border: none;
   background: transparent;
+  font-size: 1em;
 }
 
 .clearButton {
@@ -123,10 +146,7 @@
 }
 
 .itemActive {
-  background-color: var(
-    --commandPaletteSelectedBg,
-    var(--chatListItemSelectedBg)
-  );
+  background-color: var(--chatListItemBgPinned);
 
   .dimmed {
     opacity: 0.85;
@@ -142,6 +162,10 @@
   block-size: 32px;
   flex: none;
   opacity: 0.7;
+}
+
+.accountAvatar:global(.avatar) :global(.content) {
+  border-radius: 10%;
 }
 
 .itemText {
@@ -160,7 +184,7 @@
   border-radius: 4px;
   font-size: 0.75em;
   white-space: nowrap;
-  background-color: var(--commandPaletteTabHintBg);
+  border: 1px solid #888;
 }
 
 .freshMessageCounter {

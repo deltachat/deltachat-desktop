@@ -2,14 +2,14 @@
   "command_palette_tab_to_search": {
     "message": "Tab to search"
   },
-  "command_palette_filter_unread": {
-    "message": "Unread"
-  },
   "command_palette_no_unread": {
     "message": "No unread chats"
   },
   "command_palette_commands_section": {
     "message": "Commands"
+  },
+  "command_palette_type_for_command_mode": {
+    "message": "Type %1$s for command mode"
   },
   "commands_in_current_account_only": {
     "message": "Command mode is only available for the current active account."

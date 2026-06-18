@@ -1,7 +1,7 @@
 import React, { useEffect, useId, useRef, useState, useMemo } from 'react'
 
 import Dialog from '../../Dialog'
-import Icon, { type IconName } from '../../Icon'
+import Icon from '../../Icon'
 import { Avatar } from '../../Avatar'
 import { BackendRemote } from '../../../backend-com'
 import { selectedAccountId } from '../../../ScreenController'
@@ -43,14 +43,6 @@ const UNREAD_FILTER_TRIGGER = /^(?:is)?:unread\s/i
 type Props = {
   mode?: 'search' | 'command'
   onClose: DialogProps['onClose']
-}
-
-const SECTION_ICON: Record<PaletteSection, IconName> = {
-  accounts: 'swap_vert',
-  chats: 'forum',
-  contacts: 'person',
-  messages: 'chat_bubble',
-  commands: 'settings',
 }
 
 function sectionLabel(
@@ -207,6 +199,30 @@ export default function CommandPalette({ mode = 'search', onClose }: Props) {
     ]
   )
 
+  // When opened directly in command mode (Ctrl+P) while
+  // a chat is open in the main view, scope to that chat
+  useEffect(() => {
+    if (mode !== 'command' || openChatId == null) {
+      return
+    }
+    let cancelled = false
+    BackendRemote.rpc
+      .getBasicChatInfo(currentAccountId, openChatId)
+      .then(chat => {
+        if (cancelled) {
+          return
+        }
+        setScope('chat')
+        setScopedChat({ id: chat.id, name: chat.name })
+      })
+      .catch(err => log.error('failed to scope to active chat', err))
+    return () => {
+      cancelled = true
+    }
+    // Only on mount.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   // Command mode: typing `>` switches from search to command mode
   const isCommandMode = query.startsWith('>') && !filter
   const commandFilter = isCommandMode ? query.slice(1).trim().toLowerCase() : ''
@@ -214,7 +230,7 @@ export default function CommandPalette({ mode = 'search', onClose }: Props) {
   const commands = usePaletteCommands({
     accountId: effectiveAccountId,
     scopedChat,
-    selectedChatId: openChatId ?? null,
+    activeChatId: openChatId ?? null,
     close: onClose,
   })
 
@@ -413,9 +429,7 @@ export default function CommandPalette({ mode = 'search', onClose }: Props) {
         )}
         {scope === 'account' && filter === 'unread' && (
           <span className={styles.filterCrumb}>
-            <span className={styles.crumbLabel}>
-              {tx('command_palette_filter_unread')}
-            </span>
+            <span className={styles.crumbLabel}>{tx('search_unread')}</span>
             <button
               type='button'
               className={styles.crumbRemove}
@@ -463,6 +477,23 @@ export default function CommandPalette({ mode = 'search', onClose }: Props) {
             <Icon icon='clear' size={18} />
           </button>
         )}
+        {query === '' && (
+          <span className={styles.hint} aria-hidden>
+            {(() => {
+              // Render the `>` as a key-like chip in the middle of the hint.
+              const [before, after] = tx(
+                'command_palette_type_for_command_mode'
+              ).split('%1$s')
+              return (
+                <>
+                  {before}
+                  <span className={styles.hintKey}>&gt;</span>
+                  {after}
+                </>
+              )
+            })()}
+          </span>
+        )}
       </div>
       <div className={styles.list} ref={listRef}>
         <div role='status' style={{ display: 'contents' }}>
@@ -489,7 +520,6 @@ export default function CommandPalette({ mode = 'search', onClose }: Props) {
                 className={styles.sectionHeader}
                 id={groupHeaderId(group.section)}
               >
-                <Icon icon={SECTION_ICON[group.section]} size={14} />
                 <span>{sectionLabel(tx, group.section)}</span>
               </div>
               {group.entries.map(({ item, index }) => {
@@ -516,6 +546,11 @@ export default function CommandPalette({ mode = 'search', onClose }: Props) {
                       item.avatar && (
                         <Avatar
                           small
+                          className={
+                            item.section === 'accounts'
+                              ? styles.accountAvatar
+                              : undefined
+                          }
                           displayName={item.avatar.displayName}
                           avatarPath={item.avatar.avatarPath || undefined}
                           color={item.avatar.color}

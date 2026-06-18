@@ -18,7 +18,7 @@ export type UsePaletteCommandsParams = {
   /** The chat in the breadcrumb, if any — enables chat-specific commands. */
   scopedChat: { id: number; name: string } | null
   /** The chat currently open in the main view, so delete can unselect it. */
-  selectedChatId: number | null
+  activeChatId: number | null
   /** Dismisses the palette after a command runs. */
   close: () => void
 }
@@ -30,7 +30,7 @@ export type UsePaletteCommandsParams = {
 export function usePaletteCommands({
   accountId,
   scopedChat,
-  selectedChatId,
+  activeChatId,
   close,
 }: UsePaletteCommandsParams): PaletteItem[] {
   const tx = useTranslationFunction()
@@ -49,7 +49,7 @@ export function usePaletteCommands({
     BackendRemote.rpc.getChatlistItemsByEntries,
     entries != null ? [accountId, entries] : null
   )
-  const chatItemResult = chatItemFetch?.lingeringResult
+  const chatItemResult = chatItemFetch?.result ?? null
   const chatEntry =
     scopedChat && chatItemResult?.ok
       ? chatItemResult.value[scopedChat.id]
@@ -102,7 +102,7 @@ export function usePaletteCommands({
           : tx('menu_archive_chat'),
         run: async () => {
           // unselect chat to avoid main view showing a now-archived chat.
-          if (!chatItem.isArchived && chatItem.id === selectedChatId) {
+          if (!chatItem.isArchived && chatItem.id === activeChatId) {
             unselectChat()
           }
           await BackendRemote.rpc.setChatVisibility(
@@ -121,7 +121,7 @@ export function usePaletteCommands({
         icon: 'trash',
         label: tx('menu_delete_chat'),
         run: () => {
-          openDeleteChatsDialog(accountId, [chatItem], selectedChatId)
+          openDeleteChatsDialog(accountId, [chatItem], activeChatId)
           close()
         },
       })
@@ -187,7 +187,7 @@ export function usePaletteCommands({
   }, [
     accountId,
     chatItem,
-    selectedChatId,
+    activeChatId,
     tx,
     openDialog,
     unselectChat,
