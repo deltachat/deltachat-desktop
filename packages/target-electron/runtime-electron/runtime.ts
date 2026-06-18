@@ -92,7 +92,7 @@ class ElectronTransport extends BaseTransport {
   }
   _send(message: yerpc.Message): void {
     const serialized = JSON.stringify(message)
-    ipcBackend.invoke('json-rpc-request', serialized)
+    ipcBackend.send('json-rpc-request', serialized)
     if (logJsonrpcConnection) {
       const sentAt = performance.now()
       idToRequestMap.set(message.id, { message, sentAt })

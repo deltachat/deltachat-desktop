@@ -142,7 +142,7 @@ export default class DeltaChatController {
       this.account_manager.send(JSON.stringify(message))
     })
 
-    ipcMain.handle('json-rpc-request', (_ev, message) => {
+    ipcMain.on('json-rpc-request', (_ev, message) => {
       this.account_manager.send(message)
     })
 
