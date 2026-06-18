@@ -5,6 +5,7 @@ import styles from './styles.module.scss'
 
 export type IconName =
   | 'apps'
+  | 'archive'
   | 'arrow-left'
   | 'audio-muted'
   | 'bell'
@@ -44,6 +45,7 @@ export type IconName =
   | 'settings'
   | 'swap_vert'
   | 'swap_hor'
+  | 'trash'
   | 'upload-file'
   | 'visibility'
 

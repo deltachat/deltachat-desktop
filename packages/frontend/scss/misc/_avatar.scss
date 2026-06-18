@@ -89,6 +89,12 @@
   img.content {
     object-fit: cover;
   }
+  &.archive-avatar {
+    /* the archive avatar is an icon, centered within the avatar area */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 .avatar.small {
