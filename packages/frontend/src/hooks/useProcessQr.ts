@@ -5,6 +5,7 @@ import useAlertDialog from './dialog/useAlertDialog'
 import useConfirmationDialog from './dialog/useConfirmationDialog'
 import useDialog from './dialog/useDialog'
 import useInstantOnboarding from './useInstantOnboarding'
+import InvalidUnencryptedMailDialog from '../components/dialogs/InvalidUnencryptedMail'
 import useOpenMailtoLink from './useOpenMailtoLink'
 import useSecureJoin from './useSecureJoin'
 import useTranslationFunction from './useTranslationFunction'
@@ -109,7 +110,6 @@ export default function useProcessQR() {
   const { secureJoin } = useSecureJoin()
 
   const settingsStore = useSettingsStore()[0]
-  const forceEncryption = settingsStore?.settings.force_encryption !== '0'
   const { selectChat } = useChat()
 
   /**
@@ -198,6 +198,9 @@ export default function useProcessQR() {
     [openConfirmationDialog, startInstantOnboardingFlow, tx]
   )
 
+  const forceEncryption =
+    (settingsStore && settingsStore?.settings.force_encryption === '1') ?? false
+
   const multiDeviceMode =
     (settingsStore && settingsStore.settings['bcc_self'] === '1') ?? false
 
@@ -255,9 +258,7 @@ export default function useProcessQR() {
       if (url.toLowerCase().startsWith('mailto:')) {
         if (forceEncryption) {
           // accounts that enforce encryption can't send unencrypted email
-          await openAlertDialog({
-            message: tx('invalid_unencrypted_explanation'),
-          })
+          openDialog(InvalidUnencryptedMailDialog)
         } else {
           await openMailtoLink(accountId, url)
         }
@@ -454,8 +455,8 @@ export default function useProcessQR() {
       processQrCode,
       startInstantOnboarding,
       selectChat,
-      forceEncryption,
       multiDeviceMode,
+      forceEncryption,
       addTransportDialog,
       tx,
     ]
