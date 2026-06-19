@@ -122,8 +122,6 @@ $info-text-max-width: 400px;
         unicode-bidi: plaintext;
 
         overflow-wrap: break-word;
-        word-wrap: break-word;
-        word-break: break-word;
         white-space: pre-wrap;
         cursor: default;
 
@@ -215,6 +213,8 @@ $info-text-max-width: 400px;
   }
 
   .download {
+    overflow-wrap: break-word;
+
     span.failed {
       color: var(--colorDanger);
       font-weight: bold;
@@ -479,6 +479,7 @@ $info-text-max-width: 400px;
     opacity: 0.9;
     color: var(--infoMessageBubbleText);
     outline-offset: 4px;
+    overflow-wrap: break-word;
 
     .status-icon.sending {
       background-color: var(--infoMessageBubbleText);
