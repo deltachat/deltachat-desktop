@@ -19,7 +19,6 @@ export default function MessageListView({
           // Note that `key` has not always been here.
           // Some downstream components still try to support variable `chatId`.
           // To name a few:
-          // - `useDraft`'s `abortController`.
           // - `hasChatChanged` in `MessageList`.
           // - `useHasChanged2(chatId)` in `Composer`.
           //
