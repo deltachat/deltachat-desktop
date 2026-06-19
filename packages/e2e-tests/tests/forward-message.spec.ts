@@ -11,6 +11,7 @@ import {
   reloadPage,
   clickThroughTestIds,
   test,
+  selectChat,
 } from '../playwright-helper'
 
 /**
@@ -253,7 +254,7 @@ test('forward message to another account', async () => {
   ).toBeVisible()
 })
 
-test('forward message with file attachment', async () => {
+test('forward message with .xdc file attachment', async () => {
   const userA = getUser(0, existingProfiles)
   const userB = getUser(1, existingProfiles)
 
@@ -342,6 +343,14 @@ test('forward message with file attachment', async () => {
     .locator('.message')
     .filter({ has: forwardedWebxdcMessage })
   await expect(forwardedMessage).toContainText('Forwarded')
+})
+
+test('forward message with .zip file attachment', async () => {
+  const userA = getUser(0, existingProfiles)
+  const userB = getUser(1, existingProfiles)
+
+  await switchToProfile(page, userB.id)
+  await selectChat(page, 'Saved Messages')
 
   // Now test forwarding a zip file attachment
   const fileChooserPromise = page.waitForEvent('filechooser')
