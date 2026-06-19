@@ -490,6 +490,11 @@ function ViewGroupInner(
             />
           </div>
         )}
+        {filterContacts(groupContacts).length === 0 && memberFilter !== '' && (
+          <div className='group-member-filter-no-result'>
+            {tx('search_no_result_for_x', memberFilter)}
+          </div>
+        )}
         <div
           className='group-member-contact-list-wrapper'
           ref={groupMemberContactListWrapperRef}
@@ -544,7 +549,7 @@ function ViewGroupInner(
             aria-busy
           ></div>
         )}
-        {pastContacts.length > 0 && (
+        {filterContacts(pastContacts).length > 0 && (
           <>
             <div id='view-group-past-members-title' className='group-separator'>
               {tx('past_members')}
