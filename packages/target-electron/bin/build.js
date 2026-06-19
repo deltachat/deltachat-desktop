@@ -22,7 +22,6 @@ await build({
     'isomorphic-ws',
   ],
   entryPoints: ['src/index.ts'],
-  treeShaking: false,
   inject: ['src/cjs-shim.ts'],
   define: {
     BUILD_INFO_JSON_STRING: `"${BuildInfoString.replace(/"/g, '\\"')}"`,
