@@ -1,9 +1,9 @@
 import React from 'react'
 
-import MessageListAndComposer from './message/MessageListAndComposer'
-import NoChatSelected from './NoChatSelected'
-import useChat from '../hooks/chat/useChat'
-import { RecoverableCrashScreen } from './screens/RecoverableCrashScreen'
+import MessageListAndComposer from '../message/MessageListAndComposer'
+import NoChatSelected from '../NoChatSelected'
+import useChat from '../../hooks/chat/useChat'
+import { RecoverableCrashScreen } from '../screens/RecoverableCrashScreen'
 
 export default function MessageListView({
   accountId,
