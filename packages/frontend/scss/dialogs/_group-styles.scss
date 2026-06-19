@@ -86,7 +86,8 @@ input.group-name-input {
   user-select: text;
 }
 
-.group-member-filter {
+.group-member-filter,
+.group-member-filter-no-result {
   padding-block: 0 10px;
   padding-inline: 20px 10px;
   margin-top: 10px;
@@ -94,4 +95,8 @@ input.group-name-input {
   display: flex;
   align-items: center;
   border-bottom: 1px solid var(--separatorColor);
+}
+
+.group-member-filter-no-result {
+  margin-bottom: 20px;
 }
