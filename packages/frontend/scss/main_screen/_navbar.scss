@@ -1,0 +1,9 @@
+@mixin navbar {
+  height: var(--navBarHeight);
+  background-color: var(--navBarBackground);
+  color: var(--navBarText);
+  border-bottom: var(--outlineProperties);
+  // Just in case the "main" section below the navbar decides
+  // to do something like `height: 100%` instead of `flex-grow: 1`.
+  flex-shrink: 0;
+}
