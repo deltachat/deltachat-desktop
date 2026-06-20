@@ -41,15 +41,15 @@ export const botcommand: Plugin = ({ scanner, parser }) => {
   // a slash to form a valid bot command
 
   // Only allow alphabetic characters immediately after the slash.
-  Slash.ta(alpha, BotCommand)
+  Slash.ta(alpha!, BotCommand)
 
   // Allow alphanumeric tokens (which contain at least one letter)
   Slash.tt(ASCIINUMERICAL, BotCommand)
   Slash.tt(ALPHANUMERICAL, BotCommand)
 
   // Allow alphanumeric character groups to continue the command
-  BotCommand.ta(alphanumeric, BotCommand)
-  BotCommand.ta(numeric, BotCommand)
+  BotCommand.ta(alphanumeric!, BotCommand)
+  BotCommand.ta(numeric!, BotCommand)
 
   // Allow specific alphanumeric tokens
   BotCommand.tt(NUM, BotCommand)

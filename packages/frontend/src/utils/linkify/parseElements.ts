@@ -14,7 +14,8 @@ export function parseElements(message: string): linkify.MultiToken[] {
       const start = element.startIndex()
       // do not render botcommands if they
       // not start at index 0 or after a space
-      if (start > 0 && !/\s/.test(message[start - 1])) {
+      const char = message[start - 1]
+      if (start > 0 && char && !/\s/.test(char)) {
         element.t = 'text'
       }
     }
