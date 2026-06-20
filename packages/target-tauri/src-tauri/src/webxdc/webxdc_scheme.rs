@@ -307,6 +307,7 @@ const PERMISSIONS_POLICY_DENY_ALL: &str = concat!(
     "serial=(), ",
     "sync-xhr=(), ",
     "storage-access=(), ",
+    "tools=(), ",
     "usb=(), ",
     "web-share=(), ",
     "window-management=(), ",
