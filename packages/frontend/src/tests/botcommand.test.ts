@@ -135,7 +135,7 @@ describe('parseElements functionality', () => {
       (el: any) => el.t === 'botcommand'
     )
     expect(botCommandElements).to.have.length(1)
-    expect(botCommandElements[0].v).to.equal('/help')
+    expect(botCommandElements[0]?.v).to.equal('/help')
   })
 
   it('should identify different types of content in mixed text', () => {
@@ -152,9 +152,9 @@ describe('parseElements functionality', () => {
     expect(emails).to.have.length(1)
     expect(botCommands).to.have.length(1)
 
-    expect(urls[0].v).to.equal('https://example.com')
-    expect(emails[0].v).to.equal('test@example.com')
-    expect(botCommands[0].v).to.equal('/help')
+    expect(urls[0]?.v).to.equal('https://example.com')
+    expect(emails[0]?.v).to.equal('test@example.com')
+    expect(botCommands[0]?.v).to.equal('/help')
   })
 
   it('should identify bot commands at start of text and after spaces', () => {
@@ -178,8 +178,8 @@ describe('parseElements functionality', () => {
     expect(elements !== null).to.equal(true)
 
     expect(elements).to.have.length(1)
-    expect(elements![0].t).to.equal('text')
-    expect(elements![0].v).to.equal('Hello world')
+    expect(elements![0]?.t).to.equal('text')
+    expect(elements![0]?.v).to.equal('Hello world')
   })
 
   it('should handle error cases gracefully', () => {
@@ -229,7 +229,7 @@ describe('parseElements functionality', () => {
           0,
           `Expected bot command to be found in: "${text}"`
         )
-        expect(botCommandElements[0].v).to.include('/help')
+        expect(botCommandElements[0]?.v).to.include('/help')
       } else {
         expect(botCommandElements).to.have.length(
           0,
