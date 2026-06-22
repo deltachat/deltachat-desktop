@@ -2,6 +2,41 @@
 
 All notable changes to this project will be documented in this file.
 
+<a id="2_53_0"></a>
+## [2.53.0] - 2026-06-22
+
+### Added
+
+- Add a way to select multiple messages
+- Show num selected messages
+- `Ctrl + Alt + PageDown` to switch accounts
+- Close (unselect) chat with Escape
+- Escape to unselect chats (multiselect)
+- Show dialog for load image settings in HTML messages ([#6386](https://github.com/deltachat/deltachat-desktop/issues/6386))
+
+### Fixed
+
+- Undismissable context menu in fullscreen media
+- Escape to go back to View Group from member
+- Disable keyboard shortcuts when have dialog
+- Avoid static hard coded lang attribute ([#6436](https://github.com/deltachat/deltachat-desktop/issues/6436))
+- Do not render large images
+- Keep focus on old element on dialog close
+- Escape in Create Group goes back to New Chat
+- Focus composer when user tries to type
+- Preserve line breaks in channel dialog descr
+- Refocus input when send message button is pressed ([#6374](https://github.com/deltachat/deltachat-desktop/issues/6374))
+- No edit mode on `ArrowUp` if composer has \n
+- Don't send whitespace-only message
+- Target-browser not respecting `locale`
+- Add bottom margins in dialogs ([#6481](https://github.com/deltachat/deltachat-desktop/issues/6481))
+- Remove is chatmail ([#6480](https://github.com/deltachat/deltachat-desktop/issues/6480))
+
+### Miscellaneous Tasks
+
+- Upgrade core to 2.53.0 ([#6479](https://github.com/deltachat/deltachat-desktop/issues/6479))
+
+
 <a id="2_52_0"></a>
 ## [2.52.0] - 2026-06-09
 
@@ -4106,7 +4141,8 @@ This section is only relevant to contributors.
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.52.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.53.0...HEAD
+[2.53.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.52.0...v2.53.0
 [2.52.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.51.0...v2.52.0
 [2.51.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.49.1...v2.51.0
 [2.49.1]: https://github.com/deltachat/deltachat-desktop/compare/v2.49.0...v2.49.1
