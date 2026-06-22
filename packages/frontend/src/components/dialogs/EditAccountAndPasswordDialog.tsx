@@ -42,6 +42,8 @@ export default function EditAccountAndPasswordDialog({
     <Dialog canOutsideClickClose={false} onClose={onClose}>
       <DialogHeader
         title={
+          // forceEncryption is false if account is not
+          // configured yet or the setting is set to false
           forceEncryption
             ? tx('edit_transport')
             : tx('manual_account_setup_option')

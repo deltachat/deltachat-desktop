@@ -27,7 +27,7 @@ export default function useCreateChatByEmail(): CreateChatByEmail {
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
   const settingsStore = useSettingsStore()[0]
-  const isChatmail = settingsStore?.settings.force_encryption === '1'
+  const forceEncryption = settingsStore?.settings.force_encryption === '1'
 
   const createChatByEmail = useCallback(
     async (accountId: number, email: string) => {
@@ -39,7 +39,7 @@ export default function useCreateChatByEmail(): CreateChatByEmail {
       // On chatmail accounts a chat can't be created from a plain email address
       // alone (there's no key for it), so we only allow it when the address is
       // already a known contact
-      if (isChatmail && !contactId) {
+      if (forceEncryption && !contactId) {
         openDialog(InvalidUnencryptedMailDialog)
         return null
       }
@@ -59,7 +59,7 @@ export default function useCreateChatByEmail(): CreateChatByEmail {
 
       return await createChatByContactId(accountId, contactId, email)
     },
-    [isChatmail, openDialog, tx]
+    [forceEncryption, openDialog, tx]
   )
 
   return createChatByEmail
