@@ -8,29 +8,29 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 - Add a way to select multiple messages
-- Show num selected messages
 - `Ctrl + Alt + PageDown` to switch accounts
 - Close (unselect) chat with Escape
-- Escape to unselect chats (multiselect)
-- Show dialog for load image settings in HTML messages ([#6386](https://github.com/deltachat/deltachat-desktop/issues/6386))
 
 ### Fixed
 
-- Undismissable context menu in fullscreen media
-- Escape to go back to View Group from member
-- Disable keyboard shortcuts when have dialog
-- Avoid static hard coded lang attribute ([#6436](https://github.com/deltachat/deltachat-desktop/issues/6436))
-- Do not render large images
-- Keep focus on old element on dialog close
-- Escape in Create Group goes back to New Chat
 - Focus composer when user tries to type
+- Improve keyboard accessibility, focus management:
+  - Escape to unselect chats (multiselect)
+  - Keep focus on old element on dialog close
+  - Escape to go back to View Group from member
+  - Escape in Create Group goes back to New Chat
+  - Refocus input when send message button is pressed (useful for touch screens) ([#6374](https://github.com/deltachat/deltachat-desktop/issues/6374))
+  - Fix undismissable context menu in fullscreen media
+  - Disable keyboard shortcuts when have dialog
+- Don't enter edit mode on `ArrowUp` even if composer only has whitespace
+- Fix screen-readers always using English language for some parts of the UI
+- Do not render large images (click to open instead)
 - Preserve line breaks in channel dialog descr
-- Refocus input when send message button is pressed ([#6374](https://github.com/deltachat/deltachat-desktop/issues/6374))
-- No edit mode on `ArrowUp` if composer has \n
 - Don't send whitespace-only message
-- Target-browser not respecting `locale`
-- Add bottom margins in dialogs ([#6481](https://github.com/deltachat/deltachat-desktop/issues/6481))
-- Remove is chatmail ([#6480](https://github.com/deltachat/deltachat-desktop/issues/6480))
+- Fix bottom margins in some dialogs ([#6481](https://github.com/deltachat/deltachat-desktop/issues/6481))
+- Fix account list items "wiggling" when messages arrive or get read ([#6419](https://github.com/deltachat/deltachat-desktop/pull/6419))
+- Fix some UI related to unencrypted email and "Force Encryption" ([#6480](https://github.com/deltachat/deltachat-desktop/issues/6480))
+- "Show full message...": make the "Load Remote Content" look the same as on Android ([#6386](https://github.com/deltachat/deltachat-desktop/issues/6386))
 
 ### Miscellaneous Tasks
 
