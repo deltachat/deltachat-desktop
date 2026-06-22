@@ -604,7 +604,7 @@ function ContactAndMessageSearchResults({
   const tabindexWrapperElementMessages = useRef<HTMLDivElement>(null)
 
   const settingsStore = useSettingsStore()[0]
-  const isChatmail = settingsStore?.settings.is_chatmail === '1'
+  const forceEncryption = settingsStore?.settings.force_encryption !== '0'
 
   const addContactOnClick = async () => {
     if (!queryStrIsValidEmail || !queryStr) return
@@ -697,7 +697,7 @@ function ContactAndMessageSearchResults({
           >
             {ChatListItemRowContact}
           </ChatListPart>
-          {!isChatmail &&
+          {!forceEncryption &&
             contactIds.length === 0 &&
             chatListSearchResultsIsEmpty &&
             queryStrIsValidEmail && (

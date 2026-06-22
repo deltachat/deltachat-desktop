@@ -2,8 +2,10 @@ import { useCallback } from 'react'
 
 import ConfirmationDialog from '../../components/dialogs/ConfirmationDialog'
 import useDialog from '../dialog/useDialog'
+import InvalidUnencryptedMailDialog from '../../components/dialogs/InvalidUnencryptedMail'
 import useTranslationFunction from '../useTranslationFunction'
 import { createChatByContactId, getChatInfoByEmail } from '../../backend/chat'
+import { useSettingsStore } from '../../stores/settings'
 
 import type { T } from '@deltachat/jsonrpc-client'
 
@@ -24,6 +26,8 @@ export type CreateChatByEmail = (
 export default function useCreateChatByEmail(): CreateChatByEmail {
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
+  const settingsStore = useSettingsStore()[0]
+  const forceEncryption = settingsStore?.settings.force_encryption === '1'
 
   const createChatByEmail = useCallback(
     async (accountId: number, email: string) => {
@@ -31,12 +35,14 @@ export default function useCreateChatByEmail(): CreateChatByEmail {
       if (chatId) {
         return chatId
       }
-      /**
-       * Although we know that creating a new chat will probably fail on chatmail accounts,
-       * since we can't create an encrypted chat based on an email address, we continue
-       * here.
-       * see https://github.com/deltachat/deltachat-android/issues/3361
-       */
+
+      // On chatmail accounts a chat can't be created from a plain email address
+      // alone (there's no key for it), so we only allow it when the address is
+      // already a known contact
+      if (forceEncryption && !contactId) {
+        openDialog(InvalidUnencryptedMailDialog)
+        return null
+      }
 
       // Ask user if they want to proceed with creating a new contact and / or chat
       const continueProcess = await new Promise((resolve, _reject) => {
@@ -53,7 +59,7 @@ export default function useCreateChatByEmail(): CreateChatByEmail {
 
       return await createChatByContactId(accountId, contactId, email)
     },
-    [openDialog, tx]
+    [forceEncryption, openDialog, tx]
   )
 
   return createChatByEmail
