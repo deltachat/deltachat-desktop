@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+<a id="2_53_1"></a>
+## [2.53.1] - 2026-06-23
+
+### Build
+
+- readds a missing script for flatpak build
+
 <a id="2_53_0"></a>
 ## [2.53.0] - 2026-06-22
 
@@ -4141,7 +4148,8 @@ This section is only relevant to contributors.
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.53.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.53.1...HEAD
+[2.53.1]: https://github.com/deltachat/deltachat-desktop/compare/v2.53.1...v2.53.1
 [2.53.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.52.0...v2.53.0
 [2.52.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.51.0...v2.52.0
 [2.51.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.49.1...v2.51.0
