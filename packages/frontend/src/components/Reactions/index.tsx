@@ -28,7 +28,7 @@ export default function Reactions(props: Props) {
 
   // Compute visibleEmojis and hiddenReactionsCount from props
   const { visibleEmojis, hiddenReactionsCount } = useMemo(() => {
-    let emojiSpaces = 0
+    let emojiSpaces: number
     if (messageWidth <= 234) {
       emojiSpaces = 1
     } else {

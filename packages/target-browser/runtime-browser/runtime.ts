@@ -259,7 +259,8 @@ class BrowserRuntime implements Runtime {
           ).json()
         } else {
           throw new Error(
-            'language load failed, even alternative of base language failed.'
+            'language load failed, even alternative of base language failed.',
+            { cause: error1 }
           )
         }
       } catch (error2) {

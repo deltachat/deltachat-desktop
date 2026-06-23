@@ -36,7 +36,7 @@ const log = getLogger('renderer/dialogs/ViewProfile')
 
 function LastSeen({ timestamp }: { timestamp: number }) {
   const tx = useTranslationFunction()
-  let lastSeenString = ''
+  let lastSeenString: string
   let lastSeenAbsolute: string | undefined = undefined
 
   // Dates from 1970 mean that contact has never been seen

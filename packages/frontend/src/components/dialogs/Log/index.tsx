@@ -75,7 +75,7 @@ async function getLog(): Promise<string> {
   /** runtime info, but flattened to string and only showing keys that are not already shown elsewhere */
   const visibleRuntimeInfo = infoObjectToString(visibleRuntimeInfoObject)
 
-  let log = ''
+  let log: string
   try {
     log = await runtime.readCurrentLog()
   } catch (error: any) {
