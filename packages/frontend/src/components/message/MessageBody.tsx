@@ -11,6 +11,13 @@ const MAX_BYTE_SIZE_OF_EMOJI = 10 /* 10 is maybe already too generous? */
 const MAX_STRING_LENGTH_FOR_BIG_EMOJI =
   MAX_BIG_EMOJI_COUNT * MAX_BYTE_SIZE_OF_EMOJI
 
+// See `avatarInitial.ts` for the same pattern.
+const graphemeSegmenter = new Intl.Segmenter(undefined, {
+  // Split the input into segments at grapheme cluster
+  // (user-perceived character) boundaries
+  granularity: 'grapheme',
+})
+
 /**
  * if a message contains only emojis and is not too long,
  * we display the emojis bigger as usual inline emojis
@@ -50,12 +57,7 @@ function countEmojisIfOnlyContainsEmoji(str: string): number | null {
     if (firstToken.t === 'EMOJI') {
       // use Intl.Segmenter to split grapheme clusters (emoji + skin tone modifier etc)
       // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Segmenter/Segmenter
-      const segmenter = new (Intl as any).Segmenter('en', {
-        // Split the input into segments at grapheme cluster
-        // (user-perceived character) boundaries
-        granularity: 'grapheme',
-      })
-      return [...segmenter.segment(firstToken.v)].length
+      return [...graphemeSegmenter.segment(firstToken.v)].length
     }
   }
   return null

@@ -80,7 +80,8 @@ export class ChatStoreScheduler {
         return
       }
 
-      const effect = this.effectQueue.pop()
+      // Use shift() to run effects in strict FIFO order
+      const effect = this.effectQueue.shift()
       if (!effect) {
         throw new Error(
           `Undefined effect in effect queue? This should not happen. Effect is: ${JSON.stringify(
