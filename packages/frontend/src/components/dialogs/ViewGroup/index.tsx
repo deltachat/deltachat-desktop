@@ -297,7 +297,7 @@ function ViewGroupInner(
   // The global keybinding handler is disabled while a dialog is open
   useEffect(() => {
     const onKeyDown = (ev: KeyboardEvent) => {
-      // copied from
+      // copied from `keybindings.ts`
       const { isMac } = runtime.getRuntimeInfo()
       const modifierPressed = isMac ? ev.metaKey && !ev.ctrlKey : ev.ctrlKey
       if (

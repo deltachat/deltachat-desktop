@@ -220,7 +220,7 @@ test('check group dialog for unencrypted group has appropriate entries', async (
   await expect(dialog.locator('#showqrcode')).not.toBeVisible({ timeout: 1 })
 
   await dialog.getByTestId('view-group-menu').click()
-  // The three-dot menu should not show have an "Edit" entry for unencrypted groups.
+  // The three-dot menu should not have an "Edit" entry for unencrypted groups.
   await expect(page.getByTestId('view-group-edit')).not.toBeVisible({
     timeout: 1,
   })
