@@ -25,6 +25,9 @@ type Props = React.PropsWithChildren<{
   className?: string
   fixed?: boolean
   height?: number
+  /** lower bound for the dialog height in px. Unlike {@linkcode height} this
+   * still lets the dialog grow with its content (up to its `max-height`). */
+  minHeight?: number
   width?: number
   // takes full screen and is transparent
   unstyled?: boolean
@@ -47,6 +50,7 @@ const Dialog = React.memo<Props>(
     backdropDragAreaOnTauriRuntime,
     width = DEFAULT_WIDTH,
     height,
+    minHeight,
     unstyled = false,
     allowDefaultFocus = false,
     noTopPadding = false,
@@ -126,6 +130,7 @@ const Dialog = React.memo<Props>(
       style = {
         width: width && `${width}px`,
         height: height && `${height}px`,
+        minHeight: minHeight && `${minHeight}px`,
       }
     }
     return (

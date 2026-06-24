@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useState, useRef } from 'react'
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useState,
+  useRef,
+} from 'react'
 import { parseAndRenderMessage } from '../../message/MessageParser'
 import { C } from '@deltachat/jsonrpc-client'
 import type { T } from '@deltachat/jsonrpc-client'
@@ -60,9 +66,26 @@ export default function ViewGroup(
   } & DialogProps
 ) {
   const { chat, onClose } = props
+
+  // Freeze the dialog height to avoid resizing when filtering the member list
+  // It is reset to `undefined` when the filter is closed.
+  const [dialogMinHeight, setDialogMinHeight] = useState<number | undefined>(
+    undefined
+  )
+
   return (
-    <Dialog width={400} onClose={onClose} fixed dataTestid='view-group-dialog'>
-      <ViewGroupInner onClose={onClose} chat={chat} />
+    <Dialog
+      width={400}
+      minHeight={dialogMinHeight}
+      onClose={onClose}
+      fixed
+      dataTestid='view-group-dialog'
+    >
+      <ViewGroupInner
+        onClose={onClose}
+        chat={chat}
+        setDialogMinHeight={setDialogMinHeight}
+      />
     </Dialog>
   )
 }
@@ -262,9 +285,12 @@ function ViewGroupInner(
     chat: T.FullChat & {
       chatType: 'Group' | 'OutBroadcast'
     }
+    // Sets a lower bound for the dialog height while the
+    // member filter is open (pass `undefined` to remove it again).
+    setDialogMinHeight: (height: number | undefined) => void
   } & DialogProps
 ) {
-  const { chat, onClose } = props
+  const { chat, onClose, setDialogMinHeight } = props
   const isBroadcast = chat.chatType === 'OutBroadcast'
   const { openDialog } = useDialog()
   const accountId = selectedAccountId()
@@ -294,6 +320,28 @@ function ViewGroupInner(
 
   const [showMemberFilter, setShowMemberFilter] = useState(false)
 
+  const openMemberFilter = useCallback(() => {
+    setShowMemberFilter(true)
+  }, [])
+
+  const closeMemberFilter = useCallback(() => {
+    setShowMemberFilter(false)
+    setMemberFilter('')
+    setDialogMinHeight(undefined)
+  }, [setDialogMinHeight])
+
+  // Freeze the dialog height while the member filter is open,
+  // so it doesn't shrink when the member list gets shorter
+  useLayoutEffect(() => {
+    if (!showMemberFilter) {
+      return
+    }
+    const dialogEl = groupMemberContactListWrapperRef.current?.closest('dialog')
+    if (dialogEl) {
+      setDialogMinHeight(dialogEl.offsetHeight)
+    }
+  }, [showMemberFilter, setDialogMinHeight])
+
   // Open the member filter with Ctrl+F (Cmd+F on macOS)
   // The global keybinding handler is disabled while a dialog is open
   useEffect(() => {
@@ -321,12 +369,12 @@ function ViewGroupInner(
       }
 
       ev.preventDefault()
-      setShowMemberFilter(true)
+      openMemberFilter()
     }
 
     document.addEventListener('keydown', onKeyDown)
     return () => document.removeEventListener('keydown', onKeyDown)
-  }, [])
+  }, [openMemberFilter])
 
   const showRemoveGroupMemberConfirmationDialog = useCallback(
     async (contact: T.Contact) => {
@@ -421,7 +469,7 @@ function ViewGroupInner(
     isBroadcast,
     onClickEdit,
     showMemberFilter,
-    onShowMemberFilter: () => setShowMemberFilter(true),
+    onShowMemberFilter: openMemberFilter,
   })
 
   const filterContacts = useCallback(
@@ -486,10 +534,7 @@ function ViewGroupInner(
               id='group-member-filter'
               onChange={setMemberFilter}
               value={memberFilter}
-              onCollapse={() => {
-                setShowMemberFilter(false)
-                setMemberFilter('')
-              }}
+              onCollapse={closeMemberFilter}
             />
           </div>
         )}
