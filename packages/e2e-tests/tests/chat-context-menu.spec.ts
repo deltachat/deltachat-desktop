@@ -472,7 +472,6 @@ test.describe('Chat List Context Menu - Single Selection', () => {
 
     // Verify clone chat dialog opens,
     await expect(page.locator('.group-name-input')).toBeVisible()
-    // it should show the create group interface
 
     // close clone dialog and group profile dialog
     await page.keyboard.press('Escape')
