@@ -46,7 +46,7 @@ export default function useReactionsBar(): UseReactionsBar {
 
 /** Returns true if user should be able to send reactions to a message */
 export function showReactionsUi(message: T.Message, chat: T.FullChat): boolean {
-  return chat.canSend && !message.isInfo
+  return chat.canSend && !message.isInfo && message.originalMsgId === null
 }
 
 function getMyReaction(reactions: T.Message['reactions']): string | undefined {

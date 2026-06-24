@@ -24,7 +24,7 @@ $info-text-max-width: 400px;
   // Messages in the "Saved Messages" might
   // have an extra "show in chat" button
   &.has-original-msg-button {
-    --shortcut-menu-width: 110px;
+    --shortcut-menu-width: 80px;
   }
 
   & > .author-avatar {
@@ -479,7 +479,7 @@ $info-text-max-width: 400px;
     opacity: 0.9;
     color: var(--infoMessageBubbleText);
     outline-offset: 4px;
-    overflow-wrap: break-word;
+    overflow-wrap: anywhere;
 
     .status-icon.sending {
       background-color: var(--infoMessageBubbleText);
