@@ -11,6 +11,7 @@ import {
   makeDummyContactInviteLink,
   selectChat as selectChatByName,
   sendMessage,
+  getChat,
 } from '../playwright-helper'
 
 test.describe.configure({
@@ -468,7 +469,7 @@ test.describe('draft', () => {
       .click()
 
     const shareProfile = async () => {
-      await chatList.getByText(dummyContactName).click({ button: 'right' })
+      await getChat(page, dummyContactName).click({ button: 'right' })
       await page.getByRole('menuitem', { name: 'View Profile' }).click()
       await page
         .getByRole('dialog')
