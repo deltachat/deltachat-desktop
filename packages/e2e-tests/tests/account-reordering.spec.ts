@@ -9,7 +9,7 @@ import {
   test,
   deleteAllProfiles,
   waitForAccountItemsToFinishLoading,
-} from '../playwright-helper'
+} from '../playwright-helper.js'
 
 /**
  * It takes one backend call to show the new order after reordering.

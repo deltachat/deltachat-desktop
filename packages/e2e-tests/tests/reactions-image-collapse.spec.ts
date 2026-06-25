@@ -12,7 +12,7 @@ import {
   getUser,
   createChat,
   selectChat,
-} from '../playwright-helper'
+} from '../playwright-helper.js'
 
 /**
  * Regression test for https://github.com/deltachat/deltachat-desktop/issues/5858

@@ -12,7 +12,7 @@ import {
   getUser,
   createGroupChat,
   createChat,
-} from '../playwright-helper'
+} from '../playwright-helper.js'
 
 /**
  * E2E tests for chat context menus used in 2 scenarios:

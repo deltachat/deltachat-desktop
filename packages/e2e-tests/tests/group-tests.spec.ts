@@ -14,7 +14,7 @@ import {
   test,
   createGroupChat,
   createChat,
-} from '../playwright-helper'
+} from '../playwright-helper.js'
 
 test.describe.configure({
   mode: 'serial',

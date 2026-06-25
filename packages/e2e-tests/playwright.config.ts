@@ -1,14 +1,14 @@
 import path from 'node:path'
 import { defineConfig, devices } from '@playwright/test'
 
-import { loadEnv } from './load-env'
-import type { TestOptions } from './playwright-helper'
+import { loadEnv } from './load-env.js'
+import type { TestOptions } from './playwright-helper.js'
 import {
   DC_FRONTEND_NO_TLS,
   NUM_APP_INSTANCES,
   instanceBaseURL,
   instancePort,
-} from './playwright-helper'
+} from './playwright-helper.js'
 
 loadEnv()
 

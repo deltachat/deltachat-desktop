@@ -11,7 +11,7 @@ import {
   clickThroughTestIds,
   getUser,
   createChat,
-} from '../playwright-helper'
+} from '../playwright-helper.js'
 
 test.describe.configure({
   mode: 'serial',

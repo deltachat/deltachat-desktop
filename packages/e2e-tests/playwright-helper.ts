@@ -6,7 +6,7 @@ import {
   Page,
 } from '@playwright/test'
 import path from 'path'
-import { loadEnv } from './load-env'
+import { loadEnv } from './load-env.js'
 
 loadEnv()
 
