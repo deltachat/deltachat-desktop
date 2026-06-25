@@ -436,15 +436,16 @@ test('custom app picker URL', async () => {
 
   await page.getByRole('button', { name: 'Settings' }).click()
   await page.getByRole('button', { name: 'Advanced' }).click()
-  const settingsDialog = page
+  const advancedDialog = page
     .getByRole('dialog')
     .filter({ hasText: 'Advanced' })
+    .filter({ hasText: 'Experimental' })
 
-  await expect(settingsDialog).not.toContainText(newUrl, { ignoreCase: false })
+  await expect(advancedDialog).not.toContainText(newUrl, { ignoreCase: false })
   await page.getByRole('button', { name: 'App Picker URL' }).click()
   await page.getByRole('dialog').last().getByRole('textbox').fill(newUrl)
   await page.keyboard.press('Enter')
-  await expect(settingsDialog).toContainText(newUrl, { ignoreCase: false })
+  await expect(advancedDialog).toContainText(newUrl, { ignoreCase: false })
 
   await page.keyboard.press('Escape')
   await page.keyboard.press('Escape')
