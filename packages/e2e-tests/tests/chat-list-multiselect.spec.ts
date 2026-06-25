@@ -7,7 +7,7 @@ import {
   test,
   createNDummyChats,
   createDummyChat,
-} from '../playwright-helper'
+} from '../playwright-helper.js'
 
 test.describe.configure({
   mode: 'serial',

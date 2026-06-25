@@ -11,7 +11,7 @@ import {
   switchToProfile,
   getUser,
   createChat,
-} from '../playwright-helper'
+} from '../playwright-helper.js'
 
 /**
  * E2E tests for file attachments:

@@ -12,7 +12,7 @@ import {
   sendMessage,
   test,
   selectChat,
-} from '../playwright-helper'
+} from '../playwright-helper.js'
 
 /**
  * This test suite covers basic functionalities like

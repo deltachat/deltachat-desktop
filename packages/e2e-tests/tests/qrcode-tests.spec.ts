@@ -14,7 +14,7 @@ import {
   clickThroughTestIds,
   test,
   createProfileAndJoinChat,
-} from '../playwright-helper'
+} from '../playwright-helper.js'
 
 /**
  * Test for instant onboarding with contact invite link

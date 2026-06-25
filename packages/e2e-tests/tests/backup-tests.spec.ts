@@ -14,7 +14,7 @@ import {
   switchToProfile,
   test,
   User,
-} from '../playwright-helper'
+} from '../playwright-helper.js'
 
 test.describe.configure({
   mode: 'serial',

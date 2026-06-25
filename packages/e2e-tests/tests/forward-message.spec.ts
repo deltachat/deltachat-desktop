@@ -12,7 +12,7 @@ import {
   clickThroughTestIds,
   test,
   selectChat,
-} from '../playwright-helper'
+} from '../playwright-helper.js'
 
 /**
  * This test suite covers basic forward message functionality:

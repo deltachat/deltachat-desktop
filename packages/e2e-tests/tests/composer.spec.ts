@@ -12,7 +12,7 @@ import {
   selectChat as selectChatByName,
   sendMessage,
   getChat,
-} from '../playwright-helper'
+} from '../playwright-helper.js'
 
 test.describe.configure({
   mode: 'serial',

@@ -5,7 +5,7 @@ import {
   test,
   importDummyProfileFromBackup,
   deleteSelectedProfile,
-} from '../playwright-helper'
+} from '../playwright-helper.js'
 
 test.describe.configure({
   mode: 'serial',
