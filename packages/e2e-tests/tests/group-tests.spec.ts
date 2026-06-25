@@ -432,7 +432,7 @@ test('Add group description', async () => {
   // Open group profile
   await page.getByTestId('chat-info-button').click()
 
-  const descriptionDiv = page.locator('.group-profile-description')
+  const descriptionDiv = page.getByTestId('profile-description')
 
   // Open edit dialog
   await page.getByTestId('view-group-dialog-header-edit').click()
@@ -483,10 +483,8 @@ test('Add group description', async () => {
   ).toBeVisible()
 
   await page.getByTestId('chat-info-button').click()
-  await expect(page.locator('.group-profile-description')).toBeVisible()
-  await expect(page.locator('.group-profile-description')).toHaveText(
-    groupDescription
-  )
+  await expect(descriptionDiv).toBeVisible()
+  await expect(descriptionDiv).toHaveText(groupDescription)
   await page.getByTestId('view-group-dialog-header-close').click()
 })
 
@@ -517,7 +515,7 @@ test('Update group description', async () => {
   await page.getByTestId('ok').click()
 
   // Verify updated description is visible
-  const descriptionDiv = page.locator('.group-profile-description')
+  const descriptionDiv = page.getByTestId('profile-description')
   await expect(descriptionDiv).toBeVisible()
   await expect(descriptionDiv).toHaveText(updatedDescription)
 
@@ -541,10 +539,8 @@ test('Update group description', async () => {
   ).toBeVisible()
 
   await page.getByTestId('chat-info-button').click()
-  await expect(page.locator('.group-profile-description')).toBeVisible()
-  await expect(page.locator('.group-profile-description')).toHaveText(
-    updatedDescription
-  )
+  await expect(descriptionDiv).toBeVisible()
+  await expect(descriptionDiv).toHaveText(updatedDescription)
   await page.getByTestId('view-group-dialog-header-close').click()
 })
 
@@ -562,7 +558,7 @@ test('Clear group description', async () => {
   await page.getByTestId('chat-info-button').click()
 
   // Description should be visible
-  const descriptionDiv = page.locator('.group-profile-description')
+  const descriptionDiv = page.getByTestId('profile-description')
   await expect(descriptionDiv).toBeVisible()
 
   // Open edit dialog
@@ -758,7 +754,7 @@ test('add channel description and verify subscriber sees it', async () => {
   await page.getByTestId('ok').click()
 
   // Description should be visible in the channel profile
-  const descriptionDiv = page.locator('.group-profile-description')
+  const descriptionDiv = page.getByTestId('profile-description')
   await expect(descriptionDiv).toBeVisible()
   await expect(descriptionDiv).toHaveText(channelDescription)
 
