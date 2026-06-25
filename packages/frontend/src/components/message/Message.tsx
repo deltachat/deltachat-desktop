@@ -975,6 +975,7 @@ export default function Message(props: {
           error: status === 'error',
           forwarded: message.isForwarded,
           'has-html': hasHtml,
+          'has-original-msg-button': message.originalMsgId !== null,
         }
       )}
       id={message.id.toString()}
