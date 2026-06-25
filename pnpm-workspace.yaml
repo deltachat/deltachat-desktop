@@ -1,6 +1,25 @@
 packages:
   - packages/*
 
+supportedArchitectures:
+  os:
+    - darwin
+    - win32
+    - linux
+  cpu:
+    - x64
+    - ia32
+    - arm64
+
+allowBuilds:
+  esbuild: true
+  '@parcel/watcher': false
+  electron-winstaller: false
+
+overrides:
+  stylus: 'npm:empty-npm-package@1.0.0'
+  'esbuild-plugin-inline-worker>esbuild': ^0.25.0
+
 catalog:
   # deltachat specific
   '@deltachat/jsonrpc-client': 2.53.0
