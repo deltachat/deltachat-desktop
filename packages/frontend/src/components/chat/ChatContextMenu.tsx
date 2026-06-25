@@ -305,7 +305,6 @@ export function useChatContextMenu(): {
     openDeleteChatsDialog,
     openLeaveGroupOrChannelDialog,
     openClearChatDialog,
-    openEncryptionInfoDialog,
   } = useChatDialog()
   const openViewGroupDialog = useOpenViewGroupDialog()
   const openViewProfileDialog = useOpenViewProfileDialog()
@@ -506,19 +505,6 @@ export function useChatContextMenu(): {
       archive,
       { type: 'separator' },
       ...(!isMainView ? viewEditMenuItems : []),
-      // Encryption info for channels and mailing lists
-      // since they don't expose it through the ViewGroup menu
-      isMainView &&
-        relatedChat &&
-        (relatedChat.chatType === 'InBroadcast' ||
-          relatedChat.chatType === 'Mailinglist') && {
-          label: tx('encryption_info_title_desktop'),
-          action: () =>
-            openEncryptionInfoDialog({
-              chatId: relatedChat.id,
-              dmChatContact: null,
-            }),
-        },
       // Clone Group
       isMainView &&
         relatedChat &&

@@ -801,6 +801,33 @@ test('add channel description and verify subscriber sees it', async () => {
   await page.keyboard.press('Escape')
 })
 
+test('channel profile three-dot menu shows encryption info', async () => {
+  const userB = existingProfiles[1]
+
+  // userB is a subscriber, so opening the channel
+  // profile shows the MailingListProfile dialog
+  await switchToProfile(page, userB.id)
+  const channelChatItemB = page
+    .locator('.chat-list .chat-list-item')
+    .filter({ hasText: channelName })
+  await expect(channelChatItemB).toBeVisible()
+  await channelChatItemB.click()
+
+  await page.getByTestId('chat-info-button').click()
+
+  // Open the three-dot menu and pick "Encryption Info"
+  await page.getByTestId('mailing-list-profile-menu').click()
+  await page.getByTestId('encryption-info').click({ force: true })
+
+  const encryptionInfoDialog = page
+    .getByRole('dialog')
+    .filter({ hasText: 'Encryption Info' })
+  await expect(encryptionInfoDialog).toBeVisible()
+
+  await page.keyboard.press('Escape')
+  await page.keyboard.press('Escape')
+})
+
 test('channel main view shows Leave Channel instead of Delete Chat', async () => {
   const userB = existingProfiles[1]
 
