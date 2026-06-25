@@ -160,7 +160,11 @@ export async function createUser(
 }
 
 export const getUser = (index: number, existingProfiles: User[]) => {
-  if (!existingProfiles || existingProfiles.length < index + 1) {
+  if (
+    !existingProfiles ||
+    existingProfiles.length < index + 1 ||
+    existingProfiles[index] == undefined
+  ) {
     throw new Error(
       `Not enough profiles for test! Found ${existingProfiles?.length}`
     )
