@@ -4,6 +4,7 @@ import {
   getUser,
   createProfiles,
   deleteProfile,
+  deleteAllProfiles,
   switchToProfile,
   User,
   loadExistingProfiles,
@@ -65,8 +66,18 @@ test.afterEach(async () => {
   }
 })
 
-test.afterAll(async () => {
+// We have the "delete profiles" test, but it won't run
+// if some other test fails, so let's ensure to deleteAllProfiles still.
+test.afterAll(async ({ browser }) => {
   await page?.close()
+
+  const context = await browser.newContext()
+  const pageForProfileDeletion = await context.newPage()
+  await reloadPage(pageForProfileDeletion)
+  existingProfiles =
+    (await loadExistingProfiles(pageForProfileDeletion)) ?? existingProfiles
+  await deleteAllProfiles(pageForProfileDeletion, existingProfiles)
+  await context.close()
 })
 
 test('create profiles', async ({ browserName, isChatmail }) => {
