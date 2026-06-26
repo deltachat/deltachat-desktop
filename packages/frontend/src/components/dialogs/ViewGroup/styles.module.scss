@@ -1,6 +1,11 @@
 $borderRadius: 10px;
 $closeButtonSize: 30px;
 
+.topAlignedDialog {
+  margin-block-start: 25px;
+  margin-block-end: auto;
+}
+
 .searchInputContainer {
   position: relative;
   display: flex;

@@ -41,6 +41,7 @@ import { matchesLetterShortcut } from '../../../keybindings'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import { unknownErrorToString } from '@deltachat-desktop/shared/unknownErrorToString'
 import { getLogger } from '@deltachat-desktop/shared/logger'
+import styles from './styles.module.scss'
 const log = getLogger('ViewGroup')
 
 /**
@@ -59,9 +60,25 @@ export default function ViewGroup(
   } & DialogProps
 ) {
   const { chat, onClose } = props
+
+  // While the member filter is open we pin the dialog to its maximum height so
+  // it doesn't resize as the filtered member list changes length.
+  const [searchOpen, setSearchOpen] = useState(false)
+
   return (
-    <Dialog width={400} onClose={onClose} fixed dataTestid='view-group-dialog'>
-      <ViewGroupInner onClose={onClose} chat={chat} />
+    <Dialog
+      width={400}
+      height={searchOpen ? 'calc(100% - 50px)' : undefined}
+      className={styles.topAlignedDialog}
+      onClose={onClose}
+      fixed
+      dataTestid='view-group-dialog'
+    >
+      <ViewGroupInner
+        onClose={onClose}
+        chat={chat}
+        onSearchOpenChange={setSearchOpen}
+      />
     </Dialog>
   )
 }
@@ -261,9 +278,12 @@ function ViewGroupInner(
     chat: T.FullChat & {
       chatType: 'Group' | 'OutBroadcast'
     }
+    /** Notifies the parent when the member filter is shown/hidden, so it can
+     * adjust the dialog height. */
+    onSearchOpenChange: (open: boolean) => void
   } & DialogProps
 ) {
-  const { chat, onClose } = props
+  const { chat, onClose, onSearchOpenChange } = props
   const isBroadcast = chat.chatType === 'OutBroadcast'
   const { openDialog } = useDialog()
   const accountId = selectedAccountId()
@@ -292,6 +312,10 @@ function ViewGroupInner(
   } = useGroup(accountId, chat)
 
   const [showMemberFilter, setShowMemberFilter] = useState(false)
+
+  useEffect(() => {
+    onSearchOpenChange(showMemberFilter)
+  }, [showMemberFilter, onSearchOpenChange])
 
   // Open the member filter with Ctrl+F (Cmd+F on macOS)
   // The global keybinding handler is disabled while a dialog is open

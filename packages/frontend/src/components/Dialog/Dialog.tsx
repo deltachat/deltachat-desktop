@@ -24,7 +24,7 @@ type Props = React.PropsWithChildren<{
   backdropDragAreaOnTauriRuntime?: boolean
   className?: string
   fixed?: boolean
-  height?: number
+  height?: number | string
   width?: number
   // takes full screen and is transparent
   unstyled?: boolean
@@ -125,7 +125,7 @@ const Dialog = React.memo<Props>(
     if (!unstyled) {
       style = {
         width: width && `${width}px`,
-        height: height && `${height}px`,
+        height: typeof height === 'string' ? height : height && `${height}px`,
       }
     }
     return (
