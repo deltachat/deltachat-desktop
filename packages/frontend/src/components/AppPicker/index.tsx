@@ -95,30 +95,33 @@ export function AppPicker({ onAppSelected }: Props) {
   }, [settingsStore])
   const appListUrl = appStoreUrl + 'xdcget-lock.json'
 
-  const fetchApps = useCallback(async (appListUrl: string) => {
-    // This may throw, e.g. on network error.
-    const response = await BackendRemote.rpc.getHttpResponse(
-      selectedAccountId(),
-      appListUrl
-    )
-    const apps = getJsonFromBase64(response.blob) as AppInfo[]
-    if (apps == null) {
-      throw new Error(`Received \`null\` response from ${appStoreUrl}`)
-    }
-    apps.sort((a: AppInfo, b: AppInfo) => {
-      const dateA = new Date(a.date)
-      const dateB = new Date(b.date)
-      return dateB.getTime() - dateA.getTime() // Show newest first
-    })
-    for (const app of apps) {
-      app.short_description = app.description.split('\n')[0]
-      app.description = app.description.split('\n').slice(1).join('\n')
-      const url = new URL(app.source_code_url)
-      app.author = url.pathname.split('/')[1]
-      app.date = moment(app.date).format('LL')
-    }
-    return apps
-  }, [])
+  const fetchApps = useCallback(
+    async (appListUrl: string) => {
+      // This may throw, e.g. on network error.
+      const response = await BackendRemote.rpc.getHttpResponse(
+        selectedAccountId(),
+        appListUrl
+      )
+      const apps = getJsonFromBase64(response.blob) as AppInfo[]
+      if (apps == null) {
+        throw new Error(`Received \`null\` response from ${appStoreUrl}`)
+      }
+      apps.sort((a: AppInfo, b: AppInfo) => {
+        const dateA = new Date(a.date)
+        const dateB = new Date(b.date)
+        return dateB.getTime() - dateA.getTime() // Show newest first
+      })
+      for (const app of apps) {
+        app.short_description = app.description.split('\n')[0]
+        app.description = app.description.split('\n').slice(1).join('\n')
+        const url = new URL(app.source_code_url)
+        app.author = url.pathname.split('/')[1]
+        app.date = moment(app.date).format('LL')
+      }
+      return apps
+    },
+    [appStoreUrl]
+  )
   const appsFetch = useFetch(fetchApps, [appListUrl])
   const apps = appsFetch.result?.ok ? appsFetch.result.value : null
 
@@ -347,9 +350,9 @@ export function AppPicker({ onAppSelected }: Props) {
         )}
         <div className={styles.appPickerList}>
           {appsFetch.loading ? (
-            <div className={styles.offlineMessage}>{tx('loading')}</div>
+            <div>{tx('loading')}</div>
           ) : appsFetch.result.ok !== true ? (
-            <div className={styles.offlineMessage}>
+            <div>
               {isOffline
                 ? tx('offline')
                 : tx(
