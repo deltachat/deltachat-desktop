@@ -103,7 +103,7 @@ export function AppPicker({ onAppSelected }: Props) {
     )
     const apps = getJsonFromBase64(response.blob) as AppInfo[]
     if (apps == null) {
-      throw new Error(`Received \`null\` response from ${appStoreUrl}`)
+      throw new Error(`Received \`null\` response from ${appListUrl}`)
     }
     apps.sort((a: AppInfo, b: AppInfo) => {
       const dateA = new Date(a.date)
