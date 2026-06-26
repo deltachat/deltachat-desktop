@@ -347,9 +347,9 @@ export function AppPicker({ onAppSelected }: Props) {
         )}
         <div className={styles.appPickerList}>
           {appsFetch.loading ? (
-            <div className={styles.offlineMessage}>{tx('loading')}</div>
+            <div>{tx('loading')}</div>
           ) : appsFetch.result.ok !== true ? (
-            <div className={styles.offlineMessage}>
+            <div>
               {isOffline
                 ? tx('offline')
                 : tx(
