@@ -291,14 +291,14 @@ export default function FullscreenMedia(props: Props & DialogProps) {
             <IconButton
               onClick={onDownload.bind(null, msg)}
               icon='download'
-              size={32}
+              size={26}
               coloring='fullscreenControls'
               aria-label={tx('save')}
             />
             <IconButton
               onClick={onClose}
               icon='cross'
-              size={32}
+              size={26}
               coloring='fullscreenControls'
               aria-label={tx('close')}
             />

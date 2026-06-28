@@ -20,10 +20,10 @@
 .btn-wrapper {
   float: right;
   position: absolute;
-  background-color: rgba(0, 0, 0, 0.75);
+  background-color: var(--fullScreenMediaButtons);
   border-radius: 3px;
   display: flex;
-  gap: 5px;
+  gap: 8px;
 
   right: 8px;
   top: 6px;
@@ -42,7 +42,7 @@
 .media-next-button {
   position: absolute;
   top: calc(50vh - (60px / 2));
-  background-color: #3131316b;
+  background-color: var(--fullScreenMediaButtons);
   border-radius: 8%;
 }
 

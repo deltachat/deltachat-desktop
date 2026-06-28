@@ -86,14 +86,14 @@ export default function FullscreenAvatar(
         <IconButton
           onClick={saveAs}
           icon='download'
-          size={32}
+          size={26}
           coloring='fullscreenControls'
           aria-label={tx('save')}
         />
         <IconButton
           onClick={onClose}
           icon='cross'
-          size={32}
+          size={26}
           coloring='fullscreenControls'
           aria-label={tx('close')}
         />
