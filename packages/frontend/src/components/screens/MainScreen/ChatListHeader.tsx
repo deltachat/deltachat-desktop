@@ -7,11 +7,10 @@ import Icon from '../../Icon'
 import SearchInput from '../../SearchInput'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import useDialog from '../../../hooks/dialog/useDialog'
-import { useSettingsStore } from '../../../stores/settings'
+import useProxyEnabled from '../../../hooks/useProxyEnabled'
 import { BackendRemote, onDCEvent } from '../../../backend-com'
 import { useRpcFetch } from '../../../hooks/useFetch'
 import ProxyConfiguration from '../../dialogs/ProxyConfiguration'
-import { Proxy } from '../../Settings/DefaultCredentials'
 
 type Props = {
   accountId?: number
@@ -45,8 +44,7 @@ export default function ChatListHeader({
       })
   }, [openDialog, accountId])
 
-  const settingsStore = useSettingsStore()[0]
-  const proxyEnabled = settingsStore?.settings.proxy_enabled === Proxy.ENABLED
+  const proxyEnabled = useProxyEnabled()
 
   const connectivityFetch = useRpcFetch(
     BackendRemote.rpc.getConnectivity,

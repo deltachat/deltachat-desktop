@@ -12,8 +12,7 @@ import Icon from './Icon'
 import useDialog from '../hooks/dialog/useDialog'
 import useTranslationFunction from '../hooks/useTranslationFunction'
 import useKeyBindingAction from '../hooks/useKeyBindingAction'
-import { useSettingsStore } from '../stores/settings'
-import { Proxy } from './Settings/DefaultCredentials'
+import useProxyEnabled from '../hooks/useProxyEnabled'
 
 const log = getLogger('renderer/components/ConnectivityToast')
 
@@ -167,8 +166,7 @@ export default function ConnectivityToast() {
 
   const tx = useTranslationFunction()
 
-  const settingsStore = useSettingsStore()[0]
-  const proxyEnabled = settingsStore?.settings.proxy_enabled === Proxy.ENABLED
+  const proxyEnabled = useProxyEnabled()
 
   if (networkState[0] === Connectivity.CONNECTED) {
     return null
