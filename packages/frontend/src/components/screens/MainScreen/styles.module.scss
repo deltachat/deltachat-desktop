@@ -34,7 +34,7 @@
     @include navbar.navbar;
     display: flex;
     align-items: center;
-    padding: 0px 10px;
+    padding-inline-start: 10px;
 
     .archivedChatsTitle {
       flex: 1 1 auto;

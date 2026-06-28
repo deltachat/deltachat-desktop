@@ -13,9 +13,7 @@ import ChatList from '../../chat/ChatList'
 import ConnectivityToast from '../../ConnectivityToast'
 import SettingsStoreInstance from '../../../stores/settings'
 import { BackendRemote, onDCEvent } from '../../../backend-com'
-import Button from '../../Button'
-import Icon from '../../Icon'
-import SearchInput from '../../SearchInput'
+import ChatListHeader from './ChatListHeader'
 import { ChatView } from '../../ChatView/ChatView'
 import useChat from '../../../hooks/chat/useChat'
 import useDialog from '../../../hooks/dialog/useDialog'
@@ -294,34 +292,16 @@ export default function MainScreen({ accountId }: Props) {
           // The same goes for other occurrences of `tx('pref_chats')`.
           aria-label={tx('pref_chats')}
         >
-          <section className={styles.chatListHeader} data-tauri-drag-region>
-            {showArchivedChats && (
-              <>
-                <span data-no-drag-region>
-                  <Button
-                    aria-label={tx('back')}
-                    onClick={() => setArchivedChatsSelected(false)}
-                    className='backButton'
-                    styling='borderless'
-                  >
-                    <Icon icon='arrow-left' className='backButtonIcon'></Icon>
-                  </Button>
-                </span>
-                <div className={styles.archivedChatsTitle}>
-                  {tx('chat_archived_chats_title')}
-                </div>
-              </>
-            )}
-            {!showArchivedChats && (
-              <SearchInput
-                id='chat-list-search'
-                inputRef={searchRef}
-                onChange={handleSearchChange}
-                onClear={queryChatId ? () => handleSearchClear() : undefined}
-                value={queryStr}
-              />
-            )}
-          </section>
+          <ChatListHeader
+            accountId={accountId}
+            showArchivedChats={showArchivedChats}
+            onExitArchive={() => setArchivedChatsSelected(false)}
+            searchRef={searchRef}
+            onSearchChange={handleSearchChange}
+            onSearchClear={handleSearchClear}
+            queryStr={queryStr}
+            queryChatId={queryChatId}
+          />
           <ChatList
             queryStr={queryStr}
             showArchivedChats={showArchivedChats}

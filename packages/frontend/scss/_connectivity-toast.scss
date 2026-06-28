@@ -30,6 +30,13 @@
     border: none;
   }
 
+  .proxyIcon {
+    vertical-align: middle;
+    margin-inline-end: 4px;
+    // Purely a visual hint; let clicks fall through to `showInfoButton`.
+    pointer-events: none;
+  }
+
   .tryNowButton {
     // So that it's on top of the `showInfoButton` and can be clicked.
     @include mixins.button-reset;
