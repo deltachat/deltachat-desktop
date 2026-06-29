@@ -712,7 +712,7 @@ class BrowserRuntime implements Runtime {
     })
   }
 
-  openLink(link: string): void {
+  openLink(link: `http:${string}` | `https:${string}`): void {
     window.open(link, '_blank')?.focus()
   }
 

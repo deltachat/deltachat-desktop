@@ -381,7 +381,7 @@ class ElectronRuntime implements Runtime {
     ))
     return filePaths
   }
-  openLink(link: string): void {
+  openLink(link: `http:${string}` | `https:${string}`): void {
     ipcBackend.invoke('electron.shell.openExternal', link)
   }
   private rc_config: RC_Config | null = null
