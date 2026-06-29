@@ -38,7 +38,7 @@ export function useOpenNonMailtoLinkSafely() {
         url.toLowerCase().startsWith('http:') ||
         url.toLowerCase().startsWith('https:')
       ) {
-        runtime.openLink(url)
+        runtime.openLink(url as `http:${string}` | `https:${string}`)
       } else {
         const userConfirmed = await openConfirmationDialog({
           message: tx('ask_copy_unopenable_link_to_clipboard', url),

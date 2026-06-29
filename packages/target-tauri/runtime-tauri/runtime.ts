@@ -415,7 +415,7 @@ class TauriRuntime implements Runtime {
     }
     return this.runtime_info
   }
-  openLink(link: string): void {
+  openLink(link: `http:${string}` | `https:${string}`): void {
     if (
       link.toLowerCase().startsWith('http:') ||
       link.toLowerCase().startsWith('https:')

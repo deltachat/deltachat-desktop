@@ -87,7 +87,7 @@ export interface Runtime {
    * Opens a link in a new Window or in the Browser
    * @param link
    */
-  openLink(link: string): void
+  openLink(link: `http:${string}` | `https:${string}`): void
   showOpenFileDialog(options: RuntimeOpenDialogOptions): Promise<string[]>
   downloadFile(pathToSource: string, filename: string): Promise<void>
   transformBlobURL(blob: string): string
