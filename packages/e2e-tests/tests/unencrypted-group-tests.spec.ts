@@ -215,12 +215,17 @@ test('check group dialog for unencrypted group has appropriate entries', async (
   ).not.toBeVisible({ timeout: 1 })
   await expect(dialog.locator('#addmember')).not.toBeVisible({ timeout: 1 })
   await expect(
-    dialog.getByTestId('view-group-dialog-header-edit')
-  ).not.toBeVisible({ timeout: 1 })
-  await expect(
     dialog.getByRole('button', { name: 'QR Invite Code' })
   ).not.toBeVisible({ timeout: 1 })
   await expect(dialog.locator('#showqrcode')).not.toBeVisible({ timeout: 1 })
+
+  await dialog.getByTestId('view-group-menu').click()
+  // The three-dot menu should not have an "Edit" entry for unencrypted groups.
+  await expect(page.getByTestId('view-group-edit')).not.toBeVisible({
+    timeout: 1,
+  })
+  await expect(page.getByTestId('encryption-info')).toBeVisible()
+  await page.keyboard.press('Escape')
 
   await page.getByTestId('view-group-dialog-header-close').click()
 })
@@ -238,7 +243,7 @@ test('chat list item context menu', async () => {
   await expect(
     page.getByRole('menuitem', { name: 'Leave Group' })
   ).not.toBeVisible()
-  await expect(page.getByRole('menuitem')).toHaveCount(7)
+  await expect(page.getByRole('menuitem')).toHaveCount(5)
 
   await page.getByRole('menuitem').first().press('Escape')
   await expect(page.getByRole('menuitem')).not.toBeVisible()

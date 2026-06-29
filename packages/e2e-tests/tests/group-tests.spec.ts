@@ -403,7 +403,8 @@ test('Edit group profile from context menu and rename group', async () => {
   // click edit group item
   await page.getByTestId('edit-group').click({ force: true })
   // open edit group profile dialog
-  await page.getByTestId('view-group-dialog-header-edit').click()
+  await page.getByTestId('view-group-menu').click()
+  await page.getByTestId('view-group-edit').click()
   await page.locator('#groupname').fill(groupName + ' edited')
   await page.getByTestId('ok').click()
   await expect(page.locator('.styles_module_displayName')).toHaveText(
@@ -435,7 +436,8 @@ test('Add group description', async () => {
   const descriptionDiv = page.getByTestId('profile-description')
 
   // Open edit dialog
-  await page.getByTestId('view-group-dialog-header-edit').click()
+  await page.getByTestId('view-group-menu').click()
+  await page.getByTestId('view-group-edit').click()
 
   // Add description
   await page.locator('#description').fill(groupDescription)
@@ -506,7 +508,8 @@ test('Update group description', async () => {
   await page.getByTestId('chat-info-button').click()
 
   // Open edit dialog
-  await page.getByTestId('view-group-dialog-header-edit').click()
+  await page.getByTestId('view-group-menu').click()
+  await page.getByTestId('view-group-edit').click()
 
   // Update description
   const descriptionInput = page.locator('#description')
@@ -562,7 +565,8 @@ test('Clear group description', async () => {
   await expect(descriptionDiv).toBeVisible()
 
   // Open edit dialog
-  await page.getByTestId('view-group-dialog-header-edit').click()
+  await page.getByTestId('view-group-menu').click()
+  await page.getByTestId('view-group-edit').click()
 
   // Clear description
   const descriptionInput = page.locator('#description')
@@ -748,7 +752,8 @@ test('add channel description and verify subscriber sees it', async () => {
   await channelChatItem.click()
 
   await page.getByTestId('chat-info-button').click()
-  await page.getByTestId('view-group-dialog-header-edit').click()
+  await page.getByTestId('view-group-menu').click()
+  await page.getByTestId('view-group-edit').click()
 
   await page.locator('#description').fill(channelDescription)
   await page.getByTestId('ok').click()
@@ -789,6 +794,33 @@ test('add channel description and verify subscriber sees it', async () => {
   await expect(page.getByTestId('profile-description')).toHaveText(
     channelDescription
   )
+  await page.keyboard.press('Escape')
+})
+
+test('channel profile three-dot menu shows encryption info', async () => {
+  const userB = existingProfiles[1]
+
+  // userB is a subscriber, so opening the channel
+  // profile shows the MailingListProfile dialog
+  await switchToProfile(page, userB.id)
+  const channelChatItemB = page
+    .locator('.chat-list .chat-list-item')
+    .filter({ hasText: channelName })
+  await expect(channelChatItemB).toBeVisible()
+  await channelChatItemB.click()
+
+  await page.getByTestId('chat-info-button').click()
+
+  // Open the three-dot menu and pick "Encryption Info"
+  await page.getByTestId('mailing-list-profile-menu').click()
+  await page.getByTestId('encryption-info').click({ force: true })
+
+  const encryptionInfoDialog = page
+    .getByRole('dialog')
+    .filter({ hasText: 'Encryption Info' })
+  await expect(encryptionInfoDialog).toBeVisible()
+
+  await page.keyboard.press('Escape')
   await page.keyboard.press('Escape')
 })
 
