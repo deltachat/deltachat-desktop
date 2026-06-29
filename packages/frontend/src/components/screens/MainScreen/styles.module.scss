@@ -34,7 +34,7 @@
     @include navbar.navbar;
     display: flex;
     align-items: center;
-    padding-inline-start: 10px;
+    padding: 0px 10px;
 
     .archivedChatsTitle {
       flex: 1 1 auto;
@@ -43,6 +43,10 @@
       text-overflow: ellipsis;
       font-size: 18px;
       user-select: none;
+    }
+
+    .proxyButton {
+      padding-inline-end: 0px;
     }
   }
 }
