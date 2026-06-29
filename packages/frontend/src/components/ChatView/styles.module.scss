@@ -60,19 +60,17 @@
       min-height: 26px;
     }
 
-    :global(.navbar-button) {
+    .navbarButton {
       padding: 0;
       width: 20px;
       height: 20px;
       border-radius: 0;
       margin-inline-end: 12px;
+      align-items: center;
+      justify-content: center;
       &:hover {
         background-color: var(--navBarButtonHover);
       }
-    }
-
-    :global(#three-dot-menu-button) {
-      height: 20px;
     }
   }
 }

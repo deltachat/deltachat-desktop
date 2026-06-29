@@ -79,6 +79,11 @@ type IconButtonProps = PropsBase &
      * (search clear, QR scan, proxy status, app picker search clear, …).
      */
     styling?: 'highlight'
+    /**
+     * Marks the button with `data-no-drag-region` so it stays clickable when
+     * it sits inside a window drag region (e.g. directly in a navbar).
+     */
+    noDragRegion?: boolean
   }
 
 export default function Icon({
@@ -109,15 +114,16 @@ export function IconButton({
   icon,
   className,
   styling,
+  noDragRegion,
   ...rest
 }: IconButtonProps) {
+  // highlight on hover
   const highlight = styling === 'highlight'
   return (
     <button
       type='button'
-      // Navbar/toolbar actions live inside a window drag region,
-      // so they must opt out of it to stay clickable.
-      data-no-drag-region={highlight || undefined}
+      // Buttons inside a window drag region must opt out to stay clickable.
+      data-no-drag-region={noDragRegion || undefined}
       {...rest}
       className={classNames(
         styles.iconButton,
@@ -126,8 +132,6 @@ export function IconButton({
       )}
     >
       <Icon
-        // In the highlight variant the icon inherits the button's color
-        // (`--navBarText`), so a hover/active highlight behind it looks right.
         coloring={coloring ?? (highlight ? 'currentColor' : undefined)}
         size={size}
         icon={icon}

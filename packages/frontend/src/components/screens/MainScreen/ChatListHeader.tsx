@@ -59,8 +59,6 @@ export default function ChatListHeader({
     })
   }, [openDialog, accountId])
 
-  // The QR scan button is only shown when the search field is empty,
-  // mirroring the `hasValue` logic inside `SearchInput`.
   const hasSearchValue = queryStr.length > 0 || queryChatId != null
 
   const proxyEnabled = useProxyEnabled()
@@ -77,8 +75,7 @@ export default function ChatListHeader({
     return onDCEvent(accountId, 'ConnectivityChanged', refreshConnectivity)
   }, [accountId, proxyEnabled, refreshConnectivity])
 
-  // When a proxy is enabled, show an icon in the chat navbar
-  // indicating the current connectivity status
+  // When proxy is enabled, show an icon in the chat navbar
   const proxyConnected =
     connectivityFetch?.lingeringResult?.ok === true &&
     connectivityFetch.lingeringResult.value >= C.DC_CONNECTIVITY_WORKING
@@ -114,6 +111,7 @@ export default function ChatListHeader({
           {!hasSearchValue && (
             <IconButton
               styling='highlight'
+              noDragRegion
               aria-label={tx('qrscan_title')}
               size={17}
               icon='qr'
@@ -124,6 +122,7 @@ export default function ChatListHeader({
           {proxyEnabled && (
             <IconButton
               styling='highlight'
+              noDragRegion
               aria-label={tx('proxy_settings')}
               title={tx('proxy_settings')}
               icon={proxyConnected ? 'proxy' : 'proxy-not-connected'}
