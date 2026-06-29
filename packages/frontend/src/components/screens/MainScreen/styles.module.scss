@@ -36,6 +36,10 @@
     align-items: center;
     padding: 0px 10px;
 
+    > button {
+      margin-inline-start: 8px;
+    }
+
     .archivedChatsTitle {
       flex: 1 1 auto;
       overflow-x: hidden;
@@ -43,10 +47,6 @@
       text-overflow: ellipsis;
       font-size: 18px;
       user-select: none;
-    }
-
-    .proxyButton {
-      padding-inline-end: 0px;
     }
   }
 }
