@@ -8,6 +8,7 @@ import { onReady } from '../onready'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import { Store, useStore } from './store'
 import { throttledUpdateBadgeCounter } from '../system-integration/badge-counter'
+import { Proxy } from '../components/Settings/DefaultCredentials'
 
 export interface SettingsStoreState {
   accountId: number
@@ -25,6 +26,7 @@ export interface SettingsStoreState {
       media_quality: string
       who_can_call_me: WhoCanCallMe
       'ui.mentions_enabled': '0' | '1'
+      proxy_enabled: Proxy
     }[P]
   }
   desktopSettings: DesktopSettingsType
@@ -43,6 +45,7 @@ const settingsKeys = [
   'media_quality',
   'who_can_call_me',
   'ui.mentions_enabled',
+  'proxy_enabled',
 ] as const
 
 export const enum WhoCanCallMe {

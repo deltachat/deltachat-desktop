@@ -36,6 +36,8 @@ export type IconName =
   | 'person-filled'
   | 'phone'
   | 'plus'
+  | 'proxy'
+  | 'proxy-not-connected'
   | 'rotate-right'
   | 'qr'
   | 'question_mark'
