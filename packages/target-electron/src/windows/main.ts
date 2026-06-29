@@ -70,7 +70,7 @@ export function init(options: { hidden: boolean }) {
         spellcheck: false, // until we can load a local dictionary, see https://github.com/electron/electron/issues/22995
         webSecurity: true,
         allowRunningInsecureContent: false,
-        contextIsolation: false,
+        contextIsolation: true,
       },
       titleBarStyle: isMac ? 'hidden' : 'default',
       titleBarOverlay: true,
