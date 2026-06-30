@@ -39,3 +39,18 @@
   // extra height.
   display: flex;
 }
+
+.highlight {
+  align-items: center;
+  justify-content: center;
+  color: var(--navBarText);
+  border-radius: 10px;
+  height: 24px;
+  min-width: 24px;
+  padding-block: 0;
+  padding-inline: 1px 0;
+
+  &:hover {
+    background-color: var(--navBarButtonHover);
+  }
+}

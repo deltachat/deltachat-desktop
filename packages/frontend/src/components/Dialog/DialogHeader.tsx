@@ -65,13 +65,13 @@ export default function DialogHeader(props: Props) {
           data-no-drag-region
         >
           <Button
-            className={classNames(styles.headerThreeDotButton)}
+            className={styles.headerThreeDotButton}
             aria-label={tx('menu_more_options')}
             data-testid={dataTestid + '-context-menu'}
             onClick={onContextMenuClick}
             styling='borderless'
           >
-            <Icon icon='more' className='rotation90' size={24} />
+            <Icon icon='more_vert' size={24} />
           </Button>
         </span>
       )}

@@ -3,13 +3,15 @@ import { C } from '@deltachat/jsonrpc-client'
 
 import styles from './styles.module.scss'
 import Button from '../../Button'
-import Icon from '../../Icon'
+import Icon, { IconButton } from '../../Icon'
 import SearchInput from '../../SearchInput'
+import QrCode from '../../dialogs/QrCode'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import useDialog from '../../../hooks/dialog/useDialog'
 import useProxyEnabled from '../../../hooks/useProxyEnabled'
 import { BackendRemote, onDCEvent } from '../../../backend-com'
 import { useRpcFetch } from '../../../hooks/useFetch'
+import { SCAN_CONTEXT_TYPE } from '../../../hooks/useProcessQr'
 import ProxyConfiguration from '../../dialogs/ProxyConfiguration'
 
 type Props = {
@@ -43,6 +45,21 @@ export default function ChatListHeader({
         configured: true,
       })
   }, [openDialog, accountId])
+
+  const handleQRScan = useCallback(async () => {
+    if (accountId == undefined) {
+      return
+    }
+    const [qrCode, qrCodeSVG] =
+      await BackendRemote.rpc.getChatSecurejoinQrCodeSvg(accountId, null)
+    openDialog(QrCode, {
+      qrCode,
+      qrCodeSVG,
+      scanContext: SCAN_CONTEXT_TYPE.DEFAULT,
+    })
+  }, [openDialog, accountId])
+
+  const hasSearchValue = queryStr.length > 0 || queryChatId != null
 
   const proxyEnabled = useProxyEnabled()
 
@@ -91,20 +108,27 @@ export default function ChatListHeader({
             onClear={queryChatId ? () => onSearchClear() : undefined}
             value={queryStr}
           />
+          {!hasSearchValue && (
+            <IconButton
+              styling='highlight'
+              noDragRegion
+              aria-label={tx('qrscan_title')}
+              size={17}
+              icon='qr'
+              onClick={handleQRScan}
+              data-testid='qr-scan-button'
+            />
+          )}
           {proxyEnabled && (
-            <Button
-              onClick={openProxyDialog}
+            <IconButton
+              styling='highlight'
+              noDragRegion
               aria-label={tx('proxy_settings')}
               title={tx('proxy_settings')}
-              styling='borderless'
-              className={styles.proxyButton}
-            >
-              <Icon
-                coloring='navbar'
-                icon={proxyConnected ? 'proxy' : 'proxy-not-connected'}
-                size={18}
-              ></Icon>
-            </Button>
+              icon={proxyConnected ? 'proxy' : 'proxy-not-connected'}
+              size={18}
+              onClick={openProxyDialog}
+            />
           )}
         </>
       )}

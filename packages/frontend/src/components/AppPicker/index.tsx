@@ -21,7 +21,7 @@ import {
   FooterActionButton,
   FooterActions,
 } from '../Dialog'
-import SearchInputButton from '../SearchInput/SearchInputButton'
+import { IconButton } from '../Icon'
 import { ClickableLink } from '../helpers/ClickableLink'
 import { useFetch, useRpcFetch } from '../../hooks/useFetch'
 import { unknownErrorToString } from '@deltachat-desktop/shared/unknownErrorToString'
@@ -338,7 +338,8 @@ export function AppPicker({ onAppSelected }: Props) {
           className={styles.searchInput}
         />
         {searchQuery && (
-          <SearchInputButton
+          <IconButton
+            styling='highlight'
             className={styles.searchInputButton}
             aria-label={tx('delete')}
             icon='cross'
