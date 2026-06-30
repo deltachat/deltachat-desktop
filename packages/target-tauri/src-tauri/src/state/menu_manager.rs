@@ -77,7 +77,6 @@ impl MenuManager {
         let _ = self.inner.write().await.insert(id.to_owned(), data);
     }
 
-    #[cfg(target_os = "macos")]
     pub(crate) async fn get_menu_for_window(
         &self,
         app: &AppHandle,

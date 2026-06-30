@@ -1,5 +1,5 @@
 use crate::{
-    settings::{apply_zoom_factor_help_window, CONFIG_FILE, HELP_ZOOM_FACTOR_KEY},
+    settings::{apply_zoom_factor_help_window, get_hide_menu_bar, CONFIG_FILE, HELP_ZOOM_FACTOR_KEY},
     state::menu_manager::MenuManager,
     TranslationState,
 };
@@ -22,6 +22,7 @@ pub(crate) enum HelpMenuAction {
     ZoomOut,
     ResetZoom,
     FloatOnTop,
+    HideMenuBar,
 }
 
 super::menu_action::impl_menu_conversion!(HelpMenuAction);
@@ -65,6 +66,10 @@ impl MenuAction<'static> for HelpMenuAction {
                 help_window.set_always_on_top(!help_window.is_always_on_top()?)?;
                 // this is fast/effient enough, even though it updates all window
                 // if you want to implement sth else you need to take macOS behaviour into account
+                menu_manager.update_all(app);
+            }
+            HelpMenuAction::HideMenuBar => {
+                crate::settings::toggle_hide_menu_bar(app).await?;
                 menu_manager.update_all(app);
             }
         }
@@ -173,6 +178,17 @@ pub(crate) fn create_help_menu(
                         ),
                         true,
                         help_window.is_always_on_top()?,
+                        None::<&str>,
+                    )?,
+                    #[cfg(not(target_os = "macos"))]
+                    &PredefinedMenuItem::separator(app)?,
+                    #[cfg(not(target_os = "macos"))]
+                    &CheckMenuItem::with_id(
+                        app,
+                        HelpMenuAction::HideMenuBar,
+                        tx.sync_translate("pref_hide_menu_bar", Substitution::None),
+                        true,
+                        get_hide_menu_bar(app),
                         None::<&str>,
                     )?,
                     &PredefinedMenuItem::fullscreen(

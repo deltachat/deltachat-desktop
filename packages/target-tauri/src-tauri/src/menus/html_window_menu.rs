@@ -1,5 +1,5 @@
 use crate::{
-    settings::{apply_zoom_factor_html_window, CONFIG_FILE, HTML_EMAIL_ZOOM_FACTOR_KEY},
+    settings::{apply_zoom_factor_html_window, get_hide_menu_bar, CONFIG_FILE, HTML_EMAIL_ZOOM_FACTOR_KEY},
     state::menu_manager::MenuManager,
     TranslationState,
 };
@@ -28,6 +28,7 @@ enum HtmlWindowMenuActionVariant {
     ZoomOut,
     ResetZoom,
     FloatOnTop,
+    HideMenuBar,
 }
 
 // serialisation of event is:
@@ -110,6 +111,10 @@ impl MenuAction<'static> for HtmlWindowMenuAction {
                 win.set_always_on_top(!win.is_always_on_top()?)?;
                 // this is fast/effient enough, even though it updates all window
                 // if you want to implement sth else you need to take macOS behaviour into account
+                menu_manager.update_all(app);
+            }
+            HtmlWindowMenuActionVariant::HideMenuBar => {
+                crate::settings::toggle_hide_menu_bar(app).await?;
                 menu_manager.update_all(app);
             }
         }
@@ -227,6 +232,17 @@ pub(crate) fn create_html_window_menu(
                         ),
                         true,
                         html_email_window.is_always_on_top()?,
+                        None::<&str>,
+                    )?,
+                    #[cfg(not(target_os = "macos"))]
+                    &PredefinedMenuItem::separator(app)?,
+                    #[cfg(not(target_os = "macos"))]
+                    &CheckMenuItem::with_id(
+                        app,
+                        action(HtmlWindowMenuActionVariant::HideMenuBar),
+                        tx.sync_translate("pref_hide_menu_bar", Substitution::None),
+                        true,
+                        get_hide_menu_bar(app),
                         None::<&str>,
                     )?,
                     &PredefinedMenuItem::fullscreen(

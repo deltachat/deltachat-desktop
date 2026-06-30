@@ -514,6 +514,13 @@ pub fn run() -> i32 {
                 app.on_menu_event(handle_menu_event);
             }
 
+            #[cfg(desktop)]
+            {
+                if let Err(err) = tauri::async_runtime::block_on(settings::apply_hide_menu_bar(app.handle())) {
+                    log::error!("apply_hide_menu_bar: {err:?}");
+                }
+            }
+
             runtime_capabilities::add_runtime_capabilies(app.handle())?;
 
             start_resume_after_sleep_detector(app.handle());

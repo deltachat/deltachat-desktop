@@ -4,8 +4,9 @@ use tauri::{AppHandle, Manager};
 use tauri_plugin_store::StoreExt;
 
 use crate::{
-    state::menu_manager::MenuManager, themes::update_theme_in_other_windows, TranslationState,
-    TrayManager,
+    state::{main_window_channels::MainWindowEvents, menu_manager::MenuManager},
+    themes::update_theme_in_other_windows,
+    MainWindowChannels, TranslationState, TrayManager,
 };
 
 pub(crate) const CONFIG_FILE: &str = "config.json";
@@ -33,6 +34,8 @@ pub(crate) const SYNC_ALL_ACCOUNTS_DEFAULT: bool = true;
 pub(crate) const THEME: &str = "activeTheme";
 pub(crate) const THEME_DEFAULT: &str = "system";
 
+pub(crate) const HIDE_MENU_BAR_KEY: &str = "hideMenuBar";
+
 pub(crate) const AUTOSTART_KEY: &str = "autostart";
 // IDEA: maybe we need to have more advanced logic for the default,
 // if we have other builds like portable builds for example
@@ -57,6 +60,7 @@ pub async fn change_desktop_settings_apply_side_effects(
         NOTIFICATIONS => app.state::<TrayManager>().update_menu(&app).await,
         THEME => update_theme_in_other_windows(&app).context("update theme in other windows"),
         AUTOSTART_KEY => apply_autostart(&app).await,
+        HIDE_MENU_BAR_KEY => apply_hide_menu_bar(&app).await,
         _ => Ok(()),
     }
     .map_err(|err| format!("{err:#}"))
@@ -79,6 +83,65 @@ pub(crate) async fn load_and_apply_desktop_settings_on_startup(
         error!("{err}")
     };
     Ok(())
+}
+
+pub(crate) fn get_hide_menu_bar(app: &AppHandle) -> bool {
+    match app.store(CONFIG_FILE) {
+        Ok(store) => store.get_bool_or(HIDE_MENU_BAR_KEY, false),
+        Err(error) => {
+            warn!("get_hide_menu_bar failed: {error:?}");
+            false
+        }
+    }
+}
+
+pub(crate) async fn apply_hide_menu_bar(app: &AppHandle) -> anyhow::Result<()> {
+    // macOS always shows the native menu bar in the system menu area, so there is nothing to hide.
+    #[cfg(not(target_os = "macos"))]
+    {
+        let hide = {
+            let store = app.store(CONFIG_FILE)?;
+            store.get_bool_or(HIDE_MENU_BAR_KEY, false)
+        };
+        let window = app
+            .get_webview_window("main")
+            .context("main window not found")?;
+
+        if hide {
+            window.remove_menu()?;
+        } else {
+            let menu_manager = app.state::<crate::state::menu_manager::MenuManager>();
+            let menu = menu_manager.get_menu_for_window(app, "main").await?;
+            window.set_menu(menu)?;
+        }
+    }
+
+    Ok(())
+}
+
+pub(crate) async fn toggle_hide_menu_bar(app: &AppHandle) -> anyhow::Result<bool> {
+    #[cfg(target_os = "macos")]
+    {
+        let _ = app;
+        return Ok(get_hide_menu_bar(app));
+    }
+
+    #[cfg(not(target_os = "macos"))]
+    {
+        let store = app.store(CONFIG_FILE)?;
+        let current = get_hide_menu_bar(app);
+        let new_value = !current;
+        store.set(HIDE_MENU_BAR_KEY, new_value);
+        apply_hide_menu_bar(app).await?;
+        let channels = app.state::<MainWindowChannels>();
+        channels
+            .emit_event(MainWindowEvents::DesktopSettingChanged {
+                key: "hideMenuBar".into(),
+                value: serde_json::json!(new_value),
+            })
+            .await?;
+        Ok(new_value)
+    }
 }
 
 pub(crate) fn apply_zoom_factor(app: &AppHandle) -> anyhow::Result<()> {
