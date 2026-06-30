@@ -150,6 +150,9 @@ class ElectronRuntime implements Runtime {
   onThemeUpdate: (() => void) | undefined
   onChooseLanguage: ((locale: string) => Promise<void>) | undefined
   onToggleNotifications: (() => void) | undefined
+  onDesktopSettingChanged:
+    | ((key: string, value: string | number | boolean) => void)
+    | undefined
   emitUIFullyReady(): void {
     ipcBackend.send('frontendReady')
   }
@@ -451,6 +454,9 @@ class ElectronRuntime implements Runtime {
       this.onShowDialog?.('keybindings')
     )
     ipcBackend.on('showSettingsDialog', () => this.onShowDialog?.('settings'))
+    ipcBackend.on('desktop-setting-changed', (_ev, key, value) =>
+      this.onDesktopSettingChanged?.(key, value)
+    )
     ipcBackend.on('open-url', (_ev, url) => this.onOpenQrUrl?.(url))
     ipcBackend.on(
       'webxdc.sendToChat',

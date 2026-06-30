@@ -39,7 +39,7 @@ let lastRendererReloadAttempt = 0
 let crashDialogOpen = false
 const RENDERER_RELOAD_COOLDOWN_MS = 30_000
 
-export function init(options: { hidden: boolean }) {
+export function init(options: { hidden: boolean, hideMenuBar: boolean }) {
   if (window) {
     return window.show()
   }
@@ -72,6 +72,7 @@ export function init(options: { hidden: boolean }) {
         allowRunningInsecureContent: false,
         contextIsolation: false,
       },
+      autoHideMenuBar: options.hideMenuBar,
       titleBarStyle: isMac ? 'hidden' : 'default',
       titleBarOverlay: true,
     })
@@ -413,6 +414,30 @@ export function toggleAlwaysOnTop() {
 
 export function isAlwaysOnTop() {
   return window ? window.isAlwaysOnTop() : false
+}
+
+export function applyHideMenuBar(hide: boolean) {
+  if (!window) return
+  // macOS has a system-level menu bar that sits outside the window,
+  // so auto-hide and menu bar visibility APIs have no effect.
+  if (process.platform === 'darwin') return
+  log.info(`applyHideMenuBar ${hide}`)
+  window.setAutoHideMenuBar(hide)
+  window.setMenuBarVisibility(!hide)
+}
+
+export function toggleHideMenuBar() {
+  if (!window) return
+  if (process.platform === 'darwin') return
+  const flag = !window.autoHideMenuBar
+  applyHideMenuBar(flag)
+  DesktopSettings.update({ hideMenuBar: flag })
+  // Notify frontend (Settings UI) about the change from View menu
+  window.webContents.send('desktop-setting-changed', 'hideMenuBar', flag)
+}
+
+export function isHideMenuBar() {
+  return window ? window.autoHideMenuBar : false
 }
 
 export function toggleDevTools() {

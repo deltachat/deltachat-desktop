@@ -235,6 +235,10 @@ onReady(() => {
     }
     SettingsStoreInstance.effect.loadCoreKey(accountId, key as any)
   })
+
+  runtime.onDesktopSettingChanged = (key, value) => {
+    SettingsStoreInstance.reducer.setDesktopSetting(key as any, value)
+  }
 })
 
 const SettingsStoreInstance = new SettingsStore(null, 'SettingsStore')

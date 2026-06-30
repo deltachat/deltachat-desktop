@@ -86,6 +86,8 @@ export interface DesktopSettingsType {
   autostart: boolean
   /** whether to start Electron with system on supported platforms */
   autostartElectron: boolean
+  /** whether to auto-hide the native window menu bar */
+  hideMenuBar: boolean
 }
 
 export interface RC_Config {
