@@ -4149,7 +4149,7 @@ This section is only relevant to contributors.
 
 
 [unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.53.1...HEAD
-[2.53.1]: https://github.com/deltachat/deltachat-desktop/compare/v2.53.1...v2.53.1
+[2.53.1]: https://github.com/deltachat/deltachat-desktop/compare/v2.53.0...v2.53.1
 [2.53.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.52.0...v2.53.0
 [2.52.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.51.0...v2.52.0
 [2.51.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.49.1...v2.51.0
