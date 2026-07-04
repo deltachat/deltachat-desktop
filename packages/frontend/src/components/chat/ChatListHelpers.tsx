@@ -4,6 +4,7 @@ import { debounce } from 'debounce'
 import { BackendRemote, onDCEvent } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { useFetch } from '../../hooks/useFetch'
+import { useStableArray } from '../../hooks/useStableArray'
 import asyncThrottle from '@jcoreio/async-throttle'
 
 const log = getLogger('renderer/helpers/ChatList')
@@ -210,10 +211,16 @@ function useChatListSimple(
     )
   }
 
+  // Make sure we return the previous array as long as the IDs and their
+  // order does not change, avoiding a re-render of the whole chat list.
+  const chatListIds = useStableArray(
+    chatListFetch?.lingeringResult?.ok
+      ? chatListFetch.lingeringResult.value
+      : []
+  )
+
   return {
-    chatListIds: chatListFetch?.lingeringResult?.ok
-      ? chatListFetch?.lingeringResult.value
-      : [],
+    chatListIds,
     chatListFetch,
   }
 }
