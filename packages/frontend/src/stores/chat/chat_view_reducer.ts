@@ -92,7 +92,15 @@ export class ChatViewReducer {
     }
   }
 
-  static fetchedIncomingMessages(prevState: ChatViewState): ChatViewState {
+  /**
+   * Scroll to the bottom of the messages list, but only if it is already
+   * scrolled close to the bottom (we don't force the scroll to bottom
+   * if the user has scrolled to another position already)
+   * `lastKnownScrollHeight` must be captured _before_ the content change
+   * is rendered, so that the proximity check in `MessageList` compares
+   * the scroll position against the old content height.
+   */
+  static scrollToBottomIfClose(prevState: ChatViewState): ChatViewState {
     const {
       lastKnownScrollHeight,
       // lastKnownScrollTop,
@@ -106,6 +114,10 @@ export class ChatViewReducer {
       },
       lastKnownScrollHeight,
     }
+  }
+
+  static fetchedIncomingMessages(prevState: ChatViewState): ChatViewState {
+    return ChatViewReducer.scrollToBottomIfClose(prevState)
   }
 
   static unlockScroll(prevState: ChatViewState): ChatViewState {
