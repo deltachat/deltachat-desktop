@@ -188,7 +188,7 @@ export default function ConnectivityToast() {
         <Icon
           icon={
             networkState[0] === Connectivity.WORKING
-              ? 'proxy'
+              ? 'proxy-connected'
               : 'proxy-not-connected'
           }
           size={16}

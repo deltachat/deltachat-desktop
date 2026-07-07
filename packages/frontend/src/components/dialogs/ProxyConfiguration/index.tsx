@@ -332,10 +332,10 @@ export default function ProxyConfiguration(
         // Needed to update the settings store since
         // `batchSetConfig` bypasses the store reducer
         // and we want to show the proxy status in the UI immediately
-        await SettingsStoreInstance.effect.loadCoreKey(
-          accountId,
-          'proxy_enabled'
-        )
+        await Promise.all([
+          SettingsStoreInstance.effect.loadCoreKey(accountId, 'proxy_enabled'),
+          SettingsStoreInstance.effect.loadCoreKey(accountId, 'proxy_url'),
+        ])
 
         await BackendRemote.rpc.stopIo(accountId)
         await BackendRemote.rpc.startIo(accountId)
