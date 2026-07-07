@@ -1,5 +1,8 @@
 #!/usr/bin/env zsh
 
+# run from the repo root, regardless of where this script is invoked from
+cd "${0:A:h}/../.." || exit 1
+
 dark_grey="\033[0;30m"
 white="\033[1;37m"
 red="\033[1;31m"

@@ -6,7 +6,7 @@
   "license": "GPL-3.0-or-later",
   "scripts": {
     "check:types": "tsc --noEmit --noUncheckedIndexedAccess false -p runtime-tauri",
-    "check:webxdc-denied-permissions": "node ../../bin/webxdc-check-permissions-policy-count.js",
+    "check:webxdc-denied-permissions": "node ../../bin/build/webxdc-check-permissions-policy-count.js",
     "start": "tauri dev",
     "build4production": "NODE_ENV=production pnpm build",
     "build": "pnpm build:locales && pnpm --filter=@deltachat-desktop/frontend build && pnpm build:compose-frontend && pnpm build:html-email-view && pnpm build:webxdc-js",

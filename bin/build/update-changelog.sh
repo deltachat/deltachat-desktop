@@ -2,12 +2,12 @@
 # Helper script to update changelog and footer links
 #
 # Usage:
-#   ./bin/update-changelog.sh 2.23.0       # Prepare release 2.23.0 (before tagging)
+#   ./bin/build/update-changelog.sh 2.23.0       # Prepare release 2.23.0 (before tagging)
 
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
 cd "$PROJECT_ROOT"
 

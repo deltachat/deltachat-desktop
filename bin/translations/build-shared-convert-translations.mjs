@@ -133,8 +133,8 @@ function main() {
 This scripts translates all the locale files downloaded/pulled from transifex
 which are in the .xml format into a .json version.
 Examples:
-- node ./bin/build/build-shared-convert-translations.mjs ./_locales
-- node ./bin/build/build-shared-convert-translations.mjs ./_locales -w
+- node ./bin/translations/build-shared-convert-translations.mjs ./_locales
+- node ./bin/translations/build-shared-convert-translations.mjs ./_locales -w
 Options:
 --help  | -h       Show this help
 --watch | -w       Watch for file changes`)

@@ -124,4 +124,4 @@ jobs:
           persist-credentials: false
       - name: check the list of denied web permissions for webxdc
         working-directory: packages/target-tauri
-        run: node ../../bin/webxdc-check-permissions-policy-count.js
+        run: node ../../bin/build/webxdc-check-permissions-policy-count.js
