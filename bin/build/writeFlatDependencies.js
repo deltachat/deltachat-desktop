@@ -39,12 +39,12 @@ const rawdestination = process.argv[3]
 const destination = isAbsolute(rawdestination)
   ? rawdestination
   : join(process.cwd(), rawdestination)
-const pnpmLockfile = join(__dirname, '../pnpm-lock.yaml')
-const pnpmStore = join(__dirname, '../node_modules/.pnpm')
+const pnpmLockfile = join(__dirname, '../../pnpm-lock.yaml')
+const pnpmStore = join(__dirname, '../../node_modules/.pnpm')
 
 const workspacePackageJsonPath = join(
   __dirname,
-  '..',
+  '../..',
   workspacePackage,
   'package.json'
 )
