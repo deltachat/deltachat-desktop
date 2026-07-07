@@ -58,7 +58,8 @@ export default function SearchInput(props: Props) {
       />
       {hasValue && (
         <IconButton
-          styling='highlight'
+          className={styles.clearButton}
+          coloring='currentColor'
           noDragRegion
           aria-label={tx('clear_search')}
           icon='cross'

@@ -74,12 +74,6 @@ type IconButtonProps = PropsBase &
   React.ButtonHTMLAttributes<HTMLButtonElement> & {
     'aria-label': string
     /**
-     * `'highlight'` renders a transparent, icon-only button with a rounded
-     * background highlight on hover. Used for navbar / toolbar actions
-     * (search clear, QR scan, proxy status, app picker search clear, …).
-     */
-    styling?: 'highlight'
-    /**
      * Marks the button with `data-no-drag-region` so it stays clickable when
      * it sits inside a window drag region (e.g. directly in a navbar).
      */
@@ -113,29 +107,18 @@ export function IconButton({
   size,
   icon,
   className,
-  styling,
   noDragRegion,
   ...rest
 }: IconButtonProps) {
-  // highlight on hover
-  const highlight = styling === 'highlight'
   return (
     <button
       type='button'
       // Buttons inside a window drag region must opt out to stay clickable.
       data-no-drag-region={noDragRegion || undefined}
       {...rest}
-      className={classNames(
-        styles.iconButton,
-        highlight && styles.highlight,
-        className
-      )}
+      className={classNames(styles.iconButton, className)}
     >
-      <Icon
-        coloring={coloring ?? (highlight ? 'currentColor' : undefined)}
-        size={size}
-        icon={icon}
-      />
+      <Icon coloring={coloring} size={size} icon={icon} />
     </button>
   )
 }

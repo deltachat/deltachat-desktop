@@ -110,7 +110,8 @@ export default function ChatListHeader({
           />
           {!hasSearchValue && (
             <IconButton
-              styling='highlight'
+              className={styles.highlight}
+              coloring='currentColor'
               noDragRegion
               aria-label={tx('qrscan_title')}
               size={17}
@@ -121,7 +122,8 @@ export default function ChatListHeader({
           )}
           {proxyEnabled && (
             <IconButton
-              styling='highlight'
+              className={styles.highlight}
+              coloring='currentColor'
               noDragRegion
               aria-label={tx('proxy_settings')}
               title={tx('proxy_settings')}

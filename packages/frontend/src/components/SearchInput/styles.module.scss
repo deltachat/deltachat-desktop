@@ -20,3 +20,16 @@ input.searchInput {
     color: var(--navBarSearchPlaceholder);
   }
 }
+
+.clearButton {
+  align-items: center;
+  justify-content: center;
+  color: var(--navBarText);
+  border-radius: 10px;
+  height: $closeButtonSize;
+  min-width: $closeButtonSize;
+
+  &:hover {
+    background-color: var(--navBarButtonHover);
+  }
+}

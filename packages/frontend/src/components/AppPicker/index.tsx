@@ -339,8 +339,8 @@ export function AppPicker({ onAppSelected }: Props) {
         />
         {searchQuery && (
           <IconButton
-            styling='highlight'
-            className={styles.searchInputButton}
+            className={styles.clearButton}
+            coloring='currentColor'
             aria-label={tx('delete')}
             icon='cross'
             onClick={() => setSearchQuery('')}
