@@ -73,6 +73,11 @@ type JustIconProps = PropsBase & {
 type IconButtonProps = PropsBase &
   React.ButtonHTMLAttributes<HTMLButtonElement> & {
     'aria-label': string
+    /**
+     * Marks the button with `data-no-drag-region` so it stays clickable when
+     * it sits inside a window drag region (e.g. directly in a navbar).
+     */
+    noDragRegion?: boolean
   }
 
 export default function Icon({
@@ -102,11 +107,14 @@ export function IconButton({
   size,
   icon,
   className,
+  noDragRegion,
   ...rest
 }: IconButtonProps) {
   return (
     <button
       type='button'
+      // Buttons inside a window drag region must opt out to stay clickable.
+      data-no-drag-region={noDragRegion || undefined}
       {...rest}
       className={classNames(styles.iconButton, className)}
     >

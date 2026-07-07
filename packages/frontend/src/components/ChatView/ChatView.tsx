@@ -11,7 +11,7 @@ import MailingListProfile from '../dialogs/MailingListProfile'
 import { useSettingsStore } from '../../stores/settings'
 import { BackendRemote } from '../../backend-com'
 import Button from '../Button'
-import Icon from '../Icon'
+import Icon, { IconButton } from '../Icon'
 import useDialog from '../../hooks/dialog/useDialog'
 import useOpenViewGroupDialog from '../../hooks/dialog/useOpenViewGroupDialog'
 import useOpenViewProfileDialog from '../../hooks/dialog/useOpenViewProfileDialog'
@@ -301,25 +301,25 @@ function ChatNavButtons({
       {lastUsedApps && lastUsedApps.length > 0 && (
         <AppIcons accountId={selectedAccountId()} apps={lastUsedApps} />
       )}
-      <Button
+      <IconButton
         onClick={openMediaViewDialog}
         aria-label={tx('apps_and_media')}
         title={tx('apps_and_media')}
-        className='navbar-button'
-        styling='borderless'
-      >
-        <Icon coloring='navbar' icon='apps' size={18} />
-      </Button>
+        className={styles.navbarButton}
+        coloring='navbar'
+        icon='apps'
+        size={18}
+      />
       {settingsStore?.desktopSettings.enableOnDemandLocationStreaming && (
-        <Button
+        <IconButton
           onClick={() => openMapWebxdc(selectedAccountId(), chatId)}
           aria-label={tx('tab_map')}
-          className='navbar-button'
-          styling='borderless'
+          className={styles.navbarButton}
           title={tx('tab_map')}
-        >
-          <Icon coloring='navbar' icon='map' size={18} />
-        </Button>
+          coloring='navbar'
+          icon='map'
+          size={18}
+        />
       )}
       {/* Calls are only implemented on Electron; Tauri and Browser
         runtimes do not implement `startOutgoingVideoCall`. */}
@@ -333,15 +333,15 @@ function ChatNavButtons({
         chat.contactIds.some(id => id > C.DC_CONTACT_ID_LAST_SPECIAL) && (
           <CallButton chat={chat} />
         )}
-      <Button
+      <IconButton
         id='three-dot-menu-button'
-        className='navbar-button'
+        className={styles.navbarButton}
         aria-label={tx('main_menu')}
         onClick={onClickThreeDotMenu}
-        styling='borderless'
-      >
-        <Icon coloring='navbar' icon='more' className='rotate90' size={24} />
-      </Button>
+        coloring='navbar'
+        icon='more_vert'
+        size={24}
+      />
     </div>
   )
 }
@@ -478,15 +478,15 @@ function CallButton({ chat }: { chat: T.FullChat }) {
   )
 
   return (
-    <Button
+    <IconButton
       id={elId}
       aria-label={tx('start_call')}
       title={tx('start_call')}
-      className='navbar-button'
-      styling='borderless'
+      className={styles.navbarButton}
       onClick={onContextMenu}
-    >
-      <Icon coloring='navbar' icon='phone' size={18} />
-    </Button>
+      coloring='navbar'
+      icon='phone'
+      size={18}
+    />
   )
 }
