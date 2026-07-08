@@ -35,7 +35,10 @@ import classNames from 'classnames'
 
 const log = getLogger('ChatView')
 
-export function ChatView({
+export function ChatView(props: Parameters<typeof ChatViewInner>[0]) {
+  return <ChatViewInner {...props}/>
+}
+export function ChatViewInner({
   accountId,
   lastUsedApps,
   className,
