@@ -1111,9 +1111,7 @@ export default function Message(props: {
               tabindexForInteractiveContents={tabindexForInteractiveContents}
             />
             <div
-              // TODO the "+1" count aria-live announcment is perhaps not great
-              // out of context.
-              // Also the "show ReactionsDialog" button gets announced.
+              // TODO the "show ReactionsDialog" button also gets announced.
               aria-live='polite'
               aria-relevant='all'
             >
