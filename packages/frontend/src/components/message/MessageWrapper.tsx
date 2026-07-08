@@ -17,7 +17,11 @@ type RenderMessageProps = {
 
 const log = getLogger('renderer/message/MessageWrapper')
 
-export function MessageWrapper(props: RenderMessageProps) {
+// `React.memo`, so that a single changed message doesn't re-render
+// every other message in the list.
+export const MessageWrapper = React.memo(function MessageWrapper(
+  props: RenderMessageProps
+) {
   const observerRef = useRef<HTMLDivElement>(null)
   const state = props.message.state
   const shouldInViewObserve =
@@ -73,4 +77,4 @@ export function MessageWrapper(props: RenderMessageProps) {
       )}
     </li>
   )
-}
+})

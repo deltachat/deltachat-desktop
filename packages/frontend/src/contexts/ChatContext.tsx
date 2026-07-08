@@ -273,14 +273,25 @@ export const ChatProvider = ({
     }
   }, [accountId, chatWithLinger, chatId, refreshChat])
 
-  const value: ChatContextValue = {
-    chatWithLinger,
-    chatNoLinger,
-    loadingChat: chatFetch?.loading ?? false,
-    chatId,
-    selectChat,
-    unselectChat,
-  }
+  const loadingChat = chatFetch?.loading ?? false
+  const value: ChatContextValue = useMemo(
+    () => ({
+      chatWithLinger,
+      chatNoLinger,
+      loadingChat,
+      chatId,
+      selectChat,
+      unselectChat,
+    }),
+    [
+      chatWithLinger,
+      chatNoLinger,
+      loadingChat,
+      chatId,
+      selectChat,
+      unselectChat,
+    ]
+  )
 
   return <ChatContext.Provider value={value}>{children}</ChatContext.Provider>
 }

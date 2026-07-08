@@ -670,14 +670,17 @@ export default function MessageList({
     }
   }, [])
 
+  const messagesDisplayContextValue = useMemo(
+    () => ({
+      context: 'chat_messagelist' as const,
+      chatId: chat.id,
+      isDeviceChat: chat.isDeviceChat,
+    }),
+    [chat.id, chat.isDeviceChat]
+  )
+
   return (
-    <MessagesDisplayContext.Provider
-      value={{
-        context: 'chat_messagelist',
-        chatId: chat.id,
-        isDeviceChat: chat.isDeviceChat,
-      }}
-    >
+    <MessagesDisplayContext.Provider value={messagesDisplayContextValue}>
       <MessageListInner
         onScroll={onScroll}
         onScrollEnd={onScrollEnd}
@@ -749,11 +752,14 @@ export const MessageListInner = React.memo(
       loadMissingMessages,
     } = props
 
-    const conversationType: ConversationType = {
-      hasMultipleParticipants: chat.chatType !== 'Single',
-      isDeviceChat: chat.isDeviceChat as boolean,
-      chatType: chat.chatType,
-    }
+    const conversationType: ConversationType = useMemo(
+      () => ({
+        hasMultipleParticipants: chat.chatType !== 'Single',
+        isDeviceChat: chat.isDeviceChat as boolean,
+        chatType: chat.chatType,
+      }),
+      [chat.chatType, chat.isDeviceChat]
+    )
 
     useKeyBindingAction(KeybindAction.MessageList_PageUp, () => {
       if (messageListRef.current) {
@@ -1128,7 +1134,9 @@ function JumpDownButton({
   )
 }
 
-export function DayMarker(props: { timestamp: number }) {
+export const DayMarker = React.memo(function DayMarker(props: {
+  timestamp: number
+}) {
   const { timestamp } = props
   const tx = useTranslationFunction()
 
@@ -1161,4 +1169,4 @@ export function DayMarker(props: { timestamp: number }) {
       </div>
     </li>
   )
-}
+})
