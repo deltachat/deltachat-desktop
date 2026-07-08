@@ -980,16 +980,6 @@ export const MessageListInner = React.memo(
         </div>
       </>
     )
-  },
-  (prevProps, nextProps) => {
-    const areEqual: boolean =
-      prevProps.activeView === nextProps.activeView &&
-      prevProps.messageCache === nextProps.messageCache &&
-      prevProps.oldestFetchedMessageIndex ===
-        nextProps.oldestFetchedMessageIndex &&
-      prevProps.onScroll === nextProps.onScroll &&
-      prevProps.onWheel === nextProps.onWheel
-    return areEqual
   }
 )
 
