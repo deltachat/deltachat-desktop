@@ -107,7 +107,6 @@ export default function MessageList({
   } = messageListStore
   const {
     oldestFetchedMessageListItemIndex,
-    newestFetchedMessageListItemIndex,
     messageCache,
     messageListItems,
     viewState,
@@ -281,17 +280,21 @@ export default function MessageList({
       messageListRef.current.scrollTop -
       messageListRef.current.clientHeight
 
+    const {
+      newestFetchedMessageListItemIndex: newestFetchedIndex,
+      messageListItems: currentMessageListItems,
+    } = messageListStore.getState()
+
     const isNewestMessageLoaded =
-      newestFetchedMessageListItemIndex === messageListItems.length - 1
+      newestFetchedIndex === currentMessageListItems.length - 1
     const newShowJumpDownButton =
       !isNewestMessageLoaded ||
       distanceToBottom > maxScrollToBottomDistanceConsideredShort
     // Don't flash the button during a programmatic smooth scroll —
     // we already know we're scrolling to the bottom.
     if (pendingProgrammaticSmoothScrollTo.current === null) {
-      if (newShowJumpDownButton != showJumpDownButton) {
-        setShowJumpDownButton(newShowJumpDownButton)
-      }
+      // React bails out of re-rendering if the value didn't change.
+      setShowJumpDownButton(newShowJumpDownButton)
     }
     if (!newShowJumpDownButton) {
       clearJumpStack()
@@ -324,10 +327,8 @@ export default function MessageList({
     clearJumpStack,
     fetchMoreBottom,
     fetchMoreTop,
-    messageListItems.length,
-    newestFetchedMessageListItemIndex,
+    messageListStore,
     scheduler,
-    showJumpDownButton,
   ])
   const onScrollEnd = useCallback((_ev: Event) => {
     clearTimeout(pendingProgrammaticSmoothScrollTimeout.current)
