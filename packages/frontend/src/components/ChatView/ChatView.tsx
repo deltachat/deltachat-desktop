@@ -36,7 +36,11 @@ import classNames from 'classnames'
 const log = getLogger('ChatView')
 
 export function ChatView(
-  props: Omit<Parameters<typeof ChatViewInner>[0], 'chatWithLinger'> & {
+  props: Omit<
+    Parameters<typeof ChatViewInner>[0],
+    'accountId' | 'chatWithLinger'
+  > & {
+    accountId: T.Account['id'] | undefined
     className?: string
   }
 ) {
@@ -47,7 +51,7 @@ export function ChatView(
       aria-labelledby='chat-section-heading'
       className={classNames(props.className, styles.chatAndNavbar)}
     >
-      {chatWithLinger ? (
+      {props.accountId != undefined && chatWithLinger ? (
         <ChatViewInner
           // Note that `key` has not always been here.
           // Some downstream components still try to support variable `chatId`.
@@ -59,7 +63,7 @@ export function ChatView(
           // so it probably can be removed.
           // We do not and should actually rely on any kind of cross-chat state.
           key={`${props.accountId}_${chatWithLinger.id}`}
-          {...props}
+          {...(props as typeof props & { accountId: typeof props.accountId })}
           chatWithLinger={chatWithLinger}
         />
       ) : (
@@ -78,7 +82,7 @@ export function ChatViewInner({
   lastUsedApps,
   chatWithLinger,
 }: {
-  accountId: number | undefined
+  accountId: number
   lastUsedApps: T.Message[]
   chatWithLinger: NonNullable<ReturnType<typeof useChat>['chatWithLinger']>
 }) {
@@ -108,27 +112,11 @@ export function ChatViewInner({
           <ChatNavButtons chat={chatWithLinger} lastUsedApps={lastUsedApps} />
         )}
       </nav>
-      <MessageListView accountId={accountId} />
-    </>
-  )
-}
-
-function MessageListView({
-  accountId,
-}: {
-  accountId?: number
-}): React.JSX.Element {
-  const { chatWithLinger } = useChat()
-
-  if (chatWithLinger && accountId) {
-    return (
       <RecoverableCrashScreen reset_on_change_key={chatWithLinger.id}>
         <MessageListAndComposer accountId={accountId} chat={chatWithLinger} />
       </RecoverableCrashScreen>
-    )
-  }
-
-  return <NoChatSelected />
+    </>
+  )
 }
 
 /**
