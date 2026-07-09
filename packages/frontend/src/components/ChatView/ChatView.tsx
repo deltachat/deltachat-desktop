@@ -1,5 +1,5 @@
 import styles from './styles.module.scss'
-import React, { useCallback, useContext, useId } from 'react'
+import React, { useCallback, useContext, useId, useMemo } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 
 import MessageListAndComposer from '../message/MessageListAndComposer'
@@ -32,6 +32,11 @@ import { ContextMenuContext } from '../../contexts/ContextMenuContext'
 import { mouseEventToPosition } from '../../utils/mouseEventToPosition'
 import useMessage from '../../hooks/chat/useMessage'
 import classNames from 'classnames'
+import {
+  MessageMultiselectContext,
+  useMessageFocusAndMultiselectContextValue,
+} from '../message/focusAndMultiselect'
+import { useMessageList } from '../../stores/messagelist'
 
 const log = getLogger('ChatView')
 
@@ -90,6 +95,17 @@ export function ChatViewInner({
   const { unselectChat } = useChat()
   const { smallScreenMode } = useContext(ScreenContext)
 
+  const messageListData = useMessageList(accountId, chatWithLinger.id)
+  const messageIds = useMemo(
+    () =>
+      messageListData.state.messageListItems
+        .filter(v => v.kind !== 'dayMarker')
+        .map(v => v.msg_id),
+    [messageListData.state.messageListItems]
+  )
+  const focusAndMultiselectContextValue =
+    useMessageFocusAndMultiselectContextValue({ messageIds })
+
   return (
     <>
       <nav className={styles.chatNavbar} data-tauri-drag-region>
@@ -113,7 +129,15 @@ export function ChatViewInner({
         )}
       </nav>
       <RecoverableCrashScreen reset_on_change_key={chatWithLinger.id}>
-        <MessageListAndComposer accountId={accountId} chat={chatWithLinger} />
+        <MessageMultiselectContext.Provider
+          value={focusAndMultiselectContextValue}
+        >
+          <MessageListAndComposer
+            accountId={accountId}
+            chat={chatWithLinger}
+            messageListData={messageListData}
+          />
+        </MessageMultiselectContext.Provider>
       </RecoverableCrashScreen>
     </>
   )

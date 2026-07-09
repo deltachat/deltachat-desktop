@@ -15,7 +15,7 @@ import ConfirmSendingFiles from '../dialogs/ConfirmSendingFiles'
 import { ReactionsBarProvider } from '../ReactionsBar'
 import useDialog from '../../hooks/dialog/useDialog'
 import useMessage from '../../hooks/chat/useMessage'
-import { useMessageList } from '../../stores/messagelist'
+import type { useMessageList } from '../../stores/messagelist'
 import { IMAGE_EXTENSIONS } from '@deltachat-desktop/shared/constants'
 
 const log = getLogger('renderer/MessageListAndComposer')
@@ -23,6 +23,7 @@ const log = getLogger('renderer/MessageListAndComposer')
 type Props = {
   chat: T.FullChat
   accountId: number
+  messageListData: ReturnType<typeof useMessageList>
 }
 
 export function getBackgroundImageStyle(
@@ -92,7 +93,11 @@ function isImage(file: ParsedPath) {
   return IMAGE_EXTENSIONS.map(ext => '.' + ext).includes(file.ext.toLowerCase())
 }
 
-export default function MessageListAndComposer({ accountId, chat }: Props) {
+export default function MessageListAndComposer({
+  accountId,
+  chat,
+  messageListData,
+}: Props) {
   const conversationRef = useRef<HTMLDivElement>(null)
   const refComposer = useRef(null)
 
@@ -107,7 +112,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     state: messageListState,
     fetchMoreBottom,
     fetchMoreTop,
-  } = useMessageList(accountId, chat.id)
+  } = messageListData
 
   const {
     draftState,
