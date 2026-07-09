@@ -1,10 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import type { T } from '@deltachat/jsonrpc-client'
 import { getLogger } from '@deltachat-desktop/shared/logger'
-import {
-  RovingTabindexProvider,
-  useRovingTabindex,
-} from '../../contexts/RovingTabindex'
+import { useRovingTabindex } from '../../contexts/RovingTabindex'
 import { useMultiselect } from '../../hooks/useMultiselect'
 
 const log = getLogger('messageFocusAndMultiselect')
@@ -24,9 +21,6 @@ export const MessageMultiselectContext =
   })
 
 export function useMessageFocusAndMultiselectContextValue(props: {
-  wrapperElementRef: Parameters<
-    typeof RovingTabindexProvider
-  >[0]['wrapperElementRef']
   messageIds: Array<T.Message['id']>
 }) {
   const [selectedMessages_, setSelectedMessages] = useState(

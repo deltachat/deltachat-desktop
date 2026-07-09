@@ -869,10 +869,7 @@ export const MessageListInner = React.memo(
       [messageListItems]
     )
     const focusAndMultiselectContextValue =
-      useMessageFocusAndMultiselectContextValue({
-        messageIds,
-        wrapperElementRef: messageListRef,
-      })
+      useMessageFocusAndMultiselectContextValue({ messageIds })
 
     if (!loaded) {
       return (
