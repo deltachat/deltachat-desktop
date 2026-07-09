@@ -105,6 +105,8 @@ export function ChatViewInner({
   )
   const focusAndMultiselectContextValue =
     useMessageFocusAndMultiselectContextValue({ messageIds })
+  const numSelectedMessages = focusAndMultiselectContextValue.selectedItems.size
+  const showMessageMultiselectCounter = numSelectedMessages > 0
 
   return (
     <>
@@ -122,7 +124,26 @@ export function ChatViewInner({
           </span>
         )}
         <div className={styles.chatNavbarHeadingWrapper} data-tauri-drag-region>
-          {chatWithLinger && <ChatHeading chat={chatWithLinger} />}
+          {chatWithLinger && (
+            <>
+              <div role='status' style={{ display: 'contents' }}>
+                {showMessageMultiselectCounter && (
+                  <div className={styles.messageMultiselectCounter}>
+                    {tx('n_selected', numSelectedMessages.toString(), {
+                      quantity: numSelectedMessages,
+                    })}
+                  </div>
+                )}
+              </div>
+              <ChatHeading
+                chat={chatWithLinger}
+                // Why `hidden` instead of simply not rendering?
+                // Because this component contains the accessible title
+                // for the "ChatView" section (`id='chat-section-heading'`).
+                hidden={showMessageMultiselectCounter}
+              />
+            </>
+          )}
         </div>
         {chatWithLinger && (
           <ChatNavButtons chat={chatWithLinger} lastUsedApps={lastUsedApps} />
@@ -187,7 +208,7 @@ function chatSubtitle(chat: T.FullChat, firstContact: T.Contact | null) {
   return 'ErrTitle'
 }
 
-function ChatHeading({ chat }: { chat: T.FullChat }) {
+function ChatHeading({ chat, hidden }: { chat: T.FullChat; hidden: boolean }) {
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
   const openViewGroupDialog = useOpenViewGroupDialog()
@@ -259,7 +280,12 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
   )
 
   return (
-    <div className='navbar-heading' data-no-drag-region>
+    <div
+      className={classNames('navbar-heading', {
+        'visually-hidden': hidden,
+      })}
+      data-no-drag-region
+    >
       <Avatar
         displayName={chat.name}
         color={chat.color}
@@ -299,6 +325,8 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
         aria-label={buttonLabel}
         data-testid='chat-info-button'
         className='navbar-heading-chat-info-button'
+        // Ensure that it can't be tab-focused.
+        disabled={hidden}
       ></button>
     </div>
   )
