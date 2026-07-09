@@ -36,7 +36,7 @@ import classNames from 'classnames'
 const log = getLogger('ChatView')
 
 export function ChatView(
-  props: Parameters<typeof ChatViewInner>[0] & {
+  props: Omit<Parameters<typeof ChatViewInner>[0], 'chatWithLinger'> & {
     className?: string
   }
 ) {
@@ -60,6 +60,7 @@ export function ChatView(
           // We do not and should actually rely on any kind of cross-chat state.
           key={`${props.accountId}_${chatWithLinger.id}`}
           {...props}
+          chatWithLinger={chatWithLinger}
         />
       ) : (
         <>
@@ -75,12 +76,14 @@ export function ChatView(
 export function ChatViewInner({
   accountId,
   lastUsedApps,
+  chatWithLinger,
 }: {
   accountId: number | undefined
   lastUsedApps: T.Message[]
+  chatWithLinger: NonNullable<ReturnType<typeof useChat>['chatWithLinger']>
 }) {
   const tx = useTranslationFunction()
-  const { chatWithLinger, unselectChat } = useChat()
+  const { unselectChat } = useChat()
   const { smallScreenMode } = useContext(ScreenContext)
 
   return (
