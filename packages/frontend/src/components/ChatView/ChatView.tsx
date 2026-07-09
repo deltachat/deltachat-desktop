@@ -35,43 +35,56 @@ import classNames from 'classnames'
 
 const log = getLogger('ChatView')
 
-export function ChatView(props: Parameters<typeof ChatViewInner>[0]) {
+export function ChatView(
+  props: Parameters<typeof ChatViewInner>[0] & {
+    className?: string
+  }
+) {
   const { chatWithLinger } = useChat()
   return (
-    <ChatViewInner
-      // Note that `key` has not always been here.
-      // Some downstream components still try to support variable `chatId`.
-      // To name a few:
-      // - `hasChatChanged` in `MessageList`.
-      // - `useHasChanged2(chatId)` in `Composer`.
-      //
-      // However, most of that code is about resetting some state,
-      // so it probably can be removed.
-      // We do not and should actually rely on any kind of cross-chat state.
-      key={`${props.accountId}_${chatWithLinger?.id}`}
-      {...props}
-    />
+    <section
+      role='region'
+      aria-labelledby='chat-section-heading'
+      className={classNames(props.className, styles.chatAndNavbar)}
+    >
+      {chatWithLinger ? (
+        <ChatViewInner
+          // Note that `key` has not always been here.
+          // Some downstream components still try to support variable `chatId`.
+          // To name a few:
+          // - `hasChatChanged` in `MessageList`.
+          // - `useHasChanged2(chatId)` in `Composer`.
+          //
+          // However, most of that code is about resetting some state,
+          // so it probably can be removed.
+          // We do not and should actually rely on any kind of cross-chat state.
+          key={`${props.accountId}_${chatWithLinger.id}`}
+          {...props}
+        />
+      ) : (
+        <>
+          {/* Dummy header to reduce layout shifting
+          when unselecting/selecting a chat. */}
+          <nav className={styles.chatNavbar} data-tauri-drag-region></nav>
+          <NoChatSelected />
+        </>
+      )}
+    </section>
   )
 }
 export function ChatViewInner({
   accountId,
   lastUsedApps,
-  className,
 }: {
   accountId: number | undefined
   lastUsedApps: T.Message[]
-  className?: string
 }) {
   const tx = useTranslationFunction()
   const { chatWithLinger, unselectChat } = useChat()
   const { smallScreenMode } = useContext(ScreenContext)
 
   return (
-    <section
-      role='region'
-      aria-labelledby='chat-section-heading'
-      className={classNames(className, styles.chatAndNavbar)}
-    >
+    <>
       <nav className={styles.chatNavbar} data-tauri-drag-region>
         {smallScreenMode && (
           <span data-no-drag-region>
@@ -93,7 +106,7 @@ export function ChatViewInner({
         )}
       </nav>
       <MessageListView accountId={accountId} />
-    </section>
+    </>
   )
 }
 
