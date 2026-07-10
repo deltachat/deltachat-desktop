@@ -55,6 +55,7 @@ import { useSettingsStore } from '../../stores/settings'
 import { useMultiselect } from '../../hooks/useMultiselect'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 import { useHasChanged2 } from '../../hooks/useHasChanged'
+import asyncThrottle from '@jcoreio/async-throttle'
 
 const log = getLogger('ChatList')
 const useMultiselectLog = getLogger('ChatListMultiselect')
@@ -816,23 +817,31 @@ export function useLogicVirtualChatList(
   useEffect(() => {
     const loadingChats = loadingChatsRef_.current
 
-    let debouncingChatlistItemRequests: { [chatid: number]: number } = {}
-
-    const updateChatListItem = async (chatId: number) => {
-      debouncingChatlistItemRequests[chatId] = 1
-      loadingChats.add(chatId)
-      const chats = await BackendRemote.rpc.getChatlistItemsByEntries(
-        accountId,
-        [chatId]
-      )
-      setChatCache(cache => ({ ...cache, ...chats }))
-      loadingChats.delete(chatId)
-      if (debouncingChatlistItemRequests[chatId] > 1) {
-        updateChatListItem(chatId)
-      } else {
-        debouncingChatlistItemRequests[chatId] = 0
+    // Batch `ChatlistItemChanged` events: collect the changed chat ids
+    // and update them with a single RPC call and a single `setChatCache`
+    // This reduces the number of re-renders bounded when many chats change
+    // in a short period, e.g. when a lot of messages arrive
+    const pendingChatIds = new Set<number>()
+    const flushPendingChatIds = asyncThrottle(async () => {
+      const chatIds = [...pendingChatIds]
+      pendingChatIds.clear()
+      if (chatIds.length === 0) {
+        return
       }
-    }
+      try {
+        const chats = await BackendRemote.rpc.getChatlistItemsByEntries(
+          accountId,
+          chatIds
+        )
+        setChatCache(cache => ({ ...cache, ...chats }))
+      } catch (err) {
+        log.error('failed to fetch changed chatlist items', err)
+      } finally {
+        for (const chatId of chatIds) {
+          loadingChats.delete(chatId)
+        }
+      }
+    }, 400)
 
     const removeListener = onDCEvent(
       accountId,
@@ -842,25 +851,19 @@ export function useLogicVirtualChatList(
           return
         }
         if (chatId !== null) {
-          if (
-            debouncingChatlistItemRequests[chatId] === undefined ||
-            debouncingChatlistItemRequests[chatId] === 0
-          ) {
-            updateChatListItem(chatId)
-          } else {
-            debouncingChatlistItemRequests[chatId] =
-              debouncingChatlistItemRequests[chatId] + 1
-          }
+          pendingChatIds.add(chatId)
+          loadingChats.add(chatId)
+          flushPendingChatIds.invokeIgnoreResult()
         } else {
-          // invalidate whole chatlist cache and reload everyhting that was visible before
+          // invalidate whole chatlist cache and reload everything that was visible before
+          pendingChatIds.clear()
           await reloadChats()
-          // reset debouncing
-          debouncingChatlistItemRequests = {}
         }
       }
     )
     return () => {
       removeListener()
+      flushPendingChatIds.cancel()
     }
   }, [accountId])
 

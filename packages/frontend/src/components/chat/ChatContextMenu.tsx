@@ -326,13 +326,31 @@ export function useChatContextMenu(): {
     activeChatId: number | null
   ) => {
     // only if chatListItems contains a single chat, we need the full chat
+    const singleChatItem =
+      chatListItems.length === 1 ? chatListItems[0] : undefined
     const selectedChat =
-      chatListItems.length === 1
-        ? await BackendRemote.rpc.getFullChatById(
-            accountId,
-            chatListItems[0].id
-          )
+      singleChatItem !== undefined
+        ? await BackendRemote.rpc.getFullChatById(accountId, singleChatItem.id)
         : undefined
+    // The passed `chatListItems` come from the chat list's cache, which is
+    // updated with a throttle, so right after an action (e.g. pin/unpin)
+    // they may still hold the previous state for a moment.
+    if (selectedChat !== undefined) {
+      chatListItems = [fullChatToChatListItem(selectedChat)]
+    } else {
+      try {
+        const freshItems = await BackendRemote.rpc.getChatlistItemsByEntries(
+          accountId,
+          chatListItems.map(chat => chat.id)
+        )
+        chatListItems = chatListItems.map(chat => {
+          const freshItem = freshItems[chat.id]
+          return freshItem?.kind === 'ChatListItem' ? freshItem : chat
+        })
+      } catch (err) {
+        log.error('failed to fetch current chatlist items for menu', err)
+      }
+    }
     return openContextMenuInternalHandler(
       event,
       selectedChat,
