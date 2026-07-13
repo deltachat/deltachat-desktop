@@ -8,11 +8,12 @@ import SearchInput from '../../SearchInput'
 import QrCode from '../../dialogs/QrCode'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import useDialog from '../../../hooks/dialog/useDialog'
-import useProxyEnabled from '../../../hooks/useProxyEnabled'
 import { BackendRemote, onDCEvent } from '../../../backend-com'
 import { useRpcFetch } from '../../../hooks/useFetch'
 import { SCAN_CONTEXT_TYPE } from '../../../hooks/useProcessQr'
+import { useSettingsStore } from '../../../stores/settings'
 import ProxyConfiguration from '../../dialogs/ProxyConfiguration'
+import useProxyEnabled from '../../../hooks/useProxyEnabled'
 
 type Props = {
   accountId?: number
@@ -62,6 +63,12 @@ export default function ChatListHeader({
   const hasSearchValue = queryStr.length > 0 || queryChatId != null
 
   const proxyEnabled = useProxyEnabled()
+  const settingsStore = useSettingsStore()[0]
+  // Whether any proxy is configured (any entry in the proxy list).
+  const hasProxies =
+    (settingsStore?.settings.proxy_url
+      ?.split('\n')
+      .filter(url => url.trim() !== '').length ?? 0) > 0
 
   const connectivityFetch = useRpcFetch(
     BackendRemote.rpc.getConnectivity,
@@ -75,10 +82,18 @@ export default function ChatListHeader({
     return onDCEvent(accountId, 'ConnectivityChanged', refreshConnectivity)
   }, [accountId, proxyEnabled, refreshConnectivity])
 
-  // When proxy is enabled, show an icon in the chat navbar
   const proxyConnected =
     connectivityFetch?.lingeringResult?.ok === true &&
     connectivityFetch.lingeringResult.value >= C.DC_CONNECTIVITY_WORKING
+
+  // Show a proxy icon in the chat navbar whenever a proxy
+  // is configured even if it is currently disabled
+  const showProxyButton = proxyEnabled || hasProxies
+  const proxyIcon = !proxyEnabled
+    ? 'proxy-disabled'
+    : proxyConnected
+      ? 'proxy-connected'
+      : 'proxy-not-connected'
 
   return (
     <section className={styles.chatListHeader} data-tauri-drag-region>
@@ -120,14 +135,14 @@ export default function ChatListHeader({
               data-testid='qr-scan-button'
             />
           )}
-          {proxyEnabled && (
+          {showProxyButton && (
             <IconButton
               className={styles.highlight}
               coloring='currentColor'
               noDragRegion
               aria-label={tx('proxy_settings')}
               title={tx('proxy_settings')}
-              icon={proxyConnected ? 'proxy' : 'proxy-not-connected'}
+              icon={proxyIcon}
               size={18}
               onClick={openProxyDialog}
             />
