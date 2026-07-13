@@ -1,13 +1,13 @@
 #!/bin/bash
 # Prepare a new release
 #
-# Usage: ./bin/prepare-release.sh 2.23.0
+# Usage: ./bin/build/prepare-release.sh 2.23.0
 
 set -e
 
 if [ -z "$1" ]; then
     echo "❌ Error: Version argument required"
-    echo "Usage: ./bin/prepare-release.sh VERSION"
+    echo "Usage: ./bin/build/prepare-release.sh VERSION"
     exit 1
 fi
 
@@ -15,7 +15,7 @@ VERSION="$1"
 CLEAN_VERSION=$(echo "$VERSION" | sed 's/^v//')
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
 cd "$PROJECT_ROOT"
 
@@ -25,12 +25,12 @@ echo ""
 
 # Step 1: Update version in all package.json files and Cargo.toml
 echo "📦 Step 1: Updating version numbers..."
-node ./bin/update_desktop_version.js "$CLEAN_VERSION"
+node ./bin/build/update_desktop_version.js "$CLEAN_VERSION"
 echo ""
 
 # Step 2: Update CHANGELOG
 echo "📝 Step 2: Updating CHANGELOG..."
-./bin/update-changelog.sh "$CLEAN_VERSION"
+./bin/build/update-changelog.sh "$CLEAN_VERSION"
 echo ""
 
 # Step 3: Format package.json files

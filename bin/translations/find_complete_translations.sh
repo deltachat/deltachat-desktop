@@ -2,6 +2,9 @@
 
 # checks if there are any new translations which reached the threshold to be included in the language selection
 
+# run from the repo root, regardless of where this script is invoked from
+cd "$(dirname "${BASH_SOURCE[0]}")/../.." || exit 1
+
 threshold=150
 
 code=$(cat <<EOF

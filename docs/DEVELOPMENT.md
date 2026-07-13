@@ -318,7 +318,7 @@ Ubuntu 24.04 and later [restrict unprivileged user namespaces via AppArmor](http
 To fix this, run the provided helper script which installs an AppArmor profile for the development Electron binary:
 
 ```sh
-./bin/setup-apparmor-dev.sh
+./bin/tools/setup-apparmor-dev.sh
 ```
 
 The script requires `sudo` and needs to be re-run after changing the Electron version.

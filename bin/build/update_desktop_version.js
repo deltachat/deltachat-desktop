@@ -12,8 +12,8 @@ let version
 if (versionArg) {
   if (checkOnly) {
     console.error('❌ Error: Cannot use --check with a version argument')
-    console.error('Usage: node bin/update_desktop_version.js [version]')
-    console.error('   or: node bin/update_desktop_version.js --check')
+    console.error('Usage: node bin/build/update_desktop_version.js [version]')
+    console.error('   or: node bin/build/update_desktop_version.js --check')
     process.exit(1)
   }
 

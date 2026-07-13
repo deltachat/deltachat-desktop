@@ -1,6 +1,17 @@
 packages:
   - packages/*
 
+# Run package.json scripts through pnpm's POSIX shell emulator so inline env
+# vars (e.g. `NODE_ENV=production ...`) work cross-platform, incl. Windows CI.
+# (pnpm 11 no longer reads `shell-emulator` from .npmrc — it must live here.)
+shellEmulator: true
+
+# Shorten node_modules/.pnpm/<module> dir names so Windows doesn't hit the
+# 260-char path limit (nsis packaging breaks on the long allowOnlyOneInstallerInstance.nsh
+# path). The `pnpm pack:patch-node-modules` script needs the stdio package folder
+# names unchanged; longest there is 49 chars, and 70 leaves headroom without truncating those.
+virtualStoreDirMaxLength: 70
+
 supportedArchitectures:
   os:
     - darwin
