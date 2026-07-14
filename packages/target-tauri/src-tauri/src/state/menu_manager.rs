@@ -18,6 +18,8 @@ pub(crate) trait WindowAbstraction<R: Runtime> {
     fn label(&self) -> &str;
     #[cfg(desktop)]
     fn set_menu(&self, menu: Menu<R>) -> tauri::Result<Option<Menu<R>>>;
+    #[cfg(desktop)]
+    fn remove_menu(&self) -> tauri::Result<Option<Menu<R>>>;
     fn on_window_event<F: Fn(&WindowEvent) + Send + 'static>(&self, f: F);
 }
 
@@ -29,6 +31,11 @@ impl<R: Runtime> WindowAbstraction<R> for WebviewWindow<R> {
     #[cfg(desktop)]
     fn set_menu(&self, menu: Menu<R>) -> tauri::Result<Option<Menu<R>>> {
         self.set_menu(menu)
+    }
+
+    #[cfg(desktop)]
+    fn remove_menu(&self) -> tauri::Result<Option<Menu<R>>> {
+        self.remove_menu()
     }
 
     fn on_window_event<F: Fn(&WindowEvent) + Send + 'static>(&self, f: F) {
@@ -44,6 +51,11 @@ impl<R: Runtime> WindowAbstraction<R> for Window<R> {
     #[cfg(desktop)]
     fn set_menu(&self, menu: Menu<R>) -> tauri::Result<Option<Menu<R>>> {
         self.set_menu(menu)
+    }
+
+    #[cfg(desktop)]
+    fn remove_menu(&self) -> tauri::Result<Option<Menu<R>>> {
+        self.remove_menu()
     }
 
     fn on_window_event<F: Fn(&WindowEvent) + Send + 'static>(&self, f: F) {
@@ -103,8 +115,23 @@ impl MenuManager {
         let menu_generator_arc = Arc::new(menu_generator);
         self.add(window_id, menu_generator_arc.clone()).await;
 
-        // #[cfg(not(target_os = "macos"))]
-        win.set_menu(menu_generator_arc(app)?)?;
+        // On non-macOS, respect the "hide menu bar" setting already at
+        // window registration, so a secondary window opened while hiding is
+        // enabled does not flash (or permanently show) a menu bar until the
+        // next `update_all`.
+        #[cfg(not(target_os = "macos"))]
+        {
+            let menu = menu_generator_arc(app)?;
+            if crate::settings::get_hide_menu_bar(app) {
+                win.remove_menu()?;
+            } else {
+                win.set_menu(menu)?;
+            }
+        }
+        #[cfg(target_os = "macos")]
+        {
+            win.set_menu(menu_generator_arc(app)?)?;
+        }
 
         #[cfg(target_os = "macos")]
         {
