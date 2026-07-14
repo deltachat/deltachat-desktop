@@ -1,4 +1,4 @@
-import { copyFileSync } from 'fs'
+import { copyFileSync, mkdirSync } from 'fs'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 
@@ -11,7 +11,16 @@ const browserSourceMapSupportPath = join(
   'source-map-support',
   'browser-source-map-support.js'
 )
+
+const outDir = join(__dirname, '..', 'html-dist')
+try {
+  mkdirSync(outDir)
+} catch (err) {
+  if (err.code !== 'EEXIST') {
+    throw err
+  }
+}
 copyFileSync(
   browserSourceMapSupportPath,
-  join(__dirname, '..', 'html-dist', 'browser-source-map-support.js')
+  join(outDir, 'browser-source-map-support.js')
 )
