@@ -447,6 +447,11 @@ export function useDraft(
     if (!currQuote) {
       if (upOrDown === KeybindAction.Composer_SelectReplyToUp) {
         const id = messageIds[messageIds.length - 1]
+        if (id == undefined) {
+          // No quotable messages in the cache. Either the chat is empty,
+          // or the messages haven't been loaded yet
+          return
+        }
         const fromCache = messageListState.messageCache[id]
         quoteAndJumpToMessage(fromCache?.kind === 'message' ? fromCache : id)
       }

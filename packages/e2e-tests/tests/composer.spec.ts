@@ -593,6 +593,11 @@ test.describe('Ctrl + Up shortcut', () => {
   // A little stupid, but works I guess.
   test.beforeEach(async () => {
     await selectChatByName(page, chatName)
+    // Wait for the messages to be loaded:
+    // the shortcut does nothing as long as they aren't.
+    await expect(
+      page.getByLabel('Messages').getByText(getMessageText(numMessages - 1))
+    ).toBeVisible()
   })
 
   async function up() {
