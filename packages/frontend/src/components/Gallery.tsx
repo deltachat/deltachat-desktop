@@ -501,6 +501,7 @@ function GridGallery({
             // proper grid navigation,
             // since grid dimensions are known.
             direction='both'
+            pageStepSize={itemsPerRow}
           >
             <InfiniteLoader
               isItemLoaded={isMessageLoaded}

@@ -913,7 +913,10 @@ export const MessageListInner = React.memo(
           }}
         >
           <ol aria-label={tx('messages')}>
-            <RovingTabindexProvider wrapperElementRef={messageListRef}>
+            <RovingTabindexProvider
+              wrapperElementRef={messageListRef}
+              pageStepSize={'disable'}
+            >
               <MessageMultiselectContext.Provider
                 value={focusAndMultiselectContextValue}
               >

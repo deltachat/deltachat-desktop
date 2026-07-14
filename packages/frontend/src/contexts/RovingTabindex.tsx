@@ -111,6 +111,17 @@ type ProviderProps = PropsWithChildren<{
    * @default 'vertical'
    */
   direction?: 'vertical' | 'horizontal' | 'both'
+  // TODO hmmm maybe better to disable by default?
+  // Have default behavior unless it's a virtualized list.
+  // Because then PageUp/PageDown feels mega shit in the gallery.
+  // Need to implement proper 2D navigation first I think.
+  /**
+   * How many items to step on PageUp/PageDown.
+   * 'disable' or 0 will not handle PageUp/PageDown keys.
+   *
+   * @default 5
+   */
+  pageStepSize?: number | 'disable'
 }>
 
 export const RovingTabindexContext = createContext<ContextValue>({
@@ -126,12 +137,19 @@ export function RovingTabindexProvider({
   wrapperElementRef,
   classNameOfTargetElements,
   direction,
+  pageStepSize,
 }: ProviderProps) {
   if (classNameOfTargetElements == undefined) {
     classNameOfTargetElements = 'roving-tabindex'
   }
   if (direction == undefined) {
     direction = 'vertical'
+  }
+  if (pageStepSize == undefined) {
+    pageStepSize = 5
+  }
+  if (pageStepSize === 'disable') {
+    pageStepSize = 0
   }
 
   const [activeElement, setActiveElement] = useState<HTMLElement | null>(null)
@@ -182,9 +200,15 @@ export function RovingTabindexProvider({
         return
       }
 
-      const indexChange: -1 | 1 | 'first' | 'last' | undefined =
+      const indexChange: IndexChange | undefined =
         indexChangeTable[direction][event.code]
       if (indexChange == undefined) {
+        return
+      }
+      if (
+        pageStepSize === 0 &&
+        (indexChange === 'PageUp' || indexChange === 'PageDown')
+      ) {
         return
       }
 
@@ -211,6 +235,13 @@ export function RovingTabindexProvider({
       } else if (indexChange === 'last') {
         newActiveElement = eligibleElements[eligibleElements.length - 1]
       } else {
+        const indexChange2 =
+          indexChange === 'PageDown'
+            ? pageStepSize
+            : indexChange === 'PageUp'
+              ? -pageStepSize
+              : indexChange
+
         let oldActiveElementInd: number | undefined
         for (let i = 0; i < eligibleElements.length; i++) {
           const eligibleEl = eligibleElements[i]
@@ -227,12 +258,12 @@ export function RovingTabindexProvider({
           return
         }
 
-        newActiveElement = eligibleElements[oldActiveElementInd + indexChange]
-        // `newActiveElement` could be `undefined` if the active element
-        // is either the last or the first.
-        if (newActiveElement == undefined) {
-          return
-        }
+        const newInd = clamp(
+          0,
+          oldActiveElementInd + indexChange2,
+          eligibleElements.length - 1
+        )
+        newActiveElement = eligibleElements[newInd]
       }
 
       const newActiveElement_ = newActiveElement as HTMLElement
@@ -252,7 +283,13 @@ export function RovingTabindexProvider({
         )
       }
     },
-    [activeElement, classNameOfTargetElements, direction, wrapperElementRef]
+    [
+      activeElement,
+      classNameOfTargetElements,
+      direction,
+      pageStepSize,
+      wrapperElementRef,
+    ]
   )
 
   return (
@@ -269,26 +306,36 @@ export function RovingTabindexProvider({
   )
 }
 
-type IndexChange = -1 | 1 | 'first' | 'last'
+type IndexChange = -1 | 1 | 'first' | 'last' | 'PageUp' | 'PageDown'
 const indexChangeTable = {
   vertical: {
     Home: 'first',
     End: 'last',
+    PageUp: 'PageUp',
+    PageDown: 'PageDown',
     ArrowUp: -1,
     ArrowDown: 1,
   } as { [key: string]: IndexChange },
   horizontal: {
     Home: 'first',
     End: 'last',
+    PageUp: 'PageUp',
+    PageDown: 'PageDown',
     ArrowLeft: -1,
     ArrowRight: 1,
   } as { [key: string]: IndexChange },
   both: {
     Home: 'first',
     End: 'last',
+    PageUp: 'PageUp',
+    PageDown: 'PageDown',
     ArrowUp: -1,
     ArrowLeft: -1,
     ArrowDown: 1,
     ArrowRight: 1,
   } as { [key: string]: IndexChange },
 } as const
+
+function clamp(min: number, num: number, max: number) {
+  return num > max ? max : num < min ? min : num
+}
