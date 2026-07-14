@@ -6,11 +6,12 @@
   "license": "GPL-3.0-or-later",
   "scripts": {
     "check:types": "tsc --noEmit --noUncheckedIndexedAccess false && tsc --noEmit --noUncheckedIndexedAccess false -p runtime-browser",
-    "build": "pnpm build:locales && pnpm build:backend && pnpm --filter=@deltachat-desktop/frontend build && pnpm run build:compose-frontend",
+    "build": "pnpm run \"/^build:.*/\"",
     "build:locales": "pnpm -w translations:convert",
     "build:backend": "node ./bin/build.js",
     "build:runtime-impl": "pnpm esbuild --format=esm --bundle --minify --keep-names --sourcemap --outdir=./dist runtime-browser/runtime.ts",
-    "build:compose-frontend": "node ../../bin/tools/copy.js ../frontend/html-dist ./dist && node ../../bin/tools/copy.js ./static ./dist && pnpm build:runtime-impl",
+    "build:frontend": "pnpm --filter=@deltachat-desktop/frontend build && node ../../bin/tools/copy.js ../frontend/html-dist ./dist",
+    "build:static": "node ../../bin/tools/copy.js ./static ./dist",
     "start": "pnpm run build && node dist/server.js",
     "start:server": "node dist/server.js"
   },
