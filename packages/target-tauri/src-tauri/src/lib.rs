@@ -516,7 +516,9 @@ pub fn run() -> i32 {
 
             #[cfg(desktop)]
             {
-                if let Err(err) = tauri::async_runtime::block_on(settings::apply_hide_menu_bar(app.handle())) {
+                if let Err(err) =
+                    tauri::async_runtime::block_on(settings::apply_hide_menu_bar(app.handle()))
+                {
                     log::error!("apply_hide_menu_bar: {err:?}");
                 }
             }

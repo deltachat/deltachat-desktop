@@ -349,10 +349,12 @@ function getMenuTemplate(
         {
           label: tx('pref_hide_menu_bar'),
           type: 'checkbox',
+          visible: process.platform !== 'darwin',
           click: () => mainWindow.toggleHideMenuBar(),
         },
         {
           type: 'separator',
+          visible: process.platform !== 'darwin',
         },
         {
           role: 'togglefullscreen',

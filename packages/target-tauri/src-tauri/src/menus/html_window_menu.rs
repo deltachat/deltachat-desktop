@@ -1,5 +1,7 @@
 use crate::{
-    settings::{apply_zoom_factor_html_window, get_hide_menu_bar, CONFIG_FILE, HTML_EMAIL_ZOOM_FACTOR_KEY},
+    settings::{
+        apply_zoom_factor_html_window, get_hide_menu_bar, CONFIG_FILE, HTML_EMAIL_ZOOM_FACTOR_KEY,
+    },
     state::menu_manager::MenuManager,
     TranslationState,
 };

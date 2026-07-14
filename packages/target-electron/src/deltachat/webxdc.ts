@@ -334,6 +334,7 @@ export default class DCWebxdc {
         title: makeTitle(webxdcInfo, chatName),
         alwaysOnTop: main_window?.isAlwaysOnTop(),
         show: false,
+        autoHideMenuBar: DesktopSettings.state.hideMenuBar,
       })
       // Settings this should make WebRTC always use the proxy.
       // However, since the proxy won't work, this should, in theory,

@@ -133,7 +133,7 @@ export default function Appearance({
         label={tx('pref_use_system_ui_font')}
         callback={() => ThemeManager.refresh()}
       />
-      {isBrowser === false && (
+      {!isBrowser && (
         <DesktopSettingsSwitch
           settingsKey='hideMenuBar'
           label={tx('pref_hide_menu_bar')}

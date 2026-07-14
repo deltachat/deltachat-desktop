@@ -39,7 +39,7 @@ let lastRendererReloadAttempt = 0
 let crashDialogOpen = false
 const RENDERER_RELOAD_COOLDOWN_MS = 30_000
 
-export function init(options: { hidden: boolean, hideMenuBar: boolean }) {
+export function init(options: { hidden: boolean; hideMenuBar: boolean }) {
   if (window) {
     return window.show()
   }

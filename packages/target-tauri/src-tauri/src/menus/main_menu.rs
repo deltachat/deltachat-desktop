@@ -204,6 +204,7 @@ pub(crate) fn create_main_menu(
         main_window.is_always_on_top()?,
         None::<&str>,
     )?;
+    #[cfg(not(target_os = "macos"))]
     let hide_menu_bar = CheckMenuItem::with_id(
         app,
         MainMenuAction::HideMenuBar,

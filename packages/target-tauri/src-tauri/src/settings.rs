@@ -60,7 +60,11 @@ pub async fn change_desktop_settings_apply_side_effects(
         NOTIFICATIONS => app.state::<TrayManager>().update_menu(&app).await,
         THEME => update_theme_in_other_windows(&app).context("update theme in other windows"),
         AUTOSTART_KEY => apply_autostart(&app).await,
-        HIDE_MENU_BAR_KEY => apply_hide_menu_bar(&app).await,
+        HIDE_MENU_BAR_KEY => apply_hide_menu_bar(&app).await.map(|_| {
+            // keep secondary windows (help, html, webxdc) in sync too —
+            // `apply_hide_menu_bar` only touches the main window.
+            app.state::<MenuManager>().update_all(&app);
+        }),
         _ => Ok(()),
     }
     .map_err(|err| format!("{err:#}"))
@@ -136,7 +140,7 @@ pub(crate) async fn toggle_hide_menu_bar(app: &AppHandle) -> anyhow::Result<bool
         let channels = app.state::<MainWindowChannels>();
         channels
             .emit_event(MainWindowEvents::DesktopSettingChanged {
-                key: "hideMenuBar".into(),
+                key: HIDE_MENU_BAR_KEY.into(),
                 value: serde_json::json!(new_value),
             })
             .await?;

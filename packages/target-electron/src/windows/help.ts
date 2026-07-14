@@ -8,6 +8,7 @@ import { getLogger } from '../../../shared/logger.js'
 import { appWindowTitle } from '../../../shared/constants.js'
 import { tx } from '../load-translations.js'
 import { window as main_window } from './main.js'
+import { DesktopSettings } from '../desktop_settings.js'
 import {
   getAppMenu,
   getFileMenu,
@@ -75,6 +76,7 @@ export async function openHelpWindow(locale: string, anchor?: string) {
       spellcheck: false,
     },
     alwaysOnTop: main_window?.isAlwaysOnTop(),
+    autoHideMenuBar: DesktopSettings.state.hideMenuBar,
   }))
 
   setContentProtection(help_window)

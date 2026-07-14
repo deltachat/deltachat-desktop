@@ -96,6 +96,7 @@ export function openHtmlEmailWindow(
       contextIsolation: true,
     },
     alwaysOnTop: mainWindow?.isAlwaysOnTop(),
+    autoHideMenuBar: DesktopSettings.state.hideMenuBar,
   }))
   window.webContents.setZoomFactor(mainWindowZoomFactor)
 
