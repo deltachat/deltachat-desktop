@@ -1,31 +1,33 @@
 import { C } from '@deltachat/jsonrpc-client'
-import { DesktopSettingsType, RC_Config } from '../../../shared/shared-types'
+import {
+  DesktopSettingsType,
+  RC_Config,
+} from '@deltachat-desktop/shared/shared-types'
 import { BackendRemote, Type } from '../backend-com'
 import { onReady } from '../onready'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import { Store, useStore } from './store'
 import { throttledUpdateBadgeCounter } from '../system-integration/badge-counter'
+import { Proxy } from '../components/Settings/DefaultCredentials'
 
 export interface SettingsStoreState {
   accountId: number
   selfContact: Type.Contact
   settings: {
     [P in (typeof settingsKeys)[number]]: {
-      mvbox_move: string
       configured_addr: string
       displayname: string
       selfstatus: string
       mdns_enabled: string
-      show_emails: string
       bcc_self: string
       delete_device_after: string
-      delete_server_after: string
       download_limit: string
-      only_fetch_mvbox: string
+      force_encryption: '0' | '1'
       media_quality: string
-      is_chatmail: '0' | '1'
       who_can_call_me: WhoCanCallMe
       'ui.mentions_enabled': '0' | '1'
+      proxy_enabled: Proxy
+      proxy_url: string
     }[P]
   }
   desktopSettings: DesktopSettingsType
@@ -33,21 +35,19 @@ export interface SettingsStoreState {
 }
 
 const settingsKeys = [
-  'mvbox_move',
   'configured_addr',
   'displayname',
   'selfstatus',
   'mdns_enabled',
-  'show_emails',
   'bcc_self',
   'delete_device_after',
-  'delete_server_after',
   'download_limit',
-  'only_fetch_mvbox',
+  'force_encryption',
   'media_quality',
-  'is_chatmail',
   'who_can_call_me',
   'ui.mentions_enabled',
+  'proxy_enabled',
+  'proxy_url',
 ] as const
 
 export const enum WhoCanCallMe {
@@ -75,9 +75,9 @@ class SettingsStore extends Store<SettingsStoreState | null> {
         }
       }, 'setSelfContact')
     },
-    setDesktopSetting: (
-      key: keyof DesktopSettingsType,
-      value: string | number | boolean
+    setDesktopSetting: <T extends keyof DesktopSettingsType>(
+      key: T,
+      value: DesktopSettingsType[T]
     ) => {
       this.setState(state => {
         if (state === null) {
@@ -172,9 +172,9 @@ class SettingsStore extends Store<SettingsStoreState | null> {
         }, 'set')
       }
     },
-    setDesktopSetting: async (
-      key: keyof DesktopSettingsType,
-      value: string | number | boolean
+    setDesktopSetting: async <T extends keyof DesktopSettingsType>(
+      key: T,
+      value: (string | number | boolean | undefined) & DesktopSettingsType[T]
     ) => {
       try {
         await runtime.setDesktopSetting(key, value)

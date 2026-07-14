@@ -11,7 +11,7 @@
     "menu_help": "Hilfe",
     "app_name": "Delta Chat",
     "placeholder": "Suchen",
-    "one_result": "Result for \"[SEARCH_TERM]\"",
+    "one_result": "Ergebnis für \"%1$s\"",
     "zero_results": "Keine Ergebnisse für \"[SEARCH_TERM]\" gefunden.",
     "clear_search": "×"
   },
@@ -19,7 +19,7 @@
     "menu_help": "Help",
     "app_name": "Delta Chat",
     "placeholder": "Search",
-    "one_result": "Result for \"[SEARCH_TERM]\"",
+    "one_result": "Result for \"%1$s\"",
     "zero_results": "No results found for \"[SEARCH_TERM]\"",
     "clear_search": "×"
   },
@@ -29,6 +29,14 @@
     "placeholder": "Buscar",
     "one_result": "Result for \"[SEARCH_TERM]\"",
     "zero_results": "No se encontraron resultados para \"[SEARCH_TERM]\"",
+    "clear_search": "×"
+  },
+  "eu": {
+    "menu_help": "Laguntza",
+    "app_name": "Delta Chat",
+    "placeholder": "Bilatu",
+    "one_result": "Result for \"[SEARCH_TERM]\"",
+    "zero_results": "Ez da emaitzarik aurkitu \"[SEARCH_TERM]\" bilaketarentzat",
     "clear_search": "×"
   },
   "fr": {
@@ -53,14 +61,6 @@
     "placeholder": "Cerca",
     "one_result": "Result for \"[SEARCH_TERM]\"",
     "zero_results": "Nessun risultato trovato per \"[SEARCH_TERM]\"",
-    "clear_search": "×"
-  },
-  "nl": {
-    "menu_help": "Help",
-    "app_name": "Delta Chat",
-    "placeholder": "Search",
-    "one_result": "Result for \"[SEARCH_TERM]\"",
-    "zero_results": "No results for \"[SEARCH_TERM]\"",
     "clear_search": "×"
   },
   "pl": {
@@ -99,7 +99,7 @@
     "menu_help": "Ndihmë",
     "app_name": "Delta Chat",
     "placeholder": "Kërko",
-    "one_result": "Result for \"[SEARCH_TERM]\"",
+    "one_result": "Përfundim për “%1$s",
     "zero_results": "S’u gjetën përfundime për “[SEARCH_TERM]”",
     "clear_search": "×"
   },
@@ -115,7 +115,7 @@
     "menu_help": "帮助",
     "app_name": "Delta Chat",
     "placeholder": "搜索",
-    "one_result": "Result for \"[SEARCH_TERM]\"",
+    "one_result": "“%1$s”的结果",
     "zero_results": "没有找到有关\"[SEARCH_TERM]\"的结果",
     "clear_search": "×"
   }

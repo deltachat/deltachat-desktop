@@ -15,16 +15,24 @@ try {
   console.error(`Failed to load ${envPath}`, error)
 }
 
+function resolvePath(path: string): string {
+  return isAbsolute(path) ? path : join(__dirname, path)
+}
+
 // Directories & Files
 export const DIST_DIR = join(__dirname)
-export const DATA_DIR = join(__dirname, '../data')
+export const DATA_DIR = process.env['DATA_DIR']
+  ? resolvePath(process.env['DATA_DIR'])
+  : join(__dirname, '../data')
 export const LOGS_DIR = join(DATA_DIR, 'logs')
-export const PRIVATE_CERTIFICATE_KEY = join(
-  DATA_DIR,
-  'certificate/cert.key.pem'
-)
-export const PRIVATE_CERTIFICATE_CERT = join(DATA_DIR, 'certificate/cert.pem')
-export let DC_ACCOUNTS_DIR = join(DATA_DIR, 'accounts')
+const privateCertPath = process.env['PRIVATE_CERTIFICATE_PATH']
+  ? resolvePath(process.env['PRIVATE_CERTIFICATE_PATH'])
+  : join(DATA_DIR, 'certificate')
+export const PRIVATE_CERTIFICATE_KEY = join(privateCertPath, 'cert.key.pem')
+export const PRIVATE_CERTIFICATE_CERT = join(privateCertPath, 'cert.pem')
+export const DC_ACCOUNTS_DIR = process.env['DC_ACCOUNTS_DIR']
+  ? resolvePath(process.env['DC_ACCOUNTS_DIR'])
+  : join(DATA_DIR, 'accounts')
 
 export const LOCALES_DIR = join(__dirname, '../../../_locales')
 
@@ -39,23 +47,9 @@ export const ENV_WEB_TRUST_FIRST_PROXY = Boolean(
   process.env['WEB_TRUST_FIRST_PROXY']
 )
 
-if (process.env['DC_ACCOUNTS_DIR']) {
-  if (isAbsolute(process.env['DC_ACCOUNTS_DIR'])) {
-    DC_ACCOUNTS_DIR = process.env['DC_ACCOUNTS_DIR']
-  } else {
-    DC_ACCOUNTS_DIR = join(__dirname, process.env['DC_ACCOUNTS_DIR'])
-  }
-}
-
 export const NODE_ENV = (process.env['NODE_ENV'] ?? 'production').toLowerCase()
 
-try {
-  mkdirSync(DATA_DIR)
-} catch (err: any) {
-  if (err.code !== 'EEXIST') {
-    throw err
-  }
-}
+mkdirSync(DATA_DIR, { recursive: true })
 mkdirSync(LOGS_DIR, { recursive: true })
 
 if (

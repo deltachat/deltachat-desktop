@@ -20,6 +20,7 @@ import { unknownErrorToString } from '@deltachat-desktop/shared/unknownErrorToSt
 
 import ProxyItemRow from './ProxyItemRow'
 import BasicQrScanner from '../BasicScanner'
+import SettingsStoreInstance from '../../../stores/settings'
 
 const log = getLogger('proxy-configuration')
 
@@ -328,6 +329,14 @@ export default function ProxyConfiguration(
           proxy_enabled: proxyState.enabled ? Proxy.ENABLED : Proxy.DISABLED,
         })
 
+        // Needed to update the settings store since
+        // `batchSetConfig` bypasses the store reducer
+        // and we want to show the proxy status in the UI immediately
+        await Promise.all([
+          SettingsStoreInstance.effect.loadCoreKey(accountId, 'proxy_enabled'),
+          SettingsStoreInstance.effect.loadCoreKey(accountId, 'proxy_url'),
+        ])
+
         await BackendRemote.rpc.stopIo(accountId)
         await BackendRemote.rpc.startIo(accountId)
       } catch (error) {
@@ -387,7 +396,7 @@ export default function ProxyConfiguration(
         onClose={closeDialog}
         dataTestid='proxy-settings'
       />
-      <DialogBody className={styles.proxyDialogBody}>
+      <DialogBody>
         <div className={styles.container}>
           {proxyState.proxies.length > 0 && (
             <SettingsSwitch
@@ -435,7 +444,6 @@ export default function ProxyConfiguration(
                 {tx('proxy_add')}
               </Button>
               <Button
-                className={styles.scanQrButton}
                 onClick={openQrScanner}
                 styling='primary'
                 data-testid='scan-proxy-qr-button'

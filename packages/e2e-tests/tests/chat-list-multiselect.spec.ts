@@ -1,14 +1,13 @@
 import { expect, type Page, type Locator } from '@playwright/test'
 
 import {
-  createProfiles,
-  User,
-  loadExistingProfiles,
-  deleteAllProfiles,
+  importDummyProfileFromBackup,
+  deleteSelectedProfile,
   reloadPage,
   test,
   createNDummyChats,
-} from '../playwright-helper'
+  createDummyChat,
+} from '../playwright-helper.js'
 
 test.describe.configure({
   mode: 'serial',
@@ -16,10 +15,6 @@ test.describe.configure({
 
 expect.configure({ timeout: 5_000 })
 test.setTimeout(30_000)
-
-let existingProfiles: User[] = []
-
-const numberOfProfiles = 1
 
 // https://playwright.dev/docs/next/test-retries#reuse-single-page-between-tests
 let page: Page
@@ -41,30 +36,10 @@ const expectChats = async (chatNums: number[]) => {
   )
 }
 
-test.beforeAll(async ({ browser, isChatmail }) => {
-  const contextForProfileCreation = await browser.newContext()
-  const pageForProfileCreation = await contextForProfileCreation.newPage()
-
-  console.log(
-    `Running multiselect tests with ${isChatmail ? 'isChatmail' : 'plain email'} profiles`
-  )
-
-  await reloadPage(pageForProfileCreation)
-
-  existingProfiles =
-    (await loadExistingProfiles(pageForProfileCreation)) ?? existingProfiles
-
-  await createProfiles(
-    numberOfProfiles,
-    existingProfiles,
-    pageForProfileCreation,
-    browser.browserType().name(),
-    isChatmail
-  )
-
-  await contextForProfileCreation.close()
+test.beforeAll(async ({ browser }) => {
   page = await browser.newPage()
   await reloadPage(page)
+  await importDummyProfileFromBackup(page)
 
   chatList = page.getByLabel('Chats').getByRole('tablist')
   selectedChats = chatList.getByRole('tab', { selected: true })
@@ -79,7 +54,7 @@ test.afterAll(async ({ browser }) => {
   const context = await browser.newContext()
   const pageForProfileDeletion = await context.newPage()
   await reloadPage(pageForProfileDeletion)
-  await deleteAllProfiles(pageForProfileDeletion, existingProfiles)
+  await deleteSelectedProfile(pageForProfileDeletion)
   await context.close()
 })
 
@@ -198,6 +173,74 @@ test.describe('Shift + Click', () => {
     await page.keyboard.press('Shift+ArrowUp')
     // This is the topmost chat: do nothing.
     await expectSelectedChats([9, 8, 7])
+  })
+
+  test("doesn't break if the item at the start of the selection gets removed", async () => {
+    const chatName = 'Chat to be removed'
+    await createDummyChat(page, chatName)
+    const chat = chatList.getByRole('tab', { name: chatName })
+    await chat.click()
+    await expect(selectedChats).toContainText([chatName])
+
+    await chat.click({ button: 'right' })
+    await page.getByRole('menuitem', { name: 'Leave' }).click()
+    await page
+      .getByRole('dialog')
+      .getByRole('button', { name: 'Delete' })
+      .click()
+    await expectSelectedChats([])
+
+    await getChat(3).click({ modifiers: ['Shift'] })
+    await expectSelectedChats([3])
+  })
+})
+
+test.describe('Escape unselects chats', () => {
+  test('if multiple are selected', async () => {
+    await getChat(7).click()
+    await expectSelectedChats([7])
+    await getChat(7).focus()
+    await page.keyboard.press('Shift+ArrowDown')
+    await page.keyboard.press('Shift+ArrowDown')
+    await expectSelectedChats([7, 6, 5])
+    await page.keyboard.press('Escape')
+    await expectSelectedChats([])
+    await page.keyboard.press('Escape')
+    await expectSelectedChats([])
+
+    await getChat(7).click()
+    await getChat(3).click({
+      modifiers: ['ControlOrMeta'],
+    })
+    await expectSelectedChats([7, 3])
+    await getChat(9).focus()
+    await page.keyboard.press('Escape')
+    await expectSelectedChats([])
+  })
+  // This behavior is perhaps not very useful
+  // for people who don't use multiselect often,
+  // but I can come up with at least one example
+  // where not behaving this way could be problematic:
+  // user trying to unselect all chats with Escape
+  // while they're scrolled way below the active chat:
+  // then they would not be able to see that Escape
+  // didn't actually unselect all chats but left just one (the active one).
+  test('if only the active is selected', async () => {
+    await getChat(7).click()
+    await expectSelectedChats([7])
+    await getChat(7).focus()
+    await expect(getChat(7)).toBeFocused()
+    await page.keyboard.press('Escape')
+    await expectSelectedChats([])
+
+    await getChat(5).click()
+    await expectSelectedChats([5])
+    await getChat(5).focus()
+    await page.keyboard.press('ArrowDown')
+    await page.keyboard.press('ArrowDown')
+    await expect(getChat(3)).toBeFocused()
+    await page.keyboard.press('Escape')
+    await expectSelectedChats([])
   })
 })
 
@@ -397,8 +440,6 @@ test.describe('context menu', () => {
       'Mute Notifications',
       'Archive Chat',
       'View Profile',
-      'Encryption Info',
-      'Clone Chat',
       'Leave Group',
     ])
     await page.keyboard.press('Escape')

@@ -152,6 +152,23 @@ div.delta-form-group {
     }
   }
 
+  &.delta-switch {
+    > label {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      height: auto;
+      font-size: 15px;
+      line-height: normal;
+      cursor: pointer;
+      color: var(--deltaChatPrimaryFgLight);
+      padding-inline-end: 5px;
+      padding-block-end: 4px;
+    }
+  }
+
   &.delta-input {
     input {
       appearance: none;

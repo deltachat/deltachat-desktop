@@ -2,14 +2,10 @@
   "compilerOptions": {
     "declaration": true,
     "sourceMap": true,
-    "noImplicitAny": true,
-    "module": "NodeNext",
-    "target": "es2022",
+    "module": "preserve",
     "allowJs": false,
-    "strictNullChecks": true,
-    "strict": true,
     "resolveJsonModule": true,
-    "moduleResolution": "NodeNext"
+    "noUncheckedIndexedAccess": true
   },
   "include": ["./**/*.ts", "./**/*.js", "../../_locales/*.json"],
   "exclude": ["./ts-compiled-for-tests"]

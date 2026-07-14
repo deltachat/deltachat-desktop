@@ -6,11 +6,11 @@ import {
   DesktopSettingsType,
   RC_Config,
   Theme,
-} from '../../../../shared/shared-types'
+} from '@deltachat-desktop/shared/shared-types'
 import SettingsStoreInstance, {
   SettingsStoreState,
 } from '../../stores/settings'
-import { getLogger } from '../../../../shared/logger'
+import { getLogger } from '@deltachat-desktop/shared/logger'
 import SettingsSelector from './SettingsSelector'
 import DesktopSettingsSwitch from './DesktopSettingsSwitch'
 import SmallSelectDialog, { SelectDialogOption } from '../SmallSelectDialog'

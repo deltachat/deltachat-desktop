@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import classNames from 'classnames'
 import moment from 'moment'
 import formatRelativeTime from './formatRelativeTime'
-import { getLogger } from '../../../../shared/logger'
+import { getLogger } from '@deltachat-desktop/shared/logger'
 
 const log = getLogger('renderer/Component/Timestamp')
 

@@ -6,7 +6,7 @@ import {
   AUDIO_EXTENSIONS,
   IMAGE_EXTENSIONS,
   VIDEO_EXTENSIONS,
-} from '../../../../shared/constants'
+} from '@deltachat-desktop/shared/constants'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/dialog/useDialog'
 import SelectContactDialog from '../dialogs/SelectContact'
@@ -23,7 +23,12 @@ import ConfirmSendingFiles from '../dialogs/ConfirmSendingFiles'
 import useMessage from '../../hooks/chat/useMessage'
 
 type Props = {
-  addFileToDraft: (file: string, fileName: string, viewType: T.Viewtype) => void
+  addFileToDraft: (
+    file: string,
+    fileName: string | null,
+    viewType: T.Viewtype
+  ) => void
+  focusMessageInput: () => void
   showAppPicker: (show: boolean) => void
   selectedChat: Pick<T.BasicChat, 'name' | 'id' | 'chatType'> | null
 }
@@ -31,6 +36,7 @@ type Props = {
 // Main component that creates the menu and popover
 export default function MenuAttachment({
   addFileToDraft,
+  focusMessageInput,
   showAppPicker,
   selectedChat,
 }: Props) {
@@ -56,6 +62,7 @@ export default function MenuAttachment({
           return
         }
 
+        setTimeout(() => focusMessageInput())
         for (const filePath of filePaths) {
           await sendMessage(accountId, selectedChat.id, {
             file: filePath,
@@ -103,7 +110,8 @@ export default function MenuAttachment({
       } else if (files[0].toLowerCase().endsWith('.vcf')) {
         viewType = 'Vcard'
       }
-      addFileToDraft(files[0], basename(files[0]), viewType)
+      addFileToDraft(files[0], null, viewType)
+      focusMessageInput()
     } else if (files.length > 1) {
       confirmSendMultipleFiles(files, 'File')
     }
@@ -127,7 +135,8 @@ export default function MenuAttachment({
 
     if (files.length === 1) {
       setLastPath(dirname(files[0]))
-      addFileToDraft(files[0], basename(files[0]), 'Image')
+      addFileToDraft(files[0], null, 'Image')
+      focusMessageInput()
     } else if (files.length > 1) {
       confirmSendMultipleFiles(files, 'Image')
     }
@@ -154,7 +163,9 @@ export default function MenuAttachment({
         const fileName = `VCard-${cleanAuthname}.vcf`
         const tmp_file = await runtime.writeTempFile(fileName, vCardContact)
         addFileToDraft(tmp_file, fileName, 'Vcard')
+
         closeDialog(dialogId)
+        setTimeout(() => focusMessageInput())
       }
     }
     dialogId = openDialog(SelectContactDialog, { onOk: addContactAsVcard })

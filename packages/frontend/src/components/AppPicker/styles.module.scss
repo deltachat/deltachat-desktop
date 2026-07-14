@@ -72,14 +72,18 @@
   }
 }
 
-.searchInputButton {
+.clearButton {
   position: absolute;
-  top: 2px;
-  right: 0;
-
-  // For higher specificity, to ensure override.
-  &.searchInputButton {
-    color: var(--picker-text-rgb);
+  top: 6px;
+  right: 6px;
+  align-items: center;
+  justify-content: center;
+  color: var(--picker-text-rgb);
+  border-radius: 10px;
+  height: 24px;
+  min-width: 24px;
+  &:hover {
+    background-color: var(--navBarButtonHover);
   }
 }
 

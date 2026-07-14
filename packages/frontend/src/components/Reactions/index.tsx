@@ -60,11 +60,15 @@ export default function Reactions(props: Props) {
 
   return (
     <div className={styles.reactions}>
-      {reactions.slice(0, visibleEmojis).map(({ emoji, isFromSelf, count }) => {
+      {reactions.map(({ emoji, isFromSelf, count }, index) => {
         return (
           <span
             className={classNames(styles.emoji, {
               [styles.isFromSelf]: isFromSelf,
+              // Instead of not rendering hidden reactions at all,
+              // hide them with CSS,
+              // so as to not trigger `aria-live` announcements on resize.
+              'visually-hidden': index >= visibleEmojis,
             })}
             key={emoji}
           >
@@ -74,7 +78,10 @@ export default function Reactions(props: Props) {
         )
       })}
       {reactions.length > visibleEmojis && (
-        <span className={classNames(styles.emoji, styles.emojiCount)}>
+        <span
+          aria-hidden
+          className={classNames(styles.emoji, styles.emojiCount)}
+        >
           +{hiddenReactionsCount}
         </span>
       )}

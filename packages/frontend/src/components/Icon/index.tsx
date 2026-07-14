@@ -5,13 +5,16 @@ import styles from './styles.module.scss'
 
 export type IconName =
   | 'apps'
+  | 'archive'
   | 'arrow-left'
   | 'audio-muted'
   | 'bell'
   | 'brightness-6'
   | 'camera'
+  | 'chat_bubble'
   | 'chevron-left'
   | 'chevron-right'
+  | 'clear'
   | 'code-tags'
   | 'cross'
   | 'devices'
@@ -33,14 +36,19 @@ export type IconName =
   | 'person-filled'
   | 'phone'
   | 'plus'
+  | 'proxy-connected'
+  | 'proxy-disabled'
+  | 'proxy-not-connected'
   | 'rotate-right'
   | 'qr'
   | 'question_mark'
+  | 'search'
   | 'reaction'
   | 'sell'
   | 'settings'
   | 'swap_vert'
   | 'swap_hor'
+  | 'trash'
   | 'upload-file'
   | 'visibility'
 
@@ -66,6 +74,11 @@ type JustIconProps = PropsBase & {
 type IconButtonProps = PropsBase &
   React.ButtonHTMLAttributes<HTMLButtonElement> & {
     'aria-label': string
+    /**
+     * Marks the button with `data-no-drag-region` so it stays clickable when
+     * it sits inside a window drag region (e.g. directly in a navbar).
+     */
+    noDragRegion?: boolean
   }
 
 export default function Icon({
@@ -95,11 +108,14 @@ export function IconButton({
   size,
   icon,
   className,
+  noDragRegion,
   ...rest
 }: IconButtonProps) {
   return (
     <button
       type='button'
+      // Buttons inside a window drag region must opt out to stay clickable.
+      data-no-drag-region={noDragRegion || undefined}
       {...rest}
       className={classNames(styles.iconButton, className)}
     >

@@ -16,7 +16,7 @@ import { T } from '@deltachat/jsonrpc-client'
 import { BackendRemote } from '../../../backend-com'
 import { Screens } from '../../../ScreenController'
 import { avatarInitial } from '@deltachat-desktop/shared/avatarInitial'
-import { getLogger } from '../../../../../shared/logger'
+import { getLogger } from '@deltachat-desktop/shared/logger'
 import ImageBackdrop from '../../ImageBackdrop'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 

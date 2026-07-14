@@ -341,7 +341,15 @@ export class MessageListStore extends Store<MessageListState> {
         return modifiedState
       }, 'unlockScroll')
     },
-    messageChanged: (message: Type.Message) => {
+    messageChanged: (
+      message: Type.Message,
+      /**
+       * Should be true if the change can make the message taller,
+       * as it could be the case for incoming image messages
+       * (when the download finishes) or for edited messages
+       */
+      scrollToBottomIfClose: boolean = false
+    ) => {
       const messageLoadResult: Type.MessageLoadResult = {
         kind: 'message',
         ...message,
@@ -353,6 +361,9 @@ export class MessageListStore extends Store<MessageListState> {
             ...state.messageCache,
             [message.id]: messageLoadResult,
           },
+          viewState: scrollToBottomIfClose
+            ? ChatViewReducer.scrollToBottomIfClose(state.viewState)
+            : state.viewState,
         }
         return modifiedState
       }, 'messageChanged')
@@ -755,7 +766,24 @@ export class MessageListStore extends Store<MessageListState> {
               this.accountId,
               messageId
             )
-            this.reducer.messageChanged(message)
+            const oldMessage = this.state.messageCache[messageId]
+            // When the download of a partially-downloaded message finishes,
+            // it can become much taller (when the image is rendered)
+            const downloadFinished =
+              oldMessage?.kind === 'message' &&
+              oldMessage.downloadState !== 'Done' &&
+              message.downloadState === 'Done'
+            // Same for a message that just got edited (e.g. from another
+            // device): it can become taller.
+            // https://github.com/deltachat/deltachat-desktop/issues/4698
+            const edited =
+              oldMessage?.kind === 'message' &&
+              message.isEdited &&
+              oldMessage.text !== message.text
+            // Scroll down if message height might have changed
+            // (only if we're close to the bottom)
+            const messageHeightMightHaveChanged = downloadFinished || edited
+            this.reducer.messageChanged(message, messageHeightMightHaveChanged)
           } catch (error) {
             this.log.warn('failed to fetch message with id', messageId, error)
             // ignore not found and other errors

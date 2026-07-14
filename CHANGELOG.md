@@ -2,6 +2,123 @@
 
 All notable changes to this project will be documented in this file.
 
+<a id="2_53_1"></a>
+## [2.53.1] - 2026-06-23
+
+### Build
+
+- readds a missing script for flatpak build
+
+<a id="2_53_0"></a>
+## [2.53.0] - 2026-06-22
+
+### Added
+
+- Add a way to select multiple messages
+- `Ctrl + Alt + PageDown` to switch accounts
+- Close (unselect) chat with Escape
+
+### Fixed
+
+- Focus composer when user tries to type
+- Improve keyboard accessibility, focus management:
+  - Escape to unselect chats (multiselect)
+  - Keep focus on old element on dialog close
+  - Escape to go back to View Group from member
+  - Escape in Create Group goes back to New Chat
+  - Refocus input when send message button is pressed (useful for touch screens) ([#6374](https://github.com/deltachat/deltachat-desktop/issues/6374))
+  - Fix undismissable context menu in fullscreen media
+  - Disable keyboard shortcuts when have dialog
+- Don't enter edit mode on `ArrowUp` even if composer only has whitespace
+- Fix screen-readers always using English language for some parts of the UI
+- Do not render large images (click to open instead)
+- Preserve line breaks in channel dialog descr
+- Don't send whitespace-only message
+- Fix bottom margins in some dialogs ([#6481](https://github.com/deltachat/deltachat-desktop/issues/6481))
+- Fix account list items "wiggling" when messages arrive or get read ([#6419](https://github.com/deltachat/deltachat-desktop/pull/6419))
+- Fix some UI related to unencrypted email and "Force Encryption" ([#6480](https://github.com/deltachat/deltachat-desktop/issues/6480))
+- "Show full message...": make the "Load Remote Content" look the same as on Android ([#6386](https://github.com/deltachat/deltachat-desktop/issues/6386))
+
+### Miscellaneous Tasks
+
+- Upgrade core to 2.53.0 ([#6479](https://github.com/deltachat/deltachat-desktop/issues/6479))
+
+
+<a id="2_52_0"></a>
+## [2.52.0] - 2026-06-09
+
+### Miscellaneous Tasks
+- Upgrade core to 2.52.0
+
+<a id="2_51_0"></a>
+## [2.51.0] - 2026-05-30
+
+### Removed
+
+- Remove "Move to DeltaChat folder", in case you are using the option, a device message shows how to proceed
+- Remove "Only fetch from DeltaChat folder" option, the functionality is preserved for existing profiles
+- Remove "Delete Messages from Server" option, this is now up to the server: Chatmail handles that automatically, classic email servers used as relay often have lots of storage or options themselves
+- Remove "Show Email" options, all messages are shown by default, account sharing is anyway not supported
+
+### Added
+
+- "Mark as Unread" menu item (and "as Read")
+- Add inline reply on notifications (Win, Mac)
+- Allow to submit "Edit Group" with "Enter"
+- Calls & channels are not experimental anymore ([#6335](https://github.com/deltachat/deltachat-desktop/issues/6335))
+- Add window menu for MacOS ([#6357](https://github.com/deltachat/deltachat-desktop/issues/6357))
+- Improve crash handling ([#6341](https://github.com/deltachat/deltachat-desktop/issues/6341))
+- Click on call messages opens/focus call window ([#6376](https://github.com/deltachat/deltachat-desktop/issues/6376))
+- WebXDC: add `isAppSender`, `isBroadcast`
+- Add option to force encryption ([#6410](https://github.com/deltachat/deltachat-desktop/issues/6410))
+- Show imap folder if set ([#6424](https://github.com/deltachat/deltachat-desktop/issues/6424))
+- Resend the last 10 messages to new broadcast channel member
+- Enable PQC (Post-Quantum Cryptography) support. We do not generate PQC keys yet, this step is needed for forward compatibility
+- Allow otherwise invalid TLS connections if the key is unchanged
+- Do not show "non delivered" notifications in broadcast channels
+- Adapt quota warning to automatic cleanup.
+- Improved avatar resolution
+
+### Fixed
+
+- Use correct filename when dragging a file out ([#6219](https://github.com/deltachat/deltachat-desktop/issues/6219))
+- Chat list switching between archive by itself ([#6255](https://github.com/deltachat/deltachat-desktop/issues/6255))
+- Chat list: Ctrl + Space multiselect on Linux
+- Add counter for screenreaders ([#6297](https://github.com/deltachat/deltachat-desktop/issues/6297))
+- Show channel description ([#6283](https://github.com/deltachat/deltachat-desktop/issues/6283))
+- Enable sticker replies ([#6278](https://github.com/deltachat/deltachat-desktop/issues/6278))
+- Detect images dropped with uppercase extensions (e.g. .JPG) ([#6324](https://github.com/deltachat/deltachat-desktop/issues/6324))
+- Switch account in all SelectChat dialogs ([#6279](https://github.com/deltachat/deltachat-desktop/issues/6279))
+- Mark visible messages as read after a programmatic scroll completes ([#6329](https://github.com/deltachat/deltachat-desktop/issues/6329))
+- Show appropriate buttons when invite code is pasted to search field ([#6330](https://github.com/deltachat/deltachat-desktop/issues/6330))
+- Hide apps for channels ([#6336](https://github.com/deltachat/deltachat-desktop/issues/6336))
+- Create group/channel with description & image ([#6314](https://github.com/deltachat/deltachat-desktop/issues/6314))
+- Resize reactions after image load ([#6334](https://github.com/deltachat/deltachat-desktop/issues/6334))
+- Truncate author name in quotes ([#6356](https://github.com/deltachat/deltachat-desktop/issues/6356))
+- Always show sent time in html email view([#6363](https://github.com/deltachat/deltachat-desktop/issues/6363))
+- Show rtl text in correct direction in mixed texts ([#6379](https://github.com/deltachat/deltachat-desktop/issues/6379))
+- Qr code video is flipped for back camera ([#6373](https://github.com/deltachat/deltachat-desktop/issues/6373))
+- Set default height smaller then screen height ([#6385](https://github.com/deltachat/deltachat-desktop/issues/6385))
+- Adapt accountlist sidebar ([#6380](https://github.com/deltachat/deltachat-desktop/issues/6380))
+- Reload settings after importing backup ([#6396](https://github.com/deltachat/deltachat-desktop/issues/6396))
+
+### Miscellaneous Tasks
+
+- Update translations ([#6295](https://github.com/deltachat/deltachat-desktop/issues/6295))
+- Upgrade Electron to 41.7.1
+- Add burmese language ([#6416](https://github.com/deltachat/deltachat-desktop/issues/6416))
+- Upgrade core to 2.51.0 ([#6425](https://github.com/deltachat/deltachat-desktop/issues/6425))
+- Upgrade React zoom pan pinch ([#6375](https://github.com/deltachat/deltachat-desktop/issues/6375))
+- Replace emoji mart ([#6201](https://github.com/deltachat/deltachat-desktop/issues/6201))
+
+### Other
+
+- HTML viewer: move Load Remote Images
+- Sticker folder rewrite ([#6231](https://github.com/deltachat/deltachat-desktop/issues/6231))
+- change: remove open sticker folder button
+- fix: keep sticker picker open where appropriate
+- Add Device: move buttons to menu ([#6126](https://github.com/deltachat/deltachat-desktop/issues/6126))
+
 <a id="2_49_1"></a>
 ## [2.49.1] - 2026-04-18
 
@@ -4031,7 +4148,11 @@ This section is only relevant to contributors.
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.49.1...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.53.1...HEAD
+[2.53.1]: https://github.com/deltachat/deltachat-desktop/compare/v2.53.0...v2.53.1
+[2.53.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.52.0...v2.53.0
+[2.52.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.51.0...v2.52.0
+[2.51.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.49.1...v2.51.0
 [2.49.1]: https://github.com/deltachat/deltachat-desktop/compare/v2.49.0...v2.49.1
 [2.49.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.48.0...v2.49.0
 [2.48.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.47.0...v2.48.0

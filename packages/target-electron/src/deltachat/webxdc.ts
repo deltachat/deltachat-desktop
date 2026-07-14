@@ -19,11 +19,14 @@ import { platform } from 'os'
 import { readdir, stat, rmdir, writeFile } from 'fs/promises'
 import { existsSync } from 'fs'
 import type DeltaChatController from './controller.js'
-import { getLogger } from '../../../shared/logger.js'
+import { getLogger } from '@deltachat-desktop/shared/logger.js'
 import { getConfigPath, htmlDistDir } from '../application-constants.js'
 import { truncateText } from '@deltachat-desktop/shared/util.js'
 import { tx } from '../load-translations.js'
-import { Bounds, DcOpenWebxdcParameters } from '../../../shared/shared-types.js'
+import {
+  Bounds,
+  DcOpenWebxdcParameters,
+} from '@deltachat-desktop/shared/shared-types.js'
 import { DesktopSettings } from '../desktop_settings.js'
 import { window as main_window, send } from '../windows/main.js'
 import { writeTempFileFromBase64 } from '../ipc.js'
@@ -48,11 +51,15 @@ type AppInstance = {
   msgId: number
   accountId: number
   internet_access: boolean
-  selfAddr: string
   displayName: string
-  sendUpdateInterval: number
-  sendUpdateMaxSize: number
-}
+} & Pick<
+  T.WebxdcMessageInfo,
+  | 'selfAddr'
+  | 'sendUpdateInterval'
+  | 'sendUpdateMaxSize'
+  | 'isAppSender'
+  | 'isBroadcast'
+>
 const open_apps: {
   [instanceId: string]: AppInstance
 } = {}
@@ -385,6 +392,8 @@ export default class DCWebxdc {
         displayName: p.displayname || webxdcInfo.selfAddr || 'unknown',
         sendUpdateInterval: webxdcInfo.sendUpdateInterval,
         sendUpdateMaxSize: webxdcInfo.sendUpdateMaxSize,
+        isAppSender: webxdcInfo.isAppSender,
+        isBroadcast: webxdcInfo.isBroadcast,
       }
 
       const isMac = platform() === 'darwin'
@@ -1189,7 +1198,10 @@ async function webxdcProtocolHandler(
       body: Buffer.from(
         `window.webxdc_internal.setup("${selfAddr}","${displayName}", ${Number(
           open_apps[id].sendUpdateInterval
-        )}, ${Number(open_apps[id].sendUpdateMaxSize)})`
+        )}, ${Number(open_apps[id].sendUpdateMaxSize)},
+          ${Boolean(open_apps[id].isAppSender)},
+          ${Boolean(open_apps[id].isBroadcast)},
+        )`
       ),
       responseInit: {},
       mime_type: mimeType,

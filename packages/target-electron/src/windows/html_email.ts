@@ -3,7 +3,6 @@ import electron, {
   dialog,
   Menu,
   MenuItem,
-  MenuItemConstructorOptions,
   nativeTheme,
   session,
   WebContents,
@@ -19,11 +18,11 @@ import {
   shouldHandleLinkInMainApp,
   truncateText,
 } from '@deltachat-desktop/shared/util.js'
-import { tx } from '../load-translations.js'
+import { tx, getCurrentLocaleDate } from '../load-translations.js'
 import { open_url } from '../open_url.js'
 import { loadTheme } from '../themes.js'
 import { getDCJsonrpcRemote } from '../ipc.js'
-import { getLogger } from '../../../shared/logger.js'
+import { getLogger } from '@deltachat-desktop/shared/logger.js'
 
 import * as mainWindow from './main.js'
 import {
@@ -115,6 +114,7 @@ export function openHtmlEmailWindow(
     subject,
     from,
     sentTime,
+    locale: getCurrentLocaleDate().locale,
   }))
 
   nativeTheme.on('updated', () => {
@@ -245,62 +245,68 @@ export function openHtmlEmailWindow(
   )
   let context_menu_handle = createContextMenu(window, sandboxedView.webContents)
 
-  window.webContents.ipc.handle('html-view:more-menu', (_ev, { x, y }) => {
-    const menuItems: {
-      [key: string]: () => MenuItemConstructorOptions
-    } = {
-      separator: () => ({ type: 'separator' }),
-      load_remote_images: () => ({
-        id: 'load_remote_images',
-        type: 'checkbox',
-        label: tx('load_remote_content'),
-        checked: loadRemoteContent,
-        click() {
-          update_restrictions(!loadRemoteContent)
-        },
-      }),
-      always_show: () => ({
-        id: 'always_show',
-        type: 'checkbox',
-        label: tx('always_load_remote_images'),
-        checked: DesktopSettings.state.HTMLEmailAlwaysLoadRemoteContent,
-        click() {
-          const newValue =
-            !DesktopSettings.state.HTMLEmailAlwaysLoadRemoteContent
-          DesktopSettings.update({
-            HTMLEmailAlwaysLoadRemoteContent: newValue,
-          })
-          // apply change
-          update_restrictions(newValue, true)
-        },
-      }),
-      dont_ask: () => ({
-        id: 'show_warning',
-        type: 'checkbox',
-        label: tx('show_warning'),
-        checked: DesktopSettings.state.HTMLEmailAskForRemoteLoadingConfirmation,
-        click() {
-          DesktopSettings.update({
-            HTMLEmailAskForRemoteLoadingConfirmation:
-              !DesktopSettings.state.HTMLEmailAskForRemoteLoadingConfirmation,
-          })
-        },
-      }),
-    }
-    let menu: Electron.Menu
-    if (isContactRequest) {
-      menu = electron.Menu.buildFromTemplate([
-        menuItems.load_remote_images(),
-        menuItems.dont_ask(),
-      ])
-    } else {
-      menu = electron.Menu.buildFromTemplate([
-        menuItems.load_remote_images(),
-        menuItems.always_show(),
-        menuItems.dont_ask(),
-      ])
-    }
-    menu.popup({ window, x, y })
+  window.webContents.ipc.handle('html_email:get_menu_labels', () => ({
+    load_remote_content: tx('load_remote_content'),
+  }))
+
+  window.webContents.ipc.handle('html-view:load-remote-content', () => {
+    const currentState =
+      !isContactRequest &&
+      DesktopSettings.state.HTMLEmailAlwaysLoadRemoteContent
+        ? 'always'
+        : loadRemoteContent
+          ? 'once'
+          : 'never'
+    const possibleStates: Array<'never' | 'once' | 'always'> = isContactRequest
+      ? ['never', 'once']
+      : ['never', 'once', 'always']
+    const currentIndex = possibleStates.indexOf(currentState)
+    // needed to close the dialog if the window is closed while the dialog is opened
+    const abortController = new AbortController()
+    const onClose = () => abortController.abort()
+    window.once('close', onClose)
+    const buttons = possibleStates.map(
+      state => (state === currentState ? '✅ ' : '') + tx(state)
+    )
+    dialog
+      .showMessageBox(window, {
+        message: tx('load_remote_content_ask'),
+        buttons,
+        type: 'none',
+        icon: '',
+        defaultId: currentIndex,
+        cancelId: currentIndex,
+        signal: abortController.signal,
+      })
+      .then(({ response }) => {
+        window.off('close', onClose)
+        const selected = possibleStates[response]
+        if (selected === currentState) return // no-op (also covers Escape)
+        if (selected === 'never') {
+          if (DesktopSettings.state.HTMLEmailAlwaysLoadRemoteContent) {
+            DesktopSettings.update({
+              HTMLEmailAlwaysLoadRemoteContent: false,
+            })
+          }
+          update_restrictions(false)
+        } else if (selected === 'once') {
+          if (DesktopSettings.state.HTMLEmailAlwaysLoadRemoteContent) {
+            DesktopSettings.update({
+              HTMLEmailAlwaysLoadRemoteContent: false,
+            })
+          }
+          update_restrictions(true)
+        } else {
+          const _assert: 'always' = selected
+          // 'always' — only selectable for non-contact requests
+          DesktopSettings.update({ HTMLEmailAlwaysLoadRemoteContent: true })
+          update_restrictions(true)
+        }
+      })
+      .catch(() => {
+        // dialog was closed because the window was closed (AbortError)
+        window.off('close', onClose)
+      })
   })
 
   window.webContents.ipc.handle(
@@ -332,59 +338,7 @@ export function openHtmlEmailWindow(
     DesktopSettings.update({ HTMLEmailWindowBounds: window_bounds })
   })
 
-  const update_restrictions = async (
-    allow_network: boolean,
-    skip_sideeffects = false
-  ) => {
-    if (
-      !skip_sideeffects &&
-      !isContactRequest &&
-      !allow_network &&
-      DesktopSettings.state.HTMLEmailAlwaysLoadRemoteContent
-    ) {
-      // revert always loading when turning the toggle switch
-      DesktopSettings.update({
-        HTMLEmailAlwaysLoadRemoteContent: false,
-      })
-    }
-
-    if (
-      !skip_sideeffects &&
-      allow_network &&
-      DesktopSettings.state.HTMLEmailAskForRemoteLoadingConfirmation
-    ) {
-      const buttons = [
-        {
-          label: tx('no'),
-          action: () => {
-            throw new Error('user denied')
-          },
-        },
-        { label: tx('yes'), action: () => {} },
-        // isContactRequest || {
-        //   label: tx('pref_html_always_load_remote_content'),
-        //   action: () => {
-        //     DesktopSettings.update({
-        //       HTMLEmailAlwaysLoadRemoteContent: true,
-        //     })
-        //   },
-        // },
-      ].filter(item => typeof item === 'object') as {
-        label: string
-        action: () => void
-      }[]
-
-      const result = await dialog.showMessageBox(window, {
-        message: tx('load_remote_content_ask'),
-        buttons: buttons.map(b => b.label),
-        type: 'none',
-        icon: '',
-        defaultId: 0,
-        cancelId: 0,
-      })
-      buttons[result.response].action()
-    }
-
+  const update_restrictions = async (allow_network: boolean) => {
     loadRemoteContent = allow_network
     const bounds = sandboxedView?.getBounds()
     window.contentView.removeChildView(sandboxedView)

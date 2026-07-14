@@ -1,16 +1,16 @@
+import path from 'node:path'
 import { defineConfig, devices } from '@playwright/test'
 
-import { loadEnv } from './load-env'
-import { TestOptions } from './playwright-helper'
+import { loadEnv } from './load-env.js'
+import type { TestOptions } from './playwright-helper.js'
+import {
+  DC_FRONTEND_NO_TLS,
+  NUM_APP_INSTANCES,
+  instanceBaseURL,
+  instancePort,
+} from './playwright-helper.js'
 
 loadEnv()
-
-export const DC_FRONTEND_NO_TLS: boolean =
-  process.env.DC_FRONTEND_NO_TLS === 'true' ||
-  process.env.DC_FRONTEND_NO_TLS === '1'
-const port = process.env.WEB_PORT ?? 3000
-
-const baseURL = `${DC_FRONTEND_NO_TLS ? 'http' : 'https'}://localhost:${port}`
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -39,7 +39,8 @@ export default defineConfig<TestOptions>({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: baseURL,
+    // Instance 0 is used as the default instance for single-instance tests.
+    baseURL: instanceBaseURL(0),
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
@@ -71,16 +72,30 @@ export default defineConfig<TestOptions>({
     // },
   ],
 
-  /* Run your local dev server before starting the tests */
-  webServer: {
-    command: `node ${
-      process.env.CI ? '' : '--env-file .env'
-    } ../target-browser/dist/server.js`,
-    url: baseURL,
-    timeout: 120 * 1000,
-    ignoreHTTPSErrors: !DC_FRONTEND_NO_TLS,
-    reuseExistingServer: !process.env.CI,
-    stdout: 'pipe',
-    stderr: 'pipe',
-  },
+  webServer: Array.from({ length: NUM_APP_INSTANCES }, (_, _index) => {
+    const index = _index as 0 | 1
+    const port = instancePort(index)
+    const url = instanceBaseURL(index)
+    return {
+      command: `node ${
+        process.env.CI ? '' : '--env-file .env'
+      } ../target-browser/dist/server.js`,
+      name: `DC instance ${port}`,
+      url,
+      timeout: 120 * 1000,
+      ignoreHTTPSErrors: !DC_FRONTEND_NO_TLS,
+      reuseExistingServer: !process.env.CI,
+      stdout: 'pipe',
+      stderr: 'pipe',
+      env: {
+        ...(process.env as Record<string, string>),
+        WEB_PORT: port.toString(),
+        DATA_DIR: path.join(
+          import.meta.dirname,
+          'data',
+          `app-instance-${port}`
+        ),
+      },
+    }
+  }),
 })

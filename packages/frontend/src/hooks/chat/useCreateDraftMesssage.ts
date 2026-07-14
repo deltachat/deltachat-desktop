@@ -12,7 +12,7 @@ const log = getLogger('useCreateDraftMessage')
 export type CreateDraftMessage = (
   accountId: number,
   chatId: number,
-  messageText: string,
+  messageText: string | null,
   file?: {
     path: string
     name?: string
@@ -67,7 +67,7 @@ export default function useCreateDraftMessage() {
               viewType: file.viewType ?? 'File',
             }
           : undefined,
-        text: messageText,
+        text: messageText ?? undefined,
       }
       window.__checkSetDraftRequest?.()
     },

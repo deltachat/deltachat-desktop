@@ -1,5 +1,5 @@
 import { build } from 'esbuild'
-import { gatherBuildInfo } from '../../../bin/lib/gather-version-info.js'
+import { gatherBuildInfo } from '../../../bin/build/gather-version-info.js'
 
 const BuildInfoString = JSON.stringify(await gatherBuildInfo())
 

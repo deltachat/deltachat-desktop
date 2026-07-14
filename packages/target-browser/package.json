@@ -2,15 +2,15 @@
   "private": true,
   "name": "@deltachat-desktop/target-browser",
   "type": "module",
-  "version": "2.49.1",
+  "version": "2.53.1",
   "license": "GPL-3.0-or-later",
   "scripts": {
-    "check:types": "tsc --noEmit && tsc --noEmit -p runtime-browser",
+    "check:types": "tsc --noEmit --noUncheckedIndexedAccess false && tsc --noEmit --noUncheckedIndexedAccess false -p runtime-browser",
     "build": "pnpm build:locales && pnpm build:backend && pnpm --filter=@deltachat-desktop/frontend build && pnpm run build:compose-frontend",
     "build:locales": "pnpm -w translations:convert",
     "build:backend": "node ./bin/build.js",
     "build:runtime-impl": "pnpm esbuild --format=esm --bundle --minify --keep-names --sourcemap --outdir=./dist runtime-browser/runtime.ts",
-    "build:compose-frontend": "node ../../bin/copy.js ../frontend/html-dist ./dist && node ../../bin/copy.js ./static ./dist && pnpm build:runtime-impl",
+    "build:compose-frontend": "node ../../bin/tools/copy.js ../frontend/html-dist ./dist && node ../../bin/tools/copy.js ./static ./dist && pnpm build:runtime-impl",
     "start": "pnpm run build && node dist/server.js",
     "start:server": "node dist/server.js"
   },
@@ -25,14 +25,14 @@
     "express-session": "^1.18.2",
     "node-localstorage": "^3.0.5",
     "resolve-path": "^1.4.0",
-    "ws": "~8.18.0"
+    "ws": "catalog:"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
     "@types/node": "^20.14.13",
     "@types/resolve-path": "^1.4.2",
-    "@types/ws": "^8.5.12",
+    "@types/ws": "catalog:",
     "error-stack-parser": "^2.1.4",
-    "esbuild": "^0.25.0"
+    "esbuild": "^0.28.1"
   }
 }

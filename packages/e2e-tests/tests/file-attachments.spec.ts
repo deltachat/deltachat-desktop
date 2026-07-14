@@ -11,7 +11,7 @@ import {
   switchToProfile,
   getUser,
   createChat,
-} from '../playwright-helper'
+} from '../playwright-helper.js'
 
 /**
  * E2E tests for file attachments:
@@ -111,6 +111,9 @@ test('send image attachment', async () => {
     '.attachment-quote-section .message-attachment-media .attachment-content'
   )
   await expect(attachmentDraftPreview).toBeVisible()
+  await expect(
+    page.locator('textarea.create-or-edit-message-input')
+  ).toBeFocused()
   // Send the message
   await page.locator('button.send-button').click()
 
@@ -164,6 +167,9 @@ test('send file attachment', async () => {
   await expect(attachmentDraftPreview).toBeVisible()
   await expect(attachmentDraftPreview).toContainText('test.zip')
 
+  await expect(
+    page.locator('textarea.create-or-edit-message-input')
+  ).toBeFocused()
   // Optionally add a message
   await page
     .locator('textarea.create-or-edit-message-input')
@@ -223,6 +229,9 @@ test('send contact as vCard', async () => {
   await expect(attachmentPreview).toBeVisible()
   await expect(attachmentPreview).toContainText(userA.name)
 
+  await expect(
+    page.locator('textarea.create-or-edit-message-input')
+  ).toBeFocused()
   // Send the message
   await page.locator('button.send-button').click()
 

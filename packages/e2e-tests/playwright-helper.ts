@@ -1,7 +1,36 @@
-import { expect, test as base, Page } from '@playwright/test'
-import { loadEnv } from './load-env'
+import {
+  expect,
+  test as base,
+  Browser,
+  BrowserContext,
+  Page,
+} from '@playwright/test'
+import path from 'path'
+import { loadEnv } from './load-env.js'
 
 loadEnv()
+
+export const DC_FRONTEND_NO_TLS: boolean =
+  process.env.DC_FRONTEND_NO_TLS === 'true' ||
+  process.env.DC_FRONTEND_NO_TLS === '1'
+export const NUM_APP_INSTANCES = 2
+type InstanceInd = 0 | 1
+export function instancePort(index: InstanceInd): number {
+  return 3000 + index
+}
+export function instanceBaseURL(index: InstanceInd): string {
+  const protocol = DC_FRONTEND_NO_TLS ? 'http' : 'https'
+  return `${protocol}://localhost:${instancePort(index)}`
+}
+export async function openInstancePage(
+  browser: Browser,
+  index: InstanceInd
+): Promise<{ context: BrowserContext; page: Page }> {
+  const context = await browser.newContext({ baseURL: instanceBaseURL(index) })
+  const page = await context.newPage()
+  await page.goto('/')
+  return { context, page }
+}
 
 export const chatmailServerDomain = process.env.DC_CHATMAIL_DOMAIN
   ? process.env.DC_CHATMAIL_DOMAIN
@@ -35,6 +64,8 @@ export const test = base.extend<TestOptions>({
   // can be overriden in the config.
   isChatmail: [true, { option: true }],
 })
+
+const fixturesPath = path.join(import.meta.dirname, 'fixtures')
 
 export async function reloadPage(page: Page): Promise<void> {
   await page.goto(`/`)
@@ -129,7 +160,11 @@ export async function createUser(
 }
 
 export const getUser = (index: number, existingProfiles: User[]) => {
-  if (!existingProfiles || existingProfiles.length < index + 1) {
+  if (
+    !existingProfiles ||
+    existingProfiles.length < index + 1 ||
+    existingProfiles[index] == undefined
+  ) {
     throw new Error(
       `Not enough profiles for test! Found ${existingProfiles?.length}`
     )
@@ -227,6 +262,21 @@ export async function createNewProfile(
   } else {
     throw new Error(`User ${name} could not be created!`)
   }
+}
+
+/**
+ * Assumes that the "Add Profile" dialog is already open
+ * (which is the case if there are no accounts).
+ */
+export async function importDummyProfileFromBackup(page: Page) {
+  await page.getByRole('button', { name: 'I Already Have a Profile' }).click()
+
+  const fileChooserPromise = page.waitForEvent('filechooser')
+  await page.getByRole('button', { name: 'Restore from Backup' }).click()
+  const fileChooser = await fileChooserPromise
+  await fileChooser.setFiles(
+    path.join(fixturesPath, 'dummy-account-backup.tar')
+  )
 }
 
 export async function getProfile(
@@ -391,17 +441,42 @@ export async function deleteProfile(
   return null
 }
 
+export async function deleteSelectedProfile(page: Page) {
+  const selectedProfile = page
+    .getByRole('navigation', { name: /Profiles?/ })
+    .getByRole('tab', { selected: true })
+  await selectedProfile.click({ button: 'right' })
+  await page.getByRole('menuitem', { name: 'Delete' }).click()
+  await page
+    .getByRole('dialog')
+    .filter({ hasText: 'Delete Profile' })
+    .getByRole('button', { name: 'Delete' })
+    .click()
+  await expect(selectedProfile).not.toBeVisible()
+}
+
 export async function createDummyChat(page: Page, chatName: string) {
   await page.getByRole('button', { name: 'New Chat' }).click()
   await page.getByRole('button', { name: 'New Group' }).click()
   await page.getByRole('textbox', { name: 'Group Name' }).fill(chatName)
   await page.getByTestId('group-create-button').click()
 }
-export async function deleteChat(page: Page, chatName: string | RegExp) {
-  await page
+/**
+ * This RegExp ensures that we don't select by draft or last message text.
+ * `\w` is for the avatar initial.
+ */
+export const makeChatNameRegex = (chatName: string) =>
+  new RegExp(`^\\w?${chatName}`)
+export function getChat(page: Page, chatName: string | RegExp) {
+  return page
     .getByLabel('Chats')
-    .getByRole('tab', { name: chatName })
-    .click({ button: 'right' })
+    .getByRole('tablist')
+    .getByRole('tab', {
+      name: chatName instanceof RegExp ? chatName : makeChatNameRegex(chatName),
+    })
+}
+export async function deleteChat(page: Page, chatName: string | RegExp) {
+  await getChat(page, chatName).click({ button: 'right' })
   await page.getByRole('menuitem', { name: /.*(Delete|Leave).*/ }).click()
   await page.getByRole('button', { name: 'Delete' }).click()
 }
@@ -430,7 +505,7 @@ export async function selectChat(
   options?: { dontWaitForLoaded?: boolean }
 ) {
   const chatList = page.getByLabel('Chats').getByRole('tablist')
-  await chatList.getByRole('tab', { name: chatName }).click()
+  await getChat(page, chatName).click()
 
   if (options?.dontWaitForLoaded) {
     return
@@ -545,7 +620,7 @@ export const createGroupChat = async (
   await page.getByPlaceholder('Description').fill('Test group description')
   await page.locator('#addmember button').click()
   const addMemberDialog = page.getByTestId('add-member-dialog')
-  await page
+  await addMemberDialog
     .locator('.contact-list-item')
     .filter({ hasText: member.name })
     .click()

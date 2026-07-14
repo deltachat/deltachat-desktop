@@ -284,33 +284,6 @@ function buildViewEditMenuItems(
 }
 
 /**
- * Builds encryption info menu item
- */
-function buildEncryptionInfoMenuItem(
-  fullChat: T.FullChat,
-  tx: ReturnType<typeof useTranslationFunction>,
-  openEncryptionInfoDialog: ReturnType<
-    typeof useChatDialog
-  >['openEncryptionInfoDialog']
-): ContextMenuItem | false {
-  return (
-    !fullChat.isDeviceChat &&
-    !fullChat.isSelfTalk && {
-      label: tx('encryption_info_title_desktop'),
-      action: () =>
-        openEncryptionInfoDialog({
-          chatId: fullChat.id,
-          // https://github.com/chatmail/core/blob/a3328ea2de1e675b1418b4e2ca0c23f88828c558/deltachat-jsonrpc/src/api/types/chat_list.rs#L130-L146
-          dmChatContact:
-            fullChat.chatType === 'Single' && fullChat.contactIds.length > 0
-              ? fullChat.contactIds[0]
-              : null,
-        }),
-    }
-  )
-}
-
-/**
  * provides a context menu for chat list items
  * and for the 3dot menu in main chat view
  */
@@ -329,7 +302,6 @@ export function useChatContextMenu(): {
   const { openDialog } = useDialog()
   const {
     openBlockFirstContactOfChatDialog,
-    openEncryptionInfoDialog,
     openDeleteChatsDialog,
     openLeaveGroupOrChannelDialog,
     openClearChatDialog,
@@ -354,13 +326,31 @@ export function useChatContextMenu(): {
     activeChatId: number | null
   ) => {
     // only if chatListItems contains a single chat, we need the full chat
+    const singleChatItem =
+      chatListItems.length === 1 ? chatListItems[0] : undefined
     const selectedChat =
-      chatListItems.length === 1
-        ? await BackendRemote.rpc.getFullChatById(
-            accountId,
-            chatListItems[0].id
-          )
+      singleChatItem !== undefined
+        ? await BackendRemote.rpc.getFullChatById(accountId, singleChatItem.id)
         : undefined
+    // The passed `chatListItems` come from the chat list's cache, which is
+    // updated with a throttle, so right after an action (e.g. pin/unpin)
+    // they may still hold the previous state for a moment.
+    if (selectedChat !== undefined) {
+      chatListItems = [fullChatToChatListItem(selectedChat)]
+    } else {
+      try {
+        const freshItems = await BackendRemote.rpc.getChatlistItemsByEntries(
+          accountId,
+          chatListItems.map(chat => chat.id)
+        )
+        chatListItems = chatListItems.map(chat => {
+          const freshItem = freshItems[chat.id]
+          return freshItem?.kind === 'ChatListItem' ? freshItem : chat
+        })
+      } catch (err) {
+        log.error('failed to fetch current chatlist items for menu', err)
+      }
+    }
     return openContextMenuInternalHandler(
       event,
       selectedChat,
@@ -475,13 +465,6 @@ export function useChatContextMenu(): {
             tx
           )
 
-    // Encryption info is only shown in chatlist and
-    // only if a single chat is selected
-    const encryptionInfoItem =
-      relatedChat !== undefined
-        ? buildEncryptionInfoMenuItem(relatedChat, tx, openEncryptionInfoDialog)
-        : null
-
     const ephemeralMessagesMenuItem = isMainView &&
       relatedChat &&
       relatedChat.canSend &&
@@ -540,9 +523,9 @@ export function useChatContextMenu(): {
       archive,
       { type: 'separator' },
       ...(!isMainView ? viewEditMenuItems : []),
-      !isMainView && encryptionInfoItem,
       // Clone Group
-      relatedChat &&
+      isMainView &&
+        relatedChat &&
         isGroup && {
           label: tx('clone_chat'),
           action: () => {

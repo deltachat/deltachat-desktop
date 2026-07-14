@@ -21,6 +21,12 @@
   user-select: text;
 }
 
+.description {
+  text-align: initial;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
 .address {
   color: #565656;
   margin-top: 0.25rem;

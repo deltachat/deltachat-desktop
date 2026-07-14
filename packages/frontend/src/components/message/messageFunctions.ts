@@ -1,6 +1,6 @@
 import moment from 'moment'
 
-import { getLogger } from '../../../../shared/logger'
+import { getLogger } from '@deltachat-desktop/shared/logger'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'

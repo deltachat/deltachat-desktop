@@ -276,7 +276,7 @@ class BrowserRuntime implements Runtime {
       }
     }
     return {
-      locale: 'en',
+      locale,
       messages: { ...localeMessages, ...untranslated },
       dir: 'ltr',
     }
@@ -715,7 +715,7 @@ class BrowserRuntime implements Runtime {
     })
   }
 
-  openLink(link: string): void {
+  openLink(link: `http:${string}` | `https:${string}`): void {
     window.open(link, '_blank')?.focus()
   }
 

@@ -20,22 +20,30 @@ import {
 } from '@deltachat-desktop/runtime-interface'
 import { BaseDeltaChat, yerpc } from '@deltachat/jsonrpc-client'
 
-import type { dialog, app, IpcRenderer, webUtils } from 'electron'
+import type { dialog, webUtils } from 'electron'
 import type { LocaleData } from '@deltachat-desktop/shared/localize.js'
 import type { getLogger as getLoggerFunction } from '@deltachat-desktop/shared/logger.js'
 import type { setLogHandler as setLogHandlerFunction } from '@deltachat-desktop/shared/logger.js'
 import { appName } from '@deltachat-desktop/shared/constants.js'
+import type {
+  InvokeChannel,
+  SendChannel,
+  SendSyncChannel,
+  ReceiveChannel,
+} from './ipc-channels.js'
 
-const {
-  app_getPath,
-  ipcRenderer: ipcBackend,
-  getPathForFile,
-} = (window as any).get_electron_functions() as {
-  // see static/preload.js
-  ipcRenderer: IpcRenderer
-  app_getPath: typeof app.getPath
+/**
+ * restrict channel parameter to those listed in ipc-channels
+ */
+type RuntimeApi = {
+  invoke: (channel: InvokeChannel, ...args: any[]) => Promise<any>
+  send: (channel: SendChannel, ...args: any[]) => void
+  sendSync: (channel: SendSyncChannel, ...args: any[]) => any
+  on: (channel: ReceiveChannel, callback: (...args: any[]) => void) => void
   getPathForFile: typeof webUtils.getPathForFile
 }
+
+const ipcBackend = (window as any).runtime_api as RuntimeApi
 
 const { BaseTransport } = yerpc
 
@@ -49,7 +57,7 @@ const idToRequestMap = new Map<
 class ElectronTransport extends BaseTransport {
   constructor(private callCounterFunction: (label: string) => void) {
     super()
-    ipcBackend.on('json-rpc-message', (_ev: any, response: any) => {
+    ipcBackend.on('json-rpc-message', (response: any) => {
       const message: yerpc.Message = JSON.parse(response)
       if (logJsonrpcConnection) {
         const responseAt = performance.now()
@@ -92,7 +100,7 @@ class ElectronTransport extends BaseTransport {
   }
   _send(message: yerpc.Message): void {
     const serialized = JSON.stringify(message)
-    ipcBackend.invoke('json-rpc-request', serialized)
+    ipcBackend.send('json-rpc-request', serialized)
     if (logJsonrpcConnection) {
       const sentAt = performance.now()
       idToRequestMap.set(message.id, { message, sentAt })
@@ -242,9 +250,6 @@ class ElectronRuntime implements Runtime {
   getActiveTheme(): Promise<{ theme: Theme; data: string } | null> {
     return ipcBackend.invoke('themes.getActiveTheme')
   }
-  async writeClipboardToTempFile(_name: string | undefined): Promise<string> {
-    return ipcBackend.invoke('app.writeClipboardToTempFile')
-  }
   writeTempFileFromBase64(name: string, content: string): Promise<string> {
     return ipcBackend.invoke('app.writeTempFileFromBase64', name, content)
   }
@@ -325,7 +330,7 @@ class ElectronRuntime implements Runtime {
   async getAppPath(
     name: Parameters<Runtime['getAppPath']>[0]
   ): Promise<string> {
-    return app_getPath(name)
+    return ipcBackend.sendSync('app-get-path', name)
   }
   async downloadFile(pathToSource: string, filename: string): Promise<void> {
     await ipcBackend.invoke('saveFile', pathToSource, filename)
@@ -379,17 +384,8 @@ class ElectronRuntime implements Runtime {
     ))
     return filePaths
   }
-  openLink(link: string): void {
-    if (
-      link.toLowerCase().startsWith('http:') ||
-      link.toLowerCase().startsWith('https:')
-    ) {
-      ipcBackend.invoke('electron.shell.openExternal', link)
-    } else {
-      this.log.error('tried to open a non http/https external link', {
-        link,
-      })
-    }
+  openLink(link: `http:${string}` | `https:${string}`): void {
+    ipcBackend.invoke('electron.shell.openExternal', link)
   }
   private rc_config: RC_Config | null = null
   getRC_Config(): RC_Config {
@@ -441,10 +437,10 @@ class ElectronRuntime implements Runtime {
       )
     }, this.getRC_Config())
     ipcBackend.on('showHelpDialog', this.openHelpWindow.bind(null, undefined))
-    ipcBackend.on('ClickOnNotification', (_ev, data) =>
+    ipcBackend.on('clickOnNotification', data =>
       this.notificationCallback(data)
     )
-    ipcBackend.on('chooseLanguage', (_ev, locale) => {
+    ipcBackend.on('chooseLanguage', locale => {
       this.onChooseLanguage?.(locale)
       ipcBackend.send('reload-main-window')
     })
@@ -457,11 +453,10 @@ class ElectronRuntime implements Runtime {
     ipcBackend.on('desktop-setting-changed', (_ev, key, value) =>
       this.onDesktopSettingChanged?.(key, value)
     )
-    ipcBackend.on('open-url', (_ev, url) => this.onOpenQrUrl?.(url))
+    ipcBackend.on('open-url', (url: string) => this.onOpenQrUrl?.(url))
     ipcBackend.on(
       'webxdc.sendToChat',
       (
-        _ev,
         file: { file_name: string; file_content: string } | null,
         text: string | null,
         account?: number
@@ -526,7 +521,7 @@ class ElectronRuntime implements Runtime {
 
       const paths: string[] = []
       for (const file of e.dataTransfer.files) {
-        const path = getPathForFile(file)
+        const path = ipcBackend.getPathForFile(file)
         this.log.info({ path })
         // TODO this doesn't work propertly when dropping images
         // from inside Delta Chat to inside Delta Chat:

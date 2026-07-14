@@ -1,13 +1,13 @@
-import React, { useRef, useEffect, useCallback, useEffectEvent } from 'react'
+import React, { useRef, useEffect, useEffectEvent } from 'react'
 import { join, parse, ParsedPath } from 'path'
 import { T } from '@deltachat/jsonrpc-client'
 
 import Composer from '../composer/Composer'
 import { useDraft } from '../../hooks/chat/useDraft'
-import { getLogger } from '../../../../shared/logger'
+import { getLogger } from '@deltachat-desktop/shared/logger'
 import MessageList from './MessageList'
 import type ComposerMessageInput from '../composer/ComposerMessageInput'
-import { DesktopSettingsType } from '../../../../shared/shared-types'
+import { DesktopSettingsType } from '@deltachat-desktop/shared/shared-types'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import { RecoverableCrashScreen } from '../screens/RecoverableCrashScreen'
 import { useSettingsStore } from '../../stores/settings'
@@ -15,7 +15,6 @@ import ConfirmSendingFiles from '../dialogs/ConfirmSendingFiles'
 import { ReactionsBarProvider } from '../ReactionsBar'
 import useDialog from '../../hooks/dialog/useDialog'
 import useMessage from '../../hooks/chat/useMessage'
-import { Viewtype } from '@deltachat/jsonrpc-client/dist/generated/types'
 import { useMessageList } from '../../stores/messagelist'
 import { IMAGE_EXTENSIONS } from '@deltachat-desktop/shared/constants'
 
@@ -154,7 +153,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     // send single file
     if (sanitized.length == 1) {
       const file = sanitized[0]
-      const msgViewType: Viewtype = isImage(file.parsed) ? 'Image' : 'File'
+      const msgViewType: T.Viewtype = isImage(file.parsed) ? 'Image' : 'File'
       await addFileToDraft(
         file.pathStr,
         file.parsed.name + file.parsed.ext,
@@ -174,7 +173,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
           }
 
           for (const file of sanitized) {
-            const msgViewType: Viewtype = isImage(file.parsed)
+            const msgViewType: T.Viewtype = isImage(file.parsed)
               ? 'Image'
               : 'File'
             sendMessage(accountId, chat.id, {
@@ -205,70 +204,11 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     e.stopPropagation()
   }
 
-  const onMouseUp = useCallback(
-    (e: MouseEvent) => {
-      const selection = window.getSelection()
-
-      if (selection?.type === 'Range' && selection.rangeCount > 0) {
-        return
-      }
-      const targetTagName = (e.target as unknown as any)?.tagName
-
-      if (targetTagName === 'INPUT' || targetTagName === 'TEXTAREA') {
-        return
-      }
-
-      // don't force focus on the message input as long as the emoji picker is open
-      if (
-        document.querySelector(':focus')?.tagName?.toLowerCase() ===
-        'em-emoji-picker'
-      ) {
-        return
-      }
-
-      // TODO this function pretty much never works, because of this condition.
-      // trying to focus the composer while a dialog is open
-      // is impossible, because the dialog will keep focus inside of it.
-      //
-      // The condition was probably meant to be the opposite
-      // (i.e. do nothing if a dialog is open),
-      // but it only incidentally fixed the bug that it was intended to fix
-      // (https://github.com/deltachat/deltachat-desktop/issues/3286),
-      // while at the same time breaking the function.
-      //
-      // However, we probably should not fix this function
-      // and remove it instead, for accessibility reasons, laid out here:
-      // https://github.com/deltachat/deltachat-desktop/issues/4590.
-      //
-      // The same goes for the check in
-      // `ComposerMessageInput.componentDidUpdate`.
-      if (!hasOpenDialogs) {
-        return
-      }
-
-      e.preventDefault()
-      e.stopPropagation()
-
-      // Only one of these is actually rendered at any given moment.
-      regularMessageInputRef.current?.focus()
-      editMessageInputRef.current?.focus()
-
-      return false
-    },
-    [hasOpenDialogs]
-  )
-
   useEffect(() => {
-    window.addEventListener('mouseup', onMouseUp)
-
     // Only one of these is actually rendered at any given moment.
     regularMessageInputRef.current?.focus()
     editMessageInputRef.current?.focus()
-
-    return () => {
-      window.removeEventListener('mouseup', onMouseUp)
-    }
-  }, [onMouseUp])
+  }, [])
 
   const settingsStore = useSettingsStore()[0]
   // If you want to update this, don't forget to update

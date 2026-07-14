@@ -66,7 +66,9 @@ import { I18nContext } from '../../../contexts/I18nContext'
 import { SCAN_CONTEXT_TYPE } from '../../../hooks/useProcessQr'
 import { IMAGE_EXTENSIONS } from '@deltachat-desktop/shared/constants'
 
-const enum GroupType {
+// Exported (and a regular `enum` rather than `const enum`) so that callers like
+// the command palette can open `CreateGroup` directly with a `groupType`.
+export enum GroupType {
   /**
    * Regular group, chat.
    * @see {@link BackendRemote.rpc.createGroupChat}.
@@ -84,46 +86,12 @@ const enum GroupType {
   BROADCAST_LIST = 'broadcast_list',
 }
 
-type ViewMode = 'main_' | GroupType
-
 export default function CreateChat(props: DialogProps) {
   const { onClose } = props
-  const tx = useTranslationFunction()
-
-  const [viewMode, setViewMode] = useState<ViewMode>('main_')
 
   return (
-    <Dialog
-      width={400}
-      onClose={onClose}
-      canOutsideClickClose={viewMode === 'main_'}
-      fixed
-      dataTestid='create-chat-dialog'
-    >
-      {viewMode == 'main_' && <CreateChatMain {...{ setViewMode, onClose }} />}
-      {viewMode == GroupType.REGULAR_GROUP && (
-        <>
-          <DialogHeader title={tx('menu_new_group')} />
-          <CreateGroup
-            {...{
-              groupType: GroupType.REGULAR_GROUP,
-              setViewMode,
-              onClose,
-            }}
-          />
-        </>
-      )}
-      {viewMode == GroupType.PLAIN_EMAIL && (
-        <>
-          <DialogHeader title={tx('new_email')} />
-          <CreateGroup
-            {...{ groupType: GroupType.PLAIN_EMAIL, setViewMode, onClose }}
-          />
-        </>
-      )}
-      {viewMode == GroupType.BROADCAST_LIST && (
-        <CreateBroadcastList {...{ setViewMode, onClose }} />
-      )}
+    <Dialog width={400} onClose={onClose} fixed dataTestid='create-chat-dialog'>
+      <CreateChatMain onClose={onClose} />
     </Dialog>
   )
 }
@@ -147,38 +115,35 @@ export function CloneChat(props: { chatTemplateId: number } & DialogProps) {
     ? descriptionFetch.result.value
     : undefined
 
-  return (
-    <Dialog width={400} onClose={onClose} fixed>
-      {chat && description !== undefined && (
-        <>
-          <DialogHeader title={tx('clone_chat')} />
-          <CreateGroup
-            {...{
-              // See https://github.com/deltachat/deltachat-desktop/issues/5059.
-              groupType: chat.isEncrypted
-                ? GroupType.REGULAR_GROUP
-                : GroupType.PLAIN_EMAIL,
+  if (!chat || description === undefined) {
+    return <Dialog width={400} onClose={onClose} fixed />
+  }
 
-              setViewMode: onClose,
-              onClose,
-              groupMembers: chat.contactIds,
-              groupImage: chat.profileImage,
-              groupDescription: description,
-            }}
-          />
-        </>
-      )}
-    </Dialog>
+  return (
+    <CreateGroup
+      {...{
+        titleOverride: tx('clone_chat'),
+        // See https://github.com/deltachat/deltachat-desktop/issues/5059.
+        groupType: chat.isEncrypted
+          ? GroupType.REGULAR_GROUP
+          : GroupType.PLAIN_EMAIL,
+
+        onFinish: onClose,
+        onClose,
+        groupMembers: chat.contactIds,
+        groupImage: chat.profileImage,
+        groupDescription: description,
+      }}
+    />
   )
 }
 
 type CreateChatMainProps = {
-  setViewMode: (newViewMode: ViewMode) => void
   onClose: DialogProps['onClose']
 }
 
 function CreateChatMain(props: CreateChatMainProps) {
-  const { setViewMode, onClose } = props
+  const { onClose } = props
   const { tx, writingDirection } = useContext(I18nContext)
   const openConfirmationDialog = useConfirmationDialog()
   const accountId = selectedAccountId()
@@ -207,20 +172,19 @@ function CreateChatMain(props: CreateChatMainProps) {
     onClose()
   }
   const settingsStore = useSettingsStore()[0]
-  const isChatmail = settingsStore?.settings.is_chatmail === '1'
+  const forceEncryption = settingsStore?.settings.force_encryption !== '0'
 
   const showAddGroup = queryStr.length === 0
   const showAddBroadcastList = queryStr.length === 0
   const showAddContactQRScan = queryStr.length === 0
 
-  // Chatmail accounts can't send unencrypted emails. See
-  // - https://github.com/deltachat/deltachat-desktop/issues/5294#issuecomment-3089552788
-  // - https://github.com/deltachat/deltachat-ios/blob/a0043be425d9c14f4039561957adb82ef1ab2adb/deltachat-ios/Controller/NewChatViewController.swift#L76-L78
+  // Don't offer the classic email / add-contact options if
+  // forceEncryption is set (default)
 
-  const showNewEmail = !isChatmail && queryStr.length === 0
+  const showNewEmail = !forceEncryption && queryStr.length === 0
 
   const showAddContact = !(
-    isChatmail ||
+    forceEncryption ||
     queryStr === '' ||
     (contactIds.length === 1 &&
       contactCache[contactIds[0]]?.address.toLowerCase() ===
@@ -412,7 +376,6 @@ function CreateChatMain(props: CreateChatMainProps) {
                       onContactClick: chooseContact,
                       addContactOnClick,
                       onContactContextMenu,
-                      setViewMode,
                       openQRScan,
                       queryStrIsValidEmail,
                       queryStr,
@@ -461,7 +424,6 @@ function CreateChatMainRow({
     onContactClick: (contact: Type.Contact) => void
     addContactOnClick: () => void
     onContactContextMenu: (contact: Type.Contact, ev: MouseEvent) => void
-    setViewMode: (viewMode: ViewMode) => void
     openQRScan: () => Promise<void>
     queryStrIsValidEmail: boolean
     queryStr: string
@@ -474,7 +436,6 @@ function CreateChatMainRow({
     onContactClick,
     addContactOnClick,
     onContactContextMenu,
-    setViewMode,
     openQRScan,
     queryStrIsValidEmail,
     queryStr,
@@ -484,6 +445,7 @@ function CreateChatMainRow({
 
   const tx = useTranslationFunction()
   const accountId = selectedAccountId()
+  const { openDialog } = useDialog()
 
   const el = (() => {
     switch (item) {
@@ -493,7 +455,12 @@ function CreateChatMainRow({
             id='newgroup'
             cutoff='+'
             text={tx('menu_new_group')}
-            onClick={() => setViewMode(GroupType.REGULAR_GROUP)}
+            onClick={() =>
+              openDialog(CreateGroup, {
+                groupType: GroupType.REGULAR_GROUP as const,
+                onFinish: onClose,
+              })
+            }
           />
         )
       }
@@ -503,7 +470,11 @@ function CreateChatMainRow({
             id='newbroadcastlist'
             cutoff='+'
             text={tx('new_channel')}
-            onClick={() => setViewMode(GroupType.BROADCAST_LIST)}
+            onClick={() => {
+              openDialog(CreateBroadcastList, {
+                onFinish: onClose,
+              })
+            }}
           />
         )
       }
@@ -513,7 +484,12 @@ function CreateChatMainRow({
             id='newemail'
             cutoff='+'
             text={tx('new_email')}
-            onClick={() => setViewMode(GroupType.PLAIN_EMAIL)}
+            onClick={() =>
+              openDialog(CreateGroup, {
+                groupType: GroupType.PLAIN_EMAIL as const,
+                onFinish: onClose,
+              })
+            }
           />
         )
       }
@@ -585,7 +561,8 @@ const enum CreateChatExtraItemType {
 }
 
 type CreateGroupProps = {
-  setViewMode: (newViewMode: ViewMode) => void
+  onFinish: () => void
+  titleOverride?: string
   // `GroupType.BROADCAST_LIST` type is handled
   // in the `CreateBroadcastList` component.
   groupType: GroupType.REGULAR_GROUP | GroupType.PLAIN_EMAIL
@@ -605,7 +582,7 @@ type CreateGroupProps = {
 export function CreateGroup(props: CreateGroupProps) {
   const { selectChat } = useChat()
   const { openDialog } = useDialog()
-  const { setViewMode, onClose, groupType } = props
+  const { titleOverride, onFinish, onClose, groupType } = props
   const tx = useTranslationFunction()
   const accountId = selectedAccountId()
 
@@ -697,89 +674,102 @@ export function CreateGroup(props: CreateGroupProps) {
           // TODO: handle error
         }
       })
-      .finally(onClose)
+      .finally(() => {
+        onFinish()
+        onClose()
+      })
   }
 
   return (
-    <form onSubmit={submitForm}>
-      <DialogBody>
-        <DialogContent>
-          <ChatSettingsSetNameAndProfileImage
-            chatName={groupName}
-            setChatName={setGroupName}
-            errorMissingChatName={errorMissingGroupName}
-            setErrorMissingChatName={setErrorMissingGroupName}
-            {...((groupType === GroupType.PLAIN_EMAIL
-              ? { groupType }
-              : {
-                  groupType,
-                  groupImage,
-                  onSetGroupImage: onSetGroupImage!,
-                  onUnsetGroupImage: onUnsetGroupImage!,
-                  description: groupDescription,
-                  setDescription: setGroupDescription,
-                }) satisfies Partial<
-              Parameters<typeof ChatSettingsSetNameAndProfileImage>[0]
-            >)}
-          />
-        </DialogContent>
-        <div id='create-group-members-title' className='group-separator'>
-          {tx(
-            membersOrRecipients === 'members' ? 'n_members' : 'n_recipients',
-            groupMembers.length.toString(),
-            {
-              quantity: groupMembers.length,
-            }
-          )}
-        </div>
-        <div
-          className='group-member-contact-list-wrapper'
-          ref={groupMemberContactListWrapperRef}
-        >
-          <RovingTabindexProvider
-            wrapperElementRef={groupMemberContactListWrapperRef}
-          >
-            <PseudoListItemAddMember onClick={showAddMemberDialog} />
-            <ContactList
-              contacts={groupContacts}
-              showRemove
-              onRemoveClick={c => {
-                removeGroupMember(c)
-              }}
-              olElementAttrs={{
-                'aria-labelledby': 'create-group-members-title',
-              }}
+    <Dialog width={400} onClose={onClose} canOutsideClickClose={false} fixed>
+      <DialogHeader
+        title={
+          titleOverride ??
+          (groupType === GroupType.REGULAR_GROUP
+            ? tx('menu_new_group')
+            : tx('new_email'))
+        }
+      />
+      <form onSubmit={submitForm}>
+        <DialogBody>
+          <DialogContent>
+            <ChatSettingsSetNameAndProfileImage
+              chatName={groupName}
+              setChatName={setGroupName}
+              errorMissingChatName={errorMissingGroupName}
+              setErrorMissingChatName={setErrorMissingGroupName}
+              {...((groupType === GroupType.PLAIN_EMAIL
+                ? { groupType }
+                : {
+                    groupType,
+                    groupImage,
+                    onSetGroupImage: onSetGroupImage!,
+                    onUnsetGroupImage: onUnsetGroupImage!,
+                    description: groupDescription,
+                    setDescription: setGroupDescription,
+                  }) satisfies Partial<
+                Parameters<typeof ChatSettingsSetNameAndProfileImage>[0]
+              >)}
             />
-          </RovingTabindexProvider>
-        </div>
-      </DialogBody>
-      <DialogFooter>
-        <FooterActions align='spaceBetween'>
-          <FooterActionButton onClick={() => setViewMode('main_')}>
-            {tx('cancel')}
-          </FooterActionButton>
-          <FooterActionButton
-            type='submit'
-            data-testid='group-create-button'
-            styling='primary'
+          </DialogContent>
+          <div id='create-group-members-title' className='group-separator'>
+            {tx(
+              membersOrRecipients === 'members' ? 'n_members' : 'n_recipients',
+              groupMembers.length.toString(),
+              {
+                quantity: groupMembers.length,
+              }
+            )}
+          </div>
+          <div
+            className='group-member-contact-list-wrapper'
+            ref={groupMemberContactListWrapperRef}
           >
-            {groupType === GroupType.PLAIN_EMAIL
-              ? tx('perm_continue')
-              : tx('group_create_button')}
-          </FooterActionButton>
-        </FooterActions>
-      </DialogFooter>
-    </form>
+            <RovingTabindexProvider
+              wrapperElementRef={groupMemberContactListWrapperRef}
+            >
+              <PseudoListItemAddMember onClick={showAddMemberDialog} />
+              <ContactList
+                contacts={groupContacts}
+                showRemove
+                onRemoveClick={c => {
+                  removeGroupMember(c)
+                }}
+                olElementAttrs={{
+                  'aria-labelledby': 'create-group-members-title',
+                }}
+              />
+            </RovingTabindexProvider>
+          </div>
+        </DialogBody>
+        <DialogFooter>
+          <FooterActions align='spaceBetween'>
+            <FooterActionButton onClick={onClose}>
+              {tx('cancel')}
+            </FooterActionButton>
+            <FooterActionButton
+              type='submit'
+              data-testid='group-create-button'
+              styling='primary'
+            >
+              {groupType === GroupType.PLAIN_EMAIL
+                ? tx('perm_continue')
+                : tx('group_create_button')}
+            </FooterActionButton>
+          </FooterActions>
+        </DialogFooter>
+      </form>
+    </Dialog>
   )
 }
 
 type CreateBroadcastListProps = {
-  setViewMode: (newViewMode: ViewMode) => void
+  onFinish: () => void
   onClose: DialogProps['onClose']
 }
 
-function CreateBroadcastList(props: CreateBroadcastListProps) {
-  const { setViewMode, onClose } = props
+export function CreateBroadcastList(props: CreateBroadcastListProps) {
+  const { onFinish, onClose } = props
   const tx = useTranslationFunction()
 
   const [broadcastName, setBroadcastName] = useState<string>('')
@@ -790,7 +780,10 @@ function CreateBroadcastList(props: CreateBroadcastListProps) {
     broadcastName,
     broadcastImage,
     broadcastDescription,
-    onClose
+    () => {
+      onClose()
+      onFinish()
+    }
   )
 
   const [errorMissingChatName, setErrorMissingChatName] =
@@ -806,7 +799,7 @@ function CreateBroadcastList(props: CreateBroadcastListProps) {
   }
 
   return (
-    <>
+    <Dialog width={400} onClose={onClose} canOutsideClickClose={false} fixed>
       <DialogHeader title={tx('new_channel')} />
       <form onSubmit={submitForm}>
         <DialogBody>
@@ -831,7 +824,7 @@ function CreateBroadcastList(props: CreateBroadcastListProps) {
         </DialogBody>
         <DialogFooter>
           <FooterActions align='spaceBetween'>
-            <FooterActionButton onClick={() => setViewMode('main_')}>
+            <FooterActionButton onClick={onClose}>
               {tx('cancel')}
             </FooterActionButton>
             <FooterActionButton type='submit' styling='primary'>
@@ -840,7 +833,7 @@ function CreateBroadcastList(props: CreateBroadcastListProps) {
           </FooterActions>
         </DialogFooter>
       </form>
-    </>
+    </Dialog>
   )
 }
 
@@ -896,7 +889,7 @@ export const ChatSettingsSetNameAndProfileImage = ({
       inputLabel = tx('subject')
       break
     case GroupType.BROADCAST_LIST:
-      inputLabel = tx('name_desktop')
+      inputLabel = tx('channel_name')
       break
     default: {
       inputLabel = tx('group_name')
@@ -1023,7 +1016,7 @@ const useCreateBroadcast = (
   groupName: string,
   groupImage: string | null,
   description: string,
-  onClose: DialogProps['onClose']
+  onFinish: () => void
 ) => {
   const accountId = selectedAccountId()
   const { selectChat } = useChat()
@@ -1045,7 +1038,7 @@ const useCreateBroadcast = (
 
   return async () => {
     const chatId = await createBroadcastList()
-    onClose()
+    onFinish()
     selectChat(accountId, chatId)
   }
 }

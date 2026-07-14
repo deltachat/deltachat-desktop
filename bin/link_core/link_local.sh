@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -e
 
+# This script links the local core repository to the target packages.
+# It is needed for the proxy workaround in the flatpak build process!
+
 if [ -z "$CORE_REPO_CHECKOUT" ]; then
     if [ -d "../core" ]; then
     CORE_REPO_CHECKOUT="../core"

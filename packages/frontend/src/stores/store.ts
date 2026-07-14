@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { getLogger } from '../../../shared/logger'
+import { getLogger } from '@deltachat-desktop/shared/logger'
 
 export function useStore<T extends Store<any>>(
   StoreInstance: T

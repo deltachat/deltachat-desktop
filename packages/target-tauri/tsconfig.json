@@ -1,8 +1,7 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
     "useDefineForClassFields": true,
-    "module": "ESNext",
+    "module": "preserve",
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
 
     /* Bundler mode */
@@ -13,7 +12,7 @@
     "noEmit": true,
 
     /* Linting */
-    "strict": true,
+    "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true

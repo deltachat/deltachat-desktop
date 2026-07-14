@@ -2,15 +2,12 @@
   "compilerOptions": {
     "noEmit": true,
     "sourceMap": true,
-    "noImplicitAny": true,
-    "module": "ES2022",
-    "target": "es2022",
-    "rootDirs": [".", "../shared"],
+    "module": "esnext",
+    "target": "es2025",
     "allowJs": false,
     "esModuleInterop": true,
-    "moduleResolution": "Node10",
-    "strictNullChecks": true,
-    "strict": true
+    "moduleResolution": "bundler",
+    "noUncheckedIndexedAccess": true
   },
   "include": ["./**/*.ts", "./**/*.js"]
 }

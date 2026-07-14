@@ -58,7 +58,9 @@
     <string name="media">Večpredstavnost</string>
     <string name="apps_and_media">Aplikacije in večpredstavnost</string>
     <string name="profile">Profil</string>
+    <!-- deprecated -->
     <string name="all_profiles">Vsi profili</string>
+    <!-- deprecated -->
     <string name="current_profile">Trenuten profil</string>
     <string name="main_menu">Glavni meni</string>
     <string name="start_chat">Začni klepet</string>
@@ -77,6 +79,7 @@
     <string name="always">Vedno</string>
     <string name="always_load_remote_images">Vedno naloži oddaljene slike</string>
     <string name="once">Enkrat</string>
+    <!-- deprecated -->
     <string name="show_warning">Prikaži opozorilo</string>
     <string name="not_now">Ne zdaj</string>
     <string name="never">Nikoli</string>
@@ -196,6 +199,7 @@
     <string name="camera">Kamera</string>
     <!-- As in "start a video recording" or "take a photo"; eg. the description of the "shutter button" in cameras -->
     <string name="capture">Zajemi</string>
+    <!-- Switch eg. from front to back camera -->
     <string name="switch_camera">Zamenjaj kamero</string>
     <string name="toggle_fullscreen">Preklopi celozaslonski način</string>
     <string name="location">Lokacija</string>
@@ -292,8 +296,11 @@
     <string name="pref_server">Strežnik</string>
     <string name="pref_encryption">Šifriranje</string>
     <string name="pref_chats">Klepeti</string>
+    <!-- deprecated -->
     <string name="pref_show_emails_no">Ne, le klepeti</string>
+    <!-- deprecated -->
     <string name="pref_show_emails_accepted_contacts">Za sprejete stike</string>
+    <!-- deprecated -->
     <string name="pref_show_emails_all">Vsi</string>
     <string name="pref_experimental_features">Eksperimentalne funkcije</string>
     <string name="pref_background_default">Privzeta slika</string>
@@ -310,6 +317,7 @@
     <!-- automatically delete message -->
     <string name="delete_old_messages">Briši stara sporočila</string>
     <string name="autodel_device_title">Briši sporočila z naprave</string>
+    <!-- deprecated -->
     <string name="autodel_server_title">Briši sporočila s strežnika</string>
     <string name="secure_join_wait">Vzpostavljanje povezave, prosimo počakajte...</string>
     <!-- notifications -->

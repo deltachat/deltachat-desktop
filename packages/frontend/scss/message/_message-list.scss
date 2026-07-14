@@ -105,6 +105,27 @@
     &::-webkit-scrollbar-track {
       background: transparent;
     }
+
+    // If you Shift+Click some messages then their text
+    // also gets selected, which looks pretty ugly.
+    // However, some people might still want to select text this way,
+    // so let's keep a really faint color for them.
+    //
+    // We apply this to the whole `<ol>` and not `<li>`
+    // because otherwise daymarkers are not affected by this
+    // (because they're not selectable).
+    //
+    // Only apply this if two or more are selected because if the user
+    // tries to simply select text in a message with Shift + Click
+    // then that will select the message,
+    // in which case we should not faint the color.
+    &.multiselected-two-or-more::selection {
+      background-color: color-mix(
+        in srgb,
+        var(--messageHightlightColor) 5%,
+        transparent
+      );
+    }
   }
 
   ol {
@@ -174,6 +195,29 @@
           background-color: transparent;
         }
       }
+
+      &:has(.multiselectable-message[aria-selected='true']) {
+        background-color: var(--messageHightlightColor);
+
+        // Don't play the color fade animation in case the message is both
+        // `.highlight`ed and selected.
+        -webkit-animation: none;
+        -moz-animation: none;
+      }
     }
+  }
+
+  .num-selected-messages-status {
+    position: absolute;
+    bottom: 0;
+    inset-inline-start: 0;
+    border-start-end-radius: 0.25rem;
+    $borderColor: color-mix(in srgb, var(--contextMenuBorder) 50%, transparent);
+    border-block-start: 1px solid $borderColor;
+    border-inline-end: 1px solid $borderColor;
+
+    background: var(--composerBg);
+    padding: 0.5rem 0.625rem;
+    line-height: 1;
   }
 }

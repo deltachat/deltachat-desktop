@@ -3,9 +3,9 @@ import { platform } from 'os'
 import { writeFile, rm, mkdir, access } from 'fs/promises'
 import { join } from 'path'
 
-import { getLogger } from '../../shared/logger.js'
+import { getLogger } from '@deltachat-desktop/shared/logger.js'
 import { appx } from './isAppx.js'
-import { AutostartState } from '../../shared/shared-types.js'
+import { AutostartState } from '@deltachat-desktop/shared/shared-types.js'
 
 const log = getLogger('main/autostart')
 

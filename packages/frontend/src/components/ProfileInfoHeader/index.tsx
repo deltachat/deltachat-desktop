@@ -11,7 +11,8 @@ type Props = {
   color?: string
   displayName: string
   wasSeenRecently?: boolean
-  description?: string
+  description: string | undefined
+  subtitle?: React.ReactNode
 } & Pick<
   Parameters<typeof ClickForFullscreenAvatarWrapper>[0],
   'disableFullscreen'
@@ -23,6 +24,7 @@ export default function ProfileInfoHeader({
   displayName,
   wasSeenRecently = false,
   description = '',
+  subtitle,
   disableFullscreen,
 }: Props) {
   return (
@@ -43,6 +45,7 @@ export default function ProfileInfoHeader({
         <p className={styles.displayName} data-testid='profile-display-name'>
           {displayName}
         </p>
+        {subtitle}
         {description && (
           <p className={styles.description} data-testid='profile-description'>
             {parseAndRenderMessage(description, false, 0)}

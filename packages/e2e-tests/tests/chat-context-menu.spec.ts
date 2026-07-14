@@ -12,7 +12,7 @@ import {
   getUser,
   createGroupChat,
   createChat,
-} from '../playwright-helper'
+} from '../playwright-helper.js'
 
 /**
  * E2E tests for chat context menus used in 2 scenarios:
@@ -376,7 +376,6 @@ test.describe('Chat List Context Menu - Single Selection', () => {
       'Mute Notifications',
       'Archive Chat',
       'View Profile',
-      'Encryption Info',
       'Block Contact',
       'Delete',
     ])
@@ -398,8 +397,6 @@ test.describe('Chat List Context Menu - Single Selection', () => {
       'Mute Notifications',
       'Archive Chat',
       'View Profile',
-      'Encryption Info',
-      'Clone Chat',
       'Leave Group',
     ])
 
@@ -452,12 +449,14 @@ test.describe('Chat List Context Menu - Single Selection', () => {
     await switchToProfile(page, userA.id)
 
     await openChatListContextMenu(page, userB.name)
-    await page.getByRole('menuitem', { name: 'Encryption Info' }).click()
+    await page.getByRole('menuitem', { name: 'View Profile' }).click()
+    await page.locator('#view-profile-menu').click()
+    await page.getByTestId('encryption-info').click()
 
     // Verify encryption info dialog opens
-    await expect(page.getByRole('dialog')).toBeVisible()
-    await expect(page.getByRole('dialog')).toContainText('Encryption')
+    await expect(page.getByRole('dialog').last()).toContainText('Encryption')
 
+    await page.keyboard.press('Escape')
     await page.keyboard.press('Escape')
   })
 
@@ -467,13 +466,15 @@ test.describe('Chat List Context Menu - Single Selection', () => {
     await switchToProfile(page, userA.id)
 
     await openChatListContextMenu(page, groupName)
-    await page.getByRole('menuitem', { name: 'Clone Chat' }).click()
+    await page.getByRole('menuitem', { name: 'View Profile' }).click()
+    await page.getByTestId('view-group-menu').click()
+    await page.getByTestId('clone-chat').click()
 
-    // Verify clone chat dialog opens
-    await expect(page.getByRole('dialog')).toBeVisible()
-    // The clone dialog should show create group interface
+    // Verify clone chat dialog opens,
     await expect(page.locator('.group-name-input')).toBeVisible()
 
+    // close clone dialog and group profile dialog
+    await page.keyboard.press('Escape')
     await page.keyboard.press('Escape')
   })
 })
@@ -481,23 +482,36 @@ test.describe('Chat List Context Menu - Single Selection', () => {
 test.describe('Removal actions', () => {
   test('delete chat from main view closes the chat', async () => {
     const userA = existingProfiles[0]
+    const userB = existingProfiles[1]
 
     await switchToProfile(page, userA.id)
 
     // Create group to delete
+    const leaveGroupName = 'Leave Notify Test Group'
     await page.locator('#new-chat-button').click()
     await page.getByRole('button', { name: 'New Group' }).click()
-    await page
-      .getByRole('textbox', { name: 'Group Name' })
-      .fill('Chat to delete')
+    await page.getByRole('textbox', { name: 'Group Name' }).fill(leaveGroupName)
+    await page.locator('#addmember button').click()
+    const addMemberDialog = page.getByTestId('add-member-dialog')
+    await addMemberDialog
+      .locator('.contact-list-item')
+      .filter({ hasText: userB.name })
+      .click()
+    await addMemberDialog.getByTestId('ok').click()
     await page.getByTestId('group-create-button').click()
 
     // Verify the chat is selected
     await expect(
       page
         .locator('.chat-list .chat-list-item')
-        .filter({ hasText: 'Chat to delete' })
+        .filter({ hasText: leaveGroupName })
     ).toBeVisible()
+
+    // send a message to activate the chat
+    await page
+      .locator('textarea.create-or-edit-message-input')
+      .fill('Hello group!')
+    await page.locator('button.send-button').click()
 
     // "Leave Group" replaces "Delete Chat" in main view.
     await openMainViewThreeDotMenu(page)
@@ -514,8 +528,22 @@ test.describe('Removal actions', () => {
     await expect(
       page
         .locator('.chat-list .chat-list-item')
-        .filter({ hasText: 'Chat to delete' })
+        .filter({ hasText: leaveGroupName })
     ).not.toBeVisible()
+
+    // Check the "Group left by..." system message was sent to the group
+    await switchToProfile(page, userB.id)
+    await page
+      .locator('.chat-list .chat-list-item')
+      .filter({ hasText: leaveGroupName })
+      .click()
+
+    await expect(
+      page
+        .getByRole('list', { name: 'Messages' })
+        .getByRole('listitem')
+        .filter({ hasText: `Group left by ${userA.name}.` })
+    ).toBeVisible({ timeout: 15_000 })
   })
 
   test('block contact from main view', async () => {

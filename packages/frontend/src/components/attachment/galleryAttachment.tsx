@@ -10,7 +10,7 @@ import { isImage, getExtension, dragAttachmentOut } from './Attachment'
 import Timestamp from '../conversations/Timestamp'
 import { makeContextMenu, OpenContextMenu } from '../ContextMenu'
 import { runtime } from '@deltachat-desktop/runtime-interface'
-import { getLogger } from '../../../../shared/logger'
+import { getLogger } from '@deltachat-desktop/shared/logger'
 import { truncateText } from '@deltachat-desktop/shared/util'
 import { selectedAccountId } from '../../ScreenController'
 import ConfirmationDialog from '../dialogs/ConfirmationDialog'
@@ -95,7 +95,8 @@ const contextMenuFactory = (
         )
         openDialog(ConfirmDeleteMessageDialog, {
           accountId,
-          msg: message,
+          messageIds: [message.id],
+          loadedMessages: { [message.id]: message },
           chat,
         })
       },

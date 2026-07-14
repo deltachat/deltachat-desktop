@@ -16,7 +16,7 @@ import useDialog from '../../hooks/dialog/useDialog'
 import type { DialogProps } from '../../contexts/DialogContext'
 import AlertDialog from './AlertDialog'
 import { T } from '@deltachat/jsonrpc-client'
-import { useSettingsStore } from '../../stores/settings'
+import SettingsStoreInstance, { useSettingsStore } from '../../stores/settings'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 
 type AccountAndPasswordDialogProps = DialogProps & {
@@ -36,13 +36,17 @@ export default function EditAccountAndPasswordDialog({
   const tx = useTranslationFunction()
 
   const settingsStore = useSettingsStore()[0]
-  const isChatmail = settingsStore?.settings.is_chatmail === '1'
+  const forceEncryption = settingsStore?.settings.force_encryption !== '0'
 
   return (
     <Dialog canOutsideClickClose={false} onClose={onClose}>
       <DialogHeader
         title={
-          isChatmail ? tx('edit_transport') : tx('manual_account_setup_option')
+          // forceEncryption is false if account is not
+          // configured yet or the setting is set to false
+          forceEncryption
+            ? tx('edit_transport')
+            : tx('manual_account_setup_option')
         }
       />
       <EditAccountInner {...{ onClose, addr }} />
@@ -57,11 +61,15 @@ function EditAccountInner({
   onClose: DialogProps['onClose']
   addr?: string
 }) {
+  const settingsStore = useSettingsStore()[0]
   const [initialSettings, setInitialAccountSettings] =
     useState<Credentials>(defaultCredentials())
 
   const [accountSettings, setAccountSettings] =
     useState<Credentials>(defaultCredentials())
+  const [forceEncryption, setForceEncryption] = useState<boolean>(
+    settingsStore?.settings['force_encryption'] === '1'
+  )
 
   const { openDialog } = useDialog()
   const tx = useTranslationFunction()
@@ -105,7 +113,18 @@ function EditAccountInner({
   }, [addr])
 
   const onUpdate = useCallback(async () => {
-    const onSuccess = () => onClose()
+    const onSuccess = async () => {
+      const forceEncryptionValue = forceEncryption ? '1' : '0'
+      if (
+        settingsStore?.settings['force_encryption'] !== forceEncryptionValue
+      ) {
+        await SettingsStoreInstance.effect.setCoreSetting(
+          'force_encryption',
+          forceEncryptionValue
+        )
+      }
+      onClose()
+    }
 
     const update = () => {
       openDialog(ConfigureProgressDialog, {
@@ -121,8 +140,16 @@ function EditAccountInner({
       log.error('changing email addres of transport is not allowed')
       return
     }
+
     update()
-  }, [accountSettings, initialSettings, onClose, openDialog])
+  }, [
+    accountSettings,
+    forceEncryption,
+    initialSettings,
+    onClose,
+    openDialog,
+    settingsStore,
+  ])
 
   const onOk = useCallback(async () => {
     await onUpdate()
@@ -137,6 +164,8 @@ function EditAccountInner({
             <LoginForm
               credentials={accountSettings}
               setCredentials={setAccountSettings}
+              forceEncryption={forceEncryption}
+              setForceEncryption={setForceEncryption}
               isEdit
             />
           )}

@@ -1,4 +1,19 @@
 {
+  "command_palette_tab_to_search": {
+    "message": "Tab to search"
+  },
+  "command_palette_no_unread": {
+    "message": "No unread chats"
+  },
+  "command_palette_commands_section": {
+    "message": "Commands"
+  },
+  "command_palette_type_for_command_mode": {
+    "message": "Type %1$s for command mode"
+  },
+  "commands_in_current_account_only": {
+    "message": "Command mode is only available for the current active account."
+  },
   "pref_background_sync_disabled": {
     "message": "Only Synchronize Selected Profile"
   },
@@ -67,5 +82,8 @@
   },
   "paste_in_qr_scanner": {
     "message": "Click to paste it in QR scanner"
+  },
+  "webxdc_store_url_explain_2_desktop": {
+    "message": "This is different from the same feature on Android and iOS.\nThis must be the path containing the xdcget-lock.json file."
   }
 }

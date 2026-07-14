@@ -1,10 +1,40 @@
 packages:
   - packages/*
 
+# Run package.json scripts through pnpm's POSIX shell emulator so inline env
+# vars (e.g. `NODE_ENV=production ...`) work cross-platform, incl. Windows CI.
+# (pnpm 11 no longer reads `shell-emulator` from .npmrc — it must live here.)
+shellEmulator: true
+
+# Shorten node_modules/.pnpm/<module> dir names so Windows doesn't hit the
+# 260-char path limit (nsis packaging breaks on the long allowOnlyOneInstallerInstance.nsh
+# path). The `pnpm pack:patch-node-modules` script needs the stdio package folder
+# names unchanged; longest there is 49 chars, and 70 leaves headroom without truncating those.
+virtualStoreDirMaxLength: 70
+
+supportedArchitectures:
+  os:
+    - darwin
+    - win32
+    - linux
+  cpu:
+    - x64
+    - ia32
+    - arm64
+
+allowBuilds:
+  esbuild: true
+  '@parcel/watcher': false
+  electron-winstaller: false
+
+overrides:
+  stylus: 'npm:empty-npm-package@1.0.0'
+  'esbuild-plugin-inline-worker>esbuild': ^0.25.0
+
 catalog:
   # deltachat specific
-  '@deltachat/jsonrpc-client': 2.49.0
-  '@deltachat/stdio-rpc-server': 2.49.0
+  '@deltachat/jsonrpc-client': 2.53.0
+  '@deltachat/stdio-rpc-server': 2.53.0
   '@webxdc/types': ^2.1.2
   '@deltachat/calls-webapp': 0.12.1-beta-debug
   mocha: ^11.7.5
@@ -12,13 +42,15 @@ catalog:
 
   # dependencies
   '@types/mime-types': ^2.1.4
+  '@types/ws': ^8.5.12
   mime-types: ^2.1.35
+  ws: ^8.18.0
 
   # tools / dev dependencies
   sass: ^1.86.3
-  typescript: ^5.9.3
+  typescript: ^6.0.3
   typescript-plugin-css-modules: ^5.2.0
-  esbuild: ^0.25.0
+  esbuild: ^0.28.1
   '@types/node': ^22.15.33
   '@types/mocha': ^10.0.7
   '@types/chai': ^4.3.17

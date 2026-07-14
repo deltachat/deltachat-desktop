@@ -1,12 +1,12 @@
 {
   "name": "@deltachat-desktop/target-tauri",
   "private": true,
-  "version": "2.49.1",
+  "version": "2.53.1",
   "type": "module",
   "license": "GPL-3.0-or-later",
   "scripts": {
-    "check:types": "tsc --noEmit -p runtime-tauri",
-    "check:webxdc-denied-permissions": "node ../../bin/webxdc-check-permissions-policy-count.js",
+    "check:types": "tsc --noEmit --noUncheckedIndexedAccess false -p runtime-tauri",
+    "check:webxdc-denied-permissions": "node ../../bin/build/webxdc-check-permissions-policy-count.js",
     "start": "tauri dev",
     "build4production": "NODE_ENV=production pnpm build",
     "build": "pnpm build:locales && pnpm --filter=@deltachat-desktop/frontend build && pnpm build:compose-frontend && pnpm build:html-email-view && pnpm build:webxdc-js",
@@ -14,14 +14,14 @@
     "build:runtime-impl": "pnpm esbuild --format=esm --bundle --minify --keep-names --sourcemap --outdir=./html-dist runtime-tauri/runtime.ts",
     "build:html-email-view": "pnpm esbuild --bundle --minify --keep-names --sourcemap --outdir=./html-dist/tauri_html_email_view tauri-html-email-view/html_email_view.ts",
     "build:webxdc-js": "pnpm esbuild --bundle --minify --keep-names --outdir=./html-dist/webxdc webxdc-js-implementation/webxdc.ts",
-    "build:compose-frontend": "node ../../bin/copy.js ../frontend/html-dist ./html-dist && node ../../bin/copy.js ./static ./html-dist && pnpm build:runtime-impl",
+    "build:compose-frontend": "node ../../bin/tools/copy.js ../frontend/html-dist ./html-dist && node ../../bin/tools/copy.js ./static ./html-dist && pnpm build:runtime-impl",
     "tauri": "tauri",
     "fmt": "cd src-tauri && cargo fmt",
     "lint": "cd src-tauri && cargo clippy"
   },
   "dependencies": {
-    "@tauri-apps/api": "2.9.1",
-    "@tauri-apps/plugin-log": "^2.7.1",
+    "@tauri-apps/api": "^2.11.0",
+    "@tauri-apps/plugin-log": "^2.8.0",
     "@tauri-apps/plugin-opener": "^2.5.2",
     "@tauri-apps/plugin-store": "^2.4.1"
   },
@@ -29,12 +29,12 @@
     "@deltachat-desktop/runtime-interface": "link:../runtime",
     "@deltachat-desktop/shared": "link:../shared",
     "@deltachat/jsonrpc-client": "catalog:",
-    "@tauri-apps/cli": "^2.8.4",
+    "@tauri-apps/cli": "^2.11.2",
     "@tauri-apps/plugin-clipboard-manager": "^2.3.2",
-    "@tauri-apps/plugin-dialog": "^2.4.2",
+    "@tauri-apps/plugin-dialog": "^2.7.1",
     "@webxdc/types": "catalog:",
     "@types/node": "catalog:",
-    "esbuild": "^0.25.0",
-    "typescript": "^5.2.2"
+    "typescript": "^6.0.3",
+    "esbuild": "^0.28.1"
   }
 }

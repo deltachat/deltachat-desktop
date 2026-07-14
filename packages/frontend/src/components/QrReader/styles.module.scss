@@ -6,7 +6,9 @@
 
 .qrReaderVideo {
   display: none;
-  height: 375px;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
   left: 0;
   position: absolute;
   right: 0;

@@ -10,11 +10,11 @@ import useSecureJoin from './useSecureJoin'
 import useTranslationFunction from './useTranslationFunction'
 import { BackendRemote } from '../backend-com'
 import { ReceiveBackupProgressDialog } from '../components/dialogs/SetupMultiDevice'
-import { getLogger } from '../../../shared/logger'
+import { getLogger } from '@deltachat-desktop/shared/logger'
 
 import type { T } from '@deltachat/jsonrpc-client'
 import type { WelcomeQrWithUrl } from '../contexts/InstantOnboardingContext'
-import type { TranslationKey } from '../../../shared/translationKeyType'
+import type { TranslationKey } from '@deltachat-desktop/shared/translationKeyType'
 import useChat from './chat/useChat'
 import { unknownErrorToString } from '@deltachat-desktop/shared/unknownErrorToString'
 import ProxyConfiguration from '../components/dialogs/ProxyConfiguration'
@@ -109,7 +109,6 @@ export default function useProcessQR() {
   const { secureJoin } = useSecureJoin()
 
   const settingsStore = useSettingsStore()[0]
-  const isChatmail = settingsStore?.settings.is_chatmail === '1'
   const { selectChat } = useChat()
 
   /**
@@ -253,14 +252,7 @@ export default function useProcessQR() {
 
       // Scanned string is actually a link to an email address
       if (url.toLowerCase().startsWith('mailto:')) {
-        if (isChatmail) {
-          // on chatmail server simple email can't be used
-          await openAlertDialog({
-            message: tx('invalid_unencrypted_explanation'),
-          })
-        } else {
-          await openMailtoLink(accountId, url)
-        }
+        await openMailtoLink(accountId, url)
         return callback?.()
       }
 
@@ -454,7 +446,6 @@ export default function useProcessQR() {
       processQrCode,
       startInstantOnboarding,
       selectChat,
-      isChatmail,
       multiDeviceMode,
       addTransportDialog,
       tx,

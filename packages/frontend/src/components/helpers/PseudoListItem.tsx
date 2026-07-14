@@ -112,9 +112,9 @@ export const PseudoListItemAddContact = ({
   const tx = window.static_translate // static_translate because the context method produced sometimes an 'Invalid hook call' crash
 
   const settingsStore = useSettingsStore()[0]
-  const isChatmail = settingsStore?.settings.is_chatmail === '1'
+  const forceEncryption = settingsStore?.settings.force_encryption !== '0'
 
-  if (isChatmail) return null
+  if (forceEncryption) return null
 
   return (
     <PseudoListItem

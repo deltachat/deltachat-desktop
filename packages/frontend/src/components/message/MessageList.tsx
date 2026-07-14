@@ -11,7 +11,7 @@ import moment from 'moment'
 import { debounce } from 'debounce'
 
 import { MessageWrapper } from './MessageWrapper'
-import { getLogger } from '../../../../shared/logger'
+import { getLogger } from '@deltachat-desktop/shared/logger'
 import { KeybindAction } from '../../keybindings'
 import { useMessageList, type MessageListStore } from '../../stores/messagelist'
 import { BackendRemote, onDCEvent } from '../../backend-com'
@@ -30,6 +30,11 @@ import {
   RovingTabindexProvider,
   useRovingTabindex,
 } from '../../contexts/RovingTabindex'
+import {
+  useMessageFocusAndMultiselect,
+  MessageMultiselectContext,
+  useMessageFocusAndMultiselectContextValue,
+} from './focusAndMultiselect'
 import { marknoticedChat } from '../../backend/chat'
 
 /**
@@ -852,6 +857,17 @@ export const MessageListInner = React.memo(
       // over the lifetime of this component.
     })
 
+    const messageIds = useMemo(
+      () =>
+        messageListItems.filter(v => v.kind !== 'dayMarker').map(v => v.msg_id),
+      [messageListItems]
+    )
+    const focusAndMultiselectContextValue =
+      useMessageFocusAndMultiselectContextValue({
+        messageIds,
+        wrapperElementRef: messageListRef,
+      })
+
     if (!loaded) {
       return (
         <div
@@ -866,58 +882,103 @@ export const MessageListInner = React.memo(
     }
 
     return (
-      <div
-        id='message-list'
-        ref={messageListRef}
-        onScroll={onScroll2}
-        onWheel={onWheel}
-      >
-        <ol aria-label={tx('messages')}>
-          <RovingTabindexProvider wrapperElementRef={messageListRef}>
-            {messageListItems.length === 0 && <EmptyChatMessage chat={chat} />}
-            {activeView.map(messageId => {
-              if (messageId.kind === 'dayMarker') {
-                return (
-                  <DayMarker
-                    key={`daymarker-${messageId.timestamp}`}
-                    timestamp={messageId.timestamp}
-                  />
-                )
-              }
+      <>
+        <div
+          id='message-list'
+          ref={messageListRef}
+          onScroll={onScroll2}
+          onWheel={onWheel}
+          className={classNames({
+            'multiselected-one-or-more':
+              focusAndMultiselectContextValue.selectedItems.size >= 1,
+            'multiselected-two-or-more':
+              focusAndMultiselectContextValue.selectedItems.size >= 2,
+          })}
+          onClick={e => {
+            // If clicked on dead space, reset selection.
 
-              if (messageId.kind === 'message') {
-                const message = messageCache[messageId.msg_id]
-                if (message?.kind === 'message') {
-                  return (
-                    <MessageWrapper
-                      key={messageId.msg_id}
-                      key2={`${messageId.msg_id}`}
-                      chat={chat}
-                      message={message}
-                      conversationType={conversationType}
-                      unreadMessageInViewIntersectionObserver={
-                        unreadMessageInViewIntersectionObserver
-                      }
-                    />
-                  )
-                } else if (message?.kind === 'loadingError') {
-                  return (
-                    <MessageLoadingError
-                      messageId={messageId}
-                      message={message}
-                    />
-                  )
-                } else {
-                  // setTimeout tells it to call method in next event loop iteration, so after rendering
-                  // it is debounced later so we can call it here multiple times and it's ok
-                  setTimeout(loadMissingMessages)
-                  return <MessageLoading messageId={messageId} />
+            if (e.ctrlKey || e.shiftKey || e.metaKey || e.altKey) {
+              return
+            }
+            if (!(e.target instanceof HTMLElement)) {
+              return
+            }
+            if (e.target.closest('.multiselectable-message') != null) {
+              // Clicked on a message. This is handled
+              // by the message click handler.
+              return
+            }
+
+            focusAndMultiselectContextValue.resetSelection()
+          }}
+        >
+          <ol aria-label={tx('messages')}>
+            <RovingTabindexProvider wrapperElementRef={messageListRef}>
+              <MessageMultiselectContext.Provider
+                value={focusAndMultiselectContextValue}
+              >
+                {messageListItems.length === 0 && (
+                  <EmptyChatMessage chat={chat} />
+                )}
+                {activeView.map(messageId => {
+                  if (messageId.kind === 'dayMarker') {
+                    return (
+                      <DayMarker
+                        key={`daymarker-${messageId.timestamp}`}
+                        timestamp={messageId.timestamp}
+                      />
+                    )
+                  }
+
+                  if (messageId.kind === 'message') {
+                    const message = messageCache[messageId.msg_id]
+                    if (message?.kind === 'message') {
+                      return (
+                        <MessageWrapper
+                          key={messageId.msg_id}
+                          key2={`${messageId.msg_id}`}
+                          chat={chat}
+                          message={message}
+                          conversationType={conversationType}
+                          unreadMessageInViewIntersectionObserver={
+                            unreadMessageInViewIntersectionObserver
+                          }
+                        />
+                      )
+                    } else if (message?.kind === 'loadingError') {
+                      return (
+                        <MessageLoadingError
+                          messageId={messageId}
+                          message={message}
+                        />
+                      )
+                    } else {
+                      // setTimeout tells it to call method in next event loop iteration, so after rendering
+                      // it is debounced later so we can call it here multiple times and it's ok
+                      setTimeout(loadMissingMessages)
+                      return <MessageLoading messageId={messageId} />
+                    }
+                  }
+                })}
+              </MessageMultiselectContext.Provider>
+            </RovingTabindexProvider>
+          </ol>
+        </div>
+
+        <div role='status' style={{ display: 'contents' }}>
+          {focusAndMultiselectContextValue.selectedItems.size > 0 && (
+            <div className='num-selected-messages-status'>
+              {tx(
+                'n_selected',
+                focusAndMultiselectContextValue.selectedItems.size.toString(),
+                {
+                  quantity: focusAndMultiselectContextValue.selectedItems.size,
                 }
-              }
-            })}
-          </RovingTabindexProvider>
-        </ol>
-      </div>
+              )}
+            </div>
+          )}
+        </div>
+      </>
     )
   },
   (prevProps, nextProps) => {
@@ -940,19 +1001,25 @@ function MessageLoadingError({
   message: T.MessageLoadResult
 }) {
   const ref = useRef<HTMLDivElement>(null)
-  const rovingTabindex = useRovingTabindex(ref)
+  const focusAndMultiselect = useMessageFocusAndMultiselect(
+    messageId.msg_id,
+    ref
+  )
 
   return (
     <div className='info-message' id={String(messageId.msg_id)}>
       <div
         ref={ref}
-        className={'bubble ' + rovingTabindex.className}
+        className={
+          'bubble multiselectable-message ' + focusAndMultiselect.className
+        }
         style={{
           backgroundColor: 'rgba(55,0,0,0.5)',
         }}
-        tabIndex={rovingTabindex.tabIndex}
-        onKeyDown={rovingTabindex.onKeydown}
-        onFocus={rovingTabindex.setAsActiveElement}
+        tabIndex={focusAndMultiselect.tabIndex}
+        onClick={focusAndMultiselect.onClick}
+        onKeyDown={focusAndMultiselect.onKeyDown}
+        onFocus={focusAndMultiselect.onFocus}
       >
         loading message {messageId.msg_id} failed: {message.error}
       </div>
@@ -965,19 +1032,25 @@ function MessageLoading({
   messageId: T.MessageListItem & { kind: 'message' }
 }) {
   const ref = useRef<HTMLDivElement>(null)
-  const rovingTabindex = useRovingTabindex(ref)
+  const focusAndMultiselect = useMessageFocusAndMultiselect(
+    messageId.msg_id,
+    ref
+  )
 
   return (
     <div className='info-message' id={String(messageId.msg_id)}>
       <div
         ref={ref}
-        className={'bubble ' + rovingTabindex.className}
+        className={
+          'bubble multiselectable-message ' + focusAndMultiselect.className
+        }
         style={{
           backgroundColor: 'rgba(55,0,0,0.5)',
         }}
-        tabIndex={rovingTabindex.tabIndex}
-        onKeyDown={rovingTabindex.onKeydown}
-        onFocus={rovingTabindex.setAsActiveElement}
+        tabIndex={focusAndMultiselect.tabIndex}
+        onClick={focusAndMultiselect.onClick}
+        onKeyDown={focusAndMultiselect.onKeyDown}
+        onFocus={focusAndMultiselect.onFocus}
       >
         Loading Message {messageId.msg_id}
       </div>
@@ -1073,6 +1146,9 @@ export function DayMarker(props: { timestamp: number }) {
   // See https://github.com/deltachat/deltachat-desktop/issues/2141
   // > Also make the divider items proper list items that can be focused,
   // > so users know when they traverse to the next/previous date.
+  //
+  // We usually utilize `useMessageFocusAndMultiselect()` for messages
+  // but here we only need a part of its functionality.
   const rovingTabindex = useRovingTabindex(ref)
 
   return (

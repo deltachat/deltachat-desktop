@@ -2,15 +2,17 @@ import React, { useEffect, useState, useCallback, useMemo, useRef } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 import { debounce } from 'debounce'
 
-import { getLogger } from '../../../shared/logger'
+import { getLogger } from '@deltachat-desktop/shared/logger'
 import { KeybindAction } from '../keybindings'
 import { debounceWithInit } from './chat/ChatListHelpers'
 import { BackendRemote, onDCEvent } from '../backend-com'
 import { selectedAccountId } from '../ScreenController'
 import ConnectivityDialog from './dialogs/ConnectivityDialog'
+import Icon from './Icon'
 import useDialog from '../hooks/dialog/useDialog'
 import useTranslationFunction from '../hooks/useTranslationFunction'
 import useKeyBindingAction from '../hooks/useKeyBindingAction'
+import useProxyEnabled from '../hooks/useProxyEnabled'
 
 const log = getLogger('renderer/components/ConnectivityToast')
 
@@ -164,6 +166,8 @@ export default function ConnectivityToast() {
 
   const tx = useTranslationFunction()
 
+  const proxyEnabled = useProxyEnabled()
+
   if (networkState[0] === Connectivity.CONNECTED) {
     return null
   }
@@ -179,6 +183,18 @@ export default function ConnectivityToast() {
         className='showInfoButton'
         aria-label={tx('connectivity')}
       ></button>
+
+      {proxyEnabled && (
+        <Icon
+          icon={
+            networkState[0] === Connectivity.WORKING
+              ? 'proxy-connected'
+              : 'proxy-not-connected'
+          }
+          size={16}
+          className='proxyIcon'
+        />
+      )}
 
       {networkState[0] === Connectivity.NOT_CONNECTED && (
         <>

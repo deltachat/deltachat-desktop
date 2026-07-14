@@ -7,8 +7,8 @@ import useCreateChatByEmail from './chat/useCreateChatByEmail'
 import useCreateDraftMessage from './chat/useCreateDraftMesssage'
 import useDialog from './dialog/useDialog'
 import useTranslationFunction from './useTranslationFunction'
-import { getLogger } from '../../../shared/logger'
-import { parseMailto } from '../../../shared/parse_mailto'
+import { getLogger } from '@deltachat-desktop/shared/logger'
+import { parseMailto } from '@deltachat-desktop/shared/parse_mailto'
 
 const log = getLogger('renderer/hooks/useOpenMailtoLink')
 

@@ -40,6 +40,7 @@ div.header > .title > p.details {
 }
 
 div.header > div.network-toggle {
+  position: relative;
   display: flex;
   align-items: center;
   margin: 4px;
@@ -59,4 +60,34 @@ div.header > div.network-toggle > button#toggle_network_more_button {
 div#content {
   flex-grow: 1;
   background-color: white;
+}
+
+.more-menu-dropdown {
+  position: absolute;
+  right: 30px;
+  top: 0;
+  z-index: 1;
+  background-color: var(--htmlEmail-background);
+  border: 1px solid var(--htmlEmail-border-color);
+  border-radius: 3px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  white-space: nowrap;
+}
+
+.more-menu-item {
+  display: block;
+  width: 100%;
+  padding: 6px 12px;
+  background: transparent;
+  border: none;
+  color: var(--htmlEmail-color);
+  cursor: pointer;
+  text-align: left;
+  font-size: 1em;
+  box-sizing: border-box;
+}
+
+.more-menu-item:hover,
+.more-menu-item:focus {
+  background-color: var(--htmlEmail-border-color);
 }

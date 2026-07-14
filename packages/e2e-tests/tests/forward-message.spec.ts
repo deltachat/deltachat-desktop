@@ -11,7 +11,8 @@ import {
   reloadPage,
   clickThroughTestIds,
   test,
-} from '../playwright-helper'
+  selectChat,
+} from '../playwright-helper.js'
 
 /**
  * This test suite covers basic forward message functionality:
@@ -137,9 +138,7 @@ test('forward message to another chat (same account, with confirmation)', async 
   // Confirmation dialog should appear
   const confirmDialog = page.getByTestId('confirm-dialog')
   await expect(confirmDialog).toBeVisible()
-  await expect(confirmDialog).toContainText(
-    `Forward messages to ${userB.name}?`
-  )
+  await expect(confirmDialog).toContainText(`Forward message to ${userB.name}?`)
 
   // Confirm the forward
   await confirmDialog.getByTestId('confirm').click()
@@ -253,7 +252,7 @@ test('forward message to another account', async () => {
   ).toBeVisible()
 })
 
-test('forward message with file attachment', async () => {
+test('forward message with .xdc file attachment', async () => {
   const userA = getUser(0, existingProfiles)
   const userB = getUser(1, existingProfiles)
 
@@ -342,6 +341,14 @@ test('forward message with file attachment', async () => {
     .locator('.message')
     .filter({ has: forwardedWebxdcMessage })
   await expect(forwardedMessage).toContainText('Forwarded')
+})
+
+test('forward message with .zip file attachment', async () => {
+  const userA = getUser(0, existingProfiles)
+  const userB = getUser(1, existingProfiles)
+
+  await switchToProfile(page, userB.id)
+  await selectChat(page, 'Saved Messages')
 
   // Now test forwarding a zip file attachment
   const fileChooserPromise = page.waitForEvent('filechooser')

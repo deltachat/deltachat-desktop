@@ -203,7 +203,8 @@ $scrollbarTransparency: 0.34 !default;
   --videoPlayBtnBg: #ffffff; // Manual value: This will not get generated in the future
   --videoPlayBtnBorder: #eaeaea;
   --videoPlayBtnBgHover: #eeeeee;
-  --fullScreenMediaButtons: #8b8e91;
+  --fullScreenMediaButtons: #44444455;
+  --fullScreenMediaButtonsText: #ffffff;
   --messageHightlightColor: rgba(66, 165, 245, 0.8);
   --addMemberChipBackgroundColor: #{$bgSecondary};
   --galleryWebxdcItem: #{changeContrast($bgPrimary, 10%)};

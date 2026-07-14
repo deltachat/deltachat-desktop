@@ -4,6 +4,7 @@ import {
   getUser,
   createProfiles,
   deleteProfile,
+  deleteAllProfiles,
   switchToProfile,
   User,
   loadExistingProfiles,
@@ -11,7 +12,8 @@ import {
   reloadPage,
   sendMessage,
   test,
-} from '../playwright-helper'
+  selectChat,
+} from '../playwright-helper.js'
 
 /**
  * This test suite covers basic functionalities like
@@ -64,8 +66,18 @@ test.afterEach(async () => {
   }
 })
 
-test.afterAll(async () => {
+// We have the "delete profiles" test, but it won't run
+// if some other test fails, so let's ensure to deleteAllProfiles still.
+test.afterAll(async ({ browser }) => {
   await page?.close()
+
+  const context = await browser.newContext()
+  const pageForProfileDeletion = await context.newPage()
+  await reloadPage(pageForProfileDeletion)
+  existingProfiles =
+    (await loadExistingProfiles(pageForProfileDeletion)) ?? existingProfiles
+  await deleteAllProfiles(pageForProfileDeletion, existingProfiles)
+  await context.close()
 })
 
 test('create profiles', async ({ browserName, isChatmail }) => {
@@ -398,6 +410,7 @@ test('add app from picker to chat', async () => {
   await page.getByTestId('add-app-to-chat').click()
   const appDraft = page.locator('.attachment-quote-section .text-part')
   await expect(appDraft).toContainText(appName)
+  await expect(page.locator('.create-or-edit-message-input')).toBeFocused()
   await page.locator('button.send-button').click()
   const webxdcMessage = page.locator('.msg-body .webxdc')
   await expect(webxdcMessage).toContainText(appName)
@@ -420,7 +433,49 @@ test('add app from picker to chat', async () => {
   expect(finalAppIconsCount).toBeGreaterThan(initialAppIconsCount)
 })
 
+test('custom app picker URL', async () => {
+  const userA = existingProfiles[0]
+  const userB = existingProfiles[1]
+  await switchToProfile(page, userA.id)
+  await selectChat(page, userB.name)
+
+  // It's the default URL but with different casing.
+  // The behavior will remain the same network-wise,
+  // but this still allows us to check that the setting change is stored
+  // and that the picker still works after that.
+  const newUrl = 'HTTPS://APPS.testRUN.ORG/'
+
+  await page.getByRole('button', { name: 'Settings' }).click()
+  await page.getByRole('button', { name: 'Advanced' }).click()
+  const advancedDialog = page
+    .getByRole('dialog')
+    .filter({ hasText: 'Advanced' })
+    .filter({ hasText: 'Experimental' })
+
+  await expect(advancedDialog).not.toContainText(newUrl, { ignoreCase: false })
+  await page.getByRole('button', { name: 'App Picker URL' }).click()
+  await page.getByRole('dialog').last().getByRole('textbox').fill(newUrl)
+  await page.keyboard.press('Enter')
+  await expect(advancedDialog).toContainText(newUrl, { ignoreCase: false })
+
+  await page.keyboard.press('Escape')
+  await page.keyboard.press('Escape')
+
+  await page.getByRole('button', { name: 'Attach' }).click()
+  await page.getByRole('menuitem', { name: 'App' }).click()
+  await page.getByRole('button', { name: 'Poll' }).first().click()
+  await page.getByRole('button', { name: 'Add to Chat' }).click()
+  await page.getByRole('button', { name: 'Send', exact: true }).click()
+  await expect(page.locator(`.message`).last()).toContainText('Poll')
+})
+
 test('recent apps context menu', async () => {
+  const userB = existingProfiles[1]
+  await page
+    .locator('.chat-list .chat-list-item')
+    .filter({ hasText: userB.name })
+    .click()
+
   await page
     .getByTestId('last-used-apps')
     .getByRole('button')
@@ -462,6 +517,20 @@ test("closing context menu with Escape doesn't close dialog", async () => {
   await expect(page.getByRole('dialog')).toBeVisible()
   await page.keyboard.press('Escape')
   await expect(page.getByRole('dialog')).not.toBeVisible()
+})
+
+test('Escape closes the chat', async () => {
+  await page.getByLabel('Chats').getByRole('tab').first().click()
+  await expect(
+    page.locator('textarea.create-or-edit-message-input')
+  ).toBeFocused()
+  await page.keyboard.press('Escape')
+  await expect(
+    page.locator('textarea.create-or-edit-message-input')
+  ).not.toBeVisible()
+  await expect(
+    page.getByLabel('Chats').getByRole('tab', { selected: true })
+  ).toHaveCount(0)
 })
 
 test('correct handling of changed profile displaynames', async () => {

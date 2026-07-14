@@ -46,7 +46,7 @@ const none = Symbol()
  *             // The "regular", non-multiselect click action.
  *             myOnClick(id)
  *           }}
- *           onFocus={() => multiselect.onFocus(id)}
+ *           onFocus={(event) => multiselect.onFocus(event, id)}
  *         >
  *           Item {id}
  *         </button>
@@ -101,6 +101,14 @@ export function useMultiselect<T>(
   onSelectionChange: (newSelectedItems: Set<T>) => void,
   logger?: {
     error: (...args: any) => void
+  },
+  options?: {
+    /**
+     * What to do when an item gets clicked without Ctrl or Shift being pressed.
+     *
+     * @default 'resetSelectionToClickedItem'
+     */
+    onNormalClick?: 'resetSelectionToClickedItem' | 'unselectAll'
   }
 ) {
   // TODO feat: a way to set initially active item?
@@ -155,14 +163,6 @@ export function useMultiselect<T>(
       const from = prevLastActivatedItem
       const to = toItem
 
-      let fromInd = availableItemsRef.current.indexOf(from)
-      if (fromInd === -1) {
-        // This could happen if `availableItems` got updated
-        // such that `prevLastActivatedItem` is no longer a member of it.
-        // Maybe there is a more graceful way to handle this.
-        onSelectionChange(new Set([from]))
-        return
-      }
       // `lastIndexOf` is functionally equivalent to `indexOf`
       // given that all items are unique,
       // but this has higher performance when selecting down,
@@ -175,7 +175,15 @@ export function useMultiselect<T>(
           'is not a member of availableItems',
           availableItemsRef.current
         )
-        onSelectionChange(new Set([from]))
+        return
+      }
+      let fromInd = availableItemsRef.current.indexOf(from)
+      if (fromInd === -1) {
+        // This could happen if `availableItems` got updated
+        // such that `prevLastActivatedItem` is no longer a member of it.
+        // Maybe there is a more graceful way to handle this.
+        onSelectionChange(new Set([to]))
+        return
       }
 
       ;[fromInd, toInd] = [Math.min(fromInd, toInd), Math.max(fromInd, toInd)]
@@ -229,6 +237,7 @@ export function useMultiselect<T>(
     }
   }, [])
 
+  const onNormalClick = options?.onNormalClick ?? 'resetSelectionToClickedItem'
   // Note that `keydown` and `click` events both fire
   // for a single press of "Space" for `<button>`s
   // https://w3c.github.io/uievents/#event-type-keydown
@@ -258,19 +267,34 @@ export function useMultiselect<T>(
         return true // shouldPreventDefault
       }
 
-      if (
-        // Check if it's already selected.
-        !(
-          selectedItemsRef.current.size === 1 &&
-          selectedItemsRef.current.has(item)
-        )
-      ) {
-        onSelectionChange(new Set([item]))
+      switch (onNormalClick) {
+        case 'resetSelectionToClickedItem': {
+          if (
+            selectedItemsRef.current.size === 1 &&
+            selectedItemsRef.current.has(item)
+          ) {
+            // Already selected.
+            break
+          }
+          onSelectionChange(new Set([item]))
+          break
+        }
+        case 'unselectAll': {
+          if (selectedItemsRef.current.size === 0) {
+            // Already unselected
+            break
+          }
+          onSelectionChange(new Set())
+          break
+        }
+        default: {
+          const _assert: never = onNormalClick
+        }
       }
       lastActivatedItem.current = item
       return false
     },
-    [onSelectContiguous, onSelectionChange, toggleItemSelection]
+    [onNormalClick, onSelectContiguous, onSelectionChange, toggleItemSelection]
   )
   const onClick = useCallback(
     (event: React.MouseEvent, item: T) => {
@@ -280,18 +304,42 @@ export function useMultiselect<T>(
   )
   const onKeyDown = useCallback(
     (event: React.KeyboardEvent, item: T) => {
+      if (event.code === 'Escape') {
+        if (selectedItemsRef.current.size === 0) {
+          return false
+        }
+        onSelectionChange(new Set())
+        return true
+      }
+
       if (event.code !== 'Space') {
         return false
       }
 
       return onClickOrKeyDown(event, item)
     },
-    [onClickOrKeyDown]
+    [onClickOrKeyDown, onSelectionChange]
   )
 
+  const prevFocusedListMemberElRef = useRef<Element>(null)
   // Handle Shift + ArrowDown, Shift + End.
   const onFocus = useCallback(
-    (item: T) => {
+    (event: React.FocusEvent, item: T) => {
+      const prevFocusedEl = prevFocusedListMemberElRef.current
+      prevFocusedListMemberElRef.current = event.target
+
+      const elLosingFocus = event.relatedTarget
+      // Without this, pressing Shift + Tab, which is usually supposed to
+      // only change focus, could also change selection.
+      //
+      // Just FYI, instead of comparing to `prevFocusedEl`
+      // we could have checked whether the element is a member of the list,
+      // but that would require the user of this hook
+      // to specify the checking function.
+      if (elLosingFocus == null || elLosingFocus !== prevFocusedEl) {
+        return
+      }
+
       if (shiftPressed.current) {
         onSelectContiguous(item)
       } else {

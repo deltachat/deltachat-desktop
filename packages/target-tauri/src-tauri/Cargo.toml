@@ -1,10 +1,10 @@
 [package]
 name = "deltachat-tauri"
-version = "2.49.1"
+version = "2.53.1"
 description = "Delta Chat Desktop: Tauri Edition. Secure, cross-platform, decentralized super-app messenger."
 authors = ["DeltaChat Contributors"]
 edition = "2021"
-rust-version = "1.88"
+rust-version = "1.89"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -19,27 +19,14 @@ crate-type = ["staticlib", "cdylib", "rlib"]
 tauri-build = { version = "2", features = ["config-json5"] }
 
 [dependencies]
-tauri = { version = "2", features = [
-    # for `proxy_url()` for webxdc.
-    "image-png",
-    "image-ico",
-    # 'unstable' feature, because of multiple webviews in html email window
-    "unstable",
-    "tray-icon",
-] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 tokio = "1.43.1"
-deltachat = { git = "https://github.com/chatmail/core", tag = "v2.49.0", version = "2.49.0" }
-deltachat-jsonrpc = { git = "https://github.com/chatmail/core", tag = "v2.49.0", version = "2.49.0" }
-tauri-plugin-dialog = "2"
-tauri-plugin-clipboard-manager = "2.0.2"
+deltachat = { git = "https://github.com/chatmail/core", tag = "v2.53.0", version = "2.53.0" }
+deltachat-jsonrpc = { git = "https://github.com/chatmail/core", tag = "v2.53.0", version = "2.53.0" }
 log = "0.4.22"
 anyhow = "1.0.93"
 futures-lite = "2.5.0"
-tauri-plugin-devtools = { version = "2.0.0", optional = true }
-tauri-plugin-log = "2"
-tauri-plugin-store = "2"
 http = "1.1.0"
 mime = "0.3.17"
 percent-encoding = "2"
@@ -49,7 +36,6 @@ base64 = "0.22.1"
 rand = { version = "0.9.3", features = ["small_rng"] }
 uuid = { version = "1", features = ["v4"] }
 sha2 = "0.10.8"
-tauri-plugin-opener = "2.2.6"
 unic-idna-punycode = "0.9.0"
 strum = { version = "0.27", features = ["derive"] }
 url = "*"
@@ -64,6 +50,24 @@ translationfn = { version = "1.0.0", path = "../crates/translationfn" }
 system_permissions = { version = "0.1.0", path = "../crates/system_permissions" }
 drag = "2.1.0"
 user-notify = "0.4.1"
+
+# tauri and plugins need to be updated
+# together with their js clients in packages/target-tauri/package.json
+# otherwise build fails, thats why we pin to exact versions here
+tauri = { version = "2.11.2", features = [
+    # for `proxy_url()` for webxdc.
+    "image-png",
+    "image-ico",
+    # 'unstable' feature, because of multiple webviews in html email window
+    "unstable",
+    "tray-icon",
+] }
+tauri-plugin-clipboard-manager = "2.3.0"
+tauri-plugin-dialog = "2.7.1"
+tauri-plugin-devtools = { version = "2.0.0", optional = true }
+tauri-plugin-log = "2.8.0"
+tauri-plugin-store = "2.4.0"
+tauri-plugin-opener = "2.5.4"
 
 [target.'cfg(any(target_os = "linux", target_os = "dragonfly", target_os = "freebsd", target_os = "openbsd", target_os = "netbsd"))'.dependencies]
 ashpd = "0.11.0"

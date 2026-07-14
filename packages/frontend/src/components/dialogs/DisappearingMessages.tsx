@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
-import { Timespans } from '../../../../shared/constants'
+import { Timespans } from '@deltachat-desktop/shared/constants'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import Dialog, {

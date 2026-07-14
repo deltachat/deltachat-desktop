@@ -5,8 +5,8 @@ import { platform } from 'os'
 import { fileURLToPath } from 'url'
 import { Session } from 'electron/main'
 
-import { appWindowTitle } from '../../../shared/constants.js'
-import { getLogger } from '../../../shared/logger.js'
+import { appWindowTitle } from '@deltachat-desktop/shared/constants.js'
+import { getLogger } from '@deltachat-desktop/shared/logger.js'
 import {
   appIcon,
   windowDefaults,
@@ -70,7 +70,7 @@ export function init(options: { hidden: boolean; hideMenuBar: boolean }) {
         spellcheck: false, // until we can load a local dictionary, see https://github.com/electron/electron/issues/22995
         webSecurity: true,
         allowRunningInsecureContent: false,
-        contextIsolation: false,
+        contextIsolation: true,
       },
       autoHideMenuBar: options.hideMenuBar,
       titleBarStyle: isMac ? 'hidden' : 'default',

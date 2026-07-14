@@ -17,7 +17,7 @@ import FooterActionButton from '../Dialog/FooterActionButton'
 import { QrReader, QrCodeScanRef } from '../QrReader'
 
 import { BackendRemote } from '../../backend-com'
-import { getLogger } from '../../../../shared/logger'
+import { getLogger } from '@deltachat-desktop/shared/logger'
 
 import { ScreenContext } from '../../contexts/ScreenContext'
 import useContextMenu from '../../hooks/useContextMenu'

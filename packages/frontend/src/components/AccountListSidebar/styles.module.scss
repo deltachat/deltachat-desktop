@@ -41,8 +41,9 @@
   background-color: var(--accountSidebarBg);
   display: flex;
   flex-direction: column;
-  min-width: 68px;
+  min-width: 76px;
   overflow: hidden;
+  padding-top: 4px;
 
   .accountListNav {
     flex-grow: 1;
@@ -53,8 +54,8 @@
     }
 
     .accountList {
-      --als-avatar-size: 42px;
-      --als-avatar-margin: 5px;
+      --als-avatar-size: 48px;
+      --als-avatar-margin: 7px;
       --als-active-indicator-color: white;
 
       margin: 0;
@@ -68,8 +69,8 @@
       li:has(.accountWrapper.isSticky) {
         // Styles for the li element when it contains a sticky account
         position: sticky;
-        bottom: var(--als-avatar-margin);
-        top: var(--als-avatar-margin);
+        bottom: 0;
+        top: 0;
         // Only needed when this account is scrolled _above_ the visible region.
         z-index: map.get(
           variables.$z-index,
@@ -108,7 +109,7 @@
     // to the margins so that
     // if there is another `.isSticky` account, then that account does not
     // cover the account that we want to scroll into view.
-    // And another extra `2 * var(--als-avatar-margin)` so that it's obvious that
+    // And another extra `var(--als-avatar-margin)` so that it's obvious that
     // the other sticky account really is sticky, to make it obviously overlay
     // on top of another account, and be positioned perfectly on top of it.
     //
@@ -116,10 +117,10 @@
     // `var(--als-avatar-margin)` in case there is no sticky account above.
     // This should be achievable with CSS.
     scroll-margin-bottom: calc(
-      5 * var(--als-avatar-margin) + var(--als-avatar-size)
+      3 * var(--als-avatar-margin) + var(--als-avatar-size)
     );
     scroll-margin-top: calc(
-      5 * var(--als-avatar-margin) + var(--als-avatar-size)
+      3 * var(--als-avatar-margin) + var(--als-avatar-size)
     );
 
     position: relative;
@@ -142,13 +143,13 @@
     &:hover,
     &.context-menu-active {
       .avatar::before {
-        --als-active-indicator-height: 32px;
+        --als-active-indicator-height: 15px;
 
         background: var(--als-active-indicator-color);
         border-radius: 20px;
         content: ' ';
         height: var(--als-active-indicator-height);
-        margin-inline-start: -16.5px;
+        margin-inline-start: -18px;
         overflow: hidden;
         pointer-events: none;
         position: absolute;
@@ -157,7 +158,7 @@
               var(--als-active-indicator-height) / 2
             )
         );
-        width: 8px;
+        width: 10px;
       }
 
       .avatar {
@@ -165,9 +166,10 @@
       }
     }
 
-    &:hover {
+    &.active,
+    &.context-menu-active {
       .avatar::before {
-        --als-active-indicator-height: 15px;
+        --als-active-indicator-height: 36px;
       }
     }
 

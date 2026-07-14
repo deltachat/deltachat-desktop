@@ -11,7 +11,7 @@ import {
   clickThroughTestIds,
   getUser,
   createChat,
-} from '../playwright-helper'
+} from '../playwright-helper.js'
 
 test.describe.configure({
   mode: 'serial',
@@ -148,11 +148,11 @@ test('check appropriate members are shown for new encrypted group', async () => 
   await expect(contactList).toHaveCount(2)
   // TODO: this should show the contact by name but it fails with a
   // screenshot showing the mail address instead of the name ??
-  await page
+  await addMemberDialog
     .locator('.contact-list-item')
     .filter({ hasText: userD.address })
     .click()
-  const contactShouldNotBeListed = page
+  const contactShouldNotBeListed = addMemberDialog
     .locator('.contact-list-item')
     .filter({ hasText: userB.name })
   await expect(contactShouldNotBeListed).not.toBeVisible()
@@ -177,15 +177,15 @@ test('check appropriate members are shown for new unencrypted group', async () =
   const contactList = page.getByTestId('add-member-dialog').locator('li button')
   // only self and the non verified users should be visible
   await expect(contactList).toHaveCount(3)
-  await page
+  await addMemberDialog
     .locator('.contact-list-item')
     .filter({ hasText: userB.address })
     .click()
-  const contactShouldNotBeListedByName = page
+  const contactShouldNotBeListedByName = addMemberDialog
     .locator('.contact-list-item')
     .filter({ hasText: userD.name })
   await expect(contactShouldNotBeListedByName).not.toBeVisible()
-  const contactShouldNotBeListedByAddress = page
+  const contactShouldNotBeListedByAddress = addMemberDialog
     .locator('.contact-list-item')
     .filter({ hasText: userD.address })
   await expect(contactShouldNotBeListedByAddress).not.toBeVisible()
@@ -215,12 +215,17 @@ test('check group dialog for unencrypted group has appropriate entries', async (
   ).not.toBeVisible({ timeout: 1 })
   await expect(dialog.locator('#addmember')).not.toBeVisible({ timeout: 1 })
   await expect(
-    dialog.getByTestId('view-group-dialog-header-edit')
-  ).not.toBeVisible({ timeout: 1 })
-  await expect(
     dialog.getByRole('button', { name: 'QR Invite Code' })
   ).not.toBeVisible({ timeout: 1 })
   await expect(dialog.locator('#showqrcode')).not.toBeVisible({ timeout: 1 })
+
+  await dialog.getByTestId('view-group-menu').click()
+  // The three-dot menu should not have an "Edit" entry for unencrypted groups.
+  await expect(page.getByTestId('view-group-edit')).not.toBeVisible({
+    timeout: 1,
+  })
+  await expect(page.getByTestId('encryption-info')).toBeVisible()
+  await page.keyboard.press('Escape')
 
   await page.getByTestId('view-group-dialog-header-close').click()
 })
@@ -238,7 +243,7 @@ test('chat list item context menu', async () => {
   await expect(
     page.getByRole('menuitem', { name: 'Leave Group' })
   ).not.toBeVisible()
-  await expect(page.getByRole('menuitem')).toHaveCount(7)
+  await expect(page.getByRole('menuitem')).toHaveCount(5)
 
   await page.getByRole('menuitem').first().press('Escape')
   await expect(page.getByRole('menuitem')).not.toBeVisible()

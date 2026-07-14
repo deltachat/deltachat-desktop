@@ -1,4 +1,4 @@
-import { getLogger } from '../../shared/logger'
+import { getLogger } from '@deltachat-desktop/shared/logger'
 import { BackendRemote } from './backend-com'
 import { DragRegionOverlay, printCallCounterResult } from './debug-tools'
 import { runtime } from '@deltachat-desktop/runtime-interface'

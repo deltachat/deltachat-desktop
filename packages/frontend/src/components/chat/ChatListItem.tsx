@@ -4,10 +4,11 @@ import { T, C } from '@deltachat/jsonrpc-client'
 
 import Timestamp from '../conversations/Timestamp'
 import { Avatar } from '../Avatar'
+import Icon from '../Icon'
 import { Type } from '../../backend-com'
 import { marknoticedChat } from '../../backend/chat'
 import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
-import { getLogger } from '../../../../shared/logger'
+import { getLogger } from '@deltachat-desktop/shared/logger'
 import { useContextMenuWithActiveState } from '../ContextMenu'
 import { selectedAccountId } from '../../ScreenController'
 import { parseAndRenderMessage } from '../message/MessageParser'
@@ -205,8 +206,8 @@ function ChatListItemArchiveLink({
         isContextMenuActive ? 'context-menu-active' : ''
       }`}
     >
-      <div className='avatar'>
-        <img className='content' src='./images/icons/icon-archive.svg' />
+      <div className='avatar archive-avatar'>
+        <Icon icon='archive' coloring='currentColor' size={24} />
       </div>
       <div className='content'>
         <div className='archive-link'>{tx('chat_archived_chats_title')}</div>

@@ -8,7 +8,7 @@ import {
   getLogger,
   printProcessLogLevelInfo,
   setLogHandler,
-} from '../../shared/logger'
+} from '@deltachat-desktop/shared/logger'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 
 async function main() {

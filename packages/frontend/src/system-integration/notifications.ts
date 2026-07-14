@@ -1,6 +1,6 @@
-import { appName } from '../../../shared/constants'
-import { getLogger } from '../../../shared/logger'
-import { NOTIFICATION_TYPE } from '../../../shared/constants'
+import { appName } from '@deltachat-desktop/shared/constants'
+import { getLogger } from '@deltachat-desktop/shared/logger'
+import { NOTIFICATION_TYPE } from '@deltachat-desktop/shared/constants'
 import { BackendRemote } from '../backend-com'
 
 import { runtime } from '@deltachat-desktop/runtime-interface'

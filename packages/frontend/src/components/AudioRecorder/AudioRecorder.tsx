@@ -85,11 +85,13 @@ export const AudioRecorder = ({
   recording,
   setRecording,
   saveVoiceAsDraft,
+  focusMessageInput,
   onError,
 }: {
   recording: boolean
   setRecording: (f: boolean) => void
   saveVoiceAsDraft: (blob: Blob) => void
+  focusMessageInput: () => void
   onError: (error: AudioRecorderError) => void
 }) => {
   const tx = useTranslationFunction()
@@ -149,6 +151,8 @@ export const AudioRecorder = ({
   }
   const onRecordingStop = () => {
     setRecording(false)
+    setTimeout(() => focusMessageInput())
+
     recorder.current
       ?.stop()
       .getMp3()

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-function-type */
-import { getLogger } from '../../../../shared/logger'
+import { getLogger } from '@deltachat-desktop/shared/logger'
 
 const log = getLogger('renderer/stores/chat/scheduler')
 
@@ -80,7 +80,8 @@ export class ChatStoreScheduler {
         return
       }
 
-      const effect = this.effectQueue.pop()
+      // Use shift() to run effects in strict FIFO order
+      const effect = this.effectQueue.shift()
       if (!effect) {
         throw new Error(
           `Undefined effect in effect queue? This should not happen. Effect is: ${JSON.stringify(

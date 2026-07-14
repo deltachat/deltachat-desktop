@@ -1,9 +1,11 @@
-import { getLogger } from '../../shared/logger'
+import { getLogger } from '@deltachat-desktop/shared/logger'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 
 const log = getLogger('renderer/keybindings')
 
 export enum KeybindAction {
+  AccountsList_SelectNextAccount = 'accountslist:select-next-chat',
+  AccountsList_SelectPreviousAccount = 'accountslist:select-previous-chat',
   ChatList_SelectNextChat = 'chatlist:select-next-chat',
   ChatList_SelectPreviousChat = 'chatlist:select-previous-chat',
   ChatList_ScrollToSelectedChat = 'chatlist:scroll-to-selected-chat',
@@ -21,6 +23,8 @@ export enum KeybindAction {
   Composer_SelectReplyToDown = 'composer:select-reply-to-down',
   Composer_CancelReply = 'composer:cancel-reply',
   NewChat_Open = 'new-chat:open',
+  CommandPalette_Open = 'command-palette:open',
+  CommandPalette_OpenSearch = 'command-palette:open-search',
   Settings_Open = 'settings:open',
   KeybindingCheatSheet_Open = 'keybindinginfo:open',
   MessageList_PageUp = 'msglist:pageup',
@@ -126,13 +130,45 @@ export function matchesNonLetterShortcut(
   const isPrintableAscii = ev.key.length === 1 && ev.key >= ' ' && ev.key <= '~'
   return !isPrintableAscii && ev.code === code
 }
+const regexIsPrintable = /\S| /
+function isPrintableCharacter(str: KeyboardEvent['key']): boolean {
+  // From https://www.w3.org/WAI/ARIA/apg/patterns/combobox/
+  return str.length === 1 && regexIsPrintable.test(str)
+}
+
+function isInput(el: HTMLElement): boolean {
+  return (
+    el.tagName === 'TEXTAREA' ||
+    el.tagName === 'INPUT' ||
+    el.tagName === 'SELECT' ||
+    el.isContentEditable
+  )
+}
+
+function haveOpenDialogs(): boolean {
+  return document.querySelector('dialog:modal') != null
+}
 
 export function keyDownEvent2Action(
   ev: KeyboardEvent
 ): KeybindAction | undefined {
   const { isMac } = runtime.getRuntimeInfo()
 
-  if (window.__contextMenuActive) {
+  // If a dialog is open, disable shortcuts.
+  // This also applies to a context menu being open.
+  //
+  // Perhaps there are some shortcuts that we don't strictly need to disable
+  // when a dialog is open, such as `Settings_Open` and `Debug_MaybeNetwork`,
+  // but it's probably not important to support that,
+  // so let's not complicate things yet.
+  if (
+    (ev.target instanceof HTMLElement && ev.target.closest('dialog') != null) ||
+    // `ev.target.closest('dialog')` doesn't always work as of writing
+    // because of `allowDefaultFocus` in `Dialog.tsx`,
+    // which `.blur()`s the element inside the dialog
+    // and thus makes `<body>` the event target.
+    haveOpenDialogs()
+  ) {
     return
   }
   // Don't capture keys during IME composition (Chinese, Japanese, Korean input)
@@ -148,9 +184,17 @@ export function keyDownEvent2Action(
     } else if (ev.altKey && ev.code === 'ArrowUp') {
       return KeybindAction.ChatList_SelectPreviousChat
     } else if (ev.ctrlKey && ev.code === 'PageDown') {
-      return KeybindAction.ChatList_SelectNextChat
+      if (ev.altKey) {
+        return KeybindAction.AccountsList_SelectNextAccount
+      } else {
+        return KeybindAction.ChatList_SelectNextChat
+      }
     } else if (ev.ctrlKey && ev.code === 'PageUp') {
-      return KeybindAction.ChatList_SelectPreviousChat
+      if (ev.altKey) {
+        return KeybindAction.AccountsList_SelectPreviousAccount
+      } else {
+        return KeybindAction.ChatList_SelectPreviousChat
+      }
     } else if (ev.ctrlKey && ev.code === 'Tab') {
       return !ev.shiftKey
         ? KeybindAction.ChatList_SelectNextChat
@@ -170,6 +214,10 @@ export function keyDownEvent2Action(
       return KeybindAction.ChatList_FocusSearchInput
     } else if ((ev.metaKey || ev.ctrlKey) && matchesLetterShortcut(ev, 'n')) {
       return KeybindAction.NewChat_Open
+    } else if ((ev.metaKey || ev.ctrlKey) && matchesLetterShortcut(ev, 'k')) {
+      return KeybindAction.CommandPalette_OpenSearch
+    } else if ((ev.metaKey || ev.ctrlKey) && matchesLetterShortcut(ev, 'p')) {
+      return KeybindAction.CommandPalette_Open
     } else if (ev.ctrlKey && matchesLetterShortcut(ev, 'm')) {
       return KeybindAction.Composer_Focus
     } else if (
@@ -227,13 +275,61 @@ export function keyDownEvent2Action(
       matchesNonLetterShortcut(ev, '/', 'Slash')
     ) {
       return KeybindAction.KeybindingCheatSheet_Open
+    } else if (
+      // When the user tries to type but the composer is not focused, focus it.
+      //
+      // Accessibility-wise this should be OK, because
+      // https://www.w3.org/WAI/ARIA/apg/patterns/combobox/
+      // has similar behavior, see the "Printable Characters" part.
+      //
+      // See also similar code in Element
+      // https://github.com/element-hq/element-web/blob/c57d66bb45a89451efefc1fcb2c3131040670da6/apps/web/src/components/structures/LoggedInView.tsx#L680-L706
+      //
+      // Don't check Shift (uppercase), and apparently Alt
+      // also needs to be skipped, because it's a common accent modifier.
+      !ev.ctrlKey &&
+      !ev.metaKey &&
+      !(
+        document.activeElement instanceof HTMLElement &&
+        isInput(document.activeElement)
+      ) &&
+      // Regular keyboard "click".
+      ev.code !== 'Space' &&
+      ev.code !== 'Enter' &&
+      isPrintableCharacter(ev.key)
+    ) {
+      // Not `Composer_Focus` because that focuses the composer
+      // only after a `setTimeout`, which would not result
+      // in this keystroke getting typed.
+      const composer = document.getElementsByClassName(
+        'create-or-edit-message-input'
+      )[0]
+      if (!(composer instanceof HTMLElement)) {
+        // Could happen if the composer is not displayed,
+        // e.g. for read-only chats (e.g. channels).
+        log.info(
+          "Tried to focus composer on typing start, but it's not present",
+          composer
+        )
+        return
+      }
+
+      composer.focus()
     }
   } else {
     // fire continuesly as long as button is pressed
     if (ev.ctrlKey && ev.code === 'PageDown') {
-      return KeybindAction.ChatList_SelectNextChat
+      if (ev.altKey) {
+        return KeybindAction.AccountsList_SelectNextAccount
+      } else {
+        return KeybindAction.ChatList_SelectNextChat
+      }
     } else if (ev.ctrlKey && ev.code === 'PageUp') {
-      return KeybindAction.ChatList_SelectPreviousChat
+      if (ev.altKey) {
+        return KeybindAction.AccountsList_SelectPreviousAccount
+      } else {
+        return KeybindAction.ChatList_SelectPreviousChat
+      }
     } else if (ev.code === 'PageUp') {
       if (
         (ev.target as HTMLElement)?.classList.contains(

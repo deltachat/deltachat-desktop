@@ -6,12 +6,11 @@ import classNames from 'classnames'
 
 import { useChatList } from '../../chat/ChatListHelpers'
 import { useLogicVirtualChatList, ChatListPart } from '../../chat/ChatList'
-import MessageBody from '../../message/MessageBody'
 import { useThemeCssVar } from '../../../ThemeManager'
 import { BackendRemote, onDCEvent } from '../../../backend-com'
 import { selectedAccountId } from '../../../ScreenController'
 import { InlineVerifiedIcon } from '../../VerifiedIcon'
-import { getLogger } from '../../../../../shared/logger'
+import { getLogger } from '@deltachat-desktop/shared/logger'
 import Dialog, { DialogBody, DialogContent, DialogHeader } from '../../Dialog'
 import HeaderButton from '../../Dialog/HeaderButton'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
@@ -252,37 +251,30 @@ export function ViewProfileInner({
   return (
     <>
       <DialogContent>
-        <ProfileInfoHeader
-          avatarPath={avatarPath ? avatarPath : undefined}
-          color={contact.color}
-          displayName={displayName}
-          wasSeenRecently={contact.wasSeenRecently}
-          disableFullscreen={
-            isSelfChat ||
-            isDeviceChat ||
-            shouldDisableClickForFullscreen(contact)
-          }
-        />
+        <MessagesDisplayContext.Provider
+          value={{
+            context: 'contact_profile_status',
+            contact_id: contact.id,
+            closeProfileDialog: onClose,
+          }}
+        >
+          <ProfileInfoHeader
+            avatarPath={avatarPath ? avatarPath : undefined}
+            color={contact.color}
+            displayName={displayName}
+            wasSeenRecently={contact.wasSeenRecently}
+            description={statusText}
+            disableFullscreen={
+              isSelfChat ||
+              isDeviceChat ||
+              shouldDisableClickForFullscreen(contact)
+            }
+          />
+        </MessagesDisplayContext.Provider>
         {statusText !== '' && (
-          <>
-            <div className={styles.statusText}>
-              <MessagesDisplayContext.Provider
-                value={{
-                  context: 'contact_profile_status',
-                  contact_id: contact.id,
-                  closeProfileDialog: onClose,
-                }}
-              >
-                <MessageBody text={statusText} disableJumbomoji />
-              </MessagesDisplayContext.Provider>
-            </div>
-            <div
-              className={classNames(
-                'group-separator',
-                styles.extendedSeparator
-              )}
-            ></div>
-          </>
+          <div
+            className={classNames('group-separator', styles.extendedSeparator)}
+          ></div>
         )}
         {!isSelfChat && (
           <div className={styles.contactAttributes}>

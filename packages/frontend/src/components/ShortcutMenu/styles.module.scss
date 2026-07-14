@@ -4,10 +4,10 @@ $transitionDuration: 50ms;
 .shortcutMenu {
   align-items: center;
   display: flex;
-  flex: 0 0 $shortcutMenuWidth;
+  flex: 0 0 var(--shortcut-menu-width, #{$shortcutMenuWidth});
   column-gap: 4px;
   justify-content: space-between;
-  width: $shortcutMenuWidth;
+  width: var(--shortcut-menu-width, #{$shortcutMenuWidth});
 
   visibility: var(--shortcut-menu-visibility);
   opacity: var(--shortcut-menu-multiplier);

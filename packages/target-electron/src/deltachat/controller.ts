@@ -8,17 +8,14 @@ import {
 } from '@deltachat/jsonrpc-client'
 import { getRPCServerPath } from '@deltachat/stdio-rpc-server'
 
-import { getLogger } from '../../../shared/logger.js'
+import { getLogger } from '@deltachat-desktop/shared/logger.js'
 import * as mainWindow from '../windows/main.js'
 import { ExtendedAppMainProcess } from '../types.js'
 import DCWebxdc from './webxdc.js'
 import { DesktopSettings } from '../desktop_settings.js'
 import { StdioServer } from './stdio_server.js'
 import rc_config from '../rc.js'
-import {
-  migrateAccountsIfNeeded,
-  disableDeleteFromServerConfig,
-} from './migration.js'
+import { migrateAccountsIfNeeded } from './migration.js'
 
 const app = rawApp as ExtendedAppMainProcess
 const log = getLogger('main/deltachat')
@@ -145,7 +142,7 @@ export default class DeltaChatController {
       this.account_manager.send(JSON.stringify(message))
     })
 
-    ipcMain.handle('json-rpc-request', (_ev, message) => {
+    ipcMain.on('json-rpc-request', (_ev, message) => {
       this.account_manager.send(message)
     })
 
@@ -155,10 +152,6 @@ export default class DeltaChatController {
       // Because there can be only one consumer of
       // `get_next_event`, and that is the renderer process's JSON-RPC client.
       false
-    )
-    await disableDeleteFromServerConfig(
-      this.jsonrpcRemote.rpc,
-      getLogger('migration')
     )
 
     if (DesktopSettings.state.syncAllAccounts) {
