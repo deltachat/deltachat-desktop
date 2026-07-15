@@ -6,6 +6,7 @@ import {
   Page,
 } from '@playwright/test'
 import path from 'path'
+import fs from 'fs/promises'
 import { loadEnv } from './load-env.js'
 
 loadEnv()
@@ -37,6 +38,19 @@ export function getDataDirPath(index: InstanceInd) {
     'data',
     `app-instance-${instancePort(index)}`
   )
+}
+/**
+ * Removes non-Core Delta Chat settings.
+ *
+ * Delta Chat might cache those, so reload the page after doing this.
+ */
+export async function deleteDeltaChatConfig(index: InstanceInd) {
+  const dir = path.join(getDataDirPath(index), 'browser-runtime-data', 'config')
+  await fs.rm(dir, {
+    // Might already be deleted or not created yet, so ignore the error.
+    force: true,
+  })
+  console.log(`Delted ${dir}`)
 }
 
 export const chatmailServerDomain = process.env.DC_CHATMAIL_DOMAIN
