@@ -27,6 +27,7 @@
     "node": ">=20.0.0"
   },
   "productName": "DeltaChat",
+  "desktopName": "deltachat.desktop",
   "homepage": "https://delta.chat",
   "scripts": {
     "check:types": "tsc --noEmit --noUncheckedIndexedAccess false && tsc --noEmit --noUncheckedIndexedAccess false -p runtime-electron || node ./bin/printCheckWarning.js",
