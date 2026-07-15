@@ -31,6 +31,13 @@ export async function openInstancePage(
   await page.goto('/')
   return { context, page }
 }
+export function getDataDirPath(index: InstanceInd) {
+  return path.join(
+    import.meta.dirname,
+    'data',
+    `app-instance-${instancePort(index)}`
+  )
+}
 
 export const chatmailServerDomain = process.env.DC_CHATMAIL_DOMAIN
   ? process.env.DC_CHATMAIL_DOMAIN

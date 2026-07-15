@@ -8,6 +8,7 @@ import {
   NUM_APP_INSTANCES,
   instanceBaseURL,
   instancePort,
+  getDataDirPath,
 } from './playwright-helper.js'
 
 loadEnv()
@@ -90,11 +91,7 @@ export default defineConfig<TestOptions>({
       env: {
         ...(process.env as Record<string, string>),
         WEB_PORT: port.toString(),
-        DATA_DIR: path.join(
-          import.meta.dirname,
-          'data',
-          `app-instance-${port}`
-        ),
+        DATA_DIR: getDataDirPath(index),
       },
     }
   }),
