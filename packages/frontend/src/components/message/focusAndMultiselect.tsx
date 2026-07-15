@@ -66,7 +66,11 @@ export function useMessageFocusAndMultiselectContextValue(props: {
     // even though all you did is click a link inside of it.
     { onNormalClick: 'unselectAll' }
   )
-  return { ...multiselect, resetSelection }
+  // Memoized because it is used as a context value.
+  return useMemo(
+    () => ({ ...multiselect, resetSelection }),
+    [multiselect, resetSelection]
+  )
 }
 
 export function useMessageFocusAndMultiselect(

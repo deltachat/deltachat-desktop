@@ -17,7 +17,9 @@ type RenderMessageProps = {
 
 const log = getLogger('renderer/message/MessageWrapper')
 
-export function MessageWrapper(props: RenderMessageProps) {
+export const MessageWrapper = React.memo(function MessageWrapper(
+  props: RenderMessageProps
+) {
   const observerRef = useRef<HTMLDivElement>(null)
   const state = props.message.state
   const shouldInViewObserve =
@@ -73,4 +75,4 @@ export function MessageWrapper(props: RenderMessageProps) {
       )}
     </li>
   )
-}
+})

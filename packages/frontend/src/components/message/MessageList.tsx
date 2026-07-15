@@ -107,7 +107,6 @@ export default function MessageList({
   } = messageListStore
   const {
     oldestFetchedMessageListItemIndex,
-    newestFetchedMessageListItemIndex,
     messageCache,
     messageListItems,
     viewState,
@@ -281,17 +280,20 @@ export default function MessageList({
       messageListRef.current.scrollTop -
       messageListRef.current.clientHeight
 
+    const {
+      newestFetchedMessageListItemIndex: newestFetchedIndex,
+      messageListItems: currentMessageListItems,
+    } = messageListStore.getState()
+
     const isNewestMessageLoaded =
-      newestFetchedMessageListItemIndex === messageListItems.length - 1
+      newestFetchedIndex === currentMessageListItems.length - 1
     const newShowJumpDownButton =
       !isNewestMessageLoaded ||
       distanceToBottom > maxScrollToBottomDistanceConsideredShort
     // Don't flash the button during a programmatic smooth scroll —
     // we already know we're scrolling to the bottom.
     if (pendingProgrammaticSmoothScrollTo.current === null) {
-      if (newShowJumpDownButton != showJumpDownButton) {
-        setShowJumpDownButton(newShowJumpDownButton)
-      }
+      setShowJumpDownButton(newShowJumpDownButton)
     }
     if (!newShowJumpDownButton) {
       clearJumpStack()
@@ -324,10 +326,8 @@ export default function MessageList({
     clearJumpStack,
     fetchMoreBottom,
     fetchMoreTop,
-    messageListItems.length,
-    newestFetchedMessageListItemIndex,
+    messageListStore,
     scheduler,
-    showJumpDownButton,
   ])
   const onScrollEnd = useCallback((_ev: Event) => {
     clearTimeout(pendingProgrammaticSmoothScrollTimeout.current)
@@ -669,14 +669,17 @@ export default function MessageList({
     }
   }, [])
 
+  const messagesDisplayContextValue = useMemo(
+    () => ({
+      context: 'chat_messagelist' as const,
+      chatId: chat.id,
+      isDeviceChat: chat.isDeviceChat,
+    }),
+    [chat.id, chat.isDeviceChat]
+  )
+
   return (
-    <MessagesDisplayContext.Provider
-      value={{
-        context: 'chat_messagelist',
-        chatId: chat.id,
-        isDeviceChat: chat.isDeviceChat,
-      }}
-    >
+    <MessagesDisplayContext.Provider value={messagesDisplayContextValue}>
       <MessageListInner
         onScroll={onScroll}
         onScrollEnd={onScrollEnd}
@@ -748,11 +751,14 @@ export const MessageListInner = React.memo(
       loadMissingMessages,
     } = props
 
-    const conversationType: ConversationType = {
-      hasMultipleParticipants: chat.chatType !== 'Single',
-      isDeviceChat: chat.isDeviceChat as boolean,
-      chatType: chat.chatType,
-    }
+    const conversationType: ConversationType = useMemo(
+      () => ({
+        hasMultipleParticipants: chat.chatType !== 'Single',
+        isDeviceChat: chat.isDeviceChat as boolean,
+        chatType: chat.chatType,
+      }),
+      [chat.chatType, chat.isDeviceChat]
+    )
 
     useKeyBindingAction(KeybindAction.MessageList_PageUp, () => {
       if (messageListRef.current) {
@@ -980,16 +986,6 @@ export const MessageListInner = React.memo(
         </div>
       </>
     )
-  },
-  (prevProps, nextProps) => {
-    const areEqual: boolean =
-      prevProps.activeView === nextProps.activeView &&
-      prevProps.messageCache === nextProps.messageCache &&
-      prevProps.oldestFetchedMessageIndex ===
-        nextProps.oldestFetchedMessageIndex &&
-      prevProps.onScroll === nextProps.onScroll &&
-      prevProps.onWheel === nextProps.onWheel
-    return areEqual
   }
 )
 
@@ -1137,7 +1133,9 @@ function JumpDownButton({
   )
 }
 
-export function DayMarker(props: { timestamp: number }) {
+export const DayMarker = React.memo(function DayMarker(props: {
+  timestamp: number
+}) {
   const { timestamp } = props
   const tx = useTranslationFunction()
 
@@ -1170,4 +1168,4 @@ export function DayMarker(props: { timestamp: number }) {
       </div>
     </li>
   )
-}
+})

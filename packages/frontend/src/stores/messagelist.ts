@@ -227,11 +227,35 @@ export class MessageListStore extends Store<MessageListState> {
     super(defaultState(), 'MessageListStore')
   }
 
+  private activeViewCache: {
+    items: T.MessageListItem[]
+    start: number
+    end: number
+    view: T.MessageListItem[]
+  } | null = null
+
+  /**
+   * Cache {@linkcode MessageListStore.activeView} and return the cached reference
+   * if nothing changed, so that it doesn't trigger `React.memo` to rerender.
+   */
   get activeView() {
+    const items = this.state.messageListItems
     const start = this.state.oldestFetchedMessageListItemIndex
     const end = this.state.newestFetchedMessageListItemIndex
-    const view = getView(this.state.messageListItems, start, end)
+
+    const cache = this.activeViewCache
+    if (
+      cache !== null &&
+      cache.items === items &&
+      cache.start === start &&
+      cache.end === end
+    ) {
+      return cache.view
+    }
+
+    const view = getView(items, start, end)
     // this.log.debug('get activeView', { end, start, view })
+    this.activeViewCache = { items, start, end, view }
     return view
   }
 

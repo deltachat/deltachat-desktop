@@ -6,6 +6,7 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from 'react'
 
@@ -255,15 +256,18 @@ export function RovingTabindexProvider({
     [activeElement, classNameOfTargetElements, direction, wrapperElementRef]
   )
 
+  const value: ContextValue = useMemo(
+    () => ({
+      activeElement,
+      onKeydown,
+      setActiveElement,
+      classNameOfTargetElements,
+    }),
+    [activeElement, onKeydown, classNameOfTargetElements]
+  )
+
   return (
-    <RovingTabindexContext.Provider
-      value={{
-        activeElement,
-        onKeydown,
-        setActiveElement,
-        classNameOfTargetElements,
-      }}
-    >
+    <RovingTabindexContext.Provider value={value}>
       {children}
     </RovingTabindexContext.Provider>
   )

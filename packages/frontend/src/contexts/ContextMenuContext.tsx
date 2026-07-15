@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useState } from 'react'
+import React, { createContext, useCallback, useMemo, useState } from 'react'
 
 import { ContextMenuLayer } from '../components/ContextMenu'
 
@@ -38,9 +38,12 @@ export function ContextMenuProvider({ children }: PropsWithChildren<{}>) {
     )
   }, [])
 
-  const value = {
-    openContextMenu: openContextMenuFn,
-  }
+  const value = useMemo(
+    () => ({
+      openContextMenu: openContextMenuFn,
+    }),
+    [openContextMenuFn]
+  )
 
   return (
     <ContextMenuContext.Provider value={value}>
