@@ -6,6 +6,7 @@ import {
   Page,
 } from '@playwright/test'
 import path from 'path'
+import https from 'https'
 import { loadEnv } from './load-env.js'
 
 loadEnv()
@@ -37,6 +38,67 @@ export const chatmailServerDomain = process.env.DC_CHATMAIL_DOMAIN
   : // Use fallback so that the tests can run on people's forks
     // without them having to specify this env variable in repository settings.
     'ci-chatmail.testrun.org'
+
+/**
+ * True if `host` is a bare IPv4 address rather than a DNS name.
+ */
+export function isIpAddress(host: string): boolean {
+  return /^(\d{1,3}\.){3}\d{1,3}$/.test(host)
+}
+
+/**
+ * Create an account on a (self-signed, IP-only) chatmail relay via its
+ * `POST /new` endpoint and return the `dclogin_url` it hands back
+ */
+export async function createAccountOnRelay(relayIp: string): Promise<string> {
+  const body = await new Promise<string>((resolve, reject) => {
+    const req = https.request(
+      {
+        method: 'POST',
+        host: relayIp,
+        path: '/new',
+        // LAN relays are self-signed and reachable only by IP.
+        rejectUnauthorized: false,
+      },
+      res => {
+        let data = ''
+        res.on('data', chunk => (data += chunk))
+        res.on('end', () => {
+          if (res.statusCode && res.statusCode >= 400) {
+            reject(
+              new Error(
+                `relay POST /new failed: ${res.statusCode} ${data.slice(0, 200)}`
+              )
+            )
+          } else {
+            resolve(data)
+          }
+        })
+      }
+    )
+    req.on('error', reject)
+    req.end()
+  })
+  let parsed: { email?: string; password?: string; dclogin_url?: string }
+  try {
+    parsed = JSON.parse(body)
+  } catch {
+    throw new Error(`unexpected /new response: ${body.slice(0, 200)}`)
+  }
+  if (parsed.dclogin_url) {
+    return parsed.dclogin_url
+  }
+  // Fallback for relays that return only credentials: build the DCLOGIN url
+  // ourselves, pinning imap/smtp to the relay IP and accepting its
+  // self-signed cert (`ic=3`).
+  if (parsed.email && parsed.password) {
+    const p = encodeURIComponent(parsed.password)
+    return `dclogin:${parsed.email}?p=${p}&v=1&ih=${relayIp}&sh=${relayIp}&ic=3`
+  }
+  throw new Error(
+    `relay /new response has neither dclogin_url nor email+password: ${body.slice(0, 200)}`
+  )
+}
 
 export const mailServerUrl = process.env.DC_MAIL_SERVER
 
@@ -196,7 +258,14 @@ export async function createNewProfile(
     if (!chatmailServerDomain) {
       throw new Error('DC_CHATMAIL_DOMAIN env var not set, cannot run tests')
     }
-    dcAccountLink = `dcaccount:${chatmailServerDomain satisfies string}`
+    if (isIpAddress(chatmailServerDomain)) {
+      // A bare-IP relay can't be onboarded via DCACCOUNT (core would try the
+      // unresolvable `imap.<ip>`), so we create the account on the relay and
+      // use DCLOGIN url to create the profile
+      dcAccountLink = await createAccountOnRelay(chatmailServerDomain)
+    } else {
+      dcAccountLink = `dcaccount:${chatmailServerDomain satisfies string}`
+    }
   } else {
     if (!mailServerUrl || mailServerToken == undefined) {
       throw new Error(
