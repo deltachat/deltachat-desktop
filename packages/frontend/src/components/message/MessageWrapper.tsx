@@ -17,8 +17,6 @@ type RenderMessageProps = {
 
 const log = getLogger('renderer/message/MessageWrapper')
 
-// `React.memo`, so that a single changed message doesn't re-render
-// every other message in the list.
 export const MessageWrapper = React.memo(function MessageWrapper(
   props: RenderMessageProps
 ) {

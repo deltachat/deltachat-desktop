@@ -293,7 +293,6 @@ export default function MessageList({
     // Don't flash the button during a programmatic smooth scroll —
     // we already know we're scrolling to the bottom.
     if (pendingProgrammaticSmoothScrollTo.current === null) {
-      // React bails out of re-rendering if the value didn't change.
       setShowJumpDownButton(newShowJumpDownButton)
     }
     if (!newShowJumpDownButton) {
