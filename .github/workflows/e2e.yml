@@ -3,14 +3,14 @@ on:
   push:
     branches: [main]
     paths-ignore:
-      - 'docs/**'  # only trigger build if a file outside of /docs was changed
+      - 'docs/**' # only trigger build if a file outside of /docs was changed
       - '_locales/*.xml'
       - '.vscode/**'
       - 'README_ASSETS/**'
       - 'README.md'
   pull_request:
     paths-ignore:
-      - 'docs/**'  # only trigger build if a file outside of /docs was changed
+      - 'docs/**' # only trigger build if a file outside of /docs was changed
       - '_locales/*.xml'
       - '.vscode/**'
       - 'README_ASSETS/**'
@@ -26,38 +26,85 @@ jobs:
       CI: true
       NODE_ENV: test
       VERSION_INFO_GIT_REF: ${{ github.ref }}
-      DC_CHATMAIL_DOMAIN: ${{ vars.DC_CHATMAIL_DOMAIN }}
+      DC_CHATMAIL_DOMAIN: 127.0.0.1
+      DC_FRONTEND_NO_TLS: true
       DC_MAIL_SERVER: ${{ vars.CI_MAIL_SERVER }}
       DC_MAIL_SERVER_TOKEN: ${{ secrets.CI_MAIL_SERVER_TOKEN }}
-    timeout-minutes: 60
+    timeout-minutes: 75
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-latest]
       fail-fast: false
     steps:
-    - uses: actions/checkout@v6
-      with:
-        show-progress: false
-        persist-credentials: false
-    - uses: actions/setup-node@v4
-      with:
-        node-version: 22.x
-    - name: Install dependencies
-      run: npm install -g pnpm && pnpm install
-    - name: Install Playwright Browsers
-      working-directory: ./packages/e2e-tests
-      run: pnpm exec playwright install --with-deps --only-shell chromium
-    - name: Run e2e tests
-      env:
-        DC_FRONTEND_NO_TLS: true
-      run: pnpm e2e
-    - uses: actions/upload-artifact@v4
-      # We may want to not upload artifacts if tests pass,
-      # (`if: ${{ failure() && !cancelled() }}`)
-      # but we want to debug flaky tests, so let's always upload them.
-      if: ${{ !cancelled() }}
-      with:
-        name: e2e-report
-        path: packages/e2e-tests/playwright-report
-        retention-days: 10
+      - uses: actions/checkout@v6
+        with:
+          show-progress: false
+          persist-credentials: false
+      - name: Checkout chatmail Docker setup
+        uses: actions/checkout@v6
+        with:
+          repository: chatmail/docker
+          path: .ci/docker
+          show-progress: false
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+      - name: Install dependencies
+        run: npm install -g pnpm && pnpm install
+      - name: Install Playwright Browsers
+        working-directory: ./packages/e2e-tests
+        run: pnpm exec playwright install --with-deps --only-shell chromium
+      - name: Start local chatmail relay
+        working-directory: ./.ci/docker
+        env:
+          CHATMAIL_IMAGE: ghcr.io/chatmail/docker:main
+        run: |
+          printf 'MAIL_DOMAIN=127.0.0.1\n' > .env
+          docker pull "$CHATMAIL_IMAGE"
+          docker compose up --no-build -d chatmail
+      - name: Wait for chatmail relay
+        run: |
+          for attempt in {1..60}; do
+            status="$(docker inspect --format='{{.State.Health.Status}}' chatmail 2>/dev/null || true)"
+            if [ "$status" = "healthy" ]; then
+              exit 0
+            fi
+
+            if [ "$status" = "unhealthy" ]; then
+              docker logs chatmail
+              docker exec chatmail get-service-logs || true
+              exit 1
+            fi
+
+            echo "Waiting for chatmail relay to become healthy (attempt ${attempt}/60, status: ${status:-starting})"
+            sleep 10
+          done
+
+          docker logs chatmail
+          docker exec chatmail get-service-logs || true
+          exit 1
+      - name: Run e2e tests
+        run: pnpm e2e
+      - name: Collect chatmail logs
+        if: ${{ !cancelled() }}
+        run: |
+          mkdir -p chatmail-logs
+          docker logs chatmail > chatmail-logs/docker.log 2>&1 || true
+          docker exec chatmail get-service-logs > chatmail-logs/services.log 2>&1 || true
+      - name: Stop chatmail relay
+        if: ${{ always() }}
+        working-directory: ./.ci/docker
+        run: docker compose down --volumes
+      - uses: actions/upload-artifact@v4
+        # We may want to not upload artifacts if tests pass,
+        # (`if: ${{ failure() && !cancelled() }}`)
+        # but we want to debug flaky tests, so let's always upload them.
+        if: ${{ !cancelled() }}
+        with:
+          name: e2e-report
+          path: |
+            packages/e2e-tests/playwright-report
+            chatmail-logs
+          retention-days: 10
