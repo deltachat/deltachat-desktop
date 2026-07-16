@@ -97,6 +97,7 @@ jobs:
           name: e2e-report-${{ matrix.relay }}
           path: |
             packages/e2e-tests/playwright-report
+            packages/e2e-tests/playwright-report-public
             chatmail-logs
           if-no-files-found: ignore
           retention-days: 10
