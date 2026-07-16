@@ -127,6 +127,19 @@ export const test = base.extend<TestOptions>({
   isChatmail: [true, { option: true }],
 })
 
+/**
+ * we skip tests that use instant onboarding against a self-signed relay
+ * because the DCACCOUNT mechanism does not work yet with self-signed relays
+ *
+ * https://github.com/chatmail/core/issues/8211
+ */
+export function skipOnIpRelay() {
+  test.skip(
+    isIpAddress(chatmailServerDomain),
+    'cannot onboard against a self-signed IP-only relay, see chatmail/core#8211'
+  )
+}
+
 const fixturesPath = path.join(import.meta.dirname, 'fixtures')
 
 export async function reloadPage(page: Page): Promise<void> {
@@ -152,6 +165,10 @@ export async function switchToProfile(
     1,
     { timeout: 10000 }
   )
+  // Move the pointer off the account item, otherwise its hover tooltip
+  // (AccountHoverInfo) stays open and intercepts clicks on elements
+  // underneath it, e.g. the qr-scan-button.
+  await page.mouse.move(0, 0)
 }
 
 /**

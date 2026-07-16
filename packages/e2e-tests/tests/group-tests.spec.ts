@@ -14,6 +14,7 @@ import {
   test,
   createGroupChat,
   createChat,
+  skipOnIpRelay,
 } from '../playwright-helper.js'
 
 test.describe.configure({
@@ -165,6 +166,7 @@ test('Invite existing user to group', async ({ browserName }) => {
 })
 
 test('Invite new user to group', async ({ browserName }) => {
+  skipOnIpRelay()
   if (browserName.toLowerCase().indexOf('chrom') > -1) {
     await page.context().grantPermissions(['clipboard-read', 'clipboard-write'])
   }
@@ -265,10 +267,13 @@ test('Remove user from group', async () => {
 
 test('Readd user to group', async () => {
   // user A adds user B again
-  const userA = existingProfiles[0]
-  const userB = existingProfiles[1]
-  const userC = existingProfiles[2]
-  const userD = existingProfiles[3]
+  const userA = getUser(0, existingProfiles)
+  const userB = getUser(1, existingProfiles)
+  const userC = getUser(2, existingProfiles)
+  // userD only exists if 'Invite new user to group' ran
+  // (it is skipped on IP-only relays)
+  const userD: User | undefined = existingProfiles[3]
+  const membersWithoutB = ['Me', userC.name, ...(userD ? [userD.name] : [])]
   await switchToProfile(page, userA.id)
   const chatListItem = page
     .locator('.chat-list .chat-list-item')
@@ -281,9 +286,11 @@ test('Readd user to group', async () => {
   // because the "Add Members" dialog won't auto-update.
   // We probably should make it auto-updateable as well.
   const membersList = page.getByTestId('group-member-list')
-  await expect(membersList.getByRole('listitem')).toHaveCount(3)
+  await expect(membersList.getByRole('listitem')).toHaveCount(
+    membersWithoutB.length
+  )
   await expect(membersList).not.toContainText(userB.name)
-  for (const name of ['Me', userC.name, userD.name]) {
+  for (const name of membersWithoutB) {
     await expect(membersList).toContainText(name)
   }
 
@@ -296,10 +303,12 @@ test('Readd user to group', async () => {
   await userBRow.click()
   await expect(userBRow.locator('.checkmark')).toBeVisible()
   await addMemberDialog.getByTestId('ok').click()
-  for (const name of ['Me', userB.name, userC.name, userD.name]) {
+  for (const name of [...membersWithoutB, userB.name]) {
     await expect(membersList).toContainText(name)
   }
-  await expect(membersList.getByRole('listitem')).toHaveCount(4)
+  await expect(membersList.getByRole('listitem')).toHaveCount(
+    membersWithoutB.length + 1
+  )
   await page.getByTestId('view-group-dialog-header-close').click()
 })
 
@@ -646,6 +655,18 @@ test('create channel and add members', async ({ browserName }) => {
     .locator('.chat-list .chat-list-item')
     .filter({ hasText: channelName })
   await expect(channelChatItemB).toBeVisible()
+
+  // Wait for the securejoin handshake to finish: the resulting
+  // "You joined the channel." message must be seen in the (auto-opened)
+  // channel chat while userB is still selected. Otherwise it arrives
+  // after we switch to userA and counts as a second unread message,
+  // making the badge assertion below flaky
+  await expect(
+    page
+      .getByRole('list', { name: 'Messages' })
+      .getByRole('listitem')
+      .filter({ hasText: 'You joined the channel.' })
+  ).toBeVisible()
 
   // userA posts a message to the channel
   await switchToProfile(page, userA.id)
