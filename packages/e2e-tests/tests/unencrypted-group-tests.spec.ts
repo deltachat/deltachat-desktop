@@ -11,6 +11,8 @@ import {
   clickThroughTestIds,
   getUser,
   createChat,
+  mailServerUrl,
+  mailServerToken,
 } from '../playwright-helper.js'
 
 test.describe.configure({
@@ -35,6 +37,10 @@ test.beforeAll(async ({ browser, isChatmail }) => {
       'Non encrypted groups are not possible on chatmail accounts'
     )
   }
+  test.skip(
+    !mailServerUrl || mailServerToken == undefined,
+    'DC_MAIL_SERVER / DC_MAIL_SERVER_TOKEN are not configured'
+  )
   const contextForProfileCreation = await browser.newContext()
   const pageForProfileCreation = await contextForProfileCreation.newPage()
   await reloadPage(pageForProfileCreation)
