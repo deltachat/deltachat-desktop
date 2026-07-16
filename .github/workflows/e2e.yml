@@ -85,8 +85,19 @@ jobs:
           docker logs chatmail
           docker exec chatmail get-service-logs || true
           exit 1
-      - name: Run e2e tests
-        run: pnpm e2e
+      - name: Build browser target
+        run: pnpm build:browser
+      - name: Run e2e tests (local chatmail relay)
+        run: pnpm --filter=e2e-tests e2e
+      # Instant onboarding (DCACCOUNT) does not work with self-signed
+      # IP-only local relay (see chatmail/core#8211)
+      # so we run it against a public chatmail relay instead.
+      - name: Run instant onboarding e2e tests (public chatmail relay)
+        if: ${{ !cancelled() }}
+        run: pnpm --filter=e2e-tests e2e qrcode instant-onboarding
+        env:
+          DC_CHATMAIL_DOMAIN: ci-chatmail.testrun.org
+          PLAYWRIGHT_HTML_OUTPUT_DIR: playwright-report-public
       - name: Collect chatmail logs
         if: ${{ !cancelled() }}
         run: |
@@ -106,5 +117,6 @@ jobs:
           name: e2e-report
           path: |
             packages/e2e-tests/playwright-report
+            packages/e2e-tests/playwright-report-public
             chatmail-logs
           retention-days: 10
