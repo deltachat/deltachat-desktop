@@ -62,14 +62,16 @@ export default defineConfig<TestOptions>({
         isChatmail: true, // create profiles on a dedicated chatmail server
       },
     },
-    // Our non chatmail server is too unreliable right now to be used in CI
-    // {
-    //   name: 'non-chatmail',
-    //   use: {
-    //     ...devices['Desktop Chrome'],
-    //     isChatmail: false, // create profiles on a dedicated non-chatmail server
-    //   },
-    // },
+    {
+      name: 'non-chatmail',
+      // Only the tests that need plain (non-chatmail) email accounts.
+      // They skip themselves if DC_MAIL_SERVER is not configured.
+      testMatch: /unencrypted-group-tests\.spec\.ts/,
+      use: {
+        ...devices['Desktop Chrome'],
+        isChatmail: false, // create profiles on a dedicated non-chatmail server
+      },
+    },
   ],
 
   webServer: Array.from({ length: NUM_APP_INSTANCES }, (_, _index) => {
