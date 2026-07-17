@@ -121,10 +121,10 @@ impl MenuManager {
         // next `update_all`.
         #[cfg(not(target_os = "macos"))]
         {
-            let menu = menu_generator_arc(app)?;
             if crate::settings::get_hide_menu_bar(app) {
                 win.remove_menu()?;
             } else {
+                let menu = menu_generator_arc(app)?;
                 win.set_menu(menu)?;
             }
         }
