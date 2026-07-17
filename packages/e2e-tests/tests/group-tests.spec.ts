@@ -85,13 +85,13 @@ test('create group', async () => {
   await expect(badgeNumber).toHaveText('1')
 })
 
-test('check "New E-Mail" option presence', async ({ isChatmail }) => {
+test('check "New Email" option presence', async ({ isChatmail }) => {
   await page.locator('#new-chat-button').click()
 
   await expect(page.getByRole('button', { name: 'New Group' })).toBeVisible()
 
   // Since we're on a Chatmail server, this button is not supposed to be shown.
-  const newEmailButton = page.getByRole('button', { name: 'New E-Mail' })
+  const newEmailButton = page.getByRole('button', { name: 'New Email' })
   if (isChatmail) {
     await expect(newEmailButton).not.toBeVisible()
     // Same button, but double-check, by ID.

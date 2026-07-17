@@ -13,6 +13,7 @@ import {
   createChat,
   mailServerUrl,
   mailServerToken,
+  setForceEncryption,
 } from '../playwright-helper.js'
 
 test.describe.configure({
@@ -47,6 +48,7 @@ test.beforeAll(async ({ browser, isChatmail }) => {
 
   existingProfiles =
     (await loadExistingProfiles(pageForProfileCreation)) ?? existingProfiles
+  test.setTimeout(180_000)
 
   await createProfiles(
     numberOfProfiles,
@@ -54,6 +56,14 @@ test.beforeAll(async ({ browser, isChatmail }) => {
     pageForProfileCreation,
     browser.browserType().name(),
     isChatmail
+  )
+
+  // Unencrypted ("New Email") chats can only be created when
+  // force_encryption is disabled
+  await setForceEncryption(
+    pageForProfileCreation,
+    getUser(0, existingProfiles).id,
+    false
   )
 
   await contextForProfileCreation.close()
@@ -82,7 +92,7 @@ test.afterAll(async ({ browser }) => {
 /**
  * create an unencrypted group with plain email contacts
  */
-test('check "New E-Mail" option is shown and a chat can be created', async () => {
+test('check "New Email" option is shown and a chat can be created', async () => {
   const userA = existingProfiles[0]
   const userB = existingProfiles[1]
   const userC = existingProfiles[2]
@@ -93,7 +103,7 @@ test('check "New E-Mail" option is shown and a chat can be created', async () =>
   await page.locator('#new-chat-button').click()
 
   // Since we're on a non-chatmail server, this button is supposed to be shown.
-  const newEmailButton = page.getByRole('button', { name: 'New E-Mail' })
+  const newEmailButton = page.getByRole('button', { name: 'New Email' })
   await expect(newEmailButton).toBeVisible()
 
   await newEmailButton.click()
@@ -104,21 +114,24 @@ test('check "New E-Mail" option is shown and a chat can be created', async () =>
   ).not.toBeVisible()
   await page.locator('#addmember').click()
 
-  await page.getByTestId('add-member-search').fill(emailUserB)
+  const searchInput = page.getByTestId('add-member-search')
+  await searchInput.fill(emailUserB)
 
   const contactRowA = page
     .locator('.styles_module_addMemberContactList li button')
     .filter({ hasText: emailUserB })
     .first()
   await contactRowA.click()
+  await expect(searchInput).toHaveValue('')
 
-  await page.getByTestId('add-member-search').fill(emailUserC)
+  await searchInput.fill(emailUserC)
 
   const contactRowB = page
     .locator('.styles_module_addMemberContactList li button')
     .filter({ hasText: emailUserC })
     .first()
   await contactRowB.click()
+  await expect(searchInput).toHaveValue('')
 
   await page.getByTestId('ok').click()
 
@@ -152,11 +165,9 @@ test('check appropriate members are shown for new encrypted group', async () => 
   const contactList = page.getByTestId('add-member-dialog').locator('li button')
   // only self and the verified user should be visible
   await expect(contactList).toHaveCount(2)
-  // TODO: this should show the contact by name but it fails with a
-  // screenshot showing the mail address instead of the name ??
   await addMemberDialog
     .locator('.contact-list-item')
-    .filter({ hasText: userD.address })
+    .filter({ hasText: userD.name })
     .click()
   const contactShouldNotBeListed = addMemberDialog
     .locator('.contact-list-item')
@@ -244,12 +255,16 @@ test('chat list item context menu', async () => {
   await chatListItem.click({
     button: 'right',
   })
-  // "Leave Group" does not apply to unencrypted groups.
-  await expect(page.getByRole('menuitem', { name: 'Delete' })).toBeVisible()
-  await expect(
-    page.getByRole('menuitem', { name: 'Leave Group' })
-  ).not.toBeVisible()
-  await expect(page.getByRole('menuitem')).toHaveCount(5)
+  // "Leave Group" does not apply to unencrypted groups,
+  // "Delete" is shown instead.
+  await expect(page.getByRole('menuitem')).toHaveText([
+    'Pin Chat',
+    'Unread',
+    'Mute Notifications',
+    'Archive Chat',
+    'View Profile',
+    'Delete',
+  ])
 
   await page.getByRole('menuitem').first().press('Escape')
   await expect(page.getByRole('menuitem')).not.toBeVisible()
