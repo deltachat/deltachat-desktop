@@ -334,7 +334,7 @@ export function ViewProfileInner({
 
                       activeChatId: null,
                       activeContextMenuChatIds: [],
-                      openContextMenu: async () => {},
+                      openContextMenu: undefined,
                     }}
                   >
                     {ChatListItemRowChat}

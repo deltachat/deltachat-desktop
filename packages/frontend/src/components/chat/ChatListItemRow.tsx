@@ -52,7 +52,9 @@ export type ChatListItemData = {
   onChatClick: (chatId: number) => void
   // onChatClick: (event: React.MouseEvent, chatId: number) => void
   // onChatFocus?: (chatId: number) => void
-  openContextMenu: ReturnType<typeof useChatContextMenu>['openContextMenu']
+  openContextMenu:
+    | ReturnType<typeof useChatContextMenu>['openContextMenu']
+    | undefined
   activeContextMenuChatIds: ReturnType<
     typeof useChatContextMenu
   >['activeContextMenuChatIds']
@@ -146,6 +148,11 @@ export const ChatListItemRowChat = React.memo<{
 
   const onContextMenu = useCallback(
     (event: React.MouseEvent) => {
+      if (openContextMenu == null) {
+        throw new Error(
+          'tried to open context menu, but its callback is nullish'
+        )
+      }
       // So, do we handle archive link multiselect here?
       if (chat == null) {
         // Probably still loading.
@@ -237,6 +244,10 @@ export const ChatListItemRowChat = React.memo<{
   const onContextMenuRef = useRef(onContextMenu)
   // eslint-disable-next-line react-hooks/refs
   onContextMenuRef.current = onContextMenu
+  const onContextMenuCallback = useCallback(
+    (event: React.MouseEvent) => onContextMenuRef.current(event),
+    []
+  )
 
   const multiselectOnFocus = multiselect?.onFocus
   const onFocus = useCallback(
@@ -276,10 +287,7 @@ export const ChatListItemRowChat = React.memo<{
           (event: React.FocusEvent) => onFocusRef.current(event),
           []
         )}
-        onContextMenu={useCallback(
-          (event: React.MouseEvent) => onContextMenuRef.current(event),
-          []
-        )}
+        onContextMenu={openContextMenu ? onContextMenuCallback : undefined}
         isContextMenuActive={activeContextMenuChatIds.includes(chatId)}
         aria-setsize={chatListIds.length}
         aria-posinset={index + 1}
