@@ -399,6 +399,35 @@ export async function getProfile(
   }
 }
 
+/**
+ * Toggle the "Enforce Encryption for All Relays" setting
+ * Unencrypted ("New Email") chats can only be created when it is disabled.
+ */
+export async function setForceEncryption(
+  page: Page,
+  accountId: string,
+  enabled: boolean
+): Promise<void> {
+  await page.getByTestId(`account-item-${accountId}`).click({ button: 'right' })
+  await page.getByTestId('open-settings-menu-item').click()
+  await page.getByTestId('open-advanced-settings').click()
+  await page.getByTestId('open-transport-settings').click()
+  await page.getByLabel('Edit Relay').first().click()
+  await page.locator('#show-advanced-button').click()
+  const switchInput = page.getByRole('checkbox', {
+    name: 'Enforce Encryption for All Relays',
+  })
+  if ((await switchInput.isChecked()) !== enabled) {
+    await switchInput.press('Space')
+  }
+  await expect(switchInput).toBeChecked({ checked: enabled })
+  await page.getByTestId('ok').click()
+  // Wait for the re-configuration to finish and the edit dialog to close.
+  await expect(page.locator('#addr')).not.toBeVisible({ timeout: 60_000 })
+  await page.getByTestId('transports-settings-close').click()
+  await page.getByTestId('settings-advanced-close').click()
+}
+
 export async function createProfiles(
   number: number,
   existingProfiles: User[],
