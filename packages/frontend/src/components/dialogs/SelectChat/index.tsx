@@ -195,7 +195,7 @@ function SelectChatList({
 
                     activeChatId: null,
                     activeContextMenuChatIds: [],
-                    openContextMenu: async () => {},
+                    openContextMenu: undefined,
                   }}
                 >
                   {ChatListItemRowChat}
