@@ -237,7 +237,7 @@ onReady(() => {
   })
 
   runtime.onDesktopSettingChanged = (key, value) => {
-    SettingsStoreInstance.reducer.setDesktopSetting(key as any, value)
+    SettingsStoreInstance.reducer.setDesktopSetting(key, value)
   }
 })
 

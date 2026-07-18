@@ -152,7 +152,10 @@ class BrowserRuntime implements Runtime {
   onResumeFromSleep: (() => void) | undefined
   onOpenQrUrl: ((url: string) => void) | undefined
   onDesktopSettingChanged:
-    | ((key: string, value: string | number | boolean) => void)
+    | ((
+        key: keyof DesktopSettingsType,
+        value: string | number | boolean
+      ) => void)
     | undefined
   onToggleNotifications: (() => void) | undefined
 

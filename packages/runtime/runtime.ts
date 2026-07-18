@@ -213,7 +213,10 @@ export interface Runtime {
   onResumeFromSleep: (() => void) | undefined
   onToggleNotifications: (() => void) | undefined
   onDesktopSettingChanged:
-    | ((key: string, value: string | number | boolean) => void)
+    | ((
+        key: keyof DesktopSettingsType,
+        value: string | number | boolean
+      ) => void)
     | undefined
 
   checkMediaAccess: (mediaType: MediaType) => Promise<MediaAccessStatus>

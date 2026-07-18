@@ -365,7 +365,10 @@ class TauriRuntime implements Runtime {
       } else if (event.event === 'notificationClick') {
         this.notificationCallback?.(event.data)
       } else if (event.event === 'desktopSettingChanged') {
-        this.onDesktopSettingChanged?.(event.data.key, event.data.value)
+        this.onDesktopSettingChanged?.(
+          event.data.key as keyof DesktopSettingsType,
+          event.data.value
+        )
       }
     }
     getCurrentWebview().onDragDropEvent(event => {
@@ -726,7 +729,10 @@ class TauriRuntime implements Runtime {
   onResumeFromSleep: (() => void) | undefined
   onToggleNotifications: (() => void) | undefined
   onDesktopSettingChanged:
-    | ((key: string, value: string | number | boolean) => void)
+    | ((
+        key: keyof DesktopSettingsType,
+        value: string | number | boolean
+      ) => void)
     | undefined
   checkMediaAccess(mediaType: MediaType): Promise<MediaAccessStatus> {
     return invoke('check_media_permission', {
