@@ -9,12 +9,9 @@ To update the desktop application to a new core you need to update the following
 
 ## Update to a tagged/released core version
 
-Let's say the core version you want to upgrade to is `X.Y.Z`.
+> `node ./bin/link_core/link_version.js X.Y.Z`
 
-1. `node ./bin/link_core/link_version.js X.Y.Z`
-2. mention that you updated those dependencies in `CHANGELOG.md`
-
-If version `X.Y.Z` hasn't yet been published to `npm`, then ask another maintainer.
+If the version that you want to update to hasn't yet been published to `npm`, then ask another maintainer.
 
 GitHub CI builds and publishes [stdio-rpc-server](https://github.com/chatmail/core/actions/workflows/deltachat-rpc-server.yml) and [jsonrpc-client](https://github.com/chatmail/core/actions/workflows/jsonrpc-client-npm-package.yml) to npm.
 
