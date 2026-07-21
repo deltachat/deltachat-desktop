@@ -79,7 +79,7 @@
     "@types/rc": "^1.2.4",
     "@webxdc/types": "catalog:",
     "@electron/fuses": "^2.0.0",
-    "adm-zip": "0.5.14",
+    "adm-zip": "0.6.0",
     "application-config": "^3.0.0",
     "chai": "^5.1.1",
     "debounce": "^1.2.0",
