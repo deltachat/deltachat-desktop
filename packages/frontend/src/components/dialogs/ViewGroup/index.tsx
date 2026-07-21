@@ -384,11 +384,7 @@ function ViewGroupInner(
         groupDescription: string,
         groupImage: string | null
       ) => {
-        // TODO this check should be way earlier, you should not be able to "OK" the dialog if there is no group name
-        if (groupName.length > 0) {
-          setGroupName(groupName)
-        }
-        // Description can be empty, so always set it
+        setGroupName(groupName)
         setGroupDescription(groupDescription)
         setGroupImage(groupImage)
       },
@@ -654,6 +650,7 @@ export function EditGroupNameDialog({
   isBroadcast?: boolean
 } & DialogProps) {
   const [groupName, setGroupName] = useState(initialGroupName)
+  const groupNameIsInvalid = groupName === ''
   const [groupDescription, setGroupDescription] = useState(
     initialGroupDescription
   )
@@ -665,6 +662,9 @@ export function EditGroupNameDialog({
   }
 
   const onClickOk = () => {
+    if (groupNameIsInvalid) {
+      return
+    }
     onClose()
     onOk(groupName, groupDescription, groupImage)
   }
@@ -702,7 +702,7 @@ export function EditGroupNameDialog({
                 setGroupName(event.target.value)
               }}
             />
-            {groupName === '' && (
+            {groupNameIsInvalid && (
               <p
                 style={{
                   color: 'var(--colorDanger)',
