@@ -48,7 +48,7 @@ import { runtime } from '@deltachat-desktop/runtime-interface'
 import { unknownErrorToString } from '@deltachat-desktop/shared/unknownErrorToString'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 import styles from './styles.module.scss'
-import { useFetch } from '../../../hooks/useFetch'
+import { useFetch, useRpcFetch } from '../../../hooks/useFetch'
 const log = getLogger('ViewGroup')
 
 /**
@@ -101,7 +101,6 @@ const useGroup = (accountId: number, initialGroupState: T.FullChat) => {
   // Optimistic group state, set from the "Edit Group" dialog
   // or from further re-fetching from the backend.
   const [groupName, setGroupName] = useState(initialGroupState.name)
-  const [groupDescription, setGroupDescription] = useState<string | null>(null)
   const [groupImage, setGroupImage] = useState(initialGroupState.profileImage)
 
   const firstLoad = useRef(true)
@@ -135,16 +134,14 @@ const useGroup = (accountId: number, initialGroupState: T.FullChat) => {
       ? initialGroupState
       : groupFetch.lingeringResult.value.group
 
-  useEffect(() => {
-    const fetchGroupDescription = async () => {
-      const groupDescription = await BackendRemote.rpc.getChatDescription(
-        accountId,
-        initialGroupState.id
-      )
-      setGroupDescription(groupDescription)
-    }
-    fetchGroupDescription()
-  }, [initialGroupState.id, accountId])
+  const groupDescriptionFetch = useRpcFetch(
+    BackendRemote.rpc.getChatDescription,
+    [accountId, initialGroupState.id]
+  )
+  // TODO don't ignore errors and loading state.
+  const groupDescription = groupDescriptionFetch.lingeringResult?.ok
+    ? groupDescriptionFetch.lingeringResult.value
+    : null
 
   const addMembers = useCallback(
     async (members: number[]) => {
@@ -282,13 +279,14 @@ const useGroup = (accountId: number, initialGroupState: T.FullChat) => {
   }, [accountId, group])
 
   const groupFetchRefresh = useEffectEvent(groupFetch.refresh)
+  const groupDescriptionFetchRefresh = useEffectEvent(
+    groupDescriptionFetch.refresh
+  )
   useEffect(() => {
     return onDCEvent(accountId, 'ChatModified', ({ chatId }) => {
       if (chatId === group.id) {
         groupFetchRefresh()
-        BackendRemote.rpc
-          .getChatDescription(accountId, chatId)
-          .then(setGroupDescription)
+        groupDescriptionFetchRefresh()
       }
     })
   }, [accountId, group.id])
@@ -299,7 +297,6 @@ const useGroup = (accountId: number, initialGroupState: T.FullChat) => {
     groupDescription,
     groupImage,
     setGroupName,
-    setGroupDescription,
     groupContacts,
     addMembers,
     removeMember,
@@ -338,7 +335,6 @@ function ViewGroupInner(
     groupDescription,
     groupImage,
     setGroupName,
-    setGroupDescription,
     groupContacts,
     pastContacts,
     addMembers,
@@ -429,7 +425,6 @@ function ViewGroupInner(
         // Set optimistic state
         // (FYI yes, as of writing we don't roll back on failure).
         setGroupName(groupName)
-        setGroupDescription(groupDescription)
         setGroupImage(groupImage)
       },
       isBroadcast,
