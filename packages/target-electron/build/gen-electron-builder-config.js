@@ -164,6 +164,12 @@ build['appImage'] = {
   artifactName: '${productName}-${version}-${arch}.${ext}',
 }
 
+// see https://www.electron.build/docs/appimage/#modern-toolset-103--static-runtime
+// can be removed once we use electron builder 27 (not released yet)!
+build['toolsets'] = {
+  appimage: '1.0.3',
+}
+
 build['deb'] = {
   packageName: previewBuild ? 'deltachat-desktop-preview' : 'deltachat-desktop',
   depends: [
