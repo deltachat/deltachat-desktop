@@ -33,7 +33,6 @@ import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import { LastUsedSlot } from '../../../utils/lastUsedPaths'
 import ProfileInfoHeader from '../../ProfileInfoHeader'
 import ImageSelector from '../../ImageSelector'
-import { modifyGroup } from '../../../backend/group'
 
 import type { DialogProps } from '../../../contexts/DialogContext'
 import ImageCropper from '../../ImageCropper'
@@ -397,18 +396,28 @@ function ViewGroupInner(
       groupDescription,
       groupImage: group.profileImage,
       groupColor: initialGroupState.color,
-      onOk: (
+      onOk: async (
         groupName: string,
         groupDescription: string,
         groupImage: string | null
       ) => {
-        modifyGroup(
+        const chatId = initialGroupState.id
+        const chat = await BackendRemote.rpc.getBasicChatInfo(accountId, chatId)
+
+        await BackendRemote.rpc.setChatName(accountId, chatId, groupName)
+        await BackendRemote.rpc.setChatDescription(
           accountId,
-          initialGroupState.id,
-          groupName,
-          groupDescription,
-          groupImage
+          chatId,
+          groupDescription
         )
+
+        if (chat.profileImage !== groupImage) {
+          await BackendRemote.rpc.setChatProfileImage(
+            accountId,
+            chatId,
+            groupImage || null
+          )
+        }
       },
       isBroadcast,
     })
