@@ -84,7 +84,7 @@
     "chai": "^5.1.1",
     "debounce": "^1.2.0",
     "electron": "^42.5.0",
-    "electron-builder": "^26.7.0",
+    "electron-builder": "^26.15.7",
     "esbuild": "^0.28.1",
     "mocha": "^10.7.0",
     "rc": "^1.2.8",
