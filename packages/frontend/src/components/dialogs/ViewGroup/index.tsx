@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useState, useRef } from 'react'
+import React, {
+  useCallback,
+  useEffect,
+  useState,
+  useRef,
+  useEffectEvent,
+} from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 import type { T } from '@deltachat/jsonrpc-client'
 
@@ -42,6 +48,7 @@ import { runtime } from '@deltachat-desktop/runtime-interface'
 import { unknownErrorToString } from '@deltachat-desktop/shared/unknownErrorToString'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 import styles from './styles.module.scss'
+import { useFetch } from '../../../hooks/useFetch'
 const log = getLogger('ViewGroup')
 
 /**
@@ -91,15 +98,42 @@ export default function ViewGroup(
  * as the group changes on the backend.
  */
 const useGroup = (accountId: number, initialGroupState: T.FullChat) => {
-  const [group, setGroup] = useState(initialGroupState)
   // Optimistic group state, set from the "Edit Group" dialog
   // or from further re-fetching from the backend.
   const [groupName, setGroupName] = useState(initialGroupState.name)
   const [groupDescription, setGroupDescription] = useState<string | null>(null)
   const [groupImage, setGroupImage] = useState(initialGroupState.profileImage)
 
+  const firstLoad = useRef(true)
   const { openDialog } = useDialog()
   const tx = useTranslationFunction()
+
+  const groupFetch = useFetch(
+    useCallback(
+      async (...args: Parameters<typeof BackendRemote.rpc.getFullChatById>) => {
+        if (firstLoad.current) {
+          firstLoad.current = false
+          /**
+           * Just use {@linkcode initialGroupState} instead,
+           * no need to re-fetch.
+           */
+          return { type: 'useInitial' } as const
+        }
+        return {
+          type: 'refetched',
+          group: await BackendRemote.rpc.getFullChatById(...args),
+        } as const
+      },
+      []
+    ),
+    [accountId, initialGroupState.id]
+  )
+  const group: T.FullChat =
+    // TODO don't ignore errors and loading state.
+    !groupFetch.lingeringResult?.ok ||
+    groupFetch.lingeringResult.value.type === 'useInitial'
+      ? initialGroupState
+      : groupFetch.lingeringResult.value.group
 
   useEffect(() => {
     const fetchGroupDescription = async () => {
@@ -247,10 +281,11 @@ const useGroup = (accountId: number, initialGroupState: T.FullChat) => {
     )
   }, [accountId, group])
 
+  const groupFetchRefresh = useEffectEvent(groupFetch.refresh)
   useEffect(() => {
     return onDCEvent(accountId, 'ChatModified', ({ chatId }) => {
       if (chatId === group.id) {
-        BackendRemote.rpc.getFullChatById(accountId, group.id).then(setGroup)
+        groupFetchRefresh()
         BackendRemote.rpc
           .getChatDescription(accountId, chatId)
           .then(setGroupDescription)
