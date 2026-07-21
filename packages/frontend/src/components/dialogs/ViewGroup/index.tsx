@@ -89,10 +89,12 @@ export default function ViewGroup(
  */
 export const useGroup = (accountId: number, chat: T.FullChat) => {
   const [group, setGroup] = useState(chat)
+  // Optimistic group state, set from the "Edit Group" dialog
+  // or from further re-fetching from the backend.
   const [groupName, setGroupName] = useState(chat.name)
   const [groupDescription, setGroupDescription] = useState<string | null>(null)
   const [groupImage, setGroupImage] = useState(chat.profileImage)
-  const firstLoad = useRef(true)
+
   const { openDialog } = useDialog()
   const tx = useTranslationFunction()
 
@@ -106,15 +108,6 @@ export const useGroup = (accountId: number, chat: T.FullChat) => {
     }
     fetchGroupDescription()
   }, [chat.id, accountId])
-
-  useEffect(() => {
-    if (groupDescription === null) return // Not loaded yet
-    if (firstLoad.current) {
-      firstLoad.current = false
-      return
-    }
-    modifyGroup(accountId, chat.id, groupName, groupDescription, groupImage)
-  }, [groupName, groupDescription, groupImage, chat.id, accountId])
 
   const addMembers = useCallback(
     async (members: number[]) => {
@@ -384,6 +377,9 @@ function ViewGroupInner(
         groupDescription: string,
         groupImage: string | null
       ) => {
+        modifyGroup(accountId, chat.id, groupName, groupDescription, groupImage)
+        // Set optimistic state
+        // (FYI yes, as of writing we don't roll back on failure).
         setGroupName(groupName)
         setGroupDescription(groupDescription)
         setGroupImage(groupImage)
