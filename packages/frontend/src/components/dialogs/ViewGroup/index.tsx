@@ -87,7 +87,7 @@ export default function ViewGroup(
  * manages changes to the group name, image and members
  * and updates the group in the backend
  */
-export const useGroup = (accountId: number, chat: T.FullChat) => {
+const useGroup = (accountId: number, chat: T.FullChat) => {
   const [group, setGroup] = useState(chat)
   // Optimistic group state, set from the "Edit Group" dialog
   // or from further re-fetching from the backend.
@@ -599,7 +599,7 @@ function ViewGroupInner(
   )
 }
 
-export function ShowQRDialog({
+function ShowQRDialog({
   qrCode,
   groupName,
   qrCodeSVG,
@@ -625,7 +625,7 @@ export function ShowQRDialog({
   )
 }
 
-export function EditGroupNameDialog({
+function EditGroupNameDialog({
   onClose,
   onOk,
   isBroadcast,
@@ -730,7 +730,7 @@ export function EditGroupNameDialog({
   )
 }
 
-export function GroupImageSelector(props: {
+function GroupImageSelector(props: {
   groupName: string
   groupColor: string
   groupImage: string | null
