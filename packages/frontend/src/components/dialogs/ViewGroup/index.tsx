@@ -98,11 +98,6 @@ export default function ViewGroup(
  * as the group changes on the backend.
  */
 const useGroup = (accountId: number, initialGroupState: T.FullChat) => {
-  // Optimistic group state, set from the "Edit Group" dialog
-  // or from further re-fetching from the backend.
-  const [groupName, setGroupName] = useState(initialGroupState.name)
-  const [groupImage, setGroupImage] = useState(initialGroupState.profileImage)
-
   const firstLoad = useRef(true)
   const { openDialog } = useDialog()
   const tx = useTranslationFunction()
@@ -293,14 +288,10 @@ const useGroup = (accountId: number, initialGroupState: T.FullChat) => {
 
   return {
     group,
-    groupName,
     groupDescription,
-    groupImage,
-    setGroupName,
     groupContacts,
     addMembers,
     removeMember,
-    setGroupImage,
     pastContacts,
   }
 }
@@ -331,15 +322,11 @@ function ViewGroupInner(
 
   const {
     group,
-    groupName,
     groupDescription,
-    groupImage,
-    setGroupName,
     groupContacts,
     pastContacts,
     addMembers,
     removeMember,
-    setGroupImage,
   } = useGroup(accountId, initialGroupState)
 
   const [showMemberFilter, setShowMemberFilter] = useState(false)
@@ -406,9 +393,9 @@ function ViewGroupInner(
       return
     }
     openDialog(EditGroupNameDialog, {
-      groupName,
+      groupName: group.name,
       groupDescription,
-      groupImage,
+      groupImage: group.profileImage,
       groupColor: initialGroupState.color,
       onOk: (
         groupName: string,
@@ -422,10 +409,6 @@ function ViewGroupInner(
           groupDescription,
           groupImage
         )
-        // Set optimistic state
-        // (FYI yes, as of writing we don't roll back on failure).
-        setGroupName(groupName)
-        setGroupImage(groupImage)
       },
       isBroadcast,
     })
@@ -458,7 +441,7 @@ function ViewGroupInner(
     openDialog(ShowQRDialog, {
       qrCode,
       qrCodeSVG: svg,
-      groupName,
+      groupName: group.name,
     })
   }
 
@@ -516,9 +499,9 @@ function ViewGroupInner(
       <DialogBody>
         <DialogContent>
           <ProfileInfoHeader
-            avatarPath={groupImage ? groupImage : undefined}
+            avatarPath={group.profileImage ? group.profileImage : undefined}
             color={initialGroupState.color}
-            displayName={groupName}
+            displayName={group.name}
             disableFullscreen={shouldDisableFullscreenAvatar(initialGroupState)}
             subtitle={
               <div className='group-profile-subtitle'>
