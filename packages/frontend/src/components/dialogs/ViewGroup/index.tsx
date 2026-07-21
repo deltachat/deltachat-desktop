@@ -385,7 +385,7 @@ function ViewGroupInner(
         groupImage: string | null
       ) => {
         // TODO this check should be way earlier, you should not be able to "OK" the dialog if there is no group name
-        if (groupName.length > 1) {
+        if (groupName.length > 0) {
           setGroupName(groupName)
         }
         // Description can be empty, so always set it
