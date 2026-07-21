@@ -33,8 +33,8 @@ overrides:
 
 catalog:
   # deltachat specific
-  '@deltachat/jsonrpc-client': 2.55.0
-  '@deltachat/stdio-rpc-server': 2.55.0
+  '@deltachat/jsonrpc-client': 2.56.0
+  '@deltachat/stdio-rpc-server': 2.56.0
   '@webxdc/types': ^2.1.2
   '@deltachat/calls-webapp': 0.12.1-beta-debug
   mocha: ^11.7.5
@@ -56,15 +56,15 @@ catalog:
   '@types/chai': ^4.3.17
 
 minimumReleaseAgeExclude:
-  - '@deltachat/jsonrpc-client@2.55.0'
-  - '@deltachat/stdio-rpc-server-android-arm64@2.55.0'
-  - '@deltachat/stdio-rpc-server-android-arm@2.55.0'
-  - '@deltachat/stdio-rpc-server-darwin-arm64@2.55.0'
-  - '@deltachat/stdio-rpc-server-darwin-x64@2.55.0'
-  - '@deltachat/stdio-rpc-server-linux-arm64@2.55.0'
-  - '@deltachat/stdio-rpc-server-linux-arm@2.55.0'
-  - '@deltachat/stdio-rpc-server-linux-ia32@2.55.0'
-  - '@deltachat/stdio-rpc-server-linux-x64@2.55.0'
-  - '@deltachat/stdio-rpc-server-win32-ia32@2.55.0'
-  - '@deltachat/stdio-rpc-server-win32-x64@2.55.0'
-  - '@deltachat/stdio-rpc-server@2.55.0'
+  - '@deltachat/jsonrpc-client@2.56.0'
+  - '@deltachat/stdio-rpc-server-android-arm64@2.56.0'
+  - '@deltachat/stdio-rpc-server-android-arm@2.56.0'
+  - '@deltachat/stdio-rpc-server-darwin-arm64@2.56.0'
+  - '@deltachat/stdio-rpc-server-darwin-x64@2.56.0'
+  - '@deltachat/stdio-rpc-server-linux-arm64@2.56.0'
+  - '@deltachat/stdio-rpc-server-linux-arm@2.56.0'
+  - '@deltachat/stdio-rpc-server-linux-ia32@2.56.0'
+  - '@deltachat/stdio-rpc-server-linux-x64@2.56.0'
+  - '@deltachat/stdio-rpc-server-win32-ia32@2.56.0'
+  - '@deltachat/stdio-rpc-server-win32-x64@2.56.0'
+  - '@deltachat/stdio-rpc-server@2.56.0'
