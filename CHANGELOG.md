@@ -38,7 +38,7 @@ All notable changes to this project will be documented in this file.
 - Unify `mailto:` logic with `force_encryption`
 - Security hardening: set contextIsolation to true ([#6524](https://github.com/deltachat/deltachat-desktop/issues/6524))
 - Attaching file sometimes resetting text
-- Live update read receipts and chan view count
+- Live update the "Ready By" dialog and channel view count: no need to manually "refresh" them
 - "Edit Group" dialog:
   - Fix setting name and description at the same time not working sometimes
   - Make it possible to set 1-char group name
