@@ -38,7 +38,7 @@ All notable changes to this project will be documented in this file.
 - Adjust group/channel edit dialog title
 - Unify `mailto:` logic with `force_encryption`
 - QR code scanner in cut on the right when using a vertical camera ([#6462](https://github.com/deltachat/deltachat-desktop/issues/6462))
-- Set contextIsolation to true ([#6524](https://github.com/deltachat/deltachat-desktop/issues/6524))
+- Security hardening: set contextIsolation to true ([#6524](https://github.com/deltachat/deltachat-desktop/issues/6524))
 - Attaching file sometimes resetting text
 - Throttle chatListItemChanged handling ([#6538](https://github.com/deltachat/deltachat-desktop/issues/6538))
 - Add bottom margin to copy dialog ([#6552](https://github.com/deltachat/deltachat-desktop/issues/6552))
