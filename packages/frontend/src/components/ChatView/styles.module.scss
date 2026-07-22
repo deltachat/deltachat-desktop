@@ -73,6 +73,21 @@
       }
     }
 
+    .appsGroup {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-inline-end: 24px;
+
+      border: 1px solid #999;
+      border-radius: 4px;
+      padding: 3px 4px;
+
+      .navbarButton {
+        margin-inline-end: 0;
+      }
+    }
+
     .messageMultiselectCounter {
       font-size: large;
       font-weight: bold;
@@ -84,7 +99,6 @@
 
 .webxdcIcons {
   line-height: 0;
-  margin-right: 12px;
   img.webxdcIcon {
     width: 25px;
     height: 25px;
