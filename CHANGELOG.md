@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 
 - Remove "Hide Relay from Contacts": now "Remove Relay" hides it from contacts
   and schedules automatic removal (https://github.com/chatmail/core/pull/8428)
+- Remove OAuth support (https://github.com/chatmail/core/pull/8431)
 
 ### Added
 
