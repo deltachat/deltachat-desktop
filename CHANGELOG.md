@@ -28,20 +28,22 @@ All notable changes to this project will be documented in this file.
 - AppImage no longer requires libfuse2 ([#6564](https://github.com/deltachat/deltachat-desktop/issues/6564))
 - Fix message list "scrolling up" after image is loaded or after a message is edited by another member ([#6536](https://github.com/deltachat/deltachat-desktop/issues/6536))
 - Avoid horizontal scrollbar in the message list, especially in Saved Messages ([#6491](https://github.com/deltachat/deltachat-desktop/issues/6491))
+- Accessibility:
+  - Settings: keep focus after going back a level
+  - add `aria-live` for draft quote & attachment:
+    announce when a file is attached or a quote is added to the draft
+  - Don't announce reactions when a chat gets opened or scrolled
+  - Some non-primary chat lists' items wrongly saying "opens menu"
+  - Better contrast for fullscreen media view buttons ([#6521](https://github.com/deltachat/deltachat-desktop/issues/6521))
 - Adjust group/channel edit dialog title
-- Settings: keep focus after going back a level
 - Unify `mailto:` logic with `force_encryption`
 - QR code scanner in cut on the right when using a vertical camera ([#6462](https://github.com/deltachat/deltachat-desktop/issues/6462))
-- Better contrast for full media buttons ([#6521](https://github.com/deltachat/deltachat-desktop/issues/6521))
 - Set contextIsolation to true ([#6524](https://github.com/deltachat/deltachat-desktop/issues/6524))
 - Attaching file sometimes resetting text
-- A11y: aria-live for draft quote & attachment
 - Throttle chatListItemChanged handling ([#6538](https://github.com/deltachat/deltachat-desktop/issues/6538))
-- Don't announce reactions on chat open/scroll
 - Show appropriate proxy icon ([#6534](https://github.com/deltachat/deltachat-desktop/issues/6534))
 - Add bottom margin to copy dialog ([#6552](https://github.com/deltachat/deltachat-desktop/issues/6552))
 - Live update read receipts and chan view count
-- Non-main chat list items: wrong aria-haspopup
 - "Edit Group" dialog:
   - Fix setting name and description at the same time not working sometimes
   - Make it possible to set 1-char group name
