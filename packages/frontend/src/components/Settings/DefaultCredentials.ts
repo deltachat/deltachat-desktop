@@ -27,7 +27,6 @@ export function defaultCredentials(credentials?: Credentials): Credentials {
     smtpServer: null,
     smtpPort: null,
     smtpSecurity: null,
-    oauth2: null,
   }
 
   return { ...defaultCredentials, ...credentials }
