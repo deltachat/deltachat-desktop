@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 <a id="2_56_0"></a>
 ## [2.56.0] - 2026-07-22
 
+### Removed
+
+- Remove "Hide Relay from Contacts": now "Remove Relay" hides it from contacts
+  and schedules automatic removal (https://github.com/chatmail/core/pull/8428)
+
 ### Added
 
 - Custom app picker URL setting
@@ -14,7 +19,6 @@ All notable changes to this project will be documented in this file.
 - Make it possible to set 1-char group name
 - Show num msgs in "Forward?" dialog
 - Move msg select counter to header
-- "delete transport" to unpublish it`
 - Command palette ([#6443](https://github.com/deltachat/deltachat-desktop/issues/6443))
 
 ### Fixed
