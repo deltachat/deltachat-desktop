@@ -35,6 +35,10 @@ All notable changes to this project will be documented in this file.
 - Add bottom margin to copy dialog ([#6552](https://github.com/deltachat/deltachat-desktop/issues/6552))
 - Live update read receipts and chan view count
 - Non-main chat list items: wrong aria-haspopup
+- "Edit Group" dialog:
+  - Fix setting name and description at the same time not working sometimes
+  - Make it possible to set 1-char group name
+  - Edit Group: disable form submit if name is empty
 
 ### Miscellaneous Tasks
 
