@@ -17,7 +17,7 @@ All notable changes to this project will be documented in this file.
 - Show proxy status in the chat list header, like on Android ([#6522](https://github.com/deltachat/deltachat-desktop/issues/6522))
 - Merge images and video to "gallery" tab ([#5644](https://github.com/deltachat/deltachat-desktop/issues/5644))
 - Show num msgs in "Forward?" dialog
-- Command palette ([#6443](https://github.com/deltachat/deltachat-desktop/issues/6443))
+- (experimental) Command palette: `Ctrl + P` or `Ctrl + K` to type commands and search for chats, messges, and more ([#6443](https://github.com/deltachat/deltachat-desktop/issues/6443))
 
 ### Other
 
