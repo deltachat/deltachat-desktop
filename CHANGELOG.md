@@ -15,13 +15,13 @@ All notable changes to this project will be documented in this file.
 - Custom app picker URL setting
 - Add member search and three-dot menu to group profile ([#6456](https://github.com/deltachat/deltachat-desktop/issues/6456))
 - Show proxy status in the chat list header, like on Android ([#6522](https://github.com/deltachat/deltachat-desktop/issues/6522))
-- Merge images and video to "gallery" tab ([#5644](https://github.com/deltachat/deltachat-desktop/issues/5644))
 - Show num msgs in "Forward?" dialog
 - (experimental) Command palette: `Ctrl + P` or `Ctrl + K` to type commands and search for chats, messges, and more ([#6443](https://github.com/deltachat/deltachat-desktop/issues/6443))
 
 ### Other
 
 - Move message multiselect counter to the chat header
+- Merge images and video to "gallery" tab ([#5644](https://github.com/deltachat/deltachat-desktop/issues/5644))
 
 ### Fixed
 
