@@ -27,7 +27,6 @@ All notable changes to this project will be documented in this file.
 
 - AppImage no longer requires libfuse2 ([#6564](https://github.com/deltachat/deltachat-desktop/issues/6564))
 - Fix message list "scrolling up" after image is loaded or after a message is edited by another member ([#6536](https://github.com/deltachat/deltachat-desktop/issues/6536))
-- Misc fixes for jsonrpc-client types, message rendering, and chat scheduler ([#6475](https://github.com/deltachat/deltachat-desktop/issues/6475))
 - Avoid horizontal scrollbar ([#6491](https://github.com/deltachat/deltachat-desktop/issues/6491))
 - Adjust group/channel edit dialog title
 - Settings: keep focus after going back a level
