@@ -6,6 +6,7 @@ import {
   keyDownEvent2Action,
 } from '../keybindings'
 import useKeyBindingAction from '../hooks/useKeyBindingAction'
+import { useSelectAllKeyboardShortcut } from '../hooks/useSelectAllKeyboardShortcut'
 import useDialog from '../hooks/dialog/useDialog'
 import { Screens } from '../ScreenController'
 import KeybindingCheatSheet from '../components/dialogs/KeybindingCheatSheet'
@@ -20,6 +21,8 @@ export const KeybindingsContextProvider = ({
   children,
 }: PropsWithChildren<{}>) => {
   const { openDialog, hasOpenDialogs } = useDialog()
+
+  useSelectAllKeyboardShortcut()
 
   // @TODO: This probably needs another place
   useKeyBindingAction(KeybindAction.Settings_Open, () => {
