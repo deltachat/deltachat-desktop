@@ -13,8 +13,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 - Custom app picker URL setting
-- Add three-dot menu and member search to group profile ([#6456](https://github.com/deltachat/deltachat-desktop/issues/6456))
-- Show proxy icon ([#6522](https://github.com/deltachat/deltachat-desktop/issues/6522))
+- Add member search and three-dot menu to group profile ([#6456](https://github.com/deltachat/deltachat-desktop/issues/6456))
+- Show proxy status in the chat list header, like on Android ([#6522](https://github.com/deltachat/deltachat-desktop/issues/6522))
 - Merge images and video to "gallery" tab ([#5644](https://github.com/deltachat/deltachat-desktop/issues/5644))
 - Show num msgs in "Forward?" dialog
 - Move msg select counter to header
