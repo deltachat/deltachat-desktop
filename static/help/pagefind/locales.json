@@ -27,7 +27,7 @@
     "menu_help": "Ayuda",
     "app_name": "Delta Chat",
     "placeholder": "Buscar",
-    "one_result": "Result for \"[SEARCH_TERM]\"",
+    "one_result": "Resultado para \"%1$s\"",
     "zero_results": "No se encontraron resultados para \"[SEARCH_TERM]\"",
     "clear_search": "×"
   },
@@ -59,7 +59,7 @@
     "menu_help": "Aiuto",
     "app_name": "Delta Chat",
     "placeholder": "Cerca",
-    "one_result": "Result for \"[SEARCH_TERM]\"",
+    "one_result": "Risultato per \"%1$s\"",
     "zero_results": "Nessun risultato trovato per \"[SEARCH_TERM]\"",
     "clear_search": "×"
   },
@@ -67,7 +67,7 @@
     "menu_help": "Pomoc",
     "app_name": "Delta Chat",
     "placeholder": "Szukaj",
-    "one_result": "Result for \"[SEARCH_TERM]\"",
+    "one_result": "Wynik dla „%1$s”",
     "zero_results": "Nie znaleziono wyników dla „[SEARCH_TERM]",
     "clear_search": "×"
   },
@@ -75,7 +75,7 @@
     "menu_help": "Ajuda",
     "app_name": "Delta Chat",
     "placeholder": "Pesquisar",
-    "one_result": "Result for \"[SEARCH_TERM]\"",
+    "one_result": "Resultado para \"%1$s\"",
     "zero_results": "Nenhum resultado encontrado para \"[SEARCH_TERM]\"",
     "clear_search": "×"
   },
@@ -83,7 +83,7 @@
     "menu_help": "Справка",
     "app_name": "Delta Chat",
     "placeholder": "Поиск",
-    "one_result": "Result for \"[SEARCH_TERM]\"",
+    "one_result": "Результат по запросу \"%1$s\"",
     "zero_results": "Ничего не найдено по запросу \"[SEARCH_TERM]\"",
     "clear_search": "×"
   },
