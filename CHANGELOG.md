@@ -12,9 +12,9 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- Custom app picker URL setting
 - Add member search and three-dot menu to group profile ([#6456](https://github.com/deltachat/deltachat-desktop/issues/6456))
 - Show proxy status in the chat list header, like on Android ([#6522](https://github.com/deltachat/deltachat-desktop/issues/6522))
+- Custom app picker URL setting
 - Show num msgs in "Forward?" dialog
 - (experimental) Command palette: `Ctrl + P` or `Ctrl + K` to type commands and search for chats, messges, and more ([#6443](https://github.com/deltachat/deltachat-desktop/issues/6443))
 
@@ -35,8 +35,6 @@ All notable changes to this project will be documented in this file.
   - Don't announce reactions when a chat gets opened or scrolled
   - Some non-primary chat lists' items wrongly saying "opens menu"
   - Better contrast for fullscreen media view buttons ([#6521](https://github.com/deltachat/deltachat-desktop/issues/6521))
-- Security hardening: set contextIsolation to true ([#6524](https://github.com/deltachat/deltachat-desktop/issues/6524))
-- Attaching file sometimes resetting text
 - Live update the "Ready By" dialog and channel view count: no need to manually "refresh" them
 - "Edit Group" dialog:
   - Fix setting name and description at the same time not working sometimes
@@ -46,6 +44,8 @@ All notable changes to this project will be documented in this file.
   - QR code scanner in cut on the right when using a vertical camera ([#6462](https://github.com/deltachat/deltachat-desktop/issues/6462))
   - Add bottom margin to copy dialog ([#6552](https://github.com/deltachat/deltachat-desktop/issues/6552))
   - Adjust group/channel edit dialog title
+- Attaching file sometimes resetting text
+- Security hardening: set contextIsolation to true ([#6524](https://github.com/deltachat/deltachat-desktop/issues/6524))
 - Unify `mailto:` link handling logic with `force_encryption`
 
 ### Miscellaneous Tasks
