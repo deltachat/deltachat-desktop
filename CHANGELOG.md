@@ -2,6 +2,46 @@
 
 All notable changes to this project will be documented in this file.
 
+<a id="2_56_0"></a>
+## [2.56.0] - 2026-07-22
+
+### Added
+
+- Custom app picker URL setting
+- Add three-dot menu and member search to group profile ([#6456](https://github.com/deltachat/deltachat-desktop/issues/6456))
+- Show proxy icon ([#6522](https://github.com/deltachat/deltachat-desktop/issues/6522))
+- Merge images and video to "gallery" tab ([#5644](https://github.com/deltachat/deltachat-desktop/issues/5644))
+- Make it possible to set 1-char group name
+- Show num msgs in "Forward?" dialog
+- Move msg select counter to header
+- "delete transport" to unpublish it`
+- Command palette ([#6443](https://github.com/deltachat/deltachat-desktop/issues/6443))
+
+### Fixed
+
+- Misc fixes for jsonrpc-client types, message rendering, and chat scheduler ([#6475](https://github.com/deltachat/deltachat-desktop/issues/6475))
+- Avoid horizontal scrollbar ([#6491](https://github.com/deltachat/deltachat-desktop/issues/6491))
+- Adjust group/channel edit dialog title
+- Settings: keep focus after going back a level
+- Unify `mailto:` logic with `force_encryption`
+- QR code scanner in cut on the right when using a vertical camera ([#6462](https://github.com/deltachat/deltachat-desktop/issues/6462))
+- Better contrast for full media buttons ([#6521](https://github.com/deltachat/deltachat-desktop/issues/6521))
+- Set contextIsolation to true ([#6524](https://github.com/deltachat/deltachat-desktop/issues/6524))
+- Attaching file sometimes resetting text
+- A11y: aria-live for draft quote & attachment
+- Throttle chatListItemChanged handling ([#6538](https://github.com/deltachat/deltachat-desktop/issues/6538))
+- Don't announce reactions on chat open/scroll
+- Show appropriate proxy icon ([#6534](https://github.com/deltachat/deltachat-desktop/issues/6534))
+- Add bottom margin to copy dialog ([#6552](https://github.com/deltachat/deltachat-desktop/issues/6552))
+- Live update read receipts and chan view count
+- Non-main chat list items: wrong aria-haspopup
+
+### Miscellaneous Tasks
+
+- Upgrade electron to 42.5 ([#6508](https://github.com/deltachat/deltachat-desktop/issues/6508))
+- Upgrade core to 2.56.0 ([#6569](https://github.com/deltachat/deltachat-desktop/issues/6569))
+
+
 <a id="2_53_1"></a>
 ## [2.53.1] - 2026-06-23
 
@@ -4148,7 +4188,8 @@ This section is only relevant to contributors.
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.53.1...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.56.0...HEAD
+[2.56.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.53.1...v2.56.0
 [2.53.1]: https://github.com/deltachat/deltachat-desktop/compare/v2.53.0...v2.53.1
 [2.53.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.52.0...v2.53.0
 [2.52.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.51.0...v2.52.0
