@@ -35,7 +35,6 @@ All notable changes to this project will be documented in this file.
   - Don't announce reactions when a chat gets opened or scrolled
   - Some non-primary chat lists' items wrongly saying "opens menu"
   - Better contrast for fullscreen media view buttons ([#6521](https://github.com/deltachat/deltachat-desktop/issues/6521))
-- Unify `mailto:` logic with `force_encryption`
 - Security hardening: set contextIsolation to true ([#6524](https://github.com/deltachat/deltachat-desktop/issues/6524))
 - Attaching file sometimes resetting text
 - Live update the "Ready By" dialog and channel view count: no need to manually "refresh" them
@@ -47,6 +46,7 @@ All notable changes to this project will be documented in this file.
   - QR code scanner in cut on the right when using a vertical camera ([#6462](https://github.com/deltachat/deltachat-desktop/issues/6462))
   - Add bottom margin to copy dialog ([#6552](https://github.com/deltachat/deltachat-desktop/issues/6552))
   - Adjust group/channel edit dialog title
+- Unify `mailto:` link handling logic with `force_encryption`
 
 ### Miscellaneous Tasks
 
