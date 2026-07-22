@@ -16,7 +16,6 @@ All notable changes to this project will be documented in this file.
 - Add three-dot menu and member search to group profile ([#6456](https://github.com/deltachat/deltachat-desktop/issues/6456))
 - Show proxy icon ([#6522](https://github.com/deltachat/deltachat-desktop/issues/6522))
 - Merge images and video to "gallery" tab ([#5644](https://github.com/deltachat/deltachat-desktop/issues/5644))
-- Make it possible to set 1-char group name
 - Show num msgs in "Forward?" dialog
 - Move msg select counter to header
 - Command palette ([#6443](https://github.com/deltachat/deltachat-desktop/issues/6443))
