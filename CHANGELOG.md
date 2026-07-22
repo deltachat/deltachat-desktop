@@ -41,7 +41,6 @@ All notable changes to this project will be documented in this file.
 - Set contextIsolation to true ([#6524](https://github.com/deltachat/deltachat-desktop/issues/6524))
 - Attaching file sometimes resetting text
 - Throttle chatListItemChanged handling ([#6538](https://github.com/deltachat/deltachat-desktop/issues/6538))
-- Show appropriate proxy icon ([#6534](https://github.com/deltachat/deltachat-desktop/issues/6534))
 - Add bottom margin to copy dialog ([#6552](https://github.com/deltachat/deltachat-desktop/issues/6552))
 - Live update read receipts and chan view count
 - "Edit Group" dialog:
