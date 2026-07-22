@@ -619,6 +619,7 @@ export default function Message(props: {
   const commonAttrs = {
     ref,
     tabIndex: focusAndMultiselect.tabIndex,
+    onMouseDown: focusAndMultiselect.onMouseDown,
     onKeyDown: (e: React.KeyboardEvent) => {
       const messageIds =
         focusAndMultiselect.selectedItems.size === 0

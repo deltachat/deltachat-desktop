@@ -89,6 +89,23 @@ export function useMessageFocusAndMultiselect(
       },
       [messageId, multiselect]
     ),
+    onMouseDown: useCallback(
+      (e: React.MouseEvent) => {
+        // Shift + Click extends the message selection. The browser would
+        // also extend the text selection until the re-render adds
+        // `multiselected-two-or-more` to the list and fades it out.
+        //
+        // Only when something is already selected: with an empty selection
+        // Shift + Click is still a plain "select this text" gesture.
+        if (e.shiftKey && multiselect.selectedItems.size >= 1) {
+          e.preventDefault()
+          // `preventDefault()` on `mousedown` also suppresses focus,
+          // which the roving tabindex needs.
+          elementRef.current?.focus()
+        }
+      },
+      [elementRef, multiselect]
+    ),
     onFocus: useCallback(() => {
       rovingTabindex.setAsActiveElement()
 
