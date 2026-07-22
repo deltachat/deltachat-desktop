@@ -35,18 +35,19 @@ All notable changes to this project will be documented in this file.
   - Don't announce reactions when a chat gets opened or scrolled
   - Some non-primary chat lists' items wrongly saying "opens menu"
   - Better contrast for fullscreen media view buttons ([#6521](https://github.com/deltachat/deltachat-desktop/issues/6521))
-- Adjust group/channel edit dialog title
 - Unify `mailto:` logic with `force_encryption`
-- QR code scanner in cut on the right when using a vertical camera ([#6462](https://github.com/deltachat/deltachat-desktop/issues/6462))
 - Security hardening: set contextIsolation to true ([#6524](https://github.com/deltachat/deltachat-desktop/issues/6524))
 - Attaching file sometimes resetting text
 - Throttle chatListItemChanged handling ([#6538](https://github.com/deltachat/deltachat-desktop/issues/6538))
-- Add bottom margin to copy dialog ([#6552](https://github.com/deltachat/deltachat-desktop/issues/6552))
 - Live update read receipts and chan view count
 - "Edit Group" dialog:
   - Fix setting name and description at the same time not working sometimes
   - Make it possible to set 1-char group name
   - Edit Group: disable form submit if name is empty
+- Style, labels:
+  - QR code scanner in cut on the right when using a vertical camera ([#6462](https://github.com/deltachat/deltachat-desktop/issues/6462))
+  - Add bottom margin to copy dialog ([#6552](https://github.com/deltachat/deltachat-desktop/issues/6552))
+  - Adjust group/channel edit dialog title
 
 ### Miscellaneous Tasks
 
