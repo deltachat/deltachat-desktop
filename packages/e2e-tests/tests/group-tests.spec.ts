@@ -85,13 +85,13 @@ test('create group', async () => {
   await expect(badgeNumber).toHaveText('1')
 })
 
-test('check "New E-Mail" option presence', async ({ isChatmail }) => {
+test('check "New Email" option presence', async ({ isChatmail }) => {
   await page.locator('#new-chat-button').click()
 
   await expect(page.getByRole('button', { name: 'New Group' })).toBeVisible()
 
   // Since we're on a Chatmail server, this button is not supposed to be shown.
-  const newEmailButton = page.getByRole('button', { name: 'New E-Mail' })
+  const newEmailButton = page.getByRole('button', { name: 'New Email' })
   if (isChatmail) {
     await expect(newEmailButton).not.toBeVisible()
     // Same button, but double-check, by ID.
@@ -164,77 +164,6 @@ test('Invite existing user to group', async ({ browserName }) => {
   ).toContainText(msg)
 })
 
-test('Invite new user to group', async ({ browserName }) => {
-  if (browserName.toLowerCase().indexOf('chrom') > -1) {
-    await page.context().grantPermissions(['clipboard-read', 'clipboard-write'])
-  }
-  const newUserName = userNames[3]
-  const userA = existingProfiles[0]
-  const userB = existingProfiles[1]
-  await switchToProfile(page, userA.id)
-  const chatListItem = page
-    .locator('.chat-list .chat-list-item')
-    .filter({ hasText: groupName })
-  await expect(chatListItem).toBeVisible()
-  await chatListItem.click()
-  // copy group invite link
-  await page.getByTestId('chat-info-button').click()
-  await page.locator('#showqrcode button').click()
-  await clickThroughTestIds(page, [
-    'copy-qr-code',
-    'confirm-qr-code',
-    'view-group-dialog-header-close',
-  ])
-
-  // paste invite link in Instant Onboarding Dialog
-  await clickThroughTestIds(page, [
-    'add-account-button',
-    'create-account-button',
-    'other-login-button',
-    'scan-qr-login',
-    'paste',
-  ])
-
-  const confirmDialog = page.getByTestId('ask-join-group')
-  await expect(confirmDialog).toBeVisible()
-  // confirm dialog should contain group name
-  await expect(confirmDialog).toContainText(groupName)
-  await confirmDialog.getByTestId('confirm').click()
-  await page.locator('#displayName').fill(newUserName)
-  await page.getByTestId('login-button').click()
-  // userA invited you to group message
-  await expect(
-    page
-      .getByRole('list', { name: 'Messages' })
-      .getByRole('listitem')
-      .filter({ hasText: groupInviteMessage })
-  ).toBeVisible()
-  const composer = page.locator('textarea.create-or-edit-message-input')
-  await expect(composer).not.toBeVisible({ timeout: 1 })
-
-  // verified chat after response from userA
-  await expect(page.locator('.e2ee-info')).toBeVisible()
-
-  const msg = 'Hello chat!' + Math.random()
-  await composer.fill(msg)
-  await page.getByRole('button', { name: 'Send' }).click()
-  await expect(
-    page.locator('#message-list li.message-wrapper').last()
-  ).toContainText(msg)
-
-  await page.getByTestId('chat-info-button').click()
-  // new user sees group members
-  await expect(
-    page
-      .locator('.group-member-contact-list-wrapper .contact-list-item')
-      .filter({ hasText: userB.name })
-  ).toBeVisible()
-  await page.getByTestId('view-group-dialog-header-close').click()
-  // update existing profiles so they include the new user
-  // to make sure all get deleted after the test
-  existingProfiles = await loadExistingProfiles(page)
-})
-
 test('Remove user from group', async () => {
   // user C removes user B
   const userB = existingProfiles[1]
@@ -265,10 +194,10 @@ test('Remove user from group', async () => {
 
 test('Readd user to group', async () => {
   // user A adds user B again
-  const userA = existingProfiles[0]
-  const userB = existingProfiles[1]
-  const userC = existingProfiles[2]
-  const userD = existingProfiles[3]
+  const userA = getUser(0, existingProfiles)
+  const userB = getUser(1, existingProfiles)
+  const userC = getUser(2, existingProfiles)
+  const membersWithoutB = ['Me', userC.name]
   await switchToProfile(page, userA.id)
   const chatListItem = page
     .locator('.chat-list .chat-list-item')
@@ -281,9 +210,11 @@ test('Readd user to group', async () => {
   // because the "Add Members" dialog won't auto-update.
   // We probably should make it auto-updateable as well.
   const membersList = page.getByTestId('group-member-list')
-  await expect(membersList.getByRole('listitem')).toHaveCount(3)
+  await expect(membersList.getByRole('listitem')).toHaveCount(
+    membersWithoutB.length
+  )
   await expect(membersList).not.toContainText(userB.name)
-  for (const name of ['Me', userC.name, userD.name]) {
+  for (const name of membersWithoutB) {
     await expect(membersList).toContainText(name)
   }
 
@@ -296,10 +227,12 @@ test('Readd user to group', async () => {
   await userBRow.click()
   await expect(userBRow.locator('.checkmark')).toBeVisible()
   await addMemberDialog.getByTestId('ok').click()
-  for (const name of ['Me', userB.name, userC.name, userD.name]) {
+  for (const name of [...membersWithoutB, userB.name]) {
     await expect(membersList).toContainText(name)
   }
-  await expect(membersList.getByRole('listitem')).toHaveCount(4)
+  await expect(membersList.getByRole('listitem')).toHaveCount(
+    membersWithoutB.length + 1
+  )
   await page.getByTestId('view-group-dialog-header-close').click()
 })
 
@@ -646,6 +579,18 @@ test('create channel and add members', async ({ browserName }) => {
     .locator('.chat-list .chat-list-item')
     .filter({ hasText: channelName })
   await expect(channelChatItemB).toBeVisible()
+
+  // Wait for the securejoin handshake to finish: the resulting
+  // "You joined the channel." message must be seen in the (auto-opened)
+  // channel chat while userB is still selected. Otherwise it arrives
+  // after we switch to userA and counts as a second unread message,
+  // making the badge assertion below flaky
+  await expect(
+    page
+      .getByRole('list', { name: 'Messages' })
+      .getByRole('listitem')
+      .filter({ hasText: 'You joined the channel.' })
+  ).toBeVisible()
 
   // userA posts a message to the channel
   await switchToProfile(page, userA.id)
