@@ -106,7 +106,7 @@ export default function useProcessQR() {
 
   const openMailtoLink = useOpenMailtoLink()
   const { startInstantOnboardingFlow } = useInstantOnboarding()
-  const { secureJoin } = useSecureJoin()
+  const secureJoin = useSecureJoin()
 
   const settingsStore = useSettingsStore()[0]
   const { selectChat } = useChat()
