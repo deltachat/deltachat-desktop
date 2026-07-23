@@ -2,6 +2,59 @@
 
 All notable changes to this project will be documented in this file.
 
+<a id="2_56_0"></a>
+## [2.56.0] - 2026-07-22
+
+### Removed
+
+- Remove "Hide Relay from Contacts": now "Remove Relay" hides it from contacts
+  and schedules automatic removal (https://github.com/chatmail/core/pull/8428)
+- Remove OAuth support (https://github.com/chatmail/core/pull/8431)
+
+### Added
+
+- Add member search and three-dot menu to group profile ([#6456](https://github.com/deltachat/deltachat-desktop/issues/6456))
+- Show proxy status in the chat list header, like on Android ([#6522](https://github.com/deltachat/deltachat-desktop/issues/6522))
+- Custom app picker URL setting
+- Show num msgs in "Forward?" dialog
+- (experimental) Command palette: `Ctrl + P` or `Ctrl + K` to type commands and search for chats, messges, and more ([#6443](https://github.com/deltachat/deltachat-desktop/issues/6443))
+
+### Other
+
+- Move message multiselect counter to the chat header
+- Merge images and video to "gallery" tab ([#5644](https://github.com/deltachat/deltachat-desktop/issues/5644))
+
+### Fixed
+
+- AppImage no longer requires libfuse2 ([#6564](https://github.com/deltachat/deltachat-desktop/issues/6564))
+- Fix message list "scrolling up" after image is loaded or after a message is edited by another member ([#6536](https://github.com/deltachat/deltachat-desktop/issues/6536))
+- Avoid horizontal scrollbar in the message list, especially in Saved Messages ([#6491](https://github.com/deltachat/deltachat-desktop/issues/6491))
+- Accessibility:
+  - Settings: keep focus after going back a level
+  - add `aria-live` for draft quote & attachment:
+    announce when a file is attached or a quote is added to the draft
+  - Don't announce reactions when a chat gets opened or scrolled
+  - Some non-primary chat lists' items wrongly saying "opens menu"
+  - Better contrast for fullscreen media view buttons ([#6521](https://github.com/deltachat/deltachat-desktop/issues/6521))
+- Live update the "Ready By" dialog and channel view count: no need to manually "refresh" them
+- "Edit Group" dialog:
+  - Fix setting name and description at the same time not working sometimes
+  - Make it possible to set 1-char group name
+  - Edit Group: disable form submit if name is empty
+- Style, labels:
+  - QR code scanner in cut on the right when using a vertical camera ([#6462](https://github.com/deltachat/deltachat-desktop/issues/6462))
+  - Add bottom margin to copy dialog ([#6552](https://github.com/deltachat/deltachat-desktop/issues/6552))
+  - Adjust group/channel edit dialog title
+- Attaching file sometimes resetting text
+- Security hardening: set contextIsolation to true ([#6524](https://github.com/deltachat/deltachat-desktop/issues/6524))
+- Unify `mailto:` link handling logic with `force_encryption`
+
+### Miscellaneous Tasks
+
+- Upgrade electron to 42.5 ([#6508](https://github.com/deltachat/deltachat-desktop/issues/6508))
+- Upgrade core to 2.56.0 ([#6569](https://github.com/deltachat/deltachat-desktop/issues/6569))
+
+
 <a id="2_53_1"></a>
 ## [2.53.1] - 2026-06-23
 
@@ -4148,7 +4201,8 @@ This section is only relevant to contributors.
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.53.1...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.56.0...HEAD
+[2.56.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.53.1...v2.56.0
 [2.53.1]: https://github.com/deltachat/deltachat-desktop/compare/v2.53.0...v2.53.1
 [2.53.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.52.0...v2.53.0
 [2.52.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.51.0...v2.52.0
