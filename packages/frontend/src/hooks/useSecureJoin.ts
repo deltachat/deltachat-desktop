@@ -88,7 +88,5 @@ export default function useSecureJoin() {
     [openConfirmationDialog, tx]
   )
 
-  return {
-    secureJoin,
-  }
+  return secureJoin
 }

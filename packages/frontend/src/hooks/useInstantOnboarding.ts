@@ -37,7 +37,7 @@ type InstantOnboarding = {
 export default function useInstantOnboarding(): InstantOnboarding {
   const context = useContext(InstantOnboardingContext)
   const { openDialog } = useDialog()
-  const { secureJoin } = useSecureJoin()
+  const secureJoin = useSecureJoin()
 
   if (!context) {
     throw new Error(
