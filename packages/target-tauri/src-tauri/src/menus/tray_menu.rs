@@ -69,6 +69,7 @@ pub(crate) fn create_tray_menu(app: &AppHandle) -> anyhow::Result<Menu<Wry>> {
         None::<&str>,
     )?;
 
+    // Testttttttt
     let mute_notifications = CheckMenuItem::with_id(
         app,
         TrayMenuAction::MuteNotifications,
