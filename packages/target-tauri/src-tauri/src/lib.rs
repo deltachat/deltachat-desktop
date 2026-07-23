@@ -393,6 +393,7 @@ pub fn run() -> i32 {
                 .level_for("iroh_net_report", log::LevelFilter::Warn)
                 .level_for("iroh_relay", log::LevelFilter::Warn)
                 .level_for("netwatch", log::LevelFilter::Warn)
+                // aaaaaaaaaaaaaaaaa
                 .level_for("hyper_util", log::LevelFilter::Warn)
                 // also emitted by tauri
                 .level_for("tracing", log::LevelFilter::Warn)
