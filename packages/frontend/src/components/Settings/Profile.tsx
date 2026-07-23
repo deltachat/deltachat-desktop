@@ -50,6 +50,7 @@ export default function Profile({ settingsStore, onStatusClick }: Props) {
         >
           {profileName}
         </div>
+        {settingsStore.settings.team_profile === '1' && <div>{tx('team')}</div>}
         <div className={styles.profileBio}>
           {settingsStore.settings.selfstatus?.replace('\n', ' ') ||
             tx('pref_default_status_label')}

@@ -82,5 +82,20 @@
   },
   "webxdc_store_url_explain_2_desktop": {
     "message": "This is different from the same feature on Android and iOS.\nThis must be the path containing the xdcget-lock.json file."
+  },
+  "team": {
+    "message": "Team"
+  },
+  "create_team_profile": {
+    "message": "Create Team Profile"
+  },
+  "team_name": {
+    "message": "Team Name"
+  },
+  "team_profile": {
+    "message": "Team Profile (experimental)"
+  },
+  "team_profile_explain": {
+    "message": "A \"Team Profile\" is managed collectively by a group of people or an organization.\n\n⚠️ Team Profiles are experimental and may be changed or removed in the future."
   }
 }

@@ -24,6 +24,9 @@ import { OpenDialog } from '../../../contexts/DialogContext'
 import ProxyConfiguration from '../../dialogs/ProxyConfiguration'
 import { selectedAccountId } from '../../../ScreenController'
 import { TranslationKey } from '@deltachat-desktop/shared/translationKeyType'
+import SettingsStoreInstance from '../../../stores/settings'
+import type { ContextMenuItem } from '../../ContextMenu'
+import ConfirmationDialog from '../../dialogs/ConfirmationDialog'
 
 type Props = {
   onCancel: () => void
@@ -32,8 +35,10 @@ type Props = {
 
 function buildContextMenu(
   openDialog: OpenDialog,
-  tx: (key: TranslationKey) => string
-) {
+  tx: (key: TranslationKey) => string,
+  isTeamProfile: boolean,
+  setIsTeamProfile: (newValue: boolean) => void
+): ContextMenuItem[] {
   return [
     {
       label: tx('proxy_use_proxy'),
@@ -45,6 +50,28 @@ function buildContextMenu(
       },
       dataTestid: 'proxy-context-menu-item',
     },
+    isTeamProfile
+      ? {
+          // TODO fix a11y: the menu item needs to be `role="menuitemcheckbox"`.
+          label: '🗹 ' + tx('create_team_profile'),
+          action: () => setIsTeamProfile(false),
+        }
+      : {
+          label: '☐ ' + tx('create_team_profile'),
+          action: () => {
+            openDialog(ConfirmationDialog, {
+              header: tx('create_team_profile'),
+              message: tx('team_profile_explain'),
+              confirmLabel: tx('create_team_profile'),
+              cb(confirmed) {
+                if (!confirmed) {
+                  return
+                }
+                setIsTeamProfile(true)
+              },
+            })
+          },
+        },
   ]
 }
 
@@ -66,6 +93,11 @@ export default function InstantOnboardingScreen({
   const tx = useTranslationFunction()
   const openAlertDialog = useAlertDialog()
   const { changeScreen } = useContext(ScreenContext)
+  // Instead of settings `team_profile` Core config value immediately
+  // we store the "isTeamProfile" value here
+  // because we want it to be easier for the user to just go back
+  // to a normal profile during the account creation flow.
+  const [isTeamProfile, setIsTeamProfile] = useState(false)
   const { createInstantAccount, resetInstantOnboarding } =
     useInstantOnboarding()
   const { selectChat } = useChat()
@@ -84,7 +116,12 @@ export default function InstantOnboardingScreen({
       MouseEvent
     >
   ) => {
-    const items = buildContextMenu(openDialog, tx)
+    const items = buildContextMenu(
+      openDialog,
+      tx,
+      isTeamProfile,
+      setIsTeamProfile
+    )
 
     openContextMenu({
       ...mouseEventToPosition(event),
@@ -150,7 +187,10 @@ export default function InstantOnboardingScreen({
     }
 
     try {
-      await saveDisplayName()
+      await Promise.all([
+        SettingsStoreInstance.effect.setCoreSetting('team_profile', '1'),
+        saveDisplayName(),
+      ])
       // Automatically create a "chatmail" account
       const chatId = await createInstantAccount(selectedAccountId)
 
@@ -178,6 +218,9 @@ export default function InstantOnboardingScreen({
 
   const onClickBack = () => {
     saveDisplayName()
+    // Yes, stuff like the avatar and name are preserved,
+    // but apparently we want it to be easy to go back to a "normal" profile.
+    setIsTeamProfile(false)
     onCancel()
   }
 
@@ -186,7 +229,11 @@ export default function InstantOnboardingScreen({
       <DialogHeader
         onClickBack={onClickBack}
         onContextMenuClick={showMenu}
-        title={tx('instant_onboarding_title')}
+        title={
+          isTeamProfile
+            ? tx('create_team_profile')
+            : tx('instant_onboarding_title')
+        }
       />
       <DialogBody className={styles.welcomeScreenBody}>
         <DialogContent>
@@ -196,10 +243,15 @@ export default function InstantOnboardingScreen({
               profilePicture={profilePicture}
               setProfilePicture={onChangeProfileImage}
             />
+            {isTeamProfile && (
+              <p className='whitespace'>{tx('team_profile_explain')}</p>
+            )}
             <DeltaInput
               key='displayName'
               id='displayName'
-              placeholder={tx('pref_your_name')}
+              placeholder={
+                isTeamProfile ? tx('team_name') : tx('pref_your_name')
+              }
               value={displayName}
               onChange={onChangeDisplayName}
               onBlur={saveDisplayName}
