@@ -325,11 +325,6 @@ export const QrReader = forwardRef<QrCodeScanRef, Props>(
       }
 
       const startStream = async () => {
-        const videoConstraints: MediaTrackConstraints = {
-          deviceId,
-          facingMode: 'user',
-        }
-
         try {
           setReady(false)
 
@@ -362,10 +357,38 @@ export const QrReader = forwardRef<QrCodeScanRef, Props>(
             }
           }
 
-          const stream = await navigator.mediaDevices.getUserMedia({
-            video: videoConstraints,
-            audio: false,
-          })
+          let stream: MediaStream
+          // Apparently specifying `deviceId` as a non-exact constraint
+          // can reuslt in the requested camera not being selected
+          // even if it _can_ be selected.
+          // So we first try it as an exact constraint,
+          // then, if failed, only as an ideal.
+          function getUserMedia({ exactDeviceId }: { exactDeviceId: boolean }) {
+            return navigator.mediaDevices.getUserMedia({
+              video: {
+                deviceId: deviceId
+                  ? exactDeviceId
+                    ? { exact: deviceId }
+                    : { ideal: deviceId }
+                  : undefined,
+              },
+              audio: false,
+            })
+          }
+          try {
+            stream = await getUserMedia({ exactDeviceId: true })
+          } catch (error) {
+            log.warn(
+              new Error(
+                `asking for getUserMedia with exact deviceId "${deviceId}" failed`,
+                {
+                  cause: error,
+                }
+              )
+            )
+
+            stream = await getUserMedia({ exactDeviceId: false })
+          }
 
           if (unmounted) {
             stopStream(stream)
