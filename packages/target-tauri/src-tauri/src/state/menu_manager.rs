@@ -18,6 +18,8 @@ pub(crate) trait WindowAbstraction<R: Runtime> {
     fn label(&self) -> &str;
     #[cfg(desktop)]
     fn set_menu(&self, menu: Menu<R>) -> tauri::Result<Option<Menu<R>>>;
+    #[cfg(desktop)]
+    fn remove_menu(&self) -> tauri::Result<Option<Menu<R>>>;
     fn on_window_event<F: Fn(&WindowEvent) + Send + 'static>(&self, f: F);
 }
 
@@ -29,6 +31,11 @@ impl<R: Runtime> WindowAbstraction<R> for WebviewWindow<R> {
     #[cfg(desktop)]
     fn set_menu(&self, menu: Menu<R>) -> tauri::Result<Option<Menu<R>>> {
         self.set_menu(menu)
+    }
+
+    #[cfg(desktop)]
+    fn remove_menu(&self) -> tauri::Result<Option<Menu<R>>> {
+        self.remove_menu()
     }
 
     fn on_window_event<F: Fn(&WindowEvent) + Send + 'static>(&self, f: F) {
@@ -44,6 +51,11 @@ impl<R: Runtime> WindowAbstraction<R> for Window<R> {
     #[cfg(desktop)]
     fn set_menu(&self, menu: Menu<R>) -> tauri::Result<Option<Menu<R>>> {
         self.set_menu(menu)
+    }
+
+    #[cfg(desktop)]
+    fn remove_menu(&self) -> tauri::Result<Option<Menu<R>>> {
+        self.remove_menu()
     }
 
     fn on_window_event<F: Fn(&WindowEvent) + Send + 'static>(&self, f: F) {
@@ -77,7 +89,6 @@ impl MenuManager {
         let _ = self.inner.write().await.insert(id.to_owned(), data);
     }
 
-    #[cfg(target_os = "macos")]
     pub(crate) async fn get_menu_for_window(
         &self,
         app: &AppHandle,
@@ -104,8 +115,23 @@ impl MenuManager {
         let menu_generator_arc = Arc::new(menu_generator);
         self.add(window_id, menu_generator_arc.clone()).await;
 
-        // #[cfg(not(target_os = "macos"))]
-        win.set_menu(menu_generator_arc(app)?)?;
+        // On non-macOS, respect the "hide menu bar" setting already at
+        // window registration, so a secondary window opened while hiding is
+        // enabled does not flash (or permanently show) a menu bar until the
+        // next `update_all`.
+        #[cfg(not(target_os = "macos"))]
+        {
+            if crate::settings::get_hide_menu_bar(app) {
+                win.remove_menu()?;
+            } else {
+                let menu = menu_generator_arc(app)?;
+                win.set_menu(menu)?;
+            }
+        }
+        #[cfg(target_os = "macos")]
+        {
+            win.set_menu(menu_generator_arc(app)?)?;
+        }
 
         #[cfg(target_os = "macos")]
         {
@@ -167,15 +193,24 @@ impl MenuManager {
         // call all the callbacks
         #[cfg(not(target_os = "macos"))]
         {
+            // Respect the "hide menu bar" setting: when it is enabled, removing
+            // the menu (instead of setting it) keeps windows consistent and
+            // prevents `set_menu` from undoing a `remove_menu` that was just
+            // performed by `apply_hide_menu_bar` / `toggle_hide_menu_bar`.
+            let hide = crate::settings::get_hide_menu_bar(app);
             for (label, menu_builder) in self.inner.read().await.iter() {
                 let Some(win) = app.get_window(label).or(app.get_window(label)) else {
                     error!("window {label} not found");
                     continue;
                 };
 
-                if let Err(err) =
-                    menu_builder(app).and_then(|menu| win.set_menu(menu).map_err(|err| err.into()))
-                {
+                let result = if hide {
+                    win.remove_menu().map(|_| ()).map_err(|err| err.into())
+                } else {
+                    menu_builder(app)
+                        .and_then(|menu| win.set_menu(menu).map(|_| ()).map_err(|err| err.into()))
+                };
+                if let Err(err) = result {
                     error!("failed to update menu for window {label}: {err}");
                 }
             }

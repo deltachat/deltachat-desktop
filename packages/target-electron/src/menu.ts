@@ -57,6 +57,8 @@ export function refresh() {
   const menu = Menu.buildFromTemplate(template)
   const item = getMenuItem(menu, tx('global_menu_view_floatontop_desktop'))
   if (item) item.checked = mainWindow.isAlwaysOnTop()
+  const hideMenuItem = getMenuItem(menu, tx('pref_hide_menu_bar'))
+  if (hideMenuItem) hideMenuItem.checked = mainWindow.isHideMenuBar()
   const isMac = process.platform === 'darwin'
   if (isMac === true) {
     Menu.setApplicationMenu(menu)
@@ -343,6 +345,16 @@ function getMenuTemplate(
         },
         {
           type: 'separator',
+        },
+        {
+          label: tx('pref_hide_menu_bar'),
+          type: 'checkbox',
+          visible: process.platform !== 'darwin',
+          click: () => mainWindow.toggleHideMenuBar(),
+        },
+        {
+          type: 'separator',
+          visible: process.platform !== 'darwin',
         },
         {
           role: 'togglefullscreen',

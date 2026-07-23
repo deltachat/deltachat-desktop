@@ -41,6 +41,10 @@ pub enum MainWindowEvents {
         chat_id: u32,
         msg_id: u32,
     },
+    DesktopSettingChanged {
+        key: String,
+        value: serde_json::Value,
+    },
 }
 
 pub(crate) struct InnerMainWindowChannelsState {

@@ -81,6 +81,10 @@ type MainWindowEvents =
       event: 'deepLinkOpened'
       data: string
     }
+  | {
+      event: 'desktopSettingChanged'
+      data: { key: string; value: boolean | string | number }
+    }
 
 const events = new Channel<MainWindowEvents>()
 const jsonrpc = new Channel<yerpc.Message>()
@@ -182,6 +186,7 @@ class TauriRuntime implements Runtime {
       notifications: true,
       syncAllAccounts: true,
       autostart: true,
+      hideMenuBar: false,
     } satisfies Partial<DesktopSettingsType>
 
     const frontendOnly = {
@@ -359,6 +364,11 @@ class TauriRuntime implements Runtime {
         this.onOpenQrUrl?.(event.data)
       } else if (event.event === 'notificationClick') {
         this.notificationCallback?.(event.data)
+      } else if (event.event === 'desktopSettingChanged') {
+        this.onDesktopSettingChanged?.(
+          event.data.key as keyof DesktopSettingsType,
+          event.data.value
+        )
       }
     }
     getCurrentWebview().onDragDropEvent(event => {
@@ -718,6 +728,12 @@ class TauriRuntime implements Runtime {
     | undefined
   onResumeFromSleep: (() => void) | undefined
   onToggleNotifications: (() => void) | undefined
+  onDesktopSettingChanged:
+    | ((
+        key: keyof DesktopSettingsType,
+        value: string | number | boolean
+      ) => void)
+    | undefined
   checkMediaAccess(mediaType: MediaType): Promise<MediaAccessStatus> {
     return invoke('check_media_permission', {
       permission: mediaTypeToPermission[mediaType],

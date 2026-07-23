@@ -76,6 +76,7 @@ export type SendSyncChannel = (typeof SEND_SYNC_CHANNELS)[number]
 export const RECEIVE_CHANNELS = Object.freeze([
   'chooseLanguage',
   'clickOnNotification',
+  'desktop-setting-changed',
   'json-rpc-message',
   'onResumeFromSleep',
   'open-url',

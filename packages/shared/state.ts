@@ -30,6 +30,7 @@ export function getDefaultState(): DesktopSettingsType {
     inChatSoundsVolume: 0.5,
     autostart: true,
     autostartElectron: false,
+    hideMenuBar: false,
     appStoreBaseUrl: undefined,
   }
 }

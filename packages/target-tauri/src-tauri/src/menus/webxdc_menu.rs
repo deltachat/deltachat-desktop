@@ -1,5 +1,5 @@
 use crate::{
-    settings::{apply_zoom_factor_webxdc, CONFIG_FILE, WEBXDC_ZOOM_FACTOR_KEY},
+    settings::{apply_zoom_factor_webxdc, get_hide_menu_bar, CONFIG_FILE, WEBXDC_ZOOM_FACTOR_KEY},
     state::menu_manager::MenuManager,
     DeltaChatAppState, TranslationState, WebxdcInstancesState,
 };
@@ -34,6 +34,7 @@ enum WebxdcMenuActionVariant {
     ZoomOut,
     ResetZoom,
     FloatOnTop,
+    HideMenuBar,
     WebxdcSourceCode,
     WhatIsWebxdc,
 }
@@ -118,6 +119,10 @@ impl MenuAction<'static> for WebxdcMenuAction {
                 win.set_always_on_top(!win.is_always_on_top()?)?;
                 // this is fast/effient enough, even though it updates all window
                 // if you want to implement sth else you need to take macOS behaviour into account
+                menu_manager.update_all(app);
+            }
+            WebxdcMenuActionVariant::HideMenuBar => {
+                crate::settings::toggle_hide_menu_bar(app).await?;
                 menu_manager.update_all(app);
             }
             WebxdcMenuActionVariant::WebxdcSourceCode => {
@@ -345,6 +350,17 @@ pub(crate) fn create_webxdc_window_menu(
                         ),
                         true,
                         webxdc_window.is_always_on_top()?,
+                        None::<&str>,
+                    )?,
+                    #[cfg(not(target_os = "macos"))]
+                    &PredefinedMenuItem::separator(app)?,
+                    #[cfg(not(target_os = "macos"))]
+                    &CheckMenuItem::with_id(
+                        app,
+                        action(WebxdcMenuActionVariant::HideMenuBar),
+                        tx.sync_translate("pref_hide_menu_bar", Substitution::None),
+                        true,
+                        get_hide_menu_bar(app),
                         None::<&str>,
                     )?,
                     &PredefinedMenuItem::fullscreen(

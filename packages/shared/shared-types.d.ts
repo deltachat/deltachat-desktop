@@ -89,6 +89,8 @@ export interface DesktopSettingsType {
   autostart: boolean
   /** whether to start Electron with system on supported platforms */
   autostartElectron: boolean
+  /** whether to auto-hide the native window menu bar */
+  hideMenuBar: boolean
   /**
    * URL relative to which to fetch the `xdcget-lock.json` file.
    * If `undefined` or an empty string then we default to

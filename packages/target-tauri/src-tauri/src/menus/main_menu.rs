@@ -2,7 +2,7 @@ use std::str::FromStr;
 
 use crate::{
     help_window::open_help_window,
-    settings::{apply_zoom_factor, CONFIG_FILE, LOCALE_KEY, ZOOM_FACTOR_KEY},
+    settings::{apply_zoom_factor, get_hide_menu_bar, CONFIG_FILE, LOCALE_KEY, ZOOM_FACTOR_KEY},
     state::{main_window_channels::MainWindowEvents, menu_manager::MenuManager},
     AppState, MainWindowChannels, TranslationState,
 };
@@ -29,6 +29,7 @@ pub(crate) enum MainMenuAction {
     Quit,
     CloseWindow,
     FloatOnTop,
+    HideMenuBar,
     Zoom06,
     Zoom08,
     Zoom10,
@@ -82,6 +83,10 @@ impl MenuAction<'static> for MainMenuAction {
                 main_window.set_always_on_top(!main_window.is_always_on_top()?)?;
                 // this is fast/effient enough, even though it updates all window
                 // if you want to implement sth else you need to take macOS behaviour into account
+                menu_manager.update_all(app);
+            }
+            MainMenuAction::HideMenuBar => {
+                crate::settings::toggle_hide_menu_bar(app).await?;
                 menu_manager.update_all(app);
             }
             MainMenuAction::Zoom06
@@ -197,6 +202,15 @@ pub(crate) fn create_main_menu(
         tx.sync_translate("global_menu_view_floatontop_desktop", Substitution::None),
         true,
         main_window.is_always_on_top()?,
+        None::<&str>,
+    )?;
+    #[cfg(not(target_os = "macos"))]
+    let hide_menu_bar = CheckMenuItem::with_id(
+        app,
+        MainMenuAction::HideMenuBar,
+        tx.sync_translate("pref_hide_menu_bar", Substitution::None),
+        true,
+        get_hide_menu_bar(app),
         None::<&str>,
     )?;
     let zoom_menu = Submenu::with_items(
@@ -370,6 +384,10 @@ pub(crate) fn create_main_menu(
                 true,
                 &[
                     &float_on_top,
+                    #[cfg(not(target_os = "macos"))]
+                    &PredefinedMenuItem::separator(app)?,
+                    #[cfg(not(target_os = "macos"))]
+                    &hide_menu_bar,
                     &zoom_menu,
                     &get_locales_menu(app, &current_language_key)?,
                     &PredefinedMenuItem::separator(app)?,

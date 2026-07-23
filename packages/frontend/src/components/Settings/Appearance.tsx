@@ -42,6 +42,8 @@ export default function Appearance({
   const { openDialog } = useDialog()
   const [availableThemes, setAvailableThemes] = useState<Theme[]>([])
   const tx = useTranslationFunction()
+  const isBrowser = runtime.getRuntimeInfo().target === 'browser'
+  const isMac = runtime.getRuntimeInfo().isMac
 
   useEffect(() => {
     ;(async () => {
@@ -132,6 +134,12 @@ export default function Appearance({
         label={tx('pref_use_system_ui_font')}
         callback={() => ThemeManager.refresh()}
       />
+      {!isBrowser && !isMac && (
+        <DesktopSettingsSwitch
+          settingsKey='hideMenuBar'
+          label={tx('pref_hide_menu_bar')}
+        />
+      )}
     </>
   )
 }
