@@ -371,6 +371,7 @@ export const QrReader = forwardRef<QrCodeScanRef, Props>(
                     ? { exact: deviceId }
                     : { ideal: deviceId }
                   : undefined,
+                facingMode: { ideal: 'environment' },
               },
               audio: false,
             })
