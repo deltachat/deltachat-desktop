@@ -4,7 +4,6 @@
   "type": "module",
   "version": "2.56.0",
   "scripts": {
-    "preinstall": "node ./bin/check-nodejs-version.js",
     "check": "pnpm check:types && pnpm check:lint && pnpm check:format && pnpm check:target-versions",
     "check:types": "pnpm -r --no-bail check:types",
     "check:lint": "eslint . --cache",
