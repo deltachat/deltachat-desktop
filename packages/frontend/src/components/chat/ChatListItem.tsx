@@ -251,6 +251,7 @@ function ChatListItemError({
 >) {
   log.info('Error Loading Chatlistitem ' + chatListItem.id, chatListItem.error)
 
+  const tx = useTranslationFunction()
   const ref = useRef<HTMLButtonElement>(null)
 
   const {
@@ -294,7 +295,9 @@ function ChatListItemError({
       <div className='content'>
         <div className='header'>
           <div className='name'>
-            <span>Error Loading Chat {chatListItem.id}</span>
+            <span>
+              {tx('error_x', `Error Loading Chat ${chatListItem.id}`)}
+            </span>
           </div>
         </div>
         <div className='chat-list-item-message'>

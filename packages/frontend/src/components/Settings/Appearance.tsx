@@ -94,7 +94,7 @@ export default function Appearance({
     const theme = availableThemes.find(
       ({ address }: { address: string }) => address === activeTheme
     )
-    if (!theme) return 'Loading...'
+    if (!theme) return tx('loading')
 
     return theme.name
   }
