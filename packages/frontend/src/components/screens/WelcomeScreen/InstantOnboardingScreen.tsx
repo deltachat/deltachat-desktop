@@ -53,11 +53,11 @@ function buildContextMenu(
     isTeamProfile
       ? {
           // TODO fix a11y: the menu item needs to be `role="menuitemcheckbox"`.
-          label: '🗹 ' + tx('create_team_profile'),
+          label: '✓ ' + tx('create_team_profile'),
           action: () => setIsTeamProfile(false),
         }
       : {
-          label: '☐ ' + tx('create_team_profile'),
+          label: tx('create_team_profile'),
           action: () => {
             openDialog(ConfirmationDialog, {
               header: tx('create_team_profile'),
