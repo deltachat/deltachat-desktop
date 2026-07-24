@@ -11,6 +11,8 @@ import { runtime } from '@deltachat-desktop/runtime-interface'
 import styles from './styles.module.scss'
 
 import type { T } from '@deltachat/jsonrpc-client'
+import { useRpcFetch } from '../../hooks/useFetch'
+import { unknownErrorToString } from '@deltachat-desktop/shared/unknownErrorToString'
 
 type Props = {
   account: T.Account
@@ -36,6 +38,11 @@ export default function AccountHoverInfo({
     })
   }, [account.id])
 
+  const isTeamProfile = useRpcFetch(BackendRemote.rpc.getConfig, [
+    account.id,
+    'team_profile',
+  ])
+
   const showConnection = isSelected || !bgSyncDisabled
 
   let content: React.ReactElement
@@ -58,6 +65,20 @@ export default function AccountHoverInfo({
             <Icon icon='sell' size={12} className={styles.hoverInfoMuteIcon} />{' '}
             {account.privateTag}
           </HoverInfoProperty>
+        )}
+        {isTeamProfile.result?.ok === false ? (
+          <p>
+            {tx(
+              'error_x',
+              'failed to check if the profile is a team profile: ' +
+                unknownErrorToString(isTeamProfile.result.err)
+            )}
+          </p>
+        ) : (
+          !isTeamProfile.loading &&
+          isTeamProfile.result.value === '1' && (
+            <HoverInfoProperty>{tx('team')}</HoverInfoProperty>
+          )
         )}
         {showConnection && (
           <HoverInfoProperty>

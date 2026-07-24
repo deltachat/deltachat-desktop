@@ -28,6 +28,7 @@ export interface SettingsStoreState {
       'ui.mentions_enabled': '0' | '1'
       proxy_enabled: Proxy
       proxy_url: string
+      team_profile: '0' | '1'
     }[P]
   }
   desktopSettings: DesktopSettingsType
@@ -48,6 +49,7 @@ const settingsKeys = [
   'ui.mentions_enabled',
   'proxy_enabled',
   'proxy_url',
+  'team_profile',
 ] as const
 
 export const enum WhoCanCallMe {
