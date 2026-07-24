@@ -1005,6 +1005,10 @@ function MessageLoading({
     ref
   )
 
+  useEffect(() => {
+    log.warn(`Rendered message ${messageId.msg_id} that is not loaded yet`)
+  }, [messageId.msg_id])
+
   return (
     <div className='info-message' id={String(messageId.msg_id)}>
       <div
@@ -1020,7 +1024,7 @@ function MessageLoading({
         onKeyDown={focusAndMultiselect.onKeyDown}
         onFocus={focusAndMultiselect.onFocus}
       >
-        {tx('loading')} Message {messageId.msg_id}
+        {tx('loading')}
       </div>
     </div>
   )
