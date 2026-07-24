@@ -1,11 +1,8 @@
-import { C, T } from '@deltachat/jsonrpc-client'
+import type { T } from '@deltachat/jsonrpc-client'
 import React, { useState } from 'react'
-import { useDebouncedCallback } from 'use-debounce/lib'
 
 import { DeltaInput, DeltaSelect } from './Login-Styles'
-import { ClickableLink } from './helpers/ClickableLink'
 import { getLogger } from '@deltachat-desktop/shared/logger'
-import { BackendRemote, Type } from '../backend-com'
 import Collapse from './Collapse'
 import { I18nContext } from '../contexts/I18nContext'
 
@@ -45,9 +42,6 @@ export default function LoginForm({
   isEdit,
 }: LoginProps) {
   const [uiShowAdvanced, setUiShowAdvanced] = useState<boolean>(false)
-  const [providerInfo, setProviderInfo] = useState<
-    Type.ProviderInfo | undefined
-  >()
   const settingsStore = useSettingsStore()[0]
   const forceEncryption =
     forceEncryptionProp ?? settingsStore?.settings['force_encryption'] === '1'
@@ -70,43 +64,6 @@ export default function LoginForm({
       typeSafeValue = ''
     }
     setCredentials({ ...credentials, [id]: typeSafeValue })
-  }
-
-  const [debouncedGetProviderInfo] = useDebouncedCallback(
-    async (addr: string) => {
-      if (window.__selectedAccountId === undefined) {
-        setProviderInfo(undefined)
-        return
-      }
-      const result: any = await BackendRemote.rpc.getProviderInfo(
-        window.__selectedAccountId,
-        addr
-      )
-      setProviderInfo(result || null)
-    },
-    500
-  )
-
-  const onEmailChange = (
-    event: React.FormEvent<HTMLElement> & React.ChangeEvent<HTMLInputElement>
-  ) => {
-    handleCredentialsChange(event)
-    const email = event.target.value
-    if (email === '') {
-      setProviderInfo(undefined)
-      return
-    }
-  }
-
-  const onEmailBlur = (
-    event: React.FormEvent<HTMLElement> & React.FocusEvent<HTMLInputElement>
-  ) => {
-    const email = event.target.value
-    if (email === '') {
-      setProviderInfo(undefined)
-      return
-    }
-    debouncedGetProviderInfo(email)
   }
 
   const {
@@ -134,8 +91,7 @@ export default function LoginForm({
             id='addr'
             placeholder={tx('email_address')}
             value={addr}
-            onChange={onEmailChange}
-            onBlur={onEmailBlur}
+            onChange={handleCredentialsChange}
             disabled={isEdit === true}
           />
 
@@ -147,21 +103,6 @@ export default function LoginForm({
             value={password || ''}
             onChange={handleCredentialsChange}
           />
-
-          {providerInfo?.beforeLoginHint && (
-            <div
-              className={`before-login-hint ${
-                providerInfo.status === C.DC_PROVIDER_STATUS_BROKEN
-                  ? 'broken'
-                  : ''
-              }`}
-            >
-              <p>{providerInfo.beforeLoginHint}</p>
-              <ClickableLink href={providerInfo.overviewPage}>
-                {tx('more_info_desktop')}
-              </ClickableLink>
-            </div>
-          )}
 
           <p className='text'>{tx('login_advanced_hint')}</p>
           <button
