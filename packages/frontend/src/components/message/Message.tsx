@@ -1330,7 +1330,7 @@ function WebxdcMessageContent({
   }
 
   const info = webxdcInfo || {
-    name: isLoadingWebxdcInfo ? 'Loading...' : 'INFO MISSING!',
+    name: isLoadingWebxdcInfo ? tx('loading') : 'INFO MISSING!',
     document: undefined,
     summary: isLoadingWebxdcInfo ? '' : 'INFO MISSING!',
   }

@@ -599,6 +599,7 @@ export function WebxdcAttachment({
   messageId,
   loadResult,
 }: GalleryAttachmentElementProps) {
+  const tx = useTranslationFunction()
   const { openDialog } = useDialog()
   const contextMenu = useContext(ContextMenuContext)
   const { jumpToMessage, deleteMessage } = useMessage()
@@ -649,7 +650,7 @@ export function WebxdcAttachment({
           src={runtime.getWebxdcIconURL(selectedAccountId(), messageId)}
         />
         <div className='text-part'>
-          <div className='name'>Loading...</div>
+          <div className='name'>{tx('loading')}</div>
           <div className='summary'></div>
         </div>
       </div>
@@ -677,7 +678,7 @@ export function WebxdcAttachment({
           src={runtime.getWebxdcIconURL(selectedAccountId(), messageId)}
         />
         <div className='text-part'>
-          <div className='name'>Error loading info</div>
+          <div className='name'>{tx('error_x', 'could not load app info')}</div>
           <div className='summary'>
             {'webxdcInfo is not available!, msgid:' + messageId}
           </div>

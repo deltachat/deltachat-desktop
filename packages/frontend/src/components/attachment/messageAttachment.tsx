@@ -283,6 +283,7 @@ export function DraftAttachment({
 }: {
   attachment: MessageTypeAttachmentSubset
 }) {
+  const tx = useTranslationFunction()
   const isViewTypeWebxdc = attachment.viewType === 'Webxdc'
   const [attachmentIdToLoad, setAttachmentIdToLoad] = useState(attachment.id)
   const webxdcInfoFetch = useRpcFetch(
@@ -341,7 +342,7 @@ export function DraftAttachment({
             {/* `webxdcInfoFetch` is never `null` here, but TypeScript
             doesn't know it. */}
             {webxdcInfoFetch?.loading
-              ? 'Loading...'
+              ? tx('loading')
               : webxdcInfoFetch?.result.ok
                 ? webxdcInfoFetch.result.value.name
                 : 'Unknown App'}

@@ -998,6 +998,7 @@ function MessageLoading({
 }: {
   messageId: T.MessageListItem & { kind: 'message' }
 }) {
+  const tx = useTranslationFunction()
   const ref = useRef<HTMLDivElement>(null)
   const focusAndMultiselect = useMessageFocusAndMultiselect(
     messageId.msg_id,
@@ -1019,7 +1020,7 @@ function MessageLoading({
         onKeyDown={focusAndMultiselect.onKeyDown}
         onFocus={focusAndMultiselect.onFocus}
       >
-        Loading Message {messageId.msg_id}
+        {tx('loading')} Message {messageId.msg_id}
       </div>
     </div>
   )
