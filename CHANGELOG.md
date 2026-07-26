@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file.
 
+<a id="2_57_0"></a>
+## [2.57.0] - 2026-07-25
+
+### Removed
+
+- Remove hints about email providers on login (such as "Gmail requires you to create an app-specific password") (https://github.com/chatmail/core/pull/8437)
+
+### Fixed
+
+- Relay list not syncing to devices with Delta Chat versions older than 2.55.0.
+  If you recently added a second device and it can't receive and send messages,
+  upgrade your main device to 2.57.0 and then add that second device again.
+
+### Changes
+
+- Update onboard help
+
+### Miscellaneous Tasks
+
+- Upgrade core to 2.57.0 ([#6594](https://github.com/deltachat/deltachat-desktop/issues/6594))
+
 <a id="2_56_0"></a>
 ## [2.56.0] - 2026-07-22
 
@@ -4201,7 +4222,8 @@ This section is only relevant to contributors.
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.56.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.57.0...HEAD
+[2.57.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.56.0...v2.57.0
 [2.56.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.53.1...v2.56.0
 [2.53.1]: https://github.com/deltachat/deltachat-desktop/compare/v2.53.0...v2.53.1
 [2.53.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.52.0...v2.53.0

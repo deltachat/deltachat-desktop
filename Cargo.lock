@@ -2051,7 +2051,7 @@ dependencies = [
 
 [[package]]
 name = "deltachat-tauri"
-version = "2.56.0"
+version = "2.57.0"
 dependencies = [
  "anyhow",
  "ashpd",
@@ -2069,7 +2069,7 @@ dependencies = [
  "mime_guess",
  "notify",
  "percent-encoding",
- "png 0.18.0",
+ "png 0.17.16",
  "rand 0.9.3",
  "regex",
  "register-default-handler",
