@@ -11,7 +11,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
-- Relay list not syncing to devices with Delta Chat versions older than 2.55.0.
+- Relay list not syncing to devices with Delta Chat versions older than 2.56.0.
   If you recently added a second device and it can't receive and send messages,
   upgrade your main device to 2.57.0 and then add that second device again.
 
