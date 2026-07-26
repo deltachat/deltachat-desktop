@@ -5,9 +5,15 @@ All notable changes to this project will be documented in this file.
 <a id="2_57_0"></a>
 ## [2.57.0] - 2026-07-25
 
-### Added
+### Removed
 
-- Remove hints about email providers on login
+- Remove hints about email providers on login (such as "Gmail requires you to create an app-specific password") (https://github.com/chatmail/core/pull/8437)
+
+### Fixed
+
+- Relay list not syncing to devices with Delta Chat versions older than 2.55.0.
+  If you recently added a second device and it can't receive and send messages,
+  upgrade your main device to 2.57.0 and then add that second device again.
 
 ### Changes
 
