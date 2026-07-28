@@ -213,9 +213,9 @@ export interface Runtime {
   onResumeFromSleep: (() => void) | undefined
   onToggleNotifications: (() => void) | undefined
   onDesktopSettingChanged:
-    | ((
-        key: keyof DesktopSettingsType,
-        value: string | number | boolean
+    | (<T extends keyof DesktopSettingsType>(
+        key: T,
+        value: DesktopSettingsType[T]
       ) => void)
     | undefined
 

@@ -43,6 +43,7 @@ export default function Appearance({
   const [availableThemes, setAvailableThemes] = useState<Theme[]>([])
   const tx = useTranslationFunction()
   const isBrowser = runtime.getRuntimeInfo().target === 'browser'
+  const isTauri = runtime.getRuntimeInfo().target === 'tauri'
   const isMac = runtime.getRuntimeInfo().isMac
 
   useEffect(() => {
@@ -134,12 +135,12 @@ export default function Appearance({
         label={tx('pref_use_system_ui_font')}
         callback={() => ThemeManager.refresh()}
       />
-      {!isBrowser && !isMac && (
-        <DesktopSettingsSwitch
-          settingsKey='hideMenuBar'
-          label={tx('pref_hide_menu_bar')}
-        />
-      )}
+      <DesktopSettingsSwitch
+        settingsKey='hideMenuBar'
+        label={tx('pref_hide_menu_bar')}
+        disabled={isBrowser || isTauri || isMac}
+        disabledValue={false}
+      />
     </>
   )
 }

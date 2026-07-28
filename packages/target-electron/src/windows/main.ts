@@ -433,7 +433,7 @@ export function toggleHideMenuBar() {
   applyHideMenuBar(flag)
   DesktopSettings.update({ hideMenuBar: flag })
   // Notify frontend (Settings UI) about the change from View menu
-  window.webContents.send('desktop-setting-changed', 'hideMenuBar', flag)
+  send('desktop-setting-changed', 'hideMenuBar', flag)
 }
 
 export function isHideMenuBar() {

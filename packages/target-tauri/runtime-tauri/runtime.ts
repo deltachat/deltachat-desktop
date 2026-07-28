@@ -81,10 +81,6 @@ type MainWindowEvents =
       event: 'deepLinkOpened'
       data: string
     }
-  | {
-      event: 'desktopSettingChanged'
-      data: { key: string; value: boolean | string | number }
-    }
 
 const events = new Channel<MainWindowEvents>()
 const jsonrpc = new Channel<yerpc.Message>()
@@ -171,6 +167,7 @@ class TauriRuntime implements Runtime {
       bounds: {}, // managed by tauri_plugin_window_state plugin
       HTMLEmailWindowBounds: undefined, // managed by tauri_plugin_window_state plugin
       autostartElectron: false, // not needed in tauri version
+      hideMenuBar: false, // not used in tauri version
     } satisfies Partial<DesktopSettingsType>
 
     const frontendAndTauri = {
@@ -186,7 +183,6 @@ class TauriRuntime implements Runtime {
       notifications: true,
       syncAllAccounts: true,
       autostart: true,
-      hideMenuBar: false,
     } satisfies Partial<DesktopSettingsType>
 
     const frontendOnly = {
@@ -364,11 +360,6 @@ class TauriRuntime implements Runtime {
         this.onOpenQrUrl?.(event.data)
       } else if (event.event === 'notificationClick') {
         this.notificationCallback?.(event.data)
-      } else if (event.event === 'desktopSettingChanged') {
-        this.onDesktopSettingChanged?.(
-          event.data.key as keyof DesktopSettingsType,
-          event.data.value
-        )
       }
     }
     getCurrentWebview().onDragDropEvent(event => {
@@ -729,9 +720,9 @@ class TauriRuntime implements Runtime {
   onResumeFromSleep: (() => void) | undefined
   onToggleNotifications: (() => void) | undefined
   onDesktopSettingChanged:
-    | ((
-        key: keyof DesktopSettingsType,
-        value: string | number | boolean
+    | (<T extends keyof DesktopSettingsType>(
+        key: T,
+        value: DesktopSettingsType[T]
       ) => void)
     | undefined
   checkMediaAccess(mediaType: MediaType): Promise<MediaAccessStatus> {
