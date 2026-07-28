@@ -38,7 +38,7 @@ function getLinuxAutostartFilePath(): string {
 // without the trailing app arguments (`-- --minimized`).
 function getLinuxExecCommand(): string {
   if (process.env.FLATPAK_ID) {
-    return `flatpak run ${escapeDesktopExecArg(process.env.FLATPAK_ID)}`
+    return `flatpak run ${process.env.FLATPAK_ID}`
   }
   if (process.env.APPIMAGE) {
     // When running as an AppImage, APPIMAGE env var is set to the
@@ -49,9 +49,9 @@ function getLinuxExecCommand(): string {
     // On Nix/NixOS, process.execPath is a version-pinned path to the shared
     // `electron` binary (e.g. /nix/store/…-electron-…/…/electron), not to
     // Delta Chat. Pinning it would break autostart on every update so rely
-    // on the `deltachat` command
+    // on the `deltachat-desktop` command
     // see https://github.com/deltachat/deltachat-desktop/issues/6431
-    return 'deltachat'
+    return 'deltachat-desktop'
   }
   // Regular installs (e.g. the .deb): process.execPath is the Delta Chat
   // executable itself, and its absolute path is unambiguous even when several
@@ -93,8 +93,6 @@ Type=Application
 Name=Delta Chat
 Comment=Delta Chat decentralized private messenger
 Exec=${getLinuxExecCommand()} -- --minimized
-Terminal=false
-StartupNotify=false
 Hidden=false
 NoDisplay=false
 X-GNOME-Autostart-enabled=true
