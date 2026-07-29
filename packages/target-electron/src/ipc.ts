@@ -44,6 +44,7 @@ import {
 } from '@deltachat-desktop/shared/shared-types.js'
 import { set_has_unread, updateTrayIcon } from './tray.js'
 import { openHtmlEmailWindow } from './windows/html_email.js'
+import { refresh } from './menu.js'
 import { appx, mapPackagePath } from './isAppx.js'
 import DeltaChatController from './deltachat/controller.js'
 import { BuildInfo } from './get-build-info.js'
@@ -319,6 +320,10 @@ export async function init(cwd: string, logHandler: LogHandler) {
         } catch (error) {
           log.error('Failed to apply autostart setting', error)
         }
+      } else if (key === 'hideMenuBar') {
+        mainWindow.applyHideMenuBar(Boolean(value))
+        // Refresh menu to update checkbox state when changed from Settings UI
+        refresh()
       }
 
       return true

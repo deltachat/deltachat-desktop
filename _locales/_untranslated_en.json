@@ -77,6 +77,9 @@
   "qr_link_pasted": {
     "message": "QR link detected"
   },
+  "pref_hide_menu_bar": {
+    "message": "Hide Menu Bar"
+  },
   "paste_in_qr_scanner": {
     "message": "Click to paste it in QR scanner"
   },

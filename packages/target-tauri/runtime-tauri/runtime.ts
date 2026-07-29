@@ -167,6 +167,7 @@ class TauriRuntime implements Runtime {
       bounds: {}, // managed by tauri_plugin_window_state plugin
       HTMLEmailWindowBounds: undefined, // managed by tauri_plugin_window_state plugin
       autostartElectron: false, // not needed in tauri version
+      hideMenuBar: false, // not used in tauri version
     } satisfies Partial<DesktopSettingsType>
 
     const frontendAndTauri = {
@@ -718,6 +719,12 @@ class TauriRuntime implements Runtime {
     | undefined
   onResumeFromSleep: (() => void) | undefined
   onToggleNotifications: (() => void) | undefined
+  onDesktopSettingChanged:
+    | (<T extends keyof DesktopSettingsType>(
+        key: T,
+        value: DesktopSettingsType[T]
+      ) => void)
+    | undefined
   checkMediaAccess(mediaType: MediaType): Promise<MediaAccessStatus> {
     return invoke('check_media_permission', {
       permission: mediaTypeToPermission[mediaType],
