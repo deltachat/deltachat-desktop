@@ -11,36 +11,13 @@ import { getLogger } from '@deltachat-desktop/shared/logger'
 import { BackendRemote } from './backend-com'
 import { runPostponedFunctions } from './onready'
 import { I18nContext } from './contexts/I18nContext'
+import { useSelectAllKeyboardShortcut } from './hooks/useSelectAllKeyboardShortcut'
 
 export default function App(_props: any) {
+  useSelectAllKeyboardShortcut()
+
   useEffect(() => {
     runtime.emitUIReady()
-    window.addEventListener('keydown', function (ev: KeyboardEvent) {
-      if (ev.code === 'KeyA' && (ev.metaKey || ev.ctrlKey)) {
-        let stop = true
-        if (
-          (ev.target as HTMLElement).localName === 'textarea' ||
-          (ev.target as HTMLElement).localName === 'input'
-        ) {
-          stop = false
-        } else {
-          // KeyboardEvent ev.path does ONLY exist in CHROMIUM
-          const invokePath: HTMLElement[] = (ev as any).path
-          for (let index = 0; index < invokePath.length; index++) {
-            const element: HTMLElement = invokePath[index]
-            if (
-              element.localName === 'textarea' ||
-              element.localName === 'input'
-            )
-              stop = false
-          }
-        }
-        if (stop) {
-          ev.stopPropagation()
-          ev.preventDefault()
-        }
-      }
-    })
   }, [])
 
   useLayoutEffect(() => {
