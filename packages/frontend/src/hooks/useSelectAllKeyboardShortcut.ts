@@ -22,12 +22,15 @@ export function useSelectAllKeyboardShortcut() {
         return
       }
 
-      const target = ev.target
-      if (
-        target instanceof HTMLInputElement ||
-        target instanceof HTMLTextAreaElement ||
-        (target instanceof HTMLElement && target.isContentEditable)
-      ) {
+      const isInEditableField = ev
+        .composedPath() // make sure we also get events from shadow DOM elements
+        .some(
+          el =>
+            el instanceof HTMLInputElement ||
+            el instanceof HTMLTextAreaElement ||
+            (el instanceof HTMLElement && el.isContentEditable)
+        )
+      if (isInEditableField) {
         return
       }
       ev.preventDefault()
