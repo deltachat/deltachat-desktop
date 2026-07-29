@@ -199,7 +199,7 @@ app.get('/stickers/:account/:?pack/:filename', authMiddleWare, (req, res) => {
   res.send('req.params' + JSON.stringify(req.params))
 })
 
-app.use('/background', express.static(join(DATA_DIR, 'background')))
+app.use('/background', authMiddleWare, express.static(join(DATA_DIR, 'background')))
 
 app.use('/backend-api', BackendApiRoute)
 app.use(helpRoute)
