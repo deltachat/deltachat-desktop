@@ -62,8 +62,8 @@
 
     .navbarButton {
       padding: 0;
-      width: 20px;
-      height: 20px;
+      width: 22px;
+      height: 22px;
       border-radius: 0;
       margin-inline-end: 12px;
       align-items: center;
@@ -78,10 +78,6 @@
       align-items: center;
       gap: 10px;
       margin-inline-end: 24px;
-
-      border: 1px solid #999;
-      border-radius: 4px;
-      padding: 3px 4px;
 
       .navbarButton {
         margin-inline-end: 0;
@@ -100,8 +96,8 @@
 .webxdcIcons {
   line-height: 0;
   img.webxdcIcon {
-    width: 25px;
-    height: 25px;
+    width: 22px;
+    height: 22px;
     cursor: pointer;
     border-radius: 3px;
   }

@@ -361,7 +361,7 @@ function ChatNavButtons({
 
   return (
     <div className='views' data-no-drag-region>
-      <div className={hasLastUsedApps ? styles.appsGroup : undefined}>
+      <div className={styles.appsGroup}>
         {hasLastUsedApps && (
           <AppIcons accountId={selectedAccountId()} apps={lastUsedApps} />
         )}
@@ -372,7 +372,7 @@ function ChatNavButtons({
           className={styles.navbarButton}
           coloring='navbar'
           icon='apps'
-          size={18}
+          size={22}
         />
       </div>
       {settingsStore?.desktopSettings.enableOnDemandLocationStreaming && (
@@ -383,7 +383,7 @@ function ChatNavButtons({
           title={tx('tab_map')}
           coloring='navbar'
           icon='map'
-          size={18}
+          size={22}
         />
       )}
       {/* Calls are only implemented on Electron; Tauri and Browser
