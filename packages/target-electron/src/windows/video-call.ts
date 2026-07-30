@@ -787,7 +787,8 @@ function makeResponse(
 const SCHEME_NAME = 'calls-webapp-scheme'
 
 /**
- * @see `origin_no_opaque` in the Tauri version.
+ * @see `origin_no_opaque` in the Tauri version:
+ * https://github.com/deltachat/deltachat-tauri
  */
 function isOriginGood(url: string) {
   const urlParsed = URL.parse(url)
