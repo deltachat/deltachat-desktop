@@ -132,7 +132,12 @@ export type RuntimeInfo = {
   isMac: boolean
   /** currently used to check for an additional device message */
   isAppx: boolean
-  /** to show / hide elements/options that are not supported, like tray icon options on browser */
+  /** to show / hide elements/options that are not supported, like tray icon options on browser
+   *
+   * 'tauri' has no target package in this repository — it is implemented in
+   * https://github.com/deltachat/deltachat-tauri, which builds against this
+   * type. Keep the tauri branches in the frontend, they are not dead code.
+   */
   target: 'electron' | 'browser' | 'tauri'
   /** runtime library versions, be it electron, node, tauri or whatever,
    *  used for showing to user in the About dialog */
