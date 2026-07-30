@@ -17,6 +17,10 @@ loadEnv()
  */
 export default defineConfig<TestOptions>({
   testDir: './tests',
+  testIgnore:
+    process.env.E2E_EXCLUDE_UNENCRYPTED === 'true'
+      ? '**/unencrypted-group-tests.spec.ts'
+      : undefined,
   /* Run all tests in serial mode only */
   fullyParallel: false,
   /* Fail the build on CI if you accidentally left test.only in the source code. */

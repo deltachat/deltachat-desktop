@@ -20,10 +20,9 @@ import {
 /**
  * Joining a group via instant onboarding needs the DCACCOUNT mechanism,
  * which does not work against a self-signed IP-only relay
- * (see `skipOnIpRelay`), so all tests that need it live in their own self-contained file:
- * in CI it runs in a separate step against the public chatmail relay
- * (see .github/workflows/e2e.yml), while the rest of the suite
- * uses a local Docker relay.
+ * (see `skipOnIpRelay`), so all tests that need it live in their own
+ * self-contained file. In CI, they are skipped for the local IP-based relay
+ * and run against the remote relay (see .github/workflows/e2e.yml).
  */
 
 test.describe.configure({

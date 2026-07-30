@@ -20,28 +20,34 @@ permissions: {}
 
 jobs:
   test:
-    name: E2E Tests
+    name: E2E Tests (${{ matrix.relay }} chatmail relay)
     environment: test
     env:
       CI: true
       NODE_ENV: test
       VERSION_INFO_GIT_REF: ${{ github.ref }}
-      DC_CHATMAIL_DOMAIN: 127.0.0.1
+      DC_CHATMAIL_DOMAIN: ${{ matrix.chatmail_domain }}
       DC_FRONTEND_NO_TLS: true
-      DC_MAIL_SERVER: ${{ vars.CI_MAIL_SERVER }}
-      DC_MAIL_SERVER_TOKEN: ${{ secrets.CI_MAIL_SERVER_TOKEN }}
+      E2E_EXCLUDE_UNENCRYPTED: true
     timeout-minutes: 75
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     strategy:
-      matrix:
-        os: [ubuntu-latest]
       fail-fast: false
+      matrix:
+        include:
+          - relay: local
+            chatmail_domain: 127.0.0.1
+            start_local_relay: true
+          - relay: remote
+            chatmail_domain: ci-chatmail.testrun.org
+            start_local_relay: false
     steps:
       - uses: actions/checkout@v6
         with:
           show-progress: false
           persist-credentials: false
       - name: Checkout chatmail Docker setup
+        if: ${{ matrix.start_local_relay }}
         uses: actions/checkout@v6
         with:
           repository: chatmail/docker
@@ -57,6 +63,7 @@ jobs:
         working-directory: ./packages/e2e-tests
         run: pnpm exec playwright install --with-deps --only-shell chromium
       - name: Start local chatmail relay
+        if: ${{ matrix.start_local_relay }}
         working-directory: ./.ci/docker
         env:
           CHATMAIL_IMAGE: ghcr.io/chatmail/docker:main
@@ -65,6 +72,7 @@ jobs:
           docker pull "$CHATMAIL_IMAGE"
           docker compose up --no-build -d chatmail
       - name: Wait for chatmail relay
+        if: ${{ matrix.start_local_relay }}
         run: |
           for attempt in {1..60}; do
             status="$(docker inspect --format='{{.State.Health.Status}}' chatmail 2>/dev/null || true)"
@@ -87,25 +95,16 @@ jobs:
           exit 1
       - name: Build browser target
         run: pnpm build:browser
-      - name: Run e2e tests (local chatmail relay)
+      - name: Run e2e tests (${{ matrix.relay }} chatmail relay)
         run: pnpm --filter=e2e-tests e2e
-      # Instant onboarding (DCACCOUNT) does not work with self-signed
-      # IP-only local relay (see chatmail/core#8211)
-      # so we run it against a public chatmail relay instead.
-      - name: Run instant onboarding e2e tests (public chatmail relay)
-        if: ${{ !cancelled() }}
-        run: pnpm --filter=e2e-tests e2e qrcode instant-onboarding
-        env:
-          DC_CHATMAIL_DOMAIN: ci-chatmail.testrun.org
-          PLAYWRIGHT_HTML_OUTPUT_DIR: playwright-report-public
       - name: Collect chatmail logs
-        if: ${{ !cancelled() }}
+        if: ${{ !cancelled() && matrix.start_local_relay }}
         run: |
           mkdir -p chatmail-logs
           docker logs chatmail > chatmail-logs/docker.log 2>&1 || true
           docker exec chatmail get-service-logs > chatmail-logs/services.log 2>&1 || true
       - name: Stop chatmail relay
-        if: ${{ always() }}
+        if: ${{ always() && matrix.start_local_relay }}
         working-directory: ./.ci/docker
         run: docker compose down --volumes
       - uses: actions/upload-artifact@v4
@@ -114,9 +113,9 @@ jobs:
         # but we want to debug flaky tests, so let's always upload them.
         if: ${{ !cancelled() }}
         with:
-          name: e2e-report
+          name: e2e-report-${{ matrix.relay }}
           path: |
             packages/e2e-tests/playwright-report
-            packages/e2e-tests/playwright-report-public
             chatmail-logs
+          if-no-files-found: ignore
           retention-days: 10
