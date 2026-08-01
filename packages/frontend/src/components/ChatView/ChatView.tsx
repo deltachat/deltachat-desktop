@@ -357,20 +357,24 @@ function ChatNavButtons({
     })
   }, [openDialog, chatId])
 
+  const hasLastUsedApps = lastUsedApps && lastUsedApps.length > 0
+
   return (
     <div className='views' data-no-drag-region>
-      {lastUsedApps && lastUsedApps.length > 0 && (
-        <AppIcons accountId={selectedAccountId()} apps={lastUsedApps} />
-      )}
-      <IconButton
-        onClick={openMediaViewDialog}
-        aria-label={tx('apps_and_media')}
-        title={tx('apps_and_media')}
-        className={styles.navbarButton}
-        coloring='navbar'
-        icon='apps'
-        size={18}
-      />
+      <div className={styles.appsGroup}>
+        {hasLastUsedApps && (
+          <AppIcons accountId={selectedAccountId()} apps={lastUsedApps} />
+        )}
+        <IconButton
+          onClick={openMediaViewDialog}
+          aria-label={tx('apps_and_media')}
+          title={tx('apps_and_media')}
+          className={styles.navbarButton}
+          coloring='navbar'
+          icon='apps'
+          size={22}
+        />
+      </div>
       {settingsStore?.desktopSettings.enableOnDemandLocationStreaming && (
         <IconButton
           onClick={() => openMapWebxdc(selectedAccountId(), chatId)}
@@ -379,7 +383,7 @@ function ChatNavButtons({
           title={tx('tab_map')}
           coloring='navbar'
           icon='map'
-          size={18}
+          size={22}
         />
       )}
       {/* Calls are only implemented on Electron; Tauri and Browser
