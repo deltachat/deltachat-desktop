@@ -1,7 +1,7 @@
 import { BackendRemote } from '../backend-com'
 import { clearNotificationsForChat } from '../system-integration/notifications'
 
-import { C, type T } from '@deltachat/jsonrpc-client'
+import { C } from '@deltachat/jsonrpc-client'
 
 /**
  * Finds basic info, like contact id and the related chat ID of a contact based
@@ -44,20 +44,6 @@ export async function getLastChatId(accountId: number): Promise<number | null> {
   }
 
   return null
-}
-
-export async function muteChat(
-  accountId: number,
-  chatId: number,
-  duration: T.MuteDuration
-) {
-  await BackendRemote.rpc.setChatMuteDuration(accountId, chatId, duration)
-}
-
-export async function unmuteChat(accountId: number, chatId: number) {
-  await BackendRemote.rpc.setChatMuteDuration(accountId, chatId, {
-    kind: 'NotMuted',
-  })
 }
 
 export function marknoticedChat(accountId: number, chatId: number) {
