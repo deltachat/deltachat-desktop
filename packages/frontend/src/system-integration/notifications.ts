@@ -462,12 +462,6 @@ export function clearNotificationsForChat(accountId: number, chatId: number) {
   runtime.clearNotifications(accountId, chatId)
 }
 
-export function clearAllNotifications() {
-  log.debug('clearAllNotifications')
-  // ask runtime to delete the notifications
-  runtime.clearAllNotifications()
-}
-
 function getNotificationIcon(
   notification: T.MessageNotificationInfo
 ): [icon: string | null, iconIsAvatar: boolean] {
