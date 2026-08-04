@@ -28,7 +28,10 @@ rawApp.commandLine.appendSwitch('host-resolver-rules', hostRules)
 
 rawApp.commandLine.appendSwitch('disable-features', 'IsolateSandboxedIframes')
 
-rawApp.commandLine.appendSwitch('enable-features', 'WebRtcPipeWireCamera,WebRtcPipeWireScreenCapturer')
+rawApp.commandLine.appendSwitch(
+  'enable-features',
+  'WebRtcPipeWireCamera,WebRtcPipeWireScreenCapturer'
+)
 
 if (rc['version'] === true || rc['v'] === true) {
   // eslint-disable-next-line no-console
