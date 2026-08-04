@@ -17,23 +17,3 @@ export function usePrevious(value: any) {
   // eslint-disable-next-line react-hooks/refs
   return ref.current
 }
-
-/**
- * Like {@link usePrevious}, but the returned value is from the previous
- * execution of this hook (i.e. previous render function execution),
- * and not from the previous actual render (not `useEffect`).
- *
- * It is this pattern:
- * https://react.dev/learn/you-might-not-need-an-effect#adjusting-some-state-when-a-prop-changes
- *
- * @returns `undefined` on initial run,
- * otherwise the `val` from the previous run of the hook.
- */
-export function usePrevious2<T>(val: T): T | undefined {
-  const prevRef = useRef<T>(undefined)
-  // eslint-disable-next-line react-hooks/refs
-  const prev = prevRef.current
-  // eslint-disable-next-line react-hooks/refs
-  prevRef.current = val
-  return prev
-}
