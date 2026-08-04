@@ -31,14 +31,21 @@ const build = {}
 build['appId'] = 'chat.delta.desktop.electron'
 build['extraMetadata'] = {
   //@ts-ignore
-  // restore old name before mono-repo
   name: 'deltachat-desktop',
+  // Electron derives the Linux window class (X11 WM_CLASS / Wayland app_id)
+  // from `desktopName` in package.json. It must match the name of the
+  // installed desktop file (`<executableName>.desktop`)
+  // see https://github.com/deltachat/deltachat-desktop/issues/6505
+  //@ts-ignore
+  desktopName: 'deltachat-desktop.desktop',
 }
 
 if (previewBuild) {
   build.appId = 'chat.delta.desktop.electron.dev'
   //@ts-ignore
   build.extraMetadata.name = 'deltachat-desktop-dev'
+  //@ts-ignore
+  build.extraMetadata.desktopName = 'deltachat-desktop-dev.desktop'
   //@ts-ignore
   build.extraMetadata.productName = 'DeltaChat-DevBuild'
   const p = JSON.parse(
