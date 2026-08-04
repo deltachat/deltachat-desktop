@@ -2,7 +2,6 @@ export const appName = 'Delta Chat'
 export const homePageUrl = 'https://delta.chat'
 export const gitHubUrl = 'https://github.com/deltachat/deltachat-desktop'
 export const gitHubIssuesUrl = `${gitHubUrl}/issues`
-export const gitHubLicenseUrl = gitHubUrl + '/blob/main/LICENSE'
 export const donationUrl = 'https://delta.chat/donate'
 
 export const appWindowTitle = appName

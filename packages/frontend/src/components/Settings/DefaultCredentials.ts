@@ -2,11 +2,6 @@ import { T } from '@deltachat/jsonrpc-client'
 
 export type Credentials = T.EnteredLoginParam
 
-export type ProxySettings = {
-  proxyEnabled: boolean
-  proxyUrl: string | null
-}
-
 export enum Proxy {
   DISABLED = '0',
   ENABLED = '1',
