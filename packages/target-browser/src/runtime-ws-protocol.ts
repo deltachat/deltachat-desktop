@@ -1,5 +1,3 @@
-export namespace MessageToFrontend {}
-
 export namespace MessageToBackend {
   export interface LogEntry {
     type: 'log'

@@ -51,10 +51,3 @@ export function mapPackagePath(path: string) {
   }
   return path
 }
-
-export function getAppxPath(app_folder: string) {
-  return join(
-    app_folder,
-    '../Packages/merlinux.DeltaChat_v2ry5hvxhdhyy/LocalCache/Local/DeltaChat'
-  )
-}

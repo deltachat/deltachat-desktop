@@ -6,10 +6,6 @@ export function isImage(viewType: Type.Viewtype | null) {
   return viewType === 'Image' || viewType === 'Gif'
 }
 
-export function hasAttachment(attachment: MessageTypeAttachmentSubset | null) {
-  return attachment && attachment.file
-}
-
 // note that we rely on the viewTypes from core here to make sure all Delta Chat clients
 // display the same attachment types in the same way - although this could result in not
 // showing some attachments as files even if we could show them as media (like svg for example)

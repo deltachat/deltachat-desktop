@@ -106,7 +106,7 @@ export function ExperimentalFeatures() {
   )
 }
 
-export default function SyncAllAccountsSwitch() {
+function SyncAllAccountsSwitch() {
   const tx = useTranslationFunction()
   const settingsStore = useSettingsStore()[0]
 
