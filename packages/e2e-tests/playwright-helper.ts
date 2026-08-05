@@ -8,6 +8,7 @@ import {
 import path from 'path'
 import https from 'https'
 import { loadEnv } from './load-env.js'
+import net from 'net'
 
 loadEnv()
 
@@ -40,10 +41,10 @@ export const chatmailServerDomain = process.env.DC_CHATMAIL_DOMAIN
     'ci-chatmail.testrun.org'
 
 /**
- * True if `host` is a bare IPv4 address rather than a DNS name.
+ * True if `host` is a bare IP address rather than a DNS name.
  */
 export function isIpAddress(host: string): boolean {
-  return /^(\d{1,3}\.){3}\d{1,3}$/.test(host)
+  return net.isIP(host) !== 0
 }
 
 /**
