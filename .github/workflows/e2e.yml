@@ -46,14 +46,6 @@ jobs:
         with:
           show-progress: false
           persist-credentials: false
-      - name: Checkout chatmail Docker setup
-        if: ${{ matrix.start_local_relay }}
-        uses: actions/checkout@v6
-        with:
-          repository: chatmail/docker
-          path: .ci/docker
-          show-progress: false
-          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: 22.x
