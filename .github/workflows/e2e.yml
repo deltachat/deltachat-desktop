@@ -70,29 +70,7 @@ jobs:
         run: |
           printf 'MAIL_DOMAIN=127.0.0.1\n' > .env
           docker pull "$CHATMAIL_IMAGE"
-          docker compose up --no-build -d chatmail
-      - name: Wait for chatmail relay
-        if: ${{ matrix.start_local_relay }}
-        run: |
-          for attempt in {1..60}; do
-            status="$(docker inspect --format='{{.State.Health.Status}}' chatmail 2>/dev/null || true)"
-            if [ "$status" = "healthy" ]; then
-              exit 0
-            fi
-
-            if [ "$status" = "unhealthy" ]; then
-              docker logs chatmail
-              docker exec chatmail get-service-logs || true
-              exit 1
-            fi
-
-            echo "Waiting for chatmail relay to become healthy (attempt ${attempt}/60, status: ${status:-starting})"
-            sleep 10
-          done
-
-          docker logs chatmail
-          docker exec chatmail get-service-logs || true
-          exit 1
+          docker compose up --no-build -d --wait chatmail
       - name: Build browser target
         run: pnpm build:browser
       - name: Run e2e tests (${{ matrix.relay }} chatmail relay)
