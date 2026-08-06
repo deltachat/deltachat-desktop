@@ -37,14 +37,7 @@ type ComposerMessageInputProps = {
   onArrowUpWhenEmpty?: () => void
 }
 
-type ComposerMessageInputState = {
-  // error?:boolean|Error
-}
-
-export default class ComposerMessageInput extends React.Component<
-  ComposerMessageInputProps,
-  ComposerMessageInputState
-> {
+export default class ComposerMessageInput extends React.Component<ComposerMessageInputProps> {
   static contextType = DialogContext
   declare context: React.ContextType<typeof DialogContext>
 
