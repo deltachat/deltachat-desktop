@@ -422,14 +422,12 @@ export async function createProfiles(
     await page.context().grantPermissions(['clipboard-read', 'clipboard-write'])
   }
   for (let n = 0; n < number; n++) {
-    if (!hasProfileWithName(userNames[n])) {
-      await createUser(
-        userNames[n],
-        page,
-        existingProfiles,
-        n === 0,
-        useChatmail
-      )
+    const name = userNames[n]
+    if (name == undefined) {
+      throw new Error('not enough userNames')
+    }
+    if (!hasProfileWithName(name)) {
+      await createUser(name, page, existingProfiles, n === 0, useChatmail)
     } else {
       console.log('User already exists')
     }
@@ -440,8 +438,7 @@ export async function deleteAllProfiles(
   page: Page,
   existingProfiles: User[]
 ): Promise<void> {
-  for (let i = 0; i < existingProfiles.length; i++) {
-    const profileToDelete = existingProfiles[i]
+  for (const profileToDelete of existingProfiles) {
     const deleted = await deleteProfile(page, profileToDelete.id)
     expect(deleted).toContain(profileToDelete.name)
     if (deleted) {
