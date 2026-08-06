@@ -154,16 +154,12 @@
       line-height: $line-height;
       margin-top: 8px;
       margin-bottom: 8px;
-      overflow-y: hidden;
       background-color: var(--composerBg);
       color: var(--composerText);
 
-      &.use-field-sizing-css-prop {
-        field-sizing: content;
-        max-height: calc(var(--maxLines) * $line-height);
-
-        overflow-y: auto;
-      }
+      field-sizing: content;
+      max-height: calc(var(--maxLines) * $line-height);
+      overflow-y: auto;
 
       &::placeholder {
         color: var(--composerPlaceholderText);
@@ -173,10 +169,6 @@
       // might be enough, (or it might not, we'll see).
       &:focus {
         outline: none;
-      }
-
-      &.scroll {
-        overflow-y: scroll;
       }
 
       // The "edit message" mode hides the .attachment-button.
