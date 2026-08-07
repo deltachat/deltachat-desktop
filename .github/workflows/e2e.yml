@@ -27,9 +27,7 @@ jobs:
       NODE_ENV: test
       VERSION_INFO_GIT_REF: ${{ github.ref }}
       DC_CHATMAIL_DOMAIN: ${{ matrix.chatmail_domain }}
-      DC_FRONTEND_NO_TLS: true
-      E2E_EXCLUDE_UNENCRYPTED: true
-    timeout-minutes: 75
+    timeout-minutes: 60
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -71,31 +69,18 @@ jobs:
           printf 'MAIL_DOMAIN=127.0.0.1\n' > .env
           docker pull "$CHATMAIL_IMAGE"
           docker compose up --no-build -d chatmail
-      - name: Wait for chatmail relay
-        if: ${{ matrix.start_local_relay }}
-        run: |
-          for attempt in {1..60}; do
-            status="$(docker inspect --format='{{.State.Health.Status}}' chatmail 2>/dev/null || true)"
-            if [ "$status" = "healthy" ]; then
-              exit 0
-            fi
-
-            if [ "$status" = "unhealthy" ]; then
-              docker logs chatmail
-              docker exec chatmail get-service-logs || true
-              exit 1
-            fi
-
-            echo "Waiting for chatmail relay to become healthy (attempt ${attempt}/60, status: ${status:-starting})"
-            sleep 10
-          done
-
-          docker logs chatmail
-          docker exec chatmail get-service-logs || true
-          exit 1
+      # Build while the relay boots
       - name: Build browser target
         run: pnpm build:browser
+      - name: Wait for chatmail relay
+        if: ${{ matrix.start_local_relay }}
+        working-directory: ./.ci/docker
+        # `up` is idempotent, so this only waits for the already started
+        # container to become healthy.
+        run: docker compose up --no-build -d --wait --wait-timeout 600 chatmail
       - name: Run e2e tests (${{ matrix.relay }} chatmail relay)
+        env:
+          DC_FRONTEND_NO_TLS: true
         run: pnpm --filter=e2e-tests e2e
       - name: Collect chatmail logs
         if: ${{ !cancelled() && matrix.start_local_relay }}
@@ -103,10 +88,6 @@ jobs:
           mkdir -p chatmail-logs
           docker logs chatmail > chatmail-logs/docker.log 2>&1 || true
           docker exec chatmail get-service-logs > chatmail-logs/services.log 2>&1 || true
-      - name: Stop chatmail relay
-        if: ${{ always() && matrix.start_local_relay }}
-        working-directory: ./.ci/docker
-        run: docker compose down --volumes
       - uses: actions/upload-artifact@v4
         # We may want to not upload artifacts if tests pass,
         # (`if: ${{ failure() && !cancelled() }}`)
