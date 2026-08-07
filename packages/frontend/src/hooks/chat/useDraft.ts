@@ -431,33 +431,53 @@ export function useDraft(
       })
     }
 
+    const step = upOrDown === KeybindAction.Composer_SelectReplyToUp ? -1 : +1
     /**
-     * filter all messageIds that can be replied to
+     * Iterate message list items up or down, starting from `fromInd`
+     * and skipping messages that definitely can't be replied to
      *
-     * see https://github.com/deltachat/deltachat-desktop/blob/77a1f88a351df49e5df38a14c3a1704a76ecdcb3/packages/frontend/src/components/message/Message.tsx#L274-L278
+     * Messages that are not loaded are not skipped,
+     * it's up to the caller how to handle them.
      */
-    const messageIds = messageListState.messageListItems
-      .filter((item): item is { kind: 'message'; msg_id: number } => {
-        if (item.kind !== 'message') {
-          return false
-        }
-        const id = item.msg_id
-
-        return (
-          messageListState.messageCache[id]?.kind === 'message' &&
-          messageListState.messageCache[id]?.isInfo === false
-        )
+    const makeIter = (fromInd: number) => {
+      return valuesFromInd({
+        arr: messageListState.messageListItems,
+        fromInd,
+        step,
       })
-      .map(({ msg_id }) => msg_id)
+        .filter(item => item.kind === 'message')
+        .map(({ msg_id }) => msg_id)
+        .map(msg_id => {
+          const fromCache = messageListState.messageCache[msg_id]
+          if (fromCache == undefined) {
+            return { kind: 'notLoaded', msg_id } as const
+          }
+
+          // see https://github.com/deltachat/deltachat-desktop/blob/77a1f88a351df49e5df38a14c3a1704a76ecdcb3/packages/frontend/src/components/message/Message.tsx#L274-L278
+          return fromCache.kind === 'message' && fromCache.isInfo === false
+            ? ({ kind: 'quotable', msg_id } as const)
+            : ({ kind: 'notQuotable', msg_id } as const)
+        })
+        .filter(item => item.kind !== 'notQuotable')
+    }
+
     const currQuote = draftState.quote
     if (!currQuote) {
       if (upOrDown === KeybindAction.Composer_SelectReplyToUp) {
-        const id = messageIds[messageIds.length - 1]
-        if (id == undefined) {
+        // Note that if we're in the middle of a chat,
+        // this will quote the last loaded (and quotable) message.
+        const newQuoteRes = makeIter(
+          messageListState.messageListItems.length - 1
+        )
+          .filter(item => item.kind !== 'notLoaded')
+          .next()
+        if (newQuoteRes.done) {
           // No quotable messages in the cache. Either the chat is empty,
           // or the messages haven't been loaded yet
           return
         }
+        newQuoteRes.value.kind satisfies 'quotable'
+        const id = newQuoteRes.value.msg_id
         const fromCache = messageListState.messageCache[id]
         quoteAndJumpToMessage(fromCache?.kind === 'message' ? fromCache : id)
       }
@@ -467,48 +487,43 @@ export function useDraft(
       // Or shall we override with the last message?
       return
     }
-    const currQuoteMessageIdInd = messageIds.lastIndexOf(currQuote.messageId)
-    if (currQuoteMessageIdInd === -1) {
-      // maybe the message is just not in the cache (yet)
-      // but still in the full list of messages
-      // -> check if it's there
-      const isQuoteInMessagelist = messageListState.messageListItems.some(
-        m => m.kind === 'message' && m.msg_id === currQuote.messageId
+    const currQuoteMessageIdInd =
+      messageListState.messageListItems.findLastIndex(
+        item => item.kind === 'message' && item.msg_id === currQuote.messageId
       )
-      if (isQuoteInMessagelist) {
-        // message is in the full list, just not in the cache (yet)
-        // -> jump to it, it will be loaded then (and the surrounding messages)
-        jumpToMessage({
-          accountId,
-          msgId: currQuote.messageId,
-          msgChatId: chatId,
-          highlight: true,
-          focus: false,
-          scrollIntoViewArg: { block: 'nearest' },
-        })
-        return
-      } else {
-        // message not found at all, remove quote
-        removeQuote()
-        return
-      }
-    }
-    if (
-      currQuoteMessageIdInd === messageIds.length - 1 && // Last message
-      upOrDown === KeybindAction.Composer_SelectReplyToDown
-    ) {
+    if (currQuoteMessageIdInd === -1) {
+      // message not found at all, remove quote
       removeQuote()
       return
     }
-    const newId: number | undefined =
-      messageIds[
-        upOrDown === KeybindAction.Composer_SelectReplyToUp
-          ? currQuoteMessageIdInd - 1
-          : currQuoteMessageIdInd + 1
-      ]
-    if (newId == undefined) {
+
+    const newQuoteRes = makeIter(currQuoteMessageIdInd + step).next()
+    if (newQuoteRes.done) {
+      if (upOrDown === KeybindAction.Composer_SelectReplyToDown) {
+        // Currently quoted message was the last message of the chat
+        removeQuote()
+      } else {
+        // Currently quoted message is the first message of the chat,
+        // just do nothing.
+      }
       return
     }
+    if (newQuoteRes.value.kind === 'notLoaded') {
+      // message is in the full list, just not in the cache (yet)
+      // -> jump to it, it will be loaded then (and the surrounding messages)
+      jumpToMessage({
+        accountId,
+        msgId: newQuoteRes.value.msg_id,
+        msgChatId: chatId,
+        highlight: true,
+        focus: false,
+        scrollIntoViewArg: { block: 'nearest' },
+      })
+      return
+    }
+
+    newQuoteRes.value.kind satisfies 'quotable'
+    const newId = newQuoteRes.value.msg_id
     const fromCache = messageListState.messageCache[newId]
     quoteAndJumpToMessage(fromCache?.kind === 'message' ? fromCache : newId)
   }
@@ -719,5 +734,23 @@ function messageToQuote(
           : null,
       messageId: message.id,
     },
+  }
+}
+
+/**
+ * Iterate from an arbitrary index, up or down.
+ */
+function* valuesFromInd<T>({
+  arr,
+  fromInd,
+  step,
+}: {
+  arr: T[]
+  fromInd: number
+  step: 1 | -1
+}) {
+  for (let i = fromInd; i >= 0 && i < arr.length; i += step) {
+    const item: T = arr[i]!
+    yield item
   }
 }
