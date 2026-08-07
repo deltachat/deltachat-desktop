@@ -100,15 +100,6 @@ export default class ComposerMessageInput extends React.Component<ComposerMessag
       }
 
       this.setCursorPosition = false
-    } else {
-      // This is useful when entering / exiting the message editing mode.
-      if (
-        prevProps.hidden !== this.props.hidden &&
-        !this.props.hidden &&
-        this.props.text.length !== 0
-      ) {
-        this.moveCursorToTheEnd()
-      }
     }
     if (
       !browserSupportsCSSFieldSizing &&
@@ -118,7 +109,7 @@ export default class ComposerMessageInput extends React.Component<ComposerMessag
     }
   }
 
-  private moveCursorToTheEnd() {
+  moveCursorToTheEnd() {
     if (this.textareaRef.current == null) {
       log.warn(
         'Tried to move the cursor position to the end, ' +
