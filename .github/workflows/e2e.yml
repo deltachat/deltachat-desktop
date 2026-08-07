@@ -3,14 +3,14 @@ on:
   push:
     branches: [main]
     paths-ignore:
-      - 'docs/**'  # only trigger build if a file outside of /docs was changed
+      - 'docs/**' # only trigger build if a file outside of /docs was changed
       - '_locales/*.xml'
       - '.vscode/**'
       - 'README_ASSETS/**'
       - 'README.md'
   pull_request:
     paths-ignore:
-      - 'docs/**'  # only trigger build if a file outside of /docs was changed
+      - 'docs/**' # only trigger build if a file outside of /docs was changed
       - '_locales/*.xml'
       - '.vscode/**'
       - 'README_ASSETS/**'
@@ -20,44 +20,83 @@ permissions: {}
 
 jobs:
   test:
-    name: E2E Tests
+    name: E2E Tests (${{ matrix.relay }} chatmail relay)
     environment: test
     env:
       CI: true
       NODE_ENV: test
       VERSION_INFO_GIT_REF: ${{ github.ref }}
-      DC_CHATMAIL_DOMAIN: ${{ vars.DC_CHATMAIL_DOMAIN }}
-      DC_MAIL_SERVER: ${{ vars.CI_MAIL_SERVER }}
-      DC_MAIL_SERVER_TOKEN: ${{ secrets.CI_MAIL_SERVER_TOKEN }}
+      DC_CHATMAIL_DOMAIN: ${{ matrix.chatmail_domain }}
     timeout-minutes: 60
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     strategy:
-      matrix:
-        os: [ubuntu-latest]
       fail-fast: false
+      matrix:
+        include:
+          - relay: local
+            chatmail_domain: 127.0.0.1
+            start_local_relay: true
+          - relay: remote
+            chatmail_domain: ci-chatmail.testrun.org
+            start_local_relay: false
     steps:
-    - uses: actions/checkout@v6
-      with:
-        show-progress: false
-        persist-credentials: false
-    - uses: actions/setup-node@v4
-      with:
-        node-version: 22.x
-    - name: Install dependencies
-      run: npm install -g pnpm && pnpm install
-    - name: Install Playwright Browsers
-      working-directory: ./packages/e2e-tests
-      run: pnpm exec playwright install --with-deps --only-shell chromium
-    - name: Run e2e tests
-      env:
-        DC_FRONTEND_NO_TLS: true
-      run: pnpm e2e
-    - uses: actions/upload-artifact@v4
-      # We may want to not upload artifacts if tests pass,
-      # (`if: ${{ failure() && !cancelled() }}`)
-      # but we want to debug flaky tests, so let's always upload them.
-      if: ${{ !cancelled() }}
-      with:
-        name: e2e-report
-        path: packages/e2e-tests/playwright-report
-        retention-days: 10
+      - uses: actions/checkout@v6
+        with:
+          show-progress: false
+          persist-credentials: false
+      - name: Checkout chatmail Docker setup
+        if: ${{ matrix.start_local_relay }}
+        uses: actions/checkout@v6
+        with:
+          repository: chatmail/docker
+          path: .ci/docker
+          show-progress: false
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+      - name: Install dependencies
+        run: npm install -g pnpm && pnpm install
+      - name: Install Playwright Browsers
+        working-directory: ./packages/e2e-tests
+        run: pnpm exec playwright install --with-deps --only-shell chromium
+      - name: Start local chatmail relay
+        if: ${{ matrix.start_local_relay }}
+        working-directory: ./.ci/docker
+        env:
+          CHATMAIL_IMAGE: ghcr.io/chatmail/docker:main
+        run: |
+          printf 'MAIL_DOMAIN=127.0.0.1\n' > .env
+          docker pull "$CHATMAIL_IMAGE"
+          docker compose up --no-build -d chatmail
+      # Build while the relay boots
+      - name: Build browser target
+        run: pnpm build:browser
+      - name: Wait for chatmail relay
+        if: ${{ matrix.start_local_relay }}
+        working-directory: ./.ci/docker
+        # `up` is idempotent, so this only waits for the already started
+        # container to become healthy.
+        run: docker compose up --no-build -d --wait --wait-timeout 600 chatmail
+      - name: Run e2e tests (${{ matrix.relay }} chatmail relay)
+        env:
+          DC_FRONTEND_NO_TLS: true
+        run: pnpm --filter=e2e-tests e2e
+      - name: Collect chatmail logs
+        if: ${{ !cancelled() && matrix.start_local_relay }}
+        run: |
+          mkdir -p chatmail-logs
+          docker logs chatmail > chatmail-logs/docker.log 2>&1 || true
+          docker exec chatmail get-service-logs > chatmail-logs/services.log 2>&1 || true
+      - uses: actions/upload-artifact@v4
+        # We may want to not upload artifacts if tests pass,
+        # (`if: ${{ failure() && !cancelled() }}`)
+        # but we want to debug flaky tests, so let's always upload them.
+        if: ${{ !cancelled() }}
+        with:
+          name: e2e-report-${{ matrix.relay }}
+          path: |
+            packages/e2e-tests/playwright-report
+            chatmail-logs
+          if-no-files-found: ignore
+          retention-days: 10

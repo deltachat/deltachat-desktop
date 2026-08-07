@@ -189,6 +189,9 @@ test.describe('Shift + Click', () => {
       .getByRole('button', { name: 'Delete' })
       .click()
     await expectSelectedChats([])
+    // The chat list update is throttled. While the deleted chat is still
+    // in it, it stays the anchor and Shift + click range-selects from the top.
+    await expect(chat).toHaveCount(0)
 
     await getChat(3).click({ modifiers: ['Shift'] })
     await expectSelectedChats([3])
