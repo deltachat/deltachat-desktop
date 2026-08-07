@@ -580,11 +580,8 @@ test('create channel and add members', async ({ browserName }) => {
     .filter({ hasText: channelName })
   await expect(channelChatItemB).toBeVisible()
 
-  // Wait for the securejoin handshake to finish: the resulting
-  // "You joined the channel." message must be seen in the (auto-opened)
-  // channel chat while userB is still selected. Otherwise it arrives
-  // after we switch to userA and counts as a second unread message,
-  // making the badge assertion below flaky
+  // Wait for the securejoin handshake while userB is still selected,
+  // otherwise this message counts as a second unread one for the badge below.
   await expect(
     page
       .getByRole('list', { name: 'Messages' })

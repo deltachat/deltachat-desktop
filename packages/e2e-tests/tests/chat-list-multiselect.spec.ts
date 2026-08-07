@@ -189,10 +189,8 @@ test.describe('Shift + Click', () => {
       .getByRole('button', { name: 'Delete' })
       .click()
     await expectSelectedChats([])
-    // Wait until the chat is removed from the chat list (the update is
-    // throttled) before Shift + clicking: as long as the deleted chat is
-    // still in the list, it serves as the selection anchor and the click
-    // would range-select from the top of the list.
+    // The chat list update is throttled. While the deleted chat is still
+    // in it, it stays the anchor and Shift + click range-selects from the top.
     await expect(chat).toHaveCount(0)
 
     await getChat(3).click({ modifiers: ['Shift'] })
