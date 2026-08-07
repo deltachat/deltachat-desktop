@@ -13,26 +13,20 @@ import {
   test,
   createGroupChat,
   createChat,
-  chatmailServerDomain,
-  isIpAddress,
+  skipOnIpRelay,
 } from '../playwright-helper.js'
 
 /**
- * Joining a group via instant onboarding needs the DCACCOUNT mechanism,
- * which does not work against a self-signed IP-only relay
- * (see `skipOnIpRelay`), so all tests that need it live in their own
- * self-contained file. In CI, they are skipped for the local IP-based relay
- * and run against the remote relay (see .github/workflows/e2e.yml).
+ * These tests onboard an additional profile, so they keep their own set of
+ * profiles instead of sharing the serial state of `group-tests.spec.ts`,
+ * which would go out of sync whenever they are skipped.
  */
 
 test.describe.configure({
   mode: 'serial',
 })
 
-test.skip(
-  () => isIpAddress(chatmailServerDomain),
-  'cannot onboard against a self-signed IP-only relay, see chatmail/core#8211'
-)
+skipOnIpRelay()
 
 let existingProfiles: User[] = []
 
@@ -93,8 +87,6 @@ test('Invite new user to group', async ({ browserName }) => {
   const newUserName = userNames[2] ?? 'Chris'
   const groupInviteMessage = `${userA.name} invited you to join this group`
 
-  // Establish contact between userA and userB and create the group
-  // that the new user is then invited to.
   await createChat(userA, userB, page, browserName)
   await createGroupChat(page, groupName, userA, userB)
 
