@@ -841,6 +841,20 @@ test.describe('edit message', () => {
     await page.keyboard.press('ArrowUp')
     await expect(textareaNonEdit()).toHaveText('\n\n\n\n\n')
     await expect(composerSection).not.toContainText('Edit Message')
+
+    await textareaNonEdit().clear()
+  })
+  test('text cursor is placed at the end', async () => {
+    await textarea.focus()
+    await page.keyboard.press('ArrowUp')
+    await expect(textareaEdit()).toHaveText('M 3')
+    await expect(textareaEdit()).toBeFocused()
+
+    await page.keyboard.press('Backspace')
+    await page.keyboard.press('Backspace')
+    await expect(textareaEdit()).toHaveText('M')
+
+    await page.keyboard.press('Escape')
   })
 })
 

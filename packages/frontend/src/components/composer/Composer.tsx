@@ -934,6 +934,7 @@ function useMessageEditing(
       // Wait until the new element is actually rendered, only then focus.
       setTimeout(() => {
         editMessageInputRef.current?.focus()
+        editMessageInputRef.current?.moveCursorToTheEnd()
       })
     }
     return () => {
