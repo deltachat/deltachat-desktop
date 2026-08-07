@@ -7,7 +7,6 @@ import { I18nContext } from '../../contexts/I18nContext'
 
 const log = getLogger('renderer/composer/ComposerMessageInput')
 
-const browserSupportsCSSFieldSizing = CSS.supports('field-sizing', 'content')
 const maxLines = 9
 
 type ComposerMessageInputProps = {
@@ -48,14 +47,11 @@ export default class ComposerMessageInput extends React.Component<
   static contextType = DialogContext
   declare context: React.ContextType<typeof DialogContext>
 
-  composerSize: number
   setCursorPosition: number | false
   textareaRef: React.RefObject<HTMLTextAreaElement | null>
   constructor(props: ComposerMessageInputProps) {
     super(props)
 
-    this.composerSize = 48
-    this.setComposerSize = this.setComposerSize.bind(this)
     this.setCursorPosition = false
     this.onKeyDown = this.onKeyDown.bind(this)
     this.onChange = this.onChange.bind(this)
@@ -72,10 +68,6 @@ export default class ComposerMessageInput extends React.Component<
 
   componentWillUnmount() {
     ActionEmitter.unRegisterHandler(KeybindAction.Composer_Focus, this.focus)
-  }
-
-  setComposerSize(size: number) {
-    this.composerSize = size
   }
 
   focus() {
@@ -116,12 +108,6 @@ export default class ComposerMessageInput extends React.Component<
       ) {
         this.moveCursorToTheEnd()
       }
-    }
-    if (
-      !browserSupportsCSSFieldSizing &&
-      prevProps.chatId === this.props.chatId
-    ) {
-      this.resizeTextareaAndComposer()
     }
   }
 
@@ -177,41 +163,6 @@ export default class ComposerMessageInput extends React.Component<
     }
   }
 
-  resizeTextareaAndComposer() {
-    const maxScrollHeight = maxLines * 24
-
-    const el = this.textareaRef.current
-
-    if (!el) {
-      return
-    }
-
-    // We need to set the textarea height first to `auto` to get the real needed
-    // scrollHeight. Ugly hack.
-    el.style.height = 'auto'
-    const scrollHeight = el.scrollHeight
-
-    if (scrollHeight + 16 === this.composerSize) {
-      el.style.height = scrollHeight + 'px'
-      return
-    }
-
-    if (scrollHeight > maxScrollHeight && el.classList.contains('scroll')) {
-      el.style.height = maxScrollHeight + 'px'
-      return
-    }
-
-    if (scrollHeight < maxScrollHeight) {
-      this.setComposerSize(scrollHeight + 16)
-      el.style.height = scrollHeight + 'px'
-      el.classList.remove('scroll')
-    } else {
-      this.setComposerSize(maxScrollHeight + 16)
-      el.style.height = maxScrollHeight + 'px'
-      el.classList.add('scroll')
-    }
-  }
-
   insertStringAtCursorPosition(str: string) {
     const textareaElem = this.textareaRef.current
     if (!textareaElem) {
@@ -238,12 +189,7 @@ export default class ComposerMessageInput extends React.Component<
       <I18nContext.Consumer>
         {({ writingDirection }) => (
           <textarea
-            className={
-              'create-or-edit-message-input' +
-              (browserSupportsCSSFieldSizing
-                ? ' use-field-sizing-css-prop'
-                : '')
-            }
+            className='create-or-edit-message-input'
             style={{ '--maxLines': maxLines } as React.CSSProperties}
             id={
               this.props.isMessageEditingMode
