@@ -436,13 +436,19 @@ export function useDraft(
      *
      * see https://github.com/deltachat/deltachat-desktop/blob/77a1f88a351df49e5df38a14c3a1704a76ecdcb3/packages/frontend/src/components/message/Message.tsx#L274-L278
      */
-    const messageIds = Object.keys(messageListState.messageCache)
-      .map(Number)
-      .filter(
-        id =>
+    const messageIds = messageListState.messageListItems
+      .filter((item): item is { kind: 'message'; msg_id: number } => {
+        if (item.kind !== 'message') {
+          return false
+        }
+        const id = item.msg_id
+
+        return (
           messageListState.messageCache[id]?.kind === 'message' &&
           messageListState.messageCache[id]?.isInfo === false
-      )
+        )
+      })
+      .map(({ msg_id }) => msg_id)
     const currQuote = draftState.quote
     if (!currQuote) {
       if (upOrDown === KeybindAction.Composer_SelectReplyToUp) {
