@@ -49,9 +49,10 @@ function getLinuxExecCommand(): string {
     // On Nix/NixOS, process.execPath is a version-pinned path to the shared
     // `electron` binary (e.g. /nix/store/…-electron-…/…/electron), not to
     // Delta Chat. Pinning it would break autostart on every update so rely
-    // on the `deltachat-desktop` command
+    // on the `deltachat` command
     // see https://github.com/deltachat/deltachat-desktop/issues/6431
-    return 'deltachat-desktop'
+    // and https://github.com/NixOS/nixpkgs/blob/a1016521f29c094127657220a52ed0b09d689919/pkgs/by-name/de/deltachat-desktop/package.nix#L129
+    return 'deltachat'
   }
   // Regular installs (e.g. the .deb): process.execPath is the Delta Chat
   // executable itself, and its absolute path is unambiguous even when several
