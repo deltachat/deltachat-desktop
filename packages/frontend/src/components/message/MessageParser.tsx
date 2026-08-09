@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 
-import * as linkify from 'linkifyjs'
+import type * as linkify from 'linkifyjs'
 import 'linkify-plugin-hashtag'
 import '../../utils/linkify/plugin-bot-command/index.js'
 
