@@ -47,7 +47,13 @@ function renderElement(
         // see https://github.com/nfrasser/linkifyjs/blob/3abe9abbcb4e069aeadde2f42de7dfcc2371c0f0/packages/linkifyjs/src/text.mjs#L24
         fullUrl = 'https://' + fullUrl
       }
-      const url = new URL(fullUrl)
+      const url = URL.parse(fullUrl)
+      if (url == null) {
+        log.error('cannot render invalid URL as a link', fullUrl, elm.v)
+        // Should not really happen. Fall back to regular text.
+        return <span key={key}>{elm.v}</span>
+      }
+
       let suspicousUrl = false
       const stripLastSlash = (url: string) => {
         if (url.endsWith('/')) {
