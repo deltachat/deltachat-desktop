@@ -546,7 +546,8 @@ export class MessageListStore extends Store<MessageListState> {
               this.accountId,
               messageListItems,
               oldestFetchedMessageListItemIndex,
-              newestFetchedMessageListItemIndex
+              newestFetchedMessageListItemIndex,
+              {} // pass empty cache instead of `this.state.messageCache`
             ).catch(err => this.log.error('loadMessages failed', err))) || {}
         }
 
@@ -646,7 +647,8 @@ export class MessageListStore extends Store<MessageListState> {
               this.accountId,
               state.messageListItems,
               oldestFetchedMessageListItemIndex,
-              lastMessageIndex - 1
+              lastMessageIndex - 1,
+              this.state.messageCache
             ).catch(err => this.log.error('loadMessages failed', err))) || {}
 
           this.reducer.appendMessagesTop({
@@ -706,7 +708,8 @@ export class MessageListStore extends Store<MessageListState> {
               this.accountId,
               state.messageListItems,
               newestFetchedMessageListItemIndex,
-              newNewestFetchedMessageListItemIndex
+              newNewestFetchedMessageListItemIndex,
+              this.state.messageCache
             ).catch(err => this.log.error('loadMessages failed', err))) || {}
 
           this.reducer.appendMessagesBottom({
@@ -749,7 +752,8 @@ export class MessageListStore extends Store<MessageListState> {
               this.accountId,
               messageListItems,
               oldestFetchedMessageListItemIndex,
-              newestFetchedMessageListItemIndex
+              newestFetchedMessageListItemIndex,
+              {} // pass empty cache instead of `this.state.messageCache`
             ).catch(err => this.log.error('loadMessages failed', err))) || {}
 
           this.reducer.refresh(
@@ -910,7 +914,8 @@ export class MessageListStore extends Store<MessageListState> {
         this.accountId,
         messageListItems,
         indexStart,
-        indexEnd
+        indexEnd,
+        this.state.messageCache
       ).catch(err => this.log.error('loadMessages failed', err))) || {}
 
     this.reducer.fetchedIncomingMessages({
@@ -1217,7 +1222,8 @@ export class MessageListStore extends Store<MessageListState> {
             accountId,
             messageListItems,
             oldestFetchedMessageListItemIndex,
-            newestFetchedMessageListItemIndex
+            newestFetchedMessageListItemIndex,
+            this.state.messageCache
           ).catch(err => this.log.error('loadMessages failed', err))) || {}
       }
 
@@ -1268,11 +1274,20 @@ export class MessageListStore extends Store<MessageListState> {
   }
 }
 
+/**
+ * The return value will only contain messages between
+ * {@linkcode oldestFetchedMessageListItemIndex} and
+ * {@linkcode newestFetchedMessageListItemIndex} in
+ * {@linkcode messageListItems}, even if {@linkcode existingMessages}
+ * contained some messages outside of the range.
+ * (See {@linkcode MessageListState} docs for reasoning).
+ */
 async function loadMessages(
   accountId: number,
   messageListItems: Type.MessageListItem[],
   oldestFetchedMessageListItemIndex: number,
-  newestFetchedMessageListItemIndex: number
+  newestFetchedMessageListItemIndex: number,
+  existingMessages: MessageListState['messageCache']
 ) {
   const view = getView(
     messageListItems,
@@ -1282,12 +1297,39 @@ async function loadMessages(
     .map(m => (m.kind === 'message' ? m.msg_id : C.DC_MSG_ID_LAST_SPECIAL))
     .filter(msgId => msgId !== C.DC_MSG_ID_LAST_SPECIAL)
 
-  if (view.length > 100) {
+  const missingIds = view.filter(msgId => {
+    const m = existingMessages[msgId]
+    const exists =
+      m != undefined &&
+      // Usually if a message failed to load then it's permanent (e.g. deleted),
+      // but let's reload it for good measure.
+      m.kind !== 'loadingError'
+
+    if (exists) {
+      m satisfies T.Message &
+        T.MessageLoadResult & {
+          kind: 'message'
+        }
+    }
+
+    return !exists
+  })
+
+  if (missingIds.length > 100) {
     log.error(
-      `loadMessages is loading too many (${view.length}) messages. ` +
+      `loadMessages is loading too many (${missingIds.length}) messages. ` +
         'This is bad for performance.'
     )
   }
 
-  return await BackendRemote.rpc.getMessages(accountId, view)
+  const missing =
+    missingIds.length > 0
+      ? await BackendRemote.rpc.getMessages(accountId, missingIds)
+      : {}
+
+  const ret: typeof existingMessages = {}
+  for (const id of view) {
+    ret[id] = missing[id] ?? existingMessages[id]
+  }
+  return ret
 }
