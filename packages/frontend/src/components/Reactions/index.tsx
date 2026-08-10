@@ -14,6 +14,7 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 type Props = {
   reactions: T.Reactions
+  chatType: T.FullChat['chatType']
   tabindexForInteractiveContents: -1 | 0
   messageWidth: number
 }
@@ -21,10 +22,10 @@ type Props = {
 export default function Reactions(props: Props) {
   const tx = useTranslationFunction()
 
-  const { messageWidth } = props
+  const { messageWidth, chatType } = props
 
   const { openDialog } = useDialog()
-  const { reactionsByContact, reactions } = props.reactions
+  const { reactions } = props.reactions
 
   // Compute visibleEmojis and hiddenReactionsCount from props
   const { visibleEmojis, hiddenReactionsCount } = useMemo(() => {
@@ -54,7 +55,10 @@ export default function Reactions(props: Props) {
 
   const handleClick = () => {
     openDialog(ReactionsDialog, {
-      reactionsByContact,
+      reactions: props.reactions,
+      // Subscribers of a channel only get to know the accumulated reactions,
+      // not who reacted with what.
+      showContacts: chatType !== 'InBroadcast',
     })
   }
 

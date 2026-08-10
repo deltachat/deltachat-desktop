@@ -16,6 +16,8 @@ import {
   useRovingTabindex,
 } from '../../contexts/RovingTabindex'
 import useChat from '../../hooks/chat/useChat'
+import useAlertDialog from '../../hooks/dialog/useAlertDialog'
+import { unknownErrorToString } from '@deltachat-desktop/shared/unknownErrorToString'
 
 const log = getLogger('ReactionsBar')
 
@@ -34,6 +36,7 @@ export default function ReactionsBar({
 }: Props) {
   const tx = useTranslationFunction()
   const { chatWithLinger } = useChat()
+  const openAlertDialog = useAlertDialog()
 
   const reactionsBarRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
@@ -54,13 +57,18 @@ export default function ReactionsBar({
   const accountId = selectedAccountId()
 
   const toggleReaction = async (emoji: string) => {
-    if (emoji === myReaction) {
-      await BackendRemote.rpc.sendReaction(accountId, messageId, [])
-    } else {
-      await BackendRemote.rpc.sendReaction(accountId, messageId, [emoji])
+    try {
+      await BackendRemote.rpc.sendReaction(
+        accountId,
+        messageId,
+        emoji === myReaction ? [] : [emoji]
+      )
+    } catch (error) {
+      log.error('Failed to send reaction:', error)
+      void openAlertDialog({ message: unknownErrorToString(error) })
+    } finally {
+      onClick()
     }
-
-    onClick()
   }
 
   const handleShowAllEmojis = (

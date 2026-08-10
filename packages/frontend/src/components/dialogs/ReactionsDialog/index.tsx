@@ -20,7 +20,12 @@ import {
 } from '../../../contexts/RovingTabindex'
 
 export type Props = {
-  reactionsByContact: T.Reactions['reactionsByContact']
+  reactions: T.Reactions
+  /**
+   * Whether it is known who reacted with what. This is not the case for
+   * subscribers of a channel, they only know the accumulated reactions.
+   */
+  showContacts: boolean
   onClose?: () => void
 }
 
@@ -29,7 +34,8 @@ type ContactWithReaction = T.Contact & {
 }
 
 export default function ReactionsDialog({
-  reactionsByContact,
+  reactions,
+  showContacts,
   onClose,
 }: Props & DialogProps) {
   const tx = useTranslationFunction()
@@ -39,17 +45,48 @@ export default function ReactionsDialog({
       <DialogHeader title={tx('reactions')} onClose={onClose} />
       <DialogBody>
         <DialogContent>
-          <ReactionsDialogList
-            reactionsByContact={reactionsByContact}
-            onClose={onClose}
-          />
+          {showContacts ? (
+            <ReactionsDialogList
+              reactionsByContact={reactions.reactionsByContact}
+              onClose={onClose}
+            />
+          ) : (
+            <AccumulatedReactionsList reactions={reactions.reactions} />
+          )}
         </DialogContent>
       </DialogBody>
     </Dialog>
   )
 }
 
-function ReactionsDialogList({ reactionsByContact, onClose }: Props) {
+function AccumulatedReactionsList({
+  reactions,
+}: {
+  reactions: T.Reactions['reactions']
+}) {
+  const tx = useTranslationFunction()
+
+  return (
+    <ul className={styles.reactionsDialogList}>
+      {reactions.map(({ emoji, count }) => (
+        <li key={emoji} className={styles.accumulatedReactionsListItem}>
+          <div className={styles.reactionsDialogEmoji}>{emoji}</div>
+          <div className={styles.accumulatedReactionsCount}>
+            {tx('n_reactions', [String(count)], { quantity: count })}
+          </div>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+function ReactionsDialogList({
+  reactionsByContact,
+  onClose,
+}: {
+  reactionsByContact: T.Reactions['reactionsByContact']
+  onClose?: () => void
+}) {
   const accountId = selectedAccountId()
   const [contacts, setContacts] = useState<ContactWithReaction[]>([])
   const openViewProfileDialog = useOpenViewProfileDialog({ onAction: onClose })
