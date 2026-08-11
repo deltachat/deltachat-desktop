@@ -68,7 +68,7 @@ function Header({
           <FreshMessageCounter counter={freshMessageCounter} visible={false} />
         </span>
       </div>
-      {isMuted && <div className='mute_icon' aria-label={tx('mute')} />}
+      {isMuted && <div className='mute_icon' aria-label={tx('muted')} />}
       <div>
         {lastUpdated && lastUpdated !== 0 && (
           <Timestamp
