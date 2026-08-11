@@ -323,7 +323,7 @@ test.describe('Main View - 3-Dot Menu', () => {
     const chatListItem = page
       .locator('.chat-list .chat-list-item')
       .filter({ hasText: userB.name })
-    await expect(chatListItem.getByLabel('Mute')).toBeVisible()
+    await expect(chatListItem.getByLabel('Muted')).toBeVisible()
 
     // Unmute the chat
     await openMainViewThreeDotMenu(page)
@@ -331,7 +331,7 @@ test.describe('Main View - 3-Dot Menu', () => {
     await page.getByRole('menuitem', { name: 'Unmute' }).click()
 
     // Verify mute icon is gone
-    await expect(chatListItem.getByLabel('Mute')).not.toBeVisible()
+    await expect(chatListItem.getByLabel('Muted')).not.toBeVisible()
   })
 
   test('clear chat removes messages', async () => {
