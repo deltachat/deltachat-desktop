@@ -1,4 +1,4 @@
-import { expect, type Page } from '@playwright/test'
+import { expect, type Locator, type Page } from '@playwright/test'
 
 import {
   groupName,
@@ -14,6 +14,7 @@ import {
   test,
   createGroupChat,
   createChat,
+  openReactionsBar,
   selectChat,
   sendMessage,
 } from '../playwright-helper.js'
@@ -741,6 +742,12 @@ test('add channel description and verify subscriber sees it', async () => {
   await page.keyboard.press('Escape')
 })
 
+/** Opens the reactions dialog of `message` */
+async function openReactionsDialog(page: Page, message: Locator) {
+  await message.getByRole('button', { name: 'More Info' }).click()
+  return page.getByRole('dialog')
+}
+
 test.describe('channel reactions', () => {
   let userA = existingProfiles[0]!
   let userB = existingProfiles[1]!
@@ -783,10 +790,14 @@ test.describe('channel reactions', () => {
     await switchToProfile(page, userB.id)
     await selectChat(page, channelName)
 
-    await message().click({ button: 'right' })
-    await page.getByRole('menuitem', { name: 'React' }).click()
+    // Subscribers can react although they can't send messages
+    await expect(
+      page.locator('textarea.create-or-edit-message-input')
+    ).toHaveCount(0)
 
-    await expect(page.getByRole('menu').getByRole('menuitemradio')).toHaveText([
+    const reactionsBar = await openReactionsBar(page, message())
+
+    await expect(reactionsBar.getByRole('menuitemradio')).toHaveText([
       '👍',
       '👎',
       '❤️',
@@ -795,11 +806,24 @@ test.describe('channel reactions', () => {
     ])
 
     // No "Arbitrary emoji" button
-    await expect(page.getByRole('menu').getByRole('menuitem')).not.toBeVisible()
-    await expect(page.getByRole('menu').locator('> *')).toHaveCount(5)
+    await expect(reactionsBar.getByRole('menuitem')).not.toBeVisible()
+    await expect(reactionsBar.locator('> *')).toHaveCount(5)
 
     await page.getByRole('menuitemradio', { name: '😂' }).click()
     await expect(message()).toContainText('😂')
+  })
+
+  test('subscriber only sees the accumulated reactions', async () => {
+    await switchToProfile(page, userB.id)
+    await selectChat(page, channelName)
+
+    const rows = (await openReactionsDialog(page, message())).getByRole(
+      'listitem'
+    )
+    // Subscribers don't get to know who reacted with what, so the rows are
+    // the accumulated counts and not the contacts, which would be clickable
+    await expect(rows.getByRole('button')).toHaveCount(0)
+    await expect(rows.filter({ hasText: '😂' })).toContainText('1 reaction')
   })
 
   test('owner sees the reaction', async () => {
@@ -807,6 +831,27 @@ test.describe('channel reactions', () => {
     await selectChat(page, channelName)
 
     await expect(message()).toContainText('😂')
+  })
+
+  test('owner sees who reacted', async () => {
+    await switchToProfile(page, userA.id)
+    await selectChat(page, channelName)
+
+    const rows = (await openReactionsDialog(page, message())).getByRole(
+      'listitem'
+    )
+    await expect(rows).toHaveCount(1)
+    // The row is a button, it opens the profile of the contact that reacted
+    await expect(rows.getByRole('button')).toHaveCount(1)
+  })
+
+  test('owner can only use the default reactions', async () => {
+    await switchToProfile(page, userA.id)
+    await selectChat(page, channelName)
+
+    const reactionsBar = await openReactionsBar(page, message())
+    await expect(reactionsBar.getByRole('menuitemradio')).toHaveCount(5)
+    await expect(reactionsBar.getByRole('menuitem')).toHaveCount(0)
   })
 })
 
