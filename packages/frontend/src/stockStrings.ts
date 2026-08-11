@@ -27,6 +27,11 @@ export async function updateCoreStrings() {
     | typeof C.DC_STR_SYNC_MSG_SUBJECT
     | typeof C.DC_STR_SYNC_MSG_BODY
 
+    // No string for these upstream yet. TODO.
+    | typeof C.DC_STR_PHASING_OUT
+    | typeof C.DC_STR_MESSAGE_PINNED_BY_OTHER
+    | typeof C.DC_STR_MESSAGE_PINNED_BY_YOU
+
     // Deprecated, see
     // https://github.com/chatmail/core/blob/main/deltachat-ffi/deltachat.h
     | typeof C.DC_STR_E2E_AVAILABLE
