@@ -15,6 +15,7 @@ import {
   RovingTabindexProvider,
   useRovingTabindex,
 } from '../../contexts/RovingTabindex'
+import useChat from '../../hooks/chat/useChat'
 
 const log = getLogger('ReactionsBar')
 
@@ -32,6 +33,7 @@ export default function ReactionsBar({
   myReaction,
 }: Props) {
   const tx = useTranslationFunction()
+  const { chatWithLinger } = useChat()
 
   const reactionsBarRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
@@ -113,7 +115,11 @@ export default function ReactionsBar({
                 onClick={() => toggleReaction(myReaction)}
               />
             )}
-            <MoreEmojisButton onClick={handleShowAllEmojis} />
+            {chatWithLinger != undefined &&
+              chatWithLinger.chatType !== 'InBroadcast' &&
+              chatWithLinger.chatType !== 'OutBroadcast' && (
+                <MoreEmojisButton onClick={handleShowAllEmojis} />
+              )}
           </RovingTabindexProvider>
         </div>
       )}

@@ -378,6 +378,9 @@ async function flushNotifications(accountId: number) {
             )
             if (chat.chatType === 'Group') {
               // only show mentions for group chats
+              //
+              // for outgoing channels reactions should not trigger
+              // a notification if the owner muted the channel
               return notification
             }
           }
