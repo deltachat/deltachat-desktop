@@ -6,6 +6,7 @@ import {
   User,
   loadExistingProfiles,
   deleteAllProfiles,
+  openReactionsBar,
   reloadPage,
   test,
   switchToProfile,
@@ -125,9 +126,9 @@ test('reactions on image messages are not collapsed after image loads', async ()
   ).toBeVisible()
 
   // userA reacts with ❤️
-  await sentMessage.click({ button: 'right' })
-  await page.getByRole('menu').getByRole('menuitem', { name: 'React' }).click()
-  await page.getByRole('menuitemradio', { name: '❤️' }).click()
+  await (await openReactionsBar(page, sentMessage))
+    .getByRole('menuitemradio', { name: '❤️' })
+    .click()
   await expect(sentMessage.getByText('❤️')).toBeVisible()
 
   // userB reacts with 👍
@@ -137,9 +138,9 @@ test('reactions on image messages are not collapsed after image loads', async ()
   await expect(
     receivedB.locator('.msg-body img.attachment-content')
   ).toBeVisible()
-  await receivedB.click({ button: 'right' })
-  await page.getByRole('menu').getByRole('menuitem', { name: 'React' }).click()
-  await page.getByRole('menuitemradio', { name: '👍' }).click()
+  await (await openReactionsBar(page, receivedB))
+    .getByRole('menuitemradio', { name: '👍' })
+    .click()
   await expect(receivedB.getByText('👍')).toBeVisible()
 
   // userC reacts with 😂
@@ -149,9 +150,9 @@ test('reactions on image messages are not collapsed after image loads', async ()
   await expect(
     receivedC.locator('.msg-body img.attachment-content')
   ).toBeVisible()
-  await receivedC.click({ button: 'right' })
-  await page.getByRole('menu').getByRole('menuitem', { name: 'React' }).click()
-  await page.getByRole('menuitemradio', { name: '😂' }).click()
+  await (await openReactionsBar(page, receivedC))
+    .getByRole('menuitemradio', { name: '😂' })
+    .click()
   await expect(receivedC.getByText('😂')).toBeVisible()
 
   // Back to userA: wait for all three reactions to arrive

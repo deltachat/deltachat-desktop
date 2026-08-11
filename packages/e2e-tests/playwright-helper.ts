@@ -3,6 +3,7 @@ import {
   test as base,
   Browser,
   BrowserContext,
+  Locator,
   Page,
 } from '@playwright/test'
 import path from 'path'
@@ -641,6 +642,15 @@ export async function selectChat(
       .filter({ has: page.getByRole('list', { name: 'Messages' }) })
       .getByRole('heading')
   ).toContainText(chatName)
+}
+
+export async function openReactionsBar(
+  page: Page,
+  message: Locator
+): Promise<Locator> {
+  await message.click({ button: 'right' })
+  await page.getByRole('menu').getByRole('menuitem', { name: 'React' }).click()
+  return page.getByRole('menu', { name: 'React' })
 }
 
 export const createChat = async (
