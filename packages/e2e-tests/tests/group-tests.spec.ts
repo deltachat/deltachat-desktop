@@ -14,6 +14,8 @@ import {
   test,
   createGroupChat,
   createChat,
+  selectChat,
+  sendMessage,
 } from '../playwright-helper.js'
 
 test.describe.configure({
@@ -737,6 +739,75 @@ test('add channel description and verify subscriber sees it', async () => {
     channelDescription
   )
   await page.keyboard.press('Escape')
+})
+
+test.describe('channel reactions', () => {
+  let userA = existingProfiles[0]!
+  let userB = existingProfiles[1]!
+  const chatListItem = () =>
+    page.getByLabel('Chats').getByRole('tab', { name: channelName })
+  const messageText = 'My post 123.\nLike and subscribe.'
+  const message = () =>
+    page
+      .getByRole('list', { name: 'Messages' })
+      .getByRole('listitem')
+      .filter({ hasText: messageText })
+      .locator('.message') // Just the bubble and not the whole row
+
+  test.beforeAll(async () => {
+    userA = existingProfiles[0]!
+    userB = existingProfiles[1]!
+
+    await switchToProfile(page, userA.id)
+    await selectChat(page, channelName)
+    await sendMessage(page, channelName, messageText)
+
+    await expect(message()).not.toContainText('😂')
+  })
+
+  test('owner can unmute channel', async () => {
+    await switchToProfile(page, userA.id)
+
+    // Channels are muted by default
+    await expect(chatListItem().getByLabel('Mute')).toBeVisible()
+    await chatListItem().click({ button: 'right' })
+    await page.getByRole('menuitem', { name: 'Unmute' }).click()
+    await expect(chatListItem().getByLabel('Mute')).not.toBeVisible()
+
+    await chatListItem().click({ button: 'right' })
+    await page.getByRole('menuitem', { name: 'Mute Notifications' }).click()
+    await page.getByRole('menuitem', { name: 'Mute forever' }).click()
+  })
+
+  test('react', async () => {
+    await switchToProfile(page, userB.id)
+    await selectChat(page, channelName)
+
+    await message().click({ button: 'right' })
+    await page.getByRole('menuitem', { name: 'React' }).click()
+
+    await expect(page.getByRole('menu').getByRole('menuitemradio')).toHaveText([
+      '👍',
+      '👎',
+      '❤️',
+      '😂',
+      '🙁',
+    ])
+
+    // No "Arbitrary emoji" button
+    await expect(page.getByRole('menu').getByRole('menuitem')).not.toBeVisible()
+    await expect(page.getByRole('menu').locator('> *')).toHaveCount(5)
+
+    await page.getByRole('menuitemradio', { name: '😂' }).click()
+    await expect(message()).toContainText('😂')
+  })
+
+  test('owner sees the reaction', async () => {
+    await switchToProfile(page, userA.id)
+    await selectChat(page, channelName)
+
+    await expect(message()).toContainText('😂')
+  })
 })
 
 test('channel profile three-dot menu shows encryption info', async () => {
