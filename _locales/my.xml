@@ -73,7 +73,7 @@
     <!-- Used as an menu entry or button -->
     <string name="mark_as_read">ဖတ်ပြီးဟု မှတ်သားပါ</string>
     <!-- Used beside an icon with very few space. Shortest text for "Mark as being read". In english, this could be "Read" (past tense of "to read"), in german, this could be "Gelesen". -->
-    <string name="mark_as_read_short">မှတ်သားဖတ်ရန်</string>
+    <string name="mark_as_read_short">ဖတ်ပြီး</string>
     <!-- Used as an menu entry or button -->
     <string name="mark_as_unread">မဖတ်ရသေးဟု မှတ်သားပါ</string>
     <!-- Used beside an icon with very few space. Shortest text for "Mark as being unread". In english, this could be "Unread" (past tense of "to unread"), in german, this could be "Ungelesen". -->
@@ -198,6 +198,8 @@
     <string name="capture">ဖမ်းယူပါ</string>
     <!-- Switch eg. from front to back camera -->
     <string name="switch_camera">ကင်မရာပြောင်းပါ</string>
+    <!-- Toggle camera on/off eg. during an video call -->
+    <string name="toggle_camera">ကင်မရာပြောင်းရန်</string>
     <string name="toggle_fullscreen">မျက်နှာပြင်အပြည့်မုဒ်ကို ပြောင်းပါ</string>
     <string name="location">တည်နေရာ</string>
     <string name="locations">တည်နေရာများ</string>
@@ -275,6 +277,7 @@
     <string name="menu_send">ပို့ပါ</string>
     <string name="menu_toggle_keyboard">အီမိုဂျီ ကီးဘုတ်ကို ပြောင်းပါ</string>
     <string name="menu_edit_group">အဖွဲ့ကို တည်းဖြတ်ပါ</string>
+    <!-- deprecated: "Edit Group" dialog usually also contains the "Group Description" field, use global_menu_edit_desktop instead -->
     <string name="menu_group_name_and_image">အဖွဲ့အမည်နှင့် ရုပ်ပုံ</string>
     <string name="menu_show_global_map">နေရာအားလုံး</string>
     <string name="menu_archive_chat">မော်ကွန်းတင်ချတ်</string>
@@ -397,6 +400,8 @@
     <string name="answer_call">ဖုန်းလက်ခံရန်</string>
     <!-- the action "to decline" a call, not: "the decline" -->
     <string name="end_call">ဖုန်းချရန်</string>
+    <!-- the action to end a call -->
+    <string name="end_call2">ဖုန်းချ</string>
     <!-- Used in call bubbles, summaries, notifications -->
     <string name="audio_call">အသံခေါ်ဆိုမှု</string>
     <!-- Used in call bubbles, summaries, notifications -->
@@ -419,13 +424,15 @@
     <string name="canceled_call">ပယ်ဖျက်ထားသော ခေါ်ဆိုမှု</string>
     <string name="missed_call">လွတ်သွားသော ခေါ်ဆိုမှု</string>
     <string name="already_in_call">ဖုန်းပြောနေပါသည်</string>
+    <string name="call_back">ပြန်ခေါ်ပါ</string>
     <string name="call_answered_elsewhere">အခြားနေရာတွင် ဖုန်းလက်ခံဖြေဆိုပြီးပါပြီ</string>
+    <string name="call_requires_camera_permission">ဗီဒီယိုခေါ်ဆိုမှုများအတွက် ကင်မရာခွင့်ပြုချက် လိုအပ်ပါသည်</string>
     <string name="call_requires_mic_permission">ဖုန်းခေါ်ဆိုရန် မိုက်ခရိုဖုန်း ခွင့်ပြုချက် လိုအပ်သည်</string>
+    <string name="call_requires_connection">ဖုန်းခေါ်ဆိုမှုကို စတင်၍မရပါ။ သင့်စက်တွင် အင်တာနက်ချိတ်ဆက်မှုရှိကြောင်း သေချာစေပြီး ထပ်မံကြိုးစားပါ။</string>
     <!-- Used e.g. in a notifications to describe an ongoing call. "Call" is a noun here, in the meaning of "This is the call with ..." where the placeholder is replaced by the name of the contact. -->
     <string name="call_with">%1$s နှင့် ခေါ်ဆိုမှု</string>
     <!-- Use e.g. in a notifications during ringing. Placeholder is relaced by the name of the contact being called. -->
     <string name="calling_person">%1$s သို့ ခေါ်ဆိုနေသည်</string>
-
     <!-- get confirmations -->
     <!-- confirmation for leaving groups or channels. If a subject is needed, "Are you sure you want to leave the chat?" would work as well -->
     <string name="ask_leave_group">ချတ်မှ ထွက်ခွာချင်တာ သေချာပါသလား?</string>
@@ -436,6 +443,10 @@
     <string name="ask_delete_message">မက်ဆေ့ချ်ကို ဖျက်မည်လား?</string>
     <plurals name="ask_delete_messages">
         <item quantity="other">မက်ဆေ့ချ် %d ခုကို ဖျက်မည်လား?</item>
+    </plurals>
+    <!-- First placeholder gets replaced by the number of messages to forward. Second placeholder gets replaced by the name of the destination chat -->
+    <plurals name="ask_forward_messages">
+        <item quantity="other">စာတို %1$d ကို %2$s ဆီသို့ ထပ်ဆင့် ပို့ မှာလား?</item>
     </plurals>
     <!-- deprecated, use ask_forward_messages -->
     <string name="ask_forward">မက်ဆေ့ချ်ကို %1$s ဆီသို့ ထပ်ဆင့်ပို့မည်လား?</string>
@@ -645,6 +656,9 @@
     <string name="welcome_chat_over_email">အီးမေးလ်မှတစ်ဆင့် ချတ်လုပ်ပါ</string>
     <string name="scan_invitation_code">ဖိတ်ကြားချက်ကုဒ်ကို စကင်ဖတ်ပါ</string>
     <string name="login_title">လော့ဂ်အင်</string>
+    <string name="login_advanced_hint">ဤလော့ဂ်အင်သည် အဆင့်မြင့်
+အသုံးပြုသူများအတွက်ဖြစ်သည်။\n\nအခြားအက်ပ်တွင် 
+သင်အသုံးပြုနေသောလိပ်စာကို မသုံးပါနှင့်။</string>
     <string name="login_inbox">ဝင်စာ</string>
     <string name="login_imap_login">IMAP လော့ဂ်အင်</string>
     <string name="login_imap_server">IMAP ဆာဗာ</string>
@@ -677,14 +691,15 @@
     <string name="remove_transport">ရီလေးကို ဖယ်ရှားပါ</string>
     <string name="edit_transport">ရီလေးကို တည်းဖြတ်ပါ</string>
     <string name="used_for_sending">ပေးပို့ရန်အတွက် အသုံးပြုသည်</string>
+    <!-- deprecated -->
     <string name="hide_from_contacts">အဆက်အသွယ်များမှ ဝှက်ထားပါ</string>
+    <!-- deprecated -->
     <string name="hidden_from_contacts">အဆက်အသွယ်များမှ ဝှက်ထားသည်</string>
-    <!-- Hint for the list of relays -->
-    <string name="transport_list_hint">သင်အသုံးပြုနေသော ရီလေးများစာရင်း</string>
+    <string name="enforce_e2ee">ရီလေးများအားလုံးအတွက် စာဝှက်စနစ်ကို ပြဋ္ဌာန်းပါ</string>
     <!-- shown if a QR code was scanned that can be used as a relay -->
     <string name="confirm_add_transport">ဤရီလေးကို ထည့်မည်လား?</string>
     <string name="invalid_transport_qr">ရီလေး QR ကုဒ် မမှန်ကန်ပါ</string>
-    <!-- placeholder will be replaced by a relay server name -->
+    <!-- deprecated -->
     <string name="confirm_remove_or_hide_transport_x">%1$s ကို ဖယ်ရှားမည်/ဝှက်ထားမည်လား?</string>
     <string name="login_certificate_checks">လက်မှတ် စစ်ဆေးမှုများ</string>
     <string name="login_error_mail">အီးမေးလ် လိပ်စာ မှားယွင်းနေသည်</string>
@@ -753,6 +768,8 @@
     <string name="pref_mention_notifications_explain">သင့်ကို မန်ရှင်းခေါ်သည့်အခါ အသိပေးပါ</string>
     <!-- Title for the "Calls" notification setting. This is a plural noun, not a verb. -->
     <string name="pref_calls">ဖုန်းခေါ်ဆိုမှုများ</string>
+    <!-- Details about what the "Calls" notification setting does -->
+    <string name="pref_calls_explain">လက်ခံထားသော အဆက်အသွယ်များအတွက် ဖုန်းခေါ်ဆိုမှု မျက်နှာပြင်ကို ပြပါ</string>
     <string name="pref_notifications_show">အသိပေးချက်များကို ပြပါ</string>
     <string name="pref_notifications_priority">အသိပေးချက် ဦးစားပေး</string>
     <string name="pref_notifications_explain">အသိပေးချက် ဆက်တင်များ</string>
@@ -820,6 +837,7 @@
     <string name="pref_show_emails_all">အားလုံး</string>
     <string name="pref_experimental_features">စမ်းသပ်ဆဲ လုပ်ဆောင်ချက်များ</string>
     <string name="pref_experimental_features_explain">ဤအရာများသည် မတည်ငြိမ်နိုင်ပါ</string>
+    <string name="pref_on_demand_location_streaming">တည်နေရာ တိုက်ရိုက်ထုတ်လွှင့်မှု</string>
     <string name="pref_background_default">မူလပုံစံ</string>
     <string name="pref_background_default_color">မူလ အရောင်</string>
     <string name="pref_background_custom_image">စိတ်ကြိုက် ရုပ်ပုံ</string>
@@ -1156,6 +1174,9 @@
     <string name="a11y_message_context_menu_btn_label">မက်ဆေ့ချ် ရွေးချယ်စရာများ</string>
     <string name="a11y_background_preview_label">နောက်ခံပုံ အစမ်းကြည့်ရှုခြင်း</string>
     <string name="a11y_disappearing_messages_activated">ပျောက်ဆုံးနေသော မက်ဆေ့ချ်များကို ဖွင့်ထားသည်</string>
+    <!-- The placeholder will be replaced by a link, eg. "Open https://delta.chat". Used e.g. in for accessibility. -->
+    <string name="open_link">%1$s ကို ဖွင့်ပါ။</string>
+
     <!-- iOS specific strings, developers: please take care to remove strings that are no longer used! -->
     <string name="stop_sharing_location">တည်နေရာ မျှဝေခြင်းကို ရပ်ရန်</string>
     <string name="a11y_voice_message_hint_ios">အသံဖမ်းပြီးနောက် ပေးပို့ရန် နှစ်ချက်နှိပ်ပါ။ အသံဖမ်းယူထားမှုကို ဖျက်ပစ်ရန် လက်ချောင်းနှစ်ချောင်းဖြင့် ပွတ်ဆွဲပါ။</string>
