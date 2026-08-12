@@ -91,10 +91,11 @@ $info-text-max-width: 400px;
     border-radius: 16px;
     --msg-container-padding-horizontal: 12px;
     --msg-container-padding-top: 10px;
+    --msg-container-padding-bottom: 10px;
     padding-inline-end: var(--msg-container-padding-horizontal);
     padding-inline-start: var(--msg-container-padding-horizontal);
     padding-top: var(--msg-container-padding-top);
-    padding-bottom: 10px;
+    padding-bottom: var(--msg-container-padding-bottom);
 
     .msg-body {
       &.call {
@@ -334,9 +335,15 @@ $info-text-max-width: 400px;
 }
 
 .message.video-only {
-  .msg-container {
-    /* make the whole container black, as videos always have a black background */
+  .message-attachment-media {
+    /* Videos always have a black background,
+       extend it down to the bottom edge of the bubble,
+       as background for the metadata */
     background-color: #000;
+    padding-bottom: calc(
+      var(--attachment-bottom-gap) + var(--msg-container-padding-bottom)
+    );
+    margin-bottom: calc(-1 * var(--msg-container-padding-bottom));
   }
 }
 
@@ -404,11 +411,10 @@ $info-text-max-width: 400px;
   }
 }
 
-.message.type-sticker,
-.message.video-only {
+.message.type-sticker {
   .msg-container {
     .quote-background {
-      // `.msg-container` background is transparent or black,
+      // `.msg-container` background is transparent,
       // so let's explicitly apply the color just for the quote.
       background: var(--messageBg);
 

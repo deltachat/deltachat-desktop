@@ -19,6 +19,8 @@
   @include mixins.button-reset;
   display: block;
 
+  --attachment-bottom-gap: 7px;
+
   // Entirely to ensure that images are centered if they aren't full width of bubble
   text-align: center;
   position: relative;
@@ -71,7 +73,7 @@
   &.content-below,
   /* needed to avoid metadata video controls overlap */
   &.video {
-    margin-bottom: 7px;
+    margin-bottom: var(--attachment-bottom-gap);
   }
   &.content-below {
     border-bottom-left-radius: 0px;
