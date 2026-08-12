@@ -1,4 +1,4 @@
-import errorStackParser from 'error-stack-parser'
+import errorStackParser from 'error-stack-parser/error-stack-parser.js'
 import StackFrame from 'stackframe'
 import { RC_Config } from './shared-types.js'
 
