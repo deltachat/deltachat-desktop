@@ -47,7 +47,7 @@ catalog:
   ws: ^8.18.0
 
   # tools / dev dependencies
-  sass: ^1.86.3
+  sass: ^1.102.0
   typescript: ^6.0.3
   typescript-plugin-css-modules: ^5.2.0
   esbuild: ^0.28.1

@@ -46,8 +46,8 @@ catalogs:
       specifier: ^11.7.5
       version: 11.7.5
     sass:
-      specifier: ^1.86.3
-      version: 1.86.3
+      specifier: ^1.102.0
+      version: 1.102.0
     typescript:
       specifier: ^6.0.3
       version: 6.0.3
@@ -255,7 +255,7 @@ importers:
         version: 8.0.1
       sass:
         specifier: 'catalog:'
-        version: 1.86.3
+        version: 1.102.0
       source-map-support:
         specifier: ^0.5.21
         version: 0.5.21
@@ -386,7 +386,7 @@ importers:
         version: 2.1.35
       sass:
         specifier: 'catalog:'
-        version: 1.86.3
+        version: 1.102.0
       ws:
         specifier: 'catalog:'
         version: 8.21.0
@@ -2649,8 +2649,8 @@ packages:
     engines: {node: '>=0.10.0'}
     hasBin: true
 
-  immutable@5.1.1:
-    resolution: {integrity: sha512-3jatXi9ObIsPGr3N5hGw/vWWcTkq6hUYhpQz4k0wLC+owqWi/LiugIw9x0EdNZ2yGedKN/HzePiBvaJRXa0Ujg==}
+  immutable@5.1.9:
+    resolution: {integrity: sha512-m8nVez3rwrgmWxtLMt1ZYXB2Lv7OKYn/disyxAlSDYAlKSlFoPPfIAmAM/M5xqL4m4C/wAPw7S2/CNaUii1Hxg==}
 
   import-fresh@3.3.1:
     resolution: {integrity: sha512-TR3KfrTZTYLPB6jUjfx6MF9WcWrHL9su5TObK4ZkYgBdWKPOFoSoQIdEuTuR82pmtxH2spWG9h6etwfr1pLBqQ==}
@@ -3627,9 +3627,9 @@ packages:
   sanitize-filename@1.6.4:
     resolution: {integrity: sha512-9ZyI08PsvdQl2r/bBIGubpVdR3RR9sY6RDiWFPreA21C/EFlQhmgo20UZlNjZMMZNubusLhAQozkA0Od5J21Eg==}
 
-  sass@1.86.3:
-    resolution: {integrity: sha512-iGtg8kus4GrsGLRDLRBRHY9dNVA78ZaS7xr01cWnS7PEMQyFtTqBiyCrfpTYTZXRWM94akzckYjh8oADfFNTzw==}
-    engines: {node: '>=14.0.0'}
+  sass@1.102.0:
+    resolution: {integrity: sha512-NSOyTnaQF7rTAEOtI2fwb386vL+akyiQLBZu8Na7hXCb+umJy0GAqlcMIaqACZ6Z1VgTBS4K9PG6B3IdjHGJsw==}
+    engines: {node: '>=20.19.0'}
     hasBin: true
 
   sax@1.4.3:
@@ -6581,7 +6581,7 @@ snapshots:
   image-size@0.5.5:
     optional: true
 
-  immutable@5.1.1: {}
+  immutable@5.1.9: {}
 
   import-fresh@3.3.1:
     dependencies:
@@ -7538,10 +7538,10 @@ snapshots:
     dependencies:
       truncate-utf8-bytes: 1.0.2
 
-  sass@1.86.3:
+  sass@1.102.0:
     dependencies:
-      chokidar: 4.0.3
-      immutable: 5.1.1
+      chokidar: 5.0.0
+      immutable: 5.1.9
       source-map-js: 1.2.1
     optionalDependencies:
       '@parcel/watcher': 2.5.1
@@ -7960,7 +7960,7 @@ snapshots:
       postcss-modules-local-by-default: 4.2.0(postcss@8.5.6)
       postcss-modules-scope: 3.2.1(postcss@8.5.6)
       reserved-words: 0.1.2
-      sass: 1.86.3
+      sass: 1.102.0
       source-map-js: 1.2.1
       tsconfig-paths: 4.2.0
       typescript: 6.0.3
