@@ -129,8 +129,7 @@ export default function TransportsDialog(
     async (transport: Transport) => {
       const userConfirmed = await openConfirmationDialog({
         confirmLabel: tx('remove_transport'),
-        // TODO should be a question? Overall might need a better label?
-        message: tx('remove_transport'),
+        message: tx('confirm_remove_relay_x', transport.addr.split('@')[1]),
         isConfirmDanger: true,
       })
       if (!userConfirmed) {
