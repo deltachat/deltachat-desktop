@@ -45,9 +45,6 @@ catalogs:
     mocha:
       specifier: ^11.7.5
       version: 11.7.5
-    sass:
-      specifier: ^1.102.0
-      version: 1.102.0
     typescript:
       specifier: ^6.0.3
       version: 6.0.3
@@ -254,7 +251,7 @@ importers:
         specifier: ^8.0.1
         version: 8.0.1
       sass:
-        specifier: 'catalog:'
+        specifier: ^1.102.0
         version: 1.102.0
       source-map-support:
         specifier: ^0.5.21
@@ -384,9 +381,6 @@ importers:
       mime-types:
         specifier: 'catalog:'
         version: 2.1.35
-      sass:
-        specifier: 'catalog:'
-        version: 1.102.0
       ws:
         specifier: 'catalog:'
         version: 8.21.0
