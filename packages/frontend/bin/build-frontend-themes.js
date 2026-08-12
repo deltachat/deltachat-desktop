@@ -1,6 +1,6 @@
 //@ts-check
 import { readdir, readFile, writeFile, rm, mkdir } from 'fs/promises'
-import { compile, compileString, renderSync } from 'sass'
+import { compileString } from 'sass'
 import { join, dirname } from 'path'
 
 import { fileURLToPath } from 'url'
