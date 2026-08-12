@@ -62,7 +62,6 @@
     "@deltachat/calls-webapp": "catalog:",
     "escape-html": "^1.0.3",
     "mime-types": "catalog:",
-    "sass": "catalog:",
     "ws": "catalog:"
   },
   "devDependencies": {
