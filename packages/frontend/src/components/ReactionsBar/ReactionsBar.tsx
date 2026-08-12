@@ -65,7 +65,9 @@ export default function ReactionsBar({
       )
     } catch (error) {
       log.error('Failed to send reaction:', error)
-      void openAlertDialog({ message: unknownErrorToString(error) })
+      void openAlertDialog({
+        message: tx('error_x', unknownErrorToString(error)),
+      })
     } finally {
       onClick()
     }

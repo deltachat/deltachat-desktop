@@ -769,6 +769,7 @@ test.describe('channel reactions', () => {
     await selectChat(page, channelName)
     await sendMessage(page, channelName, messageText)
 
+    await expect(message()).toBeVisible()
     await expect(message()).not.toContainText('😂')
   })
 
@@ -789,6 +790,8 @@ test.describe('channel reactions', () => {
   test('react', async () => {
     await switchToProfile(page, userB.id)
     await selectChat(page, channelName)
+
+    await expect(message()).toBeVisible()
 
     // Subscribers can react although they can't send messages
     await expect(
@@ -822,8 +825,9 @@ test.describe('channel reactions', () => {
     )
     // Subscribers don't get to know who reacted with what, so the rows are
     // the accumulated counts and not the contacts, which would be clickable
-    await expect(rows.getByRole('button')).toHaveCount(0)
+    await expect(rows).toHaveCount(1)
     await expect(rows.filter({ hasText: '😂' })).toContainText('1 reaction')
+    await expect(rows.getByRole('button')).toHaveCount(0)
   })
 
   test('owner sees the reaction', async () => {
