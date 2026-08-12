@@ -1118,6 +1118,7 @@ export default function Message(props: {
               {message.reactions && (
                 <Reactions
                   reactions={message.reactions}
+                  chatType={chat.chatType}
                   tabindexForInteractiveContents={
                     tabindexForInteractiveContents
                   }

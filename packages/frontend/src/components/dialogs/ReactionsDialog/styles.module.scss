@@ -38,3 +38,15 @@
   font-size: 20px;
   text-align: center;
 }
+
+.accumulatedReactionsListItem {
+  align-items: center;
+  display: flex;
+  padding-block: 8px;
+}
+
+.accumulatedReactionsCount {
+  flex: 1;
+  margin-inline-end: 10px;
+  overflow: hidden;
+}

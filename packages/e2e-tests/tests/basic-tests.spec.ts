@@ -9,6 +9,7 @@ import {
   User,
   loadExistingProfiles,
   clickThroughTestIds,
+  openReactionsBar,
   reloadPage,
   sendMessage,
   test,
@@ -241,11 +242,8 @@ test('message menu items presence', async () => {
 
 test('React to a message', async () => {
   const someMessage = page.getByLabel('Messages').getByText('Hello').first()
-  await someMessage.click({ button: 'right' })
-  await page.getByRole('menu').getByRole('menuitem', { name: 'React' }).click()
-  await expect(
-    page.getByRole('menu', { name: 'React' }).getByRole('menuitemradio').first()
-  ).toBeFocused()
+  const reactionsBar = await openReactionsBar(page, someMessage)
+  await expect(reactionsBar.getByRole('menuitemradio').first()).toBeFocused()
 
   await page.keyboard.press('Escape')
   await expect(
@@ -257,9 +255,7 @@ test('React to a message', async () => {
   // but this is how it works now.
   await someMessage.click()
   await page.keyboard.press('ControlOrMeta+R')
-  await expect(
-    page.getByRole('menu', { name: 'React' }).getByRole('menuitemradio').first()
-  ).toBeFocused()
+  await expect(reactionsBar.getByRole('menuitemradio').first()).toBeFocused()
 
   const chatList = page.getByLabel('Chats').getByRole('tablist')
   await expect(chatList).not.toContainText('You reacted')
