@@ -83,7 +83,7 @@
     "application-config": "^3.0.0",
     "chai": "^5.1.1",
     "debounce": "^1.2.0",
-    "electron": "^42.5.1",
+    "electron": "^42.9.0",
     "electron-builder": "^26.15.7",
     "esbuild": "^0.28.1",
     "mocha": "^10.7.0",
