@@ -2,6 +2,36 @@
 
 All notable changes to this project will be documented in this file.
 
+<a id="2_58_0"></a>
+## [2.58.0] - 2026-08-13
+
+### Added
+
+- Add Hide Menu Bar setting ([#6544](https://github.com/deltachat/deltachat-desktop/issues/6544))
+- Group last used apps visually ([#6572](https://github.com/deltachat/deltachat-desktop/issues/6572))
+- Add (experimental) "Team Profiles"
+- Enable channel reactions ([#6638](https://github.com/deltachat/deltachat-desktop/issues/6638))
+
+### Fixed
+
+- QR scanner camera select not working
+- Fix disable Ctrl+a selecting all text ([#6570](https://github.com/deltachat/deltachat-desktop/issues/6570))
+- Fix incorrect "You removed member X" messages
+- Autostart on nixos not working ([#6571](https://github.com/deltachat/deltachat-desktop/issues/6571))
+- "Edit" sometimes not moving cursor to the end
+- Video background in quotes ([#6639](https://github.com/deltachat/deltachat-desktop/issues/6639))
+
+### Miscellaneous Tasks
+
+- Upgrade Core to 2.58.0
+- Translations update 2026-08 ([#6644](https://github.com/deltachat/deltachat-desktop/issues/6644))
+- Upgrade Electron 42.5.0 to 42.9.0
+
+### Other
+
+- QR scanner: prefer environment facing
+
+
 <a id="2_57_0"></a>
 ## [2.57.0] - 2026-07-25
 
@@ -4222,7 +4252,8 @@ This section is only relevant to contributors.
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.57.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.58.0...HEAD
+[2.58.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.57.0...v2.58.0
 [2.57.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.56.0...v2.57.0
 [2.56.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.53.1...v2.56.0
 [2.53.1]: https://github.com/deltachat/deltachat-desktop/compare/v2.53.0...v2.53.1
