@@ -133,11 +133,20 @@ jobs:
           trap 'rm -f __TEMP_INPUT_KEY_FILE' EXIT
           echo -e "$SSH_KEY" >__TEMP_INPUT_KEY_FILE
           chmod 600 __TEMP_INPUT_KEY_FILE
-          # The key is restricted to rrsync, so the target directory is fixed in
-          # authorized_keys on the server and has to be addressed as "."
+          SSH_BIN=ssh
+          if [ "$RUNNER_OS" = "Windows" ]; then
+            # cwRsync is cygwin based and fails with "dup() in/out/err failed"
+            # when it starts the msys2 ssh of Git for Windows, so use its own.
+            SSH_BIN=$(find /c/ProgramData/chocolatey/lib/rsync -name ssh.exe | head -n1)
+            test -n "$SSH_BIN" || { echo "ssh.exe of cwRsync not found"; exit 1; }
+            # cygwin binaries do not understand the /c/... paths of Git bash
+            SSH_BIN=$(cygpath -m "$SSH_BIN")
+          fi
+          # The key is restricted to rrsync, so the target directory is configured in
+          # authorized_keys on the server
           rsync -rvz \
-            -e "ssh -o StrictHostKeyChecking=no -i __TEMP_INPUT_KEY_FILE -p 22" \
-            packages/target-electron/dist/preview/ "$SSH_USER@download.delta.chat:."
+            -e "$SSH_BIN -o StrictHostKeyChecking=no -i __TEMP_INPUT_KEY_FILE -p 22" \
+            packages/target-electron/dist/preview/ "$SSH_USER@download.delta.chat:"
         continue-on-error: true
       - name: 'Post links to details'
         if: steps.upload.outcome == 'success'
