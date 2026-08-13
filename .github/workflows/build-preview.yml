@@ -119,14 +119,25 @@ jobs:
           dir preview
           cd ..
       # Upload Step
+      - name: WINDOWS install rsync
+        if: runner.os == 'Windows'
+        run: choco install --no-progress -y rsync
       - name: upload folder
         id: upload
         shell: bash
         if: contains(github.event.pull_request.body, '#public-preview')  || contains(github.event.pull_request.title, 'prepare release')
+        env:
+          SSH_KEY: ${{ secrets.KEY }}
+          SSH_USER: ${{ secrets.USERNAME }}
         run: |
-          echo -e "${{ secrets.KEY }}" >__TEMP_INPUT_KEY_FILE
+          trap 'rm -f __TEMP_INPUT_KEY_FILE' EXIT
+          echo -e "$SSH_KEY" >__TEMP_INPUT_KEY_FILE
           chmod 600 __TEMP_INPUT_KEY_FILE
-          scp -o StrictHostKeyChecking=no -v -i __TEMP_INPUT_KEY_FILE -P "22" -r packages/target-electron/dist/preview/* "${{ secrets.USERNAME }}"@"download.delta.chat":"/var/www/html/download/desktop/preview/"
+          # The key is restricted to rrsync, so the target directory is fixed in
+          # authorized_keys on the server and has to be addressed as "."
+          rsync -rvz --chmod=F644,D755 \
+            -e "ssh -o StrictHostKeyChecking=no -i __TEMP_INPUT_KEY_FILE -p 22" \
+            packages/target-electron/dist/preview/ "$SSH_USER@download.delta.chat:."
         continue-on-error: true
       - name: 'Post links to details'
         if: steps.upload.outcome == 'success'
