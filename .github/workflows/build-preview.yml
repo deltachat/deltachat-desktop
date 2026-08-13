@@ -135,7 +135,7 @@ jobs:
           chmod 600 __TEMP_INPUT_KEY_FILE
           # The key is restricted to rrsync, so the target directory is fixed in
           # authorized_keys on the server and has to be addressed as "."
-          rsync -rvz --chmod=F644,D755 \
+          rsync -rvz \
             -e "ssh -o StrictHostKeyChecking=no -i __TEMP_INPUT_KEY_FILE -p 22" \
             packages/target-electron/dist/preview/ "$SSH_USER@download.delta.chat:."
         continue-on-error: true
