@@ -129,7 +129,7 @@ export default function TransportsDialog(
     async (transport: Transport) => {
       const userConfirmed = await openConfirmationDialog({
         confirmLabel: tx('remove_transport'),
-        message: tx('confirm_remove_relay_x', transport.addr.split('@')[1]),
+        message: tx('confirm_remove_relay_x', transport.addr),
         isConfirmDanger: true,
       })
       if (!userConfirmed) {
