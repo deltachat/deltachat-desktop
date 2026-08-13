@@ -69,8 +69,6 @@
     <string name="mark_all_as_read">Označi vse kot prebrano</string>
     <!-- Used as an menu entry or button -->
     <string name="mark_as_read">Označi kot prebrano</string>
-    <!-- Used beside an icon with very few space. Shortest text for "Mark as being read". In english, this could be "Read" (past tense of "to read"), in german, this could be "Gelesen". -->
-    <string name="mark_as_read_short">Prebrano</string>
     <!-- Placeholder text when something is loading -->
     <string name="loading">Nalaganje...</string>
     <string name="hide">Skrij</string>
