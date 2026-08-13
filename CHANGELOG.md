@@ -7,29 +7,33 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- Add Hide Menu Bar setting ([#6544](https://github.com/deltachat/deltachat-desktop/issues/6544))
-- Group last used apps visually ([#6572](https://github.com/deltachat/deltachat-desktop/issues/6572))
-- Add (experimental) "Team Profiles"
-- Enable channel reactions ([#6638](https://github.com/deltachat/deltachat-desktop/issues/6638))
+- React to channel posts ([#6638](https://github.com/deltachat/deltachat-desktop/issues/6638))
+- "Hide Window Menu Bar" setting (Settings -> Appearance) ([#6544](https://github.com/deltachat/deltachat-desktop/issues/6544))
+- (experimental) "Team Profiles": you may enable this while creating a new profile (<https://github.com/chatmail/core/pull/7694>)
 
 ### Fixed
 
+- NixOS: autostart not working: you'll need to toggle the "autostart" off and on again in Delta Chat Advanced settings ([#6571](https://github.com/deltachat/deltachat-desktop/issues/6571))
+- Disable Ctrl+A shortcut (select all text) outside of text inputs ([#6570](https://github.com/deltachat/deltachat-desktop/issues/6570))
 - QR scanner camera select not working
-- Fix disable Ctrl+a selecting all text ([#6570](https://github.com/deltachat/deltachat-desktop/issues/6570))
 - Fix incorrect "You removed member X" messages
-- Autostart on nixos not working ([#6571](https://github.com/deltachat/deltachat-desktop/issues/6571))
-- "Edit" sometimes not moving cursor to the end
-- Video background in quotes ([#6639](https://github.com/deltachat/deltachat-desktop/issues/6639))
+- Fix links in messages not being clickable sometimes
+- Minor fixes for the View Group dialog
+- accessibility: say "Muted" instead of "Mute" for chat list items
+- Clicking "Edit Message" sometimes not moving the text cursor to the end of the input
+- style: better message bubble color of messages with a video attachment: have the quote on a normal background color and not black ([#6639](https://github.com/deltachat/deltachat-desktop/issues/6639))
+- More minor fixes
 
 ### Miscellaneous Tasks
 
-- Upgrade Core to 2.58.0
+- Upgrade Core to [2.58.0](https://github.com/chatmail/core/blob/main/CHANGELOG.md#2580---2026-08-10)
 - Translations update 2026-08 ([#6644](https://github.com/deltachat/deltachat-desktop/issues/6644))
 - Upgrade Electron 42.5.0 to 42.9.0
 
 ### Other
 
 - QR scanner: prefer environment facing
+- style: adjust the spacing in the "Recently used apps" section in the chat header ([#6572](https://github.com/deltachat/deltachat-desktop/issues/6572))
 
 
 <a id="2_57_0"></a>
