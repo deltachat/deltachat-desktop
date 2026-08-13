@@ -122,6 +122,9 @@ jobs:
       - name: WINDOWS install rsync
         if: runner.os == 'Windows'
         run: choco install --no-progress -y rsync
+      - name: MAC install rsync
+        if: runner.os == 'macOS'
+        run: brew install rsync
       - name: upload folder
         id: upload
         shell: bash
@@ -134,6 +137,7 @@ jobs:
           echo -e "$SSH_KEY" >__TEMP_INPUT_KEY_FILE
           chmod 600 __TEMP_INPUT_KEY_FILE
           SSH_BIN=ssh
+          RSYNC_BIN=rsync
           if [ "$RUNNER_OS" = "Windows" ]; then
             # cwRsync is cygwin based and fails with "dup() in/out/err failed"
             # when it starts the msys2 ssh of Git for Windows, so use its own.
@@ -141,10 +145,18 @@ jobs:
             test -n "$SSH_BIN" || { echo "ssh.exe of cwRsync not found"; exit 1; }
             # cygwin binaries do not understand the /c/... paths of Git bash
             SSH_BIN=$(cygpath -m "$SSH_BIN")
+            # cygwin reads the ACLs written by msys2's chmod as 0750, so the key
+            # has to be restricted to the current user via windows ACLs instead
+            icacls __TEMP_INPUT_KEY_FILE /inheritance:r /grant:r "$USERNAME:R" >/dev/null
+          elif [ "$RUNNER_OS" = "macOS" ]; then
+            # /usr/bin/rsync is openrsync, whose --server command is rejected by
+            # rrsync ("invalid rsync-command syntax or options")
+            RSYNC_BIN="$(brew --prefix)/bin/rsync"
+            test -x "$RSYNC_BIN" || { echo "rsync from homebrew not found"; exit 1; }
           fi
           # The key is restricted to rrsync, so the target directory is configured in
           # authorized_keys on the server
-          rsync -rvz \
+          "$RSYNC_BIN" -rvz \
             -e "$SSH_BIN -o StrictHostKeyChecking=no -i __TEMP_INPUT_KEY_FILE -p 22" \
             packages/target-electron/dist/preview/ "$SSH_USER@download.delta.chat:"
         continue-on-error: true
