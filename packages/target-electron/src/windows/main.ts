@@ -331,13 +331,6 @@ export function send(channel: string, ...args: any[]) {
   }
 }
 
-/**
- * Enforce window aspect ratio. Remove with 0. (Mac)
- */
-// export function setAspectRatio(aspectRatio) {
-//   window?.setAspectRatio(aspectRatio)
-// }
-
 export function show() {
   window?.show()
 }
