@@ -15,26 +15,29 @@ const GITHUB_TOKEN = process.env['GITHUB_TOKEN']
 /** May be absent */
 const FULL_ARTIFACT_URL = process.env['FULL_ARTIFACT_URL']
 
+/** `runner.os` of the build - the upload job posts for all three from linux */
+const PLATFORM = process.env['PLATFORM']
+
 let platform_status = {}
 
-if (process.platform === 'darwin') {
+if (PLATFORM === 'macOS') {
   platform_status['context'] = '⭐ MacOS Preview Build'
   // platform_status['target_url'] = base_url + prId + '.dmg'
   platform_status['target_url'] =
     FULL_ARTIFACT_URL ||
     base_url + '-mas.' + branchName + '.zip'
-} else if (process.platform === 'win32') {
+} else if (PLATFORM === 'Windows') {
   platform_status['context'] = '⭐ Windows Preview Build (portable)'
   platform_status['target_url'] =
     FULL_ARTIFACT_URL ||
     base_url + '.' + branchName + '.portable.exe'
-} else if (process.platform === 'linux') {
+} else if (PLATFORM === 'Linux') {
   platform_status['context'] = '⭐ Linux Preview Build'
   platform_status['target_url'] =
     FULL_ARTIFACT_URL ||
     base_url + '.' + branchName + '.AppImage'
 } else {
-  throw new Error('Unsupported platform: ' + process.platform)
+  throw new Error('Unsupported platform: ' + PLATFORM)
 }
 
 const STATUS_DATA = {
