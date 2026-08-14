@@ -17,13 +17,13 @@ permissions:
   statuses: write
 
 jobs:
-  upload-preview:
+  build-preview:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
       fail-fast: false
-    name: Upload Preview
+    name: Build Preview
     env:
       IS_PREVIEW: true
     steps:
@@ -118,56 +118,7 @@ jobs:
           move Delta*Chat*.exe preview/deltachat-desktop.$env:BRANCH.portable.exe
           dir preview
           cd ..
-      # Upload Step
-      - name: WINDOWS install rsync
-        if: runner.os == 'Windows'
-        run: choco install --no-progress -y rsync
-      - name: MAC install rsync
-        if: runner.os == 'macOS'
-        run: brew install rsync
-      - name: upload folder
-        id: upload
-        shell: bash
-        if: contains(github.event.pull_request.body, '#public-preview')  || contains(github.event.pull_request.title, 'prepare release')
-        env:
-          SSH_KEY: ${{ secrets.KEY }}
-          SSH_USER: ${{ secrets.USERNAME }}
-        run: |
-          trap 'rm -f __TEMP_INPUT_KEY_FILE' EXIT
-          echo -e "$SSH_KEY" >__TEMP_INPUT_KEY_FILE
-          chmod 600 __TEMP_INPUT_KEY_FILE
-          SSH_BIN=ssh
-          RSYNC_BIN=rsync
-          if [ "$RUNNER_OS" = "Windows" ]; then
-            # cwRsync is cygwin based and fails with "dup() in/out/err failed"
-            # when it starts the msys2 ssh of Git for Windows, so use its own.
-            SSH_BIN=$(find /c/ProgramData/chocolatey/lib/rsync -name ssh.exe | head -n1)
-            test -n "$SSH_BIN" || { echo "ssh.exe of cwRsync not found"; exit 1; }
-            # cygwin binaries do not understand the /c/... paths of Git bash
-            SSH_BIN=$(cygpath -m "$SSH_BIN")
-            # cygwin reads the ACLs written by msys2's chmod as 0750, so the key
-            # has to be restricted to the current user via windows ACLs instead
-            icacls __TEMP_INPUT_KEY_FILE /inheritance:r /grant:r "$USERNAME:R" >/dev/null
-          elif [ "$RUNNER_OS" = "macOS" ]; then
-            # /usr/bin/rsync is openrsync, whose --server command is rejected by
-            # rrsync ("invalid rsync-command syntax or options")
-            RSYNC_BIN="$(brew --prefix)/bin/rsync"
-            test -x "$RSYNC_BIN" || { echo "rsync from homebrew not found"; exit 1; }
-          fi
-          # The key is restricted to rrsync, so the target directory is configured in
-          # authorized_keys on the server
-          "$RSYNC_BIN" -rvz \
-            -e "$SSH_BIN -o StrictHostKeyChecking=no -i __TEMP_INPUT_KEY_FILE -p 22" \
-            packages/target-electron/dist/preview/ "$SSH_USER@download.delta.chat:"
-        continue-on-error: true
-      - name: 'Post links to details'
-        if: steps.upload.outcome == 'success'
-        run: node ./bin/github-actions/postLinksToDetails.js
-        env:
-          PR_BRANCH: ${{ steps.prepare.outputs.branch }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload result to artifacts
-        if: contains(github.event.pull_request.body, '#public-preview') == false || contains(github.event.pull_request.title, 'prepare release') == false || steps.upload.outcome == 'failure'
         id: upload-github
         uses: actions/upload-artifact@main
         with:
@@ -178,4 +129,54 @@ jobs:
         run: node ./bin/github-actions/postLinksToDetails.js
         env:
           FULL_ARTIFACT_URL: ${{ steps.upload-github.outputs.artifact-url }}
+          PLATFORM: ${{ runner.os }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # Uploading from the build jobs themselves with rsync caused problems: the macOS
+  # runner ships openrsync, which rrsync rejects, and on windows the cygwin based
+  # rsync cannot be combined with the msys2 ssh of Git for Windows.
+  upload-preview:
+    runs-on: ubuntu-latest
+    name: Upload Preview
+    needs: build-preview
+    # runs even if a build failed, to upload the platforms that did succeed
+    if: ${{ !cancelled() && (contains(github.event.pull_request.body, '#public-preview') || contains(github.event.pull_request.title, 'prepare release')) }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          show-progress: false
+          persist-credentials: false
+      - name: Get Branch Name
+        id: prepare
+        run: |
+          echo "branch=$(echo "${GITHUB_HEAD_REF}" | sed 's/[^A-Za-z0-9._-]/_/g')" >> $GITHUB_OUTPUT
+      - name: Download the builds of all platforms
+        uses: actions/download-artifact@v4
+        with:
+          path: preview
+          pattern: '* output'
+          merge-multiple: true
+      - name: upload folder
+        id: upload
+        env:
+          SSH_KEY: ${{ secrets.KEY }}
+          SSH_USER: ${{ secrets.USERNAME }}
+        run: |
+          trap 'rm -f __TEMP_INPUT_KEY_FILE' EXIT
+          echo -e "$SSH_KEY" >__TEMP_INPUT_KEY_FILE
+          chmod 600 __TEMP_INPUT_KEY_FILE
+          # The key is restricted to rrsync, so the target directory is configured in
+          # authorized_keys on the server
+          rsync -rvz \
+            -e "ssh -o StrictHostKeyChecking=no -i __TEMP_INPUT_KEY_FILE -p 22" \
+            preview/ "$SSH_USER@download.delta.chat:"
+        continue-on-error: true
+      - name: 'Post links to details'
+        if: steps.upload.outcome == 'success'
+        run: |
+          for platform in Linux macOS Windows; do
+            PLATFORM=$platform node ./bin/github-actions/postLinksToDetails.js
+          done
+        env:
+          PR_BRANCH: ${{ steps.prepare.outputs.branch }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
