@@ -291,7 +291,7 @@ test('Withdraw group invite link', async ({ browserName }) => {
   // might just not do anything, even if the link is revoked.
   await expect(
     page.getByRole('list', { name: 'Messages' }).getByRole('listitem').last()
-  ).toContainText('Member Me removed by Alice')
+  ).toContainText('You were removed by Alice')
   await clickThroughTestIds(page, ['qr-scan-button', 'show-qr-scan', 'paste'])
 
   const confirmJoinGroupDialog = page.getByTestId('confirm-join-group')
@@ -309,7 +309,7 @@ test('Withdraw group invite link', async ({ browserName }) => {
     page
       .getByRole('list', { name: 'Messages' })
       .getByRole('listitem')
-      .filter({ hasText: 'Member Me removed by Alice' })
+      .filter({ hasText: 'You were removed by Alice' })
   ).toBeVisible()
   await expect(
     page
