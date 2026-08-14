@@ -31,6 +31,10 @@ export async function updateCoreStrings() {
     | typeof C.DC_STR_PHASING_OUT
     | typeof C.DC_STR_MESSAGE_PINNED_BY_OTHER
     | typeof C.DC_STR_MESSAGE_PINNED_BY_YOU
+    | typeof C.DC_STR_ADD_YOU
+    | typeof C.DC_STR_ADD_YOU_BY
+    | typeof C.DC_STR_REMOVE_YOU
+    | typeof C.DC_STR_REMOVE_YOU_BY
 
     // Deprecated, see
     // https://github.com/chatmail/core/blob/main/deltachat-ffi/deltachat.h
