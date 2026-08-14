@@ -10,11 +10,11 @@ catalogs:
       specifier: 0.12.1-beta-debug
       version: 0.12.1-beta-debug
     '@deltachat/jsonrpc-client':
-      specifier: 2.58.0
-      version: 2.58.0
+      specifier: 2.59.0
+      version: 2.59.0
     '@deltachat/stdio-rpc-server':
-      specifier: 2.58.0
-      version: 2.58.0
+      specifier: 2.59.0
+      version: 2.59.0
     '@types/chai':
       specifier: ^4.3.17
       version: 4.3.20
@@ -71,7 +71,7 @@ importers:
         version: 2.0.0(eslint@9.39.2(jiti@2.7.0)(supports-color@8.1.1))
       '@eslint/eslintrc':
         specifier: ^3.3.3
-        version: 3.3.3
+        version: 3.3.3(supports-color@8.1.1)
       '@eslint/js':
         specifier: ^9.39.2
         version: 9.39.2
@@ -113,7 +113,7 @@ importers:
         version: 6.0.3
       typescript-eslint:
         specifier: ^8.61.1
-        version: 8.61.1(eslint@9.39.2(jiti@2.7.0)(supports-color@8.1.1))(typescript@6.0.3)
+        version: 8.61.1(eslint@9.39.2(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)
       xml-js:
         specifier: ^1.6.11
         version: 1.6.11
@@ -143,7 +143,7 @@ importers:
         version: link:../shared
       '@deltachat/jsonrpc-client':
         specifier: 'catalog:'
-        version: 2.58.0(ws@8.21.0)
+        version: 2.59.0(ws@8.21.0)
       '@emoji-mart-awesome/react':
         specifier: 1.0.0
         version: 1.0.0(emoji-mart-awesome@3.0.0)(react@19.2.0)
@@ -276,7 +276,7 @@ importers:
         version: link:../shared
       '@deltachat/jsonrpc-client':
         specifier: 'catalog:'
-        version: 2.58.0(ws@8.21.0)
+        version: 2.59.0(ws@8.21.0)
       '@types/node':
         specifier: 'catalog:'
         version: 22.15.33
@@ -285,7 +285,7 @@ importers:
     dependencies:
       '@deltachat/jsonrpc-client':
         specifier: 'catalog:'
-        version: 2.58.0(ws@8.21.0)
+        version: 2.59.0(ws@8.21.0)
       error-stack-parser:
         specifier: ^2.1.4
         version: 2.1.4
@@ -322,10 +322,10 @@ importers:
         version: link:../shared
       '@deltachat/jsonrpc-client':
         specifier: 'catalog:'
-        version: 2.58.0(ws@8.21.0)
+        version: 2.59.0(ws@8.21.0)
       '@deltachat/stdio-rpc-server':
         specifier: 'catalog:'
-        version: 2.58.0(@deltachat/jsonrpc-client@2.58.0(ws@8.21.0))
+        version: 2.59.0(@deltachat/jsonrpc-client@2.59.0(ws@8.21.0))
       '@types/express-session':
         specifier: ^1.18.0
         version: 1.18.1
@@ -334,10 +334,10 @@ importers:
         version: 1.3.3
       express:
         specifier: ^4.22.2
-        version: 4.22.2
+        version: 4.22.2(supports-color@8.1.1)
       express-session:
         specifier: ^1.19.0
-        version: 1.19.0
+        version: 1.19.0(supports-color@8.1.1)
       node-localstorage:
         specifier: ^3.0.5
         version: 3.0.5
@@ -374,10 +374,10 @@ importers:
         version: 0.12.1-beta-debug
       '@deltachat/jsonrpc-client':
         specifier: 'catalog:'
-        version: 2.58.0(ws@8.21.0)
+        version: 2.59.0(ws@8.21.0)
       '@deltachat/stdio-rpc-server':
         specifier: 'catalog:'
-        version: 2.58.0(@deltachat/jsonrpc-client@2.58.0(ws@8.21.0))
+        version: 2.59.0(@deltachat/jsonrpc-client@2.59.0(ws@8.21.0))
       escape-html:
         specifier: ^1.0.3
         version: 1.0.3
@@ -402,7 +402,7 @@ importers:
         version: 2.0.0
       '@electron/notarize':
         specifier: ^2.4
-        version: 2.5.0
+        version: 2.5.0(supports-color@8.1.1)
       '@types/adm-zip':
         specifier: ^0.5.5
         version: 0.5.7
@@ -444,10 +444,10 @@ importers:
         version: 1.2.1
       electron:
         specifier: ^42.9.0
-        version: 42.9.0
+        version: 42.9.0(supports-color@8.1.1)
       electron-builder:
         specifier: ^26.15.7
-        version: 26.15.7(electron-builder-squirrel-windows@26.15.7)
+        version: 26.15.7(electron-builder-squirrel-windows@26.15.7)(supports-color@8.1.1)
       esbuild:
         specifier: ^0.28.1
         version: 0.28.1
@@ -484,7 +484,7 @@ importers:
         version: link:../shared
       '@deltachat/jsonrpc-client':
         specifier: 'catalog:'
-        version: 2.58.0(ws@8.21.0)
+        version: 2.59.0(ws@8.21.0)
       '@tauri-apps/cli':
         specifier: ^2.11.2
         version: 2.11.2
@@ -607,61 +607,61 @@ packages:
   '@deltachat/calls-webapp@0.12.1-beta-debug':
     resolution: {integrity: sha512-24ceQrtW3Jf7oCTrlAPY5h/pLoIybxiz/UgoiHn4sNjgIDYbhhp71zbdeQRCOS4oOmPrJoZftvB4lhpZurX9CQ==}
 
-  '@deltachat/jsonrpc-client@2.58.0':
-    resolution: {integrity: sha512-Sa9c4+T/PL0OJ1ZgBmGCKuultA7h2olXma+9r14Cvndnz31i20aHF7S1bmRB8pUE7SbLdAXer7SKHJQxuLXHdw==}
+  '@deltachat/jsonrpc-client@2.59.0':
+    resolution: {integrity: sha512-TfIG0DqpFanJNKpFUNQ/GqKtineMvSjzXam9X5NBMQu2qTDVqPNvbqJeiLeKT2oo7r+2vJ/uIe/QJiz+GnePdw==}
 
-  '@deltachat/stdio-rpc-server-android-arm64@2.58.0':
-    resolution: {integrity: sha512-fz8nId366AkiFeErujfzLjtLQpTIJmGrK6evpJS7O+m5+BNR6uFEloy0ee2W6/qGxKMKWOuqdAiQZhjOM13CBA==}
+  '@deltachat/stdio-rpc-server-android-arm64@2.59.0':
+    resolution: {integrity: sha512-jDm/kzAD510X114lWRMnnNmWD1uZiqktYnIhc1Vxm7GhzTeljzmT30c+w6jHO77GOiXR0+T5B4fi8KnRVm51eg==}
     cpu: [arm64]
     os: [android]
 
-  '@deltachat/stdio-rpc-server-android-arm@2.58.0':
-    resolution: {integrity: sha512-H/390IJnCrIZryEODLRzZ99z6ojUDECd22yU21FxyVCmN98YJEcOcxWWEgYo+6Rziw5GoNctH1sXC/06F20V0g==}
+  '@deltachat/stdio-rpc-server-android-arm@2.59.0':
+    resolution: {integrity: sha512-MtzSGSImGmIKiGsOMkiiBtm585b4A6esp2PjLm/NSPB6KSTS67xzMQzmpPWMm/w3OlJN5XfLc6bPtiCZhxehmw==}
     cpu: [arm]
     os: [android]
 
-  '@deltachat/stdio-rpc-server-darwin-arm64@2.58.0':
-    resolution: {integrity: sha512-H4u4z0tO8R7GmM9jppyGkCrVw5W+9NpbyPvcfTnMFSkUtJJ6AwubfqpMiaWmsLz690GsK++IT6eydB4WGl1C/Q==}
+  '@deltachat/stdio-rpc-server-darwin-arm64@2.59.0':
+    resolution: {integrity: sha512-YO/5hxZZnnb7K7pmr7mFoi5Vt4E+8VvaQu3t6F9eAw1pdEffoKix9IQYrFXB4U6/CSd1/ywCYi2t4o8kPU4JFw==}
     cpu: [arm64]
     os: [darwin]
 
-  '@deltachat/stdio-rpc-server-darwin-x64@2.58.0':
-    resolution: {integrity: sha512-O+Kf2w6eKE0ynrU2/tPOC5bSg8BhiX2V+u1w8qN3Zmb6WH+3fAFki0jY643cXTM3cF5Ng1rpVJHsXvC7BnJSaw==}
+  '@deltachat/stdio-rpc-server-darwin-x64@2.59.0':
+    resolution: {integrity: sha512-NGr9ar0wT+cwu3+gKRvfs4LrNwyCLDZ4Dq+i65+YuGe56JgbCVPecbYYHZLem0dDD8Q1I/+e1eso5TuvyuU1xw==}
     cpu: [x64]
     os: [darwin]
 
-  '@deltachat/stdio-rpc-server-linux-arm64@2.58.0':
-    resolution: {integrity: sha512-ox7MVlQvu94GEgXIe6mZEetK+NP1pmAQhsXHWIpOqWAV0jFC2IZZ0CZpFUebRQYH4fGcKSm7NZxdcFlYxWgdYg==}
+  '@deltachat/stdio-rpc-server-linux-arm64@2.59.0':
+    resolution: {integrity: sha512-EPGLkrH/7kDtpmH2yylPXFP6cSouOxs3rd+nJLfwmVBYIBmrCxBeNCJ1dFlhLk9yTcXgh7NhVU7r9YjPek0LDA==}
     cpu: [arm64]
     os: [linux]
 
-  '@deltachat/stdio-rpc-server-linux-arm@2.58.0':
-    resolution: {integrity: sha512-dOpTgoEW4dbtCB4pDdDP2s0AHVTcm6uReF70+rZwKi9A+XIv62p7jPsmVYNoZhTJmNyQ6xgV9Vp6HIvGsw15lA==}
+  '@deltachat/stdio-rpc-server-linux-arm@2.59.0':
+    resolution: {integrity: sha512-gE9URRav5aKYoObT+N3GWzB2HXAKLHXjJNreI77GJ+/lV5AEIfbK/bjq3ZpW3qw1B6bZKDO/aWS64fl285B7kw==}
     cpu: [arm]
     os: [linux]
 
-  '@deltachat/stdio-rpc-server-linux-ia32@2.58.0':
-    resolution: {integrity: sha512-nz/Qj11y9xjIwR1lhJKLIVT74lgXUERM5cyprRARByq7+BtgBmKPon3/4eKIaSTXnejYbXqdvrIKVziZKyhLdQ==}
+  '@deltachat/stdio-rpc-server-linux-ia32@2.59.0':
+    resolution: {integrity: sha512-RLpvE+OG0tJ4bgIfJwJJnDX9GA5igBBdlqGYqYM+WSHcLXSwxEQl+8PR8d9V+Jih5B2pmoAJ7qgXvHfLL9+GsA==}
     cpu: [ia32]
     os: [linux]
 
-  '@deltachat/stdio-rpc-server-linux-x64@2.58.0':
-    resolution: {integrity: sha512-PMlcAZiF6+1g6+QuzHyjOo/FEUWyMYdORlRq+nvPJkhok99R1ydCtIndBL9MazDHp23BLkv6sbVthaPUVnQkaw==}
+  '@deltachat/stdio-rpc-server-linux-x64@2.59.0':
+    resolution: {integrity: sha512-Fyxsd1AmdxNyqmSq9PiuCNrXGcvEOOfa43JTZXTfFPI9gLo1cCJAeoOEjbZzHePm0szivSzlM4pQNITXqP+r0g==}
     cpu: [x64]
     os: [linux]
 
-  '@deltachat/stdio-rpc-server-win32-ia32@2.58.0':
-    resolution: {integrity: sha512-xdDNahXyNeqbpVHRZvxLuAI/sHo1FKxPGDsUmH6OesjrEqmFijbt74OsAbC4hq4DrGvs5kAVxVBnY0ZSeKRTzQ==}
+  '@deltachat/stdio-rpc-server-win32-ia32@2.59.0':
+    resolution: {integrity: sha512-U6YLqT3s/8phWpfKcWsN7zESlOAhT1wqUkt7urdO5g5xvjMPQQNMDoEcVXRPAZBWqL1KhGUsRGBGtQW9WjCKpQ==}
     cpu: [ia32]
     os: [win32]
 
-  '@deltachat/stdio-rpc-server-win32-x64@2.58.0':
-    resolution: {integrity: sha512-fKQFxEjW7xjAaUCUoz7TL7h2B06i5dIV3fY9NhSFFp33gY2pQS3goFV+4r1UwB/fLf1nLikxrTlx5Q81V/UB/A==}
+  '@deltachat/stdio-rpc-server-win32-x64@2.59.0':
+    resolution: {integrity: sha512-jTlP3E1WIclMeg2L/+BPOOV3HFNKsFzghJNzAA0zFi8cLVkPD2M7clVH7XqlKB+03bHfhIAQUVgygHHYBaVfdA==}
     cpu: [x64]
     os: [win32]
 
-  '@deltachat/stdio-rpc-server@2.58.0':
-    resolution: {integrity: sha512-oL7DxHW+deyoDF2iutu4DgyoK1PrH7TxmYpotD433/+vd6H/mFnSBXG8lrNxijxigz/KTR9MSZgoYOKYX73vbg==}
+  '@deltachat/stdio-rpc-server@2.59.0':
+    resolution: {integrity: sha512-F7K0umRUw15jW4y2ohxE1abaJsPi0eSNE2isEyhJzm8PxrsQuJLrLbOAl7Ttoi5OAJf07J3kYuHnRHxaHrnAyw==}
     peerDependencies:
       '@deltachat/jsonrpc-client': '*'
 
@@ -1580,6 +1580,7 @@ packages:
   '@xmldom/xmldom@0.8.13':
     resolution: {integrity: sha512-KRYzxepc14G/CEpEGc3Yn+JKaAeT63smlDr+vjB8jRfgTBBI9wRj/nkQEO+ucV8p8I9bfKLWp37uHgFrbntPvw==}
     engines: {node: '>=10.0.0'}
+    deprecated: this version has critical issues, please update to the latest version
 
   abbrev@4.0.0:
     resolution: {integrity: sha512-a1wflyaL0tHtJSmLSOVybYhy22vRih4eduhhrkcjgrWGnRfrZtovJ2FRjxuTtkkj47O/baf0R86QU5OuYpz8fA==}
@@ -4331,7 +4332,7 @@ snapshots:
     dependencies:
       preact: 10.28.3
 
-  '@deltachat/jsonrpc-client@2.58.0(ws@8.21.0)':
+  '@deltachat/jsonrpc-client@2.59.0(ws@8.21.0)':
     dependencies:
       '@deltachat/tiny-emitter': 3.0.0
       isomorphic-ws: 5.0.0(ws@8.21.0)
@@ -4341,50 +4342,50 @@ snapshots:
       - utf-8-validate
       - ws
 
-  '@deltachat/stdio-rpc-server-android-arm64@2.58.0':
+  '@deltachat/stdio-rpc-server-android-arm64@2.59.0':
     optional: true
 
-  '@deltachat/stdio-rpc-server-android-arm@2.58.0':
+  '@deltachat/stdio-rpc-server-android-arm@2.59.0':
     optional: true
 
-  '@deltachat/stdio-rpc-server-darwin-arm64@2.58.0':
+  '@deltachat/stdio-rpc-server-darwin-arm64@2.59.0':
     optional: true
 
-  '@deltachat/stdio-rpc-server-darwin-x64@2.58.0':
+  '@deltachat/stdio-rpc-server-darwin-x64@2.59.0':
     optional: true
 
-  '@deltachat/stdio-rpc-server-linux-arm64@2.58.0':
+  '@deltachat/stdio-rpc-server-linux-arm64@2.59.0':
     optional: true
 
-  '@deltachat/stdio-rpc-server-linux-arm@2.58.0':
+  '@deltachat/stdio-rpc-server-linux-arm@2.59.0':
     optional: true
 
-  '@deltachat/stdio-rpc-server-linux-ia32@2.58.0':
+  '@deltachat/stdio-rpc-server-linux-ia32@2.59.0':
     optional: true
 
-  '@deltachat/stdio-rpc-server-linux-x64@2.58.0':
+  '@deltachat/stdio-rpc-server-linux-x64@2.59.0':
     optional: true
 
-  '@deltachat/stdio-rpc-server-win32-ia32@2.58.0':
+  '@deltachat/stdio-rpc-server-win32-ia32@2.59.0':
     optional: true
 
-  '@deltachat/stdio-rpc-server-win32-x64@2.58.0':
+  '@deltachat/stdio-rpc-server-win32-x64@2.59.0':
     optional: true
 
-  '@deltachat/stdio-rpc-server@2.58.0(@deltachat/jsonrpc-client@2.58.0(ws@8.21.0))':
+  '@deltachat/stdio-rpc-server@2.59.0(@deltachat/jsonrpc-client@2.59.0(ws@8.21.0))':
     dependencies:
-      '@deltachat/jsonrpc-client': 2.58.0(ws@8.21.0)
+      '@deltachat/jsonrpc-client': 2.59.0(ws@8.21.0)
     optionalDependencies:
-      '@deltachat/stdio-rpc-server-android-arm': 2.58.0
-      '@deltachat/stdio-rpc-server-android-arm64': 2.58.0
-      '@deltachat/stdio-rpc-server-darwin-arm64': 2.58.0
-      '@deltachat/stdio-rpc-server-darwin-x64': 2.58.0
-      '@deltachat/stdio-rpc-server-linux-arm': 2.58.0
-      '@deltachat/stdio-rpc-server-linux-arm64': 2.58.0
-      '@deltachat/stdio-rpc-server-linux-ia32': 2.58.0
-      '@deltachat/stdio-rpc-server-linux-x64': 2.58.0
-      '@deltachat/stdio-rpc-server-win32-ia32': 2.58.0
-      '@deltachat/stdio-rpc-server-win32-x64': 2.58.0
+      '@deltachat/stdio-rpc-server-android-arm': 2.59.0
+      '@deltachat/stdio-rpc-server-android-arm64': 2.59.0
+      '@deltachat/stdio-rpc-server-darwin-arm64': 2.59.0
+      '@deltachat/stdio-rpc-server-darwin-x64': 2.59.0
+      '@deltachat/stdio-rpc-server-linux-arm': 2.59.0
+      '@deltachat/stdio-rpc-server-linux-arm64': 2.59.0
+      '@deltachat/stdio-rpc-server-linux-ia32': 2.59.0
+      '@deltachat/stdio-rpc-server-linux-x64': 2.59.0
+      '@deltachat/stdio-rpc-server-win32-ia32': 2.59.0
+      '@deltachat/stdio-rpc-server-win32-x64': 2.59.0
 
   '@deltachat/tiny-emitter@3.0.0': {}
 
@@ -4404,7 +4405,7 @@ snapshots:
 
   '@electron/fuses@2.0.0': {}
 
-  '@electron/get@3.1.0':
+  '@electron/get@3.1.0(supports-color@8.1.1)':
     dependencies:
       debug: 4.4.3(supports-color@8.1.1)
       env-paths: 2.2.1
@@ -4412,26 +4413,26 @@ snapshots:
       got: 11.8.6
       progress: 2.0.3
       semver: 6.3.1
-      sumchecker: 3.0.1
+      sumchecker: 3.0.1(supports-color@8.1.1)
     optionalDependencies:
       global-agent: 3.0.0
     transitivePeerDependencies:
       - supports-color
 
-  '@electron/get@5.1.0':
+  '@electron/get@5.1.0(supports-color@8.1.1)':
     dependencies:
       debug: 4.4.3(supports-color@8.1.1)
       env-paths: 3.0.0
       graceful-fs: 4.2.11
       progress: 2.0.3
       semver: 7.8.5
-      sumchecker: 3.0.1
+      sumchecker: 3.0.1(supports-color@8.1.1)
     optionalDependencies:
       undici: 7.29.0
     transitivePeerDependencies:
       - supports-color
 
-  '@electron/notarize@2.5.0':
+  '@electron/notarize@2.5.0(supports-color@8.1.1)':
     dependencies:
       debug: 4.4.1(supports-color@8.1.1)
       fs-extra: 9.1.0
@@ -4439,7 +4440,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@electron/osx-sign@1.3.3':
+  '@electron/osx-sign@1.3.3(supports-color@8.1.1)':
     dependencies:
       compare-version: 0.1.2
       debug: 4.4.3(supports-color@8.1.1)
@@ -4450,18 +4451,18 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@electron/rebuild@4.2.0':
+  '@electron/rebuild@4.2.0(supports-color@8.1.1)':
     dependencies:
       '@malept/cross-spawn-promise': 2.0.0
       debug: 4.4.3(supports-color@8.1.1)
       node-abi: 4.33.0
       node-api-version: 0.2.1
       node-gyp: 12.4.0
-      read-binary-file-arch: 1.0.6
+      read-binary-file-arch: 1.0.6(supports-color@8.1.1)
     transitivePeerDependencies:
       - supports-color
 
-  '@electron/universal@2.0.3':
+  '@electron/universal@2.0.3(supports-color@8.1.1)':
     dependencies:
       '@electron/asar': 3.4.1
       '@malept/cross-spawn-promise': 2.0.0
@@ -4473,7 +4474,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@electron/windows-sign@1.2.2':
+  '@electron/windows-sign@1.2.2(supports-color@8.1.1)':
     dependencies:
       cross-dirname: 0.1.0
       debug: 4.4.3(supports-color@8.1.1)
@@ -4680,7 +4681,7 @@ snapshots:
     dependencies:
       '@types/json-schema': 7.0.15
 
-  '@eslint/eslintrc@3.3.3':
+  '@eslint/eslintrc@3.3.3(supports-color@8.1.1)':
     dependencies:
       ajv: 6.15.0
       debug: 4.4.3(supports-color@8.1.1)
@@ -4759,7 +4760,7 @@ snapshots:
     dependencies:
       cross-spawn: 7.0.6
 
-  '@malept/flatpak-bundler@0.4.0':
+  '@malept/flatpak-bundler@0.4.0(supports-color@8.1.1)':
     dependencies:
       debug: 4.4.3(supports-color@8.1.1)
       fs-extra: 9.1.0
@@ -5111,7 +5112,7 @@ snapshots:
       '@typescript-eslint/parser': 8.61.1(eslint@9.39.2(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)
       '@typescript-eslint/scope-manager': 8.61.1
       '@typescript-eslint/type-utils': 8.61.1(eslint@9.39.2(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)
-      '@typescript-eslint/utils': 8.61.1(eslint@9.39.2(jiti@2.7.0)(supports-color@8.1.1))(typescript@6.0.3)
+      '@typescript-eslint/utils': 8.61.1(eslint@9.39.2(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)
       '@typescript-eslint/visitor-keys': 8.61.1
       eslint: 9.39.2(jiti@2.7.0)(supports-color@8.1.1)
       ignore: 7.0.5
@@ -5155,7 +5156,7 @@ snapshots:
     dependencies:
       '@typescript-eslint/types': 8.61.1
       '@typescript-eslint/typescript-estree': 8.61.1(supports-color@8.1.1)(typescript@6.0.3)
-      '@typescript-eslint/utils': 8.61.1(eslint@9.39.2(jiti@2.7.0)(supports-color@8.1.1))(typescript@6.0.3)
+      '@typescript-eslint/utils': 8.61.1(eslint@9.39.2(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)
       debug: 4.4.3(supports-color@8.1.1)
       eslint: 9.39.2(jiti@2.7.0)(supports-color@8.1.1)
       ts-api-utils: 2.5.0(typescript@6.0.3)
@@ -5180,7 +5181,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@typescript-eslint/utils@8.61.1(eslint@9.39.2(jiti@2.7.0)(supports-color@8.1.1))(typescript@6.0.3)':
+  '@typescript-eslint/utils@8.61.1(eslint@9.39.2(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)':
     dependencies:
       '@eslint-community/eslint-utils': 4.9.1(eslint@9.39.2(jiti@2.7.0)(supports-color@8.1.1))
       '@typescript-eslint/scope-manager': 8.61.1
@@ -5252,33 +5253,33 @@ snapshots:
       normalize-path: 3.0.0
       picomatch: 2.3.2
 
-  app-builder-lib@26.15.7(dmg-builder@26.15.7)(electron-builder-squirrel-windows@26.15.7):
+  app-builder-lib@26.15.7(dmg-builder@26.15.7)(electron-builder-squirrel-windows@26.15.7)(supports-color@8.1.1):
     dependencies:
       '@electron/asar': 3.4.1
       '@electron/fuses': 1.8.0
-      '@electron/get': 3.1.0
-      '@electron/notarize': 2.5.0
-      '@electron/osx-sign': 1.3.3
-      '@electron/rebuild': 4.2.0
-      '@electron/universal': 2.0.3
-      '@malept/flatpak-bundler': 0.4.0
+      '@electron/get': 3.1.0(supports-color@8.1.1)
+      '@electron/notarize': 2.5.0(supports-color@8.1.1)
+      '@electron/osx-sign': 1.3.3(supports-color@8.1.1)
+      '@electron/rebuild': 4.2.0(supports-color@8.1.1)
+      '@electron/universal': 2.0.3(supports-color@8.1.1)
+      '@malept/flatpak-bundler': 0.4.0(supports-color@8.1.1)
       '@noble/hashes': 2.3.0
       '@peculiar/webcrypto': 1.7.1
       '@types/fs-extra': 9.0.13
       ajv: 8.20.0
       asn1js: 3.0.10
       async-exit-hook: 2.0.1
-      builder-util: 26.15.3
-      builder-util-runtime: 9.7.0
+      builder-util: 26.15.3(supports-color@8.1.1)
+      builder-util-runtime: 9.7.0(supports-color@8.1.1)
       chromium-pickle-js: 0.2.0
       ci-info: 4.3.1
       debug: 4.4.3(supports-color@8.1.1)
-      dmg-builder: 26.15.7(electron-builder-squirrel-windows@26.15.7)
+      dmg-builder: 26.15.7(electron-builder-squirrel-windows@26.15.7)(supports-color@8.1.1)
       dotenv: 16.6.1
       dotenv-expand: 11.0.7
       ejs: 3.1.10
-      electron-builder-squirrel-windows: 26.15.7(dmg-builder@26.15.7)
-      electron-publish: 26.15.3
+      electron-builder-squirrel-windows: 26.15.7(dmg-builder@26.15.7)(supports-color@8.1.1)
+      electron-publish: 26.15.3(supports-color@8.1.1)
       fs-extra: 10.1.0
       hosted-git-info: 4.1.0
       isbinaryfile: 5.0.7
@@ -5407,11 +5408,11 @@ snapshots:
 
   bluebird@3.7.2: {}
 
-  body-parser@1.20.6:
+  body-parser@1.20.6(supports-color@8.1.1):
     dependencies:
       bytes: 3.1.2
       content-type: 1.0.5
-      debug: 2.6.9
+      debug: 2.6.9(supports-color@8.1.1)
       depd: 2.0.0
       destroy: 1.2.0
       http-errors: 2.0.1
@@ -5456,23 +5457,23 @@ snapshots:
 
   buffer-from@1.1.2: {}
 
-  builder-util-runtime@9.7.0:
+  builder-util-runtime@9.7.0(supports-color@8.1.1):
     dependencies:
       debug: 4.4.3(supports-color@8.1.1)
       sax: 1.4.3
     transitivePeerDependencies:
       - supports-color
 
-  builder-util@26.15.3:
+  builder-util@26.15.3(supports-color@8.1.1):
     dependencies:
       '@types/debug': 4.1.13
-      builder-util-runtime: 9.7.0
+      builder-util-runtime: 9.7.0(supports-color@8.1.1)
       chalk: 4.1.2
       cross-spawn: 7.0.6
       debug: 4.4.3(supports-color@8.1.1)
       fs-extra: 10.1.0
-      http-proxy-agent: 7.0.2
-      https-proxy-agent: 7.0.6
+      http-proxy-agent: 7.0.2(supports-color@8.1.1)
+      https-proxy-agent: 7.0.6(supports-color@8.1.1)
       js-yaml: 4.3.1
       sanitize-filename: 1.6.4
       source-map-support: 0.5.21
@@ -5658,9 +5659,11 @@ snapshots:
 
   debounce@1.2.1: {}
 
-  debug@2.6.9:
+  debug@2.6.9(supports-color@8.1.1):
     dependencies:
       ms: 2.0.0
+    optionalDependencies:
+      supports-color: 8.1.1
 
   debug@4.4.1(supports-color@8.1.1):
     dependencies:
@@ -5727,10 +5730,10 @@ snapshots:
       minimatch: 3.1.5
       p-limit: 3.1.0
 
-  dmg-builder@26.15.7(electron-builder-squirrel-windows@26.15.7):
+  dmg-builder@26.15.7(electron-builder-squirrel-windows@26.15.7)(supports-color@8.1.1):
     dependencies:
-      app-builder-lib: 26.15.7(dmg-builder@26.15.7)(electron-builder-squirrel-windows@26.15.7)
-      builder-util: 26.15.3
+      app-builder-lib: 26.15.7(dmg-builder@26.15.7)(electron-builder-squirrel-windows@26.15.7)(supports-color@8.1.1)
+      builder-util: 26.15.3(supports-color@8.1.1)
       fs-extra: 10.1.0
       js-yaml: 4.3.1
     transitivePeerDependencies:
@@ -5765,23 +5768,23 @@ snapshots:
     dependencies:
       jake: 10.9.4
 
-  electron-builder-squirrel-windows@26.15.7(dmg-builder@26.15.7):
+  electron-builder-squirrel-windows@26.15.7(dmg-builder@26.15.7)(supports-color@8.1.1):
     dependencies:
-      app-builder-lib: 26.15.7(dmg-builder@26.15.7)(electron-builder-squirrel-windows@26.15.7)
-      builder-util: 26.15.3
-      electron-winstaller: 5.4.0
+      app-builder-lib: 26.15.7(dmg-builder@26.15.7)(electron-builder-squirrel-windows@26.15.7)(supports-color@8.1.1)
+      builder-util: 26.15.3(supports-color@8.1.1)
+      electron-winstaller: 5.4.0(supports-color@8.1.1)
     transitivePeerDependencies:
       - dmg-builder
       - supports-color
 
-  electron-builder@26.15.7(electron-builder-squirrel-windows@26.15.7):
+  electron-builder@26.15.7(electron-builder-squirrel-windows@26.15.7)(supports-color@8.1.1):
     dependencies:
-      app-builder-lib: 26.15.7(dmg-builder@26.15.7)(electron-builder-squirrel-windows@26.15.7)
-      builder-util: 26.15.3
-      builder-util-runtime: 9.7.0
+      app-builder-lib: 26.15.7(dmg-builder@26.15.7)(electron-builder-squirrel-windows@26.15.7)(supports-color@8.1.1)
+      builder-util: 26.15.3(supports-color@8.1.1)
+      builder-util-runtime: 9.7.0(supports-color@8.1.1)
       chalk: 4.1.2
       ci-info: 4.4.0
-      dmg-builder: 26.15.7(electron-builder-squirrel-windows@26.15.7)
+      dmg-builder: 26.15.7(electron-builder-squirrel-windows@26.15.7)(supports-color@8.1.1)
       fs-extra: 10.1.0
       lazy-val: 1.0.5
       simple-update-notifier: 2.0.0
@@ -5790,12 +5793,12 @@ snapshots:
       - electron-builder-squirrel-windows
       - supports-color
 
-  electron-publish@26.15.3:
+  electron-publish@26.15.3(supports-color@8.1.1):
     dependencies:
       '@types/fs-extra': 9.0.13
       aws4: 1.13.2
-      builder-util: 26.15.3
-      builder-util-runtime: 9.7.0
+      builder-util: 26.15.3(supports-color@8.1.1)
+      builder-util-runtime: 9.7.0(supports-color@8.1.1)
       chalk: 4.1.2
       form-data: 4.0.6
       fs-extra: 10.1.0
@@ -5806,7 +5809,7 @@ snapshots:
 
   electron-to-chromium@1.5.267: {}
 
-  electron-winstaller@5.4.0:
+  electron-winstaller@5.4.0(supports-color@8.1.1):
     dependencies:
       '@electron/asar': 3.4.1
       debug: 4.4.3(supports-color@8.1.1)
@@ -5814,14 +5817,14 @@ snapshots:
       lodash: 4.18.1
       temp: 0.9.4
     optionalDependencies:
-      '@electron/windows-sign': 1.2.2
+      '@electron/windows-sign': 1.2.2(supports-color@8.1.1)
     transitivePeerDependencies:
       - supports-color
 
-  electron@42.9.0:
+  electron@42.9.0(supports-color@8.1.1):
     dependencies:
       '@electron-internal/extract-zip': 1.0.5
-      '@electron/get': 5.1.0
+      '@electron/get': 5.1.0(supports-color@8.1.1)
       '@types/node': 24.13.3
     transitivePeerDependencies:
       - supports-color
@@ -6084,7 +6087,7 @@ snapshots:
       '@eslint/config-array': 0.21.1(supports-color@8.1.1)
       '@eslint/config-helpers': 0.4.2
       '@eslint/core': 0.17.0
-      '@eslint/eslintrc': 3.3.3
+      '@eslint/eslintrc': 3.3.3(supports-color@8.1.1)
       '@eslint/js': 9.39.2
       '@eslint/plugin-kit': 0.4.1
       '@humanfs/node': 0.16.7
@@ -6155,11 +6158,11 @@ snapshots:
 
   exponential-backoff@3.1.3: {}
 
-  express-session@1.19.0:
+  express-session@1.19.0(supports-color@8.1.1):
     dependencies:
       cookie: 0.7.2
       cookie-signature: 1.0.7
-      debug: 2.6.9
+      debug: 2.6.9(supports-color@8.1.1)
       depd: 2.0.0
       on-headers: 1.1.0
       parseurl: 1.3.3
@@ -6168,21 +6171,21 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  express@4.22.2:
+  express@4.22.2(supports-color@8.1.1):
     dependencies:
       accepts: 1.3.8
       array-flatten: 1.1.1
-      body-parser: 1.20.6
+      body-parser: 1.20.6(supports-color@8.1.1)
       content-disposition: 0.5.4
       content-type: 1.0.5
       cookie: 0.7.2
       cookie-signature: 1.0.7
-      debug: 2.6.9
+      debug: 2.6.9(supports-color@8.1.1)
       depd: 2.0.0
       encodeurl: 2.0.0
       escape-html: 1.0.3
       etag: 1.8.1
-      finalhandler: 1.3.2
+      finalhandler: 1.3.2(supports-color@8.1.1)
       fresh: 0.5.2
       http-errors: 2.0.1
       merge-descriptors: 1.0.3
@@ -6194,8 +6197,8 @@ snapshots:
       qs: 6.15.3
       range-parser: 1.2.1
       safe-buffer: 5.2.1
-      send: 0.19.1
-      serve-static: 1.16.2
+      send: 0.19.1(supports-color@8.1.1)
+      serve-static: 1.16.2(supports-color@8.1.1)
       setprototypeof: 1.2.0
       statuses: 2.0.2
       type-is: 1.6.18
@@ -6234,9 +6237,9 @@ snapshots:
     dependencies:
       to-regex-range: 5.0.1
 
-  finalhandler@1.3.2:
+  finalhandler@1.3.2(supports-color@8.1.1):
     dependencies:
-      debug: 2.6.9
+      debug: 2.6.9(supports-color@8.1.1)
       encodeurl: 2.0.0
       escape-html: 1.0.3
       on-finished: 2.4.1
@@ -6554,7 +6557,7 @@ snapshots:
       statuses: 2.0.2
       toidentifier: 1.0.1
 
-  http-proxy-agent@7.0.2:
+  http-proxy-agent@7.0.2(supports-color@8.1.1):
     dependencies:
       agent-base: 7.1.4
       debug: 4.4.3(supports-color@8.1.1)
@@ -6566,7 +6569,7 @@ snapshots:
       quick-lru: 5.1.1
       resolve-alpn: 1.2.1
 
-  https-proxy-agent@7.0.6:
+  https-proxy-agent@7.0.6(supports-color@8.1.1):
     dependencies:
       agent-base: 7.1.4
       debug: 4.4.3(supports-color@8.1.1)
@@ -7425,7 +7428,7 @@ snapshots:
 
   react@19.2.0: {}
 
-  read-binary-file-arch@1.0.6:
+  read-binary-file-arch@1.0.6(supports-color@8.1.1):
     dependencies:
       debug: 4.4.3(supports-color@8.1.1)
     transitivePeerDependencies:
@@ -7568,9 +7571,9 @@ snapshots:
 
   semver@7.8.5: {}
 
-  send@0.19.0:
+  send@0.19.0(supports-color@8.1.1):
     dependencies:
-      debug: 2.6.9
+      debug: 2.6.9(supports-color@8.1.1)
       depd: 2.0.0
       destroy: 1.2.0
       encodeurl: 1.0.2
@@ -7586,9 +7589,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  send@0.19.1:
+  send@0.19.1(supports-color@8.1.1):
     dependencies:
-      debug: 2.6.9
+      debug: 2.6.9(supports-color@8.1.1)
       depd: 2.0.0
       destroy: 1.2.0
       encodeurl: 2.0.0
@@ -7613,12 +7616,12 @@ snapshots:
     dependencies:
       randombytes: 2.1.0
 
-  serve-static@1.16.2:
+  serve-static@1.16.2(supports-color@8.1.1):
     dependencies:
       encodeurl: 2.0.0
       escape-html: 1.0.3
       parseurl: 1.3.3
-      send: 0.19.0
+      send: 0.19.0(supports-color@8.1.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -7810,7 +7813,7 @@ snapshots:
 
   strip-json-comments@3.1.1: {}
 
-  sumchecker@3.0.1:
+  sumchecker@3.0.1(supports-color@8.1.1):
     dependencies:
       debug: 4.4.3(supports-color@8.1.1)
     transitivePeerDependencies:
@@ -7953,12 +7956,12 @@ snapshots:
     dependencies:
       is-typedarray: 1.0.0
 
-  typescript-eslint@8.61.1(eslint@9.39.2(jiti@2.7.0)(supports-color@8.1.1))(typescript@6.0.3):
+  typescript-eslint@8.61.1(eslint@9.39.2(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3):
     dependencies:
       '@typescript-eslint/eslint-plugin': 8.61.1(@typescript-eslint/parser@8.61.1(eslint@9.39.2(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3))(eslint@9.39.2(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)
       '@typescript-eslint/parser': 8.61.1(eslint@9.39.2(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)
       '@typescript-eslint/typescript-estree': 8.61.1(supports-color@8.1.1)(typescript@6.0.3)
-      '@typescript-eslint/utils': 8.61.1(eslint@9.39.2(jiti@2.7.0)(supports-color@8.1.1))(typescript@6.0.3)
+      '@typescript-eslint/utils': 8.61.1(eslint@9.39.2(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)
       eslint: 9.39.2(jiti@2.7.0)(supports-color@8.1.1)
       typescript: 6.0.3
     transitivePeerDependencies:
