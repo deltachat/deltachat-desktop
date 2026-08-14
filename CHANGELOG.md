@@ -2,8 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-<a id="2_58_0"></a>
-## [2.58.0] - 2026-08-13
+<a id="2_59_0"></a>
+## [2.59.0] - 2026-08-14
+
 
 ### Added
 
@@ -26,7 +27,7 @@ All notable changes to this project will be documented in this file.
 
 ### Miscellaneous Tasks
 
-- Upgrade Core to [2.58.0](https://github.com/chatmail/core/blob/main/CHANGELOG.md#2580---2026-08-10)
+- Upgrade Core to [2.59.0](https://github.com/chatmail/core/blob/v2.59.0/CHANGELOG.md)
 - Translations update 2026-08 ([#6644](https://github.com/deltachat/deltachat-desktop/issues/6644))
 - Upgrade Electron 42.5.0 to 42.9.0
 
@@ -4256,8 +4257,8 @@ This section is only relevant to contributors.
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.58.0...HEAD
-[2.58.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.57.0...v2.58.0
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.59.0...HEAD
+[2.59.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.57.0...v2.59.0
 [2.57.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.56.0...v2.57.0
 [2.56.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.53.1...v2.56.0
 [2.53.1]: https://github.com/deltachat/deltachat-desktop/compare/v2.53.0...v2.53.1
