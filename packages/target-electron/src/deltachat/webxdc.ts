@@ -28,6 +28,7 @@ import {
   DcOpenWebxdcParameters,
 } from '@deltachat-desktop/shared/shared-types.js'
 import { DesktopSettings } from '../desktop_settings.js'
+import rc from '../rc.js'
 import { window as main_window, send } from '../windows/main.js'
 import { writeTempFileFromBase64 } from '../ipc.js'
 import {
@@ -242,7 +243,7 @@ export default class DCWebxdc {
             if (details.url.startsWith('webxdc://')) {
               cancelRequest = false
             } else if (details.url.startsWith('devtools://')) {
-              cancelRequest = !DesktopSettings.state.enableWebxdcDevTools
+              cancelRequest = !rc.devmode
             } else if (details.url.startsWith('https://')) {
               cancelRequest = !internetAccess
             }
@@ -334,7 +335,11 @@ export default class DCWebxdc {
           webSecurity: true,
           nodeIntegration: false,
           navigateOnDragDrop: false,
-          devTools: DesktopSettings.state.enableWebxdcDevTools,
+          // devTools should only be allowed in devmode, not in production (!)
+          //
+          // See https://delta.chat/en/2023-05-22-webxdc-security,
+          // "XDC-01-004 WP1: Data exfiltration via desktop app DevTools"
+          devTools: rc.devmode,
           javascript: true,
           preload: join(htmlDistDir(), 'webxdc-preload.js'),
         },
@@ -439,7 +444,7 @@ export default class DCWebxdc {
                 },
               },
               { role: 'togglefullscreen' },
-              ...(DesktopSettings.state.enableWebxdcDevTools
+              ...(rc.devmode
                 ? [
                     { type: 'separator' } as MenuItemConstructorOptions,
                     {
@@ -647,15 +652,6 @@ export default class DCWebxdc {
           callback(permission_handler(permission))
         }
       )
-
-      webxdcWindow.webContents.on('before-input-event', (event, input) => {
-        if (input.code === 'F12') {
-          if (DesktopSettings.state.enableWebxdcDevTools) {
-            webxdcWindow.webContents.toggleDevTools()
-            event.preventDefault()
-          }
-        }
-      })
     }
 
     // actual webxdc instances
