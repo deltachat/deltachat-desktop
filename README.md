@@ -14,7 +14,7 @@
 | The default application. Based on Electron. Currently deployed in appstore and used by most users. | Highly experimental version with a webserver component and web-ui in the browser. At the moment only meant for developers and automated testing.                                              |
 | [Project Folder](./packages/target-electron) <br /> [Download Links](https://get.delta.chat)       | [Project Folder](./packages/target-browser) <br /> [Fediverse Thread](https://fosstodon.org/@treefit/113116480883632874) <br /> [Blog Post](https://delta.chat/en/2025-05-22-browser-edition) |
 
-There is a third, **WIP** edition based on [`Tauri`](https://tauri.app/) instead of
+There is a third, **WIP** edition based on [`Tauri`](https://tauri.app/) <img src="README_ASSETS/TAURI_Glyph_Color.svg" width="16px" height="16px" style="vertical-align:middle" /> instead of
 Electron. It lives in its own repository — [deltachat-tauri](https://github.com/deltachat/deltachat-tauri) — and
 consumes this repository's frontend through a pinned `upstream/` submodule.
 See [Fediverse Thread](https://fosstodon.org/@treefit/113578409177635057) and
