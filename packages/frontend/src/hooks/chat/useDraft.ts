@@ -446,8 +446,6 @@ export function useDraft(
         fromInd,
         direction,
       })
-        .filter(item => item.kind === 'message')
-        .map(({ msg_id }) => msg_id)
         .map(msg_id => {
           const fromCache = messageListState.messageCache[msg_id]
           if (fromCache == undefined) {
@@ -488,10 +486,9 @@ export function useDraft(
       // Or shall we override with the last message?
       return
     }
-    const currQuoteMessageIdInd =
-      messageListState.messageListItems.findLastIndex(
-        item => item.kind === 'message' && item.msg_id === currQuote.messageId
-      )
+    const currQuoteMessageIdInd = messageListState.messageListItems.lastIndexOf(
+      currQuote.messageId
+    )
     if (currQuoteMessageIdInd === -1) {
       // message not found at all, remove quote
       removeQuote()
