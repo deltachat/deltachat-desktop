@@ -508,6 +508,7 @@ export class MessageListStore extends Store<MessageListState> {
             // 'center' so that old messages are also shown, for context.
             // See https://github.com/deltachat/deltachat-desktop/issues/4284
             scrollIntoViewArg: { block: 'center' },
+            messageListItemsP,
           })
 
           // TODO why do we only do this when `firstUnreadMsgId !== null`?
@@ -955,6 +956,11 @@ export class MessageListStore extends Store<MessageListState> {
    * For example, this must be ensured for message quotes,
    * because they might belong to a different chat due to the
    * "Reply Privately" feature.
+   * @param messageListItemsP an already started `getMessageListItems()`
+   * request for `MessageListStore.chatId`, to be awaited instead of
+   * starting another one. In big chats that request is expensive
+   * (hundreds of milliseconds and megabytes of JSON),
+   * so it must not be issued twice for the same chat.
    */
   private async __jumpToMessage({
     msgId: jumpToMessageId,
@@ -962,12 +968,14 @@ export class MessageListStore extends Store<MessageListState> {
     focus,
     addMessageIdToStack,
     scrollIntoViewArg,
+    messageListItemsP,
   }: {
     msgId: number | undefined
     highlight?: boolean
     focus: boolean
     addMessageIdToStack?: undefined | number
     scrollIntoViewArg?: Parameters<HTMLElement['scrollIntoView']>[0]
+    messageListItemsP?: Promise<T.MessageListItem[]>
   }) {
     const startTime = performance.now()
 
@@ -1084,12 +1092,17 @@ export class MessageListStore extends Store<MessageListState> {
     // - A new message has just been sent to the chat and we want to jump
     //   to it.
     if (!isMessageInCurrentChat || !currentMessageListContainsTheMessage) {
-      messageListItems = await BackendRemote.rpc.getMessageListItems(
-        accountId,
-        chatId,
-        false,
-        true
-      )
+      messageListItems =
+        // `messageListItemsP` was started for `this.chatId`,
+        // so it is only usable when we're not jumping to another chat.
+        messageListItemsP != undefined && isMessageInCurrentChat
+          ? await messageListItemsP
+          : await BackendRemote.rpc.getMessageListItems(
+              accountId,
+              chatId,
+              false,
+              true
+            )
       jumpToMessageIndex = findMessageIndex()
       // Yes, `jumpToMessageIndex` could stil be `undefined` here,
       // but only if the chat actually contains no messages
