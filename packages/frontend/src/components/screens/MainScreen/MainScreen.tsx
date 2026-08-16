@@ -5,14 +5,12 @@ import React, {
   useEffect,
   useCallback,
   useContext,
-  useMemo,
 } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 
 import ChatList from '../../chat/ChatList'
 import ConnectivityToast from '../../ConnectivityToast'
 import SettingsStoreInstance from '../../../stores/settings'
-import { BackendRemote, onDCEvent } from '../../../backend-com'
 import ChatListHeader from './ChatListHeader'
 import { ChatView } from '../../ChatView/ChatView'
 import useChat from '../../../hooks/chat/useChat'
@@ -23,12 +21,9 @@ import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import { KeybindAction } from '../../../keybindings'
 import { ScreenContext } from '../../../contexts/ScreenContext'
 import MediaView from '../../dialogs/MediaView'
-import { useWebxdcMessageSentListener } from '../../../hooks/useWebxdcMessageSent'
 
 import CreateChat from '../../dialogs/CreateChat'
 import CommandPalette from '../../dialogs/CommandPalette'
-import asyncThrottle from '@jcoreio/async-throttle'
-import { useFetch } from '../../../hooks/useFetch'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 import { GlobalVoiceMessagePlayer } from '../../GlobalVoiceMessagePlayer/GlobalVoiceMessagePlayer'
 
@@ -172,75 +167,6 @@ export default function MainScreen({ accountId }: Props) {
     })
   })
 
-  // Throttle in case the user switches chats very rapidly,
-  // e.g. by holding down Ctrl + PageDown.
-  //
-  // TODO a debounce would probably be more appropriate here,
-  // given that the operation is relatively expensive,
-  // but I haven't looked for an `asyncDebounce` function.
-  const throttledFetchLastUsedApps = useMemo(
-    () =>
-      asyncThrottle(
-        async (accountId: number, chatId: number, smallScreenMode: boolean) => {
-          const maxIcons = smallScreenMode ? 1 : 3
-          const mediaIds = await BackendRemote.rpc.getChatMedia(
-            accountId,
-            chatId,
-            'Webxdc',
-            null,
-            null
-          )
-          // mediaIds holds the ids of the last updated apps,
-          // in reverse order
-          mediaIds.reverse()
-          const firstFew = mediaIds.slice(0, maxIcons)
-
-          // TODO perf: if the current throttled fetch was canceled
-          // before the next line got executed, we could bail here.
-          const mediaLoadResult = await BackendRemote.rpc.getMessages(
-            accountId,
-            firstFew
-          )
-          const lastUpdatedApps = firstFew
-            .map((id: number) => {
-              if (mediaLoadResult[id]?.kind === 'message') {
-                return mediaLoadResult[id]
-              }
-              return null
-            })
-            .filter(app => app !== null)
-
-          return lastUpdatedApps
-        },
-        50
-      ),
-    []
-  )
-  const lastUsedAppsFetch = useFetch(
-    throttledFetchLastUsedApps,
-    accountId != undefined && chatId != undefined
-      ? [accountId, chatId, smallScreenMode]
-      : null
-  )
-  if (lastUsedAppsFetch?.result?.ok === false) {
-    log.error('Failed to fetch last used apps', lastUsedAppsFetch.result.err)
-  }
-
-  // Listen for Webxdc messages being sent to the current chat
-  useWebxdcMessageSentListener(accountId || 0, chatId || 0, () => {
-    // Refresh Webxdc apps list when a Webxdc message is sent
-    lastUsedAppsFetch?.refresh()
-  })
-
-  useEffect(() => {
-    if (!accountId) {
-      return
-    }
-    return onDCEvent(accountId, 'WebxdcInstanceDeleted', () => {
-      lastUsedAppsFetch?.refresh()
-    })
-  }, [accountId, lastUsedAppsFetch])
-
   // There is another `load()` in `ScreenController.selectAccount()`,
   // but that is not enough because we also need to reload settings
   // after an unconfigured account becomes a configured one,
@@ -263,11 +189,6 @@ export default function MainScreen({ accountId }: Props) {
 
   const isSearchActive = queryStr.length > 0 || queryChatId !== null
   const showArchivedChats = !isSearchActive && archivedChatsSelected
-
-  const lastUsedApps =
-    lastUsedAppsFetch?.result?.ok && lastUsedAppsFetch.result.value.length > 0
-      ? lastUsedAppsFetch.result.value
-      : []
 
   return (
     <div
@@ -317,11 +238,7 @@ export default function MainScreen({ accountId }: Props) {
 
         <GlobalVoiceMessagePlayer />
       </div>
-      <ChatView
-        className={styles.chatView}
-        accountId={accountId}
-        lastUsedApps={lastUsedApps}
-      />
+      <ChatView className={styles.chatView} accountId={accountId} />
       {!chatListShouldBeHidden && <ConnectivityToast />}
     </div>
   )
