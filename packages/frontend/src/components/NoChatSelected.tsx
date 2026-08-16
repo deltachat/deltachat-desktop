@@ -5,8 +5,10 @@ import { useSettingsStore } from '../stores/settings'
 
 export default function NoChatSelected({
   messages,
+  composer,
 }: {
   messages: React.ReactNode
+  composer: React.ReactNode
 }) {
   const settingsStore = useSettingsStore()[0]
 
@@ -22,6 +24,7 @@ export default function NoChatSelected({
       >
         {messages}
       </div>
+      {composer}
     </div>
   )
 }

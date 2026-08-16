@@ -85,6 +85,7 @@ export function ChatView(
                 </div>
               </div>
             }
+            composer={null}
           />
         </>
       )}
