@@ -725,8 +725,8 @@ export const MessageListInner = React.memo(
     onScrollEnd: (event: Event) => void
     onWheel?: React.WheelEventHandler<HTMLDivElement>
     oldestFetchedMessageIndex: number
-    messageListItems: T.MessageListItem[]
-    activeView: T.MessageListItem[]
+    messageListItems: number[]
+    activeView: number[]
     messageCache: { [msgId: number]: T.MessageLoadResult | undefined }
     messageListRef: React.RefObject<HTMLDivElement | null>
     chat: T.FullChat
@@ -740,6 +740,7 @@ export const MessageListInner = React.memo(
       onScroll,
       onScrollEnd,
       onWheel,
+      oldestFetchedMessageIndex,
       messageListItems,
       messageCache,
       activeView,
@@ -758,6 +759,48 @@ export const MessageListInner = React.memo(
       }),
       [chat.chatType, chat.isDeviceChat]
     )
+
+    /**
+     * IDs of the messages in {@linkcode activeView} that begin a new day,
+     * i.e. the ones that get a {@linkcode DayMarker} rendered above them.
+     *
+     * `sortTimestamp` and not `timestamp`, because that is what the list is
+     * ordered by; using the sent time could place a marker for an earlier day
+     * below one for a later day.
+     *
+     * The oldest loaded message can only be classified if its predecessor is
+     * loaded too — otherwise we don't know which day it belongs to, and no
+     * marker is drawn until older messages are loaded.
+     */
+    const dayStartMessageIds = useMemo(() => {
+      const dayOf = (msgId: number | undefined): number | undefined => {
+        const message = msgId != undefined ? messageCache[msgId] : undefined
+        return message?.kind === 'message'
+          ? moment.unix(message.sortTimestamp).startOf('day').valueOf()
+          : undefined
+      }
+
+      const ids = new Set<number>()
+      let previousDay = dayOf(messageListItems[oldestFetchedMessageIndex - 1])
+
+      for (let i = 0; i < activeView.length; i++) {
+        const msgId = activeView[i]
+        const day = dayOf(msgId)
+        if (day == undefined) {
+          previousDay = undefined
+          continue
+        }
+        const isFirstMessageOfChat = oldestFetchedMessageIndex === 0 && i === 0
+        if (
+          isFirstMessageOfChat ||
+          (previousDay != undefined && day !== previousDay)
+        ) {
+          ids.add(msgId)
+        }
+        previousDay = day
+      }
+      return ids
+    }, [activeView, messageCache, messageListItems, oldestFetchedMessageIndex])
 
     useKeyBindingAction(KeybindAction.MessageList_PageUp, () => {
       if (messageListRef.current) {
@@ -912,45 +955,53 @@ export const MessageListInner = React.memo(
         <ol aria-label={tx('messages')}>
           <RovingTabindexProvider wrapperElementRef={messageListRef}>
             {messageListItems.length === 0 && <EmptyChatMessage chat={chat} />}
-            {activeView.map(messageId => {
-              if (messageId.kind === 'dayMarker') {
-                return (
-                  <DayMarker
-                    key={`daymarker-${messageId.timestamp}`}
-                    timestamp={messageId.timestamp}
+            {activeView.flatMap(messageId => {
+              const message = messageCache[messageId]
+
+              let messageElement
+              if (message?.kind === 'message') {
+                messageElement = (
+                  <MessageWrapper
+                    key={messageId}
+                    key2={`${messageId}`}
+                    chat={chat}
+                    message={message}
+                    conversationType={conversationType}
+                    unreadMessageInViewIntersectionObserver={
+                      unreadMessageInViewIntersectionObserver
+                    }
                   />
+                )
+              } else if (message?.kind === 'loadingError') {
+                messageElement = (
+                  <MessageLoadingError
+                    key={messageId}
+                    messageId={messageId}
+                    message={message}
+                  />
+                )
+              } else {
+                // setTimeout tells it to call method in next event loop iteration, so after rendering
+                // it is debounced later so we can call it here multiple times and it's ok
+                setTimeout(loadMissingMessages)
+                messageElement = (
+                  <MessageLoading key={messageId} messageId={messageId} />
                 )
               }
 
-              if (messageId.kind === 'message') {
-                const message = messageCache[messageId.msg_id]
-                if (message?.kind === 'message') {
-                  return (
-                    <MessageWrapper
-                      key={messageId.msg_id}
-                      key2={`${messageId.msg_id}`}
-                      chat={chat}
-                      message={message}
-                      conversationType={conversationType}
-                      unreadMessageInViewIntersectionObserver={
-                        unreadMessageInViewIntersectionObserver
-                      }
-                    />
-                  )
-                } else if (message?.kind === 'loadingError') {
-                  return (
-                    <MessageLoadingError
-                      messageId={messageId}
-                      message={message}
-                    />
-                  )
-                } else {
-                  // setTimeout tells it to call method in next event loop iteration, so after rendering
-                  // it is debounced later so we can call it here multiple times and it's ok
-                  setTimeout(loadMissingMessages)
-                  return <MessageLoading messageId={messageId} />
-                }
+              if (!dayStartMessageIds.has(messageId)) {
+                return messageElement
               }
+              // `dayStartMessageIds` only contains loaded messages,
+              // so the timestamp is available here.
+              const sortTimestamp = (message as T.Message).sortTimestamp
+              return [
+                <DayMarker
+                  key={`daymarker-${messageId}`}
+                  timestamp={sortTimestamp}
+                />,
+                messageElement,
+              ]
             })}
           </RovingTabindexProvider>
         </ol>
@@ -963,17 +1014,14 @@ function MessageLoadingError({
   messageId,
   message,
 }: {
-  messageId: T.MessageListItem & { kind: 'message' }
+  messageId: number
   message: T.MessageLoadResult
 }) {
   const ref = useRef<HTMLDivElement>(null)
-  const focusAndMultiselect = useMessageFocusAndMultiselect(
-    messageId.msg_id,
-    ref
-  )
+  const focusAndMultiselect = useMessageFocusAndMultiselect(messageId, ref)
 
   return (
-    <div className='info-message' id={String(messageId.msg_id)}>
+    <div className='info-message' id={String(messageId)}>
       <div
         ref={ref}
         className={
@@ -987,29 +1035,22 @@ function MessageLoadingError({
         onKeyDown={focusAndMultiselect.onKeyDown}
         onFocus={focusAndMultiselect.onFocus}
       >
-        loading message {messageId.msg_id} failed: {message.error}
+        loading message {messageId} failed: {message.error}
       </div>
     </div>
   )
 }
-function MessageLoading({
-  messageId,
-}: {
-  messageId: T.MessageListItem & { kind: 'message' }
-}) {
+function MessageLoading({ messageId }: { messageId: number }) {
   const tx = useTranslationFunction()
   const ref = useRef<HTMLDivElement>(null)
-  const focusAndMultiselect = useMessageFocusAndMultiselect(
-    messageId.msg_id,
-    ref
-  )
+  const focusAndMultiselect = useMessageFocusAndMultiselect(messageId, ref)
 
   useEffect(() => {
-    log.warn(`Rendered message ${messageId.msg_id} that is not loaded yet`)
-  }, [messageId.msg_id])
+    log.warn(`Rendered message ${messageId} that is not loaded yet`)
+  }, [messageId])
 
   return (
-    <div className='info-message' id={String(messageId.msg_id)}>
+    <div className='info-message' id={String(messageId)}>
       <div
         ref={ref}
         className={

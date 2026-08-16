@@ -23,7 +23,13 @@ const PAGE_SIZE = 11
 
 interface MessageListState {
   // chat: Type.FullChat | null
-  messageListItems: T.MessageListItem[]
+  /**
+   * IDs of all the messages of the chat, oldest first.
+   *
+   * Day markers are not part of this list: they are derived when rendering,
+   * it is much cheaper to send plain numbers over JSON-RPC than a list of tagged objects
+   */
+  messageListItems: number[]
   /**
    * Generally this contains a contiguous slice (no with no holes)
    * of a chat's messages, but we also have `loadMissingMessages`
@@ -228,10 +234,10 @@ export class MessageListStore extends Store<MessageListState> {
   }
 
   private activeViewCache: {
-    items: T.MessageListItem[]
+    items: number[]
     start: number
     end: number
-    view: T.MessageListItem[]
+    view: number[]
   } | null = null
 
   /**
@@ -272,7 +278,7 @@ export class MessageListStore extends Store<MessageListState> {
       }, 'selectedChat')
     },
     refresh: (
-      messageListItems: T.MessageListItem[],
+      messageListItems: number[],
       messageCache: MessageListState['messageCache'],
       newestFetchedMessageListItemIndex: number,
       oldestFetchedMessageListItemIndex: number
@@ -488,11 +494,11 @@ export class MessageListStore extends Store<MessageListState> {
           this.accountId,
           this.chatId
         )
-        const messageListItemsP = BackendRemote.rpc.getMessageListItems(
+        const messageListItemsP = BackendRemote.rpc.getMessageIds(
           this.accountId,
           this.chatId,
           false,
-          true
+          false
         )
 
         const firstUnreadMsgId = await firstUnreadMsgIdP
@@ -579,9 +585,9 @@ export class MessageListStore extends Store<MessageListState> {
         async () => {
           const { messageCache } = this.state
           const missing_message_ids: number[] = []
-          for (const item of this.activeView) {
-            if (item.kind === 'message' && !messageCache[item.msg_id]) {
-              missing_message_ids.push(item.msg_id)
+          for (const msgId of this.activeView) {
+            if (!messageCache[msgId]) {
+              missing_message_ids.push(msgId)
             }
           }
           if (missing_message_ids.length === 0) {
@@ -729,11 +735,11 @@ export class MessageListStore extends Store<MessageListState> {
         async () => {
           // this.log.debug(`refresh`, this)
           const state = this.state
-          const messageListItems = await BackendRemote.rpc.getMessageListItems(
+          const messageListItems = await BackendRemote.rpc.getMessageIds(
             this.accountId,
             this.chatId,
             false,
-            true
+            false
           )
           let {
             newestFetchedMessageListItemIndex,
@@ -770,11 +776,11 @@ export class MessageListStore extends Store<MessageListState> {
       'refresh'
     ),
     onEventIncomingMessage: this.scheduler.queuedEffect(async () => {
-      const messageListItems = await BackendRemote.rpc.getMessageListItems(
+      const messageListItems = await BackendRemote.rpc.getMessageIds(
         this.accountId,
         this.chatId,
         false,
-        true
+        false
       )
       await this.__appendNewMessages(messageListItems)
     }, 'onEventIncomingMessage'),
@@ -782,9 +788,7 @@ export class MessageListStore extends Store<MessageListState> {
       async (messageId: number) => {
         if (
           messageId > C.DC_MSG_ID_LAST_SPECIAL &&
-          this.state.messageListItems.some(
-            m => m.kind === 'message' && m.msg_id === messageId
-          )
+          this.state.messageListItems.includes(messageId)
         ) {
           this.log.debug(
             'DC_EVENT_MSGS_CHANGED',
@@ -820,7 +824,7 @@ export class MessageListStore extends Store<MessageListState> {
           }
         } else {
           // The draft message does not affect the return value of
-          // `getMessageListItems()`.
+          // `getMessageIds()`.
           // The main purpose of this check is not just reduced resource usage,
           // but to fix the messages list "scrolling up"
           // when you quote a message. See
@@ -842,11 +846,11 @@ export class MessageListStore extends Store<MessageListState> {
             'DC_EVENT_MSGS_CHANGED',
             'changed message seems to be a new message, refetching messageIds'
           )
-          const messageListItems = await BackendRemote.rpc.getMessageListItems(
+          const messageListItems = await BackendRemote.rpc.getMessageIds(
             this.accountId,
             this.chatId,
             false,
-            true
+            false
           )
 
           // Some "new" messages don't trigger `IncomingMsg` but only
@@ -868,24 +872,12 @@ export class MessageListStore extends Store<MessageListState> {
    * @param messageListItems
    * @returns
    */
-  private async __appendNewMessages(messageListItems: T.MessageListItem[]) {
-    const last_item: Type.MessageListItem | undefined =
+  private async __appendNewMessages(messageListItems: number[]) {
+    const last_item: number | undefined =
       this.state.messageListItems[this.state.messageListItems.length - 1]
 
     let indexStart =
-      last_item === undefined
-        ? -1
-        : messageListItems.findIndex(item => {
-            if (last_item.kind !== item.kind) {
-              return false
-            } else {
-              if (item.kind === 'message') {
-                return item.msg_id === (last_item as any).msg_id
-              } else {
-                return item.timestamp === (last_item as any).timestamp
-              }
-            }
-          })
+      last_item === undefined ? -1 : messageListItems.indexOf(last_item)
 
     // check if there is an intersection
     if (indexStart !== -1 && messageListItems[indexStart + 1]) {
@@ -956,7 +948,7 @@ export class MessageListStore extends Store<MessageListState> {
    * For example, this must be ensured for message quotes,
    * because they might belong to a different chat due to the
    * "Reply Privately" feature.
-   * @param messageListItemsP an already started `getMessageListItems()`
+   * @param messageListItemsP an already started `getMessageIds()`
    * request for `MessageListStore.chatId`, to be awaited instead of
    * starting another one. In big chats that request is expensive
    * (hundreds of milliseconds and megabytes of JSON),
@@ -975,7 +967,7 @@ export class MessageListStore extends Store<MessageListState> {
     focus: boolean
     addMessageIdToStack?: undefined | number
     scrollIntoViewArg?: Parameters<HTMLElement['scrollIntoView']>[0]
-    messageListItemsP?: Promise<T.MessageListItem[]>
+    messageListItemsP?: Promise<number[]>
   }) {
     const startTime = performance.now()
 
@@ -1065,17 +1057,12 @@ export class MessageListStore extends Store<MessageListState> {
     const findMessageIndex = (): number | undefined => {
       if (jumpToMessageId == undefined) {
         return messageListItems.length > 0
-          ? // The last `messageListItems` item is guaranteed to be _not_
-            // a daymarker, so we can safely return it without checking
-            // `m.kind === 'message'`.
-            messageListItems.length - 1
+          ? messageListItems.length - 1
           : undefined
         // Maybe it would make sense to also set `jumpToMessageId` here.
       }
 
-      const ind = messageListItems.findIndex(
-        m => m.kind === 'message' && m.msg_id === jumpToMessageId
-      )
+      const ind = messageListItems.indexOf(jumpToMessageId)
       return ind === -1 ? undefined : ind
     }
 
@@ -1087,7 +1074,7 @@ export class MessageListStore extends Store<MessageListState> {
     //   e.g. when `loadChat` interrupts itself and calls `jumpToMessage`.
     // - `this.state.messageListItems` is loaded, but there are actually
     //   no messages in the chat.
-    //   FYI in this case we perhaps don't have to `getMessageListItems()`,
+    //   FYI in this case we perhaps don't have to `getMessageIds()`,
     //   but whatever.
     // - A new message has just been sent to the chat and we want to jump
     //   to it.
@@ -1097,11 +1084,11 @@ export class MessageListStore extends Store<MessageListState> {
         // so it is only usable when we're not jumping to another chat.
         messageListItemsP != undefined && isMessageInCurrentChat
           ? await messageListItemsP
-          : await BackendRemote.rpc.getMessageListItems(
+          : await BackendRemote.rpc.getMessageIds(
               accountId,
               chatId,
               false,
-              true
+              false
             )
       jumpToMessageIndex = findMessageIndex()
       // Yes, `jumpToMessageIndex` could stil be `undefined` here,
@@ -1178,15 +1165,7 @@ export class MessageListStore extends Store<MessageListState> {
         messageListItems,
         oldestFetchedMessageListItemIndex,
         newestFetchedMessageListItemIndex
-      ).every(item => {
-        if (item.kind === 'dayMarker') {
-          return true
-        }
-        // Just for type-safety.
-        const _kind: 'message' = item.kind
-
-        return this.state.messageCache[item.msg_id] != undefined
-      })
+      ).every(msgId => this.state.messageCache[msgId] != undefined)
 
       this.log.debug(
         'messagesAlreadyLoaded:',
@@ -1241,20 +1220,7 @@ export class MessageListStore extends Store<MessageListState> {
       }
 
       if (jumpToMessageId == undefined) {
-        const item = messageListItems[jumpToMessageIndex]
-        if (item.kind !== 'message') {
-          // This should never happen, but let's write it to make
-          // TypeScript happy, and juuuuuust in case.
-          // Maybe we could refactor things, so that types guarantee this.
-          this.log.error(
-            'messageListItems[jumpToMessageIndex] is not of type "message"??',
-            item,
-            messageListItems,
-            jumpToMessageIndex
-          )
-          throw new Error()
-        }
-        jumpToMessageId = item.msg_id
+        jumpToMessageId = messageListItems[jumpToMessageIndex]
       }
       newViewState = ChatViewReducer.jumpToMessage(
         this.state.viewState,
@@ -1297,18 +1263,19 @@ export class MessageListStore extends Store<MessageListState> {
  */
 async function loadMessages(
   accountId: number,
-  messageListItems: Type.MessageListItem[],
+  messageListItems: number[],
   oldestFetchedMessageListItemIndex: number,
   newestFetchedMessageListItemIndex: number,
   existingMessages: MessageListState['messageCache']
 ) {
   const view = getView(
     messageListItems,
-    oldestFetchedMessageListItemIndex,
+    // One message older than the requested range: `MessageList` needs its
+    // timestamp to tell whether the oldest message of the range starts a new
+    // day
+    Math.max(oldestFetchedMessageListItemIndex - 1, 0),
     newestFetchedMessageListItemIndex
   )
-    .map(m => (m.kind === 'message' ? m.msg_id : C.DC_MSG_ID_LAST_SPECIAL))
-    .filter(msgId => msgId !== C.DC_MSG_ID_LAST_SPECIAL)
 
   const missingIds = view.filter(msgId => {
     const m = existingMessages[msgId]

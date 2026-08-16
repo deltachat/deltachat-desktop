@@ -472,8 +472,8 @@ export function useDraft(
       // maybe the message is just not in the cache (yet)
       // but still in the full list of messages
       // -> check if it's there
-      const isQuoteInMessagelist = messageListState.messageListItems.some(
-        m => m.kind === 'message' && m.msg_id === currQuote.messageId
+      const isQuoteInMessagelist = messageListState.messageListItems.includes(
+        currQuote.messageId
       )
       if (isQuoteInMessagelist) {
         // message is in the full list, just not in the cache (yet)

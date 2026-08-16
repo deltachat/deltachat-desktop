@@ -1,5 +1,5 @@
 import styles from './styles.module.scss'
-import React, { useCallback, useContext, useId, useMemo } from 'react'
+import React, { useCallback, useContext, useId } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 
 import MessageListAndComposer from '../message/MessageListAndComposer'
@@ -96,13 +96,7 @@ export function ChatViewInner({
   const { smallScreenMode } = useContext(ScreenContext)
 
   const messageListData = useMessageList(accountId, chatWithLinger.id)
-  const messageIds = useMemo(
-    () =>
-      messageListData.state.messageListItems
-        .filter(v => v.kind !== 'dayMarker')
-        .map(v => v.msg_id),
-    [messageListData.state.messageListItems]
-  )
+  const messageIds = messageListData.state.messageListItems
   const focusAndMultiselectContextValue =
     useMessageFocusAndMultiselectContextValue({ messageIds })
   const numSelectedMessages = focusAndMultiselectContextValue.selectedItems.size
