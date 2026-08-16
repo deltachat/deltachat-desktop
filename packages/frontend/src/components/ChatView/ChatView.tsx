@@ -49,6 +49,7 @@ export function ChatView(
     className?: string
   }
 ) {
+  const tx = useTranslationFunction()
   const { chatWithLinger } = useChat()
   return (
     <section
@@ -76,7 +77,15 @@ export function ChatView(
           {/* Dummy header to reduce layout shifting
           when unselecting/selecting a chat. */}
           <nav className={styles.chatNavbar} data-tauri-drag-region></nav>
-          <NoChatSelected />
+          <NoChatSelected
+            messages={
+              <div className='info-message big' style={{ alignSelf: 'center' }}>
+                <div className='bubble'>
+                  {tx('no_chat_selected_suggestion_desktop')}
+                </div>
+              </div>
+            }
+          />
         </>
       )}
     </section>
