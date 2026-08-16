@@ -576,6 +576,12 @@ function AppIcon({ accountId, app }: { accountId: number; app: T.Message }) {
 // since "recent apps" is a lower-priority widget.
 const throttledFetchLastUsedApps = asyncThrottle(
   async (accountId: number, chatId: number, smallScreenMode: boolean) => {
+    // We don't provide a timeout, so this can result
+    // in possibly indefinite wait,
+    // but it's fine, because this widget is not irreplaceable:
+    // we have the "Gallery" dialog.
+    await new Promise(r => requestIdleCallback(r))
+
     const maxIcons = smallScreenMode ? 1 : 3
     const mediaIds = await BackendRemote.rpc.getChatMedia(
       accountId,
