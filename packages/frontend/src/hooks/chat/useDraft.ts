@@ -436,19 +436,11 @@ export function useDraft(
      *
      * see https://github.com/deltachat/deltachat-desktop/blob/77a1f88a351df49e5df38a14c3a1704a76ecdcb3/packages/frontend/src/components/message/Message.tsx#L274-L278
      */
-    const messageIds = messageListState.messageListItems
-      .filter((item): item is { kind: 'message'; msg_id: number } => {
-        if (item.kind !== 'message') {
-          return false
-        }
-        const id = item.msg_id
+    const messageIds = messageListState.messageListIds.filter(id => {
+      const message = messageListState.messageCache[id]
 
-        return (
-          messageListState.messageCache[id]?.kind === 'message' &&
-          messageListState.messageCache[id]?.isInfo === false
-        )
-      })
-      .map(({ msg_id }) => msg_id)
+      return message?.kind === 'message' && message.isInfo === false
+    })
     const currQuote = draftState.quote
     if (!currQuote) {
       if (upOrDown === KeybindAction.Composer_SelectReplyToUp) {
@@ -472,7 +464,7 @@ export function useDraft(
       // maybe the message is just not in the cache (yet)
       // but still in the full list of messages
       // -> check if it's there
-      const isQuoteInMessagelist = messageListState.messageListItems.includes(
+      const isQuoteInMessagelist = messageListState.messageListIds.includes(
         currQuote.messageId
       )
       if (isQuoteInMessagelist) {

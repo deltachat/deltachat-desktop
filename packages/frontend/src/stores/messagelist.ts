@@ -29,7 +29,7 @@ interface MessageListState {
    * Day markers are not part of this list: they are derived when rendering,
    * it is much cheaper to send plain numbers over JSON-RPC than a list of tagged objects
    */
-  messageListItems: number[]
+  messageListIds: number[]
   /**
    * Generally this contains a contiguous slice (no with no holes)
    * of a chat's messages, but we also have `loadMissingMessages`
@@ -37,11 +37,11 @@ interface MessageListState {
    */
   messageCache: { [msgId: number]: T.MessageLoadResult | undefined }
   /**
-   * @see {@linkcode oldestFetchedMessageListItemIndex}
+   * @see {@linkcode oldestFetchedMessageIndex}
    */
-  newestFetchedMessageListItemIndex: -1 | number
+  newestFetchedMessageIndex: -1 | number
   /**
-   * Index in {@linkcode messageListItems} of the oldest message
+   * Index in {@linkcode messageListIds} of the oldest message
    * that we have fetched (i.e. added to {@linkcode messageCache}).
    *
    * Yes, this value can be calculated from {@linkcode messageCache}
@@ -50,7 +50,7 @@ interface MessageListState {
    * Might be `-1` when still loading {@linkcode messageCache},
    * if the chat is empty, and in some other cases.
    */
-  oldestFetchedMessageListItemIndex: -1 | number
+  oldestFetchedMessageIndex: -1 | number
 
   /**
    * This is used as an "event bus". When we need to update the scroll position
@@ -69,10 +69,10 @@ interface MessageListState {
 
 const defaultState = () =>
   ({
-    messageListItems: [],
+    messageListIds: [],
     messageCache: {},
-    newestFetchedMessageListItemIndex: -1,
-    oldestFetchedMessageListItemIndex: -1,
+    newestFetchedMessageIndex: -1,
+    oldestFetchedMessageIndex: -1,
     viewState: defaultChatViewState(),
     jumpToMessageStack: [],
     loaded: false,
@@ -245,9 +245,9 @@ export class MessageListStore extends Store<MessageListState> {
    * if nothing changed, so that it doesn't trigger `React.memo` to rerender.
    */
   get activeView() {
-    const items = this.state.messageListItems
-    const start = this.state.oldestFetchedMessageListItemIndex
-    const end = this.state.newestFetchedMessageListItemIndex
+    const items = this.state.messageListIds
+    const start = this.state.oldestFetchedMessageIndex
+    const end = this.state.newestFetchedMessageIndex
 
     const cache = this.activeViewCache
     if (
@@ -278,19 +278,19 @@ export class MessageListStore extends Store<MessageListState> {
       }, 'selectedChat')
     },
     refresh: (
-      messageListItems: number[],
+      messageListIds: number[],
       messageCache: MessageListState['messageCache'],
-      newestFetchedMessageListItemIndex: number,
-      oldestFetchedMessageListItemIndex: number
+      newestFetchedMessageIndex: number,
+      oldestFetchedMessageIndex: number
     ) => {
       this.setState(state => {
         const modifiedState: MessageListState = {
           ...state,
-          messageListItems,
+          messageListIds,
           messageCache,
           viewState: ChatViewReducer.refresh(state.viewState),
-          newestFetchedMessageListItemIndex,
-          oldestFetchedMessageListItemIndex,
+          newestFetchedMessageIndex,
+          oldestFetchedMessageIndex,
           loaded: true,
         }
         return modifiedState
@@ -308,7 +308,7 @@ export class MessageListStore extends Store<MessageListState> {
     appendMessagesTop: (payload: {
       id: number
       newMessageCacheItems: MessageListState['messageCache']
-      oldestFetchedMessageListItemIndex: number
+      oldestFetchedMessageIndex: number
     }) => {
       this.setState(state => {
         const modifiedState: MessageListState = {
@@ -317,8 +317,7 @@ export class MessageListStore extends Store<MessageListState> {
             ...state.messageCache,
             ...payload.newMessageCacheItems,
           },
-          oldestFetchedMessageListItemIndex:
-            payload.oldestFetchedMessageListItemIndex,
+          oldestFetchedMessageIndex: payload.oldestFetchedMessageIndex,
           viewState: ChatViewReducer.appendMessagesTop(state.viewState),
         }
         return modifiedState
@@ -335,26 +334,26 @@ export class MessageListStore extends Store<MessageListState> {
             ...state.messageCache,
             ...payload.newMessageCacheItems,
           },
-          newestFetchedMessageListItemIndex: payload.newestFetchedMessageIndex,
+          newestFetchedMessageIndex: payload.newestFetchedMessageIndex,
           viewState: ChatViewReducer.appendMessagesBottom(state.viewState),
         }
         return modifiedState
       }, 'appendMessagesBottom')
     },
     fetchedIncomingMessages: (payload: {
-      messageListItems: MessageListState['messageListItems']
+      messageListIds: MessageListState['messageListIds']
       newestFetchedMessageIndex: number
       newMessageCacheItems: MessageListState['messageCache']
     }) => {
       this.setState(state => {
         const modifiedState: MessageListState = {
           ...state,
-          messageListItems: payload.messageListItems,
+          messageListIds: payload.messageListIds,
           messageCache: {
             ...state.messageCache,
             ...payload.newMessageCacheItems,
           },
-          newestFetchedMessageListItemIndex: payload.newestFetchedMessageIndex,
+          newestFetchedMessageIndex: payload.newestFetchedMessageIndex,
           viewState: ChatViewReducer.fetchedIncomingMessages(state.viewState),
         }
         return modifiedState
@@ -431,14 +430,12 @@ export class MessageListStore extends Store<MessageListState> {
         return modifiedState
       }, 'setMessageState')
     },
-    setMessageListItems: (
-      messageListItems: MessageListState['messageListItems']
-    ) => {
+    setMessageListIds: (messageListIds: MessageListState['messageListIds']) => {
       this.setState(state => {
         const modifiedState: MessageListState = {
           ...state,
-          messageListItems,
-          viewState: ChatViewReducer.setMessageListItems(state.viewState),
+          messageListIds,
+          viewState: ChatViewReducer.setMessageListIds(state.viewState),
         }
         return modifiedState
       }, 'setMessageIds')
@@ -484,7 +481,7 @@ export class MessageListStore extends Store<MessageListState> {
           //
           // Bacause those other effects rely on the state being
           // initialized, namely on
-          // `this.state.oldestFetchedMessageListItemIndex`.
+          // `this.state.oldestFetchedMessageIndex`.
           //
           // The same applies to the other `this.__jumpToMessage()` below
           return await this.__jumpToMessage(...jumpArgs)
@@ -494,7 +491,7 @@ export class MessageListStore extends Store<MessageListState> {
           this.accountId,
           this.chatId
         )
-        const messageListItemsP = BackendRemote.rpc.getMessageIds(
+        const messageListIdsP = BackendRemote.rpc.getMessageIds(
           this.accountId,
           this.chatId,
           false,
@@ -514,7 +511,7 @@ export class MessageListStore extends Store<MessageListState> {
             // 'center' so that old messages are also shown, for context.
             // See https://github.com/deltachat/deltachat-desktop/issues/4284
             scrollIntoViewArg: { block: 'center' },
-            messageListItemsP,
+            messageListIdsP,
           })
 
           // TODO why do we only do this when `firstUnreadMsgId !== null`?
@@ -534,26 +531,26 @@ export class MessageListStore extends Store<MessageListState> {
           return await jumpToMessageP
         }
 
-        let oldestFetchedMessageListItemIndex = -1
-        let newestFetchedMessageListItemIndex = -1
+        let oldestFetchedMessageIndex = -1
+        let newestFetchedMessageIndex = -1
         let messageCache: MessageListState['messageCache'] = {}
-        const messageListItems = await messageListItemsP
-        if (messageListItems.length !== 0) {
+        const messageListIds = await messageListIdsP
+        if (messageListIds.length !== 0) {
           // mesageIds.length = 1767
-          // oldestFetchedMessageListItemIndex = 1767 - 1 = 1766 - 10 = 1756
+          // oldestFetchedMessageIndex = 1767 - 1 = 1766 - 10 = 1756
           // newestFetchedMessageIndex =                        1766
-          oldestFetchedMessageListItemIndex = Math.max(
-            messageListItems.length - 1 - PAGE_SIZE,
+          oldestFetchedMessageIndex = Math.max(
+            messageListIds.length - 1 - PAGE_SIZE,
             0
           )
-          newestFetchedMessageListItemIndex = messageListItems.length - 1
+          newestFetchedMessageIndex = messageListIds.length - 1
 
           messageCache =
             (await loadMessages(
               this.accountId,
-              messageListItems,
-              oldestFetchedMessageListItemIndex,
-              newestFetchedMessageListItemIndex,
+              messageListIds,
+              oldestFetchedMessageIndex,
+              newestFetchedMessageIndex,
               {} // pass empty cache instead of `this.state.messageCache`
             ).catch(err => this.log.error('loadMessages failed', err))) || {}
         }
@@ -562,9 +559,9 @@ export class MessageListStore extends Store<MessageListState> {
 
         this.reducer.selectedChat({
           messageCache,
-          messageListItems,
-          oldestFetchedMessageListItemIndex,
-          newestFetchedMessageListItemIndex,
+          messageListIds,
+          oldestFetchedMessageIndex,
+          newestFetchedMessageIndex,
           viewState: ChatViewReducer.selectChat(this.state.viewState),
         })
       },
@@ -623,11 +620,11 @@ export class MessageListStore extends Store<MessageListState> {
           this.log.debug(`fetchMoreMessagesTop`)
           const state = this.state
           const id = this.chatId
-          const oldestFetchedMessageListItemIndex = Math.max(
-            state.oldestFetchedMessageListItemIndex - PAGE_SIZE,
+          const oldestFetchedMessageIndex = Math.max(
+            state.oldestFetchedMessageIndex - PAGE_SIZE,
             0
           )
-          const lastMessageIndex = state.oldestFetchedMessageListItemIndex
+          const lastMessageIndex = state.oldestFetchedMessageIndex
           if (lastMessageIndex === 0) {
             this.log.debug(
               'FETCH_MORE_MESSAGES: lastMessageIndex is zero, returning'
@@ -636,13 +633,13 @@ export class MessageListStore extends Store<MessageListState> {
             // call `unlockScroll()`, so let's unlock it now.
             return false
           }
-          const fetchedMessageListItems = state.messageListItems.slice(
-            oldestFetchedMessageListItemIndex,
+          const fetchedMessageIds = state.messageListIds.slice(
+            oldestFetchedMessageIndex,
             lastMessageIndex
           )
-          if (fetchedMessageListItems.length === 0) {
+          if (fetchedMessageIds.length === 0) {
             this.log.debug(
-              'fetchMoreMessagesTop: fetchedMessageListItems.length is zero, returning'
+              'fetchMoreMessagesTop: fetchedMessageIds.length is zero, returning'
             )
             // Since we haven't changed `viewState`, `MessageList` won't
             // call `unlockScroll()`, so let's unlock it now.
@@ -652,8 +649,8 @@ export class MessageListStore extends Store<MessageListState> {
           const newMessageCacheItems =
             (await loadMessages(
               this.accountId,
-              state.messageListItems,
-              oldestFetchedMessageListItemIndex,
+              state.messageListIds,
+              oldestFetchedMessageIndex,
               lastMessageIndex - 1,
               this.state.messageCache
             ).catch(err => this.log.error('loadMessages failed', err))) || {}
@@ -661,7 +658,7 @@ export class MessageListStore extends Store<MessageListState> {
           this.reducer.appendMessagesTop({
             id,
             newMessageCacheItems,
-            oldestFetchedMessageListItemIndex,
+            oldestFetchedMessageIndex,
           })
           return true
         },
@@ -675,15 +672,12 @@ export class MessageListStore extends Store<MessageListState> {
         async () => {
           const state = this.state
 
-          const newestFetchedMessageListItemIndex =
-            state.newestFetchedMessageListItemIndex + 1
-          const newNewestFetchedMessageListItemIndex = Math.min(
-            newestFetchedMessageListItemIndex + PAGE_SIZE,
-            state.messageListItems.length - 1
+          const newestFetchedMessageIndex = state.newestFetchedMessageIndex + 1
+          const newNewestFetchedMessageIndex = Math.min(
+            newestFetchedMessageIndex + PAGE_SIZE,
+            state.messageListIds.length - 1
           )
-          if (
-            newestFetchedMessageListItemIndex === state.messageListItems.length
-          ) {
+          if (newestFetchedMessageIndex === state.messageListIds.length) {
             //log.debug('fetchMoreMessagesBottom: no more messages, returning')
             // Since we haven't changed `viewState`, `MessageList` won't
             // call `unlockScroll()`, so let's unlock it now.
@@ -691,18 +685,17 @@ export class MessageListStore extends Store<MessageListState> {
           }
           this.log.debug(`fetchMoreMessagesBottom`)
 
-          const fetchedMessageListItems = state.messageListItems.slice(
-            newestFetchedMessageListItemIndex,
-            newNewestFetchedMessageListItemIndex + 1
+          const fetchedMessageIds = state.messageListIds.slice(
+            newestFetchedMessageIndex,
+            newNewestFetchedMessageIndex + 1
           )
-          if (fetchedMessageListItems.length === 0) {
+          if (fetchedMessageIds.length === 0) {
             this.log.debug(
-              'fetchMoreMessagesBottom: fetchedMessageListItems.length is zero, returning',
+              'fetchMoreMessagesBottom: fetchedMessageIds.length is zero, returning',
               JSON.stringify({
-                newestFetchedMessageIndex: newestFetchedMessageListItemIndex,
-                newNewestFetchedMessageIndex:
-                  newNewestFetchedMessageListItemIndex,
-                messageIds: state.messageListItems,
+                newestFetchedMessageIndex: newestFetchedMessageIndex,
+                newNewestFetchedMessageIndex: newNewestFetchedMessageIndex,
+                messageIds: state.messageListIds,
               })
             )
             // Since we haven't changed `viewState`, `MessageList` won't
@@ -713,15 +706,15 @@ export class MessageListStore extends Store<MessageListState> {
           const newMessageCacheItems =
             (await loadMessages(
               this.accountId,
-              state.messageListItems,
-              newestFetchedMessageListItemIndex,
-              newNewestFetchedMessageListItemIndex,
+              state.messageListIds,
+              newestFetchedMessageIndex,
+              newNewestFetchedMessageIndex,
               this.state.messageCache
             ).catch(err => this.log.error('loadMessages failed', err))) || {}
 
           this.reducer.appendMessagesBottom({
             newMessageCacheItems,
-            newestFetchedMessageIndex: newNewestFetchedMessageListItemIndex,
+            newestFetchedMessageIndex: newNewestFetchedMessageIndex,
           })
           return true
         },
@@ -735,39 +728,33 @@ export class MessageListStore extends Store<MessageListState> {
         async () => {
           // this.log.debug(`refresh`, this)
           const state = this.state
-          const messageListItems = await BackendRemote.rpc.getMessageIds(
+          const messageListIds = await BackendRemote.rpc.getMessageIds(
             this.accountId,
             this.chatId,
             false,
             false
           )
-          let {
-            newestFetchedMessageListItemIndex,
-            oldestFetchedMessageListItemIndex,
-          } = state
-          newestFetchedMessageListItemIndex = Math.min(
-            newestFetchedMessageListItemIndex,
-            messageListItems.length - 1
+          let { newestFetchedMessageIndex, oldestFetchedMessageIndex } = state
+          newestFetchedMessageIndex = Math.min(
+            newestFetchedMessageIndex,
+            messageListIds.length - 1
           )
-          oldestFetchedMessageListItemIndex = Math.max(
-            oldestFetchedMessageListItemIndex,
-            0
-          )
+          oldestFetchedMessageIndex = Math.max(oldestFetchedMessageIndex, 0)
 
           const messageCache =
             (await loadMessages(
               this.accountId,
-              messageListItems,
-              oldestFetchedMessageListItemIndex,
-              newestFetchedMessageListItemIndex,
+              messageListIds,
+              oldestFetchedMessageIndex,
+              newestFetchedMessageIndex,
               {} // pass empty cache instead of `this.state.messageCache`
             ).catch(err => this.log.error('loadMessages failed', err))) || {}
 
           this.reducer.refresh(
-            messageListItems,
+            messageListIds,
             messageCache,
-            newestFetchedMessageListItemIndex,
-            oldestFetchedMessageListItemIndex
+            newestFetchedMessageIndex,
+            oldestFetchedMessageIndex
           )
           return true
         },
@@ -776,19 +763,19 @@ export class MessageListStore extends Store<MessageListState> {
       'refresh'
     ),
     onEventIncomingMessage: this.scheduler.queuedEffect(async () => {
-      const messageListItems = await BackendRemote.rpc.getMessageIds(
+      const messageListIds = await BackendRemote.rpc.getMessageIds(
         this.accountId,
         this.chatId,
         false,
         false
       )
-      await this.__appendNewMessages(messageListItems)
+      await this.__appendNewMessages(messageListIds)
     }, 'onEventIncomingMessage'),
     onEventMessagesChanged: this.scheduler.queuedEffect(
       async (messageId: number) => {
         if (
           messageId > C.DC_MSG_ID_LAST_SPECIAL &&
-          this.state.messageListItems.includes(messageId)
+          this.state.messageListIds.includes(messageId)
         ) {
           this.log.debug(
             'DC_EVENT_MSGS_CHANGED',
@@ -846,7 +833,7 @@ export class MessageListStore extends Store<MessageListState> {
             'DC_EVENT_MSGS_CHANGED',
             'changed message seems to be a new message, refetching messageIds'
           )
-          const messageListItems = await BackendRemote.rpc.getMessageIds(
+          const messageListIds = await BackendRemote.rpc.getMessageIds(
             this.accountId,
             this.chatId,
             false,
@@ -858,7 +845,7 @@ export class MessageListStore extends Store<MessageListState> {
           // (changing the group name, disappearing messages etc.) or
           // IncomingCall messages. Treat them the same as incoming messages so
           // the list scrolls to bottom when the user is already there.
-          await this.__appendNewMessages(messageListItems)
+          await this.__appendNewMessages(messageListIds)
         }
       },
       'onEventMessagesChanged'
@@ -869,50 +856,50 @@ export class MessageListStore extends Store<MessageListState> {
    * Appends new messages to the store and updates the scroll position
    * if needed.
    *
-   * @param messageListItems
+   * @param messageListIds
    * @returns
    */
-  private async __appendNewMessages(messageListItems: number[]) {
+  private async __appendNewMessages(messageListIds: number[]) {
     const last_item: number | undefined =
-      this.state.messageListItems[this.state.messageListItems.length - 1]
+      this.state.messageListIds[this.state.messageListIds.length - 1]
 
     let indexStart =
-      last_item === undefined ? -1 : messageListItems.indexOf(last_item)
+      last_item === undefined ? -1 : messageListIds.indexOf(last_item)
 
     // check if there is an intersection
-    if (indexStart !== -1 && messageListItems[indexStart + 1]) {
+    if (indexStart !== -1 && messageListIds[indexStart + 1]) {
       indexStart = indexStart + 1
     }
 
     // if index start is not the end, set the end to the last item
     const indexEnd =
-      indexStart !== messageListItems.length - 1
-        ? messageListItems.length - 1
+      indexStart !== messageListIds.length - 1
+        ? messageListIds.length - 1
         : indexStart
 
     // Only append if we can do so without leaving a hole
     if (
-      this.state.newestFetchedMessageListItemIndex !== -1 &&
-      indexStart !== this.state.newestFetchedMessageListItemIndex + 1
+      this.state.newestFetchedMessageIndex !== -1 &&
+      indexStart !== this.state.newestFetchedMessageIndex + 1
     ) {
       this.log.debug(
-        `__appendNewMessages: new messages cannot be added to state without having a hole (indexStart: ${indexStart}, newestFetchedMessageListItemIndex ${this.state.newestFetchedMessageListItemIndex}), falling back to setMessageListItems`
+        `__appendNewMessages: new messages cannot be added to state without having a hole (indexStart: ${indexStart}, newestFetchedMessageIndex ${this.state.newestFetchedMessageIndex}), falling back to setMessageListIds`
       )
-      this.reducer.setMessageListItems(messageListItems)
+      this.reducer.setMessageListIds(messageListIds)
       return
     }
 
     const newMessageCacheItems =
       (await loadMessages(
         this.accountId,
-        messageListItems,
+        messageListIds,
         indexStart,
         indexEnd,
         this.state.messageCache
       ).catch(err => this.log.error('loadMessages failed', err))) || {}
 
     this.reducer.fetchedIncomingMessages({
-      messageListItems,
+      messageListIds,
       newMessageCacheItems,
       newestFetchedMessageIndex: indexEnd,
     })
@@ -921,10 +908,10 @@ export class MessageListStore extends Store<MessageListState> {
   /**
    * Loads and shows the message in the messages list.
    * It can handle initializing MessageListStore
-   * (loading `messageListItems` and `messageCache`, etc),
+   * (loading `messageListIds` and `messageCache`, etc),
    * loading the message if it is missing
    * from `this.state.messageCache`,
-   * reloading `messageListItems` if the message is missing from there,
+   * reloading `messageListIds` if the message is missing from there,
    * and showing the message in a chat other than `this.chatId`.
    * The latter (showing the message from a different chat), however,
    * should not be used, because, as of 2025-01-19, we re-create
@@ -948,7 +935,7 @@ export class MessageListStore extends Store<MessageListState> {
    * For example, this must be ensured for message quotes,
    * because they might belong to a different chat due to the
    * "Reply Privately" feature.
-   * @param messageListItemsP an already started `getMessageIds()`
+   * @param messageListIdsP an already started `getMessageIds()`
    * request for `MessageListStore.chatId`, to be awaited instead of
    * starting another one. In big chats that request is expensive
    * (hundreds of milliseconds and megabytes of JSON),
@@ -960,14 +947,14 @@ export class MessageListStore extends Store<MessageListState> {
     focus,
     addMessageIdToStack,
     scrollIntoViewArg,
-    messageListItemsP,
+    messageListIdsP,
   }: {
     msgId: number | undefined
     highlight?: boolean
     focus: boolean
     addMessageIdToStack?: undefined | number
     scrollIntoViewArg?: Parameters<HTMLElement['scrollIntoView']>[0]
-    messageListItemsP?: Promise<number[]>
+    messageListIdsP?: Promise<number[]>
   }) {
     const startTime = performance.now()
 
@@ -1003,7 +990,7 @@ export class MessageListStore extends Store<MessageListState> {
             .chatId
       } else {
         // Since `jumpToMessageId` is coming from
-        // `this.state.messageListItems`, it's guaranteed to belong
+        // `this.state.messageListIds`, it's guaranteed to belong
         // to the current chat. No need to
         // `(await rpc.getMessage(accountId, jumpToMessageId)).chatId`
         chatId = chatIdPreset ?? this.chatId
@@ -1053,37 +1040,35 @@ export class MessageListStore extends Store<MessageListState> {
       )
     }
 
-    let messageListItems = this.state.messageListItems
+    let messageListIds = this.state.messageListIds
     const findMessageIndex = (): number | undefined => {
       if (jumpToMessageId == undefined) {
-        return messageListItems.length > 0
-          ? messageListItems.length - 1
-          : undefined
+        return messageListIds.length > 0 ? messageListIds.length - 1 : undefined
         // Maybe it would make sense to also set `jumpToMessageId` here.
       }
 
-      const ind = messageListItems.indexOf(jumpToMessageId)
+      const ind = messageListIds.indexOf(jumpToMessageId)
       return ind === -1 ? undefined : ind
     }
 
     let jumpToMessageIndex = findMessageIndex()
     const currentMessageListContainsTheMessage = jumpToMessageIndex != undefined
     // Even if the message is in the current chat, it could still
-    // be missing from `this.state.messageListItems` in these cases:
-    // - `this.state.messageListItems` is still unloaded,
+    // be missing from `this.state.messageListIds` in these cases:
+    // - `this.state.messageListIds` is still unloaded,
     //   e.g. when `loadChat` interrupts itself and calls `jumpToMessage`.
-    // - `this.state.messageListItems` is loaded, but there are actually
+    // - `this.state.messageListIds` is loaded, but there are actually
     //   no messages in the chat.
     //   FYI in this case we perhaps don't have to `getMessageIds()`,
     //   but whatever.
     // - A new message has just been sent to the chat and we want to jump
     //   to it.
     if (!isMessageInCurrentChat || !currentMessageListContainsTheMessage) {
-      messageListItems =
-        // `messageListItemsP` was started for `this.chatId`,
+      messageListIds =
+        // `messageListIdsP` was started for `this.chatId`,
         // so it is only usable when we're not jumping to another chat.
-        messageListItemsP != undefined && isMessageInCurrentChat
-          ? await messageListItemsP
+        messageListIdsP != undefined && isMessageInCurrentChat
+          ? await messageListIdsP
           : await BackendRemote.rpc.getMessageIds(
               accountId,
               chatId,
@@ -1097,20 +1082,20 @@ export class MessageListStore extends Store<MessageListState> {
     }
 
     // calculate page indexes, so that jumpToMessageId is in the middle of the page
-    let oldestFetchedMessageListItemIndex: number
-    let newestFetchedMessageListItemIndex: number
+    let oldestFetchedMessageIndex: number
+    let newestFetchedMessageIndex: number
     let newMessageCache: MessageListState['messageCache']
     let newViewState: ChatViewState
-    if (messageListItems.length === 0) {
+    if (messageListIds.length === 0) {
       if (jumpToMessageId != undefined) {
         this.log.error(
-          `Tried to jumpToMessage ${jumpToMessageId}, but messageListItems ` +
+          `Tried to jumpToMessage ${jumpToMessageId}, but messageListIds ` +
             `is empty. Anyways, proceeding.`
         )
       }
 
-      oldestFetchedMessageListItemIndex = -1
-      newestFetchedMessageListItemIndex = -1
+      oldestFetchedMessageIndex = -1
+      newestFetchedMessageIndex = -1
       newMessageCache = {}
       // Same as in `loadChat()`
       newViewState = ChatViewReducer.selectChat(this.state.viewState)
@@ -1120,7 +1105,7 @@ export class MessageListStore extends Store<MessageListState> {
         // that is now deleted, e.g. if it got deleted just recently
         // and not all state has updated, but this is super rare.
         this.log.error(
-          `messageListItems is not empty, but jumpToMessageIndex ` +
+          `messageListIds is not empty, but jumpToMessageIndex ` +
             `is still undefined? Does msgId ${jumpToMessageId} ` +
             `even belong to chat ${chatId}? Or did the message get deleted?\n` +
             `Anyways, falling back to jumping to the last message.`
@@ -1129,42 +1114,42 @@ export class MessageListStore extends Store<MessageListState> {
           type: 'error',
           text: `${window.static_translate('error')}: message not found`,
         })
-        jumpToMessageIndex = messageListItems.length - 1
+        jumpToMessageIndex = messageListIds.length - 1
       }
 
       const half_page_size = Math.ceil(PAGE_SIZE / 2)
 
-      oldestFetchedMessageListItemIndex = Math.max(
+      oldestFetchedMessageIndex = Math.max(
         jumpToMessageIndex - half_page_size,
         0
       )
-      newestFetchedMessageListItemIndex = Math.min(
+      newestFetchedMessageIndex = Math.min(
         jumpToMessageIndex + half_page_size,
-        messageListItems.length - 1
+        messageListIds.length - 1
       )
 
       const countMessagesOnNewerSide =
-        newestFetchedMessageListItemIndex - jumpToMessageIndex
+        newestFetchedMessageIndex - jumpToMessageIndex
       const countMessagesOnOlderSide =
-        jumpToMessageIndex - oldestFetchedMessageListItemIndex
+        jumpToMessageIndex - oldestFetchedMessageIndex
       if (countMessagesOnNewerSide < half_page_size) {
-        oldestFetchedMessageListItemIndex = Math.max(
-          oldestFetchedMessageListItemIndex -
+        oldestFetchedMessageIndex = Math.max(
+          oldestFetchedMessageIndex -
             (half_page_size - countMessagesOnNewerSide),
           0
         )
       } else if (countMessagesOnOlderSide < half_page_size) {
-        newestFetchedMessageListItemIndex = Math.min(
-          newestFetchedMessageListItemIndex +
+        newestFetchedMessageIndex = Math.min(
+          newestFetchedMessageIndex +
             (half_page_size - countMessagesOnOlderSide),
-          messageListItems.length - 1
+          messageListIds.length - 1
         )
       }
 
       const messagesAlreadyLoaded = getView(
-        messageListItems,
-        oldestFetchedMessageListItemIndex,
-        newestFetchedMessageListItemIndex
+        messageListIds,
+        oldestFetchedMessageIndex,
+        newestFetchedMessageIndex
       ).every(msgId => this.state.messageCache[msgId] != undefined)
 
       this.log.debug(
@@ -1179,11 +1164,11 @@ export class MessageListStore extends Store<MessageListState> {
         newMessageCache = this.state.messageCache
 
         // Why do we need `Math.min` / `Math.max` here, instead of simply
-        // keeping `this.state.oldestFetchedMessageListItemIndex`
-        // and `this.state.newestFetchedMessageListItemIndex` as they are?
+        // keeping `this.state.oldestFetchedMessageIndex`
+        // and `this.state.newestFetchedMessageIndex` as they are?
         // Because some other code might update the state in such a way
         // that `messageCache` and these
-        // `(oldest|newest)FetchedMessageListItemIndex` are out of sync:
+        // `(oldest|newest)FetchedMessageIndex` are out of sync:
         // `messageCache` actually has a message, but
         // these integers say that the message is not yet fetched.
         // Namely, this can happen inside of `messageChanged` when
@@ -1194,33 +1179,33 @@ export class MessageListStore extends Store<MessageListState> {
         // The result would be that we'd fail to jump to message inside of
         // `MessageList.tsx`, because the message wouldn't be rendered,
         // because we only render messages that are between
-        // `oldestFetchedMessageListItemIndex` and
-        // `newestFetchedMessageListItemIndex` (see `activeView`).
+        // `oldestFetchedMessageIndex` and
+        // `newestFetchedMessageIndex` (see `activeView`).
         //
         // TODO it would be ideal to get ensure that we don't corrupt
         // the state in the first place, but let's make
         // this workaround for now.
-        oldestFetchedMessageListItemIndex = Math.min(
-          this.state.oldestFetchedMessageListItemIndex,
-          oldestFetchedMessageListItemIndex
+        oldestFetchedMessageIndex = Math.min(
+          this.state.oldestFetchedMessageIndex,
+          oldestFetchedMessageIndex
         )
-        newestFetchedMessageListItemIndex = Math.max(
-          this.state.newestFetchedMessageListItemIndex,
-          newestFetchedMessageListItemIndex
+        newestFetchedMessageIndex = Math.max(
+          this.state.newestFetchedMessageIndex,
+          newestFetchedMessageIndex
         )
       } else {
         newMessageCache =
           (await loadMessages(
             accountId,
-            messageListItems,
-            oldestFetchedMessageListItemIndex,
-            newestFetchedMessageListItemIndex,
+            messageListIds,
+            oldestFetchedMessageIndex,
+            newestFetchedMessageIndex,
             this.state.messageCache
           ).catch(err => this.log.error('loadMessages failed', err))) || {}
       }
 
       if (jumpToMessageId == undefined) {
-        jumpToMessageId = messageListItems[jumpToMessageIndex]
+        jumpToMessageId = messageListIds[jumpToMessageIndex]
       }
       newViewState = ChatViewReducer.jumpToMessage(
         this.state.viewState,
@@ -1238,9 +1223,9 @@ export class MessageListStore extends Store<MessageListState> {
     // It woud be great to not re-render the message list in that case.
     this.reducer.selectedChat({
       messageCache: newMessageCache,
-      messageListItems,
-      oldestFetchedMessageListItemIndex,
-      newestFetchedMessageListItemIndex,
+      messageListIds,
+      oldestFetchedMessageIndex,
+      newestFetchedMessageIndex,
       viewState: newViewState,
       jumpToMessageStack,
     })
@@ -1255,26 +1240,28 @@ export class MessageListStore extends Store<MessageListState> {
 
 /**
  * The return value will only contain messages between
- * {@linkcode oldestFetchedMessageListItemIndex} and
- * {@linkcode newestFetchedMessageListItemIndex} in
- * {@linkcode messageListItems}, even if {@linkcode existingMessages}
+ * {@linkcode oldestFetchedMessageIndex} and
+ * {@linkcode newestFetchedMessageIndex} in {@linkcode messageListIds},
+ * plus the one message right before that range (its timestamp is needed
+ * to decide whether the oldest message of the range starts a new day),
+ * even if {@linkcode existingMessages}
  * contained some messages outside of the range.
  * (See {@linkcode MessageListState} docs for reasoning).
  */
 async function loadMessages(
   accountId: number,
-  messageListItems: number[],
-  oldestFetchedMessageListItemIndex: number,
-  newestFetchedMessageListItemIndex: number,
+  messageListIds: number[],
+  oldestFetchedMessageIndex: number,
+  newestFetchedMessageIndex: number,
   existingMessages: MessageListState['messageCache']
 ) {
   const view = getView(
-    messageListItems,
+    messageListIds,
     // One message older than the requested range: `MessageList` needs its
     // timestamp to tell whether the oldest message of the range starts a new
     // day
-    Math.max(oldestFetchedMessageListItemIndex - 1, 0),
-    newestFetchedMessageListItemIndex
+    Math.max(oldestFetchedMessageIndex - 1, 0),
+    newestFetchedMessageIndex
   )
 
   const missingIds = view.filter(msgId => {

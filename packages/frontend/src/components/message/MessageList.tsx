@@ -106,9 +106,9 @@ export default function MessageList({
     activeView,
   } = messageListStore
   const {
-    oldestFetchedMessageListItemIndex,
+    oldestFetchedMessageIndex,
     messageCache,
-    messageListItems,
+    messageListIds,
     viewState,
     jumpToMessageStack,
     loaded,
@@ -281,12 +281,12 @@ export default function MessageList({
       messageListRef.current.clientHeight
 
     const {
-      newestFetchedMessageListItemIndex: newestFetchedIndex,
-      messageListItems: currentMessageListItems,
+      newestFetchedMessageIndex: newestFetchedIndex,
+      messageListIds: currentMessageListIds,
     } = messageListStore.getState()
 
     const isNewestMessageLoaded =
-      newestFetchedIndex === currentMessageListItems.length - 1
+      newestFetchedIndex === currentMessageListIds.length - 1
     const newShowJumpDownButton =
       !isNewestMessageLoaded ||
       distanceToBottom > maxScrollToBottomDistanceConsideredShort
@@ -683,8 +683,8 @@ export default function MessageList({
         onScroll={onScroll}
         onScrollEnd={onScrollEnd}
         onWheel={isReactionsBarShown ? hideReactionsBar : undefined}
-        oldestFetchedMessageIndex={oldestFetchedMessageListItemIndex}
-        messageListItems={messageListItems}
+        oldestFetchedMessageIndex={oldestFetchedMessageIndex}
+        messageListIds={messageListIds}
         activeView={activeView}
         messageCache={messageCache}
         messageListRef={messageListRef}
@@ -725,7 +725,7 @@ export const MessageListInner = React.memo(
     onScrollEnd: (event: Event) => void
     onWheel?: React.WheelEventHandler<HTMLDivElement>
     oldestFetchedMessageIndex: number
-    messageListItems: number[]
+    messageListIds: number[]
     activeView: number[]
     messageCache: { [msgId: number]: T.MessageLoadResult | undefined }
     messageListRef: React.RefObject<HTMLDivElement | null>
@@ -741,7 +741,7 @@ export const MessageListInner = React.memo(
       onScrollEnd,
       onWheel,
       oldestFetchedMessageIndex,
-      messageListItems,
+      messageListIds,
       messageCache,
       activeView,
       messageListRef,
@@ -781,7 +781,7 @@ export const MessageListInner = React.memo(
       }
 
       const ids = new Set<number>()
-      let previousDay = dayOf(messageListItems[oldestFetchedMessageIndex - 1])
+      let previousDay = dayOf(messageListIds[oldestFetchedMessageIndex - 1])
 
       for (let i = 0; i < activeView.length; i++) {
         const msgId = activeView[i]
@@ -800,7 +800,7 @@ export const MessageListInner = React.memo(
         previousDay = day
       }
       return ids
-    }, [activeView, messageCache, messageListItems, oldestFetchedMessageIndex])
+    }, [activeView, messageCache, messageListIds, oldestFetchedMessageIndex])
 
     useKeyBindingAction(KeybindAction.MessageList_PageUp, () => {
       if (messageListRef.current) {
@@ -954,7 +954,7 @@ export const MessageListInner = React.memo(
       >
         <ol aria-label={tx('messages')}>
           <RovingTabindexProvider wrapperElementRef={messageListRef}>
-            {messageListItems.length === 0 && <EmptyChatMessage chat={chat} />}
+            {messageListIds.length === 0 && <EmptyChatMessage chat={chat} />}
             {activeView.flatMap(messageId => {
               const message = messageCache[messageId]
 
