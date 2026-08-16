@@ -1,5 +1,5 @@
 import styles from './styles.module.scss'
-import React, { useCallback, useContext, useId, useMemo } from 'react'
+import React, { useCallback, useContext, useId, useMemo, useRef } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 
 import MessageListAndComposer from '../message/MessageListAndComposer'
@@ -37,27 +37,25 @@ import {
   useMessageFocusAndMultiselectContextValue,
 } from '../message/focusAndMultiselect'
 import { useMessageList } from '../../stores/messagelist'
+import Composer from '../composer/Composer'
 
 const log = getLogger('ChatView')
 
 export function ChatView(
-  props: Omit<
-    Parameters<typeof ChatViewInner>[0],
-    'accountId' | 'chatWithLinger'
-  > & {
+  props: Omit<Parameters<typeof ChatViewInner>[0], 'accountId' | 'chatId'> & {
     accountId: T.Account['id'] | undefined
     className?: string
   }
 ) {
   const tx = useTranslationFunction()
-  const { chatWithLinger } = useChat()
+  const { chatId } = useChat()
   return (
     <section
       role='region'
       aria-labelledby='chat-section-heading'
       className={classNames(props.className, styles.chatAndNavbar)}
     >
-      {props.accountId != undefined && chatWithLinger ? (
+      {props.accountId != undefined && chatId != undefined ? (
         <ChatViewInner
           // Note that `key` has not always been here.
           // Some downstream components still try to support variable `chatId`.
@@ -68,9 +66,9 @@ export function ChatView(
           // However, most of that code is about resetting some state,
           // so it probably can be removed.
           // We do not and should actually rely on any kind of cross-chat state.
-          key={`${props.accountId}_${chatWithLinger.id}`}
+          key={`${props.accountId}_${chatId}`}
           {...(props as typeof props & { accountId: typeof props.accountId })}
-          chatWithLinger={chatWithLinger}
+          chatId={chatId}
         />
       ) : (
         <>
@@ -95,17 +93,17 @@ export function ChatView(
 export function ChatViewInner({
   accountId,
   lastUsedApps,
-  chatWithLinger,
+  chatId,
 }: {
   accountId: number
   lastUsedApps: T.Message[]
-  chatWithLinger: NonNullable<ReturnType<typeof useChat>['chatWithLinger']>
+  chatId: T.BasicChat['id']
 }) {
   const tx = useTranslationFunction()
-  const { unselectChat } = useChat()
+  const { unselectChat, chatWithLinger, oldChat } = useChat()
   const { smallScreenMode } = useContext(ScreenContext)
 
-  const messageListData = useMessageList(accountId, chatWithLinger.id)
+  const messageListData = useMessageList(accountId, chatId)
   const messageIds = useMemo(
     () =>
       messageListData.state.messageListItems
@@ -119,7 +117,10 @@ export function ChatViewInner({
   const showMessageMultiselectCounter = numSelectedMessages > 0
 
   return (
-    <>
+    <div
+      style={{ display: 'contents' }}
+      aria-busy={chatWithLinger == undefined}
+    >
       <nav className={styles.chatNavbar} data-tauri-drag-region>
         {smallScreenMode && (
           <span data-no-drag-region>
@@ -159,20 +160,93 @@ export function ChatViewInner({
           <ChatNavButtons chat={chatWithLinger} lastUsedApps={lastUsedApps} />
         )}
       </nav>
-      <RecoverableCrashScreen reset_on_change_key={chatWithLinger.id}>
+      <RecoverableCrashScreen reset_on_change_key={chatId}>
         <MessageMultiselectContext.Provider
           value={focusAndMultiselectContextValue}
         >
-          <MessageListAndComposer
-            accountId={accountId}
-            chat={chatWithLinger}
-            messageListData={messageListData}
-          />
+          {chatWithLinger ? (
+            <MessageListAndComposer
+              accountId={accountId}
+              chat={chatWithLinger}
+              messageListData={messageListData}
+            />
+          ) : (
+            <MessageListAndComposerPlaceholder
+              // Provide the old chat to reduce layout shifts.
+              // E.g. if the old chat had the composer hidden,
+              // this will keep the composer hidden while we're loading
+              // the new chat.
+              chat={oldChat ?? null}
+            />
+          )}
         </MessageMultiselectContext.Provider>
       </RecoverableCrashScreen>
-    </>
+    </div>
   )
 }
+
+/**
+ * To be displayed in place of a "real" {@linkcode MessageListAndComposer}
+ * while it's loading, to reduce flashing / layout shifts.
+ */
+function MessageListAndComposerPlaceholder({
+  chat,
+}: {
+  /**
+   * Can be the previous (old) chat, or just a dummy chat object.
+   */
+  chat: Parameters<typeof Composer>['0']['selectedChat'] | null
+}) {
+  const regularMessageInputRef: Parameters<
+    typeof Composer
+  >[0]['regularMessageInputRef'] = useRef(null)
+  const editMessageInputRef: Parameters<
+    typeof Composer
+  >[0]['editMessageInputRef'] = useRef(null)
+
+  return (
+    <NoChatSelected
+      composer={
+        chat && (
+          // `inert` to disable possible effectful interactions
+          // (e.g. sending a message, updating the draft, etc).
+          <div inert style={{ display: 'contents' }}>
+            <Composer
+              isContactRequest={chat.isContactRequest}
+              selectedChat={chat}
+              regularMessageInputRef={regularMessageInputRef}
+              editMessageInputRef={editMessageInputRef}
+              // If there _was_ a draft then we'll still flash a bit,
+              // but this is good enough.
+              draftState={{
+                id: 0,
+                text: '',
+                file: null,
+                fileBytes: 0,
+                fileMime: null,
+                fileName: null,
+                quote: null,
+                viewType: 'Text',
+                vcardContact: null,
+              }}
+              draftIsLoading={true}
+              updateDraftText={noop}
+              onSelectReplyToShortcut={noop}
+              removeQuote={noop}
+              addFileToDraft={() => Promise.resolve()}
+              removeFile={noop}
+              clearDraftState={noop}
+              setDraftState={noop}
+              messageCache={{}}
+            />
+          </div>
+        )
+      }
+      messages={null}
+    />
+  )
+}
+const noop = () => {}
 
 /**
  * @param chat
