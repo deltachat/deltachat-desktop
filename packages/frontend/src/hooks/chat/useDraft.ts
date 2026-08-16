@@ -442,7 +442,7 @@ export function useDraft(
      */
     const quoteCandidatesFrom = (fromInd: number) => {
       return valuesFromInd({
-        arr: messageListState.messageListItems,
+        arr: messageListState.messageListIds,
         fromInd,
         direction,
       })
@@ -466,7 +466,7 @@ export function useDraft(
         // Note that if we're in the middle of a chat,
         // this will quote the last loaded (and quotable) message.
         const newQuoteRes = quoteCandidatesFrom(
-          messageListState.messageListItems.length - 1
+          messageListState.messageListIds.length - 1
         )
           .filter(item => item.kind !== 'notLoaded')
           .next()
@@ -486,7 +486,7 @@ export function useDraft(
       // Or shall we override with the last message?
       return
     }
-    const currQuoteMessageIdInd = messageListState.messageListItems.lastIndexOf(
+    const currQuoteMessageIdInd = messageListState.messageListIds.lastIndexOf(
       currQuote.messageId
     )
     if (currQuoteMessageIdInd === -1) {
