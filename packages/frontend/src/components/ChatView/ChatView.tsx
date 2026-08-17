@@ -100,7 +100,7 @@ export function ChatViewInner({
   chatId: T.BasicChat['id']
 }) {
   const tx = useTranslationFunction()
-  const { unselectChat, chatWithLinger, oldChat } = useChat()
+  const { unselectChat, chat, oldChat } = useChat()
   const { smallScreenMode } = useContext(ScreenContext)
 
   const messageListData = useMessageList(accountId, chatId)
@@ -117,10 +117,7 @@ export function ChatViewInner({
   const showMessageMultiselectCounter = numSelectedMessages > 0
 
   return (
-    <div
-      style={{ display: 'contents' }}
-      aria-busy={chatWithLinger == undefined}
-    >
+    <div style={{ display: 'contents' }} aria-busy={chat == undefined}>
       <nav className={styles.chatNavbar} data-tauri-drag-region>
         {smallScreenMode && (
           <span data-no-drag-region>
@@ -135,7 +132,7 @@ export function ChatViewInner({
           </span>
         )}
         <div className={styles.chatNavbarHeadingWrapper} data-tauri-drag-region>
-          {chatWithLinger && (
+          {chat && (
             <>
               <div role='status' style={{ display: 'contents' }}>
                 {showMessageMultiselectCounter && (
@@ -147,7 +144,7 @@ export function ChatViewInner({
                 )}
               </div>
               <ChatHeading
-                chat={chatWithLinger}
+                chat={chat}
                 // Why `hidden` instead of simply not rendering?
                 // Because this component contains the accessible title
                 // for the "ChatView" section (`id='chat-section-heading'`).
@@ -156,18 +153,16 @@ export function ChatViewInner({
             </>
           )}
         </div>
-        {chatWithLinger && (
-          <ChatNavButtons chat={chatWithLinger} lastUsedApps={lastUsedApps} />
-        )}
+        {chat && <ChatNavButtons chat={chat} lastUsedApps={lastUsedApps} />}
       </nav>
       <RecoverableCrashScreen reset_on_change_key={chatId}>
         <MessageMultiselectContext.Provider
           value={focusAndMultiselectContextValue}
         >
-          {chatWithLinger ? (
+          {chat ? (
             <MessageListAndComposer
               accountId={accountId}
-              chat={chatWithLinger}
+              chat={chat}
               messageListData={messageListData}
             />
           ) : (

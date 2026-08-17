@@ -35,7 +35,7 @@ export default function ReactionsBar({
   myReaction,
 }: Props) {
   const tx = useTranslationFunction()
-  const { chatWithLinger } = useChat()
+  const { chat } = useChat()
   const openAlertDialog = useAlertDialog()
 
   const reactionsBarRef = useRef<HTMLDivElement>(null)
@@ -125,9 +125,9 @@ export default function ReactionsBar({
                 onClick={() => toggleReaction(myReaction)}
               />
             )}
-            {chatWithLinger != undefined &&
-              chatWithLinger.chatType !== 'InBroadcast' &&
-              chatWithLinger.chatType !== 'OutBroadcast' && (
+            {chat != undefined &&
+              chat.chatType !== 'InBroadcast' &&
+              chat.chatType !== 'OutBroadcast' && (
                 <MoreEmojisButton onClick={handleShowAllEmojis} />
               )}
           </RovingTabindexProvider>
