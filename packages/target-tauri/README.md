@@ -1,1 +1,1 @@
-The tauri package has moved to it's own dedicated repository at https://github.com/deltachat/deltachat-tauri
+The Tauri package has moved to its own dedicated repository at https://github.com/deltachat/deltachat-tauri
