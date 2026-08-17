@@ -1,7 +1,5 @@
 import React, { useContext, useEffect, useRef } from 'react'
 
-import styles from './styles.module.scss'
-import classNames from 'classnames'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 import { ForceMutedAudioPlayer } from './ForceMutedAudioPlayer'
 import {
@@ -111,23 +109,6 @@ export function AudioPlayer({
         }
         ignoreOnePauseEvent.current = false
       }}
-    />
-  )
-}
-
-export function AudioPlayerNonMutex({
-  ref,
-  className,
-  ...restProps
-}: Props & {
-  ref?: React.RefObject<HTMLAudioElement | null>
-}) {
-  return (
-    <audio
-      ref={ref}
-      controls
-      className={classNames(styles.audioPlayer, className)}
-      {...restProps}
     />
   )
 }

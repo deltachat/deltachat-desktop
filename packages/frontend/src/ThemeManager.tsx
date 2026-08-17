@@ -3,7 +3,6 @@ import React, { useContext, useMemo } from 'react'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 
 export namespace ThemeManager {
-  let currentThemeMetaData: Theme
   let currentThemeChangeHook: () => void = () => {}
 
   export async function refresh() {
@@ -13,7 +12,6 @@ export namespace ThemeManager {
       data: string
     } | null = await runtime.getActiveTheme()
     if (theme) {
-      currentThemeMetaData = theme.theme
       const themeVars = window.document.getElementById('theme-vars')
       if (!themeVars) {
         throw new Error('#theme-vars element not found')
@@ -28,10 +26,6 @@ export namespace ThemeManager {
     } else {
       document.body.classList.remove('system-fonts')
     }
-  }
-
-  export function getCurrentThemeMetaData() {
-    return currentThemeMetaData
   }
 
   export function setUpdateHook(hook: typeof currentThemeChangeHook) {
