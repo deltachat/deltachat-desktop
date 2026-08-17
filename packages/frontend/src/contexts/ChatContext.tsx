@@ -21,23 +21,26 @@ export type ChatContextValue = {
    * {@linkcode ChatContextValue.chatId},
    * or `undefined` during initial load,
    * after {@linkcode ChatContextValue.selectChat}.
-   *
-   * `withLinger` means that the value of `chatWithLinger`
-   * does not change immediately when we start refreshing the chat
-   * (e.g. after `ChatModified` event),
-   * until the new chat's info gets loaded.
    */
-  chatWithLinger?: T.FullChat
+  chat?: T.FullChat
+  /**
+   * Same as {@linkcode ChatContextValue.chat}, but `undefined`
+   * while {@linkcode ChatContextValue.loading} == true.
+   */
   chatNoLinger?: T.FullChat
   /**
    * Right after {@linkcode ChatContextValue.selectChat},
-   * {@linkcode ChatContextValue.chatWithLinger} becomes `undefined`
+   * {@linkcode ChatContextValue.chat} becomes `undefined`
    * and the original chat migrates here.
    *
    * Can be useful for reducing layout shifts and flashing,
    * but be careful not to use this for anything effectful.
    */
   oldChat?: T.FullChat
+  /**
+   * `true` when {@linkcode ChatContextValue.chat} == undefined
+   * and when refreshing the chat e.g. after `ChatModified` event.
+   */
   loadingChat: boolean
   chatId?: number
   /**
@@ -138,7 +141,7 @@ export const ChatProvider = ({
     accountId === chatFetch.lingeringResult.value.accountId
       ? chatFetch.lingeringResult.value.chat
       : undefined
-  const chatWithLinger =
+  const chat =
     chatWithLinger_ != undefined && chatWithLinger_.id === chatId
       ? chatWithLinger_
       : undefined
@@ -266,7 +269,7 @@ export const ChatProvider = ({
         return
       }
 
-      if (!chatWithLinger) {
+      if (!chat) {
         return
       }
 
@@ -274,7 +277,7 @@ export const ChatProvider = ({
         return
       }
 
-      if (!chatWithLinger.contactIds.includes(contactId)) {
+      if (!chat.contactIds.includes(contactId)) {
         return
       }
 
@@ -294,12 +297,12 @@ export const ChatProvider = ({
       BackendRemote.off('ChatEphemeralTimerModified', onChatModified)
       BackendRemote.off('ContactsChanged', onContactsModified)
     }
-  }, [accountId, chatWithLinger, chatId, refreshChat])
+  }, [accountId, chat, chatId, refreshChat])
 
   const loadingChat = chatFetch?.loading ?? false
   const value: ChatContextValue = useMemo(
     () => ({
-      chatWithLinger,
+      chat,
       chatNoLinger,
       oldChat,
       loadingChat,
@@ -307,15 +310,7 @@ export const ChatProvider = ({
       selectChat,
       unselectChat,
     }),
-    [
-      chatWithLinger,
-      chatNoLinger,
-      oldChat,
-      loadingChat,
-      chatId,
-      selectChat,
-      unselectChat,
-    ]
+    [chat, chatNoLinger, oldChat, loadingChat, chatId, selectChat, unselectChat]
   )
 
   return <ChatContext.Provider value={value}>{children}</ChatContext.Provider>

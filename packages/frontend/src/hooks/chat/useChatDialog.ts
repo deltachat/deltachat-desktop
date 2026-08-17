@@ -21,9 +21,9 @@ export default function useChatDialog() {
   const tx = useTranslationFunction()
   const openConfirmationDialog = useConfirmationDialog()
   const { openDialog } = useDialog()
-  const { chatWithLinger, selectChat, unselectChat } = useChat()
+  const { chat, selectChat, unselectChat } = useChat()
 
-  const chatContactIds = chatWithLinger?.contactIds
+  const chatContactIds = chat?.contactIds
   const openBlockContactById = useCallback(
     async (accountId: number, dmChatContact: number) => {
       const hasUserConfirmed = await openConfirmationDialog({
