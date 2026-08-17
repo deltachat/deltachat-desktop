@@ -23,7 +23,7 @@ echo "Preparing release ${CLEAN_VERSION}"
 echo "=================================="
 echo ""
 
-# Step 1: Update version in all package.json files and Cargo.toml
+# Step 1: Update version in all package.json files
 echo "📦 Step 1: Updating version numbers..."
 node ./bin/build/update_desktop_version.js "$CLEAN_VERSION"
 echo ""
