@@ -26,6 +26,7 @@ describe('/shared/localize', () => {
       if (err) {
         assert.fail('no error reading folder')
       }
+      // TODO this
       const xmlFiles = files.filter(f => path.extname(f) === '.xml')
       const jsonFiles = files.filter(
         f =>

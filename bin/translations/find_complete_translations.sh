@@ -7,6 +7,8 @@ cd "$(dirname "${BASH_SOURCE[0]}")/../.." || exit 1
 
 threshold=150
 
+# TODO this whole script
+
 code=$(cat <<EOF
 
 const {readFileSync} = require('fs');

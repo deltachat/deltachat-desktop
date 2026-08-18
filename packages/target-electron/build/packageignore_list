@@ -58,7 +58,7 @@ static/
 **/*.ts
 **/*.d.ts
 _locales
-_locales/*.xml
+_locales/deltachat-android
 build/
 runtime-electron/
 migration-tests/

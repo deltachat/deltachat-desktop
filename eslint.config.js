@@ -92,7 +92,6 @@ export default defineConfig(
     '**/.cache',
     '**/.github',
     '**/.test',
-    '**/.tx',
     '**/.vscode',
     '**/bin',
     '**/build',

@@ -4,14 +4,12 @@ on:
     branches: [main]
     paths-ignore:
       - 'docs/**' # only trigger build if a file outside of /docs was changed
-      - '_locales/*.xml'
       - '.vscode/**'
       - 'README_ASSETS/**'
       - 'README.md'
   pull_request:
     paths-ignore:
       - 'docs/**' # only trigger build if a file outside of /docs was changed
-      - '_locales/*.xml'
       - '.vscode/**'
       - 'README_ASSETS/**'
       - 'README.md'

@@ -1,0 +1,6 @@
+[submodule "_locales/deltachat-android"]
+	path = _locales/deltachat-android
+	url = https://github.com/deltachat/deltachat-android.git
+	# It's quite big, and we don't really need it
+	# for anything except the latest translations.
+	shallow = true

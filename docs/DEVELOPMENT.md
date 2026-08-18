@@ -128,6 +128,7 @@ Running `pnpm -w test` runs the unit tests.
 
 see [E2E-TESTING.md](./E2E-TESTING.md)
 
+<!-- TODO this section, and other mentions of Transifex -->
 ### Translations <a id="translations"></a>
 
 Install the [transifex client](https://developers.transifex.com/docs/cli) and get added to the `Delta Chat App` project.
@@ -255,7 +256,7 @@ Some important folders and files:
 ├── _locales                                # translations
 │   ├── _languages.json                     # central file which defines the visible languages and their native names for the users to choose
 │   ├── _untranslated_en.json               # new translation keys that are not yet upstreamed to the android-repo/transifex.
-│   └── ...
+│   └── deltachat-android                   # Git submodule, the source of truth for translations
 ├── bin                                     # executable scripts for various developer tasks
 ├── docs                                    # documentation
 ├── images                                  # images and icons

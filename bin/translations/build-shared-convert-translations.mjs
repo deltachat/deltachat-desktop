@@ -1,7 +1,7 @@
 //@ts-check
 import { xml2js } from 'xml-js'
 import { extname, join } from 'path'
-import { readdir, readFile, writeFile } from 'fs/promises'
+import { access, constants, readdir, readFile, writeFile } from 'fs/promises'
 
 
 /**
@@ -34,6 +34,7 @@ async function xmlToJson(filename) {
   }
 
   async function done() {
+    // TODO output to `_locales`
     const newFile = filename.replace(extname(filename), '') + '.json'
     await writeFile(newFile, JSON.stringify(res, null, 2))
   }
@@ -78,8 +79,15 @@ async function convertTranslationsFromXMLToJSON(pathLocales, watch = false) {
   let count_converted = 0
 
   for (let f of await readdir(pathLocales)) {
-    if (extname(f) !== '.xml') continue
-    const pathXml = join(pathLocales, f)
+    if (!f.startsWith('values')) {
+      continue
+    }
+    const pathXml = join(pathLocales, f, 'strings.xml')
+    try {
+      await access(pathXml, constants.R_OK)
+    } catch {
+      continue
+    }
     await xmlToJson(pathXml)
     count_converted++
   }
@@ -133,6 +141,7 @@ function main() {
 This scripts translates all the locale files downloaded/pulled from transifex
 which are in the .xml format into a .json version.
 Examples:
+// TODO this
 - node ./bin/translations/build-shared-convert-translations.mjs ./_locales
 - node ./bin/translations/build-shared-convert-translations.mjs ./_locales -w
 Options:
