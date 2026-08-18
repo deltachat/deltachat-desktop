@@ -6,7 +6,7 @@ Options:
 | `--minimized` | Start deltachat in minimized mode with trayicon (trayicon will be activated for this session regardless whether it's disabled) |
 | **Development Options** | |
 | `--translation-watch` | enable auto-reload for `_locales/_untranslated_en.json`, when that file changes the current language is reloaded |
-| `--devmode` | opens electron devtools, enables the developer menu in webxdc windows and activates `--log-debug` & `--log-to-console` |
+| `--devmode` | opens electron devtools and activates `--log-debug` & `--log-to-console` |
 | `--allow-unsafe-core-replacement` | allow changing core with `DELTA_CHAT_RPC_SERVER` and looking for it in `PATH` instead of forcing the use of the prebuilds |
 | **Theme** | |
 | `--theme <themeid>` | set a specific theme (see [THEMES.md](./THEMES.md)) |

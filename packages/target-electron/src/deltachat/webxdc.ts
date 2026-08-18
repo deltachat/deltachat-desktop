@@ -7,13 +7,7 @@ import {
   screen,
 } from 'electron/main'
 import Mime from 'mime-types'
-import {
-  Menu,
-  nativeImage,
-  MenuItemConstructorOptions,
-  dialog,
-  IpcMainInvokeEvent,
-} from 'electron'
+import { Menu, nativeImage, dialog, IpcMainInvokeEvent } from 'electron'
 import { join } from 'path'
 import { platform } from 'os'
 import { readdir, stat, rmdir, writeFile } from 'fs/promises'
@@ -28,7 +22,6 @@ import {
   DcOpenWebxdcParameters,
 } from '@deltachat-desktop/shared/shared-types.js'
 import { DesktopSettings } from '../desktop_settings.js'
-import rc from '../rc.js'
 import { window as main_window, send } from '../windows/main.js'
 import { writeTempFileFromBase64 } from '../ipc.js'
 import {
@@ -53,6 +46,15 @@ type AppInstance = {
   accountId: number
   internet_access: boolean
   displayName: string
+  /**
+   * Whether the user accepted the risk of opening developer tools on this app,
+   * see https://delta.chat/en/2023-05-22-webxdc-security,
+   * "XDC-01-004 WP1: Data exfiltration via desktop app DevTools".
+   *
+   * Deliberately neither persisted nor shared between apps: every app has to
+   * be confirmed on its own, and again after it was closed and reopened.
+   */
+  devToolsConfirmed: boolean
 } & Pick<
   T.WebxdcMessageInfo,
   | 'selfAddr'
@@ -243,7 +245,10 @@ export default class DCWebxdc {
             if (details.url.startsWith('webxdc://')) {
               cancelRequest = false
             } else if (details.url.startsWith('devtools://')) {
-              cancelRequest = !rc.devmode
+              // devtools can only be open at all if their risk was confirmed
+              cancelRequest = !Object.values(open_apps).some(
+                app => app.devToolsConfirmed
+              )
             } else if (details.url.startsWith('https://')) {
               cancelRequest = !internetAccess
             }
@@ -335,11 +340,10 @@ export default class DCWebxdc {
           webSecurity: true,
           nodeIntegration: false,
           navigateOnDragDrop: false,
-          // devTools should only be allowed in devmode, not in production (!)
-          //
-          // See https://delta.chat/en/2023-05-22-webxdc-security,
-          // "XDC-01-004 WP1: Data exfiltration via desktop app DevTools"
-          devTools: rc.devmode,
+          // Devtools can only be opened from the "View / Developer" menu,
+          // which asks the user to confirm the risk for this app first,
+          // see `devToolsConfirmed`.
+          devTools: true,
           javascript: true,
           preload: join(htmlDistDir(), 'webxdc-preload.js'),
         },
@@ -390,6 +394,7 @@ export default class DCWebxdc {
 
       open_apps[appId] = {
         win: webxdcWindow,
+        devToolsConfirmed: false,
         accountId,
         msgId: msg_id,
         internet_access: webxdcInfo['internetAccess'],
@@ -435,29 +440,52 @@ export default class DCWebxdc {
                 checked: webxdcWindow.isAlwaysOnTop(),
                 click: () => {
                   webxdcWindow.setAlwaysOnTop(!webxdcWindow.isAlwaysOnTop())
-                  if (platform() !== 'darwin') {
-                    webxdcWindow.setMenu(makeMenu())
-                  } else {
+                  if (isMac) {
                     // change to webxdc menu
                     Menu.setApplicationMenu(makeMenu())
+                  } else {
+                    webxdcWindow.setMenu(makeMenu())
                   }
                 },
               },
               { role: 'togglefullscreen' },
-              ...(rc.devmode
-                ? [
-                    { type: 'separator' } as MenuItemConstructorOptions,
-                    {
-                      label: tx('global_menu_view_developer_desktop'),
-                      submenu: [
-                        {
-                          label: tx('global_menu_view_developer_tools_desktop'),
-                          role: 'toggleDevTools',
-                        } as MenuItemConstructorOptions,
-                      ],
+              { type: 'separator' },
+              {
+                label: tx('global_menu_view_developer_desktop'),
+                submenu: [
+                  {
+                    label: tx('global_menu_view_developer_tools_desktop'),
+                    // Deliberately no `role: 'toggleDevTools'`: the role also
+                    // binds the usual devtools shortcuts, which would open them
+                    // without the confirmation below.
+                    click: () => {
+                      const { webContents } = webxdcWindow
+                      if (webContents.isDevToolsOpened()) {
+                        webContents.closeDevTools()
+                        return
+                      }
+                      const instance = open_apps[appId]
+                      if (!instance.devToolsConfirmed) {
+                        const confirmed =
+                          dialog.showMessageBoxSync(webxdcWindow, {
+                            type: 'warning',
+                            buttons: [tx('open'), tx('cancel')],
+                            defaultId: 1,
+                            cancelId: 1,
+                            title: tx('webxdc_devtools_dialog_title'),
+                            message: tx('webxdc_devtools_dialog_title'),
+                            detail: tx('webxdc_devtools_dialog_message'),
+                          }) === 0
+                        if (!confirmed) {
+                          return
+                        }
+                        instance.devToolsConfirmed = true
+                      }
+                      webContents.openDevTools()
                     },
-                  ]
-                : []),
+                  },
+                ],
+              },
             ],
           },
           {
