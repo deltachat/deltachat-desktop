@@ -461,8 +461,8 @@ export default function MessageList({
       // https://developer.mozilla.org/en-US/docs/Web/CSS/overflow-anchor/Guide_to_scroll_anchoring
       // Well, I am not sure why it is introduced back then,
       // but the reason we need it now is because scroll anchoring
-      // isn't supported by Safari (WebKit) yet, and we are gonna run on WebKit
-      // when we switch to Tauri, so let's not remove it yet.
+      // isn't supported by Safari (WebKit) yet, and the Tauri build runs
+      // on WebKit, so let's not remove it yet.
 
       log.debug(
         'scrollTo type: scrollToLastKnownPosition; lastKnownScrollHeight: ' +
@@ -527,7 +527,7 @@ export default function MessageList({
           //   until they finish scrolling.
           // - Because 'scrollend' is not supported by WebKit yet
           //   https://webkit.org/b/201556
-          //   and we'll be running on WebKit when we switch to Tauri.
+          //   and the Tauri build runs on WebKit.
           clearTimeout(pendingProgrammaticSmoothScrollTimeout.current)
           pendingProgrammaticSmoothScrollTimeout.current = window.setTimeout(
             () => {
@@ -617,8 +617,7 @@ export default function MessageList({
   // A probably better approach would be to use
   // `flex-direction: column-reverse;`, as in
   // https://github.com/deltachat/deltachat-desktop/pull/4116,
-  // but it is buggy in Chromium and maybe WebKit (which we'll be using
-  // when we switch to Tauri).
+  // but it is buggy in Chromium and maybe WebKit (which the Tauri build uses).
   //
   // `useEffect` instead of `useLayoutEffect` because we read `el.clientHeight`
   // on the first run and for that we want the contents to be painted already.

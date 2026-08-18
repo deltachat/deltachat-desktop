@@ -247,7 +247,6 @@ def main():
         "target-browser",
         "frontend",
         "runtime",
-        "target-tauri",
         "shared",
     ]
     for pkg in packages_to_link:
@@ -259,16 +258,6 @@ def main():
     # Step 5: Run pnpm install in desktop_path to re-resolve all links and update the lockfile.
 
     run_command("pnpm install --force", cwd=desktop_path)
-
-    tauri_src_dir = os.path.join(desktop_path, "packages", "target-tauri", "src-tauri")
-    deltachat_jsonrpc_path = os.path.join(core_path, "deltachat-jsonrpc")
-    result = subprocess.run(
-        f"cargo add deltachat --path {core_path} && cargo add deltachat-jsonrpc --path {deltachat_jsonrpc_path}",
-        shell=True,
-        cwd=tauri_src_dir
-    )
-    if result.returncode != 0:
-        print("\n\nFailed to link local core to tauri: please update Cargo.toml in packages/target-tauri/src-tauri manually")
 
     version = get_core_version(core_path)
     branch = get_git_branch(core_path)
