@@ -66,8 +66,7 @@
   }
 }
 .chatView {
-  // Otherwise e.g. the contents of the gallery view
-  // (tabs, sepcifically) will refuse to shrink,
+  // Otherwise e.g. the contents of the section may refuse to shrink,
   // and this element (`.chatView`) will overflow the parent.
   // Also this ensures that `.chatListAndHeaderAndAudioPlayer`
   // and `.chatView` take respectively 3 and 8 parts
