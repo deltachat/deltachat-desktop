@@ -38,10 +38,10 @@ async function xmlToJson(filename) {
     await writeFile(newFile, JSON.stringify(res, null, 2))
   }
 
-  if (!js.resources || !js.resources.string || !js.resources.plurals)
+  if (!js.resources)
     return done()
 
-  js.resources.string.forEach(string => {
+  js.resources.string?.forEach(string => {
     const name = string._attributes.name
     if (!name) return error(string)
     let text = string._text
@@ -53,7 +53,7 @@ async function xmlToJson(filename) {
     }
   })
 
-  js.resources.plurals.forEach(plural => {
+  js.resources.plurals?.forEach(plural => {
     const name = plural._attributes.name
     if (!name) return error(plural)
 
