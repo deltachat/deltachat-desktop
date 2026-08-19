@@ -17,7 +17,7 @@ import { getLogger } from '@deltachat-desktop/shared/logger'
 import { EmojiAndStickerPicker } from './EmojiAndStickerPicker'
 import { Quote } from '../message/Message'
 import { DraftAttachment } from '../attachment/messageAttachment'
-import { useSettingsStore } from '../../stores/settings'
+import { useDesktopSettingsStore } from '../../stores/settings'
 import { BackendRemote, EffectfulBackendActions, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { runtime } from '@deltachat-desktop/runtime-interface'
@@ -533,7 +533,7 @@ const Composer = forwardRef<
         }
       }
 
-  const settingsStore = useSettingsStore()[0]
+  const desktopSettingsStore = useDesktopSettingsStore()[0]
 
   const focusMessageInput = useCallback(() => {
     // Only one of these is actually rendered at any given moment.
@@ -546,12 +546,12 @@ const Composer = forwardRef<
   }, [chatId, focusMessageInput])
 
   const ariaSendShortcut: string = useMemo(() => {
-    if (settingsStore == undefined) {
+    if (desktopSettingsStore == undefined) {
       return ''
     }
 
     const firstShortcut = enterKeySendsKeyboardShortcuts(
-      settingsStore.desktopSettings.enterKeySends
+      desktopSettingsStore.enterKeySends
     )[0].keyBindings[0]
 
     if (!Array.isArray(firstShortcut) || !firstShortcut.includes('Enter')) {
@@ -560,7 +560,7 @@ const Composer = forwardRef<
     }
 
     return firstShortcut.join('+')
-  }, [settingsStore])
+  }, [desktopSettingsStore])
 
   if (chatId === null) {
     return <section ref={ref}>Error, chatid missing</section>
@@ -746,7 +746,7 @@ const Composer = forwardRef<
               selectedChat={selectedChat}
             />
           )}
-          {settingsStore && !recording && (
+          {desktopSettingsStore && !recording && (
             <>
               <ComposerMessageInput
                 text={draftState.text}
@@ -761,7 +761,7 @@ const Composer = forwardRef<
                 hidden={messageEditing.isEditingModeActive}
                 isMessageEditingMode={false}
                 ref={regularMessageInputRef}
-                enterKeySends={settingsStore?.desktopSettings.enterKeySends}
+                enterKeySends={desktopSettingsStore.enterKeySends}
                 loadingDraft={draftIsLoading}
                 sendMessageOrEditRequest={
                   (!messageEditing.isEditingModeActive
@@ -783,7 +783,7 @@ const Composer = forwardRef<
                 isMessageEditingMode={true}
                 hidden={!messageEditing.isEditingModeActive}
                 ref={editMessageInputRef}
-                enterKeySends={settingsStore?.desktopSettings.enterKeySends}
+                enterKeySends={desktopSettingsStore.enterKeySends}
                 loadingDraft={false}
                 sendMessageOrEditRequest={
                   messageEditing.doSendEditRequest ?? (() => {})

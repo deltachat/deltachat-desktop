@@ -20,7 +20,7 @@ import {
 import { getLogger } from '@deltachat-desktop/shared/logger'
 import { BackendRemote, onDCEvent, Type } from '../backend-com'
 import { selectedAccountId } from '../ScreenController'
-import SettingsStoreInstance, { SettingsStoreState } from '../stores/settings'
+import { DesktopSettingsStoreInstance } from '../stores/settings'
 import FullscreenMedia, {
   NeighboringMediaMode,
 } from './dialogs/FullscreenMedia'
@@ -32,6 +32,7 @@ import {
 } from '../contexts/RovingTabindex'
 import InfiniteLoader from 'react-window-infinite-loader'
 import { T } from '@deltachat/jsonrpc-client'
+import type { DesktopSettingsType } from '@deltachat-desktop/shared/shared-types'
 import { useTranslationWritingDirection } from '../hooks/useTranslationFunction'
 
 const log = getLogger('renderer/Gallery')
@@ -133,7 +134,8 @@ export default class Gallery extends Component<
       galleryImageKeepAspectRatio: false,
     }
 
-    this.settingsStoreListener = this.settingsStoreListener.bind(this)
+    this.desktopSettingsStoreListener =
+      this.desktopSettingsStoreListener.bind(this)
   }
 
   reset() {
@@ -150,11 +152,10 @@ export default class Gallery extends Component<
 
   componentDidMount() {
     this.onSelect(this.state.currentTab)
-    SettingsStoreInstance.subscribe(this.settingsStoreListener)
+    DesktopSettingsStoreInstance.subscribe(this.desktopSettingsStoreListener)
     this.setState({
       galleryImageKeepAspectRatio:
-        SettingsStoreInstance.state?.desktopSettings
-          .galleryImageKeepAspectRatio,
+        DesktopSettingsStoreInstance.state?.galleryImageKeepAspectRatio,
     })
 
     // It's possible to delete messages right from the gallery,
@@ -186,15 +187,14 @@ export default class Gallery extends Component<
   }
 
   componentWillUnmount() {
-    SettingsStoreInstance.unsubscribe(this.settingsStoreListener)
+    DesktopSettingsStoreInstance.unsubscribe(this.desktopSettingsStoreListener)
     this.cleanup.forEach(f => f())
   }
 
-  settingsStoreListener(state: SettingsStoreState | null) {
+  desktopSettingsStoreListener(state: DesktopSettingsType | null) {
     if (state) {
       this.setState({
-        galleryImageKeepAspectRatio:
-          state.desktopSettings.galleryImageKeepAspectRatio,
+        galleryImageKeepAspectRatio: state.galleryImageKeepAspectRatio,
       })
     }
   }
