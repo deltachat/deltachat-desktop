@@ -54,11 +54,19 @@ export interface Runtime {
     sentTime: string,
     content: string
   ): void
+
   getDesktopSettings(): Promise<DesktopSettingsType>
   setDesktopSetting(
     key: keyof DesktopSettingsType,
     value: string | number | boolean | undefined
   ): Promise<void>
+  onDesktopSettingChanged:
+    | (<T extends keyof DesktopSettingsType>(
+        key: T,
+        value: DesktopSettingsType[T]
+      ) => void)
+    | undefined
+
   /**
    * initializes runtime stuff
    * - sets the LogHandler
@@ -212,12 +220,6 @@ export interface Runtime {
     | undefined
   onResumeFromSleep: (() => void) | undefined
   onToggleNotifications: (() => void) | undefined
-  onDesktopSettingChanged:
-    | (<T extends keyof DesktopSettingsType>(
-        key: T,
-        value: DesktopSettingsType[T]
-      ) => void)
-    | undefined
 
   checkMediaAccess: (mediaType: MediaType) => Promise<MediaAccessStatus>
 

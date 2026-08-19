@@ -158,12 +158,6 @@ class ElectronRuntime implements Runtime {
   onThemeUpdate: (() => void) | undefined
   onChooseLanguage: ((locale: string) => Promise<void>) | undefined
   onToggleNotifications: (() => void) | undefined
-  onDesktopSettingChanged:
-    | (<T extends keyof DesktopSettingsType>(
-        key: T,
-        value: DesktopSettingsType[T]
-      ) => void)
-    | undefined
   emitUIFullyReady(): void {
     ipcBackend.send('frontendReady')
   }
@@ -312,6 +306,7 @@ class ElectronRuntime implements Runtime {
   restartApp(): void {
     ipcBackend.invoke('restart_app')
   }
+
   getDesktopSettings(): Promise<DesktopSettingsType> {
     return ipcBackend.invoke('get-desktop-settings')
   }
@@ -321,6 +316,13 @@ class ElectronRuntime implements Runtime {
   ): Promise<void> {
     return ipcBackend.invoke('set-desktop-setting', key, value)
   }
+  onDesktopSettingChanged:
+    | (<T extends keyof DesktopSettingsType>(
+        key: T,
+        value: DesktopSettingsType[T]
+      ) => void)
+    | undefined
+
   getWebxdcIconURL(accountId: number, msgId: number): string {
     return `webxdc-icon:${accountId}.${msgId}`
   }
