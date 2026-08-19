@@ -48,6 +48,51 @@ function isSmallScreenMode(): boolean {
   return window.innerWidth <= BREAKPOINT_FOR_SMALLSCREEN_MODE
 }
 
+/**
+ * Config keys that are not exposed as settings anymore, with their default
+ * value. Accounts that changed them in the past have to be reverted once:
+ * `disable_idle` since the experimental "disable IMAP IDLE" option was removed
+ * (#4998), `webxdc_realtime_enabled` since 2026-01-11.
+ */
+const REMOVED_SETTINGS_DEFAULTS: { [key: string]: string } = {
+  disable_idle: '0',
+  webxdc_realtime_enabled: '1',
+}
+
+/**
+ * Reverts the config keys of removed settings to their default.
+ *
+ * Resetting a key that already holds its default value changes nothing, so we
+ * read before writing: `setConfig` is a write, and while a write is in flight
+ * core cannot serve other database requests. Writing for every account right
+ * after startup competes with loading the last opened chat, which is visible
+ * in accounts with very large chats. After the first start there is nothing
+ * left to write.
+ */
+async function resetConfigsOfRemovedSettings() {
+  const keys = Object.keys(REMOVED_SETTINGS_DEFAULTS)
+  try {
+    const accountIds = await BackendRemote.rpc.getAllAccountIds()
+    await Promise.all(
+      accountIds.map(async accountId => {
+        const current = await BackendRemote.rpc.batchGetConfig(accountId, keys)
+        const changed = keys.filter(
+          key => current[key] !== REMOVED_SETTINGS_DEFAULTS[key]
+        )
+        if (changed.length === 0) {
+          return
+        }
+        await BackendRemote.rpc.batchSetConfig(
+          accountId,
+          Object.fromEntries(changed.map(key => [key, null]))
+        )
+      })
+    )
+  } catch (error) {
+    log.error('failed to reset config keys of removed settings', error)
+  }
+}
+
 export default class ScreenController extends Component {
   state: {
     message: userFeedback | false
@@ -99,21 +144,7 @@ export default class ScreenController extends Component {
     }
     updateDeviceChats()
 
-    BackendRemote.rpc.getAllAccountIds().then(accountIds => {
-      for (const accountId of accountIds) {
-        BackendRemote.rpc
-          .setConfig(accountId, 'disable_idle', null)
-          .catch(() => log.error("failed to reset 'disable_idle' config key"))
-
-        // 2026-01-11: The `webxdc_realtime_enabled` setting was removed.
-        // Revert it to the default if it was changed in the past.
-        BackendRemote.rpc
-          .setConfig(accountId, 'webxdc_realtime_enabled', null)
-          .catch(() =>
-            log.error("failed to reset 'webxdc_realtime_enabled' config key")
-          )
-      }
-    })
+    resetConfigsOfRemovedSettings()
   }
 
   private async _getLastUsedAccount(): Promise<number | undefined> {
