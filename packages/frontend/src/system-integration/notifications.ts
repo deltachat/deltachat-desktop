@@ -4,7 +4,8 @@ import { NOTIFICATION_TYPE } from '@deltachat-desktop/shared/constants'
 import { BackendRemote } from '../backend-com'
 
 import { runtime } from '@deltachat-desktop/runtime-interface'
-import SettingsStoreInstance, {
+import {
+  DesktopSettingsStoreInstance,
   mentionsEnabledDefaultVal,
 } from '../stores/settings'
 import AccountNotificationStoreInstance from '../stores/accountNotifications'
@@ -89,8 +90,8 @@ function incomingMessageHandler(
   log.debug('incomingMessageHandler: ', { chatId, messageId })
 
   if (
-    SettingsStoreInstance.state &&
-    !SettingsStoreInstance.state.desktopSettings.notifications
+    DesktopSettingsStoreInstance.state &&
+    !DesktopSettingsStoreInstance.state.notifications
   ) {
     // notifications are turned off for whole app
     log.debug(
@@ -164,7 +165,7 @@ async function showNotification(
 ) {
   const tx = window.static_translate
 
-  if (!SettingsStoreInstance.state?.desktopSettings.showNotificationContent) {
+  if (!DesktopSettingsStoreInstance.state?.showNotificationContent) {
     runtime.showNotification({
       title: appName,
       body: tx('notify_new_message'),
@@ -260,7 +261,7 @@ async function showGroupedNotification(
 ) {
   const tx = window.static_translate
 
-  if (!SettingsStoreInstance.state?.desktopSettings.showNotificationContent) {
+  if (!DesktopSettingsStoreInstance.state?.showNotificationContent) {
     runtime.showNotification({
       title: appName,
       body: tx('new_messages'),

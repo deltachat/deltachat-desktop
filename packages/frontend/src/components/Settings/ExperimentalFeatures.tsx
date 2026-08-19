@@ -1,8 +1,8 @@
 import React from 'react'
 
-import SettingsStoreInstance, {
-  useSettingsStore,
-  type SettingsStoreState,
+import {
+  DesktopSettingsStoreInstance,
+  useDesktopSettingsStore,
 } from '../../stores/settings'
 import DesktopSettingsSwitch from './DesktopSettingsSwitch'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
@@ -23,17 +23,18 @@ import { getLogger } from '@deltachat-desktop/shared/logger'
 import { DeltaInput } from '../Login-Styles'
 import SettingsSelector from './SettingsSelector'
 import { defaultAppStoreBaseUrl } from '@deltachat-desktop/shared/state'
+import type { DesktopSettingsType } from '@deltachat-desktop/shared/shared-types'
 
 const log = getLogger('ExperimentalFeatures')
 
 export function ExperimentalFeatures() {
   const tx = useTranslationFunction()
-  const settingsStore = useSettingsStore()[0]
+  const desktopSettingsStore = useDesktopSettingsStore()[0]
   const { openDialog } = useDialog()
 
   const showExperimentalInfoDialog = async (
     settingsKey: keyof Pick<
-      SettingsStoreState['desktopSettings'],
+      DesktopSettingsType,
       'enableOnDemandLocationStreaming'
     >,
     updatedValue: boolean
@@ -82,10 +83,9 @@ export function ExperimentalFeatures() {
       <SettingsSelector
         onClick={() => openDialog(AppPickerUrlDialog)}
         currentValue={
-          settingsStore == undefined
+          desktopSettingsStore == undefined
             ? undefined
-            : settingsStore.desktopSettings.appStoreBaseUrl ||
-              defaultAppStoreBaseUrl
+            : desktopSettingsStore.appStoreBaseUrl || defaultAppStoreBaseUrl
         }
       >
         {tx('webxdc_store_url')}
@@ -108,21 +108,21 @@ export function ExperimentalFeatures() {
 
 function SyncAllAccountsSwitch() {
   const tx = useTranslationFunction()
-  const settingsStore = useSettingsStore()[0]
+  const desktopSettingsStore = useDesktopSettingsStore()[0]
 
   return (
     <SettingsSwitch
       label={tx('pref_background_sync_disabled')}
       description={tx('explain_background_sync_disabled')}
-      value={settingsStore?.desktopSettings.syncAllAccounts !== true}
-      disabled={settingsStore == null}
+      value={desktopSettingsStore?.syncAllAccounts !== true}
+      disabled={desktopSettingsStore == null}
       onChange={() => {
-        if (settingsStore == null) {
+        if (desktopSettingsStore == null) {
           return
         }
-        SettingsStoreInstance.effect.setDesktopSetting(
+        DesktopSettingsStoreInstance.effect.setDesktopSetting(
           'syncAllAccounts',
-          !settingsStore.desktopSettings.syncAllAccounts
+          !desktopSettingsStore.syncAllAccounts
         )
       }}
     />
@@ -131,7 +131,7 @@ function SyncAllAccountsSwitch() {
 
 function AppPickerUrlDialog({ onClose }: DialogProps) {
   const tx = useTranslationFunction()
-  const settingsStore = useSettingsStore()[0]
+  const desktopSettingsStore = useDesktopSettingsStore()[0]
 
   return (
     <Dialog onClose={onClose}>
@@ -143,7 +143,7 @@ function AppPickerUrlDialog({ onClose }: DialogProps) {
             log.error('App picker URL form submitted, but URL is', url)
             return
           }
-          SettingsStoreInstance.effect.setDesktopSetting(
+          DesktopSettingsStoreInstance.effect.setDesktopSetting(
             'appStoreBaseUrl',
             url === '' ? undefined : url
           )
@@ -156,14 +156,14 @@ function AppPickerUrlDialog({ onClose }: DialogProps) {
             <p className='whitespace'>
               {tx('webxdc_store_url_explain_2_desktop')}
             </p>
-            {settingsStore && (
+            {desktopSettingsStore && (
               <DeltaInput
                 value={undefined}
                 placeholder={defaultAppStoreBaseUrl}
                 onChange={() => {}}
                 type='url'
                 name='url'
-                defaultValue={settingsStore.desktopSettings.appStoreBaseUrl}
+                defaultValue={desktopSettingsStore.appStoreBaseUrl}
               />
             )}
           </DialogContent>

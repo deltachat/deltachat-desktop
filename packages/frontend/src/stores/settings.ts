@@ -31,7 +31,6 @@ export interface SettingsStoreState {
       team_profile: '0' | '1'
     }[P]
   }
-  desktopSettings: DesktopSettingsType
   rc: RC_Config
 }
 
@@ -61,6 +60,61 @@ export const enum WhoCanCallMe {
 export const mentionsEnabledDefaultVal: SettingsStoreState['settings']['ui.mentions_enabled'] =
   '1'
 
+class DesktopSettingsStore extends Store<DesktopSettingsType | null> {
+  reducer = {
+    setState: (newState: DesktopSettingsType) => {
+      this.setState(_state => {
+        return newState
+      }, 'setState')
+    },
+    set: <T extends keyof DesktopSettingsType>(
+      key: T,
+      value: DesktopSettingsType[T]
+    ) => {
+      this.setState(state => {
+        if (state == null) {
+          this.log.warn(
+            'trying to update local version of desktop settings object, but it was not loaded yet'
+          )
+          return
+        }
+        return {
+          ...state,
+          [key]: value,
+        }
+      }, 'set')
+    },
+  }
+  effect = {
+    load: async () => {
+      this.reducer.setState(await runtime.getDesktopSettings())
+    },
+    setDesktopSetting: async <T extends keyof DesktopSettingsType>(
+      key: T,
+      value: (string | number | boolean | undefined) & DesktopSettingsType[T]
+    ) => {
+      try {
+        await runtime.setDesktopSetting(key, value)
+        if (key === 'syncAllAccounts') {
+          if (value) {
+            BackendRemote.rpc.startIoForAllAccounts()
+          } else {
+            BackendRemote.rpc.stopIoForAllAccounts()
+          }
+          if (SettingsStoreInstance.state?.accountId) {
+            BackendRemote.rpc.startIo(SettingsStoreInstance.state?.accountId)
+          }
+          throttledUpdateBadgeCounter()
+          window.__updateAccountListSidebar?.()
+        }
+        this.reducer.set(key, value)
+      } catch (error) {
+        this.log.error('failed to apply desktop setting:', error)
+      }
+    },
+  }
+}
+
 class SettingsStore extends Store<SettingsStoreState | null> {
   reducer = {
     setState: (newState: SettingsStoreState | null) => {
@@ -76,26 +130,6 @@ class SettingsStore extends Store<SettingsStoreState | null> {
           selfContact,
         }
       }, 'setSelfContact')
-    },
-    setDesktopSetting: <T extends keyof DesktopSettingsType>(
-      key: T,
-      value: DesktopSettingsType[T]
-    ) => {
-      this.setState(state => {
-        if (state === null) {
-          this.log.warn(
-            'trying to update local version of desktop settings object, but it was not loaded yet'
-          )
-          return
-        }
-        return {
-          ...state,
-          desktopSettings: {
-            ...state.desktopSettings,
-            [key]: value,
-          },
-        }
-      }, 'setDesktopSetting')
     },
     setCoreSetting: (
       key: keyof SettingsStoreState['settings'],
@@ -129,13 +163,12 @@ class SettingsStore extends Store<SettingsStoreState | null> {
         throw new Error('can not load settings when no account is selected')
       }
 
-      const [settings, selfContact, desktopSettings] = await Promise.all([
+      const [settings, selfContact] = await Promise.all([
         BackendRemote.rpc.batchGetConfig(
           accountId,
           settingsKeys as unknown as Array<(typeof settingsKeys)[number]>
         ) as Promise<SettingsStoreState['settings']>,
         BackendRemote.rpc.getContact(accountId, C.DC_CONTACT_ID_SELF),
-        runtime.getDesktopSettings(),
       ])
 
       if (settings['ui.mentions_enabled'] == null) {
@@ -147,7 +180,6 @@ class SettingsStore extends Store<SettingsStoreState | null> {
         settings,
         selfContact,
         accountId,
-        desktopSettings,
         rc,
       })
     },
@@ -172,29 +204,6 @@ class SettingsStore extends Store<SettingsStoreState | null> {
           }
           return { ...state, settings: { ...state.settings, [key]: newValue } }
         }, 'set')
-      }
-    },
-    setDesktopSetting: async <T extends keyof DesktopSettingsType>(
-      key: T,
-      value: (string | number | boolean | undefined) & DesktopSettingsType[T]
-    ) => {
-      try {
-        await runtime.setDesktopSetting(key, value)
-        if (key === 'syncAllAccounts') {
-          if (value) {
-            BackendRemote.rpc.startIoForAllAccounts()
-          } else {
-            BackendRemote.rpc.stopIoForAllAccounts()
-          }
-          if (this.state?.accountId) {
-            BackendRemote.rpc.startIo(this.state.accountId)
-          }
-          throttledUpdateBadgeCounter()
-          window.__updateAccountListSidebar?.()
-        }
-        this.reducer.setDesktopSetting(key, value)
-      } catch (error) {
-        this.log.error('failed to apply desktop setting:', error)
       }
     },
     setCoreSetting: async (
@@ -239,11 +248,19 @@ onReady(() => {
   })
 
   runtime.onDesktopSettingChanged = (key, value) => {
-    SettingsStoreInstance.reducer.setDesktopSetting(key, value)
+    DesktopSettingsStoreInstance.reducer.set(key, value)
   }
+  DesktopSettingsStoreInstance.effect.load()
 })
 
 const SettingsStoreInstance = new SettingsStore(null, 'SettingsStore')
 export const useSettingsStore = () => useStore(SettingsStoreInstance)
+const DesktopSettingsStoreInstance = new DesktopSettingsStore(
+  null,
+  'DesktopSettingsStore'
+)
+export const useDesktopSettingsStore = () =>
+  useStore(DesktopSettingsStoreInstance)
 
 export default SettingsStoreInstance
+export { DesktopSettingsStoreInstance }

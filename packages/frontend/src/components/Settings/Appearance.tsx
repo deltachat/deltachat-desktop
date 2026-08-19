@@ -7,7 +7,8 @@ import {
   RC_Config,
   Theme,
 } from '@deltachat-desktop/shared/shared-types'
-import SettingsStoreInstance, {
+import {
+  DesktopSettingsStoreInstance,
   SettingsStoreState,
 } from '../../stores/settings'
 import { getLogger } from '@deltachat-desktop/shared/logger'
@@ -60,7 +61,10 @@ export default function Appearance({
 
   const setTheme = async (theme: string) => {
     if (await setThemeFunction(theme)) {
-      SettingsStoreInstance.effect.setDesktopSetting('activeTheme', theme)
+      DesktopSettingsStoreInstance.effect.setDesktopSetting(
+        'activeTheme',
+        theme
+      )
       await ThemeManager.refresh()
     }
   }
@@ -116,11 +120,11 @@ export default function Appearance({
           desktopSettings={desktopSettings}
           onChange={(val: string) => {
             val.startsWith('#')
-              ? SettingsStoreInstance.effect.setDesktopSetting(
+              ? DesktopSettingsStoreInstance.effect.setDesktopSetting(
                   'chatViewBgImg',
                   `color: ${val}`
                 )
-              : SettingsStoreInstance.effect.setDesktopSetting(
+              : DesktopSettingsStoreInstance.effect.setDesktopSetting(
                   'chatViewBgImg',
                   val
                 )
@@ -228,7 +232,7 @@ function BackgroundSelector({
         if (runtime.getRuntimeInfo().target !== 'browser') {
           setLastPath(url)
         }
-        SettingsStoreInstance.effect.setDesktopSetting(
+        DesktopSettingsStoreInstance.effect.setDesktopSetting(
           'chatViewBgImg',
           await runtime.saveBackgroundImage(url, false)
         )
@@ -238,7 +242,7 @@ function BackgroundSelector({
         }
         break
       case SetBackgroundAction.presetImage:
-        SettingsStoreInstance.effect.setDesktopSetting(
+        DesktopSettingsStoreInstance.effect.setDesktopSetting(
           'chatViewBgImg',
           await runtime.saveBackgroundImage(
             (ev.target as any).dataset.url,

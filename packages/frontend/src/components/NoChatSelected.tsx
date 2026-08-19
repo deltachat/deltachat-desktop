@@ -2,14 +2,14 @@ import React from 'react'
 
 import useTranslationFunction from '../hooks/useTranslationFunction'
 import { getBackgroundImageStyle } from './message/MessageListAndComposer'
-import { useSettingsStore } from '../stores/settings'
+import { useDesktopSettingsStore } from '../stores/settings'
 
 export default function NoChatSelected() {
   const tx = useTranslationFunction()
-  const settingsStore = useSettingsStore()[0]
+  const desktopSettingsStore = useDesktopSettingsStore()[0]
 
-  const style: React.CSSProperties = settingsStore
-    ? getBackgroundImageStyle(settingsStore.desktopSettings)
+  const style: React.CSSProperties = desktopSettingsStore
+    ? getBackgroundImageStyle(desktopSettingsStore)
     : {}
 
   return (

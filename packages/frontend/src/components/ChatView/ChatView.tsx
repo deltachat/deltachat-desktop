@@ -8,7 +8,7 @@ import useChat from '../../hooks/chat/useChat'
 import { RecoverableCrashScreen } from '../screens/RecoverableCrashScreen'
 import { Avatar } from '../Avatar'
 import MailingListProfile from '../dialogs/MailingListProfile'
-import { useSettingsStore } from '../../stores/settings'
+import { useDesktopSettingsStore } from '../../stores/settings'
 import { BackendRemote } from '../../backend-com'
 import Button from '../Button'
 import Icon, { IconButton } from '../Icon'
@@ -348,7 +348,7 @@ function ChatNavButtons({
     [openMainViewContextMenu, chat]
   )
   const chatId = chat.id
-  const settingsStore = useSettingsStore()[0]
+  const desktopSettingsStore = useDesktopSettingsStore()[0]
   const { openDialog } = useDialog()
 
   const openMediaViewDialog = useCallback(() => {
@@ -375,7 +375,7 @@ function ChatNavButtons({
           size={22}
         />
       </div>
-      {settingsStore?.desktopSettings.enableOnDemandLocationStreaming && (
+      {desktopSettingsStore?.enableOnDemandLocationStreaming && (
         <IconButton
           onClick={() => openMapWebxdc(selectedAccountId(), chatId)}
           aria-label={tx('tab_map')}
