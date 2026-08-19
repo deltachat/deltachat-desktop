@@ -455,9 +455,10 @@ export default class DCWebxdc {
                 submenu: [
                   {
                     label: tx('global_menu_view_developer_tools_desktop'),
-                    // Deliberately no `role: 'toggleDevTools'`: the role also
-                    // binds the usual devtools shortcuts, which would open them
-                    // without the confirmation below.
+                    accelerator: isMac ? 'Alt+Command+I' : 'Ctrl+Shift+I',
+                    // Deliberately no `role: 'toggleDevTools'`: the role opens
+                    // devtools directly, bypassing the confirmation below.
+                    // Its shortcuts are bound to this item instead.
                     click: () => {
                       const { webContents } = webxdcWindow
                       if (webContents.isDevToolsOpened()) {
