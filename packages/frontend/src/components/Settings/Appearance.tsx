@@ -135,12 +135,15 @@ export default function Appearance({
         label={tx('pref_use_system_ui_font')}
         callback={() => ThemeManager.refresh()}
       />
-      <DesktopSettingsSwitch
-        settingsKey='hideMenuBar'
-        label={tx('pref_hide_menu_bar')}
-        disabled={isBrowser || isTauri || isMac}
-        disabledValue={false}
-      />
+      {/* on macOS the menu bar can not be hidden */}
+      {!isMac && (
+        <DesktopSettingsSwitch
+          settingsKey='hideMenuBar'
+          label={tx('pref_hide_menu_bar')}
+          disabled={isBrowser || isTauri}
+          disabledValue={false}
+        />
+      )}
     </>
   )
 }
