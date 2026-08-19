@@ -11,7 +11,7 @@ import useDialog from '../hooks/dialog/useDialog'
 import WebxdcSaveToChatDialog from './dialogs/WebxdcSendToChat'
 import { saveLastChatId } from '../backend/chat'
 import useChat from '../hooks/chat/useChat'
-import SettingsStoreInstance from '../stores/settings'
+import { DesktopSettingsStoreInstance } from '../stores/settings'
 import { SCAN_CONTEXT_TYPE } from '../hooks/useProcessQr'
 
 type Props = {
@@ -105,11 +105,11 @@ export default function RuntimeAdapter({
 
   useEffect(() => {
     runtime.onToggleNotifications = () => {
-      const settings = SettingsStoreInstance.getState()
-      if (settings) {
-        SettingsStoreInstance.effect.setDesktopSetting(
+      const desktopSettings = DesktopSettingsStoreInstance.getState()
+      if (desktopSettings) {
+        DesktopSettingsStoreInstance.effect.set(
           'notifications',
-          !settings.desktopSettings.notifications
+          !desktopSettings.notifications
         )
       }
     }

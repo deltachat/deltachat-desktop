@@ -1,7 +1,10 @@
 import React from 'react'
 
 import { DesktopSettingsType } from '@deltachat-desktop/shared/shared-types'
-import SettingsStoreInstance, { useSettingsStore } from '../../stores/settings'
+import {
+  DesktopSettingsStoreInstance,
+  useDesktopSettingsStore,
+} from '../../stores/settings'
 import SettingsSwitch from './SettingsSwitch'
 
 type Props = {
@@ -24,13 +27,13 @@ export default function DesktopSettingsSwitch({
   disabledValue,
   callback,
 }: Props) {
-  const settingsStore = useSettingsStore()[0]
+  const desktopSettingsStore = useDesktopSettingsStore()[0]
 
-  const disabledFinal: boolean = disabled || settingsStore == null
+  const disabledFinal: boolean = disabled || desktopSettingsStore == null
   const value =
     disabledFinal === true && typeof disabledValue !== 'undefined'
       ? disabledValue
-      : settingsStore?.desktopSettings[settingsKey] === true
+      : desktopSettingsStore?.[settingsKey] === true
 
   return (
     <SettingsSwitch
@@ -38,14 +41,11 @@ export default function DesktopSettingsSwitch({
       description={description}
       value={value}
       onChange={async () => {
-        if (settingsStore == null) {
+        if (desktopSettingsStore == null) {
           return
         }
-        const newValue = !settingsStore.desktopSettings[settingsKey]
-        await SettingsStoreInstance.effect.setDesktopSetting(
-          settingsKey,
-          newValue
-        )
+        const newValue = !desktopSettingsStore[settingsKey]
+        await DesktopSettingsStoreInstance.effect.set(settingsKey, newValue)
         callback?.(newValue)
       }}
       disabled={disabledFinal}

@@ -10,7 +10,7 @@ import type ComposerMessageInput from '../composer/ComposerMessageInput'
 import { DesktopSettingsType } from '@deltachat-desktop/shared/shared-types'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import { RecoverableCrashScreen } from '../screens/RecoverableCrashScreen'
-import { useSettingsStore } from '../../stores/settings'
+import { useDesktopSettingsStore } from '../../stores/settings'
 import ConfirmSendingFiles from '../dialogs/ConfirmSendingFiles'
 import { ReactionsBarProvider } from '../ReactionsBar'
 import useDialog from '../../hooks/dialog/useDialog'
@@ -215,11 +215,11 @@ export default function MessageListAndComposer({
     editMessageInputRef.current?.focus()
   }, [])
 
-  const settingsStore = useSettingsStore()[0]
+  const desktopSettingsStore = useDesktopSettingsStore()[0]
   // If you want to update this, don't forget to update
   // the `.background-preview` element as well.
-  const style = settingsStore
-    ? getBackgroundImageStyle(settingsStore.desktopSettings)
+  const style = desktopSettingsStore
+    ? getBackgroundImageStyle(desktopSettingsStore)
     : {}
 
   return (

@@ -14,7 +14,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 import { debounce } from 'debounce'
 import { getLogger } from '@deltachat-desktop/shared/logger'
-import { useSettingsStore } from './settings'
+import { useDesktopSettingsStore } from './settings'
 import { shouldShowOSNotificationForCurrentChat } from '../system-integration/notifications'
 
 const log = getLogger('messagelist')
@@ -96,14 +96,14 @@ export function useMessageList(
   // even though we only depend on `volume`,
   // but let's hope the React compiler will take care of this
   // when it's released.
-  const settingsStore = useSettingsStore()[0]
+  const desktopSettingsStore = useDesktopSettingsStore()[0]
 
   const incomingMessageAudioElement = useMemo(() => {
     const el = document.createElement('audio')
     el.src = './audio/sound_in.wav'
     return el
   }, [])
-  const volume = settingsStore?.desktopSettings.inChatSoundsVolume
+  const volume = desktopSettingsStore?.inChatSoundsVolume
   if (volume != null) {
     // Note that `volume` could be 0.
     // eslint-disable-next-line react-hooks/immutability

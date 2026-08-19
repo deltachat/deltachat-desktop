@@ -1,6 +1,9 @@
 import React, { useEffect, useCallback } from 'react'
 
-import { useSettingsStore } from '../../stores/settings'
+import {
+  useDesktopSettingsStore,
+  useSettingsStore,
+} from '../../stores/settings'
 import { SendBackupDialog } from '../dialogs/SetupMultiDevice'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import { donationUrl } from '@deltachat-desktop/shared/constants'
@@ -145,6 +148,7 @@ function SettingsSectionDialog(
   const { settingsMode, onClose: closeThisDialog } = props
   const tx = useTranslationFunction()
   const settingsStore = useSettingsStore()[0]
+  const desktopSettingsStore = useDesktopSettingsStore()[0]
 
   const closeThisAndParent = useCallback(() => {
     closeThisDialog()
@@ -175,8 +179,8 @@ function SettingsSectionDialog(
             {...commonHeaderProps}
           />
           <DialogBody>
-            {settingsStore != null && (
-              <Notifications desktopSettings={settingsStore.desktopSettings} />
+            {desktopSettingsStore != null && (
+              <Notifications desktopSettings={desktopSettingsStore} />
             )}
             <SettingsEndSeparator />
           </DialogBody>
@@ -186,10 +190,10 @@ function SettingsSectionDialog(
         <>
           <DialogHeader title={tx('pref_appearance')} {...commonHeaderProps} />
           <DialogBody>
-            {settingsStore != null && (
+            {settingsStore != null && desktopSettingsStore != null && (
               <Appearance
                 rc={settingsStore.rc}
-                desktopSettings={settingsStore.desktopSettings}
+                desktopSettings={desktopSettingsStore}
                 settingsStore={settingsStore}
               />
             )}

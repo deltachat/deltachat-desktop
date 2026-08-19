@@ -12,6 +12,7 @@ import SettingsSwitch from './SettingsSwitch'
 import SettingsSelector from './SettingsSelector'
 import SmallSelectDialog from '../SmallSelectDialog'
 import SettingsStoreInstance, {
+  DesktopSettingsStoreInstance,
   useSettingsStore,
   WhoCanCallMe,
 } from '../../stores/settings'
@@ -60,10 +61,7 @@ export default function Notifications({ desktopSettings }: Props) {
       title: tx('pref_in_chat_sounds'),
       onSave: async (volume_: string) => {
         const volume = Number(volume_)
-        SettingsStoreInstance.effect.setDesktopSetting(
-          'inChatSoundsVolume',
-          volume
-        )
+        DesktopSettingsStoreInstance.effect.set('inChatSoundsVolume', volume)
       },
     })
   }
