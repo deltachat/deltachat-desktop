@@ -10,7 +10,7 @@ async function updateBadgeCounter() {
     await Promise.all(
       accountIds.map(async accountId =>
         !AccountNotificationStoreInstance.isAccountMuted(accountId)
-          ? (await BackendRemote.rpc.getFreshMsgs(accountId)).length
+          ? await BackendRemote.rpc.getFreshMsgsCnt(accountId)
           : 0
       )
     )
@@ -18,9 +18,9 @@ async function updateBadgeCounter() {
 
   if (!(await runtime.getDesktopSettings()).syncAllAccounts) {
     if (window.__selectedAccountId) {
-      combined_count = (
-        await BackendRemote.rpc.getFreshMsgs(window.__selectedAccountId)
-      ).length
+      combined_count = await BackendRemote.rpc.getFreshMsgsCnt(
+        window.__selectedAccountId
+      )
     }
   }
 
