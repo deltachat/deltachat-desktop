@@ -56,14 +56,14 @@ export default function AccountItem({
     ? accountFetch.lingeringResult.value
     : null
 
-  const freshMsgsFetch = useRpcFetch(BackendRemote.rpc.getFreshMsgs, [
+  const freshMsgsFetch = useRpcFetch(BackendRemote.rpc.getFreshMsgsCnt, [
     accountId,
   ])
   if (freshMsgsFetch.result?.ok === false) {
     log.error('Failed to fetch unread count', freshMsgsFetch.result.err)
   }
   const unreadCount = freshMsgsFetch.lingeringResult?.ok
-    ? freshMsgsFetch.lingeringResult.value.length
+    ? freshMsgsFetch.lingeringResult.value
     : null
 
   useEffect(() => {
