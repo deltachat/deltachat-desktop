@@ -60,7 +60,7 @@
       align-items: center;
       & > .name {
         flex-grow: 1;
-        flex-shrink: 1;
+        flex-shrink: 999999999;
         font-size: 14px;
         line-height: 18px;
 
@@ -87,7 +87,7 @@
       }
 
       & > .timestamp {
-        flex-shrink: 0;
+        flex-shrink: 1;
         margin-inline-start: 6px;
         font-size: 11px;
         line-height: 16px;
