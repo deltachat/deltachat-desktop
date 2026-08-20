@@ -32,15 +32,24 @@ export async function getChatInfoByEmail(
   }
 }
 
+const knownLastChatId: Map<number, number> = new Map()
+
 export async function saveLastChatId(accountId: number, chatId: number) {
+  if (knownLastChatId.get(accountId) === chatId) {
+    return
+  }
+
   await BackendRemote.rpc.setConfig(accountId, 'ui.lastchatid', `${chatId}`)
+  knownLastChatId.set(accountId, chatId)
 }
 
 export async function getLastChatId(accountId: number): Promise<number | null> {
   const chatId = await BackendRemote.rpc.getConfig(accountId, 'ui.lastchatid')
 
   if (typeof chatId === 'string') {
-    return parseInt(chatId, 10)
+    const parsed = parseInt(chatId, 10)
+    knownLastChatId.set(accountId, parsed)
+    return parsed
   }
 
   return null
