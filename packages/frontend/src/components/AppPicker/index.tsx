@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import { filesize } from 'filesize'
 import moment from 'moment'
 import { C } from '@deltachat/jsonrpc-client'
-import { useSettingsStore } from '../../stores/settings'
+import { useDesktopSettingsStore } from '../../stores/settings'
 import { defaultAppStoreBaseUrl } from '@deltachat-desktop/shared/state'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 
@@ -72,7 +72,7 @@ type Props = {
 
 export function AppPicker({ onAppSelected }: Props) {
   const tx = useTranslationFunction()
-  const settingsStore = useSettingsStore()[0]
+  const desktopSettingsStore = useDesktopSettingsStore()[0]
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState(AppCategoryEnum.home)
   const [selectedAppInfo, setSelectedAppInfo] = useState<AppInfo | null>(null)
@@ -84,15 +84,16 @@ export function AppPicker({ onAppSelected }: Props) {
   ]
 
   const appStoreUrl: `${string}/` = useMemo(() => {
-    if (settingsStore == undefined) {
-      log.warn('settingsStore not initialized yet, using default appStoreUrl')
+    if (desktopSettingsStore == undefined) {
+      log.warn(
+        'desktopSettingsStore not initialized yet, using default appStoreUrl'
+      )
       return defaultAppStoreBaseUrl
     }
-    const res =
-      settingsStore.desktopSettings.appStoreBaseUrl || defaultAppStoreBaseUrl
+    const res = desktopSettingsStore.appStoreBaseUrl || defaultAppStoreBaseUrl
     // Ensure that it ends with a slash.
     return res.endsWith('/') ? (res as `${string}/`) : (`${res}/` as const)
-  }, [settingsStore])
+  }, [desktopSettingsStore])
   const appListUrl = appStoreUrl + 'xdcget-lock.json'
 
   const fetchApps = useCallback(async (appListUrl: string) => {

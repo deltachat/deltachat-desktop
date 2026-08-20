@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 
-import { useSettingsStore } from '../../stores/settings'
+import { useDesktopSettingsStore } from '../../stores/settings'
 import { getKeybindings, ShortcutGroup } from '../KeyboardShortcutHint'
 import Dialog, { DialogBody, DialogHeader, DialogHeading } from '../Dialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
@@ -11,7 +11,7 @@ export default function KeybindingCheatSheet(props: DialogProps) {
   const { onClose } = props
   const tx = useTranslationFunction()
 
-  const settingsStore = useSettingsStore()[0]
+  const desktopSettingsStore = useDesktopSettingsStore()[0]
 
   useEffect(() => {
     window.__keybindingsDialogOpened = true
@@ -27,30 +27,28 @@ export default function KeybindingCheatSheet(props: DialogProps) {
       </DialogHeader>
       <DialogBody className='shortcuts-dialog-body'>
         <div className='shortcuts-grid'>
-          {settingsStore &&
-            getKeybindings(settingsStore.desktopSettings).map(
-              (entry, index) => {
-                if (entry.type === 'header') {
-                  return (
-                    <div
-                      key={`header-${index}-${entry.title}`}
-                      className='shortcuts-section-title'
-                    >
-                      <h4>{entry.title}</h4>
-                    </div>
-                  )
-                } else {
-                  const { action } = entry
-                  return (
-                    <ShortcutGroup
-                      title={action.title}
-                      keyBindings={action.keyBindings}
-                      key={`shortcut-${index}-${action.title}`}
-                    />
-                  )
-                }
+          {desktopSettingsStore &&
+            getKeybindings(desktopSettingsStore).map((entry, index) => {
+              if (entry.type === 'header') {
+                return (
+                  <div
+                    key={`header-${index}-${entry.title}`}
+                    className='shortcuts-section-title'
+                  >
+                    <h4>{entry.title}</h4>
+                  </div>
+                )
+              } else {
+                const { action } = entry
+                return (
+                  <ShortcutGroup
+                    title={action.title}
+                    keyBindings={action.keyBindings}
+                    key={`shortcut-${index}-${action.title}`}
+                  />
+                )
               }
-            )}
+            })}
         </div>
       </DialogBody>
     </Dialog>
