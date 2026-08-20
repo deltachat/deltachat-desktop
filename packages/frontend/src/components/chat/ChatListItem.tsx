@@ -69,15 +69,13 @@ function Header({
         </span>
       </div>
       {isMuted && <div className='mute_icon' aria-label={tx('muted')} />}
-      <div>
-        {lastUpdated && lastUpdated !== 0 && (
-          <Timestamp
-            timestamp={lastUpdated}
-            extended={false}
-            module='timestamp'
-          />
-        )}
-      </div>
+      {lastUpdated && lastUpdated !== 0 && (
+        <Timestamp
+          timestamp={lastUpdated}
+          extended={false}
+          module='timestamp'
+        />
+      )}
       {isPinned && <div className='pin_icon' aria-label={tx('pin')} />}
     </div>
   )
@@ -569,13 +567,11 @@ export const ChatListItemMessageResult = React.memo<
               </span>
             </span>
           </div>
-          <div>
-            <Timestamp
-              timestamp={msr.timestamp * 1000}
-              extended={false}
-              module='timestamp'
-            />
-          </div>
+          <Timestamp
+            timestamp={msr.timestamp * 1000}
+            extended={false}
+            module='timestamp'
+          />
         </div>
         {!isSingleChatSearch && (
           <div className='message-result-author-line'>
