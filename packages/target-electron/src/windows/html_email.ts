@@ -140,6 +140,17 @@ export function openHtmlEmailWindow(
     window.show()
   })
 
+  // Otherwise it's impossible to focus the contents with Tab.
+  // The downside is that this makes it impossible
+  // to focus the header with Tab...
+  // Workaround for https://github.com/deltachat/deltachat-desktop/issues/6673.
+  window.once('focus', () => {
+    sandboxedView.webContents.focus()
+    sandboxedView.webContents.once('did-finish-load', () => {
+      sandboxedView.webContents.focus()
+    })
+  })
+
   window.on('close', () => {
     context_menu_handle?.()
     delete open_windows[window_id]
