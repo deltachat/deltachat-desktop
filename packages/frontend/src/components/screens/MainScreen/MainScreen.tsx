@@ -11,7 +11,10 @@ import { C } from '@deltachat/jsonrpc-client'
 
 import ChatList from '../../chat/ChatList'
 import ConnectivityToast from '../../ConnectivityToast'
-import SettingsStoreInstance from '../../../stores/settings'
+import SettingsStoreInstance, {
+  DesktopSettingsStoreInstance,
+  useDesktopSettingsStore,
+} from '../../../stores/settings'
 import { BackendRemote, onDCEvent } from '../../../backend-com'
 import ChatListHeader from './ChatListHeader'
 import { ChatView } from '../../ChatView/ChatView'
@@ -31,6 +34,7 @@ import asyncThrottle from '@jcoreio/async-throttle'
 import { useFetch } from '../../../hooks/useFetch'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 import { GlobalVoiceMessagePlayer } from '../../GlobalVoiceMessagePlayer/GlobalVoiceMessagePlayer'
+import { debounce } from 'debounce'
 
 const log = getLogger('MainScreen')
 
@@ -41,6 +45,7 @@ type Props = {
 export default function MainScreen({ accountId }: Props) {
   // Automatically select last known chat when account changed
   useSelectLastChat(accountId)
+  const desktopSettingsStore = useDesktopSettingsStore()[0]
 
   const tx = useTranslationFunction()
 
@@ -269,13 +274,23 @@ export default function MainScreen({ accountId }: Props) {
       ? lastUsedAppsFetch.result.value
       : []
 
+  const chatListSectionRef = useRef<HTMLDivElement>(null)
+  useSaveChatListWidth(chatListSectionRef)
+
   return (
     <div
       className={`main-screen ${smallScreenMode ? 'small-screen' : ''} ${
         !messageSectionShouldBeHidden ? 'chat-view-open' : ''
       }`}
     >
-      <div className={styles.chatListAndHeaderAndAudioPlayer}>
+      <div
+        ref={chatListSectionRef}
+        className={styles.chatListAndHeaderAndAudioPlayer}
+        style={{
+          ['--initialChatListAndHeaderAndAudioPlayerWidth' as keyof React.CSSProperties]:
+            desktopSettingsStore?.chatListSectionWidth,
+        }}
+      >
         <section
           className={styles.chatListAndHeader}
           role='region'
@@ -325,4 +340,49 @@ export default function MainScreen({ accountId }: Props) {
       {!chatListShouldBeHidden && <ConnectivityToast />}
     </div>
   )
+}
+
+function useSaveChatListWidth(ref: React.RefObject<HTMLElement | null>) {
+  const debouncedSave = useMemo(
+    () =>
+      debounce((width: string) => {
+        if (width === '') {
+          log.info(
+            `chat list resized, but its width not specified; normal if it was not resized by user; will not save`
+          )
+          return
+        }
+        if (!width.endsWith('px')) {
+          log.warn(
+            `chat list resized, but its width is not in pixels: "${width}", still proceeding`
+          )
+        }
+
+        log.info(`flushing new chat list width "${width}" to storage`)
+
+        DesktopSettingsStoreInstance.effect.setDesktopSetting(
+          'chatListSectionWidth',
+          width
+        )
+      }, 5 * 60_000),
+    []
+  )
+
+  useEffect(() => {
+    const el = ref.current
+    if (el == undefined) {
+      log.warn("can't watch chat list resizing: ref.current is nullish")
+      return
+    }
+
+    const observer = new ResizeObserver(_entries => {
+      debouncedSave(el.style.width)
+    })
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [debouncedSave, ref])
+
+  useEffect(() => {
+    return () => debouncedSave.flush()
+  })
 }
