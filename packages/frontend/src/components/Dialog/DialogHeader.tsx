@@ -14,7 +14,7 @@ import Icon from '../Icon'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 type Props = PropsWithChildren<{
-  title?: string
+  title?: React.ReactNode
   /**
    * When this is provided, a "back" button will be shown.
    * Otherwise it will be hidden.
