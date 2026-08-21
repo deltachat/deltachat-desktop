@@ -13,7 +13,9 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 // most used emojis come first in this list.
 
 type Props = {
-  reactions: T.Reactions
+  message: Pick<T.Message, 'id' | 'reactions'> & {
+    reactions: NonNullable<T.Message['reactions']>
+  }
   chatType: T.FullChat['chatType']
   tabindexForInteractiveContents: -1 | 0
   messageWidth: number
@@ -25,7 +27,7 @@ export default function Reactions(props: Props) {
   const { messageWidth, chatType } = props
 
   const { openDialog } = useDialog()
-  const { reactions } = props.reactions
+  const { reactions } = props.message.reactions
 
   // Compute visibleEmojis and hiddenReactionsCount from props
   const { visibleEmojis, hiddenReactionsCount } = useMemo(() => {
@@ -55,7 +57,7 @@ export default function Reactions(props: Props) {
 
   const handleClick = () => {
     openDialog(ReactionsDialog, {
-      reactions: props.reactions,
+      message: props.message,
       // Subscribers of a channel only get to know the accumulated reactions,
       // not who reacted with what.
       showContacts: chatType !== 'InBroadcast',
