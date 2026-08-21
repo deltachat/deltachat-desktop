@@ -13,7 +13,7 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 // most used emojis come first in this list.
 
 type Props = {
-  message: Pick<T.Message, 'reactions'> & {
+  message: Pick<T.Message, 'id' | 'reactions'> & {
     reactions: NonNullable<T.Message['reactions']>
   }
   chatType: T.FullChat['chatType']
