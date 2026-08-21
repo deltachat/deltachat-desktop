@@ -20,7 +20,9 @@ import {
 } from '../../../contexts/RovingTabindex'
 
 export type Props = {
-  reactions: T.Reactions
+  message: Pick<T.Message, 'reactions'> & {
+    reactions: NonNullable<T.Message['reactions']>
+  }
   /**
    * Whether it is known who reacted with what. This is not the case for
    * subscribers of a channel, they only know the accumulated reactions.
@@ -34,7 +36,7 @@ type ContactWithReaction = T.Contact & {
 }
 
 export default function ReactionsDialog({
-  reactions,
+  message,
   showContacts,
   onClose,
 }: Props & DialogProps) {
@@ -47,11 +49,11 @@ export default function ReactionsDialog({
         <DialogContent>
           {showContacts ? (
             <ReactionsDialogList
-              reactionsByContact={reactions.reactionsByContact}
+              reactionsByContact={message.reactions.reactionsByContact}
               onClose={onClose}
             />
           ) : (
-            <AccumulatedReactionsList reactions={reactions.reactions} />
+            <AccumulatedReactionsList reactions={message.reactions.reactions} />
           )}
         </DialogContent>
       </DialogBody>
