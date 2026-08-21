@@ -28,6 +28,10 @@ import { useRpcFetch } from '../../../hooks/useFetch'
 import { default as asyncThrottle } from '@jcoreio/async-throttle'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { BasicMessageInfo } from '../MessageDetail/BasicMessageInfo'
+import { unknownErrorToString } from '@deltachat-desktop/shared/unknownErrorToString'
+import useAlertDialog from '../../../hooks/dialog/useAlertDialog'
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import ReactionsBar from '../../ReactionsBar'
 
 export type Props = {
   message: Pick<T.Message, 'id' | 'reactions'>
@@ -119,7 +123,11 @@ export default function ReactionsDialog({
               />
             ) : (
               <AccumulatedReactionsList
-                reactions={message.reactions.reactions}
+                message={
+                  message as typeof message & {
+                    reactions: typeof message.reactions
+                  }
+                }
               />
             )}
           </DialogContent>
@@ -129,24 +137,94 @@ export default function ReactionsDialog({
   )
 }
 
+/**
+ * This is very similar to {@linkcode ReactionsBar}.
+ */
 function AccumulatedReactionsList({
-  reactions,
+  message,
 }: {
-  reactions: T.Reactions['reactions']
+  message: Pick<T.Message, 'id' | 'reactions'> & {
+    reactions: NonNullable<T.Message['reactions']>
+  }
 }) {
+  const ref = useRef<HTMLUListElement>(null)
   const tx = useTranslationFunction()
+  const openAlertDialog = useAlertDialog()
+
+  const toggleReaction = async (emoji: string) => {
+    try {
+      await BackendRemote.rpc.sendReaction(
+        selectedAccountId(),
+        message.id,
+        emoji === message.reactions.reactions.find(v => v.isFromSelf)?.emoji
+          ? []
+          : [emoji]
+      )
+    } catch (error) {
+      openAlertDialog({
+        message: tx(
+          'error_x',
+          'failed to send reaction: ' + unknownErrorToString(error)
+        ),
+      })
+    }
+  }
 
   return (
-    <ul className={styles.reactionsDialogList}>
-      {reactions.map(({ emoji, count }) => (
-        <li key={emoji} className={styles.accumulatedReactionsListItem}>
-          <div className={styles.reactionsDialogEmoji}>{emoji}</div>
-          <div className={styles.accumulatedReactionsCount}>
-            {tx('n_reactions', [String(count)], { quantity: count })}
-          </div>
-        </li>
-      ))}
+    <ul
+      ref={ref}
+      className={styles.accumulatedReactionsList}
+      role='menubar'
+      aria-label={tx('react')}
+      aria-orientation='horizontal'
+    >
+      <RovingTabindexProvider wrapperElementRef={ref} direction='horizontal'>
+        {message.reactions.reactions.map(({ emoji, count, isFromSelf }) => (
+          <li role='presentation' key={emoji}>
+            <ReactionButton
+              key={emoji}
+              emoji={emoji}
+              count={count}
+              isChecked={isFromSelf}
+              onClick={() => toggleReaction(emoji)}
+            />
+          </li>
+        ))}
+      </RovingTabindexProvider>
     </ul>
+  )
+}
+
+function ReactionButton(props: {
+  emoji: string
+  count: number
+  isChecked: boolean
+  onClick: () => void
+}) {
+  const ref = useRef<HTMLButtonElement>(null)
+  const rovingTabindex = useRovingTabindex(ref)
+
+  return (
+    <button
+      ref={ref}
+      type='button'
+      role='menuitemradio'
+      aria-checked={props.isChecked}
+      onClick={props.onClick}
+      className={classNames(
+        rovingTabindex.className,
+        styles.accumulatedReactionsButton,
+        {
+          [styles.isFromSelf]: props.isChecked,
+        }
+      )}
+      tabIndex={rovingTabindex.tabIndex}
+      onKeyDown={rovingTabindex.onKeydown}
+      onFocus={rovingTabindex.setAsActiveElement}
+    >
+      <span className={styles.accumulatedReactionsEmoji}>{props.emoji}</span>{' '}
+      <span className={styles.accumulatedReactionsCount}>{props.count}</span>
+    </button>
   )
 }
 
