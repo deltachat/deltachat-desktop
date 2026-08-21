@@ -116,19 +116,22 @@ export default function ReactionsDialog({
             {message.reactions == null ||
             message.reactions.reactions.length === 0 ? (
               <></>
-            ) : showContacts ? (
-              <ReactionsDialogList
-                reactionsByContact={message.reactions.reactionsByContact}
-                onClose={onClose}
-              />
             ) : (
-              <AccumulatedReactionsList
-                message={
-                  message as typeof message & {
-                    reactions: typeof message.reactions
+              <>
+                <AccumulatedReactionsList
+                  message={
+                    message as typeof message & {
+                      reactions: typeof message.reactions
+                    }
                   }
-                }
-              />
+                />
+                {showContacts && (
+                  <ReactionsDialogList
+                    reactionsByContact={message.reactions.reactionsByContact}
+                    onClose={onClose}
+                  />
+                )}
+              </>
             )}
           </DialogContent>
         </div>
