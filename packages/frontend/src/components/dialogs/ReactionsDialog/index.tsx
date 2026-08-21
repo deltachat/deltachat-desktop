@@ -1,10 +1,16 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, {
+  useEffect,
+  useEffectEvent,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import classNames from 'classnames'
 
 import Dialog, { DialogBody, DialogContent, DialogHeader } from '../../Dialog'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import { selectedAccountId } from '../../../ScreenController'
-import { BackendRemote } from '../../../backend-com'
+import { BackendRemote, onDCEvent } from '../../../backend-com'
 import { AvatarFromContact } from '../../Avatar'
 import ContactName from '../../ContactName'
 
@@ -18,9 +24,13 @@ import {
   RovingTabindexProvider,
   useRovingTabindex,
 } from '../../../contexts/RovingTabindex'
+import { useRpcFetch } from '../../../hooks/useFetch'
+import { default as asyncThrottle } from '@jcoreio/async-throttle'
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { BasicMessageInfo } from '../MessageDetail/BasicMessageInfo'
 
 export type Props = {
-  message: Pick<T.Message, 'reactions'>
+  message: Pick<T.Message, 'id' | 'reactions'>
   /**
    * Whether it is known who reacted with what. This is not the case for
    * subscribers of a channel, they only know the accumulated reactions.
@@ -34,29 +44,69 @@ type ContactWithReaction = T.Contact & {
 }
 
 export default function ReactionsDialog({
-  message,
+  message: originalMessage,
   showContacts,
   onClose,
 }: Props & DialogProps) {
   const tx = useTranslationFunction()
 
+  /**
+   * The `originalMessage` prop will not update as reactions change,
+   * so we have to update it ourselves.
+   * Similar to {@linkcode BasicMessageInfo}.
+   */
+  const [originalIsOutdated, setOriginalIsOutdated] = useState(false)
+  const freshMessageFetch = useRpcFetch(
+    useMemo(
+      () =>
+        asyncThrottle(
+          BackendRemote.rpc.getMessage.bind(BackendRemote.rpc),
+          250
+        ),
+      []
+    ),
+    originalIsOutdated ? [selectedAccountId(), originalMessage.id] : null
+  )
+  const refresh = useEffectEvent(() => freshMessageFetch?.refresh())
+  useEffect(() => {
+    return onDCEvent(selectedAccountId(), 'ReactionsChanged', ({ msgId }) => {
+      if (msgId !== originalMessage.id) {
+        return
+      }
+
+      setOriginalIsOutdated(true)
+      refresh()
+    })
+  }, [originalMessage.id])
+  const message = freshMessageFetch?.lingeringResult?.ok
+    ? freshMessageFetch.lingeringResult.value
+    : originalMessage
+
   return (
     <Dialog width={400} onClose={onClose}>
       <DialogHeader title={tx('reactions')} onClose={onClose} />
       <DialogBody>
-        <DialogContent>
-          {message.reactions == null ||
-          message.reactions.reactions.length === 0 ? (
-            <p>{tx('n_reactions', (0).toLocaleString(), { quantity: 0 })}</p>
-          ) : showContacts ? (
-            <ReactionsDialogList
-              reactionsByContact={message.reactions.reactionsByContact}
-              onClose={onClose}
-            />
-          ) : (
-            <AccumulatedReactionsList reactions={message.reactions.reactions} />
-          )}
-        </DialogContent>
+        <div
+          aria-live='polite'
+          aria-relevant='all'
+          style={{ display: 'contents' }}
+        >
+          <DialogContent>
+            {message.reactions == null ||
+            message.reactions.reactions.length === 0 ? (
+              <p>{tx('n_reactions', (0).toLocaleString(), { quantity: 0 })}</p>
+            ) : showContacts ? (
+              <ReactionsDialogList
+                reactionsByContact={message.reactions.reactionsByContact}
+                onClose={onClose}
+              />
+            ) : (
+              <AccumulatedReactionsList
+                reactions={message.reactions.reactions}
+              />
+            )}
+          </DialogContent>
+        </div>
       </DialogBody>
     </Dialog>
   )
