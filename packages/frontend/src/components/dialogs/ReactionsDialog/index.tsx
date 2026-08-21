@@ -82,9 +82,26 @@ export default function ReactionsDialog({
     ? freshMessageFetch.lingeringResult.value
     : originalMessage
 
+  const totalReactions =
+    message.reactions == null
+      ? 0
+      : message.reactions.reactions
+          .values()
+          .map(r => r.count)
+          .reduce((a, v) => a + v)
+
   return (
     <Dialog width={400} onClose={onClose}>
-      <DialogHeader title={tx('reactions')} onClose={onClose} />
+      <DialogHeader
+        title={
+          <span aria-live='polite'>
+            {tx('n_reactions', totalReactions.toLocaleString(), {
+              quantity: totalReactions,
+            })}
+          </span>
+        }
+        onClose={onClose}
+      />
       <DialogBody>
         <div
           aria-live='polite'
@@ -94,7 +111,7 @@ export default function ReactionsDialog({
           <DialogContent>
             {message.reactions == null ||
             message.reactions.reactions.length === 0 ? (
-              <p>{tx('n_reactions', (0).toLocaleString(), { quantity: 0 })}</p>
+              <></>
             ) : showContacts ? (
               <ReactionsDialogList
                 reactionsByContact={message.reactions.reactionsByContact}
