@@ -39,14 +39,31 @@
   text-align: center;
 }
 
-.accumulatedReactionsListItem {
-  align-items: center;
+.accumulatedReactionsList {
   display: flex;
-  padding-block: 8px;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.625rem;
+}
+
+.accumulatedReactionsButton {
+  @include mixins.button-reset;
+
+  padding: 0.125rem 0.5rem;
+
+  // Basically the same as with `.emoji` on message bubbles
+  border-radius: 999999px;
+  border: solid 1px rgba(100, 100, 100, 0.3);
+  background-color: var(--messageIncomingBg);
+  &.isFromSelf {
+    background-color: var(--messageOutgoingBg);
+  }
+}
+
+.accumulatedReactionsEmoji {
+  font-size: 1.125rem;
 }
 
 .accumulatedReactionsCount {
-  flex: 1;
-  margin-inline-end: 10px;
+  margin-inline: 0.125rem;
   overflow: hidden;
 }

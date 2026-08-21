@@ -18,6 +18,8 @@ import {
 import useChat from '../../hooks/chat/useChat'
 import useAlertDialog from '../../hooks/dialog/useAlertDialog'
 import { unknownErrorToString } from '@deltachat-desktop/shared/unknownErrorToString'
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import ReactionsDialog from '../dialogs/ReactionsDialog'
 
 const log = getLogger('ReactionsBar')
 
@@ -29,6 +31,9 @@ type Props = {
 
 const DEFAULT_EMOJIS = ['👍', '👎', '❤️', '😂', '🙁']
 
+/**
+ * This is very similar to {@linkcode ReactionsDialog}.
+ */
 export default function ReactionsBar({
   onClick,
   messageId,
