@@ -1,4 +1,4 @@
-import { expect, type Page } from '@playwright/test'
+import { expect, type Locator, type Page } from '@playwright/test'
 import path from 'path'
 
 import {
@@ -132,60 +132,71 @@ test.describe('Ctrl + Click', () => {
   })
 })
 
-test("Ctrl+Click and Shift+Click don't activate clickable elements", async () => {
-  await getMessage(4).click()
-  await expectSelectedMessages([])
+test.describe('clickable elements', () => {
+  let image!: Locator
+  let link!: Locator
+  let closeDialogButton!: Locator
+  test.beforeAll(async () => {
+    // Prepare a message with an image and a link.
+    const fileChooserPromise = page.waitForEvent('filechooser')
+    await page.getByRole('button', { name: 'Attach' }).click()
+    await page.getByRole('menuitem', { name: 'Image' }).click()
+    const fileChooser = await fileChooserPromise
+    await fileChooser.setFiles(imagePath)
+    await expect(
+      page.getByRole('region', { name: 'Write a message' }).getByRole('img')
+    ).toBeVisible()
+    await textarea().fill(
+      getMessageText(42) + '\nhttps://localhost/somepage.html'
+    )
+    await textarea().press('ControlOrMeta+Enter')
 
-  // Prepare a message with an image and a link.
-  const fileChooserPromise = page.waitForEvent('filechooser')
-  await page.getByRole('button', { name: 'Attach' }).click()
-  await page.getByRole('menuitem', { name: 'Image' }).click()
-  const fileChooser = await fileChooserPromise
-  await fileChooser.setFiles(imagePath)
-  await expect(
-    page.getByRole('region', { name: 'Write a message' }).getByRole('img')
-  ).toBeVisible()
-  await textarea().fill(
-    getMessageText(42) + '\nhttps://localhost/somepage.html'
-  )
-  await textarea().press('ControlOrMeta+Enter')
-
-  const image = getMessage(42).getByRole('img')
-  const link = getMessage(42).getByRole('link', {
-    name: 'https://localhost/somepage.html',
+    image = getMessage(42).getByRole('img')
+    link = getMessage(42).getByRole('link', {
+      name: 'https://localhost/somepage.html',
+    })
+    closeDialogButton = page
+      .getByRole('dialog')
+      .getByRole('button', { name: 'Close' })
   })
-  // Normally clicking the image opens the "View Image" dialog.
-  await image.click()
-  const closeDialogButton = page
-    .getByRole('dialog')
-    .getByRole('button', { name: 'Close' })
-  await closeDialogButton.click()
+  test.afterAll(async () => {
+    await getMessage(2).click()
+    await expectSelectedMessages([])
 
-  await getMessage(2).click({ modifiers: ['ControlOrMeta'] })
-  await expectSelectedMessages([2])
+    await image.click({ button: 'right' })
+    await page.getByRole('menuitem', { name: 'Delete' }).click()
+    await page
+      .getByRole('dialog')
+      .getByRole('button', { name: 'Delete' })
+      .last()
+      .click()
+  })
 
-  await link.click({ modifiers: ['ControlOrMeta'] })
-  await expectSelectedMessages([2, 42])
-  // If a "view image" dialog has been opened then the rest should not work,
-  // because the dialog makes outside content inert.
-  await image.click({ modifiers: ['ControlOrMeta'] })
-  await expectSelectedMessages([2])
-  await link.click({ modifiers: ['Shift'] })
-  await expectSelectedMessages([42])
+  test("Ctrl+Click and Shift+Click don't activate clickable elements", async () => {
+    await getMessage(4).click()
+    await expectSelectedMessages([])
 
-  await expect(closeDialogButton).not.toBeVisible()
+    // Normally clicking the image opens the "View Image" dialog.
+    await image.click()
+    await closeDialogButton.click()
 
-  await image.click()
-  await closeDialogButton.click()
+    await getMessage(2).click({ modifiers: ['ControlOrMeta'] })
+    await expectSelectedMessages([2])
 
-  // Clean up.
-  await image.click({ button: 'right' })
-  await page.getByRole('menuitem', { name: 'Delete' }).click()
-  await page
-    .getByRole('dialog')
-    .getByRole('button', { name: 'Delete' })
-    .last()
-    .click()
+    await link.click({ modifiers: ['ControlOrMeta'] })
+    await expectSelectedMessages([2, 42])
+    // If a "view image" dialog has been opened then the rest should not work,
+    // because the dialog makes outside content inert.
+    await image.click({ modifiers: ['ControlOrMeta'] })
+    await expectSelectedMessages([2])
+    await link.click({ modifiers: ['Shift'] })
+    await expectSelectedMessages([42])
+
+    await expect(closeDialogButton).not.toBeVisible()
+
+    await image.click()
+    await closeDialogButton.click()
+  })
 })
 
 test('Click on dead space', async () => {
