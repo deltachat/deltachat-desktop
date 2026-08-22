@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+<a id="2_59_1"></a>
+## [2.59.1] - 2026-08-22
+
+### Fixed
+
+- Do not always create a team profile ([#6684](https://github.com/deltachat/deltachat-desktop/issues/6684))
+- Ctrl + Up: incorrect quote order sometimes
+- Add Arabic and Telugu languages
+- Add Slovenian language
+
+### Removed
+
+- Move tauri edition to own repository!! ([#6656](https://github.com/deltachat/deltachat-desktop/issues/6656))
+
 <a id="2_59_0"></a>
 ## [2.59.0] - 2026-08-14
 
@@ -4257,7 +4271,8 @@ This section is only relevant to contributors.
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.59.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.59.1...HEAD
+[2.59.1]: https://github.com/deltachat/deltachat-desktop/compare/v2.59.0...v2.59.1
 [2.59.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.57.0...v2.59.0
 [2.57.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.56.0...v2.57.0
 [2.56.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.53.1...v2.56.0
