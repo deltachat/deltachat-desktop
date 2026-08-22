@@ -7,7 +7,13 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
-- Do not always create a team profile ([#6684](https://github.com/deltachat/deltachat-desktop/issues/6684))
+- Messages staying "unread" even when read from another device
+  for profiles created on Desktop v2.49.0 ([#6684](https://github.com/deltachat/deltachat-desktop/issues/6684))
+
+  If you see "Team" when hovering over your profile's square on the left,
+  (and you didn't intentionally click "Team Profile" when creating it),
+  you are affected.
+  We will work on a more elaborate fix in the next weeks.
 - Ctrl + Up: incorrect quote order sometimes
 - Add Arabic and Telugu languages
 - Add Slovenian language
