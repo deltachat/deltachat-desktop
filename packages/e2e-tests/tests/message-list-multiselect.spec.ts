@@ -197,6 +197,55 @@ test.describe('clickable elements', () => {
     await image.click()
     await closeDialogButton.click()
   })
+
+  test("normally clicking interactive element doesn't change selection", async () => {
+    await getMessage(4).click()
+    await expectSelectedMessages([])
+    await getMessage(2).click({ modifiers: ['ControlOrMeta'] })
+    await expectSelectedMessages([2])
+
+    await image.click()
+    await closeDialogButton.click()
+    await expectSelectedMessages([2])
+
+    await getMessage(42).click({ modifiers: ['ControlOrMeta'] })
+    await expectSelectedMessages([2, 42])
+
+    await image.click()
+    await closeDialogButton.click()
+    await expectSelectedMessages([2, 42])
+  })
+
+  test('message three-dot menu', async () => {
+    await getMessage(4).click()
+    await expectSelectedMessages([])
+
+    await getMessage(2).click({ modifiers: ['ControlOrMeta'] })
+    await getMessage(4).click({ modifiers: ['ControlOrMeta'] })
+    await getMessage(7).click({ modifiers: ['ControlOrMeta'] })
+    await expectSelectedMessages([2, 4, 7])
+
+    for (const i of [4, 2, 7]) {
+      await getMessage(i).hover()
+      await getMessage(i)
+        .getByRole('button', { name: 'Message actions' })
+        .click()
+      await expectSelectedMessages([2, 4, 7])
+      await page.getByRole('menuitem', { name: 'Delete' }).click()
+      await expect(page.getByRole('dialog')).toContainText('Delete 3 messages?')
+      await page.keyboard.press('Escape')
+      await expectSelectedMessages([2, 4, 7])
+    }
+
+    await expectSelectedMessages([2, 4, 7])
+    await getMessage(3).hover()
+    await getMessage(3).getByRole('button', { name: 'Message actions' }).click()
+    // Not multiselect member - reset selection.
+    await expectSelectedMessages([])
+    await page.getByRole('menuitem', { name: 'Delete' }).click()
+    await expect(page.getByRole('dialog')).toContainText('Delete this message?')
+    await page.keyboard.press('Escape')
+  })
 })
 
 test('Click on dead space', async () => {

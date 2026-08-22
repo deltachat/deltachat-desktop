@@ -57,7 +57,8 @@ export function useMessageFocusAndMultiselectContextValue(props: {
     // Only enter "multi-select mode" on Shift + Click or Ctrl + Click.
     // Multi-selecting messages is not something that people do all the time.
     // It's annoying that a message keeps being displayed as selected
-    // even though all you did is click a link inside of it.
+    // even though all you did is click on its bubble
+    // to focus it or to select text or something.
     { onNormalClick: 'unselectAll' }
   )
   // Memoized because it is used as a context value.
