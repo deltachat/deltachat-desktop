@@ -188,7 +188,8 @@ export default function InstantOnboardingScreen({
 
     try {
       await Promise.all([
-        SettingsStoreInstance.effect.setCoreSetting('team_profile', '1'),
+        isTeamProfile &&
+          SettingsStoreInstance.effect.setCoreSetting('team_profile', '1'),
         saveDisplayName(),
       ])
       // Automatically create a "chatmail" account
