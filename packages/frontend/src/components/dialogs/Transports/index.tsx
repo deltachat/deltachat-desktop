@@ -26,7 +26,6 @@ type Transport = Awaited<
 export default function TransportsDialog(
   props: DialogProps & {
     accountId: number
-    newTransport?: string
   }
 ) {
   const tx = useTranslationFunction()
