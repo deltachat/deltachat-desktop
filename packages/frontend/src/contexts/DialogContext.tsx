@@ -15,7 +15,7 @@ type DialogElementConstructor<T> = JSXElementConstructor<DialogProps & T>
 
 export type OpenDialog = <T extends { [key: string]: any }>(
   dialogElement: DialogElementConstructor<T>,
-  additionalProps?: T
+  additionalProps?: Omit<T, 'onClose'> & Pick<Partial<DialogProps>, 'onClose'>
 ) => DialogId
 
 export type CloseDialog = (id: DialogId) => void
