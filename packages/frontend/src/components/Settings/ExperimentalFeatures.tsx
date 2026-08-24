@@ -56,10 +56,7 @@ export function ExperimentalFeatures() {
 
     message +=
       '\n\n• If you want to quit the experimental feature, you can disable it at "Settings / Advanced"'
-    openDialog(AlertDialog, {
-      message,
-      confirmLabel: tx('ok'),
-    })
+    openDialog(AlertDialog, { message })
   }
 
   return (

@@ -529,10 +529,7 @@ export function useChatContextMenu(): {
         isGroup && {
           label: tx('clone_chat'),
           action: () => {
-            openDialog(CloneChat, {
-              setViewMode: 'createGroup',
-              chatTemplateId: relatedChat.id,
-            })
+            openDialog(CloneChat, { chatTemplateId: relatedChat.id })
           },
         },
       // Block contact

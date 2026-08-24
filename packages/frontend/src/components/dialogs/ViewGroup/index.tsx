@@ -155,7 +155,6 @@ const useGroup = (accountId: number, initialGroupState: T.FullChat) => {
         )
       } catch (error) {
         openDialog(AlertDialog, {
-          title: tx('error'),
           message: tx(
             'error_x',
             `Failed to modify group members: ${unknownErrorToString(error)}`
@@ -183,7 +182,6 @@ const useGroup = (accountId: number, initialGroupState: T.FullChat) => {
         )
       } catch (error) {
         openDialog(AlertDialog, {
-          title: tx('error'),
           message: tx(
             'error_x',
             `Failed to modify group members: ${unknownErrorToString(error)}`

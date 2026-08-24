@@ -51,10 +51,7 @@ export default function useViewGroupMenu({
     !isBroadcast && {
       label: tx('clone_chat'),
       action: () => {
-        openDialog(CloneChat, {
-          setViewMode: 'createGroup',
-          chatTemplateId: chat.id,
-        })
+        openDialog(CloneChat, { chatTemplateId: chat.id })
       },
       dataTestid: 'clone-chat',
     },
