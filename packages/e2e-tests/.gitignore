@@ -1,6 +1,8 @@
 node_modules/
 /test-results/
+/test-results-electron/
 /playwright-report/
+/playwright-report-electron/
 /playwright-report-public/
 /blob-report/
 /playwright/.cache/

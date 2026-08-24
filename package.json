@@ -30,6 +30,7 @@
     "test": "pnpm -r --no-bail test",
     "test-and-check": "pnpm test && pnpm check",
     "e2e": "pnpm build:browser && pnpm --filter=e2e-tests e2e",
+    "e2e:electron": "pnpm build:electron && pnpm --filter=e2e-tests e2e:electron",
     "reset:node_modules": "rm -rf node_modules && rm -rf packages/*/node_modules || true && pnpm i"
   },
   "engineStrict": true,
