@@ -33,32 +33,15 @@ export default function About({ onClose }: DialogProps) {
   }, [])
 
   const runtimeInfo = runtime.getRuntimeInfo()
-  const { VERSION, GIT_REF } = runtimeInfo.buildInfo
-
-  let edition = '' // electron is default, so don't show it
-  if (runtime.constructor.name !== 'ElectronRuntime') {
-    edition = `${runtime.constructor.name.replace('Runtime', '')} Edition`
-  }
+  const { VERSION } = runtimeInfo.buildInfo
 
   return (
-    <DialogWithHeader
-      width={400}
-      title={tx('global_menu_help_about_desktop')}
-      onClose={onClose}
-    >
+    <DialogWithHeader width={400} title='Delta Chat' onClose={onClose}>
       <DialogBody>
         <DialogContent>
           <div className={styles.aboutContent}>
-            <h1 className={styles.appName}>Delta Chat {edition}</h1>
-            <div className={styles.version}>
-              v{VERSION}
-              {runtime.getRC_Config().devmode && (
-                <>
-                  <br />
-                  <small>git: {GIT_REF}</small>
-                </>
-              )}
-            </div>
+            <img src='./images/intro1.png' className={styles.logo} />
+            <div className={styles.version}>v{VERSION}</div>
             <p className={styles.description}>{tx('about_description')}</p>
             <p className={styles.license}>
               {tx('about_license_text')}{' '}

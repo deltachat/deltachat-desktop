@@ -2,6 +2,8 @@ import React from 'react'
 
 import AlternativeSetupsDialog from './AlternativeSetupsDialog'
 import Button from '../../Button'
+import LanguageDialog from './LanguageDialog'
+import Icon from '../../Icon'
 import useDialog from '../../../hooks/dialog/useDialog'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import { DialogBody, DialogContent, DialogHeader } from '../../Dialog'
@@ -30,6 +32,10 @@ export default function OnboardingScreen(props: Props) {
     openDialog(AlternativeSetupsDialog, {
       selectedAccountId: props.selectedAccountId,
     })
+  }
+
+  const openLanguageDialog = () => {
+    openDialog(LanguageDialog)
   }
 
   const onSubmit = (event: React.FormEvent) => {
@@ -77,6 +83,11 @@ export default function OnboardingScreen(props: Props) {
               </Button>
             </div>
             <br /> {/* space after buttons */}
+            <div className={styles.languageRow} onClick={openLanguageDialog}>
+              <Icon icon='translate' size={16} />
+              <span>{tx('pref_language')}</span>
+              <Icon icon='chevron-down' size={16} />
+            </div>
           </form>
         </DialogContent>
       </DialogBody>

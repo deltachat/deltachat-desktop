@@ -15,6 +15,7 @@ export type IconName =
   | 'chat_bubble'
   | 'chevron-left'
   | 'chevron-right'
+  | 'chevron-down'
   | 'clear'
   | 'code-tags'
   | 'cross'

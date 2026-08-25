@@ -3,17 +3,23 @@
   flex-direction: column;
   text-align: center;
   align-items: center;
-  gap: 16px;
 }
 
-.appName {
-  margin-bottom: 0;
+.logo {
+  width: 120px;
+  margin-bottom: 8px;
+}
+
+.version {
+  margin-bottom: 16px;
 }
 
 .description {
   text-align: center;
+  margin-bottom: 4px;
 }
 
 .license {
   text-align: center;
+  margin-bottom: 24px;
 }

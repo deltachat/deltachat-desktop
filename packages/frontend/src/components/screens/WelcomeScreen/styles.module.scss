@@ -63,3 +63,19 @@
   background-color: var(--buttonSecondaryText);
   margin-inline-start: 0.2em;
 }
+
+.languageRow {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9em;
+  padding: 4px 0;
+  margin-bottom: 15px;
+
+  &:hover {
+    color: rgba(255, 255, 255, 1);
+  }
+}
