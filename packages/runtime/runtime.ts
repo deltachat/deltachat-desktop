@@ -80,6 +80,14 @@ export interface Runtime {
   openLogFile(): void
   readCurrentLog(): Promise<string>
   getCurrentLogLocation(): string
+  /** List of available UI languages, mirroring the native menu's language list. */
+  getAvailableLanguages?(): Promise<
+    { locale: string; name: string; dir: 'ltr' | 'rtl' }[]
+  >
+  /** Toggles the Electron developer tools on the main window. */
+  toggleDevTools?(): void
+  /** Opens the folder containing the log files in the OS file manager. */
+  openLogFolder?(): void
   /** Opens the help window at the specified anchor.
    *  Anchor needs to be written without the prefixed `#` */
   openHelpWindow(anchor?: string): void

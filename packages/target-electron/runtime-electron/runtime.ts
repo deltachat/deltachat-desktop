@@ -566,6 +566,17 @@ class ElectronRuntime implements Runtime {
   getConfigPath(): string {
     return ipcBackend.sendSync('get-config-path')
   }
+  getAvailableLanguages(): Promise<
+    { locale: string; name: string; dir: 'ltr' | 'rtl' }[]
+  > {
+    return ipcBackend.invoke('get-available-languages')
+  }
+  toggleDevTools(): void {
+    ipcBackend.invoke('toggle-devtools')
+  }
+  openLogFolder(): void {
+    ipcBackend.invoke('open-log-folder')
+  }
   getAutostartState(): Promise<AutostartState> {
     return ipcBackend.invoke('get-autostart-state')
   }

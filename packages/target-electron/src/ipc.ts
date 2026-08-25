@@ -44,7 +44,7 @@ import {
 } from '@deltachat-desktop/shared/shared-types.js'
 import { set_has_unread, updateTrayIcon } from './tray.js'
 import { openHtmlEmailWindow } from './windows/html_email.js'
-import { refresh } from './menu.js'
+import { languages, refresh } from './menu.js'
 import { appx, mapPackagePath } from './isAppx.js'
 import DeltaChatController from './deltachat/controller.js'
 import { BuildInfo } from './get-build-info.js'
@@ -177,6 +177,16 @@ export async function init(cwd: string, logHandler: LogHandler) {
   })
   ipcMain.handle('read-current-log', async () => {
     return readFile(logHandler.logFilePath(), 'utf-8')
+  })
+
+  ipcMain.handle('get-available-languages', () => languages)
+
+  ipcMain.handle('toggle-devtools', () => {
+    mainWindow.toggleDevTools()
+  })
+
+  ipcMain.handle('open-log-folder', () => {
+    return shell.openPath(mapPackagePath(getLogsPath()))
   })
 
   ipcMain.on('get-config-path', ev => {
