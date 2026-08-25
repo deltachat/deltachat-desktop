@@ -12,6 +12,7 @@ import {
   expect,
   test,
   type ElectronApplication,
+  type Locator,
   type Page,
   type TestInfo,
 } from '@playwright/test'
@@ -119,6 +120,22 @@ export class DeltaChatElectron {
   }
 
   /**
+   * Make all following native "open file" dialogs return `filePaths`
+   * without showing a dialog, until the app is closed or this is called again.
+   * (`runtime.showOpenFileDialog` asks the main process via IPC,
+   * which calls the `dialog.showOpenDialog` mocked here.)
+   */
+
+  async mockOpenDialog(filePaths: string[]) {
+    await this.app.evaluate(({ dialog }, filePaths) => {
+      dialog.showOpenDialog = (async () => ({
+        canceled: false,
+        filePaths,
+      })) as unknown as typeof dialog.showOpenDialog
+    }, filePaths)
+  }
+
+  /**
    * Evaluate an expression in the main window's page world.
    * `page.evaluate` does not work there, because the app blocks
    * `window.eval` (avoid-eval.js), which Playwright relies on.
@@ -147,8 +164,45 @@ export class DeltaChatElectron {
   }
 
   /**
+   * The window of a webxdc app. Pass `msgId` (and `accountId` if several
+   * profiles are used) when more than one app can be open,
+   * or use {@link openWebxdc}.
+   */
+  webxdcWindow({
+    msgId,
+    accountId,
+    timeout,
+  }: { msgId?: number; accountId?: number; timeout?: number } = {}) {
+    // see `appURL` in packages/target-electron/src/deltachat/webxdc.ts
+    const account = accountId ?? '\\d+'
+    const msg = msgId ?? '\\d+'
+    return this.waitForWindow(
+      new RegExp(`^webxdc://${account}\\.${msg}\\.webxdc(/|$)`),
+      { timeout }
+    )
+  }
+
+  /**
+   * Click "Start" on a webxdc message in the main window
+   * and return the window of exactly that app.
+   * @param message the message's `listitem` in the message list
+   */
+  async openWebxdc(
+    message: Locator,
+    options?: { accountId?: number; timeout?: number }
+  ): Promise<Page> {
+    // MessageWrapper renders the message id as the `id` of its `<li>`
+    const msgId = Number(await message.getAttribute('id'))
+    if (!Number.isInteger(msgId)) {
+      throw new Error('message locator must point to a message list item')
+    }
+    await message.getByRole('button', { name: 'Start' }).click()
+    return this.webxdcWindow({ msgId, ...options })
+  }
+
+  /**
    * Attach the newest app log (includes core and main process logs)
-   * to the test report.
+   * to the test report. See also {@link attachLogsOnFailure}.
    */
   async attachLogs(testInfo: TestInfo) {
     const logDir = join(this.profileDir, 'logs')
@@ -205,5 +259,21 @@ export class DeltaChatElectron {
           errors.join('\n  ')
       )
     }
+  }
+}
+
+/**
+ * Call in `afterEach` (failed tests) and `afterAll` (failed setup hooks)
+ * to add the logs of the given instances to the report.
+ */
+export async function attachLogsOnFailure(
+  ...instances: (DeltaChatElectron | undefined)[]
+) {
+  const testInfo = test.info()
+  if (testInfo.status === testInfo.expectedStatus) {
+    return
+  }
+  for (const dc of instances) {
+    await dc?.attachLogs(testInfo)
   }
 }

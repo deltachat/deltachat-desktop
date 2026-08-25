@@ -110,5 +110,6 @@ export default defineConfig(
     'packages/e2e-tests/test-results',
     'packages/e2e-tests/playwright-report-electron',
     'packages/e2e-tests/test-results-electron',
+    'packages/e2e-tests/fixtures',
   ])
 )
