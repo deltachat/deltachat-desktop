@@ -10,10 +10,12 @@
 import {
   _electron,
   expect,
+  test,
   type ElectronApplication,
   type Page,
+  type TestInfo,
 } from '@playwright/test'
-import { mkdtempSync, rmSync } from 'node:fs'
+import { mkdtempSync, readdirSync, readFileSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 
@@ -107,6 +109,12 @@ export class DeltaChatElectron {
     // Not `app.firstWindow()`: with `--devmode` the DevTools window
     // can be the first one.
     const mainWindow = await waitForWindow(app, MAIN_WINDOW_URL)
+    // The app shows uncaught main process exceptions in a modal dialog,
+    // which would block until the test times out. They are still logged,
+    // and `close()` fails the test because of them.
+    await app.evaluate(({ dialog }) => {
+      dialog.showErrorBox = () => {}
+    })
     return new DeltaChatElectron(name, app, mainWindow, profileDir)
   }
 
@@ -139,10 +147,63 @@ export class DeltaChatElectron {
   }
 
   /**
+   * Attach the newest app log (includes core and main process logs)
+   * to the test report.
+   */
+  async attachLogs(testInfo: TestInfo) {
+    const logDir = join(this.profileDir, 'logs')
+    let files: string[] = []
+    try {
+      files = readdirSync(logDir).sort()
+    } catch {
+      return
+    }
+    const newest = files.at(-1)
+    const name = `${this.name}-${newest}`
+    if (newest && !testInfo.attachments.some(a => a.name === name)) {
+      await testInfo.attach(name, {
+        body: readFileSync(join(logDir, newest)),
+        contentType: 'text/plain',
+      })
+    }
+  }
+
+  /**
+   * Log lines of uncaught exceptions in the main process
+   * (see the `uncaughtException` handler in target-electron/src/index.ts).
+   */
+  uncaughtErrors(): string[] {
+    const logDir = join(this.profileDir, 'logs')
+    let files: string[] = []
+    try {
+      files = readdirSync(logDir)
+    } catch {
+      return []
+    }
+    return files.flatMap(file =>
+      readFileSync(join(logDir, file), 'utf-8')
+        .split('\n')
+        .filter(line => line.includes('"uncaughtError"'))
+    )
+  }
+
+  /**
    * Quit the app and delete its profile.
+   * Throws if the main process had uncaught exceptions,
+   * including ones that happened while quitting.
    */
   async close() {
     await this.app.close().catch(() => {})
+    const errors = this.uncaughtErrors()
+    if (errors.length > 0) {
+      await this.attachLogs(test.info()).catch(() => {})
+    }
     rmSync(this.profileDir, { recursive: true, force: true })
+    if (errors.length > 0) {
+      throw new Error(
+        `${this.name}: uncaught exception in the main process:\n  ` +
+          errors.join('\n  ')
+      )
+    }
   }
 }
