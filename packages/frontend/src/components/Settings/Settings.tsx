@@ -12,8 +12,10 @@ import ConnectivityButton from './ConnectivityButton'
 import ChatsAndMedia from './ChatsAndMedia'
 import Notifications from './Notifications'
 import About from '../dialogs/About'
+import KeybindingCheatSheet from '../dialogs/KeybindingCheatSheet'
 import Appearance from './Appearance'
 import Advanced from './Advanced'
+import Language from './Language'
 import Profile from './Profile'
 import Dialog, { DialogBody, DialogHeader } from '../Dialog'
 import EditProfileDialog from '../dialogs/EditProfileDialog'
@@ -28,6 +30,7 @@ type SettingsView =
   | 'notifications'
   | 'appearance'
   | 'advanced'
+  | 'language'
 
 export default function Settings({ onClose }: DialogProps) {
   const { openDialog } = useDialog()
@@ -114,6 +117,13 @@ export default function Settings({ onClose }: DialogProps) {
         >
           {tx('menu_advanced')}
         </SettingsIconButton>
+        <SettingsIconButton
+          icon='translate'
+          onClick={() => openSettingsSectionDialog('language')}
+          dataTestid='open-language-settings'
+        >
+          {tx('pref_language')}
+        </SettingsIconButton>
         <SettingsSeparator />
         {!runtime.getRuntimeInfo().isMac && (
           <SettingsIconButton
@@ -124,6 +134,13 @@ export default function Settings({ onClose }: DialogProps) {
             {tx('donate')}
           </SettingsIconButton>
         )}
+        <SettingsIconButton
+          icon='keyboard'
+          onClick={() => openDialog(KeybindingCheatSheet)}
+          dataTestid='open-keybindings'
+        >
+          {tx('keybindings')}
+        </SettingsIconButton>
         <SettingsIconButton
           icon='question_mark'
           onClick={() => runtime.openHelpWindow()}
@@ -210,6 +227,19 @@ function SettingsSectionDialog(
           />
           <DialogBody>
             <Advanced onClose={closeThisAndParent} />
+            <SettingsEndSeparator />
+          </DialogBody>
+        </>
+      )}
+      {settingsMode === 'language' && (
+        <>
+          <DialogHeader
+            title={tx('pref_language')}
+            {...commonHeaderProps}
+            dataTestid='settings-language'
+          />
+          <DialogBody>
+            <Language />
             <SettingsEndSeparator />
           </DialogBody>
         </>
