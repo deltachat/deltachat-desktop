@@ -10,13 +10,17 @@ import {
   FooterActions,
 } from '../../Dialog'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
-import useDialog from '../../../hooks/dialog/useDialog'
-import { LogDialog } from '../Log'
+import { ClickableLink } from '../../helpers/ClickableLink'
+import { gitHubIssuesUrl } from '@deltachat-desktop/shared/constants'
+import Icon from '../../Icon'
 
 import styles from './styles.module.scss'
 
 import type { DialogProps } from '../../../contexts/DialogContext'
-import { ClickableLink } from '../../helpers/ClickableLink'
+
+const CONTRIBUTE_URL = 'https://delta.chat/contribute'
+const LICENSE_URL = 'https://www.gnu.org/licenses/gpl-3.0.en.html'
+const SOURCE_CODE_URL = 'https://github.com/deltachat/deltachat-desktop'
 
 export default function About({ onClose }: DialogProps) {
   const tx = useTranslationFunction()
@@ -27,13 +31,6 @@ export default function About({ onClose }: DialogProps) {
       window.__aboutDialogOpened = false
     }
   }, [])
-
-  const { openDialog } = useDialog()
-  const viewLog = () => {
-    openDialog(LogDialog)
-    // Close the about dialog so that it doesn't interfere with sharing the log.
-    onClose()
-  }
 
   const runtimeInfo = runtime.getRuntimeInfo()
   const { VERSION, GIT_REF } = runtimeInfo.buildInfo
@@ -52,9 +49,8 @@ export default function About({ onClose }: DialogProps) {
       <DialogBody>
         <DialogContent>
           <div className={styles.aboutContent}>
-            <img src='./images/intro1.png' />
             <h1 className={styles.appName}>Delta Chat {edition}</h1>
-            <div>
+            <div className={styles.version}>
               v{VERSION}
               {runtime.getRC_Config().devmode && (
                 <>
@@ -63,21 +59,28 @@ export default function About({ onClose }: DialogProps) {
                 </>
               )}
             </div>
-            <div>
-              <ClickableLink href={'https://delta.chat'}>
-                {'https://delta.chat'}
-              </ClickableLink>
-            </div>
+            <p className={styles.description}>{tx('about_description')}</p>
+            <p className={styles.license}>
+              {tx('about_license_text')}{' '}
+              <ClickableLink href={LICENSE_URL}>GPL-3.0</ClickableLink> ·{' '}
+              <ClickableLink href={SOURCE_CODE_URL}>GitHub</ClickableLink>
+            </p>
           </div>
         </DialogContent>
       </DialogBody>
       <DialogFooter>
         <FooterActions align='spaceBetween'>
-          <FooterActionButton onClick={() => runtime.openHelpWindow()}>
-            {tx('menu_help')}
+          <FooterActionButton
+            onClick={() => runtime.openLink(CONTRIBUTE_URL)}
+            data-testid='about-contribute'
+          >
+            <Icon icon='hand-heart' /> {tx('contribute')}
           </FooterActionButton>
-          <FooterActionButton onClick={viewLog}>
-            {tx('pref_view_log')}
+          <FooterActionButton
+            onClick={() => runtime.openLink(gitHubIssuesUrl)}
+            data-testid='about-report-issue'
+          >
+            <Icon icon='bug-outline' /> {tx('global_menu_help_report_desktop')}
           </FooterActionButton>
         </FooterActions>
       </DialogFooter>
