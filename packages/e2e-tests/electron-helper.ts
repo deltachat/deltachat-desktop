@@ -98,6 +98,10 @@ export class DeltaChatElectron {
         ...(process.platform === 'linux' ? ['--no-sandbox'] : []),
         '--disable-http-cache',
         '--lang=en-US',
+        // Synthetic camera/microphone and auto-accepted permission prompts,
+        // so calls work without real devices.
+        '--use-fake-device-for-media-stream',
+        '--use-fake-ui-for-media-stream',
         ...extraArgs,
       ],
       env: {
@@ -133,6 +137,20 @@ export class DeltaChatElectron {
         filePaths,
       })) as unknown as typeof dialog.showOpenDialog
     }, filePaths)
+  }
+
+  /**
+   * `navigator.clipboard` in the renderer is not available to tests
+   * (the main window blocks `page.evaluate`), so write via the main process.
+   */
+  async setClipboard(text: string) {
+    await this.app.evaluate(({ clipboard }, text) => {
+      clipboard.writeText(text)
+    }, text)
+  }
+
+  async readClipboard(): Promise<string> {
+    return this.app.evaluate(({ clipboard }) => clipboard.readText())
   }
 
   /**
@@ -198,6 +216,10 @@ export class DeltaChatElectron {
     }
     await message.getByRole('button', { name: 'Start' }).click()
     return this.webxdcWindow({ msgId, ...options })
+  }
+
+  callWindow(options?: { timeout?: number }) {
+    return this.waitForWindow(/^calls-webapp-scheme:\/\//, options)
   }
 
   /**
