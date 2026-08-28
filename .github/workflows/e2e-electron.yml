@@ -1,0 +1,117 @@
+name: e2e Tests (Electron)
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'docs/**' # only trigger build if a file outside of /docs was changed
+      - '_locales/*.xml'
+      - '.vscode/**'
+      - 'README_ASSETS/**'
+      - 'README.md'
+  pull_request:
+    paths-ignore:
+      - 'docs/**' # only trigger build if a file outside of /docs was changed
+      - '_locales/*.xml'
+      - '.vscode/**'
+      - 'README_ASSETS/**'
+      - 'README.md'
+
+permissions: {}
+
+jobs:
+  test:
+    name: Electron E2E Tests (${{ matrix.os }}, ${{ matrix.suite }})
+    env:
+      CI: true
+      NODE_ENV: test
+      VERSION_INFO_GIT_REF: ${{ github.ref }}
+    timeout-minutes: 30
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Tests that don't need a relay run on all platforms,
+          # because window, protocol and sandbox behaviour differs between them.
+          - os: ubuntu-latest
+            suite: offline
+            playwright_args: --grep-invert @relay
+          - os: macos-latest
+            suite: offline
+            playwright_args: --grep-invert @relay
+          - os: windows-latest
+            suite: offline
+            playwright_args: --grep-invert @relay
+          # Like e2e.yml: against a local relay and the public one,
+          # which are onboarded differently (dclogin vs. dcaccount).
+          - os: ubuntu-latest
+            suite: local-relay
+            playwright_args: --grep @relay
+            chatmail_domain: 127.0.0.1
+            start_local_relay: true
+          - os: ubuntu-latest
+            suite: remote-relay
+            playwright_args: --grep @relay
+            chatmail_domain: ci-chatmail.testrun.org
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          show-progress: false
+          persist-credentials: false
+      - name: Checkout chatmail Docker setup
+        if: ${{ matrix.start_local_relay }}
+        uses: actions/checkout@v6
+        with:
+          repository: chatmail/docker
+          path: .ci/docker
+          show-progress: false
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+      - name: Install dependencies
+        run: npm install -g pnpm && pnpm install
+      - name: Start local chatmail relay
+        if: ${{ matrix.start_local_relay }}
+        working-directory: ./.ci/docker
+        env:
+          CHATMAIL_IMAGE: ghcr.io/chatmail/docker:main
+        run: |
+          printf 'MAIL_DOMAIN=127.0.0.1\n' > .env
+          docker pull "$CHATMAIL_IMAGE"
+          docker compose up --no-build -d chatmail
+      # Build while the relay boots
+      - name: Build electron target
+        run: pnpm build:electron
+      - name: Wait for chatmail relay
+        if: ${{ matrix.start_local_relay }}
+        working-directory: ./.ci/docker
+        # `up` is idempotent, so this only waits for the already started
+        # container to become healthy.
+        run: docker compose up --no-build -d --wait --wait-timeout 600 chatmail
+      - name: Run e2e tests
+        env:
+          DC_CHATMAIL_DOMAIN: ${{ matrix.chatmail_domain }}
+        # The default shell on Windows is PowerShell, where `@relay` would be
+        # expanded as a variable (splatting) and dropped.
+        shell: bash
+        # Linux runners have no display.
+        run: >
+          ${{ runner.os == 'Linux' && 'xvfb-run --auto-servernum' || '' }}
+          pnpm --filter=e2e-tests e2e:electron ${{ matrix.playwright_args }}
+      - name: Collect chatmail logs
+        if: ${{ !cancelled() && matrix.start_local_relay }}
+        run: |
+          mkdir -p chatmail-logs
+          docker logs chatmail > chatmail-logs/docker.log 2>&1 || true
+          docker exec chatmail get-service-logs > chatmail-logs/services.log 2>&1 || true
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: e2e-electron-report-${{ matrix.os }}-${{ matrix.suite }}
+          path: |
+            packages/e2e-tests/playwright-report-electron
+            packages/e2e-tests/test-results-electron
+            chatmail-logs
+          if-no-files-found: ignore
+          retention-days: 10

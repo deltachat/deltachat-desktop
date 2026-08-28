@@ -39,10 +39,11 @@ test.beforeAll(async () => {
     DeltaChatElectron.launch({ name: 'alice' }),
     DeltaChatElectron.launch({ name: 'bob' }),
   ])
-  ;[aliceUser, bobUser] = await Promise.all([
-    onboard(alice, 'Alice'),
-    onboard(bob, 'Bob'),
-  ])
+  // Not in parallel: onboarding goes through the system clipboard, which
+  // both instances share. On a local relay each profile has its own
+  // `dclogin:` link, so both could end up with the same account.
+  aliceUser = await onboard(alice, 'Alice')
+  bobUser = await onboard(bob, 'Bob')
 
   await clickThroughTestIds(alice.mainWindow, [
     'qr-scan-button',
