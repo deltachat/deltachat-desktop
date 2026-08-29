@@ -572,10 +572,14 @@ const createContextMenu = (win: BrowserWindow, webContents: WebContents) => {
           id: 'copyLink',
           label: tx('menu_copy_link_to_clipboard'),
           click() {
-            electron.clipboard.write({
-              bookmark: props.linkText,
-              text: props.linkURL,
-            })
+            electron.clipboard.write([
+              new electron.ClipboardItem({
+                'electron application/bookmark': {
+                  title: props.linkText,
+                  url: props.linkURL,
+                },
+              }),
+            ])
           },
         })
       )
