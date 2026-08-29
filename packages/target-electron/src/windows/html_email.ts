@@ -62,6 +62,7 @@ export function openHtmlEmailWindow(
     open_windows[window_id].focus()
     return
   }
+  // Deprecated, but keep this for a while, same as for `main-window`.
   const initialBounds = DesktopSettings.state.HTMLEmailWindowBounds || {
     height: 621,
     width: 800,
@@ -73,12 +74,16 @@ export function openHtmlEmailWindow(
     mainWindow.window?.webContents.getZoomFactor() || 1.0
 
   const window = (open_windows[window_id] = new electron.BrowserWindow({
+    // TODO there might be multiple HTML windows.
+    // Maybe just don't do `windowStatePersistence` on subsequent windows?
+    name: 'html-email-window',
     backgroundColor: '#282828',
     // backgroundThrottling: false, // do not throttle animations/timers when page is background
     darkTheme: true, // Forces dark theme (GTK+3)
     icon: appIcon(),
     show: false,
     title: `${truncateText(subject, 42)} – ${truncateText(from, 40)}`,
+    windowStatePersistence: true,
     height: initialBounds.height,
     width: initialBounds.width,
     x: initialBounds.x,
@@ -316,7 +321,6 @@ export function openHtmlEmailWindow(
         mainWindowZoomFactor * Math.pow(1.2, window.webContents.getZoomLevel())
       const windowZoomFactor = window.webContents.getZoomFactor()
 
-      const window_bounds = window.getBounds()
       const content_size = window.getContentSize()
       const new_w = bounds.width * windowZoomFactor
       const new_h = bounds.height * windowZoomFactor
@@ -329,14 +333,8 @@ export function openHtmlEmailWindow(
         height: new_h,
       })
       sandboxedView?.webContents.setZoomFactor(contentZoomFactor)
-      DesktopSettings.update({ HTMLEmailWindowBounds: window_bounds })
     }
   )
-
-  window.on('moved', () => {
-    const window_bounds = window.getBounds()
-    DesktopSettings.update({ HTMLEmailWindowBounds: window_bounds })
-  })
 
   const update_restrictions = async (allow_network: boolean) => {
     loadRemoteContent = allow_network

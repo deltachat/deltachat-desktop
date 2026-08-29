@@ -326,7 +326,11 @@ export default class DCWebxdc {
         webxdcInfo['internetAccess']
       )
 
+      // const defaultSize2: Size = adjustSize(defaultSize)
+
       const webxdcWindow = new BrowserWindow({
+        name: `webxdc-window-${appId}`,
+        windowStatePersistence: true,
         webPreferences: {
           partition,
           sandbox: true,
@@ -363,6 +367,10 @@ export default class DCWebxdc {
 
       setContentProtection(webxdcWindow)
 
+      // TODO hmmm, here we also probably want to use the legacy bounds?
+      // I guess we can try to get them if they exist,
+      // and also delete them `persisted-state-restored`.
+      // orrrr, delete here right away.
       // reposition the window to last position (or default)
       this.getLastBounds(accountId, msg_id)
         .then(lastBounds => {
@@ -374,6 +382,7 @@ export default class DCWebxdc {
           // show after repositioning to avoid blinking
           webxdcWindow.show()
         })
+
       const appIconPromise = this.rpc
         .getWebxdcBlob(accountId, msg_id, webxdcInfo.icon)
         .then(blob => nativeImage.createFromBuffer(Buffer.from(blob, 'base64')))
@@ -517,6 +526,7 @@ export default class DCWebxdc {
       webxdcWindow.once('close', saveBounds.bind(this))
 
       webxdcWindow.once('ready-to-show', () => {
+        webxdcWindow.show()
         // also saving at the start, because this.webxdcCleanup uses this
         // to find out which webxdc apps were opened at some point in time.
         saveBounds()
@@ -922,24 +932,6 @@ export default class DCWebxdc {
    */
   get rpc() {
     return this.controller.jsonrpcRemote.rpc
-  }
-
-  async getLastBounds(
-    accountId: number,
-    msgId: number
-  ): Promise<Bounds | null> {
-    try {
-      const raw = await this.rpc.getConfig(
-        accountId,
-        `${BOUNDS_UI_CONFIG_PREFIX}.${msgId}`
-      )
-      if (raw) {
-        return JSON.parse(raw)
-      }
-    } catch (error) {
-      log.debug('failed to retrieve bounds for webxdc', error)
-    }
-    return null
   }
 
   setLastBounds(accountId: number, msgId: number, bounds: Bounds) {

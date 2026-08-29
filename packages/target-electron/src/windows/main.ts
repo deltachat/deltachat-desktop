@@ -1,4 +1,3 @@
-import debounce from 'debounce'
 import electron, { BrowserWindow, session } from 'electron'
 import { isAbsolute, join, sep } from 'path'
 import { platform } from 'os'
@@ -47,6 +46,11 @@ export function init(options: { hidden: boolean; hideMenuBar: boolean }) {
   const defaults = windowDefaults()
   const initialBounds = Object.assign(
     defaults.bounds,
+    // We've switched to the native `windowStatePersistence` API,
+    // but when the user launched the new version of the app
+    // for the first time, we should still restore the bounds
+    // from the previous launch, and those are only stored here.
+    // This can be removed after a few months or years.
     DesktopSettings.state.bounds
   )
 
@@ -54,12 +58,14 @@ export function init(options: { hidden: boolean; hideMenuBar: boolean }) {
 
   const mainWindow = (window = <ExtendedBrowserWindow>(
     new electron.BrowserWindow({
+      name: 'main-window',
       backgroundColor: '#282828',
       // backgroundThrottling: false, // do not throttle animations/timers when page is background
       darkTheme: true, // Forces dark theme (GTK+3)
       icon: appIcon(),
       show: false,
       title: appWindowTitle,
+      windowStatePersistence: true,
       height: initialBounds.height,
       width: initialBounds.width,
       x: initialBounds.x,
@@ -144,17 +150,6 @@ export function init(options: { hidden: boolean; hideMenuBar: boolean }) {
   mainWindow.webContents.on('did-finish-load', () => {
     rendererGone = false
   })
-
-  const saveBounds = debounce(() => {
-    const bounds = window?.getBounds()
-    if (bounds) {
-      DesktopSettings.update({ bounds })
-    }
-  }, 1000)
-
-  window.on('move', saveBounds)
-
-  window.on('resize', saveBounds)
 
   window.once('show', () => {
     if (DesktopSettings.state.zoomFactor !== undefined) {
