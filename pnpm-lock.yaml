@@ -451,6 +451,9 @@ importers:
       rc:
         specifier: ^1.2.8
         version: 1.2.8
+      sleeptime:
+        specifier: github:timrach/sleeptime
+        version: https://codeload.github.com/timrach/sleeptime/tar.gz/f4740d3658e2075707ed6791671b62e591903be2
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
@@ -2115,6 +2118,7 @@ packages:
   eslint@9.39.2:
     resolution: {integrity: sha512-LEyamqS7W5HB3ujJyvi0HQK/dtVINZvd5mAAp9eT5S/ujByGjiZLCzPcHVzuXbpJDJF/cxwHlfceVUDZ2lnSTw==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
     peerDependencies:
       jiti: '*'
@@ -3599,6 +3603,11 @@ packages:
   simple-update-notifier@2.0.0:
     resolution: {integrity: sha512-a2B9Y0KlNXl9u/vsW6sTIu9vGEpfKu2wRV6l1H3XEas/0gUIzGzBoP/IouTcUQbm9JWZLH3COxyn03TYlFax6w==}
     engines: {node: '>=10'}
+
+  sleeptime@https://codeload.github.com/timrach/sleeptime/tar.gz/f4740d3658e2075707ed6791671b62e591903be2:
+    resolution: {gitHosted: true, integrity: sha512-voXVWNE+jQk0YNqZbX2oAPESfF8by67ruzxsZ2NmO6TMIMm8/qd9/E03XdnG5M8Y7xy8DZunAUP9zag9jFAG0Q==, tarball: https://codeload.github.com/timrach/sleeptime/tar.gz/f4740d3658e2075707ed6791671b62e591903be2}
+    version: 1.0.1
+    engines: {node: '>= 0.10.29'}
 
   sort-keys@5.1.0:
     resolution: {integrity: sha512-aSbHV0DaBcr7u0PVHXzM6NbZNAtrr9sF6+Qfs9UUVG7Ll3jQ6hHi8F/xqIIcn2rvIVbr0v/2zyjSdwSV47AgLQ==}
@@ -7490,6 +7499,8 @@ snapshots:
   simple-update-notifier@2.0.0:
     dependencies:
       semver: 7.7.4
+
+  sleeptime@https://codeload.github.com/timrach/sleeptime/tar.gz/f4740d3658e2075707ed6791671b62e591903be2: {}
 
   sort-keys@5.1.0:
     dependencies:

@@ -87,6 +87,7 @@
     "esbuild": "^0.28.1",
     "mocha": "^10.7.0",
     "rc": "^1.2.8",
+    "sleeptime": "github:timrach/sleeptime",
     "typescript": "catalog:"
   }
 }
