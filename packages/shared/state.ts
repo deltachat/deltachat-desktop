@@ -5,8 +5,6 @@ export function getDefaultState(): DesktopSettingsType {
    * Persisted state. Must be JSON.
    */
   return {
-    bounds: {},
-    HTMLEmailWindowBounds: undefined,
     enterKeySends: false,
     notifications: true,
     showNotificationContent: true,

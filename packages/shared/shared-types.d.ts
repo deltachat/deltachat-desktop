@@ -11,8 +11,16 @@ type Bounds = {
 }
 
 export interface DesktopSettingsType {
-  bounds: Bounds | {}
-  HTMLEmailWindowBounds: Bounds | undefined
+  /**
+   * @deprecated replaced with native
+   * https://www.electronjs.org/docs/latest/tutorial/window-state-persistence
+   */
+  bounds?: Bounds | {}
+  /**
+   * @deprecated replaced with native
+   * https://www.electronjs.org/docs/latest/tutorial/window-state-persistence
+   */
+  HTMLEmailWindowBounds?: Bounds | undefined
   chatViewBgImg?: string
   /**
    * @deprecated replaced by lastAccount,

@@ -261,6 +261,9 @@ function openVideoCallWindow<D extends CallDirection>(
   }
 
   const win = new BrowserWindow({
+    // TODO hmm here also there might be multiple windows,
+    // same as with HTML.
+    // name
     webPreferences: {
       session: ses,
 
@@ -286,8 +289,6 @@ function openVideoCallWindow<D extends CallDirection>(
     // alwaysOnTop: main_window?.isAlwaysOnTop(),
   })
   setContentProtection(win)
-  // TODO maybe remember bounds.
-  //
   // Maybe we could add a setting for this, i.e. "Allow calls to bypass VPN".
   // win.webContents.setWebRTCIPHandlingPolicy()
 
