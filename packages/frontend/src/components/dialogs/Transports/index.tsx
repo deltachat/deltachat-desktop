@@ -161,7 +161,7 @@ export default function TransportsDialog(
       onClose={onClose}
       width={500}
       dataTestid='transports-dialog'
-      canOutsideClickClose={true}
+      closedby='any'
     >
       <DialogHeader
         title={tx('transports')}

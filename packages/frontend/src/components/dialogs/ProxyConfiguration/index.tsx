@@ -388,8 +388,7 @@ export default function ProxyConfiguration(
       fixed
       width={500}
       dataTestid='proxy-dialog'
-      canOutsideClickClose={false}
-      canEscapeKeyClose={isValid}
+      closedby={isValid ? 'closerequest' : 'none'}
     >
       <DialogHeader
         title={tx('proxy_settings')}

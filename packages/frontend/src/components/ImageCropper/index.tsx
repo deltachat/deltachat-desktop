@@ -453,12 +453,7 @@ export default function ImageCropper({
     }
   })
   return (
-    <Dialog
-      canEscapeKeyClose
-      onClose={onClose}
-      canOutsideClickClose={false}
-      width={500}
-    >
+    <Dialog onClose={onClose} closedby='closerequest' width={500}>
       <DialogHeader title={tx('ImageEditorHud_crop')} />
       <DialogBody>
         <DialogContent className={styles.imageCropperDialogContent}>

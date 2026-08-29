@@ -199,7 +199,7 @@ export function LogDialog({ onClose }: DialogProps) {
       onClose={onClose}
       // Disable canOutsideClickClose, because it interferes with text selection.
       // When you accidentally let go of the mouse button outside the dialog, it closes.
-      canOutsideClickClose={false}
+      closedby='closerequest'
     >
       <DialogHeader onClose={onClose} title={tx('pref_log_header')} />
       <DialogBody className={styles.dialogBody}>

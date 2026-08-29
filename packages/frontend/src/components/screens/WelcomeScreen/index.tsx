@@ -68,9 +68,8 @@ export default function WelcomeScreen({ selectedAccountId, ...props }: Props) {
       <Dialog
         fixed
         width={400}
-        canEscapeKeyClose={hasConfiguredAccounts}
+        closedby={hasConfiguredAccounts ? 'closerequest' : 'none'}
         backdropDragAreaOnTauriRuntime
-        canOutsideClickClose={false}
         onClose={onClose}
         dataTestid='onboarding-dialog'
         allowDefaultFocus={true}

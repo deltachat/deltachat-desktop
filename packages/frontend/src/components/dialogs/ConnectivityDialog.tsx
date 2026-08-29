@@ -16,7 +16,7 @@ export default function ConnectivityDialog({ onClose }: DialogProps) {
   const tx = useTranslationFunction()
 
   return (
-    <Dialog onClose={onClose} canOutsideClickClose={true}>
+    <Dialog onClose={onClose} closedby='any'>
       <DialogHeader title={tx('connectivity')} onClose={onClose} />
       <ConnectivityDialogInner />
     </Dialog>

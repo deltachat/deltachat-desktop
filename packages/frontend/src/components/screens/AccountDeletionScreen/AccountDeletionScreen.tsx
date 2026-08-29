@@ -60,7 +60,7 @@ export default function AccountDeletionScreen({
     <div className={styles.AccountDeletionScreen}>
       <ImageBackdrop variant='deletion'>
         <Dialog
-          canEscapeKeyClose={true}
+          closedby='any'
           backdropDragAreaOnTauriRuntime
           fixed={true}
           onClose={onCancel}

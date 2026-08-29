@@ -32,7 +32,7 @@ export default function EditProfileDialog({ onClose, ...props }: Props) {
   const tx = useTranslationFunction()
 
   return (
-    <Dialog canOutsideClickClose={false} onClose={onClose}>
+    <Dialog closedby='closerequest' onClose={onClose}>
       <DialogHeader
         title={
           props.settingsStore.settings.team_profile === '1'
