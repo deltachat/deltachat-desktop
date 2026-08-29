@@ -73,9 +73,9 @@ async function promptToCopy(win: BrowserWindow, url: string) {
       buttons: [tx('no'), tx('menu_copy_link_to_clipboard')],
       message: tx('ask_copy_unopenable_link_to_clipboard', url),
     })
-    .then(({ response }) => {
+    .then(async ({ response }) => {
       if (response == 1) {
-        clipboard.writeText(url)
+        await clipboard.writeText(url)
       }
     })
 }

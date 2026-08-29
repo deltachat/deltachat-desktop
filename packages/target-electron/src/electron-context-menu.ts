@@ -127,10 +127,14 @@ const create = (win: BrowserWindow) => {
         label: tx('menu_copy_link_to_clipboard'),
         visible: props.linkURL.length !== 0 && props.mediaType === 'none',
         click() {
-          electron.clipboard.write({
-            bookmark: props.linkText,
-            text: props.linkURL,
-          })
+          electron.clipboard.write([
+            new electron.ClipboardItem({
+              'electron application/bookmark': {
+                title: props.linkText,
+                url: props.linkURL,
+              },
+            }),
+          ])
         },
       }),
       copyImage: () => ({
