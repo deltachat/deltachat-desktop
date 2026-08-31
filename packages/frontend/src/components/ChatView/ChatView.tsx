@@ -1,5 +1,12 @@
 import styles from './styles.module.scss'
-import React, { useCallback, useContext, useId, useMemo, useRef } from 'react'
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+} from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 
 import MessageListAndComposer from '../message/MessageListAndComposer'
@@ -9,7 +16,7 @@ import { RecoverableCrashScreen } from '../screens/RecoverableCrashScreen'
 import { Avatar } from '../Avatar'
 import MailingListProfile from '../dialogs/MailingListProfile'
 import { useSettingsStore } from '../../stores/settings'
-import { BackendRemote } from '../../backend-com'
+import { BackendRemote, onDCEvent } from '../../backend-com'
 import Button from '../Button'
 import Icon, { IconButton } from '../Icon'
 import useDialog from '../../hooks/dialog/useDialog'
@@ -24,7 +31,7 @@ import { openWebxdc } from '../message/messageFunctions'
 
 import type { T } from '@deltachat/jsonrpc-client'
 import { runtime } from '@deltachat-desktop/runtime-interface'
-import { useRpcFetch } from '../../hooks/useFetch'
+import { useFetch, useRpcFetch } from '../../hooks/useFetch'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 import { useChatContextMenu } from '../chat/ChatContextMenu'
 import useContextMenu from '../../hooks/useContextMenu'
@@ -38,6 +45,8 @@ import {
 } from '../message/focusAndMultiselect'
 import { useMessageList } from '../../stores/messagelist'
 import Composer from '../composer/Composer'
+import asyncThrottle from '@jcoreio/async-throttle'
+import { useWebxdcMessageSentListener } from '../../hooks/useWebxdcMessageSent'
 
 const log = getLogger('ChatView')
 
@@ -92,11 +101,9 @@ export function ChatView(
 }
 export function ChatViewInner({
   accountId,
-  lastUsedApps,
   chatId,
 }: {
   accountId: number
-  lastUsedApps: T.Message[]
   chatId: T.BasicChat['id']
 }) {
   const tx = useTranslationFunction()
@@ -156,9 +163,7 @@ export function ChatViewInner({
             </>
           )}
         </div>
-        {chatWithLinger && (
-          <ChatNavButtons chat={chatWithLinger} lastUsedApps={lastUsedApps} />
-        )}
+        {chatWithLinger && <ChatNavButtons chat={chatWithLinger} />}
       </nav>
       <RecoverableCrashScreen reset_on_change_key={chatId}>
         <MessageMultiselectContext.Provider
@@ -416,13 +421,7 @@ function ChatHeading({ chat, hidden }: { chat: T.FullChat; hidden: boolean }) {
   )
 }
 
-function ChatNavButtons({
-  chat,
-  lastUsedApps,
-}: {
-  chat: T.FullChat
-  lastUsedApps: T.Message[]
-}) {
+function ChatNavButtons({ chat }: { chat: T.FullChat }) {
   const tx = useTranslationFunction()
   const { openMainViewContextMenu } = useChatContextMenu()
   const onClickThreeDotMenu = useCallback(
@@ -441,14 +440,10 @@ function ChatNavButtons({
     })
   }, [openDialog, chatId])
 
-  const hasLastUsedApps = lastUsedApps && lastUsedApps.length > 0
-
   return (
     <div className='views' data-no-drag-region>
       <div className={styles.appsGroup}>
-        {hasLastUsedApps && (
-          <AppIcons accountId={selectedAccountId()} apps={lastUsedApps} />
-        )}
+        <AppIcons accountId={selectedAccountId()} chatId={chatId} />
         <IconButton
           onClick={openMediaViewDialog}
           aria-label={tx('apps_and_media')}
@@ -572,14 +567,79 @@ function AppIcon({ accountId, app }: { accountId: number; app: T.Message }) {
 
 function AppIcons({
   accountId,
-  apps,
+  chatId,
 }: {
-  accountId: number | undefined
-  apps: T.Message[]
+  accountId: number
+  chatId: T.BasicChat['id']
 }) {
   const tx = useTranslationFunction()
+  const { smallScreenMode } = useContext(ScreenContext)
 
-  if (!accountId || !apps || apps.length === 0) {
+  const throttledFetchLastUsedApps = useMemo(
+    () =>
+      asyncThrottle(
+        async (accountId: number, chatId: number, smallScreenMode: boolean) => {
+          const maxIcons = smallScreenMode ? 1 : 3
+          const mediaIds = await BackendRemote.rpc.getChatMedia(
+            accountId,
+            chatId,
+            'Webxdc',
+            null,
+            null
+          )
+          // mediaIds holds the ids of the last updated apps,
+          // in reverse order
+          mediaIds.reverse()
+          const firstFew = mediaIds.slice(0, maxIcons)
+
+          // TODO perf: if the current throttled fetch was canceled
+          // before the next line got executed, we could bail here.
+          const mediaLoadResult = await BackendRemote.rpc.getMessages(
+            accountId,
+            firstFew
+          )
+          const lastUpdatedApps = firstFew
+            .map((id: number) => {
+              if (mediaLoadResult[id]?.kind === 'message') {
+                return mediaLoadResult[id]
+              }
+              return null
+            })
+            .filter(app => app !== null)
+
+          return lastUpdatedApps
+        },
+        50
+      ),
+    []
+  )
+  const lastUsedAppsFetch = useFetch(throttledFetchLastUsedApps, [
+    accountId,
+    chatId,
+    smallScreenMode,
+  ])
+  if (lastUsedAppsFetch.result?.ok === false) {
+    log.error('Failed to fetch last used apps', lastUsedAppsFetch.result.err)
+  }
+
+  // Listen for Webxdc messages being sent to the current chat
+  useWebxdcMessageSentListener(accountId, chatId, () => {
+    // Refresh Webxdc apps list when a Webxdc message is sent
+    lastUsedAppsFetch.refresh()
+  })
+
+  useEffect(() => {
+    return onDCEvent(accountId, 'WebxdcInstanceDeleted', () => {
+      lastUsedAppsFetch.refresh()
+    })
+  }, [accountId, lastUsedAppsFetch])
+
+  const apps =
+    lastUsedAppsFetch.result?.ok && lastUsedAppsFetch.result.value.length > 0
+      ? lastUsedAppsFetch.result.value
+      : []
+
+  if (apps.length === 0) {
     return null
   }
   return (
