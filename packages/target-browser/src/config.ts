@@ -30,9 +30,7 @@ const privateCertPath = process.env['PRIVATE_CERTIFICATE_PATH']
   : join(DATA_DIR, 'certificate')
 export const PRIVATE_CERTIFICATE_KEY = join(privateCertPath, 'cert.key.pem')
 export const PRIVATE_CERTIFICATE_CERT = join(privateCertPath, 'cert.pem')
-export const DC_ACCOUNTS_DIR = process.env['DC_ACCOUNTS_DIR']
-  ? resolvePath(process.env['DC_ACCOUNTS_DIR'])
-  : join(DATA_DIR, 'accounts')
+export const ACCOUNTS_DIR = join(DATA_DIR, 'accounts')
 
 export const LOCALES_DIR = join(__dirname, '../../../_locales')
 
