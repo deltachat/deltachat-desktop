@@ -459,7 +459,7 @@ export default class DCWebxdc {
                     // Deliberately no `role: 'toggleDevTools'`: the role opens
                     // devtools directly, bypassing the confirmation below.
                     // Its shortcuts are bound to this item instead.
-                    click: () => {
+                    click: async () => {
                       const { webContents } = webxdcWindow
                       if (webContents.isDevToolsOpened()) {
                         webContents.closeDevTools()
@@ -468,15 +468,17 @@ export default class DCWebxdc {
                       const instance = open_apps[appId]
                       if (!instance.devToolsConfirmed) {
                         const confirmed =
-                          dialog.showMessageBoxSync(webxdcWindow, {
-                            type: 'warning',
-                            buttons: [tx('open'), tx('cancel')],
-                            defaultId: 1,
-                            cancelId: 1,
-                            title: tx('webxdc_devtools_dialog_title'),
-                            message: tx('webxdc_devtools_dialog_title'),
-                            detail: tx('webxdc_devtools_dialog_message'),
-                          }) === 0
+                          (
+                            await dialog.showMessageBox(webxdcWindow, {
+                              type: 'warning',
+                              buttons: [tx('open'), tx('cancel')],
+                              defaultId: 1,
+                              cancelId: 1,
+                              title: tx('webxdc_devtools_dialog_title'),
+                              message: tx('webxdc_devtools_dialog_title'),
+                              detail: tx('webxdc_devtools_dialog_message'),
+                            })
+                          ).response === 0
                         if (!confirmed) {
                           return
                         }
