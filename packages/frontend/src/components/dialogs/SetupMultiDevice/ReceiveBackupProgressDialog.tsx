@@ -73,7 +73,7 @@ export function ReceiveBackupProgressDialog({
     <DialogWithHeader
       onClose={onClose}
       title={tx('multidevice_receiver_title')}
-      canOutsideClickClose={false}
+      closedby='closerequest'
     >
       <DialogBody>
         <DialogContent>

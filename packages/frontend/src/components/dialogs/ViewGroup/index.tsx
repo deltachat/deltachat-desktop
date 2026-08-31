@@ -641,12 +641,7 @@ function ShowQRDialog({
   const tx = useTranslationFunction()
 
   return (
-    <Dialog
-      onClose={onClose}
-      canOutsideClickClose={true}
-      fixed
-      dataTestid='group-invite-qr'
-    >
+    <Dialog onClose={onClose} closedby='any' fixed dataTestid='group-invite-qr'>
       <DialogHeader title={tx('qrshow_title')} onClose={onClose} />
       <QrCodeShowQrInner
         qrCode={qrCode}
@@ -704,7 +699,11 @@ function EditGroupNameDialog({
     groupImage !== initialGroupImage
 
   return (
-    <Dialog onClose={onClose} canOutsideClickClose={!haveUnsavedChanges} fixed>
+    <Dialog
+      onClose={onClose}
+      closedby={haveUnsavedChanges ? 'closerequest' : 'any'}
+      fixed
+    >
       <DialogHeader title={!isBroadcast ? tx('tab_group') : tx('channel')} />
       <form action={onClickOk}>
         <DialogBody>

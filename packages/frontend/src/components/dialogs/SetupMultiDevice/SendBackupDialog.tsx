@@ -133,12 +133,7 @@ export function SendBackupDialog({ onClose }: DialogProps) {
   }, [onClose, openConfirmationDialog, stage, tx, wasCopied])
 
   return (
-    <Dialog
-      canEscapeKeyClose={true}
-      canOutsideClickClose={false}
-      onClose={cancel}
-      width={500}
-    >
+    <Dialog closedby='closerequest' onClose={cancel} width={500}>
       <DialogHeader
         title={tx('multidevice_title')}
         onClose={cancel}

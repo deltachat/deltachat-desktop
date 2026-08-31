@@ -132,7 +132,7 @@ function ExportProgressDialog({ onClose }: DialogProps) {
   }, [accountId])
 
   return (
-    <Dialog onClose={() => {}} canOutsideClickClose={false}>
+    <Dialog onClose={() => {}} closedby='closerequest'>
       <DialogHeader title={tx('export_backup_desktop')} />
       <DialogBody>
         <DialogContent>
