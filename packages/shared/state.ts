@@ -21,7 +21,6 @@ export function getDefaultState(): DesktopSettingsType {
     minimizeToTray: true,
     syncAllAccounts: true,
     lastSaveDialogLocation: undefined,
-    enableWebxdcDevTools: false,
     HTMLEmailAskForRemoteLoadingConfirmation: true,
     HTMLEmailAlwaysLoadRemoteContent: false,
     galleryImageKeepAspectRatio: false,

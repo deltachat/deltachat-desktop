@@ -23,6 +23,12 @@
   "background_sync_disabled_explaination": {
     "message": "Background sync disabled, profile is only synced when selected"
   },
+  "webxdc_devtools_dialog_title": {
+    "message": "Open Developer Tools?"
+  },
+  "webxdc_devtools_dialog_message": {
+    "message": "Opening developer tools on a malicious webxdc app might lead to the app getting access to the Internet"
+  },
   "webxdc_beforeunload_dialog_title": {
     "message": "Close app?"
   },

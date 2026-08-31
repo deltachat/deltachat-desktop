@@ -7,13 +7,7 @@ import {
   screen,
 } from 'electron/main'
 import Mime from 'mime-types'
-import {
-  Menu,
-  nativeImage,
-  MenuItemConstructorOptions,
-  dialog,
-  IpcMainInvokeEvent,
-} from 'electron'
+import { Menu, nativeImage, dialog, IpcMainInvokeEvent } from 'electron'
 import { join } from 'path'
 import { platform } from 'os'
 import { readdir, stat, rmdir, writeFile } from 'fs/promises'
@@ -52,6 +46,15 @@ type AppInstance = {
   accountId: number
   internet_access: boolean
   displayName: string
+  /**
+   * Whether the user accepted the risk of opening developer tools on this app,
+   * see https://delta.chat/en/2023-05-22-webxdc-security,
+   * "XDC-01-004 WP1: Data exfiltration via desktop app DevTools".
+   *
+   * Deliberately neither persisted nor shared between apps: every app has to
+   * be confirmed on its own, and again after it was closed and reopened.
+   */
+  devToolsConfirmed: boolean
 } & Pick<
   T.WebxdcMessageInfo,
   | 'selfAddr'
@@ -242,7 +245,10 @@ export default class DCWebxdc {
             if (details.url.startsWith('webxdc://')) {
               cancelRequest = false
             } else if (details.url.startsWith('devtools://')) {
-              cancelRequest = !DesktopSettings.state.enableWebxdcDevTools
+              // devtools can only be open at all if their risk was confirmed
+              cancelRequest = !Object.values(open_apps).some(
+                app => app.devToolsConfirmed
+              )
             } else if (details.url.startsWith('https://')) {
               cancelRequest = !internetAccess
             }
@@ -334,7 +340,10 @@ export default class DCWebxdc {
           webSecurity: true,
           nodeIntegration: false,
           navigateOnDragDrop: false,
-          devTools: DesktopSettings.state.enableWebxdcDevTools,
+          // Devtools can only be opened from the "View / Developer" menu,
+          // which asks the user to confirm the risk for this app first,
+          // see `devToolsConfirmed`.
+          devTools: true,
           javascript: true,
           preload: join(htmlDistDir(), 'webxdc-preload.js'),
         },
@@ -385,6 +394,7 @@ export default class DCWebxdc {
 
       open_apps[appId] = {
         win: webxdcWindow,
+        devToolsConfirmed: false,
         accountId,
         msgId: msg_id,
         internet_access: webxdcInfo['internetAccess'],
@@ -430,29 +440,55 @@ export default class DCWebxdc {
                 checked: webxdcWindow.isAlwaysOnTop(),
                 click: () => {
                   webxdcWindow.setAlwaysOnTop(!webxdcWindow.isAlwaysOnTop())
-                  if (platform() !== 'darwin') {
-                    webxdcWindow.setMenu(makeMenu())
-                  } else {
+                  if (isMac) {
                     // change to webxdc menu
                     Menu.setApplicationMenu(makeMenu())
+                  } else {
+                    webxdcWindow.setMenu(makeMenu())
                   }
                 },
               },
               { role: 'togglefullscreen' },
-              ...(DesktopSettings.state.enableWebxdcDevTools
-                ? [
-                    { type: 'separator' } as MenuItemConstructorOptions,
-                    {
-                      label: tx('global_menu_view_developer_desktop'),
-                      submenu: [
-                        {
-                          label: tx('global_menu_view_developer_tools_desktop'),
-                          role: 'toggleDevTools',
-                        } as MenuItemConstructorOptions,
-                      ],
+              { type: 'separator' },
+              {
+                label: tx('global_menu_view_developer_desktop'),
+                submenu: [
+                  {
+                    label: tx('global_menu_view_developer_tools_desktop'),
+                    accelerator: isMac ? 'Alt+Command+I' : 'Ctrl+Shift+I',
+                    // Deliberately no `role: 'toggleDevTools'`: the role opens
+                    // devtools directly, bypassing the confirmation below.
+                    // Its shortcuts are bound to this item instead.
+                    click: async () => {
+                      const { webContents } = webxdcWindow
+                      if (webContents.isDevToolsOpened()) {
+                        webContents.closeDevTools()
+                        return
+                      }
+                      const instance = open_apps[appId]
+                      if (!instance.devToolsConfirmed) {
+                        const confirmed =
+                          (
+                            await dialog.showMessageBox(webxdcWindow, {
+                              type: 'warning',
+                              buttons: [tx('cancel'), tx('open')],
+                              defaultId: 0,
+                              cancelId: 0,
+                              title: tx('webxdc_devtools_dialog_title'),
+                              message: tx('webxdc_devtools_dialog_title'),
+                              detail: tx('webxdc_devtools_dialog_message'),
+                            })
+                          ).response === 1
+                        if (!confirmed) {
+                          return
+                        }
+                        instance.devToolsConfirmed = true
+                      }
+                      webContents.openDevTools()
                     },
-                  ]
-                : []),
+                  },
+                ],
+              },
             ],
           },
           {
@@ -647,15 +683,6 @@ export default class DCWebxdc {
           callback(permission_handler(permission))
         }
       )
-
-      webxdcWindow.webContents.on('before-input-event', (event, input) => {
-        if (input.code === 'F12') {
-          if (DesktopSettings.state.enableWebxdcDevTools) {
-            webxdcWindow.webContents.toggleDevTools()
-            event.preventDefault()
-          }
-        }
-      })
     }
 
     // actual webxdc instances
