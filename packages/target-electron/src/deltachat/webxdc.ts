@@ -471,14 +471,14 @@ export default class DCWebxdc {
                           (
                             await dialog.showMessageBox(webxdcWindow, {
                               type: 'warning',
-                              buttons: [tx('open'), tx('cancel')],
-                              defaultId: 1,
-                              cancelId: 1,
+                              buttons: [tx('cancel'), tx('open')],
+                              defaultId: 0,
+                              cancelId: 0,
                               title: tx('webxdc_devtools_dialog_title'),
                               message: tx('webxdc_devtools_dialog_title'),
                               detail: tx('webxdc_devtools_dialog_message'),
                             })
-                          ).response === 0
+                          ).response === 1
                         if (!confirmed) {
                           return
                         }
