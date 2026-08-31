@@ -34,8 +34,6 @@ export default function Backup() {
   const openConfirmationDialog = useConfirmationDialog()
 
   const onBackupExport = useCallback(async () => {
-    const userFeedback = window.__userFeedback
-
     const confirmed = await openConfirmationDialog({
       message: tx('pref_backup_export_explain'),
       confirmLabel: tx('pref_backup_export_start_button'),
@@ -75,9 +73,8 @@ export default function Backup() {
             okBtnLabel: tx('open'),
           })
         } else {
-          userFeedback({
-            type: 'success',
-            text: tx('pref_backup_written_to_x', path),
+          openDialog(AlertDialog, {
+            message: tx('pref_backup_written_to_x', path),
           })
         }
       }
