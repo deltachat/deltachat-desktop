@@ -17,12 +17,27 @@ export type UnselectChat = () => void
 
 export type ChatContextValue = {
   /**
-   * `withLinger` means that after `selectChat()` the value of `chatWithLinger`
-   * does not change immediately (unlike `chatId`),
+   * This is always the chat with the same ID as
+   * {@linkcode ChatContextValue.chatId},
+   * or `undefined` during initial load,
+   * after {@linkcode ChatContextValue.selectChat}.
+   *
+   * `withLinger` means that the value of `chatWithLinger`
+   * does not change immediately when we start refreshing the chat
+   * (e.g. after `ChatModified` event),
    * until the new chat's info gets loaded.
    */
   chatWithLinger?: T.FullChat
   chatNoLinger?: T.FullChat
+  /**
+   * Right after {@linkcode ChatContextValue.selectChat},
+   * {@linkcode ChatContextValue.chatWithLinger} becomes `undefined`
+   * and the original chat migrates here.
+   *
+   * Can be useful for reducing layout shifts and flashing,
+   * but be careful not to use this for anything effectful.
+   */
+  oldChat?: T.FullChat
   loadingChat: boolean
   chatId?: number
   /**
@@ -112,7 +127,7 @@ export const ChatProvider = ({
   if (chatFetch?.result?.ok === false) {
     log.error('Failed to fetch chat', chatFetch.result.err)
   }
-  const chatWithLinger =
+  const chatWithLinger_ =
     chatFetch?.lingeringResult?.ok &&
     // Make sure that the chat belongs to the current account,
     // to prevent data leaking between accounts, and weird race-y bugs.
@@ -122,6 +137,14 @@ export const ChatProvider = ({
     // for the current `accountId`?
     accountId === chatFetch.lingeringResult.value.accountId
       ? chatFetch.lingeringResult.value.chat
+      : undefined
+  const chatWithLinger =
+    chatWithLinger_ != undefined && chatWithLinger_.id === chatId
+      ? chatWithLinger_
+      : undefined
+  const oldChat =
+    chatWithLinger_ != undefined && chatWithLinger_.id !== chatId
+      ? chatWithLinger_
       : undefined
   const chatNoLinger =
     chatFetch?.result?.ok &&
@@ -278,6 +301,7 @@ export const ChatProvider = ({
     () => ({
       chatWithLinger,
       chatNoLinger,
+      oldChat,
       loadingChat,
       chatId,
       selectChat,
@@ -286,6 +310,7 @@ export const ChatProvider = ({
     [
       chatWithLinger,
       chatNoLinger,
+      oldChat,
       loadingChat,
       chatId,
       selectChat,
