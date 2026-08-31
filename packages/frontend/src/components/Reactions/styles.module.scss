@@ -1,5 +1,4 @@
 .reactions {
-  cursor: pointer;
   margin-inline-end: 10px;
   position: relative;
   line-height: 1; // So that it doesn't change the message height.
@@ -48,4 +47,5 @@
   inset: 0;
   border: none;
   background: transparent;
+  cursor: pointer;
 }
