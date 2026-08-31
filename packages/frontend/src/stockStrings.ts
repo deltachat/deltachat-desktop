@@ -29,8 +29,6 @@ export async function updateCoreStrings() {
 
     // No string for these upstream yet. TODO.
     | typeof C.DC_STR_PHASING_OUT
-    | typeof C.DC_STR_MESSAGE_PINNED_BY_OTHER
-    | typeof C.DC_STR_MESSAGE_PINNED_BY_YOU
     | typeof C.DC_STR_ADD_YOU
     | typeof C.DC_STR_ADD_YOU_BY
     | typeof C.DC_STR_REMOVE_YOU
@@ -193,6 +191,8 @@ export async function updateCoreStrings() {
     [C.DC_STR_CHANNEL_IMAGE_CHANGED]: tx('channel_image_changed'),
     [C.DC_STR_CHANNEL_NAME_CHANGED]: tx('channel_name_changed'),
     [C.DC_STR_MESSAGES_ARE_E2EE]: tx('messages_are_e2ee'),
+    [C.DC_STR_MESSAGE_PINNED_BY_YOU]: tx('message_pinned_by_you'),
+    [C.DC_STR_MESSAGE_PINNED_BY_OTHER]: tx('message_pinned_by_other'),
   }
 
   await BackendRemote.rpc.setStockStrings(strings)

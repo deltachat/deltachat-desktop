@@ -1,4 +1,5 @@
 @use '../../../scss/main_screen/_navbar';
+@use '../../../scss/mixins';
 
 .chatAndNavbar {
   display: flex;
@@ -91,6 +92,62 @@
       margin: 0.5rem 1rem;
     }
   }
+}
+
+.pinnedMessageBar {
+  @include mixins.button-reset;
+
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 50px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 14px;
+  border-bottom: var(--outlineProperties);
+  background-color: var(--globalBackground);
+  color: var(--globalText);
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--globalHoverBg);
+  }
+}
+
+.pinnedMessageIcon {
+  @include mixins.color-svg('./images/pin.svg', var(--globalLinkColor));
+
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
+
+.pinnedMessageContent {
+  min-width: 0;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+
+  strong {
+    color: var(--globalLinkColor);
+    font-size: 13px;
+    line-height: 18px;
+  }
+}
+
+.pinnedMessageSummary {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 14px;
+  line-height: 18px;
+}
+
+.pinnedMessagePosition {
+  flex-shrink: 0;
+  opacity: 0.7;
+  font-size: 12px;
 }
 
 .webxdcIcons {

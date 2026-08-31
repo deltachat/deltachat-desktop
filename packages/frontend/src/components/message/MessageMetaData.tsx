@@ -29,6 +29,7 @@ type Props = {
   viewType: T.Viewtype
   chatType: T.ChatType
   isSavedMessage: boolean
+  isPinned: boolean
 }
 
 export default function MessageMetaData(props: Props) {
@@ -50,6 +51,7 @@ export default function MessageMetaData(props: Props) {
     viewType,
     chatType,
     isSavedMessage,
+    isPinned,
   } = props
 
   return (
@@ -81,6 +83,12 @@ export default function MessageMetaData(props: Props) {
       >
         {isSavedMessage && (
           <div aria-label={tx('saved')} className={'saved-message-icon'} />
+        )}
+        {isPinned && (
+          <div
+            aria-label={tx('pinned_message')}
+            className={'pinned-message-icon'}
+          />
         )}
       </div>
       {hasLocation && <span className={'location-icon'} />}

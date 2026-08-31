@@ -300,6 +300,13 @@ function buildContextMenu(
   // - https://github.com/deltachat/deltachat-android/blob/52c01976821803fa2d8a177f93576fa4082ef5bd/src/main/java/org/thoughtcrime/securesms/ConversationFragment.java#L332-L332
   const showReply = chat.canSend && !message.isInfo
 
+  const showPin =
+    chat.canSend &&
+    message.id > C.DC_MSG_ID_DAYMARKER &&
+    !message.isInfo &&
+    message.state !== C.DC_STATE_OUT_DRAFT &&
+    message.state !== C.DC_STATE_OUT_FAILED
+
   // See
   // - https://github.com/deltachat/deltachat-desktop/issues/4695.
   // - https://github.com/deltachat/deltachat-desktop/issues/5365.
@@ -358,6 +365,16 @@ function buildContextMenu(
           ])
         }
       },
+    },
+    // Pin or unpin for every participant and every device in this chat.
+    showPin && {
+      label: tx(message.isPinned ? 'unpin' : 'pin'),
+      action: () =>
+        BackendRemote.rpc.setPinnedMessageState(
+          accountId,
+          message.id,
+          !message.isPinned
+        ),
     },
     // Send emoji reaction
     showSendReaction && {
@@ -501,11 +518,17 @@ export default function Message(props: {
   conversationType: ConversationType
 }) {
   const { message, conversationType, chat } = props
-  const { viewType, text, hasLocation, hasHtml } = message
+  const { viewType, hasLocation, hasHtml } = message
   const direction = getDirection(message)
   const status = mapCoreMsgStatus2String(message.state)
 
   const tx = useTranslationFunction()
+  const text =
+    message.systemMessageType === 'MessagePinned'
+      ? message.fromId === C.DC_CONTACT_ID_SELF
+        ? tx('message_pinned_by_you')
+        : tx('message_pinned_by_other', message.sender.displayName)
+      : message.text
   const accountId = selectedAccountId()
 
   const { showReactionsBar } = useReactionsBar()
@@ -1096,6 +1119,7 @@ export default function Message(props: {
               timestamp={message.timestamp * 1000}
               encrypted={message.showPadlock}
               isSavedMessage={isOrHasSavedMessage}
+              isPinned={message.isPinned}
               onClickError={() =>
                 openDialog(AlertDialog, {
                   message: message.error
