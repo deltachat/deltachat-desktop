@@ -1,5 +1,5 @@
 import { ChildProcessWithoutNullStreams, spawn } from 'child_process'
-import { DC_ACCOUNTS_DIR } from './config'
+import { ACCOUNTS_DIR } from './config'
 import { getRPCServerPath } from '@deltachat/stdio-rpc-server'
 import { BaseDeltaChat, yerpc } from '@deltachat/jsonrpc-client'
 import * as ws from 'ws'
@@ -22,7 +22,7 @@ class StdioServer {
     log.info('using deltachat-rpc-server at', { serverPath })
     this.serverProcess = spawn(serverPath, {
       env: {
-        DC_ACCOUNTS_PATH: DC_ACCOUNTS_DIR,
+        DC_ACCOUNTS_PATH: ACCOUNTS_DIR,
         RUST_LOG: process.env.RUST_LOG,
       },
     })
@@ -225,7 +225,7 @@ export async function startDeltaChat(): Promise<
               request.method === 'export_self_keys') &&
             request.params[1] === '<BROWSER>'
           ) {
-            request.params[1] = join(DC_ACCOUNTS_DIR, 'backups')
+            request.params[1] = join(ACCOUNTS_DIR, 'backups')
             return DCInstance.send(JSON.stringify(request))
           }
         }

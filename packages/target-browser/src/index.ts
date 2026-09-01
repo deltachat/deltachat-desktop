@@ -25,7 +25,7 @@ import {
   LOCALES_DIR,
   DATA_DIR,
   LOGS_DIR,
-  DC_ACCOUNTS_DIR,
+  ACCOUNTS_DIR,
   DC_FRONTEND_NO_TLS,
 } from './config'
 import { startDeltaChat } from './deltachat-rpc'
@@ -170,7 +170,7 @@ app.get('/blobs/:accountId/:filename', authMiddleWare, async (req, res) => {
 
 app.get('/download-backup/:filename', authMiddleWare, async (req, res) => {
   const filePath = resolvePath(
-    join(DC_ACCOUNTS_DIR, 'backups'),
+    join(ACCOUNTS_DIR, 'backups'),
     req.params.filename
   )
   res.download(filePath)

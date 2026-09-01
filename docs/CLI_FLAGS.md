@@ -25,7 +25,8 @@ useful env vars you can set:
 | Variable (sometimes with value) | Effect |
 | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `NODE_OPTIONS=--enable-source-maps` | Make stacktraces in errors useful by enabling source map support in the main process |
-| `DC_TEST_DIR=<dir>` | specify an alternative data directory |
+| `DC_TEST_DIR=<dir>` | specify an alternative data directory (electron target) |
+| `DATA_DIR=<dir>` | specify an alternative data directory (browser target) |
 | `DELTACHAT_LOCALE_DIR=<path>` | allows to specify an alternative translation data directory in development, the intended purpose is to be used together with `--translation-watch` [^1] |
 
 Most env vars can be set in .env files. Look fo a env.example in the related package for more info.
