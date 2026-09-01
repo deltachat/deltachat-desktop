@@ -6,6 +6,7 @@ import '../../utils/linkify/plugin-bot-command/index.js'
 
 import { Link } from './Link.js'
 import { parseElements } from '../../utils/linkify/parseElements.js'
+import { getLinkDestination } from '../../utils/linkify/getLinkDestination.js'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 import { ActionEmitter, KeybindAction } from '../../keybindings'
 import { BackendRemote } from '../../backend-com'
@@ -32,54 +33,12 @@ function renderElement(
         />
       )
 
-    /**
-     * linkifyJS does even identify URLs without scheme as URL, e.g.
-     * "www.example.com" or "example.com/test" or "example.com?param=value" etc.
-     * It does only identify valid TLDs based on https://data.iana.org/TLD/tlds-alpha-by-domain.txt
-     */
     case 'url': {
-      let fullUrl = elm.v
-      // no token for scheme?
-      if (!elm.tk.find(t => ['SLASH_SCHEME', 'SCHEME'].includes(t.t))) {
-        // no scheme so we add https as default
-        // be aware that custom protocols may not
-        // have a SLASH_SCHEME but just a SCHEME
-        // see https://github.com/nfrasser/linkifyjs/blob/3abe9abbcb4e069aeadde2f42de7dfcc2371c0f0/packages/linkifyjs/src/text.mjs#L24
-        fullUrl = 'https://' + fullUrl
-      }
-      const url = URL.parse(fullUrl)
-      if (url == null) {
-        log.error('cannot render invalid URL as a link', fullUrl, elm.v)
+      const destination = getLinkDestination(elm)
+      if (destination == null) {
+        log.error('cannot render invalid URL as a link', elm.v)
         // Should not really happen. Fall back to regular text.
         return <span key={key}>{elm.v}</span>
-      }
-
-      let suspicousUrl = false
-      const stripLastSlash = (url: string) => {
-        if (url.endsWith('/')) {
-          url = url.slice(0, -1)
-        }
-        return url
-      }
-      // according to https://developer.mozilla.org/docs/Web/API/URL/hostname
-      // domain names will be transformed to punycode automatically
-      // so we just need to check if the original hostname is different
-      // from the punycode one
-      if (stripLastSlash(url.href) !== stripLastSlash(fullUrl)) {
-        suspicousUrl = true
-      }
-      const destination = {
-        target: fullUrl,
-        hostname: url.hostname,
-        punycode: suspicousUrl
-          ? {
-              ascii_hostname: url.hostname,
-              punycode_encoded_url: url.href,
-              original_hostname_or_full_url: elm.v,
-            }
-          : null,
-        scheme: url.protocol.replace(':', ''),
-        linkText: elm.v,
       }
       return (
         <Link

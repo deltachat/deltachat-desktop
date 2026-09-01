@@ -16,20 +16,8 @@ import { isInviteLink } from '@deltachat-desktop/shared/util'
 import { selectedAccountId } from '../../ScreenController'
 
 import type { DialogProps } from '../../contexts/DialogContext'
+import type { LinkDestination } from '../../utils/linkify/getLinkDestination.js'
 import { SCAN_CONTEXT_TYPE } from '../../hooks/useProcessQr'
-
-type PunycodeWarning = {
-  original_hostname_or_full_url: string
-  ascii_hostname: string
-  punycode_encoded_url: string
-}
-type LinkDestination = {
-  target: string
-  hostname: null | string
-  punycode: null | PunycodeWarning
-  scheme: null | string
-  linkText?: string
-}
 
 export const Link = ({
   destination,
