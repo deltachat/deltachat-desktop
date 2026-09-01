@@ -1125,10 +1125,6 @@ export class MessageListStore extends Store<MessageListState> {
             `even belong to chat ${chatId}? Or did the message get deleted?\n` +
             `Anyways, falling back to jumping to the last message.`
         )
-        window.__userFeedback({
-          type: 'error',
-          text: `${window.static_translate('error')}: message not found`,
-        })
         jumpToMessageIndex = messageListItems.length - 1
       }
 
