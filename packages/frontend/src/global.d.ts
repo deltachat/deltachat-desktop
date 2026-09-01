@@ -1,4 +1,4 @@
-import { userFeedback, Screens } from './ScreenController'
+import { Screens } from './ScreenController'
 
 import '@deltachat-desktop/shared/global.d.ts'
 import type { useMessageList } from './stores/messagelist'
@@ -7,7 +7,6 @@ import type { T } from '@deltachat/jsonrpc-client'
 declare global {
   interface Window {
     exp: todo
-    __userFeedback: (message: userFeedback | false) => void
     __changeScreen: (screen: Screens) => void
     __selectAccount: (accountId: number) => Promise<void>
     readonly __selectedAccountId: number | undefined

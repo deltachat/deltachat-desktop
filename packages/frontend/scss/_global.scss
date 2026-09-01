@@ -1,4 +1,3 @@
-@use 'sass:map';
 @use 'variables';
 
 * {
@@ -128,36 +127,6 @@ code {
   background-color: rgba(0, 0, 0, 0.25);
   border-radius: 0.8pt;
   padding: 0.4pt 3pt;
-}
-
-// toast for errors and success messages
-.user-feedback {
-  position: fixed;
-  top: 60px;
-  text-align: center;
-  width: 100%;
-  z-index: map.get(variables.$z-index, user-feedback);
-  pointer-events: none;
-
-  p {
-    display: inline-block;
-    text-align: center;
-    font-style: italic;
-    font-weight: bold;
-    padding: 10px 15px;
-    background-color: #696868;
-    border-radius: 50px;
-    color: white;
-    font-size: medium;
-    max-width: 90%;
-    pointer-events: all;
-  }
-  &.error p {
-    background-color: #b73a3a;
-  }
-  &.success p {
-    background-color: #415e6b;
-  }
 }
 
 .crash-screen {
