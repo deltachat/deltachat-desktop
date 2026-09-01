@@ -592,6 +592,7 @@ test('correct handling of changed profile displaynames', async () => {
   await page.getByTestId('edit-contact-name').click()
   await page.getByTestId('edit-contact-name-input').fill(contactNameGivenByMe)
   await page.getByTestId('ok').click()
+  await expect(page.locator('#view-profile-menu')).toBeFocused()
   await page.getByTestId('dialog-header-close').click()
   // profile shows the name I gave to the contact
   await expect(chatHeading).toContainText(contactNameGivenByMe)

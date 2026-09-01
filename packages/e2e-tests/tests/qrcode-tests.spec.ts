@@ -236,6 +236,7 @@ test('onboarding with manual credentials', async ({ browserName }) => {
   expect(addressFromSettings).toEqual(address)
   await page.getByTestId('cancel').click()
   await page.getByTestId('transports-settings-close').click()
+  await expect(page.getByTestId('open-transport-settings')).toBeFocused()
   await page.getByTestId('settings-advanced-close').click()
   // needed in deleteAllProfiles
   existingProfiles.push({
