@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useLayoutEffect, useRef } from 'react'
 
 import styles from './styles.module.scss'
 import { runtime } from '@deltachat-desktop/runtime-interface'
@@ -119,6 +119,19 @@ const Dialog = React.memo<Props>(
         }
       }
     }, [allowDefaultFocus])
+    // This ensures that the focus is returned to the element which had focus
+    // before the dialog was opened, not only on "Escape" key close
+    // but also on programmatic `onClose`, which simply un-renders the <dialog>
+    // (see `DialogContext`).
+    // From docs:
+    // > Before your component is removed from the DOM,
+    // > React will run your cleanup function.
+    useLayoutEffect(() => {
+      const el = dialog.current
+      return () => {
+        el?.close()
+      }
+    }, [])
 
     let style
 
