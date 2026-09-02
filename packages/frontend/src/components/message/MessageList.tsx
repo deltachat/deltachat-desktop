@@ -23,6 +23,7 @@ import useKeyBindingAction from '../../hooks/useKeyBindingAction'
 import { useHasChanged2 } from '../../hooks/useHasChanged'
 import { useReactionsBar } from '../ReactionsBar'
 import EmptyChatMessage from './EmptyChatMessage'
+import { getDayStartMessageIds } from './dayMarkers'
 
 const log = getLogger('renderer/components/message/MessageList')
 
@@ -107,7 +108,8 @@ export default function MessageList({
   const {
     messageCache,
     loadedMessageIds,
-    hasOlder,
+    loadedTimestamps,
+    prevTimestamp,
     viewState,
     jumpToMessageStack,
     loaded,
@@ -677,7 +679,8 @@ export default function MessageList({
         onScrollEnd={onScrollEnd}
         onWheel={isReactionsBarShown ? hideReactionsBar : undefined}
         loadedMessageIds={loadedMessageIds}
-        hasOlder={hasOlder}
+        loadedTimestamps={loadedTimestamps}
+        prevTimestamp={prevTimestamp}
         messageCache={messageCache}
         messageListRef={messageListRef}
         chat={chat}
@@ -717,7 +720,8 @@ export const MessageListInner = React.memo(
     onScrollEnd: (event: Event) => void
     onWheel?: React.WheelEventHandler<HTMLDivElement>
     loadedMessageIds: number[]
-    hasOlder: boolean
+    loadedTimestamps: { [msgId: number]: number }
+    prevTimestamp: number | undefined
     messageCache: { [msgId: number]: T.MessageLoadResult | undefined }
     messageListRef: React.RefObject<HTMLDivElement | null>
     chat: T.FullChat
@@ -732,7 +736,8 @@ export const MessageListInner = React.memo(
       onScrollEnd,
       onWheel,
       loadedMessageIds,
-      hasOlder,
+      loadedTimestamps,
+      prevTimestamp,
       messageCache,
       messageListRef,
       chat,
@@ -753,47 +758,15 @@ export const MessageListInner = React.memo(
       [chat.chatType, chat.isDeviceChat]
     )
 
-    /**
-     * IDs of the messages in {@linkcode loadedMessageIds} that begin a new day,
-     * i.e. the ones that get a {@linkcode DayMarker} rendered above them.
-     *
-     * `sortTimestamp` and not `timestamp`, because that is what the list is
-     * ordered by; using the sent time could place a marker for an earlier day
-     * below one for a later day.
-     *
-     * The oldest loaded message can only be classified if its predecessor is
-     * loaded too — otherwise we don't know which day it belongs to, and no
-     * marker is drawn until older messages are loaded.
-     */
-    const dayStartMessageIds = useMemo(() => {
-      const dayOf = (msgId: number | undefined): number | undefined => {
-        const message = msgId != undefined ? messageCache[msgId] : undefined
-        return message?.kind === 'message'
-          ? moment.unix(message.sortTimestamp).startOf('day').valueOf()
-          : undefined
-      }
-
-      const ids = new Set<number>()
-      let previousDay = undefined
-
-      for (let i = 0; i < loadedMessageIds.length; i++) {
-        const msgId = loadedMessageIds[i]
-        const day = dayOf(msgId)
-        if (day == undefined) {
-          previousDay = undefined
-          continue
-        }
-        const isFirstMessageOfChat = !hasOlder && i === 0
-        if (
-          isFirstMessageOfChat ||
-          (previousDay != undefined && day !== previousDay)
-        ) {
-          ids.add(msgId)
-        }
-        previousDay = day
-      }
-      return ids
-    }, [loadedMessageIds, messageCache, hasOlder])
+    const dayStartMessageIds = useMemo(
+      () =>
+        getDayStartMessageIds(
+          loadedMessageIds,
+          loadedTimestamps,
+          prevTimestamp
+        ),
+      [loadedMessageIds, loadedTimestamps, prevTimestamp]
+    )
 
     useKeyBindingAction(KeybindAction.MessageList_PageUp, () => {
       if (messageListRef.current) {
@@ -986,13 +959,14 @@ export const MessageListInner = React.memo(
               if (!dayStartMessageIds.has(messageId)) {
                 return messageElement
               }
-              // `dayStartMessageIds` only contains loaded messages,
-              // so the timestamp is available here.
-              const sortTimestamp = (message as T.Message).sortTimestamp
+              // `dayStartMessageIds` only contains messages of the window,
+              // so the timestamp is available here, even if the message
+              // itself is still loading.
+              const timestamp = loadedTimestamps[messageId] as number
               return [
                 <DayMarker
                   key={`daymarker-${messageId}`}
-                  timestamp={sortTimestamp}
+                  timestamp={timestamp}
                 />,
                 messageElement,
               ]
