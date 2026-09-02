@@ -91,5 +91,17 @@
   },
   "webxdc_store_url_explain_2_desktop": {
     "message": "This is different from the same feature on Android and iOS.\nThis must be the path containing the xdcget-lock.json file."
+  },
+  "pinned_message": {
+    "message": "Pinned message"
+  },
+  "pinned_message_position": {
+    "message": "%1$d/%2$d"
+  },
+  "message_pinned_by_you": {
+    "message": "You pinned a message."
+  },
+  "message_pinned_by_other": {
+    "message": "Message pinned by %1$s."
   }
 }

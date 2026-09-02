@@ -260,6 +260,14 @@ $info-text-max-width: 400px;
       );
     }
 
+    .pinned-message-icon {
+      @include mixins.color-svg(
+        './images/pin.svg',
+        var(--messageMetadataIconColorIncoming),
+        100%
+      );
+    }
+
     .date,
     .edited,
     .viewCount {
@@ -309,6 +317,14 @@ $info-text-max-width: 400px;
     .saved-message-icon {
       @include mixins.color-svg(
         './images/icons/bookmark-filled.svg',
+        var(--messageMetadataIconColorOutgoing),
+        100%
+      );
+    }
+
+    .pinned-message-icon {
+      @include mixins.color-svg(
+        './images/pin.svg',
         var(--messageMetadataIconColorOutgoing),
         100%
       );
@@ -402,6 +418,10 @@ $info-text-max-width: 400px;
         white,
         100%
       );
+    }
+
+    .pinned-message-icon {
+      @include mixins.color-svg('./images/pin.svg', white, 100%);
     }
   }
 

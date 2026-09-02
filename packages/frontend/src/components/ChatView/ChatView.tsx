@@ -1,5 +1,12 @@
 import styles from './styles.module.scss'
-import React, { useCallback, useContext, useId, useMemo } from 'react'
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useId,
+  useMemo,
+  useState,
+} from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 
 import MessageListAndComposer from '../message/MessageListAndComposer'
@@ -9,7 +16,7 @@ import { RecoverableCrashScreen } from '../screens/RecoverableCrashScreen'
 import { Avatar } from '../Avatar'
 import MailingListProfile from '../dialogs/MailingListProfile'
 import { useDesktopSettingsStore } from '../../stores/settings'
-import { BackendRemote } from '../../backend-com'
+import { BackendRemote, onDCEvent } from '../../backend-com'
 import Button from '../Button'
 import Icon, { IconButton } from '../Icon'
 import useDialog from '../../hooks/dialog/useDialog'
@@ -149,6 +156,7 @@ export function ChatViewInner({
           <ChatNavButtons chat={chatWithLinger} lastUsedApps={lastUsedApps} />
         )}
       </nav>
+      <PinnedMessageBar accountId={accountId} chatId={chatWithLinger.id} />
       <RecoverableCrashScreen reset_on_change_key={chatWithLinger.id}>
         <MessageMultiselectContext.Provider
           value={focusAndMultiselectContextValue}
@@ -161,6 +169,191 @@ export function ChatViewInner({
         </MessageMultiselectContext.Provider>
       </RecoverableCrashScreen>
     </>
+  )
+}
+
+type PinnedMessagesState = {
+  ids: number[]
+  activeId: number | null
+}
+
+function PinnedMessageBar({
+  accountId,
+  chatId,
+}: {
+  accountId: number
+  chatId: number
+}) {
+  const tx = useTranslationFunction()
+  const { jumpToMessage } = useMessage()
+  const [pinnedMessages, setPinnedMessages] = useState<PinnedMessagesState>({
+    ids: [],
+    activeId: null,
+  })
+  const [loadedMessage, setLoadedMessage] = useState<{
+    id: number
+    message: T.Message
+  } | null>(null)
+
+  const reloadPinnedMessages = useCallback(async () => {
+    try {
+      const ids = await BackendRemote.rpc.getPinnedMessages(accountId, chatId)
+      setPinnedMessages(previous => {
+        const hasNewMessage = ids.some(id => !previous.ids.includes(id))
+        const keepActiveMessage =
+          previous.activeId !== null && ids.includes(previous.activeId)
+        const activeId =
+          ids.length === 0
+            ? null
+            : hasNewMessage || !keepActiveMessage
+              ? ids[ids.length - 1]
+              : previous.activeId
+
+        return { ids, activeId }
+      })
+    } catch (error) {
+      log.error('Could not load pinned messages', error)
+    }
+  }, [accountId, chatId])
+
+  useEffect(() => {
+    const initialReloadTimeout = window.setTimeout(() => {
+      void reloadPinnedMessages()
+    }, 0)
+
+    const cleanup = [
+      onDCEvent(accountId, 'MsgsChanged', event => {
+        if (event.chatId === chatId) {
+          void reloadPinnedMessages()
+        }
+      }),
+      onDCEvent(accountId, 'IncomingMsg', event => {
+        if (event.chatId === chatId) {
+          void reloadPinnedMessages()
+        }
+      }),
+    ]
+    return () => {
+      window.clearTimeout(initialReloadTimeout)
+      cleanup.forEach(removeListener => removeListener())
+    }
+  }, [accountId, chatId, reloadPinnedMessages])
+
+  const activeId = pinnedMessages.activeId
+  useEffect(() => {
+    let outdated = false
+    if (activeId === null) {
+      return
+    }
+
+    BackendRemote.rpc
+      .getMessage(accountId, activeId)
+      .then(message => {
+        if (!outdated) {
+          setLoadedMessage({ id: activeId, message })
+        }
+      })
+      .catch(error => {
+        if (!outdated) {
+          log.error('Could not load pinned message', error)
+        }
+      })
+
+    return () => {
+      outdated = true
+    }
+  }, [accountId, activeId])
+
+  const activeMessage =
+    loadedMessage?.id === activeId ? loadedMessage.message : null
+
+  const summary = useMemo(() => {
+    if (activeMessage === null) {
+      return tx('loading')
+    }
+    if (activeMessage.text.trim()) {
+      return activeMessage.text.trim()
+    }
+    if (activeMessage.fileName) {
+      return activeMessage.fileName
+    }
+
+    switch (activeMessage.viewType) {
+      case 'Image':
+        return tx('image')
+      case 'Gif':
+        return tx('gif')
+      case 'Sticker':
+        return tx('sticker')
+      case 'Audio':
+        return tx('audio')
+      case 'Voice':
+        return tx('voice_message')
+      case 'Video':
+        return tx('video')
+      case 'File':
+        return tx('file')
+      case 'Webxdc':
+        return tx('webxdc_app')
+      case 'Vcard':
+        return tx('contact')
+      case 'Call':
+      case 'Text':
+      case 'Unknown':
+        return tx('pinned_message')
+    }
+  }, [activeMessage, tx])
+
+  const activeIndex =
+    activeId === null ? -1 : pinnedMessages.ids.indexOf(activeId)
+  if (activeId === null || activeIndex < 0) {
+    return null
+  }
+
+  const position = tx('pinned_message_position', [
+    String(activeIndex + 1),
+    String(pinnedMessages.ids.length),
+  ])
+  const showCurrentPinnedMessage = async () => {
+    try {
+      await jumpToMessage({
+        accountId,
+        msgId: activeId,
+        msgChatId: chatId,
+        focus: true,
+        scrollIntoViewArg: { block: 'center' },
+      })
+
+      setPinnedMessages(previous => {
+        const index = previous.ids.indexOf(activeId)
+        if (index < 0) {
+          return previous
+        }
+        const nextIndex = index === 0 ? previous.ids.length - 1 : index - 1
+        return { ...previous, activeId: previous.ids[nextIndex] }
+      })
+    } catch (error) {
+      log.error('Could not jump to pinned message', error)
+    }
+  }
+
+  return (
+    <button
+      type='button'
+      className={styles.pinnedMessageBar}
+      onClick={() => void showCurrentPinnedMessage()}
+      aria-label={`${tx('pinned_message')}: ${summary}, ${position}`}
+      title={tx('show_in_chat')}
+    >
+      <span className={styles.pinnedMessageIcon} aria-hidden='true' />
+      <span className={styles.pinnedMessageContent}>
+        <strong>{tx('pinned_message')}</strong>
+        <span className={styles.pinnedMessageSummary}>{summary}</span>
+      </span>
+      <span className={styles.pinnedMessagePosition} aria-hidden='true'>
+        {position}
+      </span>
+    </button>
   )
 }
 
