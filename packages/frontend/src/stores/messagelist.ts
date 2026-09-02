@@ -19,6 +19,11 @@ import { shouldShowOSNotificationForCurrentChat } from '../system-integration/no
 
 const log = getLogger('messagelist')
 
+/**
+ * How many messages are loaded in addition to the anchor message of a
+ * window, i.e. how many more messages one `fetchMoreMessagesTop` /
+ * `fetchMoreMessagesBottom` loads.
+ */
 const PAGE_SIZE = 11
 
 interface MessageListState {
@@ -160,9 +165,11 @@ function loadedWindowOf(state: MessageListState): LoadedWindow {
 }
 
 /*
- * A hook to read a portion of messages(a view) for a given chat. It creates a store(MessageListStore)
- * for the given chat and account and loads messages on it. It always has a maximum specified number
- * of messages as per PAGE_SIZE constant.
+ * A hook to read a window of messages for a given chat. It creates a
+ * store (MessageListStore) for the given chat and account and loads a window
+ * of messages on it, `PAGE_SIZE` more of them per `fetchMoreTop` /
+ * `fetchMoreBottom`. The rest of the chat is never loaded, so the cost of
+ * opening a chat does not depend on how many messages it has.
  */
 export function useMessageList(
   accountId: number,
