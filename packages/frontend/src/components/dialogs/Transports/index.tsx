@@ -208,7 +208,7 @@ export default function TransportsDialog(
                       aria-hidden='true'
                     />
                   </Button>
-                  {!transport.isDefault && (
+                  {transports.length > 1 && (
                     <Button
                       onClick={() => deleteTransport(transport)}
                       aria-label={`${tx('delete')}`}
