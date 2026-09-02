@@ -11,5 +11,15 @@
     "resolveJsonModule": true,
     "noUncheckedIndexedAccess": true,
     "plugins": [{ "name": "typescript-plugin-css-modules" }]
+  },
+  // Only used by unit tests (see bin/register-ts-node.mjs). Types are
+  // checked by `check:types` (with the whole project incl. global.d.ts);
+  // ts-node's per-file checking would produce false positives.
+  "ts-node": {
+    "transpileOnly": true,
+    "compilerOptions": {
+      // the base config specifies no target (esbuild has its own default)
+      "target": "es2022"
+    }
   }
 }
