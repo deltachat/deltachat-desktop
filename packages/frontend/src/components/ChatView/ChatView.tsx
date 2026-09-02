@@ -96,7 +96,7 @@ export function ChatViewInner({
   const { smallScreenMode } = useContext(ScreenContext)
 
   const messageListData = useMessageList(accountId, chatWithLinger.id)
-  const messageIds = messageListData.state.messageListIds
+  const messageIds = messageListData.state.loadedMessageIds
   const focusAndMultiselectContextValue =
     useMessageFocusAndMultiselectContextValue({ messageIds })
   const numSelectedMessages = focusAndMultiselectContextValue.selectedItems.size
