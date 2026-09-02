@@ -215,6 +215,11 @@ samp {
 audio {
   width: 300px;
 }
+.main-screen.small-screen {
+  audio {
+    width: 255px;
+  }
+}
 
 // used on electron and tauri runtime (it is handled by tauri, this class is for electron)
 // means element is non-interactable and area can be used to window drag around
