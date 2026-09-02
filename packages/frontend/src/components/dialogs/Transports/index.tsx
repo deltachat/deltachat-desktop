@@ -86,10 +86,6 @@ export default function TransportsDialog(
   )
 
   const openQrScanner = useCallback(async () => {
-    const multiDeviceMode = await BackendRemote.rpc.getConfig(
-      accountId,
-      'bcc_self'
-    )
     openDialog(BasicQrScanner, {
       onSuccess: async (result: string) => {
         const qr = await BackendRemote.rpc.checkQr(accountId, result)
@@ -97,8 +93,7 @@ export default function TransportsDialog(
           const transportAdded = await addTransportDialog(
             accountId,
             result,
-            qr.kind === 'account' ? qr.domain : qr.address,
-            multiDeviceMode === '1'
+            qr.kind === 'account' ? qr.domain : qr.address
           )
           if (transportAdded) {
             // refresh transport list

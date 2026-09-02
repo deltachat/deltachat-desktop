@@ -9,7 +9,6 @@ type AddTransportDialogFn = (
   accountId: number,
   transportString: string,
   domainOrAddress: string,
-  multiDeviceMode: boolean,
   confirmLabel?: string
 ) => Promise<boolean>
 
@@ -23,16 +22,10 @@ export default function useAddTransportDialog(): AddTransportDialogFn {
       accountId,
       transportString,
       domainOrAddress,
-      multiDeviceMode,
       confirmLabel = tx('confirm_add_transport')
     ) => {
-      let message = `${confirmLabel}\n ${domainOrAddress}`
-      if (multiDeviceMode) {
-        message +=
-          '\n\nNote if using multi-device:\nbefore changing or adding transports make sure all other devices have at least version 2.33.0 installed. Otherwise they will run out of sync.'
-      }
       const confirmed = await openConfirmationDialog({
-        message,
+        message: `${confirmLabel}\n ${domainOrAddress}`,
       })
       if (!confirmed) {
         return false

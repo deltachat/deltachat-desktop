@@ -18,7 +18,6 @@ import type { TranslationKey } from '@deltachat-desktop/shared/translationKeyTyp
 import useChat from './chat/useChat'
 import { unknownErrorToString } from '@deltachat-desktop/shared/unknownErrorToString'
 import ProxyConfiguration from '../components/dialogs/ProxyConfiguration'
-import { useSettingsStore } from '../stores/settings'
 import TransportsDialog from '../components/dialogs/Transports'
 import useAddTransportDialog from './dialog/useAddTransportDialog'
 
@@ -108,7 +107,6 @@ export default function useProcessQR() {
   const { startInstantOnboardingFlow } = useInstantOnboarding()
   const secureJoin = useSecureJoin()
 
-  const settingsStore = useSettingsStore()[0]
   const { selectChat } = useChat()
 
   /**
@@ -196,9 +194,6 @@ export default function useProcessQR() {
     },
     [openConfirmationDialog, startInstantOnboardingFlow, tx]
   )
-
-  const multiDeviceMode =
-    (settingsStore && settingsStore.settings['bcc_self'] === '1') ?? false
 
   return useCallback(
     async (
@@ -290,8 +285,7 @@ export default function useProcessQR() {
           const transportAdded = await addTransportDialog(
             accountId,
             url,
-            qr.kind === 'account' ? qr.domain : qr.address,
-            multiDeviceMode
+            qr.kind === 'account' ? qr.domain : qr.address
           )
           if (transportAdded) {
             openDialog(TransportsDialog, {
@@ -446,7 +440,6 @@ export default function useProcessQR() {
       processQrCode,
       startInstantOnboarding,
       selectChat,
-      multiDeviceMode,
       addTransportDialog,
       tx,
     ]
