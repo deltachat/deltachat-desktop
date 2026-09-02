@@ -130,11 +130,7 @@ export default function TransportsDialog(
         return
       }
 
-      await BackendRemote.rpc.setTransportUnpublished(
-        accountId,
-        transport.addr,
-        true
-      )
+      await BackendRemote.rpc.deleteTransport(accountId, transport.addr)
       getTransports()
     },
     [accountId, getTransports, openConfirmationDialog, tx]
