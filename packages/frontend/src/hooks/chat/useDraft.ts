@@ -490,8 +490,32 @@ export function useDraft(
       currQuote.messageId
     )
     if (currQuoteMessageIdInd === -1) {
-      // message not found at all, remove quote
-      removeQuote()
+      // The quoted message is not among the loaded messages, but it might
+      // still be a message of this chat that is simply not loaded (yet).
+      // Ask the core instead of looking it up in the loaded messages,
+      // which are only a part of the chat.
+      BackendRemote.rpc
+        .getMessage(accountId, currQuote.messageId)
+        .then(message => {
+          if (message.chatId !== chatId) {
+            // Not a message of this chat, remove the quote
+            removeQuote()
+            return
+          }
+          // -> jump to it, it will be loaded then (and the surrounding messages)
+          jumpToMessage({
+            accountId,
+            msgId: currQuote.messageId,
+            msgChatId: chatId,
+            highlight: true,
+            focus: false,
+            scrollIntoViewArg: { block: 'nearest' },
+          })
+        })
+        .catch(() => {
+          // message not found at all, remove quote
+          removeQuote()
+        })
       return
     }
 
