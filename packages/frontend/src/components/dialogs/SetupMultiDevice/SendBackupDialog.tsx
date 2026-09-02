@@ -14,7 +14,7 @@ import Dialog, {
 import FooterActionButton from '../../Dialog/FooterActionButton'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import useConfirmationDialog from '../../../hooks/dialog/useConfirmationDialog'
-import useAlertDialog from '../../../hooks/dialog/useAlertDialog'
+import useToast from '../../../hooks/useToast'
 
 import type { PropsWithChildren } from 'react'
 import type { DialogProps } from '../../../contexts/DialogContext'
@@ -29,7 +29,7 @@ const log = getLogger('renderer/send_backup')
 export function SendBackupDialog({ onClose }: DialogProps) {
   const tx = useTranslationFunction()
   const openConfirmationDialog = useConfirmationDialog()
-  const openAlertDialog = useAlertDialog()
+  const showToast = useToast()
   const { openContextMenu } = useContext(ContextMenuContext)
 
   const [inProgress, setInProgress] = useState<boolean>(false)
@@ -76,9 +76,7 @@ export function SendBackupDialog({ onClose }: DialogProps) {
     if (qrContent) {
       runtime.writeClipboardText(qrContent)
       setCopied(true)
-      openAlertDialog({
-        message: tx('copied_to_clipboard'),
-      })
+      showToast(tx('copied_to_clipboard'))
     }
   }
 

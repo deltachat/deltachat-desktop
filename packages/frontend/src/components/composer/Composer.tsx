@@ -44,6 +44,7 @@ import {
 } from '../AudioRecorder/AudioRecorder'
 import AlertDialog from '../dialogs/AlertDialog'
 import useAlertDialog from '../../hooks/dialog/useAlertDialog'
+import useToast from '../../hooks/useToast'
 import { unknownErrorToString } from '@deltachat-desktop/shared/unknownErrorToString'
 
 const log = getLogger('renderer/composer')
@@ -880,6 +881,7 @@ function useMessageEditing(
 ) {
   const tx = useTranslationFunction()
   const openAlertDialog = useAlertDialog()
+  const showToast = useToast()
 
   const [_originalMessage, setOriginalMessage] = useState<null | T.Message>(
     null
@@ -944,12 +946,13 @@ function useMessageEditing(
   const doSendEditRequest = useCallback(() => {
     if (newText.trim().length === 0) {
       log.error('doEdit called, but newText is empty')
-      void openAlertDialog({
-        message: tx('chat_please_enter_message'),
-      }).then(() => {
-        editMessageInputRef.current?.focus()
-        editMessageInputRef.current?.moveCursorToTheEnd()
+      showToast(tx('chat_please_enter_message'), {
+        type: 'error',
+        position: 'bottom',
       })
+      // The send button could have been used, so let's get back to the input.
+      editMessageInputRef.current?.focus()
+      editMessageInputRef.current?.moveCursorToTheEnd()
       return
     }
 
@@ -996,6 +999,7 @@ function useMessageEditing(
     newText,
     originalMessage,
     tx,
+    showToast,
     openAlertDialog,
     editMessageInputRef,
     regularMessageInputRef,

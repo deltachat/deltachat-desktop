@@ -24,6 +24,7 @@ import { InstantOnboardingProvider } from './contexts/InstantOnboardingContext'
 import { MediaPlayerMutexProvider } from './contexts/MediaPlayerMutexContext'
 import { SmallScreenModeMacOSTitleBar } from './components/SmallScreenModeMacOSTitleBar'
 import { NextVoiceMessagePlayerProvider } from './contexts/NextVoiceMessagePlayerContext'
+import { ToastContextProvider } from './contexts/ToastContext'
 
 const log = getLogger('renderer/ScreenController')
 
@@ -328,28 +329,30 @@ export default class ScreenController extends Component {
                 inside of `DialogContextProvider`. */}
                 <MediaPlayerMutexProvider>
                   <NextVoiceMessagePlayerProvider>
-                    <DialogContextProvider>
-                      <RuntimeAdapter accountId={this.selectedAccountId} />
-                      <KeybindingsContextProvider>
-                        <div className='main-container-container'>
-                          {this.state.smallScreenMode &&
-                            runtime.getRuntimeInfo().isMac && (
-                              <SmallScreenModeMacOSTitleBar />
-                            )}
-                          <div className='main-container'>
-                            <AccountListSidebar
-                              selectedAccountId={this.selectedAccountId}
-                              onAddAccount={this.addAndSelectAccount}
-                              onSelectAccount={this.selectAccount.bind(this)}
-                              openAccountDeletionScreen={this.openAccountDeletionScreen.bind(
-                                this
+                    <ToastContextProvider>
+                      <DialogContextProvider>
+                        <RuntimeAdapter accountId={this.selectedAccountId} />
+                        <KeybindingsContextProvider>
+                          <div className='main-container-container'>
+                            {this.state.smallScreenMode &&
+                              runtime.getRuntimeInfo().isMac && (
+                                <SmallScreenModeMacOSTitleBar />
                               )}
-                            />
-                            {this.renderScreen(this.selectedAccountId)}
+                            <div className='main-container'>
+                              <AccountListSidebar
+                                selectedAccountId={this.selectedAccountId}
+                                onAddAccount={this.addAndSelectAccount}
+                                onSelectAccount={this.selectAccount.bind(this)}
+                                openAccountDeletionScreen={this.openAccountDeletionScreen.bind(
+                                  this
+                                )}
+                              />
+                              {this.renderScreen(this.selectedAccountId)}
+                            </div>
                           </div>
-                        </div>
-                      </KeybindingsContextProvider>
-                    </DialogContextProvider>
+                        </KeybindingsContextProvider>
+                      </DialogContextProvider>
+                    </ToastContextProvider>
                   </NextVoiceMessagePlayerProvider>
                 </MediaPlayerMutexProvider>
               </ContextMenuProvider>
