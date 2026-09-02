@@ -42,9 +42,6 @@ g.document = {
   }),
 }
 
-/** Every `window.__userFeedback(...)` call, oldest first. */
-export const userFeedbackCalls: any[] = []
-g.__userFeedback = (feedback: any) => userFeedbackCalls.push(feedback)
 g.static_translate = (key: string) => key
 
 /** For app code that uses `selectedAccountId()` from ScreenController. */
@@ -157,7 +154,6 @@ export const tick = () => new Promise<void>(resolve => setTimeout(resolve, 0))
 export function resetTestEnv() {
   rpcStubs.clear()
   rpcCalls.length = 0
-  userFeedbackCalls.length = 0
   fakeMessageListElement.scrollHeight = 1000
   fakeMessageListElement.scrollTop = 50
   g.__selectedAccountId = undefined

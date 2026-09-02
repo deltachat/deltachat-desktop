@@ -103,12 +103,11 @@ export default function MessageList({
     scheduler,
     effect: { jumpToMessage, loadMissingMessages },
     reducer: { unlockScroll, clearJumpStack },
-    activeView,
   } = messageListStore
   const {
-    oldestFetchedMessageIndex,
     messageCache,
-    messageListIds,
+    loadedMessageIds,
+    hasOlder,
     viewState,
     jumpToMessageStack,
     loaded,
@@ -280,13 +279,7 @@ export default function MessageList({
       messageListRef.current.scrollTop -
       messageListRef.current.clientHeight
 
-    const {
-      newestFetchedMessageIndex: newestFetchedIndex,
-      messageListIds: currentMessageListIds,
-    } = messageListStore.getState()
-
-    const isNewestMessageLoaded =
-      newestFetchedIndex === currentMessageListIds.length - 1
+    const isNewestMessageLoaded = !messageListStore.getState().hasNewer
     const newShowJumpDownButton =
       !isNewestMessageLoaded ||
       distanceToBottom > maxScrollToBottomDistanceConsideredShort
@@ -683,9 +676,8 @@ export default function MessageList({
         onScroll={onScroll}
         onScrollEnd={onScrollEnd}
         onWheel={isReactionsBarShown ? hideReactionsBar : undefined}
-        oldestFetchedMessageIndex={oldestFetchedMessageIndex}
-        messageListIds={messageListIds}
-        activeView={activeView}
+        loadedMessageIds={loadedMessageIds}
+        hasOlder={hasOlder}
         messageCache={messageCache}
         messageListRef={messageListRef}
         chat={chat}
@@ -724,9 +716,8 @@ export const MessageListInner = React.memo(
     onScroll: (event: React.UIEvent<HTMLDivElement>) => void
     onScrollEnd: (event: Event) => void
     onWheel?: React.WheelEventHandler<HTMLDivElement>
-    oldestFetchedMessageIndex: number
-    messageListIds: number[]
-    activeView: number[]
+    loadedMessageIds: number[]
+    hasOlder: boolean
     messageCache: { [msgId: number]: T.MessageLoadResult | undefined }
     messageListRef: React.RefObject<HTMLDivElement | null>
     chat: T.FullChat
@@ -740,10 +731,9 @@ export const MessageListInner = React.memo(
       onScroll,
       onScrollEnd,
       onWheel,
-      oldestFetchedMessageIndex,
-      messageListIds,
+      loadedMessageIds,
+      hasOlder,
       messageCache,
-      activeView,
       messageListRef,
       chat,
       loaded,
@@ -764,7 +754,7 @@ export const MessageListInner = React.memo(
     )
 
     /**
-     * IDs of the messages in {@linkcode activeView} that begin a new day,
+     * IDs of the messages in {@linkcode loadedMessageIds} that begin a new day,
      * i.e. the ones that get a {@linkcode DayMarker} rendered above them.
      *
      * `sortTimestamp` and not `timestamp`, because that is what the list is
@@ -784,16 +774,16 @@ export const MessageListInner = React.memo(
       }
 
       const ids = new Set<number>()
-      let previousDay = dayOf(messageListIds[oldestFetchedMessageIndex - 1])
+      let previousDay = undefined
 
-      for (let i = 0; i < activeView.length; i++) {
-        const msgId = activeView[i]
+      for (let i = 0; i < loadedMessageIds.length; i++) {
+        const msgId = loadedMessageIds[i]
         const day = dayOf(msgId)
         if (day == undefined) {
           previousDay = undefined
           continue
         }
-        const isFirstMessageOfChat = oldestFetchedMessageIndex === 0 && i === 0
+        const isFirstMessageOfChat = !hasOlder && i === 0
         if (
           isFirstMessageOfChat ||
           (previousDay != undefined && day !== previousDay)
@@ -803,7 +793,7 @@ export const MessageListInner = React.memo(
         previousDay = day
       }
       return ids
-    }, [activeView, messageCache, messageListIds, oldestFetchedMessageIndex])
+    }, [loadedMessageIds, messageCache, hasOlder])
 
     useKeyBindingAction(KeybindAction.MessageList_PageUp, () => {
       if (messageListRef.current) {
@@ -957,8 +947,8 @@ export const MessageListInner = React.memo(
       >
         <ol aria-label={tx('messages')}>
           <RovingTabindexProvider wrapperElementRef={messageListRef}>
-            {messageListIds.length === 0 && <EmptyChatMessage chat={chat} />}
-            {activeView.flatMap(messageId => {
+            {loadedMessageIds.length === 0 && <EmptyChatMessage chat={chat} />}
+            {loadedMessageIds.flatMap(messageId => {
               const message = messageCache[messageId]
 
               let messageElement

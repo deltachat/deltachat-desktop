@@ -128,21 +128,6 @@ export class ChatViewReducer {
     }
   }
 
-  static setMessageListIds(prevState: ChatViewState): ChatViewState {
-    const { lastKnownScrollHeight, lastKnownScrollTop } =
-      getLastKnownScrollPosition()
-
-    return {
-      ...prevState,
-      scrollTo: {
-        type: 'scrollToLastKnownPosition',
-        lastKnownScrollHeight,
-        lastKnownScrollTop,
-        appendedOn: 'top',
-      },
-    }
-  }
-
   static selectChat(prevState: ChatViewState): ChatViewState {
     return {
       ...prevState,
