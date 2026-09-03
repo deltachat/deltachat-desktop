@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback } from 'react'
 
 import Dialog, {
   DialogBody,
@@ -12,9 +12,12 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 import type { DialogProps } from '../../contexts/DialogContext'
 import { BackendRemote, Type } from '../../backend-com'
 import { C } from '@deltachat/jsonrpc-client'
-import { ScreenContext } from '../../contexts/ScreenContext'
 import { useFetch } from '../../hooks/useFetch'
 import { unknownErrorToString } from '@deltachat-desktop/shared/unknownErrorToString'
+import { getLogger } from '@deltachat-desktop/shared/logger'
+import useAlertDialog from '../../hooks/dialog/useAlertDialog'
+
+const log = getLogger('renderer/dialogs/ConfirmDeleteMessage')
 
 export type Props = {
   accountId: number
@@ -29,7 +32,7 @@ export type Props = {
 
 export default function ConfirmDeleteMessageDialog(props: Props) {
   const tx = useTranslationFunction()
-  const { userFeedback } = useContext(ScreenContext)
+  const openAlertDialog = useAlertDialog()
 
   const { accountId, chat, onClose, messageIds, loadedMessages } = props
 
@@ -87,24 +90,19 @@ export default function ConfirmDeleteMessageDialog(props: Props) {
   )
 
   const deleteMessage = (deleteForEveryone: boolean) => {
+    const onError = (err: unknown) => {
+      log.error('Failed to delete messages', err)
+      void openAlertDialog({
+        message: tx('error_x', unknownErrorToString(err)),
+      })
+    }
+
     if (deleteForEveryone) {
       BackendRemote.rpc
         .deleteMessagesForAll(accountId, messageIds)
-        .catch((err: Error) => {
-          userFeedback({
-            type: 'error',
-            text: err.message,
-          })
-        })
+        .catch(onError)
     } else {
-      BackendRemote.rpc
-        .deleteMessages(accountId, messageIds)
-        .catch((err: Error) => {
-          userFeedback({
-            type: 'error',
-            text: err.message,
-          })
-        })
+      BackendRemote.rpc.deleteMessages(accountId, messageIds).catch(onError)
     }
     onClose()
   }
