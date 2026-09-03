@@ -132,7 +132,7 @@ const closeNotification = (notify: Notification) => {
  * @param data is passed from renderer process
  */
 function showNotification(_event: IpcMainInvokeEvent, data: DcNotification) {
-  const { chatId, accountId } = data
+  const { chatId, accountId, msgId } = data
 
   log.debug(
     'Creating notification:',
@@ -144,10 +144,11 @@ function showNotification(_event: IpcMainInvokeEvent, data: DcNotification) {
 
     notify.on('click', Event => {
       onClickNotification(data.accountId, chatId, data.messageId, Event)
-      notifications[accountId][chatId][data.messageId] =
-        notifications[accountId]?.[chatId]?.[data.messageId]?.filter(
-          n => n !== notify
-        ) || []
+      if (notifications[accountId]?.[chatId]?.[msgId]) {
+        notifications[accountId][chatId][msgId] = notifications[accountId][
+          chatId
+        ][msgId].filter(n => n !== notify)
+      }
       closeNotification(notify)
     })
     notify.on('close', () => {
@@ -157,10 +158,11 @@ function showNotification(_event: IpcMainInvokeEvent, data: DcNotification) {
       if (isMac) {
         // Mark as closed to prevent calling close() again later
         closedNotifications.add(notify)
-        notifications[accountId][chatId][data.messageId] =
-          notifications[accountId]?.[chatId]?.[data.messageId]?.filter(
-            n => n !== notify
-          ) || []
+        if (notifications[accountId]?.[chatId]?.[msgId]) {
+          notifications[accountId][chatId][msgId] = notifications[accountId][
+            chatId
+          ][msgId].filter(n => n !== notify)
+        }
       }
     })
     notify.on('reply', async e => {
@@ -210,10 +212,10 @@ function showNotification(_event: IpcMainInvokeEvent, data: DcNotification) {
       notifications[accountId][chatId] = {}
     }
 
-    if (notifications[accountId][chatId][data.messageId]) {
-      notifications[accountId][chatId][data.messageId].push(notify)
+    if (notifications[accountId][chatId][msgId]) {
+      notifications[accountId][chatId][msgId].push(notify)
     } else {
-      notifications[accountId][chatId][data.messageId] = [notify]
+      notifications[accountId][chatId][msgId] = [notify]
     }
 
     notify.show()
@@ -228,11 +230,10 @@ function clearNotificationsForMessage(
   chatId: number,
   messageId: number
 ) {
-  const arr = notifications[accountId]?.[chatId]?.[messageId]
-  if (arr == undefined) {
+  if (notifications[accountId]?.[chatId]?.[messageId] == undefined) {
     return
   }
-  arr.forEach(notify => {
+  notifications[accountId][chatId][messageId].forEach(notify => {
     closeNotification(notify)
   })
   delete notifications[accountId][chatId][messageId]
