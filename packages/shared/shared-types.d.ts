@@ -13,6 +13,10 @@ type Bounds = {
 export interface DesktopSettingsType {
   bounds: Bounds | {}
   HTMLEmailWindowBounds: Bounds | undefined
+  /**
+   * Not the *exact* width, see comments in the CSS files.
+   */
+  chatListSectionWidth?: string
   chatViewBgImg?: string
   /**
    * @deprecated replaced by lastAccount,
