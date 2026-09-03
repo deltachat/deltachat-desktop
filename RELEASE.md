@@ -1,9 +1,5 @@
 # How to do releases
 
-> Every new git tag triggers a build script which will create a new release on github,
-> build binaries for the different platforms and add a new release folder on
-> delta.chat/downloads/vX.Y.Z/ which includes all generated apps
-
 ## Test releases
 
 - Before every official release we build release previews, similar to
@@ -14,9 +10,9 @@
   "preview-release-X.Y.Z". The package.json version should be updated to the
   release version, but no git tag should be pushed, since that would trigger
   the final release.
-- Release previews are published to supporters and the userbase through our
-  community channels, but not through official app stores
-- Incite more broad user testing, look for issues which came up and gather feedback
+- Release previews can be published to supporters and the userbase through our
+  community channels
+- Optional: incite more broad user testing, look for issues which came up and gather feedback
   - Create a forum post to inform about the release preview, mention what this
     release is about and what should be tested, here is an
     [example](https://support.delta.chat/t/help-testing-the-upcoming-1-41-x-release/2793)
@@ -38,15 +34,13 @@
   only the revision might be client specific. So if core is on 2.23.0 the first
   release with that core should have 2.23.0. If more releases are needed with the
   same core they will have 2.23.1, 2.23.2 etc.
-- Update the official DeltaChat website by adjusting the constants in this file:
-  <https://github.com/deltachat/deltachat-pages/blob/master/_includes/download-boxes.html>
 - An in-app device message for the new official release should exist (except for minor
   changes or revisions), if there is no highlight to mention we can say it's a
   release focused on stability and bug fixes
 - Official releases require individual building steps for each platform we
-  support. The exact steps are not further defined in this document (yet).
+  support. The exact steps are not further defined in this document.
   Please consult one of the maintainers of this repository
-- When making an official release create a new issue following this template to
+- When making an official release the build machine creates a new issue following this template to
   track its status:
   ```
   - [ ] [DeltaChat Website](https://delta.chat/en/download)
@@ -89,31 +83,25 @@
 2. Run `pnpm prepare-release <version>`
 3. check and cleanup the changes added to CHANGELOG
 4. Open a PR for your branch and get it reviewed.
-5. use 'Prepare release X.ZY' as PR name. That will trigger a preview build that can be announced to testers for having a pre release testing.
-6. When the PR is approved and you want to publish the release merge it into `main`
-7. After the PR is merged, checkout the latest version on `main`. Tag the latest commit
+5. The PR name 'Prepare release X.ZY' will trigger a preview build that can be announced to testers for having a pre release testing. It also creates a Windows release package.
+6. When the Windows package is created, create and upload the needed packages for Apple and Microsoft Store on the build machine
+7. When the Store submissions are approved and you want to publish the release merge the prepare-release branch into `main`
+8. Checkout the latest version on `main`. Tag the latest commit
    with your version number:
    ```bash
    git tag v<version> # for example v2.23.0
    git push origin main --tags
    ```
-8. The deployment script creates a [release](https://github.com/deltachat/deltachat-desktop/releases)
+9. Then run the release script on the build machine. It will create and upload all builds for download.delta.chat, create a release status issue and a [release](https://github.com/deltachat/deltachat-desktop/releases)
    draft on github which needs to be updated and published manually:
 
-- Copy the relevant part of the `CHANGELOG.md` file into the description field
-  - for fresh releases this includes the changelog of the test releases
+- review the description field which includes the relevant part of the `CHANGELOG.md`
   - for patch releases the full changelog is not needed, the part that changed from the last release is enough
-- Add a header `# Downloads` with a link to the download page.
-  If it's an official release, add a link to the release progress issue.
-- for testing releases add a link to the testing forum topic:
-  ```md
-  > This release candidate is currently in the testing phase, to learn more read https://support.delta.chat/t/<rest of link>
-  ```
 
-1.  As soon as the new tag is detected by our build machine, it will start
-    building releases for various platforms (MacOS, Windows, Linux) and upload
-    them to: `https://download.delta.chat/desktop/[version_code]`. This process
-    takes 2-3 hours.
+10. Update the official DeltaChat website by adjusting the DESKTOP_VERSION constant in this file:
+    <https://github.com/deltachat/deltachat-pages/blob/master/_includes/download-boxes.html>
+
+11. Make a PR on https://github.com/flathub/chat.delta.desktop (follow the steps in th README)
 
 ## What if the `main` branch changed in the meantime
 
@@ -123,21 +111,3 @@ contributor on how to proceed in your case.
 ## After the release
 
 Consider doing pnpm updates & electron version updates couple of days after the release to have some time to detect compatibility issues.
-
-## Upload build artefacts to GitHub release (if deployment script failed)
-
-You can easily upload the build artefacts into the GitHub release with the help
-of the [GitHub command line tool](https://cli.github.com/). Make sure you've
-followed all steps above and the CI finished its build.
-
-```bash
-# Specify the version you've just released
-export DC_VERSION=v1.42.2
-
-# Download build artefacts from CI
-wget -r --no-parent -l1 --reject html https://download.delta.chat/desktop/$DC_VERSION
-rm download.delta.chat/desktop/$DC_VERSION/*index.html*
-
-# Upload them to the GitHub release
-gh release upload -R deltachat/deltachat-desktop $DC_VERSION download.delta.chat/desktop/$DC_VERSION/*
-```
