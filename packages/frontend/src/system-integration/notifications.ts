@@ -1,4 +1,3 @@
-import { appName } from '@deltachat-desktop/shared/constants'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 import { NOTIFICATION_TYPE } from '@deltachat-desktop/shared/constants'
 import { BackendRemote } from '../backend-com'
@@ -167,7 +166,6 @@ async function showNotification(
 
   if (!DesktopSettingsStoreInstance.state?.showNotificationContent) {
     runtime.showNotification({
-      title: appName,
       body: tx('notify_new_message'),
       icon: null,
       chatId,
@@ -263,7 +261,6 @@ async function showGroupedNotification(
 
   if (!DesktopSettingsStoreInstance.state?.showNotificationContent) {
     runtime.showNotification({
-      title: appName,
       body: tx('new_messages'),
       icon: null,
       chatId: 0,
