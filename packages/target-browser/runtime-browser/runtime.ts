@@ -460,7 +460,7 @@ class BrowserRuntime implements Runtime {
     }
 
     this.log.info('notify-icon', { icon }) // todo rm
-    const notification = new Notification(title, {
+    const notification = new Notification(title ?? '', {
       body,
       icon,
       tag: `${accountId}.${chatId}.${messageId}`,
