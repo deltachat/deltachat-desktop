@@ -166,7 +166,7 @@ export interface BuildInfo {
 }
 
 export interface DcNotification {
-  title: string
+  title?: string
   body: string
   /**
    * path to image that should be shown instead of icon
