@@ -1,0 +1,84 @@
+.layer {
+  position: fixed;
+  width: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--globalText);
+  overflow: visible;
+  pointer-events: none;
+}
+
+.layer.top {
+  inset: 0 0 auto 0;
+  padding-block-start: 60px;
+}
+
+.layer.bottom {
+  inset: auto 0 0 0;
+  padding-block-end: 70px;
+}
+
+.layer:popover-open {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.layer.bottom:popover-open {
+  /* Keep the newest toast closest to the window edge it appears at. */
+  flex-direction: column-reverse;
+}
+
+.toast {
+  max-width: min(90%, 500px);
+  padding: 10px 16px;
+  border-radius: 50px;
+  background-color: var(--bp4DialogBgPrimary);
+  color: var(--globalText);
+  box-shadow:
+    0 0 0 1px rgb(16 22 26 / 10%),
+    0 4px 8px rgb(16 22 26 / 20%),
+    0 0 20px 3px rgb(16 22 26 / 20%);
+  font-size: medium;
+  text-align: center;
+  overflow-wrap: break-word;
+}
+
+.toast.top {
+  animation: appear-from-top 150ms ease-out;
+}
+
+.toast.bottom {
+  animation: appear-from-bottom 150ms ease-out;
+}
+
+.toast.error {
+  background-color: var(--errorColor);
+  color: #fff;
+}
+
+@keyframes appear-from-top {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes appear-from-bottom {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast.top,
+  .toast.bottom {
+    animation: none;
+  }
+}
