@@ -480,7 +480,16 @@ test.describe('custom app picker URL', () => {
 
     await page.getByRole('button', { name: 'Attach' }).click()
     await page.getByRole('menuitem', { name: 'App' }).click()
-    await page.getByRole('button', { name: 'Poll' }).first().click()
+    // Narrow down the list first, and then pick the app by its name only:
+    // the accessible name of a list entry also includes the description,
+    // and other apps describe themselves as poll apps as well.
+    const appPicker = page.locator('.styles_module_appPickerContainer')
+    await appPicker.getByPlaceholder('Search').fill('Poll')
+    await appPicker
+      .getByRole('button')
+      .filter({ has: page.getByText('Poll', { exact: true }) })
+      .first()
+      .click()
     await page.getByRole('button', { name: 'Add to Chat' }).click()
     await page.getByRole('button', { name: 'Send', exact: true }).click()
     await expect(page.locator(`.message`).last()).toContainText('Poll')
