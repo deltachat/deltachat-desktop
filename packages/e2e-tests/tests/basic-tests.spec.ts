@@ -481,7 +481,7 @@ test.describe('custom app picker URL', () => {
     await page.getByRole('button', { name: 'Attach' }).click()
     await page.getByRole('menuitem', { name: 'App' }).click()
     // Narrow down the list first, and then pick the app by its name only:
-    // the accessible name of a list entry also includes the description,
+    // the name of a list entry also includes the description,
     // and other apps describe themselves as poll apps as well.
     const appPicker = page.locator('.styles_module_appPickerContainer')
     await appPicker.getByPlaceholder('Search').fill('Poll')
