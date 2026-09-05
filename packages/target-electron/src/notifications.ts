@@ -132,7 +132,7 @@ const closeNotification = (notify: Notification) => {
  * @param data is passed from renderer process
  */
 function showNotification(_event: IpcMainInvokeEvent, data: DcNotification) {
-  const { chatId, accountId, msgId } = data
+  const { chatId, accountId, messageId } = data
 
   log.debug(
     'Creating notification:',
@@ -144,10 +144,10 @@ function showNotification(_event: IpcMainInvokeEvent, data: DcNotification) {
 
     notify.on('click', Event => {
       onClickNotification(data.accountId, chatId, data.messageId, Event)
-      if (notifications[accountId]?.[chatId]?.[msgId]) {
-        notifications[accountId][chatId][msgId] = notifications[accountId][
+      if (notifications[accountId]?.[chatId]?.[messageId]) {
+        notifications[accountId][chatId][messageId] = notifications[accountId][
           chatId
-        ][msgId].filter(n => n !== notify)
+        ][messageId].filter(n => n !== notify)
       }
       closeNotification(notify)
     })
@@ -158,10 +158,10 @@ function showNotification(_event: IpcMainInvokeEvent, data: DcNotification) {
       if (isMac) {
         // Mark as closed to prevent calling close() again later
         closedNotifications.add(notify)
-        if (notifications[accountId]?.[chatId]?.[msgId]) {
-          notifications[accountId][chatId][msgId] = notifications[accountId][
-            chatId
-          ][msgId].filter(n => n !== notify)
+        if (notifications[accountId]?.[chatId]?.[messageId]) {
+          notifications[accountId][chatId][messageId] = notifications[
+            accountId
+          ][chatId][messageId].filter(n => n !== notify)
         }
       }
     })
@@ -212,10 +212,10 @@ function showNotification(_event: IpcMainInvokeEvent, data: DcNotification) {
       notifications[accountId][chatId] = {}
     }
 
-    if (notifications[accountId][chatId][msgId]) {
-      notifications[accountId][chatId][msgId].push(notify)
+    if (notifications[accountId][chatId][messageId]) {
+      notifications[accountId][chatId][messageId].push(notify)
     } else {
-      notifications[accountId][chatId][msgId] = [notify]
+      notifications[accountId][chatId][messageId] = [notify]
     }
 
     notify.show()
