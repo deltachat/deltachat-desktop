@@ -492,7 +492,7 @@ app.on('web-contents-created', (_ev, contents) => {
           userCancelledDialogAtLeastOnce = true
           return
         case 1: {
-          clipboard.writeText(asciiUrl)
+          await clipboard.writeText(asciiUrl)
           break
         }
         case 2: {
