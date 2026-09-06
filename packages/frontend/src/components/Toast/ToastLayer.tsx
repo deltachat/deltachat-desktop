@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useLayoutEffect, useRef } from 'react'
 import classNames from 'classnames'
 
 import styles from './styles.module.css'
@@ -11,26 +11,36 @@ type Props = {
   onExpire: (id: Toast['id']) => void
 }
 
+const TOAST_GAP = 8
+
 /**
- * Renders all currently visible toasts in the
+ * Renders every toast in the
  * [top layer](https://developer.mozilla.org/en-US/docs/Glossary/Top_layer),
- * so that they are visible even while modal dialogs are open.
+ * so that they stay visible above modal dialogs.
  *
- * The layer is never interactive (see `pointer-events` in the styles),
- * because it overlaps whatever is below it, including dialog buttons.
+ * We use Toasts only as a non-interactive notification system
+ * notifications might be missed due to the auto-expiration
+ *
+ * If interaction is needed use a dialog instead
  */
 export default function ToastLayer({ position, toasts, onExpire }: Props) {
   const layerRef = useRef<HTMLDivElement>(null)
   const shownToasts = useRef(new Map<Toast['id'], Toast['shownAt']>())
 
-  useEffect(() => {
-    const layer = layerRef.current
-    if (layer == null) {
-      return
+  /** Toasts are in the top layer, so they don't stack by themselves. */
+  const stack = useCallback(() => {
+    let offset = 0
+    for (const element of getToastElements(layerRef.current)) {
+      element.style.setProperty('--stack-offset', `${offset}px`)
+      offset += element.offsetHeight + TOAST_GAP
     }
+  }, [])
 
-    // A changed `shownAt` means an already displayed toast was shown anew,
-    // which should bring it back to the front just like a brand new one.
+  useLayoutEffect(() => {
+    const elements = getToastElements(layerRef.current)
+
+    // A changed `shownAt` means a displayed toast was shown anew, which
+    // should bring it to the front just like a brand new one.
     const hasNewToast = toasts.some(
       toast => shownToasts.current.get(toast.id) !== toast.shownAt
     )
@@ -38,43 +48,58 @@ export default function ToastLayer({ position, toasts, onExpire }: Props) {
       toasts.map(toast => [toast.id, toast.shownAt])
     )
 
-    const isOpen = layer.matches(':popover-open')
-    if (isOpen && !hasNewToast) {
-      return
+    if (hasNewToast) {
+      // The top layer is painted in the order it was entered, and dialogs
+      // enter it through `showModal()`, so re-entering keeps toasts above
+      // dialogs that were opened after them.
+      for (const element of elements) {
+        if (element.matches(':popover-open')) {
+          element.hidePopover()
+        }
+        element.showPopover()
+      }
     }
-    // Elements of the top layer are painted in the order in which they
-    // entered it, and dialogs enter it through `showModal()`.
-    // Re-entering it for every new toast is therefore what keeps toasts
-    // above dialogs that were opened after this component was mounted.
-    if (isOpen) {
-      layer.hidePopover()
+    // Closed popovers are `display: none`, so measure only once open.
+    stack()
+  }, [toasts, stack])
+
+  useEffect(() => {
+    // Toasts grow a line when the window gets too narrow for their text.
+    const observer = new ResizeObserver(stack)
+    for (const element of getToastElements(layerRef.current)) {
+      observer.observe(element)
     }
-    layer.showPopover()
-  }, [toasts])
+    return () => observer.disconnect()
+  }, [toasts, stack])
 
   return (
     <div
       ref={layerRef}
-      // Not `"auto"`, because those get dismissed on `Escape`
-      // and by clicking anywhere.
-      popover='manual'
-      className={classNames(styles.layer, styles[position])}
-      // The layer is kept open (and thus in the accessibility tree)
-      // even while empty, so that added toasts are announced.
+      className={styles.layer}
       role='status'
       aria-atomic='false'
     >
       {toasts.map(toast => (
-        <ToastItem key={toast.id} toast={toast} onExpire={onExpire} />
+        <ToastItem
+          key={toast.id}
+          toast={toast}
+          position={position}
+          onExpire={onExpire}
+        />
       ))}
     </div>
   )
 }
 
+function getToastElements(layer: HTMLDivElement | null): HTMLElement[] {
+  return layer == null ? [] : (Array.from(layer.children) as HTMLElement[])
+}
+
 function ToastItem({
   toast,
+  position,
   onExpire,
-}: { toast: Toast } & Pick<Props, 'onExpire'>) {
+}: { toast: Toast } & Pick<Props, 'position' | 'onExpire'>) {
   useEffect(() => {
     const timeout = setTimeout(() => onExpire(toast.id), toast.durationMs)
     return () => clearTimeout(timeout)
@@ -82,7 +107,10 @@ function ToastItem({
 
   return (
     <div
-      className={classNames(styles.toast, styles[toast.position], {
+      // Not `"auto"`, because the notification should stay visible
+      // even if the user is interacting with the page
+      popover='manual'
+      className={classNames(styles.toast, styles[position], {
         [styles.error]: toast.type === 'error',
       })}
     >
