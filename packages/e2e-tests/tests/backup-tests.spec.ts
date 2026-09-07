@@ -176,7 +176,9 @@ test('shows warning when scanning backups that are newer than supported', async 
 
   await sendBackupDialog.getByTestId('dialog-header-context-menu').click()
   await page.getByRole('menuitem', { name: 'Copy' }).click()
-  await page.getByTestId('alert-ok').click()
+  await expect(
+    page.getByRole('status').getByText('Copied to clipboard')
+  ).toBeVisible()
 
   const clipboardContent = await page.evaluate(async () => {
     return navigator.clipboard.readText()

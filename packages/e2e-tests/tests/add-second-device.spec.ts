@@ -54,7 +54,9 @@ test('add a second device', async ({ browserName }) => {
     await pageA.context().grantPermissions(['clipboard-write'])
   }
   await pageA.getByRole('menuitem', { name: 'Copy' }).click()
-  await pageA.getByRole('dialog').getByRole('button', { name: 'Ok' }).click()
+  await expect(
+    pageA.getByRole('status').getByText('Copied to clipboard')
+  ).toBeVisible()
 
   await pageB
     .getByRole('dialog')
