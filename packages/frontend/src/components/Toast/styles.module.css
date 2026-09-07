@@ -1,0 +1,65 @@
+.layer {
+  /* No box of its own, it only groups the toasts into a live region. */
+  display: contents;
+}
+
+.toast {
+  position: fixed;
+  /* Undoes the `inset: 0` of the user agent's popover styles. */
+  inset: auto;
+  left: 50%;
+  translate: -50%;
+  width: fit-content;
+  max-width: min(90%, 500px);
+  margin: 0;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 50px;
+  background-color: var(--bp4DialogBgPrimary);
+  color: var(--globalText);
+  box-shadow:
+    0 0 0 1px rgb(16 22 26 / 10%),
+    0 4px 8px rgb(16 22 26 / 20%),
+    0 0 20px 3px rgb(16 22 26 / 20%);
+  font-size: medium;
+  text-align: center;
+  overflow: visible;
+  overflow-wrap: break-word;
+  pointer-events: none;
+}
+
+.toast.top {
+  top: calc(60px + var(--stack-offset, 0px));
+  animation: appear-from-top 150ms ease-out;
+}
+
+.toast.bottom {
+  bottom: calc(70px + var(--stack-offset, 0px));
+  animation: appear-from-bottom 150ms ease-out;
+}
+
+.toast.error {
+  background-color: var(--errorColor);
+  color: #fff;
+}
+
+@keyframes appear-from-top {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes appear-from-bottom {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast.top,
+  .toast.bottom {
+    animation: none;
+  }
+}
