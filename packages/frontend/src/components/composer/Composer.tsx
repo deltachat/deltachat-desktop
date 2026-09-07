@@ -6,7 +6,6 @@ import React, {
   useLayoutEffect,
   useCallback,
   useMemo,
-  useContext,
 } from 'react'
 import { T, C } from '@deltachat/jsonrpc-client'
 import { extension } from 'mime-types'
@@ -38,13 +37,13 @@ import { AppPicker } from '../AppPicker'
 import { AppInfo } from '../AppPicker'
 import OutsideClickHelper from '../OutsideClickHelper'
 import { useHasChanged2 } from '../../hooks/useHasChanged'
-import { ScreenContext } from '../../contexts/ScreenContext'
 import {
   AudioErrorType,
   AudioRecorder,
   AudioRecorderError,
 } from '../AudioRecorder/AudioRecorder'
 import AlertDialog from '../dialogs/AlertDialog'
+import useAlertDialog from '../../hooks/dialog/useAlertDialog'
 import { unknownErrorToString } from '@deltachat-desktop/shared/unknownErrorToString'
 
 const log = getLogger('renderer/composer')
@@ -880,7 +879,7 @@ function useMessageEditing(
   regularMessageInputRef: React.RefObject<ComposerMessageInput | null>
 ) {
   const tx = useTranslationFunction()
-  const { userFeedback } = useContext(ScreenContext)
+  const openAlertDialog = useAlertDialog()
 
   const [_originalMessage, setOriginalMessage] = useState<null | T.Message>(
     null
@@ -944,11 +943,13 @@ function useMessageEditing(
 
   const doSendEditRequest = useCallback(() => {
     if (newText.trim().length === 0) {
-      userFeedback({
-        type: 'error',
-        text: tx('chat_please_enter_message'),
-      })
       log.error('doEdit called, but newText is empty')
+      void openAlertDialog({
+        message: tx('chat_please_enter_message'),
+      }).then(() => {
+        editMessageInputRef.current?.focus()
+        editMessageInputRef.current?.moveCursorToTheEnd()
+      })
       return
     }
 
@@ -976,10 +977,9 @@ function useMessageEditing(
         setOriginalMessage(originalMessage_)
         setNewText(newText)
 
-        userFeedback({
-          type: 'error',
+        void openAlertDialog({
           // Probably not worth translating, since it's rare.
-          text: 'Failed to edit the message',
+          message: 'Failed to edit the message',
         })
       })
 
@@ -996,7 +996,8 @@ function useMessageEditing(
     newText,
     originalMessage,
     tx,
-    userFeedback,
+    openAlertDialog,
+    editMessageInputRef,
     regularMessageInputRef,
   ])
 

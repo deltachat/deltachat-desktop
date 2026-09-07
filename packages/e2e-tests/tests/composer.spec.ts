@@ -856,6 +856,26 @@ test.describe('edit message', () => {
 
     await page.keyboard.press('Escape')
   })
+  test('shows a dialog when trying to save an empty edit', async () => {
+    await textarea.focus()
+    await page.keyboard.press('ArrowUp')
+    await expect(textareaEdit()).toHaveText('M 3')
+
+    await textareaEdit().fill('')
+    await page.keyboard.press('ControlOrMeta+Enter')
+
+    const dialog = page.getByRole('dialog')
+    await expect(dialog.getByText('Please enter a message.')).toBeVisible()
+
+    // The dialog is dismissible, and after closing it we're back
+    // in the edit mode with the input focused.
+    await dialog.getByRole('button', { name: 'OK' }).click()
+    await expect(dialog).not.toBeVisible()
+    await expect(textareaEdit()).toBeFocused()
+    await expect(editMessageSection()).toContainText('Edit Message')
+
+    await page.keyboard.press('Escape')
+  })
 })
 
 test.describe('Emoji picker', () => {

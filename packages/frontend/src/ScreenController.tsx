@@ -1,6 +1,5 @@
 import React, { createRef } from 'react'
 import { Component } from 'react'
-import { DcEventType } from '@deltachat/jsonrpc-client'
 import { throttle } from '@deltachat-desktop/shared/util'
 
 import MainScreen from './components/screens/MainScreen/MainScreen'
@@ -66,8 +65,6 @@ export default class ScreenController extends Component {
       smallScreenMode: isSmallScreenMode(),
     }
 
-    this.onError = this.onError.bind(this)
-    this.onSuccess = this.onSuccess.bind(this)
     this.userFeedback = this.userFeedback.bind(this)
     this.userFeedbackClick = this.userFeedbackClick.bind(this)
     this.changeScreen = this.changeScreen.bind(this)
@@ -273,8 +270,6 @@ export default class ScreenController extends Component {
   }
 
   componentDidMount() {
-    BackendRemote.on('Error', this.onError)
-
     runtime.onResumeFromSleep = throttle(() => {
       log.info('onResumeFromSleep')
       // update timestamps
@@ -291,23 +286,7 @@ export default class ScreenController extends Component {
   }
 
   componentWillUnmount() {
-    BackendRemote.off('Error', this.onError)
-
     window.removeEventListener('resize', this.updateSmallScreenMode)
-  }
-
-  onError(accountId: number, { msg }: DcEventType<'Error'>) {
-    if (
-      this.selectedAccountId !== accountId ||
-      this.state.screen === Screens.Welcome
-    ) {
-      return
-    }
-    this.userFeedback({ type: 'error', text: msg })
-  }
-
-  onSuccess(_event: any, text: string) {
-    this.userFeedback({ type: 'success', text })
   }
 
   renderScreen(key: React.Key | null | undefined) {

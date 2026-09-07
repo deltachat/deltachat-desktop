@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useContext,
-  useRef,
-  useLayoutEffect,
-  useCallback,
-} from 'react'
+import React, { useState, useRef, useLayoutEffect, useCallback } from 'react'
 import classNames from 'classnames'
 
 import Dialog, {
@@ -19,7 +13,6 @@ import { QrReader, QrCodeScanRef } from '../QrReader'
 import { BackendRemote } from '../../backend-com'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 
-import { ScreenContext } from '../../contexts/ScreenContext'
 import useContextMenu from '../../hooks/useContextMenu'
 import useProcessQr from '../../hooks/useProcessQr'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
@@ -111,9 +104,9 @@ export function QrCodeShowQrInner({
   description: string
   onClose?: todo
 }) {
-  const { userFeedback } = useContext(ScreenContext)
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
+  const openAlertDialog = useAlertDialog()
 
   const onCopy = () => {
     // Pop up confirmation dialog when clicked instead of copying the link directly
@@ -121,9 +114,8 @@ export function QrCodeShowQrInner({
       message: tx('share_invite_link_explain'),
       content: qrCode,
       copyCb: () => {
-        userFeedback({
-          type: 'success',
-          text: tx('copied_to_clipboard'),
+        void openAlertDialog({
+          message: tx('copied_to_clipboard'),
         })
         onClose()
       },
