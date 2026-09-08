@@ -9,3 +9,9 @@
     background-color: rgba(200, 200, 200, 0.3);
   }
 }
+
+:global(.main-screen.small-screen) {
+  .audioPlayer {
+    min-width: 255px;
+  }
+}
