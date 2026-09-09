@@ -211,14 +211,23 @@ async function showNotification(
           summaryPrefix = `${webxdcInfo.name}`
           if (webxdcInfo.icon) {
             const iconName = webxdcInfo.icon
-            const iconBlob = await BackendRemote.rpc.getWebxdcBlob(
-              accountId,
-              message.id,
-              iconName
-            )
-            // needed for valid dataUrl
-            const imageExtension = iconName.split('.').pop()
-            icon = `data:image/${imageExtension};base64,${iconBlob}`
+            try {
+              const iconBlob = await BackendRemote.rpc.getWebxdcBlob(
+                accountId,
+                message.id,
+                iconName
+              )
+              // needed for valid dataUrl
+              const imageExtension = iconName.split('.').pop()
+              icon = `data:image/${imageExtension};base64,${iconBlob}`
+            } catch (error) {
+              // core refuses to load icons with unexpected dimensions or
+              // format; show the notification without an icon then
+              log.warn(
+                `could not load webxdc icon of message ${message.id}`,
+                error
+              )
+            }
           }
         } else {
           throw new Error(`no webxdcInfo in message with id ${message.id}`)

@@ -386,10 +386,18 @@ export default class DCWebxdc {
       const appIconPromise = this.rpc
         .getWebxdcBlob(accountId, msg_id, webxdcInfo.icon)
         .then(blob => nativeImage.createFromBuffer(Buffer.from(blob, 'base64')))
+        // core refuses to load icons with unexpected dimensions or format,
+        // and the menu below waits for this promise
+        .catch(error => {
+          log.warn(`could not load icon of webxdc app ${appId}`, error)
+          return undefined
+        })
       let app_icon: Awaited<typeof appIconPromise> | undefined
-      appIconPromise.then(i => (app_icon = i))
       appIconPromise.then(i => {
-        webxdcWindow.setIcon(i)
+        app_icon = i
+        if (i) {
+          webxdcWindow.setIcon(i)
+        }
       })
 
       open_apps[appId] = {
@@ -517,11 +525,9 @@ export default class DCWebxdc {
       }
 
       if (!isMac) {
-        if (app_icon != undefined) {
-          webxdcWindow.setMenu(makeMenu())
-        } else {
-          appIconPromise.then(() => webxdcWindow.setMenu(makeMenu()))
-        }
+        // the menu shows the app icon, so it can only be built once the
+        // icon is loaded
+        appIconPromise.then(() => webxdcWindow.setMenu(makeMenu()))
       }
 
       webxdcWindow.on('focus', () => {
