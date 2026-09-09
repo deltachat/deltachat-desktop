@@ -617,6 +617,28 @@ test('correct handling of changed profile displaynames', async () => {
   ).toBeVisible()
 })
 
+test('switching profile closes dialogs of the previous profile', async () => {
+  const userA = getUser(0, existingProfiles)
+  const userB = getUser(1, existingProfiles)
+  await switchToProfile(page, userA.id)
+  await selectChat(page, userB.name)
+
+  await page.getByRole('button', { name: 'Apps & Media' }).click()
+  await expect(page.getByRole('dialog')).toBeVisible()
+
+  // While a modal dialog is open, the account sidebar can't be clicked,
+  // so call window.__selectAccount with another accountId directly
+  await page.evaluate(
+    accountId => (window as any).__selectAccount(Number(accountId)),
+    userB.id
+  )
+  await expect(page.getByTestId(`selected-account:${userB.id}`)).toHaveCount(1)
+
+  // The dialog belongs to the previous profile, so it must not stay open,
+  // see https://github.com/deltachat/deltachat-desktop/issues/6602
+  await expect(page.getByRole('dialog')).toHaveCount(0)
+})
+
 test('delete profiles', async () => {
   if (existingProfiles.length < 1) {
     throw new Error('Not existing profiles to delete!')
