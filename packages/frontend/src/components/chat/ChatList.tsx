@@ -28,7 +28,7 @@ import {
 } from './ChatListItemRow'
 import {
   PseudoListItemAddContact,
-  PseudoListItemAddContactOrGroupFromInviteLink,
+  PseudoListItemQrSearchResult,
 } from '../helpers/PseudoListItem'
 import { KeybindAction } from '../../keybindings'
 import { useThemeCssVar } from '../../ThemeManager'
@@ -48,9 +48,11 @@ import type {
   ChatListContactItemData,
   ChatListMessageItemData,
 } from './ChatListItemRow'
-import { isInviteLink } from '@deltachat-desktop/shared/util'
 import { RovingTabindexProvider } from '../../contexts/RovingTabindex'
 import { useRpcFetch } from '../../hooks/useFetch'
+import useQrSearchResult, {
+  type QrSearchResult,
+} from '../../hooks/useQrSearchResult'
 import { useSettingsStore } from '../../stores/settings'
 import { useMultiselect } from '../../hooks/useMultiselect'
 import { getLogger } from '@deltachat-desktop/shared/logger'
@@ -208,6 +210,8 @@ export default function ChatList(props: {
     showArchivedChats
   )
 
+  const qrSearchResult = useQrSearchResult(accountId, queryStr ?? '')
+
   const { openContextMenu, activeContextMenuChatIds } = useChatContextMenu()
   const { selectChat } = useChat()
 
@@ -364,8 +368,8 @@ export default function ChatList(props: {
 
   let showChatResults = true
 
-  if (chatListIds.length === 0 && queryStr && isInviteLink(queryStr)) {
-    // Don't show "0 chats" when the query is an invite link
+  if (chatListIds.length === 0 && qrSearchResult != null) {
+    // Don't show "0 chats" when the query is a QR link
     showChatResults = false
   }
 
@@ -447,6 +451,7 @@ export default function ChatList(props: {
               {isSearchActive && (
                 <ContactAndMessageSearchResults
                   queryStr={queryStr}
+                  qrSearchResult={qrSearchResult}
                   onExitSearch={props.onExitSearch}
                   parentSectionHeight={height}
                   chatsHeight={chatsHeight}
@@ -567,6 +572,7 @@ function SearchInChatResults({
 
 function ContactAndMessageSearchResults({
   queryStr,
+  qrSearchResult,
   onExitSearch,
   parentSectionHeight,
   chatsHeight,
@@ -577,6 +583,7 @@ function ContactAndMessageSearchResults({
   DIVIDER_HEIGHT,
 }: {
   queryStr: string
+  qrSearchResult: QrSearchResult | null
   onExitSearch?: () => void
   parentSectionHeight: number
   chatsHeight: (heihgt: number) => number
@@ -627,8 +634,6 @@ function ContactAndMessageSearchResults({
       contactIds.length * CHATLISTITEM_CONTACT_HEIGHT
     )
 
-  const showPseudoListItemAddContactFromInviteLink =
-    queryStr && isInviteLink(queryStr)
   const messagesHeight = (height: number) =>
     height -
     (DIVIDER_HEIGHT * 3 +
@@ -637,9 +642,7 @@ function ContactAndMessageSearchResults({
       (chatListSearchResultsIsEmpty && queryStrIsValidEmail
         ? CHATLISTITEM_MESSAGE_HEIGHT
         : 0) +
-      (showPseudoListItemAddContactFromInviteLink
-        ? CHATLISTITEM_MESSAGE_HEIGHT
-        : 0))
+      (qrSearchResult != null ? CHATLISTITEM_MESSAGE_HEIGHT : 0))
 
   const contactlistData: ChatListContactItemData = useMemo(() => {
     return {
@@ -658,13 +661,13 @@ function ContactAndMessageSearchResults({
   }, [messageResultIds, messageCache, queryStr, queryChatId])
 
   if (
-    showPseudoListItemAddContactFromInviteLink &&
+    qrSearchResult != null &&
     contactIds.length === 0 &&
     messageResultIds.length === 0
   ) {
     return (
-      <PseudoListItemAddContactOrGroupFromInviteLink
-        inviteLink={queryStr!}
+      <PseudoListItemQrSearchResult
+        result={qrSearchResult}
         accountId={accountId}
       />
     )
@@ -708,9 +711,9 @@ function ContactAndMessageSearchResults({
                 onClick={addContactOnClick}
               />
             )}
-          {showPseudoListItemAddContactFromInviteLink && (
-            <PseudoListItemAddContactOrGroupFromInviteLink
-              inviteLink={queryStr!}
+          {qrSearchResult != null && (
+            <PseudoListItemQrSearchResult
+              result={qrSearchResult}
               accountId={accountId}
             />
           )}

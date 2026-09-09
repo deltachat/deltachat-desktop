@@ -1,15 +1,14 @@
 import React, { PropsWithChildren, CSSProperties, useRef } from 'react'
 
 import { PseudoContact } from '../contact/Contact'
-import { QRAvatar } from '../Avatar'
+import { AvatarFromContact, QRAvatar } from '../Avatar'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { useSettingsStore } from '../../stores/settings'
 import useProcessQR from '../../hooks/useProcessQr'
-import { BackendRemote } from '../../backend-com'
-import { ContactListItem } from '../contact/ContactListItem'
 import { useRovingTabindex } from '../../contexts/RovingTabindex'
-import { useRpcFetch } from '../../hooks/useFetch'
 import { SCAN_CONTEXT_TYPE } from '../../hooks/useProcessQr'
+
+import type { QrSearchResult } from '../../hooks/useQrSearchResult'
 
 export function PseudoListItem(
   props: PropsWithChildren<{
@@ -129,82 +128,46 @@ export const PseudoListItemAddContact = ({
   )
 }
 
-export const PseudoListItemAddContactOrGroupFromInviteLink = ({
-  inviteLink,
+/**
+ * A search result for a query that is a QR code / URI, e.g. an invite link.
+ *
+ * @see `useQrSearchResult`
+ */
+export const PseudoListItemQrSearchResult = ({
+  result,
   accountId,
   callback,
 }: {
-  inviteLink: string
+  result: QrSearchResult
   accountId: number
   callback?: () => void
 }) => {
   const tx = useTranslationFunction()
   const processQr = useProcessQR()
-  const inviteLinkTrimmed = inviteLink.trim()
-
-  const parsedQrFetch = useRpcFetch(BackendRemote.rpc.checkQr, [
-    accountId,
-    inviteLink,
-  ])
-  const parsedQr = parsedQrFetch.result?.ok ? parsedQrFetch.result.value : null
-  const contactFetch = useRpcFetch(
-    BackendRemote.rpc.getContact,
-    parsedQr && parsedQr.kind === 'askVerifyContact'
-      ? [accountId, parsedQr.contact_id]
-      : null
-  )
-  const contact = contactFetch?.result?.ok ? contactFetch.result.value : null
 
   const onClick = () => {
-    processQr(accountId, inviteLinkTrimmed, SCAN_CONTEXT_TYPE.DEFAULT)
+    processQr(accountId, result.qrContent, SCAN_CONTEXT_TYPE.DEFAULT)
     callback?.()
   }
 
-  return contact ? (
-    <ContactListItem
-      tagName='div'
-      showCheckbox={false}
-      checked={false}
-      showRemove={false}
-      contact={contact}
-      onClick={onClick}
-    />
-  ) : parsedQr?.kind === 'askVerifyGroup' ? (
+  return result.type === 'contact' ? (
     <PseudoListItem
-      id='newgroupfrominvitelink'
-      cutoff='+'
-      text={parsedQr.grpname}
-      subText={tx('join_group')}
-      onClick={onClick}
-    />
-  ) : parsedQr?.kind === 'askJoinBroadcast' ? (
-    <PseudoListItem
-      id='newbroadcastfrominvitelink'
-      cutoff='+'
-      text={parsedQr.name}
-      subText={tx('join_channel')}
-      onClick={onClick}
-    />
-  ) : parsedQr !== null ? (
-    // Other valid QR kinds (e.g. account, login, backup2):
-    // hint the user to paste the URL in the scanner dialog.
-    <PseudoListItem
-      id='otherinvitelinkaction'
-      cutoff='+'
-      text={tx('qr_link_pasted')}
-      subText={tx('paste_in_qr_scanner')}
+      id='newcontactfrominvitelink'
+      text={result.contact.displayName}
+      subText={tx('start_chat')}
       onClick={onClick}
     >
-      <QRAvatar />
+      <AvatarFromContact contact={result.contact} aria-hidden={true} />
     </PseudoListItem>
   ) : (
-    // parsedQr is null: still loading or unrecognised content.
     <PseudoListItem
-      id='otherinvitelinkaction'
+      id={result.id}
       cutoff='+'
-      text={tx('menu_new_contact')}
-      subText={undefined}
+      text={result.text}
+      subText={result.subText}
       onClick={onClick}
-    />
+    >
+      {result.qrAvatar && <QRAvatar />}
+    </PseudoListItem>
   )
 }
