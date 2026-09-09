@@ -119,6 +119,7 @@ const Dialog = React.memo<Props>(
         }
       }
     }, [allowDefaultFocus])
+    // Make sure to properly close the dialog before it's removed from DOM.
     // This ensures that the focus is returned to the element which had focus
     // before the dialog was opened, not only on "Escape" key close
     // but also on programmatic `onClose`, which simply un-renders the <dialog>
