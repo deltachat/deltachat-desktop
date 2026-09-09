@@ -23,7 +23,6 @@ import {
 } from '@deltachat-desktop/shared/shared-types.js'
 import { DesktopSettings } from '../desktop_settings.js'
 import { window as main_window, send } from '../windows/main.js'
-import { writeTempFileFromBase64 } from '../ipc.js'
 import {
   getAppMenu,
   getEditMenu,
@@ -803,30 +802,6 @@ export default class DCWebxdc {
     ipcMain.handle('close-all-webxdc', () => {
       this._closeAll()
     })
-
-    ipcMain.handle(
-      'webxdc:custom:drag-file-out',
-      async (
-        event,
-        file_name: string,
-        base64_content: string,
-        icon_data_url?: string
-      ) => {
-        const path = await writeTempFileFromBase64(file_name, base64_content)
-        let icon: string | Electron.NativeImage = join(
-          htmlDistDir(),
-          'images/electron-file-drag-out.png'
-        )
-        if (icon_data_url) {
-          icon = nativeImage.createFromDataURL(icon_data_url)
-        }
-        // if xdc extract icon?
-        event.sender.startDrag({
-          file: path,
-          icon,
-        })
-      }
-    )
 
     ipcMain.handle(
       'webxdc:status-update',
