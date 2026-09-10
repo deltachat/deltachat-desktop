@@ -946,10 +946,7 @@ function useMessageEditing(
   const doSendEditRequest = useCallback(() => {
     if (newText.trim().length === 0) {
       log.error('doEdit called, but newText is empty')
-      showToast(tx('chat_please_enter_message'), {
-        type: 'error',
-        position: 'bottom',
-      })
+      showToast(tx('chat_please_enter_message'))
       // The send button could have been used, so let's get back to the input.
       editMessageInputRef.current?.focus()
       editMessageInputRef.current?.moveCursorToTheEnd()
