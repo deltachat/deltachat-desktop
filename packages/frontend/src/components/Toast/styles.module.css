@@ -26,28 +26,8 @@
   overflow: visible;
   overflow-wrap: break-word;
   pointer-events: none;
-}
-
-.toast.top {
-  top: calc(60px + var(--stack-offset, 0px));
-  animation: appear-from-top 150ms ease-out;
-}
-
-.toast.bottom {
   bottom: calc(70px + var(--stack-offset, 0px));
   animation: appear-from-bottom 150ms ease-out;
-}
-
-.toast.error {
-  background-color: var(--errorColor);
-  color: #fff;
-}
-
-@keyframes appear-from-top {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
 }
 
 @keyframes appear-from-bottom {
@@ -58,8 +38,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .toast.top,
-  .toast.bottom {
+  .toast {
     animation: none;
   }
 }

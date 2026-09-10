@@ -1,12 +1,10 @@
 import React, { useCallback, useEffect, useLayoutEffect, useRef } from 'react'
-import classNames from 'classnames'
 
 import styles from './styles.module.css'
 
-import type { Toast, ToastPosition } from '../../contexts/ToastContext'
+import type { Toast } from '../../contexts/ToastContext'
 
 type Props = {
-  position: ToastPosition
   toasts: Toast[]
   onExpire: (id: Toast['id']) => void
 }
@@ -23,7 +21,7 @@ const TOAST_GAP = 8
  *
  * If interaction is needed use a dialog instead
  */
-export default function ToastLayer({ position, toasts, onExpire }: Props) {
+export default function ToastLayer({ toasts, onExpire }: Props) {
   const layerRef = useRef<HTMLDivElement>(null)
   const shownToasts = useRef(new Map<Toast['id'], Toast['shownAt']>())
 
@@ -80,12 +78,7 @@ export default function ToastLayer({ position, toasts, onExpire }: Props) {
       aria-atomic='false'
     >
       {toasts.map(toast => (
-        <ToastItem
-          key={toast.id}
-          toast={toast}
-          position={position}
-          onExpire={onExpire}
-        />
+        <ToastItem key={toast.id} toast={toast} onExpire={onExpire} />
       ))}
     </div>
   )
@@ -97,9 +90,8 @@ function getToastElements(layer: HTMLDivElement | null): HTMLElement[] {
 
 function ToastItem({
   toast,
-  position,
   onExpire,
-}: { toast: Toast } & Pick<Props, 'position' | 'onExpire'>) {
+}: { toast: Toast } & Pick<Props, 'onExpire'>) {
   useEffect(() => {
     const timeout = setTimeout(() => onExpire(toast.id), toast.durationMs)
     return () => clearTimeout(timeout)
@@ -110,9 +102,7 @@ function ToastItem({
       // Not `"auto"`, because the notification should stay visible
       // even if the user is interacting with the page
       popover='manual'
-      className={classNames(styles.toast, styles[position], {
-        [styles.error]: toast.type === 'error',
-      })}
+      className={styles.toast}
     >
       {toast.text}
     </div>

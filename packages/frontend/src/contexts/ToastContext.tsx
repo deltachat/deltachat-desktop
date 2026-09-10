@@ -5,17 +5,10 @@ import type { PropsWithChildren } from 'react'
 import ToastLayer from '../components/Toast/ToastLayer'
 import { generateRandomUUID } from '../utils/random'
 
-export type ToastType = 'info' | 'error'
-
-/** The edge of the window that the toast appears at. */
-export type ToastPosition = 'top' | 'bottom'
-
 export type Toast = {
   id: string
   text: string
-  type: ToastType
   durationMs: number
-  position: ToastPosition
   /** Set anew every time the toast's display duration is restarted. */
   shownAt: number
 }
@@ -23,9 +16,7 @@ export type Toast = {
 export type ShowToast = (
   text: string,
   options?: {
-    type?: ToastType
     durationMs?: number
-    position?: ToastPosition
   }
 ) => void
 
@@ -55,16 +46,11 @@ export const ToastContextProvider = ({ children }: PropsWithChildren<{}>) => {
   }, [])
 
   const showToast = useCallback<ShowToast>(
-    (
-      text,
-      { type = 'info', durationMs = DEFAULT_DURATION_MS, position = 'top' } = {}
-    ) => {
+    (text, { durationMs = DEFAULT_DURATION_MS } = {}) => {
       const newToast: Toast = {
         id: generateRandomUUID(),
         text,
-        type,
         durationMs,
-        position,
         shownAt: Date.now(),
       }
       setToasts(toasts => {
@@ -84,26 +70,12 @@ export const ToastContextProvider = ({ children }: PropsWithChildren<{}>) => {
     []
   )
 
-  const topToasts = useMemo(
-    () => toasts.filter(toast => toast.position === 'top'),
-    [toasts]
-  )
-  const bottomToasts = useMemo(
-    () => toasts.filter(toast => toast.position === 'bottom'),
-    [toasts]
-  )
-
   const value = useMemo(() => ({ showToast }), [showToast])
 
   return (
     <ToastContext.Provider value={value}>
       {children}
-      <ToastLayer position='top' toasts={topToasts} onExpire={removeToast} />
-      <ToastLayer
-        position='bottom'
-        toasts={bottomToasts}
-        onExpire={removeToast}
-      />
+      <ToastLayer toasts={toasts} onExpire={removeToast} />
     </ToastContext.Provider>
   )
 }
