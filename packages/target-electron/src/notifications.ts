@@ -57,6 +57,10 @@ function createNotification(data: DcNotification): Notification {
   }
 
   const notificationOptions: Electron.NotificationConstructorOptions = {
+    groupId:
+      data.chatId !== 0 && data.accountId !== 0
+        ? `account:${data.accountId}_chat:${data.chatId}`
+        : undefined,
     title: data.title,
     // https://www.electronjs.org/docs/latest/tutorial/notifications#linux
     // says
