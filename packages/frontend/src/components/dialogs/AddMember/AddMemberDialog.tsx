@@ -34,7 +34,7 @@ export function AddMemberDialog({
 
   return (
     <Dialog
-      canOutsideClickClose={false}
+      closedby='closerequest'
       fixed
       onClose={onClose}
       dataTestid='add-member-dialog'

@@ -172,7 +172,11 @@ function EditContactNameDialog({
   const haveUnsavedChanges = contactName !== initialGroupName
 
   return (
-    <Dialog canOutsideClickClose={!haveUnsavedChanges} fixed onClose={onClose}>
+    <Dialog
+      closedby={haveUnsavedChanges ? 'closerequest' : 'any'}
+      fixed
+      onClose={onClose}
+    >
       <DialogHeader title={tx('menu_edit_name')} />
       <DialogBody>
         <DialogContent>

@@ -143,11 +143,7 @@ export function ConfigureProgressDialog({
   }, [accountId])
 
   return (
-    <Dialog
-      onClose={onClose}
-      canEscapeKeyClose={false}
-      canOutsideClickClose={false}
-    >
+    <Dialog onClose={onClose} closedby='none'>
       <DialogBody>
         <DialogContent>
           <DeltaProgressBar progress={progress} />
