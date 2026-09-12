@@ -161,6 +161,10 @@ export default class ScreenController extends Component {
       return
     }
 
+    // All dialogs should be closed when switching accounts
+    // as long as we do not update account related state in dialogs
+    window.__closeAllDialogs?.()
+
     // Since we automatically invalidate `chatId` when `accountId` changes
     // in `ChatContext`, one might think that it's not necessary
     // to explicitly `unselectChat()` here.
