@@ -3,23 +3,29 @@
   flex-direction: column;
   text-align: center;
   align-items: center;
+  gap: 16px;
 }
 
 .logo {
   width: 120px;
+  height: auto;
   margin-bottom: 8px;
 }
 
+.edition {
+  color: var(--bp4Menu-textMuted);
+  font-weight: 600;
+}
+
 .version {
-  margin-bottom: 16px;
+  color: var(--bp4Menu-textMuted);
 }
 
 .description {
   text-align: center;
-  margin-bottom: 4px;
 }
 
 .license {
   text-align: center;
-  margin-bottom: 24px;
+  color: var(--bp4Menu-textMuted);
 }

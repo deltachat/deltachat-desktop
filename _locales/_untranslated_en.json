@@ -91,5 +91,14 @@
   },
   "webxdc_store_url_explain_2_desktop": {
     "message": "This is different from the same feature on Android and iOS.\nThis must be the path containing the xdcget-lock.json file."
+  },
+  "pref_logging": {
+    "message": "Logging"
+  },
+  "about_description": {
+    "message": "A decentralized and secure messenger built on open Internet Standards."
+  },
+  "about_license_text": {
+    "message": "This software is licensed under GPL-3.0. The source code is available on GitHub."
   }
 }

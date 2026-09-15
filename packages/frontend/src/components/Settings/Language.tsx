@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
 
 import { runtime } from '@deltachat-desktop/runtime-interface'
-import SettingsStoreInstance from '../../stores/settings'
+import { DesktopSettingsStoreInstance } from '../../stores/settings'
 import SettingsButton from './SettingsButton'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 type Lang = { locale: string; name: string; dir: 'ltr' | 'rtl' }
 
@@ -13,7 +12,6 @@ type Props = {
 }
 
 export default function Language({ onClose }: Props) {
-  const tx = useTranslationFunction()
   const [languages, setLanguages] = useState<Lang[] | null>(null)
   const currentLocale = window.localeData.locale
 
@@ -29,7 +27,7 @@ export default function Language({ onClose }: Props) {
 
   const choose = async (locale: string) => {
     if (locale === currentLocale) return
-    await SettingsStoreInstance.effect.setDesktopSetting('locale', locale)
+    await DesktopSettingsStoreInstance.effect.set('locale', locale)
     // Reuse the app-wide language-change hook (setLocale + reloadLocaleData)
     // — same path as the native menu's chooseLanguage event.
     if (runtime.onChooseLanguage) {

@@ -75,9 +75,11 @@ export default function Advanced({ onClose }: Props) {
       <SettingsButton onClick={() => viewLog()}>
         {tx('pref_view_log')}
       </SettingsButton>
-      <SettingsButton onClick={() => runtime.openLogFolder?.()}>
-        {tx('menu.view.developer.open.log.folder')}
-      </SettingsButton>
+      {runtime.getRuntimeInfo().target !== 'browser' && (
+        <SettingsButton onClick={() => runtime.openLogFolder?.()}>
+          {tx('menu.view.developer.open.log.folder')}
+        </SettingsButton>
+      )}
       <SettingsButton onClick={() => runtime.openLogFile()}>
         {tx('menu.view.developer.open.current.log.file')}
       </SettingsButton>
