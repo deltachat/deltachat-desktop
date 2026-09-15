@@ -58,12 +58,20 @@ function mainWindowIsVisible() {
   return mainWindow.window.isVisible() && mainWindow.window.isFocused()
 }
 
+/** Whether hiding the window would actually do something. */
+function mainWindowCanBeHidden() {
+  if (!mainWindow.window) {
+    throw new Error('window does not exist, this should never happen')
+  }
+  return mainWindow.window.isVisible() && !mainWindow.window.isMinimized()
+}
+
 export function hideDeltaChat() {
   if (!mainWindow.window) {
     throw new Error('window does not exist, this should never happen')
   }
   mainWindow.window.hide()
-  if (process.platform === 'linux') tray?.setContextMenu(getTrayMenu() as Menu)
+  if (process.platform === 'linux') refreshTrayContextMenu()
 }
 
 export function showDeltaChat() {
@@ -80,7 +88,7 @@ export function showDeltaChat() {
     // is currently active.
     app.focus({ steal: true })
   }
-  if (process.platform === 'linux') tray?.setContextMenu(getTrayMenu() as Menu)
+  if (process.platform === 'linux') refreshTrayContextMenu()
 }
 
 function hideOrShowDeltaChat() {
@@ -158,7 +166,7 @@ function getTrayMenu() {
         id: 'reduce_window',
         label: tx('global_menu_minimize_to_tray'),
         type: 'normal',
-        enabled: mainWindowIsVisible(),
+        enabled: mainWindowCanBeHidden(),
         click() {
           hideDeltaChat()
         },
