@@ -232,6 +232,22 @@ Start electron-builder:
 
 For more info look at the `scripts` section in `package.json`.
 
+#### Building only the app archive (for distribution packages)
+
+Distributions that ship electron and `deltachat-rpc-server` as their own
+packages usually only need the `app.asar`. `pnpm -w pack:asar` runs all of the
+steps above (config generation, production build, `node_modules` patching and
+`pack:linux:dir`) and then copies the result to a path that does not depend on
+the architecture:
+
+```sh
+pnpm -w pack:asar
+# -> packages/target-electron/dist/asar/app.asar (+ app.asar.unpacked)
+```
+
+Note that this leaves the patched `node_modules` behind, run
+`pnpm -w reset:node_modules` before running the tests again.
+
 The commands for windows10 appx and the App Store package for mac are currently not in the scripts section. They are useless for most people anyway, as they require special paid developer accounts or signing certificates.
 
 - `mas` - mac appstore build
