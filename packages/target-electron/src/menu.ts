@@ -332,7 +332,7 @@ function getMenuTemplate(
         },
         {
           accelerator: 'CmdOrCtrl+0',
-          label: `${tx('reset')}`,
+          label: tx('reset'),
           role: 'resetZoom',
         },
         {

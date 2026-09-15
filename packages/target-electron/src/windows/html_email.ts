@@ -38,6 +38,8 @@ const log = getLogger('html_email')
 
 const open_windows: { [window_id: string]: BrowserWindow } = {}
 
+type RemoteContentState = 'never' | 'once' | 'always'
+
 /**
  *
  * @param window_id that we know if it's already open, should be accountid+"-"+msgid
@@ -159,6 +161,39 @@ export function openHtmlEmailWindow(
 
   const isMac = platform() === 'darwin'
 
+  const possibleRemoteContentStates: RemoteContentState[] = isContactRequest
+    ? ['never', 'once']
+    : ['never', 'once', 'always']
+
+  const getRemoteContentState = (): RemoteContentState =>
+    !isContactRequest && DesktopSettings.state.HTMLEmailAlwaysLoadRemoteContent
+      ? 'always'
+      : loadRemoteContent
+        ? 'once'
+        : 'never'
+
+  const applyRemoteContentState = (state: RemoteContentState) => {
+    if (state === getRemoteContentState()) {
+      return
+    }
+    if (state === 'always') {
+      DesktopSettings.update({ HTMLEmailAlwaysLoadRemoteContent: true })
+    } else if (DesktopSettings.state.HTMLEmailAlwaysLoadRemoteContent) {
+      DesktopSettings.update({ HTMLEmailAlwaysLoadRemoteContent: false })
+    }
+    update_restrictions(state !== 'never')
+    // so that the radio items reflect the new state
+    refreshMenu()
+  }
+
+  const refreshMenu = () => {
+    if (isMac) {
+      Menu.setApplicationMenu(makeMenu())
+    } else {
+      window.setMenu(makeMenu())
+    }
+  }
+
   // copied and adapted from webxdc menu
   // TODO: would make sense to refactor these menus at some point
   const makeMenu = () => {
@@ -186,6 +221,19 @@ export function openHtmlEmailWindow(
         label: tx('global_menu_view_desktop'),
         submenu: [
           {
+            // The same choice is behind the "⋮" button, which is hard to get
+            // to without a mouse: it lives in a different `webContents` than
+            // the message, and `Tab` cannot move focus between the two.
+            label: tx('load_remote_content'),
+            submenu: possibleRemoteContentStates.map(state => ({
+              label: tx(state),
+              type: 'radio' as const,
+              checked: state === getRemoteContentState(),
+              click: () => applyRemoteContentState(state),
+            })),
+          },
+          { type: 'separator' },
+          {
             accelerator: 'CmdOrCtrl+=',
             label: tx('menu_zoom_in'),
             role: 'zoomIn',
@@ -197,7 +245,7 @@ export function openHtmlEmailWindow(
           },
           {
             accelerator: 'CmdOrCtrl+0',
-            label: `${tx('reset')}`,
+            label: tx('reset'),
             role: 'resetZoom',
           },
           { type: 'separator' },
@@ -207,12 +255,7 @@ export function openHtmlEmailWindow(
             checked: window.isAlwaysOnTop(),
             click: () => {
               window.setAlwaysOnTop(!window.isAlwaysOnTop())
-              if (platform() !== 'darwin') {
-                window.setMenu(makeMenu())
-              } else {
-                // change to window menu
-                Menu.setApplicationMenu(makeMenu())
-              }
+              refreshMenu()
             },
           },
           { role: 'togglefullscreen' },
@@ -258,19 +301,12 @@ export function openHtmlEmailWindow(
 
   window.webContents.ipc.handle('html_email:get_menu_labels', () => ({
     load_remote_content: tx('load_remote_content'),
+    more_options: tx('menu_more_options'),
   }))
 
-  window.webContents.ipc.handle('html-view:load-remote-content', () => {
-    const currentState =
-      !isContactRequest &&
-      DesktopSettings.state.HTMLEmailAlwaysLoadRemoteContent
-        ? 'always'
-        : loadRemoteContent
-          ? 'once'
-          : 'never'
-    const possibleStates: Array<'never' | 'once' | 'always'> = isContactRequest
-      ? ['never', 'once']
-      : ['never', 'once', 'always']
+  const askToLoadRemoteContent = () => {
+    const currentState = getRemoteContentState()
+    const possibleStates = possibleRemoteContentStates
     const currentIndex = possibleStates.indexOf(currentState)
     // needed to close the dialog if the window is closed while the dialog is opened
     const abortController = new AbortController()
@@ -291,34 +327,20 @@ export function openHtmlEmailWindow(
       })
       .then(({ response }) => {
         window.off('close', onClose)
-        const selected = possibleStates[response]
-        if (selected === currentState) return // no-op (also covers Escape)
-        if (selected === 'never') {
-          if (DesktopSettings.state.HTMLEmailAlwaysLoadRemoteContent) {
-            DesktopSettings.update({
-              HTMLEmailAlwaysLoadRemoteContent: false,
-            })
-          }
-          update_restrictions(false)
-        } else if (selected === 'once') {
-          if (DesktopSettings.state.HTMLEmailAlwaysLoadRemoteContent) {
-            DesktopSettings.update({
-              HTMLEmailAlwaysLoadRemoteContent: false,
-            })
-          }
-          update_restrictions(true)
-        } else {
-          const _assert: 'always' = selected
-          // 'always' — only selectable for non-contact requests
-          DesktopSettings.update({ HTMLEmailAlwaysLoadRemoteContent: true })
-          update_restrictions(true)
-        }
+        // Escape resolves to `cancelId`, which is the current state,
+        // and `applyRemoteContentState` ignores that as a no-op.
+        applyRemoteContentState(possibleStates[response])
       })
       .catch(() => {
         // dialog was closed because the window was closed (AbortError)
         window.off('close', onClose)
       })
-  })
+  }
+
+  window.webContents.ipc.handle(
+    'html-view:load-remote-content',
+    askToLoadRemoteContent
+  )
 
   window.webContents.ipc.handle(
     'html-view:resize-content',
