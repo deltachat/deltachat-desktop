@@ -13,7 +13,9 @@ const app = rawApp as ExtendedAppMainProcess
 
 // Define custom protocol handler. Deep linking works on packaged versions of the application!
 // These calls are for mac and windows, on linux it uses the desktop file.
-if (platform() !== 'linux') {
+// The portable build skips this: it would write registry entries pointing
+// to the temporary extraction directory, which is gone after the app exits.
+if (platform() !== 'linux' && !process.env.PORTABLE_EXECUTABLE_DIR) {
   app.setAsDefaultProtocolClient('openpgp4fpr')
   app.setAsDefaultProtocolClient('OPENPGP4FPR')
   app.setAsDefaultProtocolClient('dcaccount')
