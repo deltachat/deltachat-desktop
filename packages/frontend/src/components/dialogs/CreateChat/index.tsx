@@ -681,7 +681,7 @@ export function CreateGroup(props: CreateGroupProps) {
   }
 
   return (
-    <Dialog width={400} onClose={onClose} canOutsideClickClose={false} fixed>
+    <Dialog width={400} onClose={onClose} closedby='closerequest' fixed>
       <DialogHeader
         title={
           titleOverride ??
@@ -799,7 +799,7 @@ export function CreateBroadcastList(props: CreateBroadcastListProps) {
   }
 
   return (
-    <Dialog width={400} onClose={onClose} canOutsideClickClose={false} fixed>
+    <Dialog width={400} onClose={onClose} closedby='closerequest' fixed>
       <DialogHeader title={tx('new_channel')} />
       <form onSubmit={submitForm}>
         <DialogBody>

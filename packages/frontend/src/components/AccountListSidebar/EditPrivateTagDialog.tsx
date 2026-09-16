@@ -29,7 +29,7 @@ export function EditPrivateTagDialog({
   }
 
   return (
-    <Dialog onClose={onClose} canOutsideClickClose={true}>
+    <Dialog onClose={onClose} closedby='any'>
       <DialogHeader title={tx('profile_tag')} />
       <DialogBody>
         <DialogContent>

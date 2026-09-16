@@ -39,7 +39,7 @@ export default function EditAccountAndPasswordDialog({
   const forceEncryption = settingsStore?.settings.force_encryption !== '0'
 
   return (
-    <Dialog canOutsideClickClose={false} onClose={onClose}>
+    <Dialog closedby='closerequest' onClose={onClose}>
       <DialogHeader
         title={
           // forceEncryption is false if account is not

@@ -100,7 +100,7 @@ export default function AccountSetupScreen({
 
   return (
     <ImageBackdrop variant='welcome'>
-      <Dialog canOutsideClickClose={false} onClose={() => {}} fixed>
+      <Dialog closedby='closerequest' onClose={() => {}} fixed>
         <DialogHeader title={tx('manual_account_setup_option')} />
         <DialogBody>
           <DialogContent>

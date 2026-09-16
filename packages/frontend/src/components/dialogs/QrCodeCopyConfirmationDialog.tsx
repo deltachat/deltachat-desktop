@@ -41,11 +41,7 @@ export default function QrCodeCopyConfirmationDialog({
   }
 
   return (
-    <Dialog
-      onClose={onClose}
-      canEscapeKeyClose={true}
-      canOutsideClickClose={true}
-    >
+    <Dialog onClose={onClose} closedby='any'>
       <DialogBody>
         <DialogContent>
           <p>{message}</p>
