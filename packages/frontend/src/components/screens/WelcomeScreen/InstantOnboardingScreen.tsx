@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import AdditionalActionInfo from './AdditionalActionInfo'
 import Button from '../../Button'
 import ProfileImageSelector from '../../dialogs/EditProfileDialog/ProfileImageSelector'
-import UserAgreement from './UserAgreement'
+import { ClickableLink } from '../../helpers/ClickableLink'
 import useAlertDialog from '../../../hooks/dialog/useAlertDialog'
 import useChat from '../../../hooks/chat/useChat'
 import useInstantOnboarding from '../../../hooks/useInstantOnboarding'
@@ -32,6 +32,8 @@ type Props = {
   onCancel: () => void
   selectedAccountId: number
 }
+
+const PRIVACY_POLICY_URL = `https://delta.chat/gdpr`
 
 function buildContextMenu(
   openDialog: OpenDialog,
@@ -265,7 +267,11 @@ export default function InstantOnboardingScreen({
             <p>{tx('set_name_and_avatar_explain')}</p>
             <div className={styles.welcomeScreenButtonGroup}>
               <div className={styles.instantOnboardingAgreement}>
-                {welcomeQr?.qr.kind !== 'login' && <UserAgreement />}
+                {welcomeQr?.qr.kind !== 'login' && (
+                  <ClickableLink href={PRIVACY_POLICY_URL}>
+                    {tx('privacy_policy')}
+                  </ClickableLink>
+                )}
                 {welcomeQr?.qr.kind === 'login' && (
                   <>{tx('qrlogin_ask_login', welcomeQr.qr.address)}</>
                 )}
