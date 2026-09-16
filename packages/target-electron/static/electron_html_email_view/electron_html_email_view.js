@@ -16,32 +16,85 @@ let promise = window.htmlview
 const moreMenuDropdown = document.getElementById('more-menu-dropdown')
 const loadRemoteContentBtn = document.getElementById('load-remote-content-btn')
 
-window.htmlview.getMenuLabels().then(({ load_remote_content }) => {
-  loadRemoteContentBtn.textContent = load_remote_content
-})
+window.htmlview
+  .getMenuLabels()
+  .then(({ load_remote_content, more_options }) => {
+    loadRemoteContentBtn.textContent = load_remote_content
+    // The button's only content is "⋮", which on its own is not a usable name.
+    networkMoreButton.setAttribute('aria-label', more_options)
+  })
+
+const menuItems = () =>
+  Array.from(moreMenuDropdown.querySelectorAll('[role="menuitem"]'))
+
+function openMenu(focusLast = false) {
+  moreMenuDropdown.hidden = false
+  networkMoreButton.setAttribute('aria-expanded', 'true')
+  const items = menuItems()
+  const item = focusLast ? items[items.length - 1] : items[0]
+  if (item) {
+    item.focus()
+  }
+}
+
+function closeMenu(returnFocus = false) {
+  if (moreMenuDropdown.hidden) {
+    return
+  }
+  moreMenuDropdown.hidden = true
+  networkMoreButton.setAttribute('aria-expanded', 'false')
+  if (returnFocus) {
+    networkMoreButton.focus()
+  }
+}
 
 networkMoreButton.onclick = ev => {
   ev.stopPropagation()
-  const open = moreMenuDropdown.hidden
-  moreMenuDropdown.hidden = !open
-  networkMoreButton.setAttribute('aria-expanded', String(open))
+  if (moreMenuDropdown.hidden) {
+    openMenu()
+  } else {
+    closeMenu()
+  }
 }
 
 loadRemoteContentBtn.onclick = () => {
-  moreMenuDropdown.hidden = true
-  networkMoreButton.setAttribute('aria-expanded', 'false')
+  closeMenu(true)
   window.htmlview.triggerLoadRemoteContent()
 }
 
-document.addEventListener('click', () => {
-  moreMenuDropdown.hidden = true
-  networkMoreButton.setAttribute('aria-expanded', 'false')
-})
+document.addEventListener('click', () => closeMenu())
 
 document.addEventListener('keydown', ev => {
   if (ev.key === 'Escape') {
-    moreMenuDropdown.hidden = true
-    networkMoreButton.setAttribute('aria-expanded', 'false')
+    if (!moreMenuDropdown.hidden) {
+      ev.preventDefault()
+      closeMenu(true)
+    }
+    return
+  }
+
+  const isArrow = ev.key === 'ArrowDown' || ev.key === 'ArrowUp'
+
+  if (moreMenuDropdown.hidden) {
+    // `role="menu"` promises arrow key operation, so open on arrow keys too.
+    if (isArrow && document.activeElement === networkMoreButton) {
+      ev.preventDefault()
+      openMenu(ev.key === 'ArrowUp')
+    }
+    return
+  }
+
+  if (isArrow) {
+    ev.preventDefault()
+    const items = menuItems()
+    const offset = ev.key === 'ArrowDown' ? 1 : items.length - 1
+    const index = items.indexOf(document.activeElement)
+    const next = items[(Math.max(index, 0) + offset) % items.length]
+    if (next) {
+      next.focus()
+    }
+  } else if (ev.key === 'Tab') {
+    closeMenu()
   }
 })
 

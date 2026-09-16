@@ -18,11 +18,11 @@
   <body>
     <div class="header">
       <div class="title">
-        <p id="subject" aria-label="subject">SUBJECT</p>
+        <p id="subject">SUBJECT</p>
         <p class="details">
-          <span id="sender" aria-label="sender">sender</span>
+          <span id="sender">sender</span>
           -
-          <span id="sent-time" aria-label="sent time">time</span>
+          <span id="sent-time">time</span>
         </p>
       </div>
       <div class="network-toggle">
@@ -30,6 +30,7 @@
           id="toggle_network_more_button"
           aria-haspopup="menu"
           aria-expanded="false"
+          aria-controls="more-menu-dropdown"
         >⋮</button>
         <div id="more-menu-dropdown" class="more-menu-dropdown" hidden role="menu">
           <button id="load-remote-content-btn" class="more-menu-item" role="menuitem"></button>
