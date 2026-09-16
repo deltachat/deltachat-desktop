@@ -17,14 +17,6 @@
   & > div {
     display: flex;
   }
-  .transportRadioButton {
-    display: flex;
-    flex-grow: 1;
-    padding-inline-end: 10px;
-    input {
-      cursor: pointer;
-    }
-  }
   .transportItem {
     cursor: pointer;
   }
