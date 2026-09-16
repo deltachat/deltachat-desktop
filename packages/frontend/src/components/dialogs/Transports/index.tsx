@@ -35,25 +35,13 @@ export default function TransportsDialog(
   const addTransportDialog = useAddTransportDialog()
 
   // used in  new transport form
-  const [transports, setTransports] = useState<
-    (Transport & { isDefault: boolean })[]
-  >([])
+  const [transports, setTransports] = useState<Transport[]>([])
 
   const getTransports = useCallback(() => {
     const fetchTransports = async () => {
-      const configuredAddress = await BackendRemote.rpc.getConfig(
-        accountId,
-        'configured_addr'
-      )
       const transports = await BackendRemote.rpc.listTransports(accountId)
-      setTransports(
-        transports.map(t => ({
-          ...t,
-          isDefault: t.addr === configuredAddress,
-        }))
-      )
+      setTransports(transports)
     }
-
     fetchTransports()
   }, [accountId])
 
@@ -64,26 +52,6 @@ export default function TransportsDialog(
       getTransports()
     })
   }, [accountId, getTransports])
-
-  const changeDefaultTransport = useCallback(
-    async (transport: Transport) => {
-      // optimistically update UI
-      setTransports(prev =>
-        prev.map(t => ({
-          ...t,
-          isDefault: t.addr === transport.addr,
-        }))
-      )
-      await BackendRemote.rpc.setConfig(
-        accountId,
-        'configured_addr',
-        transport.addr
-      )
-      // now load transports again to be sure
-      getTransports()
-    },
-    [accountId, getTransports]
-  )
 
   const openQrScanner = useCallback(async () => {
     openDialog(BasicQrScanner, {
@@ -163,32 +131,11 @@ export default function TransportsDialog(
           <div className={styles.transportList}>
             {transports.map((transport, index) => (
               <div className={styles.transportRow} key={transport.addr}>
-                <div
-                  onClick={() => changeDefaultTransport(transport)}
-                  className={styles.transportItem}
-                >
-                  <span className={styles.transportRadioButton}>
-                    <input
-                      id={`transport-${index}`}
-                      name='transport-selection'
-                      type='radio'
-                      value={transport.addr}
-                      checked={transport.isDefault}
-                      className={styles.radioButton}
-                      aria-labelledby={`transport-label-${index}`}
-                      readOnly
-                    />
-                  </span>
+                <div className={styles.transportItem}>
                   <label id={`transport-label-${index}`}>
                     <strong>{transport.addr.split('@')[1]}</strong>
                     <br />
                     {transport.addr.split('@')[0]}
-                    {transport.isDefault && (
-                      <>
-                        {' · '}
-                        {tx('used_for_sending')}
-                      </>
-                    )}
                   </label>
                 </div>
                 <div>
