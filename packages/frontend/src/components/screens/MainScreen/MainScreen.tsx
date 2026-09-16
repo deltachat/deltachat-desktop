@@ -19,6 +19,7 @@ import useChat from '../../../hooks/chat/useChat'
 import useDialog from '../../../hooks/dialog/useDialog'
 import useKeyBindingAction from '../../../hooks/useKeyBindingAction'
 import useSelectLastChat from '../../../hooks/chat/useSelectLastChat'
+import useSelfNotInGroupToast from '../../../hooks/useSelfNotInGroupToast'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import { KeybindAction } from '../../../keybindings'
 import { ScreenContext } from '../../../contexts/ScreenContext'
@@ -41,6 +42,8 @@ type Props = {
 export default function MainScreen({ accountId }: Props) {
   // Automatically select last known chat when account changed
   useSelectLastChat(accountId)
+
+  useSelfNotInGroupToast(accountId)
 
   const tx = useTranslationFunction()
 

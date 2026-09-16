@@ -137,6 +137,28 @@ const useGroup = (accountId: number, initialGroupState: T.FullChat) => {
     ? groupDescriptionFetch.lingeringResult.value
     : null
 
+  /**
+   * Shows `error` to the user, unless it was caused by us not being a member
+   * of the group anymore. Core reports that case with an
+   * `ErrorSelfNotInGroup` event, which is turned into a toast elsewhere,
+   * so a second, less understandable message would only be in the way.
+   */
+  const reportError = useCallback(
+    (description: string, error: unknown) => {
+      log.error(description, error)
+      if (group.chatType === 'Group' && !group.selfInGroup) {
+        return
+      }
+      openDialog(AlertDialog, {
+        message: tx(
+          'error_x',
+          `${description}: ${unknownErrorToString(error)}`
+        ),
+      })
+    },
+    [group.chatType, group.selfInGroup, openDialog, tx]
+  )
+
   const addMembers = useCallback(
     async (members: number[]) => {
       if (!members || members.length === 0) {
@@ -154,12 +176,7 @@ const useGroup = (accountId: number, initialGroupState: T.FullChat) => {
           )
         )
       } catch (error) {
-        openDialog(AlertDialog, {
-          message: tx(
-            'error_x',
-            `Failed to modify group members: ${unknownErrorToString(error)}`
-          ),
-        })
+        reportError('Failed to modify group members', error)
         return
       }
 
@@ -169,7 +186,7 @@ const useGroup = (accountId: number, initialGroupState: T.FullChat) => {
         )})`
       )
     },
-    [tx, openDialog, initialGroupState.id, accountId]
+    [reportError, initialGroupState.id, accountId]
   )
 
   const removeMember = useCallback(
@@ -181,12 +198,7 @@ const useGroup = (accountId: number, initialGroupState: T.FullChat) => {
           userId
         )
       } catch (error) {
-        openDialog(AlertDialog, {
-          message: tx(
-            'error_x',
-            `Failed to modify group members: ${unknownErrorToString(error)}`
-          ),
-        })
+        reportError('Failed to modify group members', error)
         return
       }
 
@@ -194,7 +206,7 @@ const useGroup = (accountId: number, initialGroupState: T.FullChat) => {
         `Account ${accountId} removed member ${userId} from group ${initialGroupState.id})`
       )
     },
-    [tx, openDialog, initialGroupState.id, accountId]
+    [reportError, initialGroupState.id, accountId]
   )
 
   const [pastContacts, setPastContacts] = useState<T.Contact[]>([])
@@ -290,6 +302,7 @@ const useGroup = (accountId: number, initialGroupState: T.FullChat) => {
     addMembers,
     removeMember,
     pastContacts,
+    reportError,
   }
 }
 
@@ -324,6 +337,7 @@ function ViewGroupInner(
     pastContacts,
     addMembers,
     removeMember,
+    reportError,
   } = useGroup(accountId, initialGroupState)
 
   const [showMemberFilter, setShowMemberFilter] = useState(false)
@@ -400,20 +414,32 @@ function ViewGroupInner(
         groupImage: string | null
       ) => {
         const chatId = initialGroupState.id
-        const chat = await BackendRemote.rpc.getBasicChatInfo(accountId, chatId)
+        try {
+          const chat = await BackendRemote.rpc.getBasicChatInfo(
+            accountId,
+            chatId
+          )
 
-        await BackendRemote.rpc.setChatName(accountId, chatId, groupName)
-        await BackendRemote.rpc.setChatDescription(
-          accountId,
-          chatId,
-          groupDescription
-        )
-
-        if (chat.profileImage !== groupImage) {
-          await BackendRemote.rpc.setChatProfileImage(
+          await BackendRemote.rpc.setChatName(accountId, chatId, groupName)
+          await BackendRemote.rpc.setChatDescription(
             accountId,
             chatId,
-            groupImage || null
+            groupDescription
+          )
+
+          if (chat.profileImage !== groupImage) {
+            await BackendRemote.rpc.setChatProfileImage(
+              accountId,
+              chatId,
+              groupImage || null
+            )
+          }
+        } catch (error) {
+          reportError(
+            !isBroadcast
+              ? 'Failed to modify group'
+              : 'Failed to modify channel',
+            error
           )
         }
       },
