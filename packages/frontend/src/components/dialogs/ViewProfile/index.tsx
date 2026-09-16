@@ -9,14 +9,10 @@ import { useLogicVirtualChatList, ChatListPart } from '../../chat/ChatList'
 import { useThemeCssVar } from '../../../ThemeManager'
 import { BackendRemote, onDCEvent } from '../../../backend-com'
 import { selectedAccountId } from '../../../ScreenController'
-import { InlineVerifiedIcon } from '../../VerifiedIcon'
-import { getLogger } from '@deltachat-desktop/shared/logger'
 import Dialog, { DialogBody, DialogContent, DialogHeader } from '../../Dialog'
 import HeaderButton from '../../Dialog/HeaderButton'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
-import useDialog from '../../../hooks/dialog/useDialog'
 import useChat from '../../../hooks/chat/useChat'
-import useOpenViewProfileDialog from '../../../hooks/dialog/useOpenViewProfileDialog'
 import { MessagesDisplayContext } from '../../../contexts/MessagesDisplayContext'
 import ProfileInfoHeader from '../../ProfileInfoHeader'
 import Button from '../../Button'
@@ -30,8 +26,6 @@ import type { T } from '@deltachat/jsonrpc-client'
 import { RovingTabindexProvider } from '../../../contexts/RovingTabindex'
 import { ChatListItemRowChat } from '../../chat/ChatListItemRow'
 import { shouldDisableClickForFullscreen } from '../../Avatar'
-
-const log = getLogger('renderer/dialogs/ViewProfile')
 
 function LastSeen({ timestamp }: { timestamp: number }) {
   const tx = useTranslationFunction()
@@ -129,17 +123,11 @@ export function ViewProfileInner({
 }) {
   const accountId = selectedAccountId()
   const tx = useTranslationFunction()
-  const { openDialog } = useDialog()
   const { selectChat } = useChat()
-  const openViewProfileDialog = useOpenViewProfileDialog()
   const { chatListIds } = useChatList(null, '', contact.id)
   const { isChatLoaded, loadChats, chatCache } =
     useLogicVirtualChatList(chatListIds)
   const [selfChatAvatar, setSelfChatAvatar] = useState<string | null>(null)
-  const [verifier, setVerifier] = useState<null | {
-    label: string
-    action?: () => void
-  }>(null)
 
   const mutualChatsListRef = useRef<HTMLDivElement>(null)
 
@@ -179,49 +167,6 @@ export function ViewProfileInner({
     }
   }, [accountId, isSelfChat])
 
-  useEffect(() => {
-    ;(async () => {
-      if (contact.isVerified) {
-        // it might happen that a verified contact has no verifiedBy ID
-        setVerifier({ label: tx('verified_by_unknown') })
-      } else {
-        setVerifier(null) // will be overridden if verifiedBy ID is available
-      }
-
-      if (contact.verifierId === C.DC_CONTACT_ID_SELF) {
-        setVerifier({ label: tx('verified_by_you') })
-      } else if (contact.verifierId !== null) {
-        const verifierContactId = contact.verifierId
-        try {
-          const { displayName } = await BackendRemote.rpc.getContact(
-            accountId,
-            verifierContactId
-          )
-          if (displayName && displayName !== '') {
-            setVerifier({
-              label: tx('verified_by', displayName),
-              action: () => openViewProfileDialog(accountId, verifierContactId),
-            })
-          }
-        } catch (error) {
-          log.error('failed to load verifier contact', error)
-          setVerifier({
-            label:
-              'verified by: failed to load verifier contact, please report this issue',
-          })
-        }
-      }
-    })()
-  }, [
-    accountId,
-    contact.id,
-    contact.verifierId,
-    contact.isVerified,
-    openDialog,
-    openViewProfileDialog,
-    tx,
-  ])
-
   const CHATLISTITEM_CHAT_HEIGHT =
     Number(useThemeCssVar('--SPECIAL-chatlist-item-chat-height')) || 64
 
@@ -246,7 +191,6 @@ export function ViewProfileInner({
       : chatListIds.length
 
   const mutualChatsHeight = CHATLISTITEM_CHAT_HEIGHT * mutualChatsHeightFactor
-  const VerificationTag = verifier?.action ? 'button' : 'div'
 
   return (
     <>
@@ -343,21 +287,6 @@ export function ViewProfileInner({
               </AutoSizer>
             </RovingTabindexProvider>
           </div>
-          {!isSelfChat && (
-            <div className={styles.contactAttributesBottom}>
-              {verifier && (
-                <VerificationTag
-                  type='button'
-                  className={styles.verification}
-                  onClick={verifier.action}
-                  style={{ display: 'flex' }}
-                >
-                  <InlineVerifiedIcon />
-                  {verifier.label}
-                </VerificationTag>
-              )}
-            </div>
-          )}
         </>
       )}
     </>
