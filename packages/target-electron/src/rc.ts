@@ -14,6 +14,7 @@ const defaults: RC_Config = {
   v: false,
   help: false,
   h: false,
+  'allow-custom-rpc-server-path': false,
   'allow-unsafe-core-replacement': false,
 }
 
@@ -25,6 +26,14 @@ if (config.version || config.v) {
 
 if (config.help || config.h) {
   config.help = true
+}
+
+if (config['allow-unsafe-core-replacement']) {
+  // eslint-disable-next-line no-console
+  console.warn(
+    '--allow-unsafe-core-replacement is deprecated, use --allow-custom-rpc-server-path instead'
+  )
+  config['allow-custom-rpc-server-path'] = true
 }
 
 if (config.devmode) {
