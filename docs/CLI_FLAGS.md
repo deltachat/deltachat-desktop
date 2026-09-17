@@ -7,7 +7,8 @@ Options:
 | **Development Options** | |
 | `--translation-watch` | enable auto-reload for `_locales/_untranslated_en.json`, when that file changes the current language is reloaded |
 | `--devmode` | opens electron devtools and activates `--log-debug` & `--log-to-console` |
-| `--allow-unsafe-core-replacement` | allow changing core with `DELTA_CHAT_RPC_SERVER` and looking for it in `PATH` instead of forcing the use of the prebuilds |
+| `--allow-custom-rpc-server-path` | use the `deltachat-rpc-server` from `DELTA_CHAT_RPC_SERVER` or from `PATH` instead of the prebuild shipped with the app |
+| `--allow-unsafe-core-replacement` | deprecated alias for `--allow-custom-rpc-server-path` |
 | **Theme** | |
 | `--theme <themeid>` | set a specific theme (see [THEMES.md](./THEMES.md)) |
 | `--theme-watch` | enable auto-reload for the active theme |

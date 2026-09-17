@@ -111,6 +111,12 @@ export interface RC_Config {
   v: boolean
   help: boolean
   h: boolean
+  /**
+   * Allow resolving the `deltachat-rpc-server` binary from the
+   * `DELTA_CHAT_RPC_SERVER` environment variable or from `PATH`
+   */
+  'allow-custom-rpc-server-path': boolean
+  /** @deprecated use {@linkcode RC_Config['allow-custom-rpc-server-path']} instead */
   'allow-unsafe-core-replacement': boolean
 }
 
