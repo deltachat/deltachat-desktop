@@ -575,3 +575,98 @@ ipcMain.handle('restart_app', async _ev => {
   app.relaunch()
   app.quit()
 })
+
+// TODO move to file
+// TODO only check for platforms that are known not to have auto-updates,
+// e.g. portable, AppImage, etc.
+// then also consider adding a message for store releases
+// that isn't simply a link to get.delta.chat.
+;(async () => {
+  const jsonrpcRemote = await ipc.DCJsonrpcRemoteInitializedP
+  // As per Core's API docs, wait a few seconds
+  // https://github.com/chatmail/core/blob/b1da53a56b1e8e40c46865a18daeb7a7a7228d44/deltachat-jsonrpc/src/api.rs#L2760-L2761.
+  log.info('check for updates: waiting for app startup to settle...')
+  await new Promise(r => setTimeout(r, 30_000))
+  // await new Promise(r => requestIdleCallback(r))
+
+  async function checkForUpdates() {
+    log.info('check for updates: waiting for idle...')
+    await new Promise(r => requestIdleCallback(r))
+
+    log.info('checking for updates...')
+    const lastReleaseInfo = await jsonrpcRemote.rpc.getAppVersion(
+      'deltachat',
+      'desktop-generic'
+    )
+    if (lastReleaseInfo == null) {
+      log.info('check for updates: no new version info')
+      return
+    }
+
+    function normalizeVersion(str: string): string {
+      return str.startsWith('v') ? str.slice('v'.length) : str
+    }
+    // TODO semver parse
+    //
+    // TODO hmm, maybe we can "abuse" the `addDeviceMessage` system
+    // to immediately add a `null` device message for the current version?
+    // But that would be a little buggy if a version is skipped.
+    if (
+      normalizeVersion(lastReleaseInfo.versionString) ===
+      normalizeVersion(BuildInfo.VERSION)
+    ) {
+      log.info(
+        'check for updates: already on latest',
+        `latest: ${lastReleaseInfo.versionString} (${lastReleaseInfo.versionInteger})`,
+        `current: ${BuildInfo.VERSION}`
+      )
+      return
+    }
+
+    const selectedAccountId = await jsonrpcRemote.rpc.getSelectedAccountId()
+    if (selectedAccountId == null) {
+      // Good enough, we'll notify them in 24 hours,
+      // after they select an account.
+      log.info(
+        "check for updates: won't add message because no account is selected"
+      )
+      return
+    }
+
+    jsonrpcRemote.rpc.addDeviceMessage(
+      selectedAccountId,
+      // Label ensures that we won't notify of the same version
+      // every 24 hours.
+      //
+      // TODO craaaaaap, but this is per-account...
+      // OK, then we need to add this message for all accounts,
+      // but only have it "unread" for current account?
+      // https://github.com/chatmail/core/pull/8400 will allow for it.
+      // Same as with `updateDeviceChats`.
+      // Maybe just need to DRY the two places.
+      //
+      // Ah or we could simply pass `null` as message for now.
+      `update_${lastReleaseInfo.versionString}`,
+      {
+        // TODO so I guess we need some new API
+        // that ensures that this is not linkified?
+        //
+        // TODO translated `update_available_msg`
+        // text: tx('update_available_msg', ),
+        text: `New update ${lastReleaseInfo.versionString}!!\nhttps://get.delta.chat/`,
+
+        html: null,
+        viewtype: null,
+        file: null,
+        filename: null,
+        location: null,
+        overrideSenderName: null,
+        quotedMessageId: null,
+        quotedText: null,
+      }
+    )
+  }
+
+  checkForUpdates()
+  setInterval(checkForUpdates, 1000 * 60 * 60 * 24)
+})()
