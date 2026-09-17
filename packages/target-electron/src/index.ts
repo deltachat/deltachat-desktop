@@ -149,6 +149,7 @@ process.on('uncaughtException', err => {
 })
 
 import setLanguage, { getCurrentLocaleDate, tx } from './load-translations.js'
+import { findLegacyAccountData } from './legacy_account_data.js'
 import * as ipc from './ipc.js'
 import { init as initMenu } from './menu.js'
 import { DesktopSettings } from './desktop_settings.js'
@@ -254,6 +255,22 @@ async function onReady([_appReady, _loadedState, _appx, _webxdc_cleanup]: [
         app.quit()
         return
       }
+    }
+  }
+
+  const legacyAccountDataPath = await findLegacyAccountData(getAccountsPath())
+  if (legacyAccountDataPath) {
+    const result = await dialog.showMessageBox({
+      type: 'warning',
+      title: tx('warning'),
+      message: tx('data_found_legacy_format_message', legacyAccountDataPath),
+      buttons: [tx('perm_continue'), tx('global_menu_file_quit_desktop')],
+      defaultId: 1,
+      cancelId: 1,
+    })
+    if (result.response === 1) {
+      app.quit()
+      return
     }
   }
 

@@ -15,7 +15,6 @@ import DCWebxdc from './webxdc.js'
 import { DesktopSettings } from '../desktop_settings.js'
 import { StdioServer } from './stdio_server.js'
 import rc_config from '../rc.js'
-import { migrateAccountsIfNeeded } from './migration.js'
 
 const app = rawApp as ExtendedAppMainProcess
 const log = getLogger('main/deltachat')
@@ -70,16 +69,6 @@ export default class DeltaChatController {
   }
 
   async init() {
-    log.debug('Check if legacy accounts need migration')
-    if (await migrateAccountsIfNeeded(this.cwd, getLogger('migration'))) {
-      // Clear some settings that we can't migrate
-      DesktopSettings.update({
-        lastAccount: undefined,
-        lastChats: {},
-        lastSaveDialogLocation: undefined,
-      })
-    }
-
     log.debug('Initiating DeltaChatNode')
     let serverPath = await getRPCServerPath({
       // desktop should only use prebuilds normally

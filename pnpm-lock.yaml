@@ -398,9 +398,6 @@ importers:
       '@electron/notarize':
         specifier: ^2.4
         version: 2.5.0(supports-color@8.1.1)
-      '@types/adm-zip':
-        specifier: ^0.5.5
-        version: 0.5.7
       '@types/chai':
         specifier: ^4.3.17
         version: 4.3.20
@@ -425,9 +422,6 @@ importers:
       '@webxdc/types':
         specifier: 'catalog:'
         version: 2.1.2
-      adm-zip:
-        specifier: 0.6.1
-        version: 0.6.1
       application-config:
         specifier: ^3.0.0
         version: 3.0.0
@@ -1239,9 +1233,6 @@ packages:
   '@tsconfig/node16@1.0.4':
     resolution: {integrity: sha512-vxhUy4J8lyeyinH7Azl1pdd43GJhZH/tP2weN8TntQblOY+A0XbT8DJk1/oCPuOOyg/Ja757rG0CgHcWC8OfMA==}
 
-  '@types/adm-zip@0.5.7':
-    resolution: {integrity: sha512-DNEs/QvmyRLurdQPChqq0Md4zGvPwHerAJYWk9l2jCbD1VPpnzRJorOdiq4zsw09NFbYnhfsoEhWtxIzXpn2yw==}
-
   '@types/body-parser@1.19.5':
     resolution: {integrity: sha512-fB3Zu92ucau0iQ0JMCFQE7b/dv8Ot07NI3KaZIkIUNXq82k4eBAqUaneXfleGY9JWskeS9y+u0nXMyspcuQrCg==}
 
@@ -1457,10 +1448,6 @@ packages:
     resolution: {integrity: sha512-NZyJarBfL7nWwIq+FDL6Zp/yHEhePMNnnJ0y3qfieCrmNvYct8uvtiV41UvlSe6apAfk0fY1FbWx+NwfmpvtTg==}
     engines: {node: '>=0.4.0'}
     hasBin: true
-
-  adm-zip@0.6.1:
-    resolution: {integrity: sha512-Xwrja8nx9e5o2N1my4DsKCeKpdrnACyr1wtbPxBDgGzKzKyE9kRtBFA8mWldI+RVlD7CBZNWY/wQ2+ydwOR6kQ==}
-    engines: {node: '>=14.0'}
 
   agent-base@7.1.4:
     resolution: {integrity: sha512-MnA+YT8fwfJPgBx3m60MNqakm30XOkyIoH1y6huTQvC0PwZG7ki8NacLBcrPbNoo8vEZy7Jpuk7+jMO+CUovTQ==}
@@ -4736,10 +4723,6 @@ snapshots:
 
   '@tsconfig/node16@1.0.4': {}
 
-  '@types/adm-zip@0.5.7':
-    dependencies:
-      '@types/node': 22.15.33
-
   '@types/body-parser@1.19.5':
     dependencies:
       '@types/connect': 3.4.38
@@ -5003,8 +4986,6 @@ snapshots:
       acorn: 8.15.0
 
   acorn@8.15.0: {}
-
-  adm-zip@0.6.1: {}
 
   agent-base@7.1.4: {}
 
