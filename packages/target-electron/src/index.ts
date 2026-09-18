@@ -206,7 +206,9 @@ async function onReady([_appReady, _loadedState, _appx, _webxdc_cleanup]: [
 ]) {
   // can fail due to user error so running it first is better (cli argument)
   acceptThemeCLI()
-  setLanguage(DesktopSettings.state.locale || app.getLocale().split('-')[0]) // can consist of 2 strings like in en-GB
+  setLanguage(
+    DesktopSettings.state.locale || app.getLocale().split('-')[0] || 'en'
+  ) // can consist of 2 strings like in en-GB
 
   // Warn users if data exists from a different installation variant
   // (e.g. Mac App Store vs DMG, or Windows Store APPX vs Setup.exe),
@@ -258,12 +260,25 @@ async function onReady([_appReady, _loadedState, _appx, _webxdc_cleanup]: [
     }
   }
 
-  const legacyAccountDataPath = await findLegacyAccountData(getAccountsPath())
-  if (legacyAccountDataPath) {
+  const legacyAccountData = await findLegacyAccountData(getAccountsPath())
+  if (legacyAccountData) {
+    const { path: legacyPath, moveTo } = legacyAccountData
+    const message = `Your profiles were created by a very old version of Delta Chat (before 1.22) and cannot be opened by this version.
+
+  To keep them:
+     1. Quit now
+     2. Install Delta Chat Desktop 2.59.x and start it once,
+        it converts your profiles to the current format
+     3. Relaunch this version
+
+     Your old data will be kept at:
+     ${moveTo ?? legacyPath}
+
+     Continue without your previous profiles?`
     const result = await dialog.showMessageBox({
       type: 'warning',
       title: tx('warning'),
-      message: tx('data_found_legacy_format_message', legacyAccountDataPath),
+      message: message,
       buttons: [tx('perm_continue'), tx('global_menu_file_quit_desktop')],
       defaultId: 1,
       cancelId: 1,
@@ -271,6 +286,22 @@ async function onReady([_appReady, _loadedState, _appx, _webxdc_cleanup]: [
     if (result.response === 1) {
       app.quit()
       return
+    }
+    if (moveTo) {
+      // core refuses to start on an accounts folder that has files but no
+      // accounts.toml, so the old profiles have to be moved out of the way
+      try {
+        await fsPromises.rename(legacyPath, moveTo)
+        log.info(`moved old profiles from "${legacyPath}" to "${moveTo}"`)
+      } catch (error) {
+        log.error('failed to move old profiles out of the way', error)
+        dialog.showErrorBox(
+          tx('error'),
+          `Could not move "${legacyPath}" to "${moveTo}":\n${error}`
+        )
+        app.quit()
+        return
+      }
     }
   }
 

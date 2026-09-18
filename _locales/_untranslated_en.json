@@ -1,7 +1,4 @@
 {
-  "data_found_legacy_format_message": {
-    "message": "Your profiles were created by a very old version of Delta Chat (before 1.22) and cannot be opened by this version.\n\nTo keep them:\n1. Quit now\n2. Install Delta Chat Desktop 2.59.x and start it once, it converts your profiles to the current format\n3. Relaunch this version\n\nYour old data is stored at:\n%1$s\n\nContinue without your previous profiles?"
-  },
   "command_palette_tab_to_search": {
     "message": "Tab to search"
   },
