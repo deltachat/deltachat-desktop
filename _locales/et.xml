@@ -241,7 +241,6 @@
     <!-- short for "Browse through the App Picker/Store/Catalogue"; could also be translated as "Discover" or "Search" -->
     <string name="browse">Sirvi</string>
     <string name="unknown">Teadmata</string>
-
     <string name="green">Roheline</string>
     <string name="red">Punane</string>
     <string name="blue">Sinine</string>
@@ -660,15 +659,17 @@
     <!-- Instant onboarding title (there is not more to do than to set name and avatar) -->
     <string name="instant_onboarding_title">Sinu profiil</string>
     <!-- The placeholder will be replaced by the default onboarding server -->
+    <!-- deprecated -->
     <string name="instant_onboarding_agree_default2">%1$s teenuse privaatsusreeglid</string>
     <!-- The placeholder will be replaced by instance name, the whole text will link to the instance page -->
+    <!-- deprecated -->
     <string name="instant_onboarding_agree_instance">Teave %1$s teenuse profiilide kohta</string>
     <!-- Confirmation button on the instant onboarding screen -->
     <string name="instant_onboarding_create">Nõustun ja alustan profiili loomist</string>
     <!-- Secondary, link-like button to open a page with other possible instances -->
     <string name="instant_onboarding_show_more_instances">Kasuta muud serverid</string>
     <string name="instant_onboarding_other_server">Edastusserverite loend</string>
-    <!-- Hint about what happens when "Create Profile" button in pressed; the placeholder will be replaced by the group name -->
+    <!-- Hint about what happens when "Create Profile" button in pressed; the placeholder will be replaced by the group or channel name -->
     <string name="instant_onboarding_group_info">„%1$s“ grupiga liitumiseks loo profiil.</string>
     <!-- Hint about what happens when "Create Profile" button in pressed; the placeholder will be replaced by contact name -->
     <string name="instant_onboarding_contact_info">„%1$s“ kasutajaga vestlemiseks loo profiil.</string>
@@ -718,19 +719,16 @@
     <string name="add_transport">Lisa alusühendus</string>
     <string name="remove_transport">Eemalda alusühendus</string>
     <string name="edit_transport">Muuda alusühendust</string>
+    <!-- deprecated -->
     <string name="used_for_sending">Kasutatud saatmiseks</string>
     <!-- deprecated -->
     <string name="hide_from_contacts">Peida kontaktidest</string>
     <!-- deprecated -->
     <string name="hidden_from_contacts">Peidetud kontaktidest</string>
     <string name="enforce_e2ee">Kasuta kõikide alusühenduste (edastusserverite) puhul krüptimist</string>
-    <!-- Hint for the list of relays -->
-    <string name="transport_list_hint">Sõnumid saavad kõik alusühendused (edastusserverid).</string>
     <!-- shown if a QR code was scanned that can be used as a relay -->
     <string name="confirm_add_transport">Kas lisad selle alusühenduse (edastusserveri)?</string>
     <string name="invalid_transport_qr">Skaneeritud QR-koodis pole korrektset alusühendust (edastusserverid)</string>
-    <!-- placeholder will be replaced by a relay server name -->
-    <string name="confirm_remove_relay_x">Kas eemaldad „%1$s“ alusühenduse (edastusserveri)?Enne lõplikku kustutamist toimub vaikne üleminek, kus kõik sinu kontaktid saavad muudatusega arvestada.</string>
     <!-- deprecated -->
     <string name="confirm_remove_or_hide_transport_x">Kas eemaldad alusühenduse (edastusserveri) „%1$s“?\n\nKui mõni kontakt teab vaid seda ühendusviisi, siis ta ei pruugi sind kätte saada enne, kui oled talle uuesti kirjutanud.\n\nKui kahtled, siis eemakdamise asemel pigem peida see alusühendus (edastusserver).</string>
     <string name="login_certificate_checks">Sertifikaadikontrollid</string>
@@ -769,6 +767,7 @@
     <!-- first placeholder is replaced by the number of files (always 2 or more); second placeholder is replaced by a chat name -->
     <string name="ask_send_files_to_chat">Kas saadad %1$d faili „%2$s“ vestlusesse?</string>
     <string name="ask_send_files_to_selected_chats">Kas saadad %1$d faili „%2$d“ vestlusesse?</string>
+    <!-- deprecated -->
     <string name="videos_sent_without_recoding">(Videod saadetakse algupäraste suurte failidena. Videote mahu vähendamiseks lisa nad manustena ükshaaval)</string>
     <string name="share_text_multiple_chats">Kas saadad selle teksti %1$d vestlusesse?\n\n„%2$s“</string>
     <string name="share_abort">Puuduvate õiguste tõttu on jagamine katkestatud.</string>
@@ -960,16 +959,22 @@
     <string name="chat_description_changed_by_other">%1$s muutis vestluse kirjeldust.</string>
     <!-- %1$s will be replaced by name of the contact added to the group -->
     <string name="member_x_added">Lisandus uus liige: %1$s.</string>
+    <string name="member_you_added">Sa oled lisatud.</string>
     <!-- %1$s will be replaced by name of the contact added to the group -->
     <string name="add_member_by_you">Sina lisasid uue liikme: %1$s.</string>
     <!-- %1$s will be replaced by name of the contact added to the group, %2$s will be replaced by name of the contact who did the action -->
     <string name="add_member_by_other">%2$s lisas uue liikme: %1$s.</string>
+    <!-- %1$s will be replaced by name of the contact who did the action -->
+    <string name="add_you_by_other">%1$s lisas sinu.</string>
     <!-- %1$s will be replaced by name of the contact removed from the group -->
     <string name="remove_member_by_you">Sina eemaldasid liikme: %1$s.</string>
     <!-- %1$s will be replaced by name of the contact removed from the group, %2$s will be replaced by name of the contact who did the action -->
     <string name="remove_member_by_other">%2$s eemaldas liikme: %1$s.</string>
+    <!-- %1$s will be replaced by name of the contact who did the action -->
+    <string name="remove_you_by_other">%1$s eemaldas sinu.</string>
     <!-- %1$s will be replaced by name of the contact removed from the group; this string is used when it's unclear who did the action -->
     <string name="member_x_removed">Grupi liige „%1$s“ on eemaldatud.</string>
+    <string name="member_you_removed">Sa oled eemaldatud.</string>
     <!-- "left" in the meaning of "exited". -->
     <string name="group_left_by_you">Sa lahkusid grupist.</string>
     <!-- "left" in the meaning of "exited". -->
@@ -1084,8 +1089,11 @@
     <string name="contact_verified">%1$s lisas vestlusesse.</string>
     <string name="contact_blocked">Sina blokeerisid selle kontakti</string>
     <!-- Shown in contact profile. The placeholder will be replaced by the name of the contact that introduced the contact. -->
+    <!-- deprecated -->
     <string name="verified_by">%1$s lisas kontakti vestlusesse</string>
+    <!-- deprecated -->
     <string name="verified_by_you">Mina lisasin kontakti vestlusesse</string>
+    <!-- deprecated -->
     <string name="verified_by_unknown">Vestlusesse lisatud</string>
     <string name="mailto_dialog_header_select_chat">Vali vestlus, kuhu soovid sõnumi saata</string>
     <!-- first placeholder is the name of the chat -->
@@ -1123,7 +1131,6 @@
     <string name="perm_explain_access_to_storage_denied">Failide saatmiseks ja vastuvõtmiseks ava rakenduse seadistused, sealt „Õigused“ / „Load“ ning luba „Mäluruum“.</string>
     <string name="perm_explain_access_to_location_denied">Asukoha tuvastamiseks ava rakenduse seadistused, sealt „Õigused“ / „Load“ ning luba „Asukoht“.</string>
     <string name="perm_explain_access_to_notifications_denied">Teavituste saamiseks ava rakenduse seadistused, sealt „Õigused“ / „Load“ ning luba „Märguanded“.</string>
-
     <!-- ImageEditorHud -->
     <string name="ImageEditorHud_draw_anywhere_to_blur">Hägustamiseks joonista kusagil</string>
     <string name="ImageEditorHud_add_text">Lisa tekst</string>
@@ -1264,4 +1271,4 @@
 
     <!-- device messages for updates -->
     <string name="update_2_0">Mida on meil uut?\n\n💯 Läbiv krüptimine on töökindel ja seda nüüd igaveseks. Tabalukud 🔒 on läinud!\n\n✉️ Klassikalised e-kirjad, kus läbiv krüptimine on puudu, on märgitud ümbriku ikooniga\n\n😻 Uus ja tõhusam profiilivaade kõikide sinu kontaktide jaoks\n\n🔲 Uus nupp kiireks ligipääsuks vestluses kasutatavate rakendusteni\n\n❤️ Palun toeta meie arendust rahaliselt - nii saame jääda sõltumatuteks ja jätkata selle rakenduse täiustamist: %1$s</string>
-</resources>
+    </resources>

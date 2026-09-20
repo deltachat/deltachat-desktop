@@ -241,6 +241,7 @@
     <!-- short for "Browse through the App Picker/Store/Catalogue"; could also be translated as "Discover" or "Search" -->
     <string name="browse">Browse</string>
     <string name="unknown">Unknown</string>
+    <string name="unnamed">Unnamed</string>
 
     <string name="green">Green</string>
     <string name="red">Red</string>
@@ -250,6 +251,9 @@
     <string name="purple">Purple</string>
     <string name="magenta">Magenta</string>
     <string name="white">White</string>
+
+    <!-- Used to display some progress in percent. Placeholder will be replaced by a number, resulting in eg. "50%", which may be translated to "50 %" in French or "%50" in Turkish.  -->
+    <string name="progress_percent">%1$d%%</string>
 
     <string name="zoom">Zoom</string>
     <string name="extra_small">Extra small</string>
@@ -374,6 +378,8 @@
     <string name="unpin_chat">Unpin Chat</string>
     <!-- Verb "to pin", making something sticky, not a noun or abbreviation for "pin number". -->
     <string name="pin">Pin</string>
+    <!-- Adj. of "pin", describing a state of being pinned. -->
+    <string name="pinned">Pinned</string>
     <!-- Opposite of "Pin chat", removing the sticky-state from a chat. -->
     <string name="unpin">Unpin</string>
     <string name="ConversationFragment_quoted_message_not_found">Original message not found</string>
@@ -504,6 +510,10 @@
     <plurals name="chat_n_new_messages">
         <item quantity="one">%d new message</item>
         <item quantity="other">%d new messages</item>
+    </plurals>
+    <plurals name="chat_n_unread_messages">
+        <item quantity="one">%1$d unread message</item>
+        <item quantity="other">%1$d unread messages</item>
     </plurals>
     <!-- The placeholder will be replaced by the name of the recipient in a one-to-one chat. -->
     <string name="chat_new_one_to_one_hint">Send a message to %1$s.</string>
@@ -660,16 +670,18 @@
     <!-- Instant onboarding title (there is not more to do than to set name and avatar) -->
     <string name="instant_onboarding_title">Your Profile</string>
     <!-- The placeholder will be replaced by the default onboarding server -->
+    <!-- deprecated -->
     <string name="instant_onboarding_agree_default2">Privacy Policy for %1$s</string>
     <!-- The placeholder will be replaced by instance name, the whole text will link to the instance page -->
+    <!-- deprecated -->
     <string name="instant_onboarding_agree_instance">About profiles on %1$s</string>
     <!-- Confirmation button on the instant onboarding screen -->
     <string name="instant_onboarding_create">Agree &amp; Create Profile</string>
     <!-- Secondary, link-like button to open a page with other possible instances -->
     <string name="instant_onboarding_show_more_instances">Use Other Server</string>
     <string name="instant_onboarding_other_server">List Chatmail Servers</string>
-    <!-- Hint about what happens when "Create Profile" button in pressed; the placeholder will be replaced by the group name -->
-    <string name="instant_onboarding_group_info">Create a profile to join the group \"%1$s\".</string>
+    <!-- Hint about what happens when "Create Profile" button in pressed; the placeholder will be replaced by the group or channel name -->
+    <string name="instant_onboarding_group_info">Create a profile to join \"%1$s\".</string>
     <!-- Hint about what happens when "Create Profile" button in pressed; the placeholder will be replaced by contact name -->
     <string name="instant_onboarding_contact_info">Create a profile to chat with %1$s.</string>
     <!-- Question shown when another user's QR code is scanned from onboarding screen -->
@@ -718,6 +730,7 @@
     <string name="add_transport">Add Relay</string>
     <string name="remove_transport">Remove Relay</string>
     <string name="edit_transport">Edit Relay</string>
+    <!-- deprecated -->
     <string name="used_for_sending">Used for sending</string>
     <!-- deprecated -->
     <string name="hide_from_contacts">Hide from Contacts</string>
@@ -725,12 +738,12 @@
     <string name="hidden_from_contacts">Hidden from contacts</string>
     <string name="enforce_e2ee">Enforce Encryption for All Relays</string>
     <!-- Hint for the list of relays -->
-    <string name="transport_list_hint">Messages are received on all relays.</string>
+    <string name="transport_list_hint">Relays are used for sending and receiving messages. Having more than one keeps your connection reliable.</string>
     <!-- shown if a QR code was scanned that can be used as a relay -->
     <string name="confirm_add_transport">Add this relay?</string>
     <string name="invalid_transport_qr">The scanned QR code does not contain a valid relay.</string>
     <!-- placeholder will be replaced by a relay server name -->
-    <string name="confirm_remove_relay_x">Remove relay \"%1$s\"?\n\nBefore deletion, it will be gradually phased out so your contacts can switch over smoothly.</string>
+    <string name="confirm_remove_relay_x">Remove relay \"%1$s\"?</string>
     <!-- deprecated -->
     <string name="confirm_remove_or_hide_transport_x">Remove relay \"%1$s\"?\n\nContacts who only know this relay may not reach you until you message them again.\n\nIf in doubt, hide it rather than removing it.</string>
     <string name="login_certificate_checks">Certificate Checks</string>
@@ -769,6 +782,7 @@
     <!-- first placeholder is replaced by the number of files (always 2 or more); second placeholder is replaced by a chat name -->
     <string name="ask_send_files_to_chat">Send %1$d files to \"%2$s\"?</string>
     <string name="ask_send_files_to_selected_chats">Send %1$d file(s) to %2$d chats?</string>
+    <!-- deprecated -->
     <string name="videos_sent_without_recoding">(Sending multiple videos will send them as-is, which may be large. To make them smaller and save data, you can send each video in its own message)</string>
     <string name="share_text_multiple_chats">Send this text to %1$d chats?\n\n\"%2$s\"</string>
     <string name="share_abort">Sharing aborted due to missing permissions.</string>
@@ -960,16 +974,22 @@
     <string name="chat_description_changed_by_other">Chat description changed by %1$s.</string>
     <!-- %1$s will be replaced by name of the contact added to the group -->
     <string name="member_x_added">Member %1$s added.</string>
+    <string name="member_you_added">You were added.</string>
     <!-- %1$s will be replaced by name of the contact added to the group -->
     <string name="add_member_by_you">You added member %1$s.</string>
     <!-- %1$s will be replaced by name of the contact added to the group, %2$s will be replaced by name of the contact who did the action -->
     <string name="add_member_by_other">Member %1$s added by %2$s.</string>
+    <!-- %1$s will be replaced by name of the contact who did the action -->
+    <string name="add_you_by_other">You were added by %1$s.</string>
     <!-- %1$s will be replaced by name of the contact removed from the group -->
     <string name="remove_member_by_you">You removed member %1$s.</string>
     <!-- %1$s will be replaced by name of the contact removed from the group, %2$s will be replaced by name of the contact who did the action -->
     <string name="remove_member_by_other">Member %1$s removed by %2$s.</string>
+    <!-- %1$s will be replaced by name of the contact who did the action -->
+    <string name="remove_you_by_other">You were removed by %1$s.</string>
     <!-- %1$s will be replaced by name of the contact removed from the group; this string is used when it's unclear who did the action -->
     <string name="member_x_removed">Member %1$s removed.</string>
+    <string name="member_you_removed">You were removed.</string>
     <!-- "left" in the meaning of "exited". -->
     <string name="group_left_by_you">You left the group.</string>
     <!-- "left" in the meaning of "exited". -->
@@ -1084,8 +1104,11 @@
     <string name="contact_verified">%1$s introduced.</string>
     <string name="contact_blocked">You blocked the contact</string>
     <!-- Shown in contact profile. The placeholder will be replaced by the name of the contact that introduced the contact. -->
+    <!-- deprecated -->
     <string name="verified_by">Introduced by %1$s</string>
+    <!-- deprecated -->
     <string name="verified_by_you">Introduced by me</string>
+    <!-- deprecated -->
     <string name="verified_by_unknown">Introduced</string>
     <string name="mailto_dialog_header_select_chat">Select chat to send the message to</string>
     <!-- first placeholder is the name of the chat -->
@@ -1123,6 +1146,7 @@
     <string name="perm_explain_access_to_storage_denied">To receive or send files, go to the app settings, select \"Permissions\", and enable \"Storage\".</string>
     <string name="perm_explain_access_to_location_denied">To attach a location, go to the app settings, select \"Permissions\", and enable \"Location\".</string>
     <string name="perm_explain_access_to_notifications_denied">To receive notifications, go to \"System Settings / Apps / Delta Chat\" and enable \"Notifications\".</string>
+    <string name="perm_explain_local_network_denied">Delta Chat needs the "Nearby devices" permission to connect to devices on the local network. You can set it under Apps / Delta Chat / Permissions.</string>
 
     <!-- ImageEditorHud -->
     <string name="ImageEditorHud_draw_anywhere_to_blur">Draw anywhere to blur</string>
@@ -1264,4 +1288,10 @@
 
     <!-- device messages for updates -->
     <string name="update_2_0">What\'s new?\n\n💯 End-to-end encryption is reliable and forever now. Padlocks 🔒 are gone!\n\n✉️ Classic email without end-to-end encryption is marked with a letter symbol\n\n😻 New enhanced profile screen for all your contacts\n\n🔲 New button for quick access to apps used in a chat\n\n❤️ Please donate to help us remain independent and continue to bring improvements: %1$s</string>
+    <!-- The placeholder will be replaced by a version name, e.g. "v2.50.0" -->
+    <string name="update_available_msg">🎉 New version %1$s available. Tap this message to update and enjoy the new features</string>
+    <!-- The placeholder will be replaced by a version name, e.g. "Downloading v2.50.0 …" -->
+    <string name="update_downloading">Downloading %1$s …</string>
+    <string name="update_now">Update Now</string>
+    <string name="update_install_permission_explain">To install the update, please first allow Delta Chat to install apps in the system settings.</string>
 </resources>
