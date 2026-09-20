@@ -3,7 +3,7 @@
     "menu_help": "Nápověda",
     "app_name": "Delta Chat",
     "placeholder": "Hledat",
-    "one_result": "Result for \"[SEARCH_TERM]\"",
+    "one_result": "",
     "zero_results": "Žádný výsledek pro \"[SEARCH_TERM]\"",
     "clear_search": "×"
   },
@@ -11,7 +11,7 @@
     "menu_help": "Hilfe",
     "app_name": "Delta Chat",
     "placeholder": "Suchen",
-    "one_result": "Ergebnis für \"%1$s\"",
+    "one_result": "",
     "zero_results": "Keine Ergebnisse für \"[SEARCH_TERM]\" gefunden.",
     "clear_search": "×"
   },
@@ -19,7 +19,7 @@
     "menu_help": "Help",
     "app_name": "Delta Chat",
     "placeholder": "Search",
-    "one_result": "Result for \"%1$s\"",
+    "one_result": "",
     "zero_results": "No results found for \"[SEARCH_TERM]\"",
     "clear_search": "×"
   },
@@ -27,7 +27,7 @@
     "menu_help": "Ayuda",
     "app_name": "Delta Chat",
     "placeholder": "Buscar",
-    "one_result": "Resultado para \"%1$s\"",
+    "one_result": "",
     "zero_results": "No se encontraron resultados para \"[SEARCH_TERM]\"",
     "clear_search": "×"
   },
@@ -35,7 +35,7 @@
     "menu_help": "Laguntza",
     "app_name": "Delta Chat",
     "placeholder": "Bilatu",
-    "one_result": "Result for \"[SEARCH_TERM]\"",
+    "one_result": "",
     "zero_results": "Ez da emaitzarik aurkitu \"[SEARCH_TERM]\" bilaketarentzat",
     "clear_search": "×"
   },
@@ -43,7 +43,7 @@
     "menu_help": "Aide",
     "app_name": "Delta Chat",
     "placeholder": "Chercher",
-    "one_result": "Result for \"[SEARCH_TERM]\"",
+    "one_result": "",
     "zero_results": "Aucun résultat trouvé pour \"[SEARCH_TERM]\"",
     "clear_search": "×"
   },
@@ -51,7 +51,7 @@
     "menu_help": "Bantuan",
     "app_name": "Delta Chat",
     "placeholder": "Cari",
-    "one_result": "Result for \"[SEARCH_TERM]\"",
+    "one_result": "",
     "zero_results": "Tak ada hasil dari \"[SEARCH_TERM]\"",
     "clear_search": "×"
   },
@@ -59,7 +59,7 @@
     "menu_help": "Aiuto",
     "app_name": "Delta Chat",
     "placeholder": "Cerca",
-    "one_result": "Risultato per \"%1$s\"",
+    "one_result": "",
     "zero_results": "Nessun risultato trovato per \"[SEARCH_TERM]\"",
     "clear_search": "×"
   },
@@ -67,7 +67,7 @@
     "menu_help": "Pomoc",
     "app_name": "Delta Chat",
     "placeholder": "Szukaj",
-    "one_result": "Wynik dla „%1$s”",
+    "one_result": "",
     "zero_results": "Nie znaleziono wyników dla „[SEARCH_TERM]",
     "clear_search": "×"
   },
@@ -75,7 +75,7 @@
     "menu_help": "Ajuda",
     "app_name": "Delta Chat",
     "placeholder": "Pesquisar",
-    "one_result": "Resultado para \"%1$s\"",
+    "one_result": "",
     "zero_results": "Nenhum resultado encontrado para \"[SEARCH_TERM]\"",
     "clear_search": "×"
   },
@@ -83,7 +83,7 @@
     "menu_help": "Справка",
     "app_name": "Delta Chat",
     "placeholder": "Поиск",
-    "one_result": "Результат по запросу \"%1$s\"",
+    "one_result": "",
     "zero_results": "Ничего не найдено по запросу \"[SEARCH_TERM]\"",
     "clear_search": "×"
   },
@@ -91,15 +91,15 @@
     "menu_help": "Pomocník",
     "app_name": "Delta Chat",
     "placeholder": "Vyhľadávanie",
-    "one_result": "Result for \"[SEARCH_TERM]\"",
-    "zero_results": "Neboli nájdené žiadne výsledky pre \"[SEARCH_TERM]\"",
+    "one_result": "",
+    "zero_results": "Neboli nájdené žiadne výsledky pre „[SEARCH_TERM]“",
     "clear_search": "×"
   },
   "sq": {
     "menu_help": "Ndihmë",
     "app_name": "Delta Chat",
     "placeholder": "Kërko",
-    "one_result": "Përfundim për “%1$s",
+    "one_result": "",
     "zero_results": "S’u gjetën përfundime për “[SEARCH_TERM]”",
     "clear_search": "×"
   },
@@ -107,7 +107,7 @@
     "menu_help": "Допомога",
     "app_name": "Delta Chat",
     "placeholder": "Пошук",
-    "one_result": "Result for \"[SEARCH_TERM]\"",
+    "one_result": "",
     "zero_results": "Запит \"[SEARCH_TERM]\" не дав результатів",
     "clear_search": "×"
   },
@@ -115,7 +115,7 @@
     "menu_help": "帮助",
     "app_name": "Delta Chat",
     "placeholder": "搜索",
-    "one_result": "“%1$s”的结果",
+    "one_result": "",
     "zero_results": "没有找到有关\"[SEARCH_TERM]\"的结果",
     "clear_search": "×"
   }

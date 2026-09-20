@@ -147,3 +147,8 @@ mark {
 .pagefind-ui__results {
   list-style: none;
 }
+
+/* the result count above the list is empty on purpose, do not reserve space for it */
+.pagefind-ui__message:empty {
+  display: none;
+}
