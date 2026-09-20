@@ -227,7 +227,6 @@
     <!-- short for "Browse through the App Picker/Store/Catalogue"; could also be translated as "Discover" or "Search" -->
     <string name="browse">Brskaj</string>
     <string name="unknown">Neznano</string>
-
     <string name="green">Zeleno</string>
     <string name="red">Rdeče</string>
     <string name="blue">Modro</string>

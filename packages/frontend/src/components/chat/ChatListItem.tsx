@@ -37,7 +37,7 @@ function FreshMessageCounter({
     return (
       <span className='visually-hidden'>
         {' ' +
-          tx('chat_n_new_messages', String(counter), {
+          tx('chat_n_unread_messages', String(counter), {
             quantity: counter,
           })}
       </span>

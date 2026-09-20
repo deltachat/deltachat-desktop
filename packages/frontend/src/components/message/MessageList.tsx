@@ -1069,9 +1069,11 @@ function JumpDownButton({
           )}
           // Even though this is not focusable as of the time of writing,
           // let's still apply label, for future-proofing.
-          aria-label={tx('chat_n_new_messages', String(countUnreadMessages), {
-            quantity: countUnreadMessages,
-          })}
+          aria-label={tx(
+            'chat_n_unread_messages',
+            String(countUnreadMessages),
+            { quantity: countUnreadMessages }
+          )}
           style={countUnreadMessages === 0 ? { visibility: 'hidden' } : {}}
         >
           {countToShow}

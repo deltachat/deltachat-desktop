@@ -228,7 +228,6 @@
     <!-- short for "Browse through the App Picker/Store/Catalogue"; could also be translated as "Discover" or "Search" -->
     <string name="browse">ရှာဖွေပါ</string>
     <string name="unknown">မသိရသော</string>
-
     <string name="green">အစိမ်း</string>
     <string name="red">အနီ</string>
     <string name="blue">အပြာ</string>
@@ -636,16 +635,16 @@
     <!-- Instant onboarding title (there is not more to do than to set name and avatar) -->
     <string name="instant_onboarding_title">အမြန်ဖန်တီးခြင်း</string>
     <!-- The placeholder will be replaced by the default onboarding server -->
+    <!-- deprecated -->
     <string name="instant_onboarding_agree_default2">%1$s တွင် ဖန်တီးရန်</string>
     <!-- The placeholder will be replaced by instance name, the whole text will link to the instance page -->
+    <!-- deprecated -->
     <string name="instant_onboarding_agree_instance">%1$s စာချုပ်</string>
     <!-- Confirmation button on the instant onboarding screen -->
     <string name="instant_onboarding_create">ဖန်တီးပါ</string>
     <!-- Secondary, link-like button to open a page with other possible instances -->
     <string name="instant_onboarding_show_more_instances">နောက်ထပ် ဆာဗာများ ပြပါ</string>
     <string name="instant_onboarding_other_server">အခြား ဆာဗာ</string>
-    <!-- Hint about what happens when "Create Profile" button in pressed; the placeholder will be replaced by the group name -->
-    <string name="instant_onboarding_group_info">%1$s အဖွဲ့ကို ဖန်တီးမည်</string>
     <!-- Hint about what happens when "Create Profile" button in pressed; the placeholder will be replaced by contact name -->
     <string name="instant_onboarding_contact_info">%1$s ကို အဆက်အသွယ်အဖြစ် ထည့်မည်</string>
     <!-- Question shown when another user's QR code is scanned from onboarding screen -->
@@ -690,6 +689,7 @@
     <string name="add_transport">ရီလေး ထည့်ပါ</string>
     <string name="remove_transport">ရီလေးကို ဖယ်ရှားပါ</string>
     <string name="edit_transport">ရီလေးကို တည်းဖြတ်ပါ</string>
+    <!-- deprecated -->
     <string name="used_for_sending">ပေးပို့ရန်အတွက် အသုံးပြုသည်</string>
     <!-- deprecated -->
     <string name="hide_from_contacts">အဆက်အသွယ်များမှ ဝှက်ထားပါ</string>
@@ -737,6 +737,7 @@
     <!-- first placeholder is replaced by the number of files (always 2 or more); second placeholder is replaced by a chat name -->
     <string name="ask_send_files_to_chat">ဖိုင် %1$d ခုကို %2$s သို့ ပို့မည်လား?</string>
     <string name="ask_send_files_to_selected_chats">ရွေးချယ်ထားသော ချတ်များသို့ ဖိုင်များကို ပို့မည်လား?</string>
+    <!-- deprecated -->
     <string name="videos_sent_without_recoding">ဗီဒီယိုများကို မပြောင်းလဲဘဲ ပို့လိုက်သည်</string>
     <string name="share_text_multiple_chats">ချတ်အများအပြားသို့ စာသားမျှဝေပါ</string>
     <string name="share_abort">မျှဝေခြင်းကို ပယ်ဖျက်ပါ</string>
@@ -1052,8 +1053,11 @@
     <string name="contact_verified">အဆက်အသွယ် အတည်ပြုပြီးပါပြီ</string>
     <string name="contact_blocked">အဆက်အသွယ်ကို ပိတ်ပင်ထားသည်</string>
     <!-- Shown in contact profile. The placeholder will be replaced by the name of the contact that introduced the contact. -->
+    <!-- deprecated -->
     <string name="verified_by">%1$s မှ အတည်ပြုသည်</string>
+    <!-- deprecated -->
     <string name="verified_by_you">သင် အတည်ပြုခဲ့သည်</string>
+    <!-- deprecated -->
     <string name="verified_by_unknown">အမည်မသိသူမှ အတည်ပြုသည်</string>
     <string name="mailto_dialog_header_select_chat">ချတ်ကို ရွေးချယ်ပါ</string>
     <!-- first placeholder is the name of the chat -->
@@ -1091,7 +1095,6 @@
     <string name="perm_explain_access_to_storage_denied">သိုလှောင်မှုကို အသုံးပြုခွင့် ငြင်းပယ်ထားပါသည်</string>
     <string name="perm_explain_access_to_location_denied">တည်နေရာကို အသုံးပြုခွင့် ငြင်းပယ်ထားပါသည်</string>
     <string name="perm_explain_access_to_notifications_denied">အသိပေးချက်များကို ငြင်းပယ်ထားပါသည်</string>
-
     <!-- ImageEditorHud -->
     <string name="ImageEditorHud_draw_anywhere_to_blur">မှုန်ဝါးသွားစေရန် မည်သည့်နေရာတွင်မဆို ဆွဲပါ</string>
     <string name="ImageEditorHud_add_text">စာသား ထည့်ပါ</string>
@@ -1232,4 +1235,4 @@
 
     <!-- device messages for updates -->
     <string name="update_2_0">အသစ်အဆန်းတွေက ဘာတွေလဲ။\n\n💯 အဆုံးမှအဆုံး ကုဒ်ဝှက်စနစ်က ယုံကြည်စိတ်ချရပြီး ထာဝရဖြစ်နေပါပြီ။ သော့ခလောက်တွေ🔒 မရှိတော့ပါ။\n\n ✉️ အဆုံးမှအဆုံး ကုဒ်ဝှက်စနစ်မပါတဲ့ ဂန္ထဝင်အီးမေးလ်ကို အက္ခရာသင်္ကေတနဲ့ မှတ်သားထားပါတယ်။\n\n😻 သင့်အဆက်အသွယ်အားလုံးအတွက် မြှင့်တင်ထားတဲ့ ပရိုဖိုင်မျက်နှာပြင်အသစ်\n\n🔲 ချတ်မှာအသုံးပြုတဲ့ အက်ပ်တွေကို အမြန်ဝင်ရောက်နိုင်ဖို့ ခလုတ်အသစ်\n\n ❤️ ကျွန်ုပ်တို့ လွတ်လပ်နေစေဖို့နဲ့ တိုးတက်မှုတွေ ဆက်လက်ရရှိအောင် လှူဒါန်းပေးပါ-%1$s</string>
-</resources>
+    </resources>

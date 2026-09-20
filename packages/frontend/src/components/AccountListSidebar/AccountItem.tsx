@@ -192,7 +192,7 @@ export default function AccountItem({
         // it only applies to a single chat.
         // But it's good enough I guess.
         // Maybe we could also use `n_messages_in_m_chats` instead.
-        aria-label={tx('chat_n_new_messages', String(unreadCount), {
+        aria-label={tx('chat_n_unread_messages', String(unreadCount), {
           quantity: unreadCount,
         })}
       >
@@ -280,7 +280,7 @@ export default function AccountItem({
               ? account.addr
               : undefined,
             unreadCount
-              ? tx('chat_n_new_messages', String(unreadCount), {
+              ? tx('chat_n_unread_messages', String(unreadCount), {
                   quantity: unreadCount,
                 })
               : undefined,
