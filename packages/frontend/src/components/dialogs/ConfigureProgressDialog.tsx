@@ -21,7 +21,15 @@ const log = getLogger('renderer/loginForm')
 
 interface ConfigureProgressDialogProps {
   credentials: Credentials | null
-  qrCode?: string | null // must be of type DCACCOUNT or DCLOGIN
+  /**
+   * When onboarding a fresh profile: a DCACCOUNT or DCLOGIN code, which
+   * determines the transport, a securejoin code, whose relays core prefers
+   * when choosing one, or `null` to let core choose among the known relays.
+   * Otherwise: a DCACCOUNT or DCLOGIN code of the transport to add.
+   */
+  qrCode?: string | null
+  /** Set up the first transports of a new profile. */
+  isOnboarding?: boolean
   onSuccess?: () => void
   onUserCancellation?: () => void
   onFail: (error: string) => void
@@ -35,6 +43,7 @@ interface ConfigureProgressDialogProps {
 export function ConfigureProgressDialog({
   credentials,
   qrCode,
+  isOnboarding = false,
   onSuccess,
   onUserCancellation,
   onFail,
@@ -76,17 +85,19 @@ export function ConfigureProgressDialog({
     () => {
       ;(async () => {
         try {
-          if (!credentials && !qrCode) {
+          if (!credentials && !qrCode && !isOnboarding) {
             throw new Error(
               'ConfigureProgressDialog needs either credentials or a qrCode'
             )
           }
           const configuration: Credentials = credentials || defaultCredentials()
           let isInitialOnboarding = false
-          if (qrCode) {
+          if (isOnboarding) {
+            await BackendRemote.rpc.initTransports(accountId, qrCode ?? null)
+            isInitialOnboarding = true
+          } else if (qrCode) {
             // create a new transport for accountId based on the QR code
             await BackendRemote.rpc.addTransportFromQr(accountId, qrCode)
-            isInitialOnboarding = true
           } else if (
             configuration.addr !== undefined &&
             configuration.addr.length > 0
@@ -95,7 +106,7 @@ export function ConfigureProgressDialog({
               await BackendRemote.rpc.listTransports(accountId)
             if (
               existingTransports.length === 1 &&
-              existingTransports[0].addr === ''
+              existingTransports[0]?.addr === ''
             ) {
               isInitialOnboarding = true
             }
@@ -113,8 +124,9 @@ export function ConfigureProgressDialog({
             return
           }
           if (isInitialOnboarding) {
-            // Select 'Device Messages' chat as the initial one. This will serve
+            // Select 'Device Messages' chat as the initial one This will serve
             // as a first introduction to the app after they've entered
+
             const deviceChatId = await getDeviceChatId(accountId)
             if (deviceChatId) {
               await saveLastChatId(accountId, deviceChatId)
