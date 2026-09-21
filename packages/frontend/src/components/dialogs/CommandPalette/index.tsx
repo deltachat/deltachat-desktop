@@ -112,7 +112,7 @@ export default function CommandPalette({ mode = 'search', onClose }: Props) {
     avatarPath = scopedAccount.avatarPath || undefined
     accountColor = scopedAccount.color || undefined
   } else if (accountInfo?.kind === 'Configured') {
-    accountName = accountInfo.displayName || accountInfo.addr || ''
+    accountName = accountInfo.displayName || tx('unnamed')
     avatarPath = accountInfo.profileImage || undefined
     accountColor = accountInfo.color || undefined
   }

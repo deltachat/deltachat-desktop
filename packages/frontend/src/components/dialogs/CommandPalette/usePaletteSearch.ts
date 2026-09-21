@@ -96,9 +96,8 @@ export function usePaletteSearch({
         if (account.kind !== 'Configured' || account.id === accountId) {
           continue
         }
-        const label = account.displayName || account.addr || ''
-        const haystack = `${account.displayName ?? ''} ${account.addr ?? ''}`
-        if (needle !== '' && !haystack.toLowerCase().includes(needle)) {
+        const label = account.displayName || window.static_translate('unnamed')
+        if (needle !== '' && !label.toLowerCase().includes(needle)) {
           continue
         }
         count++
@@ -106,12 +105,11 @@ export function usePaletteSearch({
           id: `account-${account.id}`,
           section: 'accounts',
           label,
-          subtitle: account.addr ?? undefined,
+          subtitle: account.privateTag ?? undefined,
           avatar: {
             displayName: label,
             avatarPath: account.profileImage,
             color: account.color,
-            addr: account.addr ?? undefined,
           },
           // Enter switches to the account; Tab drills into it to browse its
           // chats/messages without switching (until a chat/message is opened).
@@ -120,7 +118,6 @@ export function usePaletteSearch({
             name: label,
             avatarPath: account.profileImage,
             color: account.color,
-            addr: account.addr ?? undefined,
           },
           run: async () => {
             await actionsRef.current.switchAccount(account.id)

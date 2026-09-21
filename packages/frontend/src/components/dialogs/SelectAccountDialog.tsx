@@ -68,10 +68,7 @@ export default function SelectAccountDialog({ onSelect, onClose }: Props) {
                         }}
                       >
                         {account.kind === 'Configured'
-                          ? avatarInitial(
-                              account.displayName || '',
-                              account.addr || undefined
-                            )
+                          ? avatarInitial(account.displayName || tx('unnamed'))
                           : '?'}
                       </div>
                     )}
@@ -79,12 +76,12 @@ export default function SelectAccountDialog({ onSelect, onClose }: Props) {
                   <div className={styles.accountInfo}>
                     <div className={styles.displayName}>
                       {account.kind === 'Configured'
-                        ? account.displayName || account.addr
+                        ? account.displayName || tx('unnamed')
                         : tx('unconfigured_account')}
                     </div>
-                    {account.kind === 'Configured' && account.addr && (
-                      <div className={styles.emailAddress}>
-                        {account.privateTag ?? account.addr}
+                    {account.kind === 'Configured' && account.privateTag && (
+                      <div className={styles.privateTag}>
+                        {account.privateTag}
                       </div>
                     )}
                   </div>

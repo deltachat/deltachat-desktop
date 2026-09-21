@@ -20,7 +20,8 @@ import SettingsStoreInstance, { useSettingsStore } from '../../stores/settings'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 
 type AccountAndPasswordDialogProps = DialogProps & {
-  addr?: string
+  /** Address of the transport to edit. */
+  addr: string
 }
 
 const log = getLogger('renderer/EditAccountAndPasswordDialog')
@@ -59,7 +60,7 @@ function EditAccountInner({
   addr,
 }: {
   onClose: DialogProps['onClose']
-  addr?: string
+  addr: string
 }) {
   const settingsStore = useSettingsStore()[0]
   const [initialSettings, setInitialAccountSettings] =
@@ -87,16 +88,12 @@ function EditAccountInner({
       if (transports.length === 0) {
         throw new Error('no transport found')
       }
-      const configuredAddress =
-        addr ||
-        (await BackendRemote.rpc.getConfig(accountId, 'configured_addr'))
-      if (cancelled) return
       const accountSettings: T.EnteredLoginParam | undefined = transports.find(
-        t => t.addr === configuredAddress
+        t => t.addr === addr
       )
 
       if (!accountSettings) {
-        throw new Error('configured transport not found in transport list')
+        throw new Error('transport to edit not found in transport list')
       }
 
       setInitialAccountSettings(accountSettings)

@@ -9,7 +9,6 @@ import useDialog from '../../../hooks/dialog/useDialog'
 import { copyToBlobDir } from '../../../utils/copyToBlobDir'
 
 type Props = {
-  addr?: string
   color?: string
   displayName: string
   hideDeleteButton?: boolean
@@ -18,13 +17,12 @@ type Props = {
 }
 
 export default function ProfileImageSelector({
-  addr,
   color,
   displayName,
   profilePicture,
   setProfilePicture,
 }: Props) {
-  const initials = avatarInitial(displayName, addr)
+  const initials = avatarInitial(displayName)
 
   const { openDialog } = useDialog()
 

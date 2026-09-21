@@ -17,7 +17,6 @@ export type AccountPartial = {
   name: string
   avatarPath?: string | null
   color?: string
-  addr?: string
 }
 
 export type PaletteAvatar = {

@@ -13,9 +13,9 @@ import { Proxy } from '../components/Settings/DefaultCredentials'
 export interface SettingsStoreState {
   accountId: number
   selfContact: Type.Contact
+  isConfigured: boolean
   settings: {
     [P in (typeof settingsKeys)[number]]: {
-      configured_addr: string
       displayname: string
       selfstatus: string
       mdns_enabled: string
@@ -35,7 +35,6 @@ export interface SettingsStoreState {
 }
 
 const settingsKeys = [
-  'configured_addr',
   'displayname',
   'selfstatus',
   'mdns_enabled',
@@ -163,12 +162,13 @@ class SettingsStore extends Store<SettingsStoreState | null> {
         throw new Error('can not load settings when no account is selected')
       }
 
-      const [settings, selfContact] = await Promise.all([
+      const [settings, selfContact, isConfigured] = await Promise.all([
         BackendRemote.rpc.batchGetConfig(
           accountId,
           settingsKeys as unknown as Array<(typeof settingsKeys)[number]>
         ) as Promise<SettingsStoreState['settings']>,
         BackendRemote.rpc.getContact(accountId, C.DC_CONTACT_ID_SELF),
+        BackendRemote.rpc.isConfigured(accountId),
       ])
 
       if (settings['ui.mentions_enabled'] == null) {
@@ -179,6 +179,7 @@ class SettingsStore extends Store<SettingsStoreState | null> {
       this.reducer.setState({
         settings,
         selfContact,
+        isConfigured,
         accountId,
         rc,
       })

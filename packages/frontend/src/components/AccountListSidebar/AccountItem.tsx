@@ -271,14 +271,11 @@ export default function AccountItem({
         aria-busy={!account && accountFetch.loading}
         aria-label={
           account?.kind === 'Configured'
-            ? account.displayName || account.addr || undefined
+            ? account.displayName || tx('unnamed')
             : undefined
         }
         aria-description={
           [
-            account?.kind === 'Configured' && account.displayName
-              ? account.addr
-              : undefined,
             unreadCount
               ? tx('chat_n_unread_messages', String(unreadCount), {
                   quantity: unreadCount,
@@ -325,10 +322,7 @@ export default function AccountItem({
                 className={styles.content}
                 style={{ backgroundColor: account.color }}
               >
-                {avatarInitial(
-                  account.displayName || '',
-                  account.addr || undefined
-                )}
+                {avatarInitial(account.displayName || tx('unnamed'))}
               </div>
             )}
           </div>
