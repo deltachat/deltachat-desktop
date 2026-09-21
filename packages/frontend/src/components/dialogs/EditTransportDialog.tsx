@@ -19,21 +19,24 @@ import { T } from '@deltachat/jsonrpc-client'
 import SettingsStoreInstance, { useSettingsStore } from '../../stores/settings'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 
-type AccountAndPasswordDialogProps = DialogProps & {
+type EditTransportDialogProps = DialogProps & {
   /** Address of the transport to edit. */
   addr: string
 }
 
-const log = getLogger('renderer/EditAccountAndPasswordDialog')
+const log = getLogger('renderer/EditTransportDialog')
 
 /**
  * uses a prefilled LoginForm with existing
- * credentials to edit transport settings
+ * credentials to edit transport settings.
+ *
+ * Note: if `force_encryption` is toggled, it will affect all
+ * transports of this account not only the one being edited!
  */
-export default function EditAccountAndPasswordDialog({
+export default function EditTransportDialog({
   onClose,
   addr,
-}: AccountAndPasswordDialogProps) {
+}: EditTransportDialogProps) {
   const tx = useTranslationFunction()
 
   const settingsStore = useSettingsStore()[0]
@@ -50,12 +53,12 @@ export default function EditAccountAndPasswordDialog({
             : tx('manual_account_setup_option')
         }
       />
-      <EditAccountInner {...{ onClose, addr }} />
+      <EditTransportInner {...{ onClose, addr }} />
     </Dialog>
   )
 }
 
-function EditAccountInner({
+function EditTransportInner({
   onClose,
   addr,
 }: {
