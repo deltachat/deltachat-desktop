@@ -63,10 +63,10 @@ function EditAccountInner({
   addr: string
 }) {
   const settingsStore = useSettingsStore()[0]
-  const [initialSettings, setInitialAccountSettings] =
+  const [initialTransportSettings, setInitialTransportSettings] =
     useState<Credentials>(defaultCredentials())
 
-  const [accountSettings, setAccountSettings] =
+  const [transportSettings, setTransportSettings] =
     useState<Credentials>(defaultCredentials())
   const [forceEncryption, setForceEncryption] = useState<boolean>(
     settingsStore?.settings['force_encryption'] === '1'
@@ -88,16 +88,15 @@ function EditAccountInner({
       if (transports.length === 0) {
         throw new Error('no transport found')
       }
-      const accountSettings: T.EnteredLoginParam | undefined = transports.find(
-        t => t.addr === addr
-      )
+      const transportSettings: T.EnteredLoginParam | undefined =
+        transports.find(t => t.addr === addr)
 
-      if (!accountSettings) {
+      if (!transportSettings) {
         throw new Error('transport to edit not found in transport list')
       }
 
-      setInitialAccountSettings(accountSettings)
-      setAccountSettings(accountSettings)
+      setInitialTransportSettings(transportSettings)
+      setTransportSettings(transportSettings)
     }
 
     loadSettings().catch(error => {
@@ -125,7 +124,7 @@ function EditAccountInner({
 
     const update = () => {
       openDialog(ConfigureProgressDialog, {
-        credentials: accountSettings,
+        credentials: transportSettings,
         onSuccess,
         onFail: error => {
           openDialog(AlertDialog, { message: error })
@@ -133,16 +132,16 @@ function EditAccountInner({
       })
     }
 
-    if (initialSettings.addr !== accountSettings.addr) {
+    if (initialTransportSettings.addr !== transportSettings.addr) {
       log.error('changing email addres of transport is not allowed')
       return
     }
 
     update()
   }, [
-    accountSettings,
+    transportSettings,
     forceEncryption,
-    initialSettings,
+    initialTransportSettings,
     onClose,
     openDialog,
     settingsStore,
@@ -152,15 +151,15 @@ function EditAccountInner({
     await onUpdate()
   }, [onUpdate])
 
-  if (accountSettings === null) return null
+  if (transportSettings === null) return null
   return (
     <>
       <DialogBody>
         <DialogContent>
-          {accountSettings && (
+          {transportSettings && (
             <LoginForm
-              credentials={accountSettings}
-              setCredentials={setAccountSettings}
+              credentials={transportSettings}
+              setCredentials={setTransportSettings}
               forceEncryption={forceEncryption}
               setForceEncryption={setForceEncryption}
               isEdit
