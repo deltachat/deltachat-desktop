@@ -222,11 +222,11 @@ def main():
         cwd=core_path
     )
 
-    # Step 2: npm install in deltachat-jsonrpc/typescript/
-    jsonrpc_ts_dir = os.path.join(core_path, "deltachat-jsonrpc", "typescript")
+    # Step 2: npm install in deltachat-jsonrpc-bindings/typescript/
+    jsonrpc_ts_dir = os.path.join(core_path, "deltachat-jsonrpc-bindings", "typescript")
     run_command("npm install", cwd=jsonrpc_ts_dir)
 
-    # Step 3: npm run build in deltachat-jsonrpc/typescript/
+    # Step 3: npm run build in deltachat-jsonrpc-bindings/typescript/
     run_command("npm run build", cwd=jsonrpc_ts_dir)
 
     # Step 4: Replace dependencies with local link in all desktop packages
@@ -235,10 +235,9 @@ def main():
     # Running `pnpm add` made the lockfile internally inconsistent: some importers
     # kept resolving @deltachat/jsonrpc-client to the registry node (e.g. 2.51.0(ws@8.21.0))
     # Now we run pnpm install only once after all package.json files are updated
-    jsonrpc_path = os.path.join(core_path, "deltachat-jsonrpc", "typescript")
     stdio_rpc_path = os.path.join(core_path, "deltachat-rpc-server", "npm-package")
     links = {
-        "@deltachat/jsonrpc-client": f"link:{jsonrpc_path}",
+        "@deltachat/jsonrpc-client": f"link:{jsonrpc_ts_dir}",
         "@deltachat/stdio-rpc-server": f"link:{stdio_rpc_path}",
     }
 
