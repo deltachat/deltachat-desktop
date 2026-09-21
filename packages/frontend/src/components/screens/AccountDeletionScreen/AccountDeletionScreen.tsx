@@ -88,20 +88,18 @@ export default function AccountDeletionScreen({
                         style={{ backgroundColor: accountInfo.color }}
                       >
                         {avatarInitial(
-                          accountInfo.displayName || '',
-                          accountInfo.addr || undefined
+                          accountInfo.displayName || tx('unnamed')
                         )}
                       </div>
                     )}
                   </div>
                   <div className={styles.accountName}>
                     <div>
-                      <b>{accountInfo.displayName}</b>
+                      <b>{accountInfo.displayName || tx('unnamed')}</b>
                     </div>
                     <div>
                       {accountInfo.privateTag ||
-                        (selfstatus ? selfstatus.split('\n')[0] : null) ||
-                        accountInfo.addr}
+                        (selfstatus ? selfstatus.split('\n')[0] : null)}
                     </div>
                     <div>
                       <div className={styles.accountSize}>
@@ -116,7 +114,7 @@ export default function AccountDeletionScreen({
                   tx(
                     'delete_account_explain_with_name',
                     accountInfo.kind === 'Configured'
-                      ? accountInfo.displayName || undefined
+                      ? accountInfo.displayName || tx('unnamed')
                       : tx('unconfigured_account')
                   )}
               </p>

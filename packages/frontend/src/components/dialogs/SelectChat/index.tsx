@@ -86,7 +86,7 @@ export default function SelectChat(props: Props) {
             {tx('switch_account')}
           </span>
           <Avatar
-            displayName={accountInfo.displayName || ''}
+            displayName={accountInfo.displayName || tx('unnamed')}
             avatarPath={accountInfo.profileImage || undefined}
             color={accountInfo.color || undefined}
             small

@@ -256,7 +256,7 @@ export default function MainScreen({ accountId }: Props) {
   useEffect(() => {
     if (
       SettingsStoreInstance.state?.accountId === accountId &&
-      SettingsStoreInstance.state?.settings.configured_addr
+      SettingsStoreInstance.state?.isConfigured
     ) {
       log.debug('account is already configured, skipping settings reload')
       return

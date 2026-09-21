@@ -50,14 +50,19 @@ export default function QrCode({
   const tx = useTranslationFunction()
   const [showQrCode, setShowQrCode] = useState(!selectScan)
 
-  const addrFetch = useRpcFetch(
+  const displaynameFetch = useRpcFetch(
     BackendRemote.rpc.getConfig,
-    window.__selectedAccountId ? [window.__selectedAccountId, 'addr'] : null
+    window.__selectedAccountId
+      ? [window.__selectedAccountId, 'displayname']
+      : null
   )
-  if (addrFetch?.result?.ok === false) {
-    log.error(addrFetch.result.err)
+  if (displaynameFetch?.result?.ok === false) {
+    log.error(displaynameFetch.result.err)
   }
-  const addr = addrFetch?.result?.ok ? (addrFetch.result.value ?? '') : ''
+  const selfName = displaynameFetch?.loading
+    ? ''
+    : (displaynameFetch?.result?.ok ? displaynameFetch.result.value : null) ||
+      tx('unnamed')
 
   return (
     <Dialog onClose={onClose} dataTestid='qr-dialog' noTopPadding>
@@ -81,7 +86,7 @@ export default function QrCode({
       </div>
       {showQrCode && (
         <QrCodeShowQrInner
-          description={tx('qrshow_join_contact_hint', [addr])}
+          description={tx('qrshow_join_contact_hint', [selfName])}
           qrCode={qrCode}
           qrCodeSVG={qrCodeSVG}
           onClose={onClose}

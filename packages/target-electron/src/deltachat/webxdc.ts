@@ -406,7 +406,7 @@ export default class DCWebxdc {
         msgId: msg_id,
         internet_access: webxdcInfo['internetAccess'],
         selfAddr: webxdcInfo.selfAddr || 'unknown@unknown',
-        displayName: p.displayname || webxdcInfo.selfAddr || 'unknown',
+        displayName: p.displayname || tx('unnamed'),
         sendUpdateInterval: webxdcInfo.sendUpdateInterval,
         sendUpdateMaxSize: webxdcInfo.sendUpdateMaxSize,
         isAppSender: webxdcInfo.isAppSender,

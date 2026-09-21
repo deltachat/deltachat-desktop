@@ -59,7 +59,7 @@ export default function AccountHoverInfo({
   } else {
     content = (
       <>
-        <b>{account.displayName ? account.displayName : account.addr}</b>
+        <b>{account.displayName || tx('unnamed')}</b>
         {account.privateTag && (
           <HoverInfoProperty>
             <Icon icon='sell' size={12} className={styles.hoverInfoMuteIcon} />{' '}

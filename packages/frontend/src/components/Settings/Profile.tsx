@@ -16,17 +16,14 @@ type Props = {
 export default function Profile({ settingsStore, onStatusClick }: Props) {
   const tx = useTranslationFunction()
 
-  const initials = avatarInitial(
-    settingsStore.settings?.displayname || '',
-    settingsStore.selfContact.address
-  )
-
   const profileImagePath = settingsStore.selfContact.profileImage || ''
 
   const profileName =
     settingsStore.settings.displayname !== ''
       ? settingsStore.settings.displayname
       : tx('pref_profile_info_headline')
+
+  const initials = avatarInitial(profileName)
 
   return (
     <button

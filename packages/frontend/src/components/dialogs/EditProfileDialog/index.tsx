@@ -95,7 +95,6 @@ function EditProfileDialogInner({
           <div className={styles.editProfileDialog}>
             <ProfileImageSelector
               displayName={displayname}
-              addr={settingsStore.selfContact.address}
               color={settingsStore.selfContact.color}
               profilePicture={profilePicture}
               setProfilePicture={setProfilePicture}
