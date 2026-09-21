@@ -6,7 +6,7 @@ import { BackendRemote, onDCEvent } from '../../../backend-com'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import useAlertDialog from '../../../hooks/dialog/useAlertDialog'
 import BasicQrScanner from '../BasicScanner'
-import EditAccountAndPasswordDialog from '../EditAccountAndPasswordDialog'
+import EditTransportDialog from '../EditTransportDialog'
 import Button from '../../Button'
 
 import styles from './styles.module.scss'
@@ -106,7 +106,7 @@ export default function TransportsDialog(
 
   const editTransport = useCallback(
     (transport: Transport) => {
-      openDialog(EditAccountAndPasswordDialog, {
+      openDialog(EditTransportDialog, {
         addr: transport.addr,
       })
     },
