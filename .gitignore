@@ -68,3 +68,7 @@ default.nix
 
 # local-only dev scripts
 bin/_local/
+
+# native addon build output
+packages/target-electron/native-dist/
+packages/target-electron/native/os-auth/target/

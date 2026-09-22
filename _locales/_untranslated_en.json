@@ -91,5 +91,11 @@
   },
   "webxdc_store_url_explain_2_desktop": {
     "message": "This is different from the same feature on Android and iOS.\nThis must be the path containing the xdcget-lock.json file."
+  },
+  "user_presence_add_second_device": {
+    "message": "add a second device"
+  },
+  "user_presence_failed": {
+    "message": "Authentication failed"
   }
 }

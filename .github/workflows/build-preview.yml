@@ -55,6 +55,18 @@ jobs:
           pnpm build
           pnpm run pack:generate_config
           pnpm run pack:patch-node-modules
+      # Native user presence addon (macOS and Windows only, see
+      # packages/target-electron/native/README.md)
+      - name: MAC build native addon
+        if: runner.os == 'macOS'
+        working-directory: packages/target-electron
+        run: |
+          rustup target add x86_64-apple-darwin aarch64-apple-darwin
+          pnpm native:build
+      - name: WINDOWS build native addon
+        if: runner.os == 'Windows'
+        working-directory: packages/target-electron
+        run: pnpm native:build
       # Packaging and processing
       - name: LINUX electron builder
         if: runner.os == 'Linux'

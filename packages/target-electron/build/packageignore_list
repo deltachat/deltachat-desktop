@@ -51,6 +51,7 @@ docs/
 dist/
 
 # Source files
+native/
 src/
 scss/
 static/

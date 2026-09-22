@@ -22,6 +22,20 @@ export type MediaAccessStatus =
   | 'restricted'
   | 'unknown'
 
+/**
+ * result of a native user presence check
+ * - `authenticated`: the user proved their presence
+ * - `cancelled`: the user dismissed the prompt
+ * - `failed`: the attempt failed (wrong password, too many retries, error)
+ * - `unsupported`: this platform/device can not ask, the caller has to fall
+ *   back to its own confirmation
+ */
+export type UserPresenceStatus =
+  | 'authenticated'
+  | 'cancelled'
+  | 'failed'
+  | 'unsupported'
+
 export type DropListener = {
   /** element that gets compared against the event target,
   either by bounds or by event target path */
@@ -225,6 +239,23 @@ export interface Runtime {
 
   // undefined if the platform does not support askForMediaAccess
   askForMediaAccess: (mediaType: MediaType) => Promise<boolean | undefined>
+
+  /**
+   * whether this device can ask the user to prove their presence
+   * (Touch ID / account password on macOS, Windows Hello on Windows)
+   */
+  isUserPresenceSupported: () => Promise<boolean>
+
+  /**
+   * Asks the user to prove their presence with the operating system prompt.
+   *
+   * This is a confirmation barrier against someone using an unattended device,
+   * it is not a protection against software running as the user - the result is
+   * a value this process decides on, nothing is encrypted with it.
+   *
+   * @param reason shown in the system prompt, has to say what is authorized
+   */
+  requestUserPresence: (reason: string) => Promise<UserPresenceStatus>
 }
 
 export const runtime: Runtime = (window as any).r

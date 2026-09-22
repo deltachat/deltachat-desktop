@@ -52,6 +52,10 @@ import { updateContentProtectionOnAllActiveWindows } from './content-protection.
 import { MediaType, type Runtime } from '@deltachat-desktop/runtime-interface'
 import { applyAutostart, getAutostartState } from './autostart.js'
 import {
+  isUserPresenceSupported,
+  requestUserPresence,
+} from './user-presence.js'
+import {
   startHandlingIncomingVideoCalls,
   startOutgoingVideoCall,
   openIncomingVideoCallWindow,
@@ -244,6 +248,12 @@ export async function init(cwd: string, logHandler: LogHandler) {
         resolve(undefined)
       })
     }
+  )
+
+  ipcMain.handle('isUserPresenceSupported', () => isUserPresenceSupported())
+
+  ipcMain.handle('requestUserPresence', (_ev, reason: string) =>
+    requestUserPresence(reason, mainWindow.window)
   )
 
   ipcMain.handle('fileChooser', async (_ev, options) => {

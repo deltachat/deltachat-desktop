@@ -38,6 +38,9 @@ jobs:
           pnpm build
           pnpm run pack:generate_config
           pnpm run pack:patch-node-modules
+      - name: WINDOWS build native addon
+        working-directory: packages/target-electron
+        run: pnpm native:build
       # Packaging and processing
       - name: WINDOWS electron builder
         if: runner.os == 'Windows'

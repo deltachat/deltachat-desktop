@@ -83,7 +83,8 @@ build['fileAssociations'] = [
 ]
 
 build['files'] = files
-build['asarUnpack'] = [] // ['./node_modules/@deltachat/stdio-rpc-server']
+// native addons can not be loaded from inside the asar archive
+build['asarUnpack'] = ['native-dist/**'] // ['./node_modules/@deltachat/stdio-rpc-server']
 // 'html-dist/xdcs/' should be in 'asarUnpack', but that had "file already exists" errors in the ci
 // see https://github.com/deltachat/deltachat-desktop/pull/3876, so we now do it "manually" in the afterPackHook
 
@@ -98,9 +99,18 @@ if (typeof env.NO_ASAR !== 'undefined' && env.NO_ASAR != 'false') {
 // platform specific
 
 const PREBUILD_FILTERS = {
-  NOT_LINUX: '!node_modules/@deltachat/stdio-rpc-server-linux-*${/*}',
-  NOT_MAC: '!node_modules/@deltachat/stdio-rpc-server-darwin-*${/*}',
-  NOT_WINDOWS: '!node_modules/@deltachat/stdio-rpc-server-win32-*${/*}',
+  NOT_LINUX: [
+    '!node_modules/@deltachat/stdio-rpc-server-linux-*${/*}',
+    '!native-dist/os-auth.linux-*.node',
+  ],
+  NOT_MAC: [
+    '!node_modules/@deltachat/stdio-rpc-server-darwin-*${/*}',
+    '!native-dist/os-auth.darwin.node',
+  ],
+  NOT_WINDOWS: [
+    '!node_modules/@deltachat/stdio-rpc-server-win32-*${/*}',
+    '!native-dist/os-auth.win32-*.node',
+  ],
 }
 
 build['mac'] = {
@@ -121,7 +131,11 @@ build['mac'] = {
   provisioningProfile: process.env.SECRETS_DIR
     ? `${process.env.SECRETS_DIR}/electron.provisionprofile`
     : '../../../electron.provisionprofile',
-  files: [...files, PREBUILD_FILTERS.NOT_LINUX, PREBUILD_FILTERS.NOT_WINDOWS],
+  files: [
+    ...files,
+    ...PREBUILD_FILTERS.NOT_LINUX,
+    ...PREBUILD_FILTERS.NOT_WINDOWS,
+  ],
   darkModeSupport: true,
   // For universal builds: allow these binaries to be x64 in both ASAR files
   x64ArchFiles: '**/*darwin*/**',
@@ -171,7 +185,11 @@ build['linux'] = {
       StartupWMClass: appName,
     },
   },
-  files: [...files, PREBUILD_FILTERS.NOT_MAC, PREBUILD_FILTERS.NOT_WINDOWS],
+  files: [
+    ...files,
+    ...PREBUILD_FILTERS.NOT_MAC,
+    ...PREBUILD_FILTERS.NOT_WINDOWS,
+  ],
   icon: 'build/icon.icns', // electron builder gets the icon out of the mac icon archive
   description: 'Decentralized Private Messenger (https://delta.chat)',
 }
@@ -205,7 +223,7 @@ build['deb'] = {
 build['win'] = {
   icon: 'html-dist/images/deltachat.ico',
   artifactName: '${productName}-${version}-Setup.${arch}.${ext}', // specifying it inside of build['nsis'] does not work for unknown reasons.
-  files: [...files, PREBUILD_FILTERS.NOT_MAC, PREBUILD_FILTERS.NOT_LINUX],
+  files: [...files, ...PREBUILD_FILTERS.NOT_MAC, ...PREBUILD_FILTERS.NOT_LINUX],
 }
 
 build['portable'] = {

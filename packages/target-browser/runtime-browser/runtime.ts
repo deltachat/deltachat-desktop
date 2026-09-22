@@ -17,6 +17,7 @@ import {
   DropListener,
   MediaAccessStatus,
   MediaType,
+  UserPresenceStatus,
   Runtime,
 } from '@deltachat-desktop/runtime-interface'
 import { BaseDeltaChat, yerpc } from '@deltachat/jsonrpc-client'
@@ -913,6 +914,13 @@ class BrowserRuntime implements Runtime {
       )
       return Promise.resolve(false)
     }
+  }
+  isUserPresenceSupported(): Promise<boolean> {
+    return Promise.resolve(false)
+  }
+  requestUserPresence(_reason: string): Promise<UserPresenceStatus> {
+    // browsers have no api to authenticate the current desktop user
+    return Promise.resolve('unsupported')
   }
 }
 

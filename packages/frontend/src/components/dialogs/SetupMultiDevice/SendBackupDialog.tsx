@@ -14,6 +14,7 @@ import Dialog, {
 import FooterActionButton from '../../Dialog/FooterActionButton'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import useConfirmationDialog from '../../../hooks/dialog/useConfirmationDialog'
+import useRequestUserPresence from '../../../hooks/useRequestUserPresence'
 import useToast from '../../../hooks/useToast'
 
 import type { PropsWithChildren } from 'react'
@@ -29,6 +30,7 @@ const log = getLogger('renderer/send_backup')
 export function SendBackupDialog({ onClose }: DialogProps) {
   const tx = useTranslationFunction()
   const openConfirmationDialog = useConfirmationDialog()
+  const requestUserPresence = useRequestUserPresence()
   const showToast = useToast()
   const { openContextMenu } = useContext(ContextMenuContext)
 
@@ -81,6 +83,11 @@ export function SendBackupDialog({ onClose }: DialogProps) {
   }
 
   const startNetworkedTransfer = async () => {
+    // the qr code hands out the whole account, so make sure it is the device
+    // owner who asks for it
+    if (!(await requestUserPresence(tx('user_presence_add_second_device')))) {
+      return
+    }
     setInProgress(true)
     const accountId = selectedAccountId()
     try {

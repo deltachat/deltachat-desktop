@@ -16,6 +16,7 @@ import {
   DropListener,
   MediaAccessStatus,
   MediaType,
+  UserPresenceStatus,
   Runtime,
 } from '@deltachat-desktop/runtime-interface'
 import { BaseDeltaChat, yerpc } from '@deltachat/jsonrpc-client'
@@ -575,6 +576,12 @@ class ElectronRuntime implements Runtime {
   // undefined is returned if the platform does not support askForMediaAccess
   askForMediaAccess(mediaType: MediaType): Promise<boolean | undefined> {
     return ipcBackend.invoke('askForMediaAccess', mediaType)
+  }
+  isUserPresenceSupported(): Promise<boolean> {
+    return ipcBackend.invoke('isUserPresenceSupported')
+  }
+  requestUserPresence(reason: string): Promise<UserPresenceStatus> {
+    return ipcBackend.invoke('requestUserPresence', reason)
   }
 }
 
