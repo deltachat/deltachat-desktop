@@ -39,8 +39,8 @@ export default function App(_props: any) {
 function I18nContextWrapper({ children }: { children: React.ReactElement }) {
   const [localeData, setLocaleData] = useState<LocaleData | null>(null)
 
-  async function reloadLocaleData(locale: string) {
-    const localeData = await runtime.getLocaleData(locale)
+  async function reloadLocaleData(locale: string | null) {
+    const localeData = await runtime.getLocaleData(locale ?? undefined)
     window.localeData = localeData
     window.static_translate = translate(localeData.locale, localeData.messages)
     setLocaleData(localeData)
@@ -52,7 +52,7 @@ function I18nContextWrapper({ children }: { children: React.ReactElement }) {
   useLayoutEffect(() => {
     ;(async () => {
       const desktop_settings = await runtime.getDesktopSettings()
-      await reloadLocaleData(desktop_settings.locale || 'en')
+      await reloadLocaleData(desktop_settings.locale)
     })()
   }, [])
 
