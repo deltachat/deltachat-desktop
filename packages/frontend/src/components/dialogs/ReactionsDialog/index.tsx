@@ -92,7 +92,7 @@ export default function ReactionsDialog({
       : message.reactions.reactions
           .values()
           .map(r => r.count)
-          .reduce((a, v) => a + v)
+          .reduce((a, v) => a + v, 0)
 
   return (
     <Dialog width={400} onClose={onClose}>
