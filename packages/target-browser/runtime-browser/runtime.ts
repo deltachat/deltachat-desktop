@@ -237,6 +237,7 @@ class BrowserRuntime implements Runtime {
     ).json()
 
     if (!locale) {
+      // TODO we're supposed to return the current locale instead.
       return {
         locale: 'en',
         messages: { ...messagesEnglish, ...untranslated },
