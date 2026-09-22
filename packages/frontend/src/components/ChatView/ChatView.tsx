@@ -30,6 +30,7 @@ import { useChatContextMenu } from '../chat/ChatContextMenu'
 import useContextMenu from '../../hooks/useContextMenu'
 import { ContextMenuContext } from '../../contexts/ContextMenuContext'
 import { mouseEventToPosition } from '../../utils/mouseEventToPosition'
+import { lastSeenLongAgoText } from '../../utils/contactFreshness'
 import useMessage from '../../hooks/chat/useMessage'
 import classNames from 'classnames'
 import {
@@ -198,6 +199,11 @@ function chatSubtitle(chat: T.FullChat, firstContact: T.Contact | null) {
       } else if (chat.isDeviceChat) {
         return tx('device_talk_subtitle')
       }
+      // Contacts we have not heard of for a long time are more likely to not
+      // receive our messages, so tell the user about it.
+      if (chat.freshness === 'Old' && firstContact != null) {
+        return lastSeenLongAgoText(firstContact.lastSeen, tx)
+      }
       if (chat.isEncrypted) {
         return null
       } else {
@@ -291,7 +297,7 @@ function ChatHeading({ chat, hidden }: { chat: T.FullChat; hidden: boolean }) {
         color={chat.color}
         avatarPath={chat.profileImage || undefined}
         small
-        wasSeenRecently={chat.wasSeenRecently}
+        freshness={chat.freshness}
         // Avatar is purely decorative here,
         // and is redundant accessibility-wise,
         // because we display the chat name below.

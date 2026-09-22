@@ -1,4 +1,5 @@
 import React from 'react'
+import type { T } from '@deltachat/jsonrpc-client'
 
 import { Avatar, ClickForFullscreenAvatarWrapper } from '../Avatar'
 import { parseAndRenderMessage } from '../message/MessageParser'
@@ -10,7 +11,7 @@ type Props = {
   avatarPath?: string
   color?: string
   displayName: string
-  wasSeenRecently?: boolean
+  freshness?: T.ContactFreshness
   description: string | undefined
   subtitle?: React.ReactNode
 } & Pick<
@@ -22,7 +23,7 @@ export default function ProfileInfoHeader({
   avatarPath,
   color,
   displayName,
-  wasSeenRecently = false,
+  freshness,
   description = '',
   subtitle,
   disableFullscreen,
@@ -37,7 +38,7 @@ export default function ProfileInfoHeader({
           displayName={displayName}
           avatarPath={avatarPath}
           color={color}
-          wasSeenRecently={wasSeenRecently}
+          freshness={freshness}
           className='very-large'
         />
       </ClickForFullscreenAvatarWrapper>

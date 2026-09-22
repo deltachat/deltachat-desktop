@@ -249,10 +249,11 @@ export function AddMemberInnerDialog({
                         queryStrIsValidEmail,
                       }}
                       itemCount={itemCount}
-                      itemKey={(index, { contactIds }) => {
-                        const isExtraItem = index >= contactIds.length
-                        return isExtraItem ? 'addContact' : contactIds[index]
-                      }}
+                      itemKey={(index, { contactIds }) =>
+                        // `undefined` for the extra "add contact" item,
+                        // whose index is out of `contactIds` bounds.
+                        contactIds[index] ?? 'addContact'
+                      }
                       onItemsRendered={onItemsRendered}
                       direction={writingDirection}
                       ref={ref}
@@ -326,11 +327,11 @@ function AddMemberInnerDialogRow({
         status: '',
         displayName: queryStr,
         id: -1,
-        lastSeen: -1,
+        lastSeen: 0,
         name: queryStr,
         profileImage: '',
         isBlocked: false,
-        wasSeenRecently: false,
+        freshness: 'Normal',
         isBot: false,
         e2eeAvail: false,
         isKeyContact: false,
@@ -359,12 +360,12 @@ function AddMemberInnerDialogRow({
       )
     }
   }
-  const isExtraItem = index >= contactIds.length
-  if (isExtraItem) {
+  const contactId = contactIds[index]
+  if (contactId == undefined) {
     return renderAddContact()
   }
 
-  const contact = contactCache[contactIds[index]]
+  const contact = contactCache[contactId]
   if (!contact) {
     // Not loaded yet
     return <li style={style}></li>

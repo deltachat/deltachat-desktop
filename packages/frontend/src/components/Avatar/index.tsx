@@ -38,7 +38,7 @@ export function Avatar(props: {
   addr?: string
   large?: boolean
   small?: boolean
-  wasSeenRecently?: boolean
+  freshness?: T.ContactFreshness
   style?: htmlDivProps['style']
   onClick?: () => void
   /**
@@ -57,7 +57,7 @@ export function Avatar(props: {
     addr,
     large,
     small,
-    wasSeenRecently,
+    freshness,
     onClick,
     tabIndex,
     className,
@@ -82,12 +82,11 @@ export function Avatar(props: {
     <div
       className={classNames(
         'avatar',
-        // Since `wasSeenRecently` is not exposed to accessibility API,
+        // Since the "seen recently" dot is not exposed to accessibility API,
         // it is safe to apply aria-hidden to the entire component.
-        // If at some point we make `wasSeenRecently` accessible,
-        // we should only apply `aria-hidden` to the avatar / initial itself
-        // (and perhaps rename the prop).
-        { large, small, wasSeenRecently },
+        // If at some point we make it accessible,
+        // we should only apply `aria-hidden` to the avatar / initial itself.
+        { large, small, wasSeenRecently: freshness === 'RecentlySeen' },
         className
       )}
       onClick={onClick}
