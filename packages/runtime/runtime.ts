@@ -161,6 +161,9 @@ export interface Runtime {
   restartApp(): void
 
   // translations
+  /**
+   * @param locale when `undefined`, get the current locale.
+   */
   getLocaleData(locale?: string): Promise<LocaleData>
   setLocale(locale: string): Promise<void>
 
