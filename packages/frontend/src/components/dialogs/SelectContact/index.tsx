@@ -125,11 +125,15 @@ function SelectContactDialogRow({
   }
 }) {
   const { onContactClick, contactIds, contactCache } = data
+  const ariaAttrs = {
+    'aria-setsize': contactIds.length,
+    'aria-posinset': index + 1,
+  }
 
   const item = contactCache[contactIds[index]]
   if (!item) {
     // It's not loaded yet
-    return <li style={style}></li>
+    return <li style={style} {...ariaAttrs}></li>
   }
 
   const contact: T.Contact = item
@@ -137,6 +141,7 @@ function SelectContactDialogRow({
     <ContactListItem
       tagName='li'
       style={style}
+      {...ariaAttrs}
       contact={contact}
       onClick={onContactClick}
       showCheckbox={false}

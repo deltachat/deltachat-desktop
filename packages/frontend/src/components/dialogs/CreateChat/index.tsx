@@ -547,7 +547,15 @@ function CreateChatMainRow({
     }
   })()
 
-  return <li style={style}>{el}</li>
+  return (
+    <li
+      style={style}
+      aria-setsize={contactsAndExtraItems.length}
+      aria-posinset={index + 1}
+    >
+      {el}
+    </li>
+  )
 }
 const enum CreateChatExtraItemType {
   // Negative number so that we can differentiate these from
