@@ -30,10 +30,6 @@ export async function updateCoreStrings() {
     // No string for these upstream yet. TODO.
     | typeof C.DC_STR_MESSAGE_PINNED_BY_OTHER
     | typeof C.DC_STR_MESSAGE_PINNED_BY_YOU
-    | typeof C.DC_STR_ADD_YOU
-    | typeof C.DC_STR_ADD_YOU_BY
-    | typeof C.DC_STR_REMOVE_YOU
-    | typeof C.DC_STR_REMOVE_YOU_BY
 
     // Deprecated, see
     // https://github.com/chatmail/core/blob/main/deltachat-ffi/deltachat.h
@@ -193,6 +189,11 @@ export async function updateCoreStrings() {
     [C.DC_STR_CHANNEL_IMAGE_CHANGED]: tx('channel_image_changed'),
     [C.DC_STR_CHANNEL_NAME_CHANGED]: tx('channel_name_changed'),
     [C.DC_STR_MESSAGES_ARE_E2EE]: tx('messages_are_e2ee'),
+
+    [C.DC_STR_ADD_YOU]: tx('member_you_added'),
+    [C.DC_STR_ADD_YOU_BY]: tx('add_you_by_other'),
+    [C.DC_STR_REMOVE_YOU]: tx('member_you_removed'),
+    [C.DC_STR_REMOVE_YOU_BY]: tx('remove_you_by_other'),
   }
 
   await BackendRemote.rpc.setStockStrings(strings)
