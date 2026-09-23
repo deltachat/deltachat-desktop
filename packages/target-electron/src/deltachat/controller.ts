@@ -81,9 +81,11 @@ export default class DeltaChatController {
     }
 
     log.debug('Initiating DeltaChatNode')
+    const allowCustomServerPath = rc_config['allow-custom-rpc-server-path']
     let serverPath = await getRPCServerPath({
       // desktop should only use prebuilds normally
-      disableEnvPath: !rc_config['allow-unsafe-core-replacement'],
+      disableEnvPath: !allowCustomServerPath,
+      takeVersionFromPATH: allowCustomServerPath,
     })
     if (serverPath.includes('app.asar')) {
       // probably inside of electron build

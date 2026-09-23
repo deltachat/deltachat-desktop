@@ -8,7 +8,8 @@ export const RCConfig: RC_Config = {
   theme: undefined, // maybe real
   'theme-watch': false, // maybe real
   'translation-watch': false, // maybe real
-  'allow-unsafe-core-replacement': false, //maybe real when we implement it
+  'allow-custom-rpc-server-path': false, // maybe real when we implement it
+  'allow-unsafe-core-replacement': false, // deprecated alias
 
   // those do not apply to browser
   minimized: false,

@@ -12,6 +12,8 @@ Flag
 Development Options
 --translation-watch             enable auto-reload for _locales/_untranslated_en.json
 --dev-mode                      opens electron devtools and activates --log-debug & --log-to-console
+--allow-custom-rpc-server-path  use the deltachat-rpc-server from DELTA_CHAT_RPC_SERVER or from PATH
+                                instead of the prebuild shipped with the app
 
 Theme
 --theme <theme-id>              set a specific theme (see THEMES.md)
