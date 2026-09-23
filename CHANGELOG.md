@@ -8,9 +8,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 - Adding a relay: show a progress bar and allow to cancel
-- Notifications are now grouped by chat
+- Notifications are now grouped by chat on some platforms
 - Show all reactions in the "Reactions" dialog grouped by emoji ("pills"), including the total count, and update the dialog live
-- New toast notifications ([#6714](https://github.com/deltachat/deltachat-desktop/issues/6714), [#6728](https://github.com/deltachat/deltachat-desktop/issues/6728))
 - More support for Delta Chat links in search ([#6752](https://github.com/deltachat/deltachat-desktop/issues/6752))
 - "Load Remote Images" option is now also available in the "View" menu, for better screen reader accessibility ([#6745](https://github.com/deltachat/deltachat-desktop/issues/6745))
 - New languages: Hebrew and Belarusian ([#6761](https://github.com/deltachat/deltachat-desktop/issues/6761))
@@ -20,9 +19,10 @@ All notable changes to this project will be documented in this file.
 - Relays: the primary relay can now be removed, and removing a relay deletes it immediately
 - Relays: removed the "default relay" setting ([#6747](https://github.com/deltachat/deltachat-desktop/issues/6747))
 - Email addresses are no longer shown for your profiles in the profile list and settings ([#6762](https://github.com/deltachat/deltachat-desktop/issues/6762))
-- Contacts are no longer shown as "verified" ([#6753](https://github.com/deltachat/deltachat-desktop/issues/6753))
-- Onboarding: show a generic privacy policy link instead of a relay-specific one ([#6746](https://gith ub.com/deltachat/deltachat-desktop/issues/6746))
-- Error and success messages are now shown as dialogs or toasts instead of the old notification bar ([#6700](https://github.com/deltachat/deltachat-desktop/issues/6700))
+- Contacts are no longer shown as "verified" (see [FAQ](https://delta.chat/en/help#e2eeguarantee)) ([#6753](https://github.com/deltachat/deltachat-desktop/issues/6753))
+- Onboarding: show a generic privacy policy link instead of a relay-specific one ([#6746](https://github.com/deltachat/deltachat-desktop/issues/6746))
+- Better-looking toast widget ([#6714](https://github.com/deltachat/deltachat-desktop/issues/6714), [#6728](https://github.com/deltachat/deltachat-desktop/issues/6728), [#6746](https://gith ub.com/deltachat/deltachat-desktop/issues/6746))
+
 - Notifications no longer repeat the app name
 
 ### Fixed
@@ -39,14 +39,13 @@ All notable changes to this project will be documented in this file.
 - Dialogs staying open after switching profiles ([#6727](https://github.com/deltachat/deltachat-desktop/issues/6727))
 - Audio player overflowing on small screens ([#6603](https://github.com/deltachat/deltachat-desktop/issues/6603))
 - Show a hint when trying to edit a group you are no longer a member of ([#6744](https://github.com/deltachat/deltachat-desktop/issues/6744))
-- Translate "You joined / left the group" messages
 - Catch possible errors when loading apps (webxdc) with broken or oversized icons ([#6723](https://github.com/deltachat/deltachat-desktop/issues/6723), [#6724](https://github.com/deltachat/deltachat-desktop/issues/6724))
 - Faster profile switching and faster "Ctrl + Up" (edit last message) in long chats
 
 ### Removed
 
-- Setting to enable developer tools for apps (webxdc) ([#6654](https://github.com/deltachat/deltachat-desktop/issues/6654))
-- Dragging files out of apps (webxdc) ([#6726](https://github.com/deltachat/deltachat-desktop/issues/6726))
+- Setting to enable developer tools for apps (WebXDC): instead we will show a dialog prompt every time you try to open developer tools ([#6654](https://github.com/deltachat/deltachat-desktop/issues/6654))
+- Undocumented `drag-file-out` WebXDC API ([#6726](https://github.com/deltachat/deltachat-desktop/issues/6726))
 - Migration of profiles from very old Delta Chat versions ([#6755](https://github.com/deltachat/deltachat-desktop/issues/6755))
 
 ### Miscellaneous Tasks
