@@ -20,7 +20,7 @@ All notable changes to this project will be documented in this file.
 - Relays: the primary relay can now be removed, and removing a relay deletes it immediately
 - Relays: removed the "default relay" setting ([#6747](https://github.com/deltachat/deltachat-desktop/issues/6747))
 - Email addresses are no longer shown for your profiles in the profile list and settings ([#6762](https://github.com/deltachat/deltachat-desktop/issues/6762))
-- Contacts are no longer shown as "verified" ([#6753](https://github.com/deltachat/deltachat-desktop/issues/6753))
+- Contacts are no longer shown as "verified" (see [FAQ](https://delta.chat/en/help#e2eeguarantee)) ([#6753](https://github.com/deltachat/deltachat-desktop/issues/6753))
 - Onboarding: show a generic privacy policy link instead of a relay-specific one ([#6746](https://gith ub.com/deltachat/deltachat-desktop/issues/6746))
 - Error and success messages are now shown as dialogs or toasts instead of the old notification bar ([#6700](https://github.com/deltachat/deltachat-desktop/issues/6700))
 - Notifications no longer repeat the app name
