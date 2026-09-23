@@ -8,7 +8,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 - Adding a relay: show a progress bar and allow to cancel
-- Notifications are now grouped by chat
+- Notifications are now grouped by chat on some platforms
 - Show all reactions in the "Reactions" dialog grouped by emoji ("pills"), including the total count, and update the dialog live
 - Better-looking toast widget ([#6714](https://github.com/deltachat/deltachat-desktop/issues/6714), [#6728](https://github.com/deltachat/deltachat-desktop/issues/6728))
 - More support for Delta Chat links in search ([#6752](https://github.com/deltachat/deltachat-desktop/issues/6752))
