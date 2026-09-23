@@ -39,6 +39,14 @@
     "zero_results": "Ez da emaitzarik aurkitu \"[SEARCH_TERM]\" bilaketarentzat",
     "clear_search": "×"
   },
+  "fa": {
+    "menu_help": "کمک",
+    "app_name": "دلتاچت",
+    "placeholder": "جستجو",
+    "one_result": "",
+    "zero_results": "نتیجه‌ای برای \"[SEARCH_TERM]\" پیدا نشد",
+    "clear_search": "×"
+  },
   "fr": {
     "menu_help": "Aide",
     "app_name": "Delta Chat",
