@@ -17,7 +17,7 @@ import {
   PseudoListItem,
   PseudoListItemAddMember,
   PseudoListItemAddContact,
-  PseudoListItemAddContactOrGroupFromInviteLink,
+  PseudoListItemQrSearchResult,
 } from '../../helpers/PseudoListItem'
 import GroupImage from '../../GroupImage'
 import { runtime } from '@deltachat-desktop/runtime-interface'
@@ -58,10 +58,12 @@ import { ContextMenuContext } from '../../../contexts/ContextMenuContext'
 import ImageCropper from '../../ImageCropper'
 import { RovingTabindexProvider } from '../../../contexts/RovingTabindex'
 import ViewProfile from '../ViewProfile'
-import { isInviteLink } from '@deltachat-desktop/shared/util'
 import { copyToBlobDir } from '../../../utils/copyToBlobDir'
 import { DeltaTextarea } from '../../Login-Styles'
 import { useRpcFetch } from '../../../hooks/useFetch'
+import useQrSearchResult, {
+  type QrSearchResult,
+} from '../../../hooks/useQrSearchResult'
 import { I18nContext } from '../../../contexts/I18nContext'
 import { SCAN_CONTEXT_TYPE } from '../../../hooks/useProcessQr'
 import { IMAGE_EXTENSIONS } from '@deltachat-desktop/shared/constants'
@@ -190,12 +192,11 @@ function CreateChatMain(props: CreateChatMainProps) {
       contactCache[contactIds[0]]?.address.toLowerCase() ===
         queryStr.trim().toLowerCase())
   )
-  const showPseudoListItemAddContactFromInviteLink =
-    queryStr && isInviteLink(queryStr)
+  const qrSearchResult = useQrSearchResult(accountId, queryStr)
   const contactsAndExtraItems = useMemo(
     () => [
-      ...(showPseudoListItemAddContactFromInviteLink
-        ? [CreateChatExtraItemType.INVITE_LINK]
+      ...(qrSearchResult != null
+        ? [CreateChatExtraItemType.QR_SEARCH_RESULT]
         : []),
       ...(showAddContactQRScan
         ? [CreateChatExtraItemType.ADD_CONTACT_QR_SCAN]
@@ -215,7 +216,7 @@ function CreateChatMain(props: CreateChatMainProps) {
       showAddContactQRScan,
       showAddGroup,
       showNewEmail,
-      showPseudoListItemAddContactFromInviteLink,
+      qrSearchResult,
     ]
   )
 
@@ -379,6 +380,7 @@ function CreateChatMain(props: CreateChatMainProps) {
                       openQRScan,
                       queryStrIsValidEmail,
                       queryStr,
+                      qrSearchResult,
                       onClose,
                     }}
                     itemKey={index => contactsAndExtraItems[index]}
@@ -427,6 +429,7 @@ function CreateChatMainRow({
     openQRScan: () => Promise<void>
     queryStrIsValidEmail: boolean
     queryStr: string
+    qrSearchResult: QrSearchResult | null
     onClose: () => void
   }
 }) {
@@ -439,6 +442,7 @@ function CreateChatMainRow({
     openQRScan,
     queryStrIsValidEmail,
     queryStr,
+    qrSearchResult,
     onClose,
   } = data
   const item = contactsAndExtraItems[index]
@@ -513,10 +517,13 @@ function CreateChatMainRow({
           />
         )
       }
-      case CreateChatExtraItemType.INVITE_LINK: {
+      case CreateChatExtraItemType.QR_SEARCH_RESULT: {
+        if (qrSearchResult == null) {
+          return null
+        }
         return (
-          <PseudoListItemAddContactOrGroupFromInviteLink
-            inviteLink={queryStr!}
+          <PseudoListItemQrSearchResult
+            result={qrSearchResult}
             accountId={accountId}
             callback={onClose}
           />
@@ -557,7 +564,7 @@ const enum CreateChatExtraItemType {
   ADD_BROADCAST_LIST,
   NEW_EMAIL,
   ADD_CONTACT,
-  INVITE_LINK,
+  QR_SEARCH_RESULT,
 }
 
 type CreateGroupProps = {
