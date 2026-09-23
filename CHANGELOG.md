@@ -10,7 +10,7 @@ All notable changes to this project will be documented in this file.
 - Adding a relay: show a progress bar and allow to cancel
 - Notifications are now grouped by chat
 - Show all reactions in the "Reactions" dialog grouped by emoji ("pills"), including the total count, and update the dialog live
-- New toast notifications ([#6714](https://github.com/deltachat/deltachat-desktop/issues/6714), [#6728](https://github.com/deltachat/deltachat-desktop/issues/6728))
+- Better-looking toast widget ([#6714](https://github.com/deltachat/deltachat-desktop/issues/6714), [#6728](https://github.com/deltachat/deltachat-desktop/issues/6728))
 - More support for Delta Chat links in search ([#6752](https://github.com/deltachat/deltachat-desktop/issues/6752))
 - "Load Remote Images" option is now also available in the "View" menu, for better screen reader accessibility ([#6745](https://github.com/deltachat/deltachat-desktop/issues/6745))
 - New languages: Hebrew and Belarusian ([#6761](https://github.com/deltachat/deltachat-desktop/issues/6761))
