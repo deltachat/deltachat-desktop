@@ -10,11 +10,11 @@ catalogs:
       specifier: 0.12.1-beta-debug
       version: 0.12.1-beta-debug
     '@deltachat/jsonrpc-client':
-      specifier: 2.60.0
-      version: 2.60.0
+      specifier: 2.62.0
+      version: 2.62.0
     '@deltachat/stdio-rpc-server':
-      specifier: 2.60.0
-      version: 2.60.0
+      specifier: 2.62.0
+      version: 2.62.0
     '@types/chai':
       specifier: ^4.3.17
       version: 4.3.20
@@ -141,7 +141,7 @@ importers:
         version: link:../shared
       '@deltachat/jsonrpc-client':
         specifier: 'catalog:'
-        version: 2.60.0(ws@8.21.0)
+        version: 2.62.0(ws@8.21.0)
       '@emoji-mart-awesome/react':
         specifier: 1.0.0
         version: 1.0.0(emoji-mart-awesome@3.0.0)(react@19.2.0)
@@ -274,7 +274,7 @@ importers:
         version: link:../shared
       '@deltachat/jsonrpc-client':
         specifier: 'catalog:'
-        version: 2.60.0(ws@8.21.0)
+        version: 2.62.0(ws@8.21.0)
       '@types/node':
         specifier: 'catalog:'
         version: 22.15.33
@@ -283,7 +283,7 @@ importers:
     dependencies:
       '@deltachat/jsonrpc-client':
         specifier: 'catalog:'
-        version: 2.60.0(ws@8.21.0)
+        version: 2.62.0(ws@8.21.0)
       error-stack-parser:
         specifier: ^2.1.4
         version: 2.1.4
@@ -320,10 +320,10 @@ importers:
         version: link:../shared
       '@deltachat/jsonrpc-client':
         specifier: 'catalog:'
-        version: 2.60.0(ws@8.21.0)
+        version: 2.62.0(ws@8.21.0)
       '@deltachat/stdio-rpc-server':
         specifier: 'catalog:'
-        version: 2.60.0(@deltachat/jsonrpc-client@2.60.0(ws@8.21.0))
+        version: 2.62.0(@deltachat/jsonrpc-client@2.62.0(ws@8.21.0))
       '@types/express-session':
         specifier: ^1.18.0
         version: 1.18.1
@@ -372,10 +372,10 @@ importers:
         version: 0.12.1-beta-debug
       '@deltachat/jsonrpc-client':
         specifier: 'catalog:'
-        version: 2.60.0(ws@8.21.0)
+        version: 2.62.0(ws@8.21.0)
       '@deltachat/stdio-rpc-server':
         specifier: 'catalog:'
-        version: 2.60.0(@deltachat/jsonrpc-client@2.60.0(ws@8.21.0))
+        version: 2.62.0(@deltachat/jsonrpc-client@2.62.0(ws@8.21.0))
       escape-html:
         specifier: ^1.0.3
         version: 1.0.3
@@ -556,61 +556,61 @@ packages:
   '@deltachat/calls-webapp@0.12.1-beta-debug':
     resolution: {integrity: sha512-24ceQrtW3Jf7oCTrlAPY5h/pLoIybxiz/UgoiHn4sNjgIDYbhhp71zbdeQRCOS4oOmPrJoZftvB4lhpZurX9CQ==}
 
-  '@deltachat/jsonrpc-client@2.60.0':
-    resolution: {integrity: sha512-UVLvEb5wpmz7+CPl5zCQMDTK0zHte6mFLCDqzrZ/IUnjX1q8BNLN1ztD4PBGYYqi67a5xj9X84yTmjQS45Gkww==}
+  '@deltachat/jsonrpc-client@2.62.0':
+    resolution: {integrity: sha512-5viD3RxKjK4ZU4JVK1iGJCGGo4LFqVwOz7a+qPYdl17Lv2favkZJR5/9EWDhIu0z/KKoUpy1/ZqYm1IxfSP0QQ==}
 
-  '@deltachat/stdio-rpc-server-android-arm64@2.60.0':
-    resolution: {integrity: sha512-5bnWVBwfZiswTusL+PawaXOoyBGuXDxu5kR6LCwuWSaJTg4ePJ0VDPTQDRM55zN8hSBaiDQABMvvsXxeA05ksA==}
+  '@deltachat/stdio-rpc-server-android-arm64@2.62.0':
+    resolution: {integrity: sha512-P6M0Yfup2lnANZAvD+Ba+kKBtO1Pjl1S2gqzaMCi/jL0T8XNshs4kqmB9DnWCYlVZZkZoj6OJCYQGweCrXyzIg==}
     cpu: [arm64]
     os: [android]
 
-  '@deltachat/stdio-rpc-server-android-arm@2.60.0':
-    resolution: {integrity: sha512-z5vZ9yyPSRhZqEDgHZeSC5evx5xts+ZzGLWHn0caiNsMRd6xxHERLnMbwiNdFFNwNvKVmZkW2VOraKU0aws+XA==}
+  '@deltachat/stdio-rpc-server-android-arm@2.62.0':
+    resolution: {integrity: sha512-QUT7qBVT1cgygrQUyf8/FSV80kRYG1h5P7XEUZt4FWlDapTYOQ/tXM4jOaLEnzjrrT+K6fLoFd+1m6ZN2k7xuQ==}
     cpu: [arm]
     os: [android]
 
-  '@deltachat/stdio-rpc-server-darwin-arm64@2.60.0':
-    resolution: {integrity: sha512-0oOKNAuDZKFNwP828G85fZ1xjmHlsp9sVaW8hYi9ywTAAlDf6d9wKDq9cO8fhoZzI0EJ8OdicFShqHFexPWY1A==}
+  '@deltachat/stdio-rpc-server-darwin-arm64@2.62.0':
+    resolution: {integrity: sha512-4elZyoQTUoSiWzghrmP3GHcQr6na2+WYMc8tPCuf6crPFt+xP+fvM/IdbG7udAglCKZtcOdX+iL2ETqaDX60xg==}
     cpu: [arm64]
     os: [darwin]
 
-  '@deltachat/stdio-rpc-server-darwin-x64@2.60.0':
-    resolution: {integrity: sha512-z6BRLy2diVnyCQt50trGUjhjSoRc6+tNfjg/3r/jB0q6V7BvB6Ni12hHP8db0Kbm94cL5jylhO0KAwl4E/aUrA==}
+  '@deltachat/stdio-rpc-server-darwin-x64@2.62.0':
+    resolution: {integrity: sha512-HaqrmY5KMGuG8Wsx08IkorEzPHGC+vP24CUJttIogly4lkI3a5hh9Wlhmla/zp3WBADl1Enm8zl9Z3ryxRCOtg==}
     cpu: [x64]
     os: [darwin]
 
-  '@deltachat/stdio-rpc-server-linux-arm64@2.60.0':
-    resolution: {integrity: sha512-LKrdy0eJVFIU7N/xr0Jyl3chflDDHgxXL+A/JJ8IRq6dju6zOqtO8XDDf1B6z794w0PxHqAiUJPxEAvxsLt8RA==}
+  '@deltachat/stdio-rpc-server-linux-arm64@2.62.0':
+    resolution: {integrity: sha512-Ja5ZnMAw+HKy/B3DQe6M+Bje3T2mwItiBeWEssZWdi7Npp7onODp0hAiZKiDJGL4ZQ9B/dlgnj/sT13F2BwAcw==}
     cpu: [arm64]
     os: [linux]
 
-  '@deltachat/stdio-rpc-server-linux-arm@2.60.0':
-    resolution: {integrity: sha512-sxS+/wwYwTkLhPKZjxW8KNlF5pR6mtk/mRUmkI8TZUJjQRmZ0PPj1HWY4aWIbYGKNlW4EGNAk7SZJrw7zjYaUg==}
+  '@deltachat/stdio-rpc-server-linux-arm@2.62.0':
+    resolution: {integrity: sha512-7rkrYNlnx8Lz2nc1A/p5kDu00hyWUm236eNb+Sebb9UWYr4R5Hmkc3sS7dT5BeY6wAuuJ6KZBHahfKc3HvfTcw==}
     cpu: [arm]
     os: [linux]
 
-  '@deltachat/stdio-rpc-server-linux-ia32@2.60.0':
-    resolution: {integrity: sha512-zhGURvccZa6+oeml1KMJTxF55yMnY51zfhwOR2Z7SfcchjJ8Uy6KIEq/tkeSVrmmxspKrJeA2cZJ6lDqDAOB/Q==}
+  '@deltachat/stdio-rpc-server-linux-ia32@2.62.0':
+    resolution: {integrity: sha512-hmeIrk/u4Qm85nGgYOt4Hi7iDsvcQHIuz2s0LaPzwMu34QFrgBJbFmRXxiGOYNka9Lqh1uSkUNQtH5UjCDmFlA==}
     cpu: [ia32]
     os: [linux]
 
-  '@deltachat/stdio-rpc-server-linux-x64@2.60.0':
-    resolution: {integrity: sha512-5akdKrHm0sIiFnYE+2OpTOxMw2UAHQaf+L95jcix0mGQ6otTMgEOZsDxDSG7wA9WE/MUNrJSYG56OD3mM9QISQ==}
+  '@deltachat/stdio-rpc-server-linux-x64@2.62.0':
+    resolution: {integrity: sha512-ewuZJQlaIuSQrosOeQCISCdVYioyNPEx6daJWH3f7yJqTBiKkwLO+/YE7i3p2VQ8yw8uw542Kw50NWk24aZWTw==}
     cpu: [x64]
     os: [linux]
 
-  '@deltachat/stdio-rpc-server-win32-ia32@2.60.0':
-    resolution: {integrity: sha512-o86KRT5Ma41AgqYb0X9BAbbFY80bi8a5rontr2LKMvJj+qohNQiUnWyU5slfzwI8D85bhVqLWhBy+ZxIQM1tPg==}
+  '@deltachat/stdio-rpc-server-win32-ia32@2.62.0':
+    resolution: {integrity: sha512-+UN+g+HuFr4mQpYcikkzb4USb6SMZ5296DrUJ1+x2m7quudqKe2/o7nkas2m3+1/kdst3JDJyVmhLk2N7G9rdA==}
     cpu: [ia32]
     os: [win32]
 
-  '@deltachat/stdio-rpc-server-win32-x64@2.60.0':
-    resolution: {integrity: sha512-JXsqSYZ0V06IATnAPBlJ42W/TzEnYS67nMGwpAKlTr1AZmp6DfbSz75Ci9JZJ6G5KoBwWdUWjGTcQ7bS0wtp6A==}
+  '@deltachat/stdio-rpc-server-win32-x64@2.62.0':
+    resolution: {integrity: sha512-S0wcVlqeBrevFyf2E5BEQg+b4hyHO3jPJPdKm/007YkkaD0r1jMB5/vIaNdUSYSGU9SyZjQ07p6zMo8fV21OJQ==}
     cpu: [x64]
     os: [win32]
 
-  '@deltachat/stdio-rpc-server@2.60.0':
-    resolution: {integrity: sha512-0yEbRrNe1t8sztg0iDABOTApXMyDP+2mJOH849Fcl5vh6C654py5YSW24JX6aBVY8cfskhVmurc6z37aGKFtkA==}
+  '@deltachat/stdio-rpc-server@2.62.0':
+    resolution: {integrity: sha512-HaU0alXzDMnb5zx/c4iLsfkFPz4io3hAwGRqd5Ujgr0CPdcVNkcXiro5eDUE8R9hdaN39QP8aGdhasO7yAAD0g==}
     peerDependencies:
       '@deltachat/jsonrpc-client': '*'
 
@@ -4187,7 +4187,7 @@ snapshots:
     dependencies:
       preact: 10.28.3
 
-  '@deltachat/jsonrpc-client@2.60.0(ws@8.21.0)':
+  '@deltachat/jsonrpc-client@2.62.0(ws@8.21.0)':
     dependencies:
       '@deltachat/tiny-emitter': 3.0.0
       isomorphic-ws: 5.0.0(ws@8.21.0)
@@ -4197,50 +4197,50 @@ snapshots:
       - utf-8-validate
       - ws
 
-  '@deltachat/stdio-rpc-server-android-arm64@2.60.0':
+  '@deltachat/stdio-rpc-server-android-arm64@2.62.0':
     optional: true
 
-  '@deltachat/stdio-rpc-server-android-arm@2.60.0':
+  '@deltachat/stdio-rpc-server-android-arm@2.62.0':
     optional: true
 
-  '@deltachat/stdio-rpc-server-darwin-arm64@2.60.0':
+  '@deltachat/stdio-rpc-server-darwin-arm64@2.62.0':
     optional: true
 
-  '@deltachat/stdio-rpc-server-darwin-x64@2.60.0':
+  '@deltachat/stdio-rpc-server-darwin-x64@2.62.0':
     optional: true
 
-  '@deltachat/stdio-rpc-server-linux-arm64@2.60.0':
+  '@deltachat/stdio-rpc-server-linux-arm64@2.62.0':
     optional: true
 
-  '@deltachat/stdio-rpc-server-linux-arm@2.60.0':
+  '@deltachat/stdio-rpc-server-linux-arm@2.62.0':
     optional: true
 
-  '@deltachat/stdio-rpc-server-linux-ia32@2.60.0':
+  '@deltachat/stdio-rpc-server-linux-ia32@2.62.0':
     optional: true
 
-  '@deltachat/stdio-rpc-server-linux-x64@2.60.0':
+  '@deltachat/stdio-rpc-server-linux-x64@2.62.0':
     optional: true
 
-  '@deltachat/stdio-rpc-server-win32-ia32@2.60.0':
+  '@deltachat/stdio-rpc-server-win32-ia32@2.62.0':
     optional: true
 
-  '@deltachat/stdio-rpc-server-win32-x64@2.60.0':
+  '@deltachat/stdio-rpc-server-win32-x64@2.62.0':
     optional: true
 
-  '@deltachat/stdio-rpc-server@2.60.0(@deltachat/jsonrpc-client@2.60.0(ws@8.21.0))':
+  '@deltachat/stdio-rpc-server@2.62.0(@deltachat/jsonrpc-client@2.62.0(ws@8.21.0))':
     dependencies:
-      '@deltachat/jsonrpc-client': 2.60.0(ws@8.21.0)
+      '@deltachat/jsonrpc-client': 2.62.0(ws@8.21.0)
     optionalDependencies:
-      '@deltachat/stdio-rpc-server-android-arm': 2.60.0
-      '@deltachat/stdio-rpc-server-android-arm64': 2.60.0
-      '@deltachat/stdio-rpc-server-darwin-arm64': 2.60.0
-      '@deltachat/stdio-rpc-server-darwin-x64': 2.60.0
-      '@deltachat/stdio-rpc-server-linux-arm': 2.60.0
-      '@deltachat/stdio-rpc-server-linux-arm64': 2.60.0
-      '@deltachat/stdio-rpc-server-linux-ia32': 2.60.0
-      '@deltachat/stdio-rpc-server-linux-x64': 2.60.0
-      '@deltachat/stdio-rpc-server-win32-ia32': 2.60.0
-      '@deltachat/stdio-rpc-server-win32-x64': 2.60.0
+      '@deltachat/stdio-rpc-server-android-arm': 2.62.0
+      '@deltachat/stdio-rpc-server-android-arm64': 2.62.0
+      '@deltachat/stdio-rpc-server-darwin-arm64': 2.62.0
+      '@deltachat/stdio-rpc-server-darwin-x64': 2.62.0
+      '@deltachat/stdio-rpc-server-linux-arm': 2.62.0
+      '@deltachat/stdio-rpc-server-linux-arm64': 2.62.0
+      '@deltachat/stdio-rpc-server-linux-ia32': 2.62.0
+      '@deltachat/stdio-rpc-server-linux-x64': 2.62.0
+      '@deltachat/stdio-rpc-server-win32-ia32': 2.62.0
+      '@deltachat/stdio-rpc-server-win32-x64': 2.62.0
 
   '@deltachat/tiny-emitter@3.0.0': {}
 

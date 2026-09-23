@@ -393,7 +393,7 @@ function RegularChatListItem({
           displayName: chat.name,
           avatarPath: chat.avatarPath || undefined,
           color: chat.color,
-          wasSeenRecently: chat.wasSeenRecently,
+          freshness: chat.freshness,
           // Avatar is purely decorative here,
           // and is redundant accessibility-wise,
           // because we display the chat name below.

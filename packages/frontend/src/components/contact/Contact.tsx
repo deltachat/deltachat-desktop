@@ -1,10 +1,13 @@
 import React, { type PropsWithChildren } from 'react'
+import type { T } from '@deltachat/jsonrpc-client'
+
 import { Avatar } from '../Avatar'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import { lastSeenLongAgoText } from '../../utils/contactFreshness'
 
 function ContactName(props: {
   displayName: string
-  address: string
-  isKeyContact?: boolean
+  subtitle?: string
   isBlocked?: boolean
 }) {
   return (
@@ -15,7 +18,7 @@ function ContactName(props: {
           <i className='material-svg-icon material-icon-blocked' />
         )}
       </div>
-      {!props.isKeyContact && <div className='email'>{props.address}</div>}
+      {props.subtitle && <div className='subtitle'>{props.subtitle}</div>}
     </div>
   )
 }
@@ -27,19 +30,33 @@ export default function Contact(props: {
     displayName: string
     address: string
     isKeyContact: boolean
-    wasSeenRecently: boolean
+    freshness: T.ContactFreshness
+    lastSeen: number
     isBlocked?: boolean
   }
 }) {
+  const tx = useTranslationFunction()
+
   const {
     profileImage,
     color,
     displayName,
     address,
     isKeyContact,
-    wasSeenRecently,
+    freshness,
+    lastSeen,
     isBlocked,
   } = props.contact
+
+  // Contacts we have not heard of for a long time are more likely to not
+  // receive our messages, so tell the user about it.
+  const subtitle =
+    freshness === 'Old'
+      ? lastSeenLongAgoText(lastSeen, tx)
+      : isKeyContact
+        ? undefined
+        : address
+
   return (
     <div className='contact'>
       <Avatar
@@ -48,7 +65,7 @@ export default function Contact(props: {
           color,
           displayName,
           addr: address,
-          wasSeenRecently,
+          freshness,
           // Avatar is purely decorative here,
           // and is redundant accessibility-wise,
           // because we display the contact name below.
@@ -57,8 +74,7 @@ export default function Contact(props: {
       />
       <ContactName
         displayName={displayName}
-        address={address}
-        isKeyContact={isKeyContact}
+        subtitle={subtitle}
         isBlocked={isBlocked}
       />
     </div>
@@ -89,7 +105,7 @@ export function PseudoContact(
           <div className='pseudo-contact-text'>{text}</div>
         </div>
       )}
-      {subText && <ContactName displayName={text} address={subText} />}
+      {subText && <ContactName displayName={text} subtitle={subText} />}
     </div>
   )
 }

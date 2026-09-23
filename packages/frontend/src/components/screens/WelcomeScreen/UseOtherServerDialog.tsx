@@ -13,9 +13,11 @@ import styles from './styles.module.scss'
 
 import type { DialogProps } from '../../../contexts/DialogContext'
 import QrCodeScanner from '../../dialogs/QrCodeScanner'
-import { CHATMAIL_INSTANCES_LIST_URL } from './chatmailInstances'
 import Icon from '../../Icon'
 import { SCAN_CONTEXT_TYPE } from '../../../hooks/useProcessQr'
+
+// URL to a list of various chatmail instances
+export const CHATMAIL_INSTANCES_LIST_URL = 'https://chatmail.at/relays'
 
 export default function UseOtherServerDialog({ onClose }: DialogProps) {
   const tx = useTranslationFunction()

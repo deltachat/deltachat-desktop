@@ -206,7 +206,7 @@ export function ViewProfileInner({
             avatarPath={avatarPath ? avatarPath : undefined}
             color={contact.color}
             displayName={displayName}
-            wasSeenRecently={contact.wasSeenRecently}
+            freshness={contact.freshness}
             description={statusText}
             disableFullscreen={
               isSelfChat ||
