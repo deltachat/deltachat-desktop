@@ -272,9 +272,6 @@ export default function InstantOnboardingScreen({
                     {tx('privacy_policy')}
                   </ClickableLink>
                 )}
-                {welcomeQr?.qr.kind === 'login' && (
-                  <>{tx('qrlogin_ask_login', welcomeQr.qr.address)}</>
-                )}
               </div>
               <Button
                 type='submit'
