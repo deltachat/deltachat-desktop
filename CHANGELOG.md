@@ -46,7 +46,7 @@ All notable changes to this project will be documented in this file.
 ### Removed
 
 - Setting to enable developer tools for apps (WebXDC): instead we will show a dialog prompt every time you try to open developer tools ([#6654](https://github.com/deltachat/deltachat-desktop/issues/6654))
-- Dragging files out of apps (webxdc) ([#6726](https://github.com/deltachat/deltachat-desktop/issues/6726))
+- Undocumented `drag-file-out` WebXDC API ([#6726](https://github.com/deltachat/deltachat-desktop/issues/6726))
 - Migration of profiles from very old Delta Chat versions ([#6755](https://github.com/deltachat/deltachat-desktop/issues/6755))
 
 ### Miscellaneous Tasks
