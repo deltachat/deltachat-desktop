@@ -167,7 +167,7 @@ export function ChatViewInner({
 
 /**
  * @param chat
- * @param firstContact The fist contact of chat and null if not loaded */
+ * @param firstContact The first contact of chat and null if not loaded */
 function chatSubtitle(chat: T.FullChat, firstContact: T.Contact | null) {
   const tx = window.static_translate
   if (chat.id && chat.id > C.DC_CHAT_ID_LAST_SPECIAL) {
@@ -201,7 +201,7 @@ function chatSubtitle(chat: T.FullChat, firstContact: T.Contact | null) {
       }
       // Contacts we have not heard of for a long time are more likely to not
       // receive our messages, so tell the user about it.
-      if (chat.freshness === 'Old' && firstContact != null) {
+      if (chat.freshness === 'Old' && firstContact != null && chat.canSend) {
         return lastSeenLongAgoText(firstContact.lastSeen, tx)
       }
       if (chat.isEncrypted) {
