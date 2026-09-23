@@ -1,6 +1,6 @@
 import path from 'path'
 import fs from 'fs'
-import { ipcMain } from 'electron'
+import { app, ipcMain } from 'electron'
 
 import { getLogger } from '@deltachat-desktop/shared/logger.js'
 import {
@@ -39,6 +39,10 @@ export default function setLanguage(locale: string) {
     localeData.locale,
     localeData.messages
   )
+}
+
+export function getPreferredSystemLanguage(): string {
+  return app.getLocale().split('-')[0]! || 'en' // can consist of 2 strings like in en-GB
 }
 
 export function loadTranslations(locale: string): LocaleData {

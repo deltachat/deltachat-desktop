@@ -148,7 +148,11 @@ process.on('uncaughtException', err => {
   )
 })
 
-import setLanguage, { getCurrentLocaleDate, tx } from './load-translations.js'
+import setLanguage, {
+  getCurrentLocaleDate,
+  getPreferredSystemLanguage,
+  tx,
+} from './load-translations.js'
 import { findLegacyAccountData } from './legacy_account_data.js'
 import * as ipc from './ipc.js'
 import { init as initMenu } from './menu.js'
@@ -206,9 +210,7 @@ async function onReady([_appReady, _loadedState, _appx, _webxdc_cleanup]: [
 ]) {
   // can fail due to user error so running it first is better (cli argument)
   acceptThemeCLI()
-  setLanguage(
-    DesktopSettings.state.locale || app.getLocale().split('-')[0] || 'en'
-  ) // can consist of 2 strings like in en-GB
+  setLanguage(DesktopSettings.state.locale || getPreferredSystemLanguage())
 
   // Warn users if data exists from a different installation variant
   // (e.g. Mac App Store vs DMG, or Windows Store APPX vs Setup.exe),
