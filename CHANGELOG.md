@@ -39,7 +39,6 @@ All notable changes to this project will be documented in this file.
 - Dialogs staying open after switching profiles ([#6727](https://github.com/deltachat/deltachat-desktop/issues/6727))
 - Audio player overflowing on small screens ([#6603](https://github.com/deltachat/deltachat-desktop/issues/6603))
 - Show a hint when trying to edit a group you are no longer a member of ([#6744](https://github.com/deltachat/deltachat-desktop/issues/6744))
-- Translate "You joined / left the group" messages
 - Catch possible errors when loading apps (webxdc) with broken or oversized icons ([#6723](https://github.com/deltachat/deltachat-desktop/issues/6723), [#6724](https://github.com/deltachat/deltachat-desktop/issues/6724))
 - Faster profile switching and faster "Ctrl + Up" (edit last message) in long chats
 
