@@ -10,7 +10,6 @@ All notable changes to this project will be documented in this file.
 - Adding a relay: show a progress bar and allow to cancel
 - Notifications are now grouped by chat on some platforms
 - Show all reactions in the "Reactions" dialog grouped by emoji ("pills"), including the total count, and update the dialog live
-- Better-looking toast widget ([#6714](https://github.com/deltachat/deltachat-desktop/issues/6714), [#6728](https://github.com/deltachat/deltachat-desktop/issues/6728))
 - More support for Delta Chat links in search ([#6752](https://github.com/deltachat/deltachat-desktop/issues/6752))
 - "Load Remote Images" option is now also available in the "View" menu, for better screen reader accessibility ([#6745](https://github.com/deltachat/deltachat-desktop/issues/6745))
 - New languages: Hebrew and Belarusian ([#6761](https://github.com/deltachat/deltachat-desktop/issues/6761))
@@ -22,7 +21,8 @@ All notable changes to this project will be documented in this file.
 - Email addresses are no longer shown for your profiles in the profile list and settings ([#6762](https://github.com/deltachat/deltachat-desktop/issues/6762))
 - Contacts are no longer shown as "verified" (see [FAQ](https://delta.chat/en/help#e2eeguarantee)) ([#6753](https://github.com/deltachat/deltachat-desktop/issues/6753))
 - Onboarding: show a generic privacy policy link instead of a relay-specific one ([#6746](https://gith ub.com/deltachat/deltachat-desktop/issues/6746))
-- Error and success messages are now shown as dialogs or toasts instead of the old notification bar ([#6700](https://github.com/deltachat/deltachat-desktop/issues/6700))
+- Better-looking toast widget ([#6714](https://github.com/deltachat/deltachat-desktop/issues/6714), [#6728](https://github.com/deltachat/deltachat-desktop/issues/6728), [#6746](https://gith ub.com/deltachat/deltachat-desktop/issues/6746))
+
 - Notifications no longer repeat the app name
 
 ### Fixed
