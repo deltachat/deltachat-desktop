@@ -3,26 +3,26 @@
 
 // FYI there is also `_main_screen.scss`.
 
+// `!important` because `react-resizable-panels` sets `display` prop inline.
+// Though it might be more proper to use the `collapsed` prop
+// of `react-resizable-panels`.
 :global(.main-screen.small-screen.chat-view-open) {
-  .chatListAndHeaderAndAudioPlayer {
-    display: none;
+  :global(#chatList) {
+    display: none !important;
   }
 }
 :global(.main-screen.small-screen:not(.chat-view-open)) {
-  .chatView {
-    display: none;
+  :global(#chatView) {
+    display: none !important;
   }
+}
+:global(.main-screen.small-screen) .chatListResizeHandle {
+  display: none;
 }
 
 .chatListAndHeaderAndAudioPlayer {
   display: flex;
   flex-direction: column;
-
-  // See below, `.chatView`'s flex-grow.
-  width: 0;
-  flex-grow: 3;
-
-  min-width: 295px;
 
   .chatListAndHeader {
     display: flex;
@@ -65,13 +65,14 @@
     }
   }
 }
-.chatView {
-  // Otherwise e.g. the contents of the gallery view
-  // (tabs, sepcifically) will refuse to shrink,
-  // and this element (`.chatView`) will overflow the parent.
-  // Also this ensures that `.chatListAndHeaderAndAudioPlayer`
-  // and `.chatView` take respectively 3 and 8 parts
-  // of the width of the parent on wide screens.
+.chatListResizeHandle {
   width: 0;
-  flex-grow: 8;
+  // So the outline doesn't get covered by the panels, see
+  // https://react-resizable-panels.vercel.app/examples/overflow.
+  z-index: 1;
+
+  &:focus-visible {
+    // Seems to be needed, otherwise it's invisible.
+    outline-style: solid;
+  }
 }
