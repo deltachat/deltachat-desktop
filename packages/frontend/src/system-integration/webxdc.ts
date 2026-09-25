@@ -58,10 +58,7 @@ export async function internalOpenWebxdc(
   ).name
   const account: Type.Account =
     await BackendRemote.rpc.getAccountInfo(accountId)
-  const displayname =
-    account.kind === 'Configured'
-      ? account.displayName || window.static_translate('unnamed')
-      : null
+  const displayname = account.kind === 'Configured' ? account.displayName : null
 
   runtime.openWebxdc(messageId, {
     accountId,
