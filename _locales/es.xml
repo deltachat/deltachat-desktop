@@ -121,11 +121,41 @@
     <string name="this_month">Este mes</string>
     <string name="last_week">La semana pasada</string>
     <string name="last_month">El mes pasado</string>
-    <!-- Refers to the time a contact was last seen. Shown below contact name in the profile. The placeholder will be replaced by date or time, resulting in "Last seen at 12:13 AM" or "Last seen Nov 12" -->
+    <!-- deprecated -->
     <string name="last_seen_at">Visto por última vez: %1$s</string>
-    <!-- Refers to the time a contact was last seen. Shown below contact name in the profile. The placeholder will be replaced by a relative point in time as "3 minutes ago" (see https://momentjs.com for more examples and languages) -->
+    <!-- deprecated -->
     <string name="last_seen_relative">Visto por última vez: %1$s</string>
+    <!-- deprecated -->
     <string name="last_seen_unknown">Visto por última vez: Desconocido</string>
+
+    <!-- A contact was seen recently. The string is at places with few space, so stay as short as possible. -->
+    <string name="seen_recently">últ. vez recientemente</string>
+    <!-- A contact was seen today. The string is at places with few space, so stay as short as possible. -->
+    <string name="seen_today">últ. vez hoy</string>
+    <!-- A contact was seen yesterday. The string is at places with few space, so stay as short as possible. -->
+    <string name="seen_yesterday">últ. vez ayer</string>
+    <!-- A contact was seen within a week. The string is at places with few space, so stay as short as possible. -->
+    <string name="seen_within_week">últ. vez hace unos días</string>
+    <!-- A contact was seen within a month. The string is at places with few space, so stay as short as possible. -->
+    <string name="seen_within_month">últ. vez hace unas semanas</string>
+    <!-- A contact was seen a number of month ago. The string is at places with few space, so stay as short as possible. -->
+    <plurals name="seen_n_months_ago">
+        <item quantity="one">últ. vez hace %d mes</item>
+        <item quantity="many">últ. vez hace %d meses</item>
+        <item quantity="other">últ. vez hace %d meses</item>
+    </plurals>
+    <!-- A contact was seen a long time ago, more than a year. The string is at places with few space, so stay as short as possible. -->
+    <string name="seen_long_ago">últ. vez hace mucho tiempo</string>
+    <!-- A contact was never seen (as added by others to a group or created by a vcard). The string is at places with few space, so stay as short as possible. -->
+    <string name="never_seen">no se ha visto nunca</string>
+
+    <!-- deprecated -->
+    <plurals name="seen_n_years_ago">
+        <item quantity="one">Visto en %d hace un año</item>
+        <item quantity="many">Visto hace %d s años</item>
+        <item quantity="other">Visto hace %d s años</item>
+    </plurals>
+
     <!-- Call duration as shown in the call bubbles. There is some risk to mix with the sending time, so the word "Duration" may be helpful. Might also be "Duration: %d minutes", "%d-minute duration", "%d-minute length" or "%d-minute call" -->
     <plurals name="call_duration_minutes">
         <item quantity="one">%d minuto</item>
@@ -212,7 +242,7 @@
     <string name="video">Video</string>
     <string name="documents">Documentos</string>
     <string name="contact">Contacto</string>
-    <string name="bot">Bot</string>
+    <string name="bot">bot</string>
     <string name="camera">Cámara</string>
     <string name="front_camera">Cámara frontal</string>
     <string name="back_camera">Cámara trasera</string>
@@ -237,7 +267,7 @@
     <!-- "App" is used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
     <string name="webxdc_app">Aplicación</string>
     <!-- plural of "App"; used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
-    <string name="webxdc_apps">Aplicaciones</string>
+    <string name="webxdc_apps">Apps</string>
     <string name="webxdc_store_url">App Picker URL</string>
     <string name="webxdc_store_url_explain">Si se establece, la URL se utilizará como App Picker en lugar de la predeterminada</string>
     <string name="webxdc_draft_hint">Pulsa \"Enviar\" para compartir</string>
@@ -623,10 +653,10 @@
     <string name="tab_image_empty_hint">Imágenes compartidas en este chat se mostrarán aquí.</string>
     <string name="tab_video_empty_hint">Vídeos compartidos en este chat se mostrarán aquí.</string>
     <string name="tab_audio_empty_hint">Los archivos de audio y los mensajes de voz compartidos en este chat se mostrarán aquí.</string>
-    <string name="tab_webxdc_empty_hint">Aplicaciones privadas compartidas en este chat se mostrarán aquí</string>
+    <string name="tab_webxdc_empty_hint">Apps compartidas en este chat se mostrarán aquí</string>
     <string name="tab_all_media_empty_hint">La multimedia compartida en cualquier chat aparecerá aquí</string>
     <string name="all_files_empty_hint">Documentos y otros archivos compartidos en cualquier chat se mostrarán aquí.</string>
-    <string name="all_apps_empty_hint">Aplicaciones privadas recibidas o enviadas en cualquier chat aparecerán aquí.</string>
+    <string name="all_apps_empty_hint">Apps recibidas o enviadas en cualquier chat aparecerán aquí.</string>
     <string name="media_preview">Vista previa de multimedia</string>
     <!-- option to show images in the gallery with the correct width/height aspect (instead of square); other gallery apps may be a source of inspiration for translation :) -->
     <string name="aspect_ratio_grid">Cuadrícula de relación de aspecto</string>
@@ -1117,6 +1147,8 @@
     <string name="qraccount_qr_code_cannot_be_used">El código QR escaneado no puede ser usado para configurar una nueva cuenta.</string>
     <!-- the placeholder will be replaced by the address of the profile -->
     <string name="qrlogin_ask_login">¿Iniciar sesión en \"%1$s\"?</string>
+    <!-- the placeholder will be replaced by a domain that is preferred for relaying messages. smth as "Using foo.example.org" -->
+    <string name="relay_login_hint">Utilizando %1$s</string>
     <!-- first placeholder will be replaced by name of the inviter, second placeholder will be replaced by the name of the inviter. -->
     <string name="secure_join_started">%1$s te invitó a unirte a este grupo.\n\nEsperando que el dispositivo de %2$s responda…</string>
     <!-- first placeholder will be replaced by name of the inviter, second placeholder will be replaced by the name of the inviter. -->
@@ -1308,6 +1340,13 @@
     <!-- disabling "Reliable service" will hide a the maybe annoying permanent-notification with the drawback that new-message-notifications get potentially unreliable -->
     <string name="perm_enable_bg_reminder_title">Toque aquí para recibir mensajes mientras Delta Chat está en segundo plano.</string>
     <string name="perm_enable_bg_already_done">Ya has permitido que Delta Chat reciba mensajes en segundo plano.\n\nSi los mensajes aún no llegan en segundo plano, compruebe también la configuración de su sistema.</string>
+
+    <!-- device messages for updates -->
+    <string name="update_2_6">¡Adivina qué hay de nuevo!\n\n🌐 Ahora tus mensajes se transmiten de forma más inteligente: gracias a los múltiples retransmisores, si uno deja de funcionar, los mensajes no se detendrán\n\n📞 Las llamadas han madurado y ya no son una función experimental\n\n📢 Los canales ahora son interactivos gracias a las reacciones\n\n✍️ Añade una descripción al chat, para que nadie se quede con la duda\n\n👌 Las imágenes enviadas ahora se ven con mayor nitidez\n\n🔵 Marca los chats como no leídos, para que no se te olviden</string>
+    <string name="update_2_6_android_additions">🐇 Acelera y reproduce automáticamente los mensajes de voz\n\nPor fin: ¡ya tenemos un selector básico de pegatinas!</string>
+    <string name="update_2_6_desktop_additions">🐇 Acelera y reproduce automáticamente los mensajes de voz\n\n⏯️ Nuevo reproductor de audio\n\n✅ Selecciona varios mensajes para reenviarlos o eliminarlos\n\nPor fin: ¡ya tenemos un selector básico de pegatinas!</string>
+    <string name="update_2_6_ios_additions">🎤 Reproduce mensajes de voz en segundo plano</string>
+    <string name="update_2_6_end">Por favor, si puedes, haz una donación para ayudarnos a mantenernos independientes y seguir aportando mejoras ❤️ https://delta.chat/donate</string>
 
     <!-- The placeholder will be replaced by a version name, e.g. "v2.50.0" -->
     <string name="update_available_msg">🎉 Ya está disponible la nueva versión %1$s. Toca este mensaje para actualizar la aplicación y disfrutar de las nuevas funciones.</string>
