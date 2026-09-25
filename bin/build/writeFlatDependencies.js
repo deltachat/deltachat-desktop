@@ -9,7 +9,7 @@ import { readFile, mkdir, copyFile, readdir, stat } from 'fs/promises'
 import { existsSync } from 'fs'
 import { fileURLToPath } from 'url'
 import { dirname, isAbsolute, join } from 'path'
-import { parse } from 'yaml'
+import { parseAllDocuments } from 'yaml'
 
 async function copyRecursive(source, destination) {
   if ((await stat(source)).isDirectory()) {
@@ -62,7 +62,8 @@ if (!destination) {
 }
 
 ;(async () => {
-  const Lockfile = parse(await readFile(pnpmLockfile, 'utf8'))
+  const docs = parseAllDocuments(await readFile(pnpmLockfile, 'utf8'))
+  const Lockfile = docs[docs.length - 1].toJS()
   const expectedLockfileVersion = '9.0'
   if (Lockfile.lockfileVersion !== expectedLockfileVersion) {
     console.log(
