@@ -30,7 +30,7 @@ import { useChatContextMenu } from '../chat/ChatContextMenu'
 import useContextMenu from '../../hooks/useContextMenu'
 import { ContextMenuContext } from '../../contexts/ContextMenuContext'
 import { mouseEventToPosition } from '../../utils/mouseEventToPosition'
-import { lastSeenLongAgoText } from '../../utils/contactFreshness'
+import { getContactStatusLine } from '../../utils/contactFreshness'
 import useMessage from '../../hooks/chat/useMessage'
 import classNames from 'classnames'
 import {
@@ -179,8 +179,6 @@ function chatSubtitle(chat: T.FullChat, firstContact: T.Contact | null) {
       } else {
         return '…'
       }
-    } else if (chat.chatType === 'Single' && firstContact?.isBot) {
-      return tx('bot')
     } else if (chat.chatType === 'Mailinglist') {
       if (chat.mailingListAddress) {
         return `${tx('mailing_list')} – ${chat.mailingListAddress}`
@@ -199,16 +197,13 @@ function chatSubtitle(chat: T.FullChat, firstContact: T.Contact | null) {
       } else if (chat.isDeviceChat) {
         return tx('device_talk_subtitle')
       }
-      // Contacts we have not heard of for a long time are more likely to not
-      // receive our messages, so tell the user about it.
-      if (chat.freshness === 'Old' && firstContact != null && chat.canSend) {
-        return lastSeenLongAgoText(firstContact.lastSeen, tx)
-      }
-      if (chat.isEncrypted) {
+      const pendingInvite = !chat.canSend && !chat.isContactRequest
+      if (pendingInvite) {
         return null
-      } else {
-        return firstContact != null ? firstContact.address : tx('loading')
       }
+      return firstContact != null
+        ? getContactStatusLine(firstContact, tx, true)
+        : tx('loading')
     }
   }
   return 'ErrTitle'

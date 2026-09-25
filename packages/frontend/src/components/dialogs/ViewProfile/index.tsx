@@ -1,6 +1,5 @@
 import AutoSizer from 'react-virtualized-auto-sizer'
 import React, { useState, useEffect, useRef } from 'react'
-import moment from 'moment'
 import { C } from '@deltachat/jsonrpc-client'
 import classNames from 'classnames'
 
@@ -26,30 +25,7 @@ import type { T } from '@deltachat/jsonrpc-client'
 import { RovingTabindexProvider } from '../../../contexts/RovingTabindex'
 import { ChatListItemRowChat } from '../../chat/ChatListItemRow'
 import { shouldDisableClickForFullscreen } from '../../Avatar'
-
-function LastSeen({ timestamp }: { timestamp: number }) {
-  const tx = useTranslationFunction()
-  let lastSeenString = ''
-  let lastSeenAbsolute: string | undefined = undefined
-
-  // Dates from 1970 mean that contact has never been seen
-  if (timestamp == 0) {
-    lastSeenString = tx('last_seen_unknown')
-  } else {
-    const date = moment(timestamp * 1000).fromNow()
-    lastSeenString = tx('last_seen_relative', date)
-    lastSeenAbsolute = tx(
-      'last_seen_at',
-      moment(timestamp * 1000).toLocaleString()
-    )
-  }
-
-  return (
-    <span className='last-seen' title={lastSeenAbsolute}>
-      {lastSeenString}
-    </span>
-  )
-}
+import { getContactStatusLine } from '../../../utils/contactFreshness'
 
 export default function ViewProfile(
   props: {
@@ -174,6 +150,10 @@ export function ViewProfileInner({
   let statusText = contact.status
   let avatarPath = contact.profileImage
 
+  const statusLine = isDeviceChat
+    ? null
+    : getContactStatusLine(contact, tx, false)
+
   if (isSelfChat) {
     displayName = tx('saved_messages')
     statusText = tx('saved_messages_explain')
@@ -207,6 +187,9 @@ export function ViewProfileInner({
             color={contact.color}
             displayName={displayName}
             freshness={contact.freshness}
+            subtitle={
+              statusLine && <p className={styles.statusLine}>{statusLine}</p>
+            }
             description={statusText}
             disableFullscreen={
               isSelfChat ||
@@ -219,22 +202,6 @@ export function ViewProfileInner({
           <div
             className={classNames('group-separator', styles.extendedSeparator)}
           ></div>
-        )}
-        {!isSelfChat && (
-          <div className={styles.contactAttributes}>
-            {contact.lastSeen !== 0 && (
-              <div>
-                <i className='material-svg-icon material-icon-schedule' />
-                <LastSeen timestamp={contact.lastSeen} />
-              </div>
-            )}
-            {contact.isBlocked && (
-              <div>
-                <i className='material-svg-icon material-icon-blocked' />
-                {tx('contact_blocked')}
-              </div>
-            )}
-          </div>
         )}
       </DialogContent>
       <div className={styles.buttonWrap}>

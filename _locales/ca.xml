@@ -121,23 +121,39 @@
     <string name="this_month">Aquest mes</string>
     <string name="last_week">La setmana passada</string>
     <string name="last_month">El mes passat</string>
-    <!-- Refers to the time a contact was last seen. Shown below contact name in the profile. The placeholder will be replaced by date or time, resulting in "Last seen at 12:13 AM" or "Last seen Nov 12" -->
+    <!-- deprecated -->
     <string name="last_seen_at">Vist per darrer cop: %1$s</string>
-    <!-- Refers to the time a contact was last seen. Shown below contact name in the profile. The placeholder will be replaced by a relative point in time as "3 minutes ago" (see https://momentjs.com for more examples and languages) -->
+    <!-- deprecated -->
     <string name="last_seen_relative">Vist per darrer cop: %1$s</string>
+    <!-- deprecated -->
     <string name="last_seen_unknown">Vist per darrer cop: desconegut</string>
-    <!-- This is about a contact that was not seen for one or more months -->
+
+    <!-- A contact was seen recently. The string is at places with few space, so stay as short as possible. -->
+    <string name="seen_recently">Vist recentment</string>
+    <!-- A contact was seen today. The string is at places with few space, so stay as short as possible. -->
+    <string name="seen_today">Vist avui</string>
+    <!-- A contact was seen yesterday. The string is at places with few space, so stay as short as possible. -->
+    <string name="seen_yesterday">Vist ahir</string>
+    <!-- A contact was seen within a week. The string is at places with few space, so stay as short as possible. -->
+    <string name="seen_within_week">Vist fa una setmana</string>
+    <!-- A contact was seen within a month. The string is at places with few space, so stay as short as possible. -->
+    <string name="seen_within_month">Vist fa un mes</string>
+    <!-- A contact was seen a number of month ago. The string is at places with few space, so stay as short as possible. -->
     <plurals name="seen_n_months_ago">
         <item quantity="one">Vist %d mesos enrere</item>
         <item quantity="other">Vist fa %d mesos</item>
     </plurals>
-    <!-- This is about a contact that was not seen for one or more years -->
+    <!-- A contact was seen a long time ago, more than a year. The string is at places with few space, so stay as short as possible. -->
+    <string name="seen_long_ago">Vist fa molt de temps</string>
+    <!-- A contact was never seen (as added by others to a group or created by a vcard). The string is at places with few space, so stay as short as possible. -->
+    <string name="never_seen">Mai vist</string>
+
+    <!-- deprecated -->
     <plurals name="seen_n_years_ago">
         <item quantity="one">Vist %d anys enrere</item>
         <item quantity="other">Vist fa %d anys</item>
     </plurals>
-    <!-- This is about a contact that was never seen (as added by others to a group or created by a vcard) -->
-    <string name="never_seen">Mai vist</string>
+
     <!-- Call duration as shown in the call bubbles. There is some risk to mix with the sending time, so the word "Duration" may be helpful. Might also be "Duration: %d minutes", "%d-minute duration", "%d-minute length" or "%d-minute call" -->
     <plurals name="call_duration_minutes">
         <item quantity="one">%d durada d\'un minut</item>
@@ -1110,6 +1126,8 @@
     <string name="qraccount_qr_code_cannot_be_used">El codi QR escanejat no es pot usar per a configurar un perfil nou.</string>
     <!-- the placeholder will be replaced by the address of the profile -->
     <string name="qrlogin_ask_login">Voleu iniciar sessió a «%1$s»?</string>
+    <!-- the placeholder will be replaced by a domain that is preferred for relaying messages. smth as "Using foo.example.org" -->
+    <string name="relay_login_hint">Utilitzant %1$s</string>
     <!-- first placeholder will be replaced by name of the inviter, second placeholder will be replaced by the name of the inviter. -->
     <string name="secure_join_started">%1$s us ha convidat a unir-vos a aquest grup.\n\nS\'està esperant el dispositiu de %2$s per a respondre...</string>
     <!-- first placeholder will be replaced by name of the inviter, second placeholder will be replaced by the name of the inviter. -->
@@ -1301,6 +1319,13 @@
     <!-- disabling "Reliable service" will hide a the maybe annoying permanent-notification with the drawback that new-message-notifications get potentially unreliable -->
     <string name="perm_enable_bg_reminder_title">Prem aquí per rebre missatges mentre Delta Chat és en segon pla.</string>
     <string name="perm_enable_bg_already_done">Ja heu autoritzat Delta Chat a rebre missatges en segon pla.\n\nSi encara no us arriben els missatge, reviseu els paràmetres de sistema.</string>
+
+    <!-- device messages for updates -->
+    <string name="update_2_6">Endevina què hi ha de nou!\n\n🌐 Els teus missatges ara viatgen més intel·ligentment: amb múltiples rutes, si una falla no s\'aturaran\n\n📞 Les trucades han madurat i ja no són experimentals\n\n📢 Els canals esdevenen interactius amb reaccions\n\n✍️ Afegeix una descripció al xat, perquè ningú es quedi amb dubtes\n\n👌 Les imatges enviades ara es veuen més nítides\n\n🔵 Marca xats com a no llegits, perquè no t\'oblidis</string>
+    <string name="update_2_6_android_additions">🐇 Accelera i reprodueix automàticament els missatges de veu\n\nFinalment: tenim un selector d\'adhesius bàsic!</string>
+    <string name="update_2_6_desktop_additions">🐇 Accelera i reprodueix automàticament missatges de veu\n\n⏯️ Nou reproductor d\'àudio\n\n✅ Selecciona múltiples missatges per reenviar-los o esborrar-los\n\nFinalment: tenim un selector bàsic d\'adhesius!</string>
+    <string name="update_2_6_ios_additions">🎤 Reprodueix missatges de veu en segon pla</string>
+    <string name="update_2_6_end">Si us plau, si pots, fes una donació per ajudar-nos a mantenir-nos independents i continuar aportant millores ❤️ https://delta.chat/donate</string>
 
     <!-- The placeholder will be replaced by a version name, e.g. "v2.50.0" -->
     <string name="update_available_msg">🎉 Nova versió %1$s disponible. Prem aquest missatge per actualitzar i gaudir de les noves funcions.</string>

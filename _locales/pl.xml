@@ -121,11 +121,31 @@
     <string name="this_month">Ten miesiąc</string>
     <string name="last_week">Ostatni tydzień</string>
     <string name="last_month">Ostatni miesiąc</string>
-    <!-- Refers to the time a contact was last seen. Shown below contact name in the profile. The placeholder will be replaced by date or time, resulting in "Last seen at 12:13 AM" or "Last seen Nov 12" -->
+    <!-- deprecated -->
     <string name="last_seen_at">Ostatnio widziano %1$s</string>
-    <!-- Refers to the time a contact was last seen. Shown below contact name in the profile. The placeholder will be replaced by a relative point in time as "3 minutes ago" (see https://momentjs.com for more examples and languages) -->
+    <!-- deprecated -->
     <string name="last_seen_relative">Ostatnio widziano %1$s</string>
+    <!-- deprecated -->
     <string name="last_seen_unknown">Ostatnio widziano: nie wiadomo</string>
+
+    <!-- A contact was seen a number of month ago. The string is at places with few space, so stay as short as possible. -->
+    <plurals name="seen_n_months_ago">
+        <item quantity="one">Widziano %d miesiąc temu</item>
+        <item quantity="few">Widziano %d miesiące temu</item>
+        <item quantity="many">Widziano %d miesięcy temu</item>
+        <item quantity="other">Widziano %d miesiąca temu</item>
+    </plurals>
+    <!-- A contact was never seen (as added by others to a group or created by a vcard). The string is at places with few space, so stay as short as possible. -->
+    <string name="never_seen">Nigdy nie widziano</string>
+
+    <!-- deprecated -->
+    <plurals name="seen_n_years_ago">
+        <item quantity="one">Widziano %d rok temu</item>
+        <item quantity="few">Widziano %d lata temu</item>
+        <item quantity="many">Widziano %d lat temu</item>
+        <item quantity="other">Widziano %d roku temu</item>
+    </plurals>
+
     <!-- Call duration as shown in the call bubbles. There is some risk to mix with the sending time, so the word "Duration" may be helpful. Might also be "Duration: %d minutes", "%d-minute duration", "%d-minute length" or "%d-minute call" -->
     <plurals name="call_duration_minutes">
         <item quantity="one">Czas trwania %d minuta</item>
@@ -1136,6 +1156,8 @@
     <string name="qraccount_qr_code_cannot_be_used">Zeskanowanego kodu QR nie można użyć do założenia nowego konta.</string>
     <!-- the placeholder will be replaced by the address of the profile -->
     <string name="qrlogin_ask_login">Zalogować się do „%1$s”?</string>
+    <!-- the placeholder will be replaced by a domain that is preferred for relaying messages. smth as "Using foo.example.org" -->
+    <string name="relay_login_hint">Używanie %1$s</string>
     <!-- first placeholder will be replaced by name of the inviter, second placeholder will be replaced by the name of the inviter. -->
     <string name="secure_join_started">Użytkownik %1$s zaprosił cię do dołączenia do tej grupy.\n\nCzekam na odpowiedź urządzenia %2$s…</string>
     <!-- first placeholder will be replaced by name of the inviter, second placeholder will be replaced by the name of the inviter. -->
@@ -1327,6 +1349,13 @@
     <!-- disabling "Reliable service" will hide a the maybe annoying permanent-notification with the drawback that new-message-notifications get potentially unreliable -->
     <string name="perm_enable_bg_reminder_title">Dotknij tutaj, aby odbierać wiadomości, podczas gdy Delta Chat działa w tle.</string>
     <string name="perm_enable_bg_already_done">Pozwolono już Delta Chat na odbieranie wiadomości w tle.\n\nJeśli wiadomości nadal nie docierają w tle, sprawdź też ustawienia systemu.</string>
+
+    <!-- device messages for updates -->
+    <string name="update_2_6">Zobacz, co nowego!\n\n🌐 Twoje wiadomości są teraz przesyłane w inteligentniejszy sposób: dzięki wielu węzłom przekaźnikowym awaria jednego z nich nie przerwie ich dostarczania\n\n📞 Funkcja połączeń dojrzała i nie jest już w fazie eksperymentalnej\n\n📢 Kanały zyskują interaktywność dzięki reakcjom\n\n✍️ Dodaj opis czatu, aby nikt nie musiał się zastanawiać, czego on dotyczy\n\n👌 Wysyłane zdjęcia są teraz wyraźniejsze\n\n🔵 Oznaczaj czaty jako nieprzeczytane, aby o nich nie zapomnieć</string>
+    <string name="update_2_6_android_additions">🐇 Przyspieszanie i automatyczne odtwarzanie wiadomości głosowych\n\nWreszcie: mamy podstawowy wybór naklejek!</string>
+    <string name="update_2_6_desktop_additions">🐇 Przyspieszanie i automatyczne odtwarzanie wiadomości głosowych\n\n⏯️ Nowy odtwarzacz audio\n\n✅ Wybór wielu wiadomości do przekazania lub usunięcia\n\nWreszcie: mamy podstawowy wybór naklejek!</string>
+    <string name="update_2_6_ios_additions">🎤 Odtwarzaj wiadomości głosowe w tle</string>
+    <string name="update_2_6_end">Jeśli możesz, przekaż darowiznę, aby pomóc nam zachować niezależność i nadal wprowadzać ulepszenia ❤️ https://delta.chat/donate</string>
 
     <!-- The placeholder will be replaced by a version name, e.g. "v2.50.0" -->
     <string name="update_available_msg">🎉 Dostępna jest nowa wersja %1$s. Dotknij tę wiadomość, aby zaktualizować aplikację i korzystać z nowych funkcji.</string>

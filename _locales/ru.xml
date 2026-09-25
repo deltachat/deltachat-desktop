@@ -121,11 +121,31 @@
     <string name="this_month">В этом месяце</string>
     <string name="last_week">Прошлая неделя</string>
     <string name="last_month">Прошлый месяц</string>
-    <!-- Refers to the time a contact was last seen. Shown below contact name in the profile. The placeholder will be replaced by date or time, resulting in "Last seen at 12:13 AM" or "Last seen Nov 12" -->
-    <string name="last_seen_at">Последнее посещение: %1$s</string>
-    <!-- Refers to the time a contact was last seen. Shown below contact name in the profile. The placeholder will be replaced by a relative point in time as "3 minutes ago" (see https://momentjs.com for more examples and languages) -->
-    <string name="last_seen_relative">Последнее посещение: %1$s</string>
-    <string name="last_seen_unknown">Последнее посещение: Неизвестно</string>
+    <!-- deprecated -->
+    <string name="last_seen_at">Последняя активность: %1$s</string>
+    <!-- deprecated -->
+    <string name="last_seen_relative">Последняя активность: %1$s</string>
+    <!-- deprecated -->
+    <string name="last_seen_unknown">Последняя активность: Неизвестно</string>
+
+    <!-- A contact was seen a number of month ago. The string is at places with few space, so stay as short as possible. -->
+    <plurals name="seen_n_months_ago">
+        <item quantity="one">Активность: %d мес. назад</item>
+        <item quantity="few">Активность: %d мес. назад</item>
+        <item quantity="many">Активность: %d мес. назад</item>
+        <item quantity="other">Активность: %d мес. назад</item>
+    </plurals>
+    <!-- A contact was never seen (as added by others to a group or created by a vcard). The string is at places with few space, so stay as short as possible. -->
+    <string name="never_seen">Нет активности</string>
+
+    <!-- deprecated -->
+    <plurals name="seen_n_years_ago">
+        <item quantity="one">Активность: %d год назад</item>
+        <item quantity="few">Активность: %d года назад</item>
+        <item quantity="many">Активность: %d лет назад</item>
+        <item quantity="other">Активность: %d лет назад</item>
+    </plurals>
+
     <!-- Call duration as shown in the call bubbles. There is some risk to mix with the sending time, so the word "Duration" may be helpful. Might also be "Duration: %d minutes", "%d-minute duration", "%d-minute length" or "%d-minute call" -->
     <plurals name="call_duration_minutes">
         <item quantity="one">Длительность: %d минута</item>
@@ -261,6 +281,8 @@
     <!-- short for "Browse through the App Picker/Store/Catalogue"; could also be translated as "Discover" or "Search" -->
     <string name="browse">Обзор</string>
     <string name="unknown">Неизвестно</string>
+    <string name="unnamed">Без имени</string>
+
     <string name="green">Зелёный</string>
     <string name="red">Красный</string>
     <string name="blue">Синий</string>
@@ -269,6 +291,9 @@
     <string name="purple">Пурпурный</string>
     <string name="magenta">Маджента</string>
     <string name="white">Белый</string>
+
+    <!-- Used to display some progress in percent. Placeholder will be replaced by a number, resulting in eg. "50%", which may be translated to "50 %" in French or "%50" in Turkish.  -->
+    <string name="progress_percent">%1$d%%</string>
 
     <string name="zoom">Масштаб</string>
     <string name="extra_small">Очень маленький</string>
@@ -395,6 +420,8 @@
     <string name="unpin_chat">Открепить чат</string>
     <!-- Verb "to pin", making something sticky, not a noun or abbreviation for "pin number". -->
     <string name="pin">Закрепить</string>
+    <!-- Adj. of "pin", describing a state of being pinned. -->
+    <string name="pinned">Закреплено</string>
     <!-- Opposite of "Pin chat", removing the sticky-state from a chat. -->
     <string name="unpin">Открепить</string>
     <string name="ConversationFragment_quoted_message_not_found">Исходное сообщение не найдено</string>
@@ -539,6 +566,12 @@
         <item quantity="few">%d новых сообщения</item>
         <item quantity="many">%d новых сообщений</item>
         <item quantity="other">%d новых сообщений</item>
+    </plurals>
+    <plurals name="chat_n_unread_messages">
+        <item quantity="one">%1$d непрочитанное</item>
+        <item quantity="few">%1$d непрочитанных</item>
+        <item quantity="many">%1$d непрочитанных</item>
+        <item quantity="other">%1$d непрочитанных</item>
     </plurals>
     <!-- The placeholder will be replaced by the name of the recipient in a one-to-one chat. -->
     <string name="chat_new_one_to_one_hint">Отправьте сообщение %1$s.</string>
@@ -763,9 +796,13 @@
     <!-- deprecated -->
     <string name="hidden_from_contacts">Скрыт из контактов</string>
     <string name="enforce_e2ee">Принудительное шифрование для всех релеев</string>
+    <!-- Hint for the list of relays -->
+    <string name="transport_list_hint">Релеи обеспечивают передачу сообщений. Наличие нескольких релеев повышает отказоустойчивость соединения.</string>
     <!-- shown if a QR code was scanned that can be used as a relay -->
     <string name="confirm_add_transport">Добавить этот релей?</string>
     <string name="invalid_transport_qr">Отсканированный QR-код не содержит корректный релей.</string>
+    <!-- placeholder will be replaced by a relay server name -->
+    <string name="confirm_remove_relay_x">Удалить релей \"%1$s\"?</string>
     <!-- deprecated -->
     <string name="confirm_remove_or_hide_transport_x">Удалить релей \"%1$s\"?\n\nКонтакты, знающие только этот релей, могут потерять связь с вами, пока вы не напишете им снова.\n\nЕсли сомневаетесь, лучше скрыть его, а не удалять.</string>
     <string name="login_certificate_checks">Проверки сертификатов</string>
@@ -1119,6 +1156,8 @@
     <string name="qraccount_qr_code_cannot_be_used">Отсканированный QR-код не может быть использован для создания нового профиля.</string>
     <!-- the placeholder will be replaced by the address of the profile -->
     <string name="qrlogin_ask_login">Авторизоваться в \"%1$s\"?</string>
+    <!-- the placeholder will be replaced by a domain that is preferred for relaying messages. smth as "Using foo.example.org" -->
+    <string name="relay_login_hint">Используется %1$s</string>
     <!-- first placeholder will be replaced by name of the inviter, second placeholder will be replaced by the name of the inviter. -->
     <string name="secure_join_started">%1$s приглашает вас присоединиться к этой группе.\n\nОжидаем ответа от устройства %2$s…</string>
     <!-- first placeholder will be replaced by name of the inviter, second placeholder will be replaced by the name of the inviter. -->
@@ -1171,6 +1210,8 @@
     <string name="perm_explain_access_to_storage_denied">Чтобы получать или отправлять файлы, откройте настройки приложения, выберите \"Разрешения\" и включите доступ к \"Хранилищу\".</string>
     <string name="perm_explain_access_to_location_denied">Чтобы прикрепить местоположение, откройте настройки приложения, выберите \"Разрешения\" и включите доступ к \"Местоположению\".</string>
     <string name="perm_explain_access_to_notifications_denied">Для получения уведомлений, перейдите в \"Настройки системы / Приложения / Delta Chat\" и включите доступ к \"Уведомлениям\".</string>
+    <string name="perm_explain_local_network_denied">Для подключения к устройствам в локальной сети Delta Chat необходимо разрешение \"Поиск устройств поблизости\". Вы можете изменить этот параметр в настройках: Приложения / Delta Chat / Разрешения.</string>
+
     <!-- ImageEditorHud -->
     <string name="ImageEditorHud_draw_anywhere_to_blur">Нарисуйте где угодно, чтобы размыть</string>
     <string name="ImageEditorHud_add_text">Добавить текст</string>
@@ -1309,4 +1350,17 @@
     <string name="perm_enable_bg_reminder_title">Нажмите здесь, чтобы получать сообщения, когда Delta Chat находится в фоновом режиме.</string>
     <string name="perm_enable_bg_already_done">Вы уже разрешили Delta Chat получать сообщения в фоновом режиме.\n\nЕсли сообщения все равно не приходят в фоновом режиме, также проверьте настройки вашей системы.</string>
 
-    </resources>
+    <!-- device messages for updates -->
+    <string name="update_2_6">Угадайте, что нового!\n\n🌐 Более умная доставка сообщений: благодаря поддержке нескольких реле, сбой одного из них не прервет отправку.\n\n📞 Звонки стали надежными: функция больше не является экспериментальной.\n\n📢 Интерактивные каналы: теперь в каналах можно ставить реакции.\n\n✍️ Описание чатов: добавьте описание, чтобы у участников не возникало лишних вопросов.\n\n👌 Улучшенное качество изображений: отправленные фото теперь выглядят четче.\n\n🔵 Отметка \"непрочитанное\": помечайте чаты, чтобы ничего не упустить.</string>
+    <string name="update_2_6_android_additions">🐇 Ускорение и автовоспроизведение голосовых сообщений\n\nНаконец-то: появился базовый выбор стикеров!</string>
+    <string name="update_2_6_desktop_additions">🐇 Ускорение и автовоспроизведение голосовых сообщений\n\n⏯️ Новый аудиоплеер\n\n✅ Выбор нескольких сообщений для пересылки или удаления\n\nНаконец-то: появился базовый выбор стикеров!</string>
+    <string name="update_2_6_ios_additions">🎤 Воспроизведение голосовых сообщений в фоновом режиме</string>
+    <string name="update_2_6_end">Если у вас есть возможность, пожалуйста, поддержите нас пожертвованием. Это поможет нам сохранить независимость проекта и продолжать развивать его ❤️ https://delta.chat/donate</string>
+
+    <!-- The placeholder will be replaced by a version name, e.g. "v2.50.0" -->
+    <string name="update_available_msg">🎉 Доступна новая версия %1$s. Нажмите на это сообщение, чтобы обновиться и оценить все возможности</string>
+    <!-- The placeholder will be replaced by a version name, e.g. "Downloading v2.50.0 …" -->
+    <string name="update_downloading">Загрузка %1$s…</string>
+    <string name="update_now">Обновить</string>
+    <string name="update_install_permission_explain">Чтобы установить обновление, сначала разрешите Delta Chat установку приложений в системных настройках.</string>
+</resources>

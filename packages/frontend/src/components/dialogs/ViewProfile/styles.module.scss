@@ -9,14 +9,9 @@
   padding-bottom: 2px;
 }
 
-.contactAttributes {
-  margin-top: 15px;
-  margin-inline-start: -4px;
-  font-size: 1.08em;
-
-  & > * {
-    margin-bottom: 8px;
-  }
+.statusLine {
+  margin: 4px 0 0;
+  color: var(--textSecondary);
 }
 
 .buttonWrap {
