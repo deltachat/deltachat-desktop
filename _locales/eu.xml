@@ -121,11 +121,13 @@
     <string name="this_month">Hilabete honetan</string>
     <string name="last_week">Azken astea</string>
     <string name="last_month">Azken hilabetea</string>
-    <!-- Refers to the time a contact was last seen. Shown below contact name in the profile. The placeholder will be replaced by date or time, resulting in "Last seen at 12:13 AM" or "Last seen Nov 12" -->
+    <!-- deprecated -->
     <string name="last_seen_at">Azken aldiz begiratua: %1$s</string>
-    <!-- Refers to the time a contact was last seen. Shown below contact name in the profile. The placeholder will be replaced by a relative point in time as "3 minutes ago" (see https://momentjs.com for more examples and languages) -->
+    <!-- deprecated -->
     <string name="last_seen_relative">Azken aldiz begiratua %1$s</string>
+    <!-- deprecated -->
     <string name="last_seen_unknown">Azken aldiz begiratzea: ezezaguna</string>
+
     <!-- Call duration as shown in the call bubbles. There is some risk to mix with the sending time, so the word "Duration" may be helpful. Might also be "Duration: %d minutes", "%d-minute duration", "%d-minute length" or "%d-minute call" -->
     <plurals name="call_duration_minutes">
         <item quantity="one">minutu %d</item>
@@ -561,6 +563,7 @@
     <string name="search_in">Bilatu %1$s</string>
     <string name="search_files">Bilatu fitxategiak</string>
     <string name="search_explain">Bilatu txatak, kontaktuak, eta mezuak.</string>
+    <!-- deprecated, there is not much point to repeat the query, use emoji_search_results, or no headline at all -->
     <string name="search_result_for_x">\"%1$s\" emaitzak</string>
     <string name="search_no_result_for_x">Ez da emaitzarik aurkitu \"%s\" bilaketarentzat</string>
     <!-- Adjective, as in "Show Unread Messages" -->
@@ -739,7 +742,7 @@
     <string name="import_backup_title">Inportatu babeskopia</string>
     <string name="import_backup_ask">Babeskopia aurkitu da: \"%1$s\".\n\nInportatu nahi duzu eta bertako datu eta ezarpenak erabili?</string>
     <string name="import_backup_no_backup_found">Ez da babeskopiarik aurkitu.\n\nKopiatu babeskopia \"%1$s\" karpetan eta saiatu berriro.</string>
-    <!-- %1$s will be replaced by the failing address -->
+    <!-- deprecated, %1$s will be replaced by the failing address -->
     <string name="login_error_cannot_login">Ezin da \"%1$s\" bezala saioa hasi. Egiaztatu E-mail helbidea eta pasahitza zuzenak diren.</string>
     <!-- TLS certificate checks -->
     <string name="accept_invalid_certificates">Onartu ziurtagiri baliogabeak</string>
@@ -1050,10 +1053,13 @@
     <string name="qrscan_failed">Ezin izan da QR kodea deszifratu</string>
     <string name="qrscan_ask_join_group">\"%1$s\" taldera elkartu nahi duzu?</string>
     <string name="qrscan_ask_join_channel">\"%1$s\" kanalera batu nahi duzu?</string>
+    <!-- deprecated -->
     <string name="qrscan_fingerprint_mismatch">Eskaneatutako hatz-marka eta %1$s erabiltzaileari ikusitako azken hatz-marka ez datoz bat.</string>
+    <!-- deprecated -->
     <string name="qrscan_no_addr_found">QR kode honek hatz-marka bat du baina ez e-mail helbidea.\n\nBandaz kanpoko egiaztaketa baterako, ezarri zifratutako konexio bat hartzailearekin aurretik.</string>
     <string name="qrscan_contains_text">Eskaneatutako QR kodearen testua:\n\n%1$s</string>
     <string name="qrscan_contains_url">Eskaneatutako QR kodearen URL-a:\n\n%1$s</string>
+    <!-- deprecated -->
     <string name="qrscan_fingerprint_label">Hatz-marka</string>
     <string name="withdraw_verifycontact_explain">QR kode hau beste batzuek eskaneatu dezakete zurekin harremanetan jartzeko.\n\nBerrezarri egin dezakezu, lehendik dagoen QR kodeak edo gonbidapen-estekak gehiago funtziona ez dezan.</string>
     <string name="withdraw_verifygroup_explain">QR kode hau beste batzuek eskaneatu dezakete \"%1$s\" taldera batzeko.\n\nBerrezarri egin dezakezu, lehendik dagoen QR kodeak edo gonbidapen-estekak gehiago funtziona ez dezan.</string>
@@ -1269,6 +1275,4 @@
     <string name="perm_enable_bg_reminder_title">Sakatu hemen mezuak jasotzeko Delta Chat bigarren planoan dagoenean.</string>
     <string name="perm_enable_bg_already_done">Dagoeneko baimendu diozu Delta Chat aplikazioari bigarren planoan mezuak jasotzea,\n\nOraindik ere mezuak heltzen ez badira, egiaztatu ere zure sistemaren ezarpenak.</string>
 
-    <!-- device messages for updates -->
-    <string name="update_2_0">Zer berri?\n\n💯 Muturretik muturrerako zifratze fidagarria eta betirakoa da orain. Sarrailak 🔒 joan dira!\n\n✉️ Muturretik muturrerako zifratzerik gabeko posta elektroniko klasikoa gutun-azal ikur batekin markatuta dago\n\n😻 Profil-bistaratze berri hobetua zure kontaktu guztientzat\n\n🔲 Txat batean erabilitako aplikazioetara azkar sartzeko botoi berria\n\n❤️ Mesedez, egin dohaintza independente jarraitzen laguntzeko eta hobekuntzak ekartzen jarraitzeko: %1$s</string>
     </resources>

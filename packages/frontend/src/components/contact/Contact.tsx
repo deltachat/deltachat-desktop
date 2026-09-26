@@ -3,7 +3,7 @@ import type { T } from '@deltachat/jsonrpc-client'
 
 import { Avatar } from '../Avatar'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
-import { lastSeenLongAgoText } from '../../utils/contactFreshness'
+import { getContactStatusLine } from '../../utils/contactFreshness'
 
 function ContactName(props: {
   displayName: string
@@ -23,39 +23,13 @@ function ContactName(props: {
   )
 }
 
-export default function Contact(props: {
-  contact: {
-    profileImage: string | null
-    color: string
-    displayName: string
-    address: string
-    isKeyContact: boolean
-    freshness: T.ContactFreshness
-    lastSeen: number
-    isBlocked?: boolean
-  }
-}) {
+export default function Contact(props: { contact: T.Contact }) {
   const tx = useTranslationFunction()
 
-  const {
-    profileImage,
-    color,
-    displayName,
-    address,
-    isKeyContact,
-    freshness,
-    lastSeen,
-    isBlocked,
-  } = props.contact
+  const { profileImage, color, displayName, address, freshness, isBlocked } =
+    props.contact
 
-  // Contacts we have not heard of for a long time are more likely to not
-  // receive our messages, so tell the user about it.
-  const subtitle =
-    freshness === 'Old'
-      ? lastSeenLongAgoText(lastSeen, tx)
-      : isKeyContact
-        ? undefined
-        : address
+  const subtitle = getContactStatusLine(props.contact, tx, true) ?? undefined
 
   return (
     <div className='contact'>

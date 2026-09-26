@@ -117,11 +117,13 @@
     <string name="this_month">این ماه</string>
     <string name="last_week">هفته گذشته</string>
     <string name="last_month">ماه گذشته</string>
-    <!-- Refers to the time a contact was last seen. Shown below contact name in the profile. The placeholder will be replaced by date or time, resulting in "Last seen at 12:13 AM" or "Last seen Nov 12" -->
+    <!-- deprecated -->
     <string name="last_seen_at">آخرین بار در %1$s دیده شده</string>
-    <!-- Refers to the time a contact was last seen. Shown below contact name in the profile. The placeholder will be replaced by a relative point in time as "3 minutes ago" (see https://momentjs.com for more examples and languages) -->
+    <!-- deprecated -->
     <string name="last_seen_relative">آخرین بار دیده‌شده در %1$s</string>
+    <!-- deprecated -->
     <string name="last_seen_unknown">آخرین زمان مشاهده: نامشخص</string>
+
     <!-- Shown beside messages that are "N minutes old". Prefer short strings, or well-known abbreviations. -->
     <plurals name="n_minutes">
         <item quantity="one">%d دقیقه</item>
@@ -666,7 +668,7 @@
     <string name="import_backup_title">وارد کردن نسخه پشتیبانی</string>
     <string name="import_backup_ask">نسخه پشتیبانی در\"%1$s\" پیدا شد.\n\n آیا می‌خواهید همه داده‌ها و تنظیم‌ها از آن وارد شود؟</string>
     <string name="import_backup_no_backup_found">نسخهٔ پشتیبانی پیدا نشد.\n\n نسخهٔ پشتیبان را در«%1$s» کپی کرده و دوباره امتحان کنید.</string>
-    <!-- %1$s will be replaced by the failing address -->
+    <!-- deprecated, %1$s will be replaced by the failing address -->
     <string name="login_error_cannot_login">نمی‌توانیم به عنوان «%1$s» وارد شویم. لطفاً درستی نشانی رایانامه و گذرواژه را بررسی کنید. </string>
     <!-- TLS certificate checks -->
     <string name="accept_invalid_certificates">پذیرش گواهینامه‌های نامعتبر</string>
@@ -956,10 +958,13 @@
     <string name="qrscan_failed">امکان رمزگشایی کد کیوآر وجود ندارد</string>
     <string name="qrscan_ask_join_group">آیا می خواهید به گروه\"%1$s\" ملحق شوید؟</string>
     <string name="qrscan_ask_join_channel">آیا می‌خواهید عضو کانال «%1$s» شوید؟</string>
+    <!-- deprecated -->
     <string name="qrscan_fingerprint_mismatch">اثرانگشت اسکن شده با انچه که برای %1$sمشاهده شده بود انطباق ندارد. </string>
+    <!-- deprecated -->
     <string name="qrscan_no_addr_found">این کیوآر حاوی یک شناساگر است. ولی آدرس رایانامه‌ای در آن نیست. \n\n برای یک تأییدیه به روش‌های دیگر لطفا ابتدا یک ارتباط رمزگذاری شده با دریافت کننده برقرار کنید. </string>
     <string name="qrscan_contains_text">کیوآر کد اسکن شده:\n\n %1$s</string>
     <string name="qrscan_contains_url">آدرس اینترنتی کیوآر اسکن شده:\n\n %1$s</string>
+    <!-- deprecated -->
     <string name="qrscan_fingerprint_label">اثر انگشت</string>
     <string name="withdraw_verifycontact_explain">دیگران برای ارتباط با شما می‌توانند این کد کیوآر را اسکن کنند. \n\n می‌توان کد کیوآر را در اینجا غیر فعال کنید و با اسکن کردن مجدد، آن را فعال کنید. </string>
     <string name="withdraw_verifygroup_explain">این کد کیوآر می‌تواند توسط دیگران و برای پیوستن به گروه «%1$s» اسکن شود.\n\n شما می‌تواند این کد کیوآر را در اینجا غیرفعال کنید و با اسکن کردن مجدد، آن را فعال نمایید. </string>
@@ -1156,6 +1161,4 @@
     <string name="perm_enable_bg_reminder_title">برای دریافت پیام‌ها به صورت پس زمینه در دلتاچت این جا را ضربه بزنید. </string>
     <string name="perm_enable_bg_already_done">قبلا اجازه دسترسی به فعالیت در پس زمینه را به دلتاچت داده‌اید. \n\n اگر پیام‌ها هنوز هم در شرایط پس زمینه نمی‌آمد لطفا تنظیم‌های سیستم را نیز بررسی نمایید. </string>
 
-    <!-- device messages for updates -->
-    <string name="update_2_0">چه خبر هست؟\n\n💯 رمزنگاری سراسری اکنون قابل اعتماد و دائمی هست. قفل‌ها 🔒 دیگر نیستند!\n\n✉️ رایانامه معمولی بدون رمزنگاری سراسری هم‌اکنون با یک نشان حرفی نشان‌گذاری شده‌اند!\n\n🔲 دکمهٔ جدید برای دسترسی سریع به مینی برنامه‌های استفاده شده در چت\n\nلطفا برای مستقل ماندن ما و ادامه دادن بهبود‌ها کمک مالی کنید: %1$sدر صورتی که ساکن ایران هستید، رمزارز نیز می‌توانید بفرستید.</string>
     </resources>
