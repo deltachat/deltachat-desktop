@@ -121,11 +121,13 @@
     <string name="this_month">Tento mesiac</string>
     <string name="last_week">Minulý týždeň</string>
     <string name="last_month">Minulý mesiac</string>
-    <!-- Refers to the time a contact was last seen. Shown below contact name in the profile. The placeholder will be replaced by date or time, resulting in "Last seen at 12:13 AM" or "Last seen Nov 12" -->
+    <!-- deprecated -->
     <string name="last_seen_at">Naposledy videné o%1$s</string>
-    <!-- Refers to the time a contact was last seen. Shown below contact name in the profile. The placeholder will be replaced by a relative point in time as "3 minutes ago" (see https://momentjs.com for more examples and languages) -->
+    <!-- deprecated -->
     <string name="last_seen_relative">Naposledy videné %1$s</string>
+    <!-- deprecated -->
     <string name="last_seen_unknown">Naposledy videné: Neznáme</string>
+
     <!-- Call duration as shown in the call bubbles. There is some risk to mix with the sending time, so the word "Duration" may be helpful. Might also be "Duration: %d minutes", "%d-minute duration", "%d-minute length" or "%d-minute call" -->
     <plurals name="call_duration_minutes">
         <item quantity="one">Trvanie %d minútu</item>
@@ -596,6 +598,7 @@
     <string name="search_in">Hľadať v konverzácii %1$s</string>
     <string name="search_files">Hľadať súbory</string>
     <string name="search_explain">Vyhľadajte konverzácie, kontakty a správy</string>
+    <!-- deprecated, there is not much point to repeat the query, use emoji_search_results, or no headline at all -->
     <string name="search_result_for_x">Výsledky pre „%1$s“</string>
     <string name="search_no_result_for_x">Neboli nájdené žiadne výsledky pre „%s“</string>
     <!-- Adjective, as in "Show Unread Messages" -->
@@ -774,7 +777,7 @@
     <string name="import_backup_title">Importovať zálohu</string>
     <string name="import_backup_ask">Záloha sa našla v umiestnení „%1$s“.\n\nChcete z nej importovať a použiť všetky dáta a nastavenia?</string>
     <string name="import_backup_no_backup_found">Neboli nájdené žiadne zálohy.\n\nSkopírujte zálohu do priečinka „%1$s“ a skúste to znova.</string>
-    <!-- %1$s will be replaced by the failing address -->
+    <!-- deprecated, %1$s will be replaced by the failing address -->
     <string name="login_error_cannot_login">Nie je možné prihlásiť sa ako „%1$s“. Skontrolujte správnosť e-mailovej adresy a hesla.</string>
     <!-- TLS certificate checks -->
     <string name="accept_invalid_certificates">Prijať neplatné certifikáty</string>
@@ -1085,10 +1088,13 @@
     <string name="qrscan_failed">QR kód sa nepodarilo dekódovať</string>
     <string name="qrscan_ask_join_group">Chcete sa pridať k skupine „%1$s“?</string>
     <string name="qrscan_ask_join_channel">Chcete sa pridať ku kanálu \"%1$s\"?</string>
+    <!-- deprecated -->
     <string name="qrscan_fingerprint_mismatch">Naskenovaný odtlačok prsta sa nezhoduje s posledným zaznamenaným pre %1$s.</string>
+    <!-- deprecated -->
     <string name="qrscan_no_addr_found">Tento QR kód obsahuje odtlačok prsta bez e-mailovej adresy.\n\nANa nezávislé overenie najskôr prosím vytvorte šifrované pripojenie k príjemcovi.</string>
     <string name="qrscan_contains_text">Naskenovaný text QR kódu: \n\n%1$s</string>
     <string name="qrscan_contains_url">URL adresa z naskenovaného QR kódu:\n\n%1$s</string>
+    <!-- deprecated -->
     <string name="qrscan_fingerprint_label">Odtlačok prsta</string>
     <string name="withdraw_verifycontact_explain">Tento QR kód môžu naskenovať iní, aby vás mohli kontaktovať.\n\nKód môžete tiež obnoviť, ak chcete zneplatniť pôvodný QR kód alebo pozývací odkaz.</string>
     <string name="withdraw_verifygroup_explain">Tento QR kód môžu naskenovať ostatní, aby sa pridali ku skupine „%1$s“.\n\nKód môžete tiež obnoviť, ak chcete zneplatniť pôvodný QR kód alebo pozývací odkaz.</string>
@@ -1296,6 +1302,4 @@
     <string name="perm_enable_bg_reminder_title">Klepnutím sem prijmete správy, zatiaľ čo je Delta Chat na pozadí.</string>
     <string name="perm_enable_bg_already_done">Aplikácii Delta Chat ste už povolili príjem správ na pozadí.\n\nAk správy stále neprichádzajú na pozadí, skontrolujte tiež nastavenia systému.</string>
 
-    <!-- device messages for updates -->
-    <string name="update_2_0">Čo je nové?\n\n💯 Šifrovanie od zariadenia k zariadeniu je dostatočne spoľahlivé a od teraz predvolene natrvalo zapnuté. Zámky 🔒 znázorňujúce šifrovanie sa viac nezobrazujú!\n\n✉️ Správy doručované bežným e-mailom bez šifrovania od zariadenia k zariadeniu sú označené symbolom obálky\n\n😻 Nová vylepšená obrazovka profilu pre všetky kontakty\n\n🔲 Nové tlačidlo pre rýchly prístup k súkromným aplikáciám v konverzáciách\n\n❤️ Prosím, prispejte nám na vývoj, aby sme mohli zostať nezávislí a naďalej mohli prinášať vylepšenia: %1$s</string>
     </resources>

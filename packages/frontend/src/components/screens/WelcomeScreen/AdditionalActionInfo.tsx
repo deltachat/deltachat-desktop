@@ -42,6 +42,10 @@ export default function AdditionalActionInfo(props: Props) {
     return <p>{tx('instant_onboarding_group_info', welcomeQr.qr.grpname)}</p>
   } else if (welcomeQr.qr.kind === 'askVerifyContact') {
     return <p>{tx('instant_onboarding_contact_info', displayName)}</p>
+  } else if (welcomeQr.qr.kind === 'account') {
+    return <p>{tx('relay_login_hint', welcomeQr.qr.domain)}</p>
+  } else if (welcomeQr.qr.kind === 'login') {
+    return <p>{tx('relay_login_hint', welcomeQr.qr.address)}</p>
   }
 
   return null

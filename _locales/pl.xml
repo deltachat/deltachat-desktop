@@ -121,11 +121,31 @@
     <string name="this_month">Ten miesiąc</string>
     <string name="last_week">Ostatni tydzień</string>
     <string name="last_month">Ostatni miesiąc</string>
-    <!-- Refers to the time a contact was last seen. Shown below contact name in the profile. The placeholder will be replaced by date or time, resulting in "Last seen at 12:13 AM" or "Last seen Nov 12" -->
+    <!-- deprecated -->
     <string name="last_seen_at">Ostatnio widziano %1$s</string>
-    <!-- Refers to the time a contact was last seen. Shown below contact name in the profile. The placeholder will be replaced by a relative point in time as "3 minutes ago" (see https://momentjs.com for more examples and languages) -->
+    <!-- deprecated -->
     <string name="last_seen_relative">Ostatnio widziano %1$s</string>
+    <!-- deprecated -->
     <string name="last_seen_unknown">Ostatnio widziano: nie wiadomo</string>
+
+    <!-- A contact was seen a number of month ago. The string is at places with few space, so stay as short as possible. -->
+    <plurals name="seen_n_months_ago">
+        <item quantity="one">Widziano %d miesiąc temu</item>
+        <item quantity="few">Widziano %d miesiące temu</item>
+        <item quantity="many">Widziano %d miesięcy temu</item>
+        <item quantity="other">Widziano %d miesiąca temu</item>
+    </plurals>
+    <!-- A contact was never seen (as added by others to a group or created by a vcard). The string is at places with few space, so stay as short as possible. -->
+    <string name="never_seen">Nigdy nie widziano</string>
+
+    <!-- deprecated -->
+    <plurals name="seen_n_years_ago">
+        <item quantity="one">Widziano %d rok temu</item>
+        <item quantity="few">Widziano %d lata temu</item>
+        <item quantity="many">Widziano %d lat temu</item>
+        <item quantity="other">Widziano %d roku temu</item>
+    </plurals>
+
     <!-- Call duration as shown in the call bubbles. There is some risk to mix with the sending time, so the word "Duration" may be helpful. Might also be "Duration: %d minutes", "%d-minute duration", "%d-minute length" or "%d-minute call" -->
     <plurals name="call_duration_minutes">
         <item quantity="one">Czas trwania %d minuta</item>
@@ -261,6 +281,8 @@
     <!-- short for "Browse through the App Picker/Store/Catalogue"; could also be translated as "Discover" or "Search" -->
     <string name="browse">Przeglądaj</string>
     <string name="unknown">Nieznany</string>
+    <string name="unnamed">Nienazwany</string>
+
     <string name="green">Zielony</string>
     <string name="red">Czerwony</string>
     <string name="blue">Niebieski</string>
@@ -269,6 +291,9 @@
     <string name="purple">Fioletowy</string>
     <string name="magenta">Magenta</string>
     <string name="white">Biały</string>
+
+    <!-- Used to display some progress in percent. Placeholder will be replaced by a number, resulting in eg. "50%", which may be translated to "50 %" in French or "%50" in Turkish.  -->
+    <string name="progress_percent">%1$d%%</string>
 
     <string name="zoom">Powiększenie</string>
     <string name="extra_small">Bardzo małe</string>
@@ -395,6 +420,8 @@
     <string name="unpin_chat">Odepnij czat</string>
     <!-- Verb "to pin", making something sticky, not a noun or abbreviation for "pin number". -->
     <string name="pin">Przypnij</string>
+    <!-- Adj. of "pin", describing a state of being pinned. -->
+    <string name="pinned">Przypięty</string>
     <!-- Opposite of "Pin chat", removing the sticky-state from a chat. -->
     <string name="unpin">Odepnij</string>
     <string name="ConversationFragment_quoted_message_not_found">Nie znaleziono oryginalnej wiadomości</string>
@@ -540,6 +567,12 @@
         <item quantity="many">%d nowe wiadomości</item>
         <item quantity="other">%d nowych wiadomości</item>
     </plurals>
+    <plurals name="chat_n_unread_messages">
+        <item quantity="one">%1$d nieprzeczytana wiadomość</item>
+        <item quantity="few">%1$d nieprzeczytane wiadomości</item>
+        <item quantity="many">%1$d nieprzeczytanych wiadomości</item>
+        <item quantity="other">%1$d nieprzeczytanej wiadomości</item>
+    </plurals>
     <!-- The placeholder will be replaced by the name of the recipient in a one-to-one chat. -->
     <string name="chat_new_one_to_one_hint">Wyślij wiadomość do %1$s.</string>
     <!-- consider keeping the term "channel" as in WhatsApp or Telegram -->
@@ -597,6 +630,7 @@
     <string name="search_in">Wyszukaj w %1$s</string>
     <string name="search_files">Szukaj plików</string>
     <string name="search_explain">Wyszukaj czaty, kontakty i wiadomości</string>
+    <!-- deprecated, there is not much point to repeat the query, use emoji_search_results, or no headline at all -->
     <string name="search_result_for_x">Wynik dla „%1$s”</string>
     <string name="search_no_result_for_x">Nie znaleziono wyników dla „%s</string>
     <!-- Adjective, as in "Show Unread Messages" -->
@@ -762,11 +796,15 @@
     <!-- deprecated -->
     <string name="hidden_from_contacts">Ukryty w kontaktach</string>
     <string name="enforce_e2ee">Wymuś szyfrowanie dla wszystkich przekaźników</string>
+    <!-- Hint for the list of relays -->
+    <string name="transport_list_hint">Przekaźniki służą do wysyłania i odbierania wiadomości. Korzystanie z więcej niż jednego z nich zapewnia niezawodność połączenia.</string>
     <!-- shown if a QR code was scanned that can be used as a relay -->
     <string name="confirm_add_transport">Dodać ten serwer przekaźnikowy?</string>
     <string name="invalid_transport_qr">Zeskanowany kod QR zawiera nieprawidłowy serwer przekaźnikowy.</string>
+    <!-- placeholder will be replaced by a relay server name -->
+    <string name="confirm_remove_relay_x">Usunąć przekaźnik „%1$s”?</string>
     <!-- deprecated -->
-    <string name="confirm_remove_or_hide_transport_x">Usuń przekaźnik „%1$s”?\n\nKontakty, które znają tylko ten przekaźnik, mogą nie dotrzeć do ciebie, dopóki nie wyślesz do nich ponownej wiadomości.\n\nW razie wątpliwości ukryj go, zamiast usuwać.</string>
+    <string name="confirm_remove_or_hide_transport_x">Usunąć przekaźnik „%1$s”?\n\nKontakty, które znają tylko ten przekaźnik, mogą nie dotrzeć do ciebie, dopóki nie wyślesz do nich ponownej wiadomości.\n\nW razie wątpliwości ukryj go, zamiast usuwać.</string>
     <string name="login_certificate_checks">Sprawdzanie certyfikatów</string>
     <string name="login_error_mail">Podaj ważny adres e-mail</string>
     <string name="login_error_server">Wprowadź poprawny adres serwera / IP</string>
@@ -775,7 +813,7 @@
     <string name="import_backup_title">Przywróć z kopii zapasowej</string>
     <string name="import_backup_ask">Znaleziono kopię zapasową w katalogu „%1$s”.\n\nChcesz zaimportować i używać wszystkich danych i ustawień z tej kopii?</string>
     <string name="import_backup_no_backup_found">Nie znaleziono kopii zapasowej.\n\nSkopiuj kopię zapasową do katalogu „%1$s” i spróbuj ponownie.</string>
-    <!-- %1$s will be replaced by the failing address -->
+    <!-- deprecated, %1$s will be replaced by the failing address -->
     <string name="login_error_cannot_login">Nie można się zalogować jako „%1$s. Sprawdź, czy adres i hasło są poprawne.</string>
     <!-- TLS certificate checks -->
     <string name="accept_invalid_certificates">Zaakceptuj nieprawidłowe certyfikaty</string>
@@ -1086,10 +1124,13 @@
     <string name="qrscan_failed">Nie udało się zdekodować kodu QR</string>
     <string name="qrscan_ask_join_group">Czy chcesz dołączyć do grupy „%1$s?</string>
     <string name="qrscan_ask_join_channel">Czy chcesz dołączyć do kanału „%1$s”?</string>
+    <!-- deprecated -->
     <string name="qrscan_fingerprint_mismatch">Zeskanowany odcisk palca nie pasuje do ostatnio widzianego u %1$s.</string>
+    <!-- deprecated -->
     <string name="qrscan_no_addr_found">Ten kod QR zawiera odcisk palca, ale nie zawiera adresu.\n\nW celu weryfikacji poza zasadniczym pasmem należy najpierw nawiązać szyfrowane połączenie z odbiorcą.</string>
     <string name="qrscan_contains_text">Zeskanowany kod QR zawiera następujący tekst:\n\n%1$s</string>
     <string name="qrscan_contains_url">Zeskanowany kod QR zawiera następujący adres:\n\n%1$s</string>
+    <!-- deprecated -->
     <string name="qrscan_fingerprint_label">Odciski palca</string>
     <string name="withdraw_verifycontact_explain">Inni użytkownicy mogą zeskanować ten kod QR, aby się z tobą skontaktować.\n\nMożesz go zresetować, aby istniejący kod QR lub link zaproszenia przestał działać.</string>
     <string name="withdraw_verifygroup_explain">Inni użytkownicy mogą zeskanować ten kod QR, aby dołączyć do grupy „%1$s”.\n\nMożesz go zresetować, aby istniejący kod QR lub link zaproszenia przestał działać.</string>
@@ -1115,6 +1156,8 @@
     <string name="qraccount_qr_code_cannot_be_used">Zeskanowanego kodu QR nie można użyć do założenia nowego konta.</string>
     <!-- the placeholder will be replaced by the address of the profile -->
     <string name="qrlogin_ask_login">Zalogować się do „%1$s”?</string>
+    <!-- the placeholder will be replaced by a domain that is preferred for relaying messages. smth as "Using foo.example.org" -->
+    <string name="relay_login_hint">Używanie %1$s</string>
     <!-- first placeholder will be replaced by name of the inviter, second placeholder will be replaced by the name of the inviter. -->
     <string name="secure_join_started">Użytkownik %1$s zaprosił cię do dołączenia do tej grupy.\n\nCzekam na odpowiedź urządzenia %2$s…</string>
     <!-- first placeholder will be replaced by name of the inviter, second placeholder will be replaced by the name of the inviter. -->
@@ -1167,6 +1210,8 @@
     <string name="perm_explain_access_to_storage_denied">Aby odbierać lub wysyłać pliki, przejdź do ustawień aplikacji, wybierz „Uprawnienia” i włącz „Pamięć”.</string>
     <string name="perm_explain_access_to_location_denied">Aby dołączyć lokalizację, przejdź do ustawień aplikacji, wybierz „Uprawnienia” i włącz „Lokalizacja”.</string>
     <string name="perm_explain_access_to_notifications_denied">Aby odbierać powiadomienia, przejdź do ustawień systemu „Ustawienia » Aplikacje » Delta Chat” i włącz „Powiadomienia”.</string>
+    <string name="perm_explain_local_network_denied">Delta Chat wymaga uprawnienia „Urządzenia w pobliżu”, aby łączyć się z urządzeniami w sieci lokalnej. Możesz je skonfigurować w sekcji Aplikacje » Delta Chat » Uprawnienia.</string>
+
     <!-- ImageEditorHud -->
     <string name="ImageEditorHud_draw_anywhere_to_blur">Rysuj gdziekolwiek, aby rozmyć</string>
     <string name="ImageEditorHud_add_text">Dodaj tekst</string>
@@ -1306,5 +1351,16 @@
     <string name="perm_enable_bg_already_done">Pozwolono już Delta Chat na odbieranie wiadomości w tle.\n\nJeśli wiadomości nadal nie docierają w tle, sprawdź też ustawienia systemu.</string>
 
     <!-- device messages for updates -->
-    <string name="update_2_0">Co nowego?\n\n💯 Szyfrowanie end-to-end jest niezawodne i na zawsze. Kłódki 🔒 odchodzą w zapomnienie!\n\n✉️ Klasyczna poczta e-mail bez szyfrowania end-to-end jest oznaczona symbolem litery.\n\n😻 Nowy, ulepszony ekran profilu dla wszystkich kontaktów.\n\n🔲 Nowy przycisk szybkiego dostępu do aplikacji używanych na czacie.\n\n❤️ Prosimy o darowizny, które pomogą nam zachować niezależność i stale wprowadzać ulepszenia: %1$s</string>
-    </resources>
+    <string name="update_2_6">Zobacz, co nowego!\n\n🌐 Twoje wiadomości są teraz przesyłane w inteligentniejszy sposób: dzięki wielu węzłom przekaźnikowym awaria jednego z nich nie przerwie ich dostarczania\n\n📞 Funkcja połączeń dojrzała i nie jest już w fazie eksperymentalnej\n\n📢 Kanały zyskują interaktywność dzięki reakcjom\n\n✍️ Dodaj opis czatu, aby nikt nie musiał się zastanawiać, czego on dotyczy\n\n👌 Wysyłane zdjęcia są teraz wyraźniejsze\n\n🔵 Oznaczaj czaty jako nieprzeczytane, aby o nich nie zapomnieć</string>
+    <string name="update_2_6_android_additions">🐇 Przyspieszanie i automatyczne odtwarzanie wiadomości głosowych\n\nWreszcie: mamy podstawowy wybór naklejek!</string>
+    <string name="update_2_6_desktop_additions">🐇 Przyspieszanie i automatyczne odtwarzanie wiadomości głosowych\n\n⏯️ Nowy odtwarzacz audio\n\n✅ Wybór wielu wiadomości do przekazania lub usunięcia\n\nWreszcie: mamy podstawowy wybór naklejek!</string>
+    <string name="update_2_6_ios_additions">🎤 Odtwarzaj wiadomości głosowe w tle</string>
+    <string name="update_2_6_end">Jeśli możesz, przekaż darowiznę, aby pomóc nam zachować niezależność i nadal wprowadzać ulepszenia ❤️ https://delta.chat/donate</string>
+
+    <!-- The placeholder will be replaced by a version name, e.g. "v2.50.0" -->
+    <string name="update_available_msg">🎉 Dostępna jest nowa wersja %1$s. Dotknij tę wiadomość, aby zaktualizować aplikację i korzystać z nowych funkcji.</string>
+    <!-- The placeholder will be replaced by a version name, e.g. "Downloading v2.50.0 …" -->
+    <string name="update_downloading">Pobieranie %1$s …</string>
+    <string name="update_now">Zaktualizuj teraz</string>
+    <string name="update_install_permission_explain">Aby zainstalować aktualizację, najpierw zezwól aplikacji Delta Chat na instalowanie aplikacji w ustawieniach systemu.</string>
+</resources>

@@ -94,11 +94,13 @@
     <string name="this_month">Tháng này</string>
     <string name="last_week">Tuần trước</string>
     <string name="last_month">Tháng trước</string>
-    <!-- Refers to the time a contact was last seen. Shown below contact name in the profile. The placeholder will be replaced by date or time, resulting in "Last seen at 12:13 AM" or "Last seen Nov 12" -->
+    <!-- deprecated -->
     <string name="last_seen_at">Nhìn thấy lần cuối lúc %1$s</string>
-    <!-- Refers to the time a contact was last seen. Shown below contact name in the profile. The placeholder will be replaced by a relative point in time as "3 minutes ago" (see https://momentjs.com for more examples and languages) -->
+    <!-- deprecated -->
     <string name="last_seen_relative">Nhìn thấy lần cuối %1$s</string>
+    <!-- deprecated -->
     <string name="last_seen_unknown">Nhìn thấy lần cuối: Không rõ</string>
+
     <!-- Shown beside messages that are "N minutes old". Prefer short strings, or well-known abbreviations. -->
     <plurals name="n_minutes">
         <item quantity="other">%d phút</item>
@@ -477,7 +479,7 @@
     <string name="import_backup_title">Khôi phục từ bản sao lưu</string>
     <string name="import_backup_ask">Đã tìm thấy bản sao lưu tại \"%1$s\".\n\nBạn có muốn nhập và sử dụng tất cả dữ liệu cũng như cài đặt từ nó không?</string>
     <string name="import_backup_no_backup_found">Không tìm thấy bản sao lưu nào.\n\nSao chép bản sao lưu vào \"%1$s\" và thử lại.</string>
-    <!-- %1$s will be replaced by the failing address -->
+    <!-- deprecated, %1$s will be replaced by the failing address -->
     <string name="login_error_cannot_login">Không thể đăng nhập với tên \"%1$s\". Vui lòng kiểm tra xem địa chỉ e-mail và mật khẩu có đúng không.</string>
     <!-- TLS certificate checks -->
     <string name="accept_invalid_certificates">Chấp nhận chứng chỉ không hợp lệ</string>
@@ -711,10 +713,13 @@
     <string name="qrscan_hint">Giữ máy ảnh của bạn phía trên mã QR.</string>
     <string name="qrscan_failed">Mã QR không thể giải mã được</string>
     <string name="qrscan_ask_join_group">Bạn có muốn tham gia nhóm \"%1$s\" không?</string>
+    <!-- deprecated -->
     <string name="qrscan_fingerprint_mismatch">Dấu vân tay được quét không khớp với dấu vân tay được nhìn thấy lần cuối trong %1$s.</string>
+    <!-- deprecated -->
     <string name="qrscan_no_addr_found">Mã QR này chứa dấu vân tay nhưng không có địa chỉ email.\n\nĐể xác minh ngoài băng tần, trước tiên vui lòng thiết lập kết nối được mã hóa với người nhận.</string>
     <string name="qrscan_contains_text">Văn bản mã QR được quét:\n\n%1$s</string>
     <string name="qrscan_contains_url">URL mã QR được quét:\n\n%1$s</string>
+    <!-- deprecated -->
     <string name="qrscan_fingerprint_label">Dấu vân tay</string>
     <string name="withdraw_verifycontact_explain">Người khác có thể quét mã QR này để liên hệ với bạn.\n\nBạn có thể tắt mã QR tại đây và kích hoạt lại bằng cách quét lại.</string>
     <string name="withdraw_verifygroup_explain">Những người khác có thể quét mã QR này để tham gia nhóm \"%1$s\".\n\nBạn có thể tắt mã QR tại đây và kích hoạt lại bằng cách quét lại.</string>

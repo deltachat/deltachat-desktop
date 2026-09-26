@@ -2,6 +2,64 @@
 
 All notable changes to this project will be documented in this file.
 
+<a id="2_62_0"></a>
+## [2.62.0] - 2026-09-23
+
+### Added
+
+- Adding a relay: show a progress bar and allow to cancel
+- Notifications are now grouped by chat on some platforms
+- Show all reactions in the "Reactions" dialog grouped by emoji ("pills"), including the total count, and update the dialog live
+- More support for Delta Chat links in search ([#6752](https://github.com/deltachat/deltachat-desktop/issues/6752))
+- "Load Remote Images" option is now also available in the "View" menu, for better screen reader accessibility ([#6745](https://github.com/deltachat/deltachat-desktop/issues/6745))
+- New languages: Hebrew and Belarusian ([#6761](https://github.com/deltachat/deltachat-desktop/issues/6761))
+
+### Changed
+
+- Relays: the primary relay can now be removed, and removing a relay deletes it immediately
+- Relays: removed the "default relay" setting ([#6747](https://github.com/deltachat/deltachat-desktop/issues/6747))
+- Email addresses are no longer shown for your profiles in the profile list and settings ([#6762](https://github.com/deltachat/deltachat-desktop/issues/6762))
+- Contacts are no longer shown as "verified" (see [FAQ](https://delta.chat/en/help#e2eeguarantee)) ([#6753](https://github.com/deltachat/deltachat-desktop/issues/6753))
+- Onboarding: show a generic privacy policy link instead of a relay-specific one ([#6746](https://github.com/deltachat/deltachat-desktop/issues/6746))
+- Better-looking toast widget ([#6714](https://github.com/deltachat/deltachat-desktop/issues/6714), [#6728](https://github.com/deltachat/deltachat-desktop/issues/6728), [#6746](https://gith ub.com/deltachat/deltachat-desktop/issues/6746))
+
+- Notifications no longer repeat the app name
+
+### Fixed
+
+- Camera not working on PipeWire-based Linux distributions ([#6604](https://github.com/deltachat/deltachat-desktop/issues/6604))
+- Tray menu: bring back a hidden window, and enable "Minimize" when appropriate ([#6737](https://github.com/deltachat/deltachat-desktop/issues/6737), [#6741](https://github.com/deltachat/deltachat-desktop/issues/6741))
+- Portable mode (Windows): store the Electron cache in the portable folder and don't register as protocol handler ([#6742](https://github.com/deltachat/deltachat-desktop/issues/6742))
+- Linux: set correct WMClass ([#6559](https://github.com/deltachat/deltachat-desktop/issues/6559))
+- macOS: hide the "Hide Window Menu Bar" setting, as it has no effect there ([#6670](https://github.com/deltachat/deltachat-desktop/issues/6670))
+- Links containing scheme-like words were not linkified correctly ([#6698](https://github.com/deltachat/deltachat-desktop/issues/6698))
+- Message multiselect being reset when clicking a button
+- Contents of "Show Full Message..." not being focusable
+- Focus not returning to the previous element after a dialog closes
+- Dialogs staying open after switching profiles ([#6727](https://github.com/deltachat/deltachat-desktop/issues/6727))
+- Audio player overflowing on small screens ([#6603](https://github.com/deltachat/deltachat-desktop/issues/6603))
+- Show a hint when trying to edit a group you are no longer a member of ([#6744](https://github.com/deltachat/deltachat-desktop/issues/6744))
+- Catch possible errors when loading apps (webxdc) with broken or oversized icons ([#6723](https://github.com/deltachat/deltachat-desktop/issues/6723), [#6724](https://github.com/deltachat/deltachat-desktop/issues/6724))
+- Faster profile switching and faster "Ctrl + Up" (edit last message) in long chats
+
+### Removed
+
+- Setting to enable developer tools for apps (WebXDC): instead we will show a dialog prompt every time you try to open developer tools ([#6654](https://github.com/deltachat/deltachat-desktop/issues/6654))
+- Undocumented `drag-file-out` WebXDC API ([#6726](https://github.com/deltachat/deltachat-desktop/issues/6726))
+- Migration of profiles from very old Delta Chat versions ([#6755](https://github.com/deltachat/deltachat-desktop/issues/6755))
+
+### Miscellaneous Tasks
+
+- Upgrade Electron to 43 ([#6718](https://github.com/deltachat/deltachat-desktop/issues/6718))
+- Upgrade core to [2.62.0](https://github.com/chatmail/core/blob/v2.62.0/CHANGELOG.md) ([#6731](https://github.com/deltachat/deltachat-desktop/issues/6731)), notable changes:
+  - Onboarding adds multiple relays
+  - Contacts are informed automatically when you change your relays
+  - Messages are fetched from all relays in the background, and sent via the fastest relay on first setup
+  - Better image quality when sending images
+  - No more "member added" messages in channels
+  - No notifications for reactions or missed calls from blocked contacts
+  - Email addresses are no longer stored in location files and export filenames
+
 <a id="2_59_1"></a>
 ## [2.59.1] - 2026-08-22
 
@@ -4277,7 +4335,8 @@ This section is only relevant to contributors.
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.59.1...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.62.0...HEAD
+[2.62.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.59.1...v2.62.0
 [2.59.1]: https://github.com/deltachat/deltachat-desktop/compare/v2.59.0...v2.59.1
 [2.59.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.57.0...v2.59.0
 [2.57.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.56.0...v2.57.0

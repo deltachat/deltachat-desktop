@@ -89,11 +89,13 @@
     <string name="this_month">Bulan ini</string>
     <string name="last_week">Minggu lalu</string>
     <string name="last_month">Bulan lalu</string>
-    <!-- Refers to the time a contact was last seen. Shown below contact name in the profile. The placeholder will be replaced by date or time, resulting in "Last seen at 12:13 AM" or "Last seen Nov 12" -->
+    <!-- deprecated -->
     <string name="last_seen_at">Terakhir terlihat di %1$s</string>
-    <!-- Refers to the time a contact was last seen. Shown below contact name in the profile. The placeholder will be replaced by a relative point in time as "3 minutes ago" (see https://momentjs.com for more examples and languages) -->
+    <!-- deprecated -->
     <string name="last_seen_relative">Terakhir terlihat %1$s</string>
+    <!-- deprecated -->
     <string name="last_seen_unknown">Terakhir terlihat: Tidak diketahui</string>
+
     <!-- Shown beside messages that are "N minutes old". Prefer short strings, or well-known abbreviations. -->
     <plurals name="n_minutes">
         <item quantity="other">%d menit</item>
@@ -369,7 +371,7 @@
     <string name="import_backup_title">Impor cadangan</string>
     <string name="import_backup_ask">Cadangan ditemukan di \"%1$s\".\n\n Apakah Anda ingin mengimpor dan menggunakan semua data dan pengaturan darinya?</string>
     <string name="import_backup_no_backup_found">Cadangan tidak ketemu.\n\nKopi cadangan ke \"%1$s\" dan coba lagi.</string>
-    <!-- %1$s will be replaced by the failing address -->
+    <!-- deprecated, %1$s will be replaced by the failing address -->
     <string name="login_error_cannot_login">Tidak bisa login sebagai \"%1$s\". Mohon cek apakah alamat surel dan kata sandi benar.</string>
     <!-- TLS certificate checks -->
     <string name="accept_invalid_certificates">Terima sertifikat yang tidak sah</string>
@@ -510,6 +512,7 @@
     <string name="qrscan_ask_join_group">Apakah anda ingin bergabung dengan grup \"%1$s\"?</string>
     <string name="qrscan_contains_text">Kode QR yang dipindai text:\n\n%1$s</string>
     <string name="qrscan_contains_url">Kode QR yang dipindai URL:\n\n%1$s</string>
+    <!-- deprecated -->
     <string name="qrscan_fingerprint_label">Sidik jari</string>
     <string name="qrshow_title">Kode undangan QR</string>
     <string name="qrshow_x_joining">%1$sbergabung.</string>

@@ -116,11 +116,13 @@
     <string name="this_month">Aggur-a </string>
     <string name="last_week">Dduṛt yezrin</string>
     <string name="last_month">Aggur yezrin</string>
-    <!-- Refers to the time a contact was last seen. Shown below contact name in the profile. The placeholder will be replaced by date or time, resulting in "Last seen at 12:13 AM" or "Last seen Nov 12" -->
+    <!-- deprecated -->
     <string name="last_seen_at">yettwaẓer i tikkelt taneggarut ɣef %1$s</string>
-    <!-- Refers to the time a contact was last seen. Shown below contact name in the profile. The placeholder will be replaced by a relative point in time as "3 minutes ago" (see https://momentjs.com for more examples and languages) -->
+    <!-- deprecated -->
     <string name="last_seen_relative">yettwaẓer i tikkelt taneggarut %1$s</string>
+    <!-- deprecated -->
     <string name="last_seen_unknown">yettwaẓer i tikkelt taneggarut: Arussin</string>
+
     <!-- Call duration as shown in the call bubbles. There is some risk to mix with the sending time, so the word "Duration" may be helpful. Might also be "Duration: %d minutes", "%d-minute duration", "%d-minute length" or "%d-minute call" -->
     <plurals name="call_duration_minutes">
         <item quantity="one">tanzagt n %d n tesdat</item>
@@ -694,7 +696,7 @@
     <string name="import_backup_title">Err-d seg uḥraz</string>
     <string name="import_backup_ask">Aḥraz yettwaf di \"%1$s\".\n\nTebɣiḍ ad d-tketreḍ u ad tesqedceḍ akk isefka d yiɣewwaren seg-s?</string>
     <string name="import_backup_no_backup_found">Ulac Iḥrazen yettwafen.\n\nNɣel aḥraz ɣer \"%1$s\" sakin ɛreḍ tikelt nniḍen.</string>
-    <!-- %1$s will be replaced by the failing address -->
+    <!-- deprecated, %1$s will be replaced by the failing address -->
     <string name="login_error_cannot_login">Ur izmir ara ad yeqqen am \"%1$s\". Ma ulac aɣilif, senqed ma yella tansa d wawal uffir d tameɣtut.</string>
     <!-- TLS certificate checks -->
     <string name="accept_invalid_certificates">Qbel iselkan arameɣtu</string>
@@ -994,10 +996,13 @@
     <string name="qrscan_failed">Tangalt QR ur tezmir ara ad ttwakestengel</string>
     <string name="qrscan_ask_join_group">Tebɣiḍ ad tettekkiḍ deg ugraw \"%1$s\"?</string>
     <string name="qrscan_ask_join_channel">Tebɣiḍ ad tettekkiḍ deg ubadu \"%1$s\"?</string>
+    <!-- deprecated -->
     <string name="qrscan_fingerprint_mismatch">Adsil umḍin yettwaḍummen ur imṣada ara akked win yettwaẓerren i tikelt taneggarut i %1$s.</string>
+    <!-- deprecated -->
     <string name="qrscan_no_addr_found">Tangalt-a QR tegber adsil umḍin maca ulac tansa.\n\nI usenqed beṛṛa n tasfift, ttxil-k-im eg tuqqna tawgelhant akked uɣerwaḍ. </string>
     <string name="qrscan_contains_text">Aḍris n tengalt QR yettwaḍummen:\n\n%1$s</string>
     <string name="qrscan_contains_url">URL n tangalt QR yettwaḍummen:\n\n%1$s</string>
+    <!-- deprecated -->
     <string name="qrscan_fingerprint_label">Adsil umḍin</string>
     <string name="withdraw_verifycontact_explain">Tangalt-a QR tezmer ad tt-id-ḍummen wiyaḍ akken ad k·m-id-nermsen.\n\nTzemreḍ ad talseḍ awennez, akken tangalt QR yellan neɣ aseɣwen n uεraḍ ur iteddu ara.</string>
     <string name="withdraw_verifygroup_explain">Tangalt-a QR tezmer ad tt-id-ḍummen wiyaḍ akken ad kecmen ɣer ugraw \"%1$s\".\n\nTzemreḍ ad talseḍ awennez, akken tangalt QR yellan neɣ aseɣwen n uεraḍ ur iteddu ara.</string>
@@ -1194,6 +1199,4 @@
     <string name="perm_enable_bg_reminder_title">Sit dagi akken ad tremseḍ iznan ticki Delta Chat yella deg ugilal.</string>
     <string name="perm_enable_bg_already_done">Tsirgeḍ yakan Delta Chat i wakken ad d-remseḍ iznan deg ugilal.\n\nMa yella iznan ur d-ttawḍen ara deg ugilal, ttxil-k·m senqed daɣen iɣewwaṛen n unagraw.</string>
 
-    <!-- device messages for updates -->
-    <string name="update_2_0">D acu i d amaynut?\n\n💯Awgelhen n yixef ɣer yixef d ayen iɣef ara tettekleḍ u i lebda. Inekcaman 🔒 ruḥen!\n\n✉️ Imayl aklasik war awgelhen yettwacreḍ s usekkil azamulan.\n\n 😻 Agdil amaynut yettwasneflin n umaɣnu i akk inermisen-ik·im\n\n🔲 Taqeffalt tamaynutt i unekcum uzrib ɣer yisnasen yettwasqedcen deg udiwenni usrid\n\n❤️ Ma ulac aɣilif mudd-aɣ-d afus akken ad neqqim d imunanen, daɣen ad nkemmel ad d-nawi asnerni: %1$s</string>
     </resources>

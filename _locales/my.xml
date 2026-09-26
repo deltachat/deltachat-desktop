@@ -121,11 +121,13 @@
     <string name="this_month">ဒီလ</string>
     <string name="last_week">ပြီးခဲ့သောအပတ်က</string>
     <string name="last_month">ပြီးခဲ့တဲ့လက</string>
-    <!-- Refers to the time a contact was last seen. Shown below contact name in the profile. The placeholder will be replaced by date or time, resulting in "Last seen at 12:13 AM" or "Last seen Nov 12" -->
+    <!-- deprecated -->
     <string name="last_seen_at">%1$sမှာ နောက်ဆုံးတွေ့ရှိခဲ့</string>
-    <!-- Refers to the time a contact was last seen. Shown below contact name in the profile. The placeholder will be replaced by a relative point in time as "3 minutes ago" (see https://momentjs.com for more examples and languages) -->
+    <!-- deprecated -->
     <string name="last_seen_relative">နောက်ဆုံးတွေ့ခန် %1$s</string>
+    <!-- deprecated -->
     <string name="last_seen_unknown">နောက်ဆုံးတွေ့ချိန်- မသိရ</string>
+
     <!-- Call duration as shown in the call bubbles. There is some risk to mix with the sending time, so the word "Duration" may be helpful. Might also be "Duration: %d minutes", "%d-minute duration", "%d-minute length" or "%d-minute call" -->
     <plurals name="call_duration_minutes">
         <item quantity="other">%dမိနစ်ကြာချိန် </item>
@@ -537,6 +539,7 @@
     <string name="search_in">%1$s တွင် ရှာဖွေပါ</string>
     <string name="search_files">ဖိုင်များကို ရှာဖွေပါ</string>
     <string name="search_explain">မက်ဆေ့ချ်များကို ရှာဖွေပါ</string>
+    <!-- deprecated, there is not much point to repeat the query, use emoji_search_results, or no headline at all -->
     <string name="search_result_for_x">%1$s အတွက် ရှာဖွေမှုရလဒ်များ</string>
     <string name="search_no_result_for_x">\"%s\" အတွက် ရလဒ်မရှိပါ</string>
     <!-- Adjective, as in "Show Unread Messages" -->
@@ -709,7 +712,7 @@
     <string name="import_backup_title">မိတ္တူကို တင်သွင်းပါ</string>
     <string name="import_backup_ask">မိတ္တူမှ ဒေတာများကို တင်သွင်းမည်လား?</string>
     <string name="import_backup_no_backup_found">မိတ္တူ ရှာမတွေ့ပါ</string>
-    <!-- %1$s will be replaced by the failing address -->
+    <!-- deprecated, %1$s will be replaced by the failing address -->
     <string name="login_error_cannot_login">လော့ဂ်အင်ဝင်၍မရပါ- %1$s</string>
     <!-- TLS certificate checks -->
     <string name="accept_invalid_certificates">မမှန်ကန်သော လက်မှတ်များကို လက်ခံပါ</string>
@@ -1014,10 +1017,13 @@
     <string name="qrscan_failed">QR စကင်ဖတ်ခြင်း မအောင်မြင်ပါ</string>
     <string name="qrscan_ask_join_group">ဤအဖွဲ့သို့ ဝင်မည်လား?</string>
     <string name="qrscan_ask_join_channel">ဤချန်နယ်သို့ ဝင်မည်လား?</string>
+    <!-- deprecated -->
     <string name="qrscan_fingerprint_mismatch">လက်ဗွေရာ မကိုက်ညီပါ</string>
+    <!-- deprecated -->
     <string name="qrscan_no_addr_found">လိပ်စာ ရှာမတွေ့ပါ</string>
     <string name="qrscan_contains_text">၎င်းတွင် စာသားပါဝင်သည်</string>
     <string name="qrscan_contains_url">၎င်းတွင် လင့်ခ်ပါဝင်သည်</string>
+    <!-- deprecated -->
     <string name="qrscan_fingerprint_label">လက်ဗွေရာ</string>
     <string name="withdraw_verifycontact_explain">အဆက်အသွယ် အတည်ပြုခြင်းကို ရုပ်သိမ်းမည်လား?</string>
     <string name="withdraw_verifygroup_explain">အဖွဲ့ အတည်ပြုခြင်းကို ရုပ်သိမ်းမည်လား?</string>
@@ -1233,6 +1239,4 @@
     <string name="perm_enable_bg_reminder_title">ဒယ်လ်တာချတ်ကို နောက်ခံတွင် ဖွင့်ထားစဉ် မက်ဆေ့ချ်များ လက်ခံရရှိရန် ဤနေရာကို နှိပ်ပါ။</string>
     <string name="perm_enable_bg_already_done">ဒယ်လ်တာချတ်ကို နောက်ခံမှာ မက်ဆေ့ချ်တွေ လက်ခံခွင့်ပြုပြီးပါပြီ။\n\nမက်ဆေ့ချ်တွေ နောက်ခံမှာ မရောက်သေးဘူးဆိုရင် စနစ်ဆက်တင်များကိုလည်း စစ်ဆေးပါ။</string>
 
-    <!-- device messages for updates -->
-    <string name="update_2_0">အသစ်အဆန်းတွေက ဘာတွေလဲ။\n\n💯 အဆုံးမှအဆုံး ကုဒ်ဝှက်စနစ်က ယုံကြည်စိတ်ချရပြီး ထာဝရဖြစ်နေပါပြီ။ သော့ခလောက်တွေ🔒 မရှိတော့ပါ။\n\n ✉️ အဆုံးမှအဆုံး ကုဒ်ဝှက်စနစ်မပါတဲ့ ဂန္ထဝင်အီးမေးလ်ကို အက္ခရာသင်္ကေတနဲ့ မှတ်သားထားပါတယ်။\n\n😻 သင့်အဆက်အသွယ်အားလုံးအတွက် မြှင့်တင်ထားတဲ့ ပရိုဖိုင်မျက်နှာပြင်အသစ်\n\n🔲 ချတ်မှာအသုံးပြုတဲ့ အက်ပ်တွေကို အမြန်ဝင်ရောက်နိုင်ဖို့ ခလုတ်အသစ်\n\n ❤️ ကျွန်ုပ်တို့ လွတ်လပ်နေစေဖို့နဲ့ တိုးတက်မှုတွေ ဆက်လက်ရရှိအောင် လှူဒါန်းပေးပါ-%1$s</string>
     </resources>
