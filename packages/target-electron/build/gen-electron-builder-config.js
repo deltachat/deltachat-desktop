@@ -142,6 +142,16 @@ build['mas'] = {
   ],
 }
 
+// CFBundleVersion of the built .pkg. App Store Connect does not allow uploading 
+// a build with the same CFBundleVersion as a previous build. So in case we need
+// to update a build that was not was released but uploaded before the Build number
+// needs to be different for the build even it is for the same version
+const appstoreBuildNumber =
+  env.APPSTORE_BUILD_NUMBER ||
+  new Date().toISOString().replace(/[-:T]/g, '').slice(0, 12) // YYYYMMDDHHmm, UTC
+//@ts-ignore
+build.mas.bundleVersion = appstoreBuildNumber
+
 build['dmg'] = {
   sign: false,
   contents: [
