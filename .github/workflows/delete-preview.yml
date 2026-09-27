@@ -34,11 +34,18 @@ jobs:
           # from being deleted as well - it must not be removed.
           # The key is restricted to rrsync, so the target directory is configured in
           # authorized_keys on the server
-          rsync -rv --delete \
-            --include="deltachat-desktop.${BRANCH}.AppImage" \
-            --include="deltachat-desktop.${BRANCH}.portable.exe" \
-            --include="deltachat-desktop.${BRANCH}.dmg" \
-            --include="deltachat-desktop-mas.${BRANCH}.zip" \
-            --exclude='*' \
-            -e "ssh -o StrictHostKeyChecking=no -i __TEMP_INPUT_KEY_FILE -p 22" \
-            empty/ "$SSH_USER@download.delta.chat:"
+          # The server sometimes resets the connection before the SSH handshake,
+          # so retry a few times before failing.
+          for attempt in 1 2 3; do
+            rsync -rv --delete \
+              --include="deltachat-desktop.${BRANCH}.AppImage" \
+              --include="deltachat-desktop.${BRANCH}.portable.exe" \
+              --include="deltachat-desktop.${BRANCH}.dmg" \
+              --include="deltachat-desktop-mas.${BRANCH}.zip" \
+              --exclude='*' \
+              -e "ssh -o StrictHostKeyChecking=no -i __TEMP_INPUT_KEY_FILE -p 22" \
+              empty/ "$SSH_USER@download.delta.chat:" && exit 0
+            echo "rsync failed (attempt $attempt of 3)"
+            [ "$attempt" -lt 3 ] && sleep 30
+          done
+          exit 1
