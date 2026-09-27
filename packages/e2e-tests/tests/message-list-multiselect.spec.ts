@@ -132,6 +132,28 @@ test.describe('Ctrl + Click', () => {
   })
 })
 
+test.describe('Shift + Click', () => {
+  test("Shift + Click on a single message doesn't select message", async () => {
+    await getMessage(2).click()
+    await expectSelectedMessages([])
+
+    await getMessage(2).click({ modifiers: ['Shift'] })
+    await expectSelectedMessages([])
+
+    // But Shift + Clicking on another does work.
+    await getMessage(3).click({ modifiers: ['Shift'] })
+    await expectSelectedMessages([2, 3])
+
+    await getMessage(2).click({ modifiers: ['Shift'] })
+    await expectSelectedMessages([2])
+    await getMessage(2).click({ modifiers: ['Shift'] })
+    await expectSelectedMessages([2])
+
+    await getMessage(2).click()
+    await expectSelectedMessages([])
+  })
+})
+
 test.describe('clickable elements', () => {
   let image!: Locator
   let link!: Locator
