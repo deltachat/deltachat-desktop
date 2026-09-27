@@ -91,5 +91,8 @@
   },
   "webxdc_store_url_explain_2_desktop": {
     "message": "This is different from the same feature on Android and iOS.\nThis must be the path containing the xdcget-lock.json file."
+  },
+  "webxdc_app_not_found": {
+    "message": "App not found. It may have been deleted."
   }
 }

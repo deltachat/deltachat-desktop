@@ -84,6 +84,7 @@ export const supportedURISchemes = [
   'MAILTO:',
   'DCACCOUNT:',
   'DCLOGIN:',
+  'DCWEBXDC:',
 ]
 
 /// Files that the main window is allowed access over the file protocol

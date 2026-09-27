@@ -71,6 +71,11 @@ build['protocols'] = [
     role: 'Viewer',
     schemes: ['mailto'],
   },
+  {
+    name: 'Open Webxdc app',
+    role: 'Viewer',
+    schemes: ['dcwebxdc'],
+  },
 ]
 
 build['fileAssociations'] = [

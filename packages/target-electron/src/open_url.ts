@@ -22,6 +22,8 @@ if (platform() !== 'linux' && !process.env.PORTABLE_EXECUTABLE_DIR) {
   app.setAsDefaultProtocolClient('DCACCOUNT')
   app.setAsDefaultProtocolClient('dclogin')
   app.setAsDefaultProtocolClient('DCLOGIN')
+  app.setAsDefaultProtocolClient('dcwebxdc')
+  app.setAsDefaultProtocolClient('DCWEBXDC')
   // do not forcefully set DC as standard email handler to not annoy users
 }
 
