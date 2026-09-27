@@ -257,15 +257,24 @@ test('Click on dead space', async () => {
   })
   await expectSelectedMessages([5])
 
-  // Space between message bubbles.
-  const deadSpace = page
-    .getByRole('list', { name: 'Messages' })
-    .filter({ has: page.getByText(makeMessageRegex(5)) })
-  await deadSpace.click({ modifiers: ['ControlOrMeta'] })
+  await getMessage(5).click({
+    position: { x: 0, y: -5 },
+    // Force because otherwise we get ".message-list intercepts click events"
+    force: true,
+    modifiers: ['ControlOrMeta'],
+  })
   await expectSelectedMessages([5])
-  await deadSpace.click({ modifiers: ['Shift'] })
+  await getMessage(5).click({
+    position: { x: 0, y: -5 },
+    force: true,
+    modifiers: ['Shift'],
+  })
   await expectSelectedMessages([5])
-  await deadSpace.click({ modifiers: [] })
+  await getMessage(5).click({
+    position: { x: 0, y: -5 },
+    force: true,
+    modifiers: [],
+  })
   await expectSelectedMessages([])
 })
 
