@@ -339,15 +339,33 @@ export default function useProcessQR() {
        * so we might extract the QR code processing from this function
        */
       if (qr.kind === 'backup2') {
-        if (isLoggedIn) {
-          await openAlertDialog({
-            message: tx('need_to_be_logged_out'),
-          })
-        } else {
-          openDialog(ReceiveBackupProgressDialog, {
-            QrWithToken: url,
-          })
+        const userConfirmed = await openConfirmationDialog({
+          header: tx('multidevice_receiver_title'),
+          message:
+            tx('multidevice_receiver_scanning_ask') +
+            '\n\n' +
+            tx('multidevice_same_network_hint'),
+          confirmLabel: tx('perm_continue'),
+        })
+        if (!userConfirmed) {
+          return
         }
+
+        if (isLoggedIn) {
+          // `await` is important here, because `ReceiveBackupProgressDialog`
+          // depends on `window.__selectedAccountId`,
+          // which `__addAndSelectAccount` will set.
+          await window.__addAndSelectAccount()
+        }
+
+        // TODO handle cancel / error: delete the new account
+        // and select the original one?
+        // See `lastAccountBeforeAddingNewAccount`.
+        openDialog(ReceiveBackupProgressDialog, {
+          QrWithToken: url,
+        })
+        // Note that the callback here applies to the old account.
+        // As of writing it's only for closing dialogs, so this should be fine.
         return callback?.()
       }
 

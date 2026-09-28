@@ -66,6 +66,17 @@ test('add a second device', async ({ browserName }) => {
     await pageB.context().grantPermissions(['clipboard-read'])
   }
   await pageB.getByRole('menuitem', { name: 'Paste from Clipboard' }).click()
+  await pageB
+    .getByRole('dialog')
+    .filter({ hasText: 'Add as Second Device' })
+    .filter({
+      hasText: 'Copy the profile from the other device to this device?',
+    })
+    .filter({
+      hasText: 'Make sure both devices are on the same Wi-Fi or network',
+    })
+    .getByRole('button', { name: 'Continue' })
+    .click()
 
   await expect(pageB.getByRole('dialog')).toHaveCount(0)
   await expect(
