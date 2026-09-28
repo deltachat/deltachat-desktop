@@ -269,6 +269,26 @@ test('Click on dead space', async () => {
   await expectSelectedMessages([])
 })
 
+test('menu items', async () => {
+  await getMessage(2).click()
+  await expectSelectedMessages([])
+
+  await getMessage(2).click({ modifiers: ['ControlOrMeta'] })
+  await getMessage(7).click({ modifiers: ['ControlOrMeta'] })
+  await expectSelectedMessages([2, 7])
+  await getMessage(7).click({
+    button: 'right',
+  })
+
+  await expect(page.getByRole('menuitem')).toHaveText([
+    'Forward',
+    'Delete',
+  ])
+
+  await page.keyboard.press('Escape')
+  await page.keyboard.press('Escape')
+})
+
 test('delete several', async () => {
   await getMessage(7).click()
   await getMessage(5).click({
