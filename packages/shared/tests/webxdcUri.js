@@ -1,9 +1,13 @@
+//@ts-check
+/* global it */
+import { describe } from 'mocha'
 import { expect } from 'chai'
-import { describe, it } from 'mocha'
+import {
+  getWebxdcUri,
+  parseWebxdcUri,
+} from '../ts-compiled-for-tests/webxdcUri.js'
 
-import { parseWebxdcUri } from '../utils/webxdcUri.js'
-
-describe('parseWebxdcUri', () => {
+describe('/shared/webxdcUri', () => {
   it('parses account and message id', () => {
     expect(parseWebxdcUri('dcwebxdc:1/1234')).to.deep.equal({
       accountId: 1,
@@ -39,5 +43,12 @@ describe('parseWebxdcUri', () => {
     ]) {
       expect(parseWebxdcUri(uri), uri).to.equal(null)
     }
+  })
+
+  it('parses what getWebxdcUri builds', () => {
+    expect(parseWebxdcUri(getWebxdcUri(3, 99))).to.deep.equal({
+      accountId: 3,
+      msgId: 99,
+    })
   })
 })

@@ -34,9 +34,9 @@ function getLinuxAutostartFilePath(): string {
   return join(getLinuxAutostartDir(), `deltachat-desktop${suffix}.desktop`)
 }
 
-// Returns the command for the Exec= key of the autostart desktop entry,
-// without the trailing app arguments (`-- --minimized`).
-function getLinuxExecCommand(): string {
+// Returns the command for the Exec= key of a desktop entry that launches
+// Delta Chat, without app arguments (e.g. `-- --minimized` for autostart).
+export function getLinuxExecCommand(): string {
   if (process.env.FLATPAK_ID) {
     return `flatpak run ${process.env.FLATPAK_ID}`
   }
@@ -61,7 +61,7 @@ function getLinuxExecCommand(): string {
 }
 
 // see https://specifications.freedesktop.org/desktop-entry/latest/exec-variables.html
-function escapeDesktopExecArg(arg: string): string {
+export function escapeDesktopExecArg(arg: string): string {
   // Desktop entry files have two layers of parsing:
   // 1. String-value unescaping (only \\, \s, \n, \t, \r are valid sequences)
   // 2. Exec-key double-quote unescaping (\, ", $, ` must be \-escaped)

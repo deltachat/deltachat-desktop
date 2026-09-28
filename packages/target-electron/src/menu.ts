@@ -142,9 +142,13 @@ export function getAppMenu(
   }
 }
 
+/**
+ * @param extraItems shown above "Close window" in windows other than the main window
+ */
 export function getFileMenu(
   window: BrowserWindow | null,
-  isMac: boolean
+  isMac: boolean,
+  extraItems: Electron.MenuItemConstructorOptions[] = []
 ): Electron.MenuItemConstructorOptions {
   const fileMenuNonMac: Electron.MenuItemConstructorOptions = {
     label: tx('global_menu_file_desktop'),
@@ -166,6 +170,7 @@ export function getFileMenu(
         ]
       } else {
         return [
+          ...extraItems,
           {
             label: tx('close_window'),
             click: () => window?.close(),
@@ -178,6 +183,7 @@ export function getFileMenu(
   const fileMenuMac: Electron.MenuItemConstructorOptions = {
     label: tx('global_menu_file_desktop'),
     submenu: [
+      ...(window === mainWindow.window ? [] : extraItems),
       {
         label: tx('close_window'),
         click: () => {

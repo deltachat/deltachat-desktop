@@ -13,10 +13,6 @@ import { saveLastChatId } from '../backend/chat'
 import useChat from '../hooks/chat/useChat'
 import { DesktopSettingsStoreInstance } from '../stores/settings'
 import { SCAN_CONTEXT_TYPE } from '../hooks/useProcessQr'
-import useAlertDialog from '../hooks/dialog/useAlertDialog'
-import useTranslationFunction from '../hooks/useTranslationFunction'
-import { openWebxdcFromUri } from '../system-integration/webxdc'
-import { parseWebxdcUri } from '../utils/webxdcUri'
 
 type Props = {
   accountId?: number
@@ -36,22 +32,10 @@ export default function RuntimeAdapter({
   const { selectChat } = useChat()
 
   const { closeDialog, openDialog, closeAllDialogs } = useDialog()
-  const openAlertDialog = useAlertDialog()
-  const tx = useTranslationFunction()
   const openSendToDialogId = useRef<string | undefined>(undefined)
 
   useEffect(() => {
     runtime.onOpenQrUrl = (url: string) => {
-      const webxdcUri = parseWebxdcUri(url)
-      if (webxdcUri) {
-        openWebxdcFromUri(webxdcUri).then(opened => {
-          if (!opened) {
-            openAlertDialog({ message: tx('webxdc_app_not_found') })
-          }
-        })
-        return
-      }
-
       if (!accountId) {
         throw new Error('accountId is not set')
       }
@@ -99,15 +83,7 @@ export default function RuntimeAdapter({
         ActionEmitter.emitAction(KeybindAction.Settings_Open)
       }
     }
-  }, [
-    accountId,
-    jumpToMessage,
-    processQr,
-    selectChat,
-    closeAllDialogs,
-    openAlertDialog,
-    tx,
-  ])
+  }, [accountId, jumpToMessage, processQr, selectChat, closeAllDialogs])
 
   useEffect(() => {
     runtime.onWebxdcSendToChat = async (file, text, account) => {

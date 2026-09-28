@@ -4,10 +4,7 @@
 
 import { BackendRemote, Type } from '../backend-com'
 import { runtime } from '@deltachat-desktop/runtime-interface'
-import { C, T } from '@deltachat/jsonrpc-client'
-import { getLogger } from '@deltachat-desktop/shared/logger'
-
-const log = getLogger('renderer/webxdc')
+import { T } from '@deltachat/jsonrpc-client'
 
 export function initWebxdc() {
   BackendRemote.on('WebxdcStatusUpdate', (accountId, { msgId }) => {
@@ -73,54 +70,6 @@ export async function internalOpenWebxdc(
     webxdcInfo,
     href,
   })
-}
-
-/**
- * Opens the webxdc app referenced by a `dcwebxdc:` URI.
- *
- * These URIs can be triggered by any website or program, so this only opens
- * webxdc apps that the user could also open from a regular chat.
- *
- * @returns `false` if there is no such webxdc app
- */
-export async function openWebxdcFromUri({
-  accountId,
-  msgId,
-}: {
-  accountId: number
-  msgId: number
-}): Promise<boolean> {
-  try {
-    const accountIds = await BackendRemote.rpc.getAllAccountIds()
-    if (!accountIds.includes(accountId)) {
-      log.warn('dcwebxdc: unknown account', { accountId, msgId })
-      return false
-    }
-    const message = await BackendRemote.rpc.getMessage(accountId, msgId)
-    if (
-      message.viewType !== 'Webxdc' ||
-      message.chatId <= C.DC_CHAT_ID_LAST_SPECIAL
-    ) {
-      log.warn('dcwebxdc: not a webxdc message', { accountId, msgId })
-      return false
-    }
-    const chat = await BackendRemote.rpc.getBasicChatInfo(
-      accountId,
-      message.chatId
-    )
-    if (chat.isContactRequest) {
-      log.warn('dcwebxdc: message is in a contact request', {
-        accountId,
-        msgId,
-      })
-      return false
-    }
-    await internalOpenWebxdc(accountId, message)
-    return true
-  } catch (error) {
-    log.warn('dcwebxdc: failed to open webxdc', { accountId, msgId }, error)
-    return false
-  }
 }
 
 export async function openMapWebxdc(accountId: number, chatId?: number) {

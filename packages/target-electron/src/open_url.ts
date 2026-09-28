@@ -1,11 +1,14 @@
-import { app as rawApp, ipcMain } from 'electron'
+import { app as rawApp, dialog, ipcMain } from 'electron'
 import { readFile } from 'fs/promises'
 import { basename } from 'path'
 import { getLogger } from '@deltachat-desktop/shared/logger.js'
+import { parseWebxdcUri } from '@deltachat-desktop/shared/webxdcUri.js'
 import { supportedURISchemes } from './application-constants.js'
 import { showDeltaChat } from './tray.js'
 import { ExtendedAppMainProcess } from './types.js'
-import { send, window } from './windows/main.js'
+import { openWebxdcFromUri } from './ipc.js'
+import { tx } from './load-translations.js'
+import { send, showInactiveOnStartup, window } from './windows/main.js'
 import { platform } from 'os'
 
 const log = getLogger('main/open_url')
@@ -63,8 +66,45 @@ export const open_url = function (url: string) {
   })
 }
 
+/**
+ * Opens the webxdc app of a `dcwebxdc:` URI. Unlike other URIs this doesn't
+ * bring up the main window, as that would take the focus from the webxdc app.
+ */
+async function openWebxdcUri({
+  accountId,
+  msgId,
+}: {
+  accountId: number
+  msgId: number
+}) {
+  if (!frontend_ready) {
+    // On startup, the main window is shown without focus and the webxdc
+    // window only opens after it, otherwise the main window takes the focus.
+    showInactiveOnStartup()
+    await new Promise(res => ipcMain.once('frontendReady', res))
+    const mainWindow = window
+    if (mainWindow && !mainWindow.isVisible() && !app.rc['minimized']) {
+      await new Promise<void>(res => mainWindow.once('show', () => res()))
+    }
+  }
+  if (!(await openWebxdcFromUri(accountId, msgId))) {
+    // without a parent window, so that it is also visible
+    // when the main window is hidden in the tray
+    dialog.showMessageBox({
+      type: 'warning',
+      message: tx('webxdc_app_not_found'),
+    })
+  }
+}
+
 app.on('open-url', (event, url) => {
   log.info('open url event')
+  const webxdcUri = parseWebxdcUri(url)
+  if (webxdcUri) {
+    event?.preventDefault()
+    openWebxdcUri(webxdcUri)
+    return
+  }
   if (event) {
     event.preventDefault()
     app.focus()
@@ -105,8 +145,12 @@ app.on('open-file', async (event, path) => {
   handleWebxdcFileOpen(path)
 })
 
-// Iterate over arguments and look out for uris and webxdc file paths
-export function openUrlsAndFilesFromArgv(argv: string[]) {
+/**
+ * Iterate over arguments and look out for uris and webxdc file paths
+ * @returns whether a `dcwebxdc:` URI was opened, see `openWebxdcUri`
+ */
+export function openUrlsAndFilesFromArgv(argv: string[]): boolean {
+  let openedWebxdcUri = false
   args_loop: for (let i = 1; i < argv.length; i++) {
     const arg = argv[i]
 
@@ -133,18 +177,25 @@ export function openUrlsAndFilesFromArgv(argv: string[]) {
         arg.startsWith(expectedScheme.toLowerCase())
       ) {
         log.debug('open-url: Detected URI: ', arg)
-        open_url(arg)
+        const webxdcUri = parseWebxdcUri(arg)
+        if (webxdcUri) {
+          openWebxdcUri(webxdcUri)
+          openedWebxdcUri = true
+        } else {
+          open_url(arg)
+        }
         continue args_loop
       }
     }
   }
+  return openedWebxdcUri
 }
 
 app.on('second-instance', (_event, argv) => {
   log.debug('Someone tried to run a second instance')
-  openUrlsAndFilesFromArgv(argv)
+  const openedWebxdcUri = openUrlsAndFilesFromArgv(argv)
   // open file from argv
-  if (window) {
+  if (window && !openedWebxdcUri) {
     showDeltaChat()
   }
 })

@@ -67,6 +67,9 @@ let dcController: typeof DeltaChatController.prototype
 export function getDCJsonrpcRemote() {
   return dcController.jsonrpcRemote
 }
+export function openWebxdcFromUri(accountId: number, msgId: number) {
+  return dcController.webxdc.openFromUri(accountId, msgId)
+}
 let onInitialized: (val: DeltaChatController['jsonrpcRemote']) => void
 export const DCJsonrpcRemoteInitializedP = new Promise<
   DeltaChatController['jsonrpcRemote']

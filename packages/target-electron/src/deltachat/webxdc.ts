@@ -7,7 +7,13 @@ import {
   screen,
 } from 'electron/main'
 import Mime from 'mime-types'
-import { Menu, nativeImage, dialog, IpcMainInvokeEvent } from 'electron'
+import {
+  Menu,
+  nativeImage,
+  dialog,
+  clipboard,
+  IpcMainInvokeEvent,
+} from 'electron'
 import { join } from 'path'
 import { platform } from 'os'
 import { readdir, stat, rmdir, writeFile } from 'fs/promises'
@@ -29,13 +35,19 @@ import {
   getFileMenu,
   refresh as refreshTitleMenu,
 } from '../menu.js'
-import { T } from '@deltachat/jsonrpc-client'
+import { C, T } from '@deltachat/jsonrpc-client'
 import type * as Jsonrpc from '@deltachat/jsonrpc-client'
 import { setContentProtection } from '../content-protection.js'
 import { Server } from 'net'
 import { openHelpWindow } from '../windows/help.js'
 import { getCurrentLocaleDate } from '../load-translations.js'
 import { openExternalHttpOrPromptToCopy } from './link-clicks.js'
+import { getWebxdcUri } from '@deltachat-desktop/shared/webxdcUri.js'
+import {
+  createWebxdcShortcut,
+  isWebxdcShortcutSavedViaDialog,
+  isWebxdcShortcutSupported,
+} from '../webxdc-shortcut.js'
 
 const log = getLogger('main/deltachat/webxdc')
 
@@ -128,6 +140,16 @@ const DEFAULT_SIZE_MAP: Size = {
  */
 
 export default class DCWebxdc {
+  /**
+   * Opens the webxdc app of a `dcwebxdc:` URI, see `getWebxdcUri`.
+   *
+   * These URIs can be triggered by any website or program, so this only opens
+   * webxdc apps that the user could also open from a regular chat.
+   *
+   * @returns `false` if there is no such webxdc app
+   */
+  readonly openFromUri: (accountId: number, msgId: number) => Promise<boolean>
+
   constructor(private readonly controller: DeltaChatController) {
     let dummyProxy_: { server: Server; url: string } | undefined
     const getDummyProxyUrl = async () => {
@@ -280,10 +302,12 @@ export default class DCWebxdc {
      * ipcMain handler for 'open-webxdc' event invoked by the renderer
      */
     const openWebxdc = async (
-      _ev: IpcMainInvokeEvent,
+      _ev: IpcMainInvokeEvent | null,
       msg_id: number,
       p: DcOpenWebxdcParameters,
-      defaultSize: Size = DEFAULT_SIZE_WEBXDC
+      defaultSize: Size = DEFAULT_SIZE_WEBXDC,
+      /** integrations like the map can't be opened with a shortcut */
+      isIntegration = false
     ) => {
       const { webxdcInfo, chatName, accountId, href } = p
 
@@ -417,10 +441,90 @@ export default class DCWebxdc {
 
       const { locale } = getCurrentLocaleDate()
 
+      /**
+       * Explains the shortcut and shows its link, which can be copied.
+       * @returns whether the user wants to create the shortcut
+       */
+      const confirmAddShortcut = async (name: string): Promise<boolean> => {
+        const uri = getWebxdcUri(accountId, msg_id)
+        const explanation = isWebxdcShortcutSavedViaDialog()
+          ? tx('webxdc_shortcut_explain_file_desktop')
+          : tx('webxdc_shortcut_explain_apps_desktop')
+        let linkCopied = false
+        for (;;) {
+          const { response } = await dialog.showMessageBox(webxdcWindow, {
+            type: 'question',
+            message: tx('webxdc_shortcut_confirm_desktop', name),
+            detail: [
+              explanation,
+              `${tx('webxdc_shortcut_explain_link_desktop')}\n${uri}`,
+              ...(linkCopied ? [tx('copied_to_clipboard')] : []),
+            ].join('\n\n'),
+            buttons: [
+              tx('cancel'),
+              tx('menu_copy_link_to_clipboard'),
+              isWebxdcShortcutSavedViaDialog()
+                ? tx('webxdc_shortcut_save_desktop')
+                : tx('webxdc_shortcut_add_desktop'),
+            ],
+            defaultId: 2,
+            cancelId: 0,
+            // on Windows, show buttons instead of "command links"
+            noLink: true,
+          })
+          if (response !== 1) {
+            return response === 2
+          }
+          clipboard.writeText(uri)
+          linkCopied = true
+        }
+      }
+
+      const addShortcut = async () => {
+        const name = `${webxdcInfo.name} – ${chatName}`
+        if (!(await confirmAddShortcut(name))) {
+          return
+        }
+        try {
+          const result = await createWebxdcShortcut({
+            accountId,
+            msgId: msg_id,
+            name,
+            icon: app_icon,
+            window: webxdcWindow,
+          })
+          if (result === 'added') {
+            dialog.showMessageBox(webxdcWindow, {
+              type: 'info',
+              message: tx('webxdc_shortcut_added_desktop', name),
+            })
+          }
+        } catch (error) {
+          log.error('could not create webxdc shortcut', { appId }, error)
+          dialog.showMessageBox(webxdcWindow, {
+            type: 'error',
+            message: tx('error'),
+            detail: error instanceof Error ? error.message : String(error),
+          })
+        }
+      }
+
       const makeMenu = () => {
         return Menu.buildFromTemplate([
           ...(isMac ? [getAppMenu(webxdcWindow)] : []),
-          getFileMenu(webxdcWindow, isMac),
+          getFileMenu(
+            webxdcWindow,
+            isMac,
+            !isIntegration && isWebxdcShortcutSupported()
+              ? [
+                  {
+                    label: tx('menu_add_webxdc_shortcut_desktop'),
+                    click: addShortcut,
+                  },
+                  { type: 'separator' },
+                ]
+              : []
+          ),
           getEditMenu(),
           {
             label: tx('global_menu_view_desktop'),
@@ -693,6 +797,48 @@ export default class DCWebxdc {
     // actual webxdc instances
     ipcMain.handle('open-webxdc', openWebxdc)
 
+    this.openFromUri = async (accountId, msgId) => {
+      try {
+        const accountIds = await this.rpc.getAllAccountIds()
+        if (!accountIds.includes(accountId)) {
+          log.warn('dcwebxdc: unknown account', { accountId, msgId })
+          return false
+        }
+        const message = await this.rpc.getMessage(accountId, msgId)
+        if (
+          message.viewType !== 'Webxdc' ||
+          message.chatId <= C.DC_CHAT_ID_LAST_SPECIAL
+        ) {
+          log.warn('dcwebxdc: not a webxdc message', { accountId, msgId })
+          return false
+        }
+        const chat = await this.rpc.getBasicChatInfo(accountId, message.chatId)
+        if (chat.isContactRequest) {
+          log.warn('dcwebxdc: message is in a contact request', {
+            accountId,
+            msgId,
+          })
+          return false
+        }
+        const webxdcInfo = await this.rpc.getWebxdcInfo(accountId, msgId)
+        const account = await this.rpc.getAccountInfo(accountId)
+        await openWebxdc(null, msgId, {
+          accountId,
+          displayname:
+            account.kind === 'Configured'
+              ? account.displayName || tx('unnamed')
+              : null,
+          chatName: chat.name,
+          webxdcInfo,
+          href: '',
+        })
+        return true
+      } catch (error) {
+        log.warn('dcwebxdc: failed to open webxdc', { accountId, msgId }, error)
+        return false
+      }
+    }
+
     ipcMain.handle('webxdc.exitFullscreen', async event => {
       const app = lookupAppFromEvent(event)
       // On Linux Electron hides the menu bar if we call
@@ -916,7 +1062,8 @@ export default class DCWebxdc {
               },
               // special behaviour for the map dc integration,
               // (in this case bigger landscape window)
-              DEFAULT_SIZE_MAP
+              DEFAULT_SIZE_MAP,
+              true
             )
           }
         }

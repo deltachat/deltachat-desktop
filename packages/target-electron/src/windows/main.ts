@@ -39,6 +39,16 @@ let lastRendererReloadAttempt = 0
 let crashDialogOpen = false
 const RENDERER_RELOAD_COOLDOWN_MS = 30_000
 
+let activateOnStartup = true
+/**
+ * Shows the main window on startup without focusing it, e.g. when Delta Chat
+ * is started to open a webxdc app, which should get the focus instead.
+ * On Wayland only the first window activated on startup gets the focus.
+ */
+export function showInactiveOnStartup() {
+  activateOnStartup = false
+}
+
 export function init(options: { hidden: boolean; hideMenuBar: boolean }) {
   if (window) {
     return window.show()
@@ -91,7 +101,13 @@ export function init(options: { hidden: boolean; hideMenuBar: boolean }) {
   window.loadFile(join(htmlDistDir(), defaults.main))
 
   window.once('ready-to-show', () => {
-    if (!options.hidden) mainWindow.show()
+    if (!options.hidden) {
+      if (activateOnStartup) {
+        mainWindow.show()
+      } else {
+        mainWindow.showInactive()
+      }
+    }
     if (process.env.NODE_ENV === 'test') {
       mainWindow.maximize()
     }

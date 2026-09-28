@@ -94,5 +94,29 @@
   },
   "webxdc_app_not_found": {
     "message": "App not found. It may have been deleted."
+  },
+  "menu_add_webxdc_shortcut_desktop": {
+    "message": "Add Shortcut to This App…"
+  },
+  "webxdc_shortcut_added_desktop": {
+    "message": "Added \"%1$s\" to your apps."
+  },
+  "webxdc_shortcut_confirm_desktop": {
+    "message": "Add a shortcut to \"%1$s\"?"
+  },
+  "webxdc_shortcut_explain_apps_desktop": {
+    "message": "This adds an entry to your apps that opens this app directly. If Delta Chat is not running, it is started first."
+  },
+  "webxdc_shortcut_explain_file_desktop": {
+    "message": "This saves a shortcut file that opens this app directly. If Delta Chat is not running, it is started first. Keep it on the desktop or drag it into the Dock."
+  },
+  "webxdc_shortcut_explain_link_desktop": {
+    "message": "You can also copy the direct link, for example to bookmark it. It only works on this device and in this profile:"
+  },
+  "webxdc_shortcut_add_desktop": {
+    "message": "Add Shortcut"
+  },
+  "webxdc_shortcut_save_desktop": {
+    "message": "Save Shortcut…"
   }
 }
