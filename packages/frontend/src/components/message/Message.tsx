@@ -69,6 +69,7 @@ import ForwardMessage from '../dialogs/ForwardMessage'
 import MessageDetail from '../dialogs/MessageDetail/MessageDetail'
 import ConfirmDeleteMessageDialog from '../dialogs/ConfirmDeleteMessage'
 import AlertDialog from '../dialogs/AlertDialog'
+import { unknownErrorToString } from '@deltachat-desktop/shared/unknownErrorToString'
 
 const log = getLogger('Message')
 
@@ -479,6 +480,25 @@ function buildMultiselectContextMenu(
           messageIds: messageIds,
           sourceChatId: chat.id,
         }),
+    },
+    // Yes, we only check if the clicked message is resendable,
+    // (because we don't have others immediately available).
+    // Other selected messages might not be resendable,
+    // so the user might get an error. But it's better than nothing.
+    isMessageResendable(clickedMessage) && {
+      label: tx('resend'),
+      action: async () => {
+        try {
+          await BackendRemote.rpc.resendMessages(accountId, messageIds)
+        } catch (error) {
+          openDialog(AlertDialog, {
+            message: tx(
+              'error_x',
+              'could not resend messages: ' + unknownErrorToString(error)
+            ),
+          })
+        }
+      },
     },
     {
       label: tx('delete'),

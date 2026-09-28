@@ -282,11 +282,38 @@ test('menu items', async () => {
 
   await expect(page.getByRole('menuitem')).toHaveText([
     'Forward',
+    'Resend',
     'Delete',
   ])
 
   await page.keyboard.press('Escape')
   await page.keyboard.press('Escape')
+})
+
+test('resend several', async () => {
+  const getDeliveryStatus = (messageNum: number) =>
+    getMessage(messageNum)
+      .getByRole('status')
+      .filter({ hasText: 'Delivery status' })
+
+  await getMessage(3).click()
+  await expectSelectedMessages([])
+
+  await getMessage(3).click({ modifiers: ['ControlOrMeta'] })
+  await getMessage(8).click({ modifiers: ['ControlOrMeta'] })
+  await expectSelectedMessages([3, 8])
+
+  // Ugh, all messages are already `Delivery status: Sending`
+  // because it's a no-network account.
+  // await expect(getDeliveryStatus(3)).not.toContainText('Sending')
+  // await expect(getDeliveryStatus(8)).not.toContainText('Sending')
+
+  await getMessage(8).click({
+    button: 'right',
+  })
+  await page.getByRole('menuitem', { name: 'Resend' }).click()
+  await expect(getDeliveryStatus(3)).toContainText('Sending')
+  await expect(getDeliveryStatus(8)).toContainText('Sending')
 })
 
 test('delete several', async () => {
