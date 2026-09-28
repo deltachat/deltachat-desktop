@@ -23,6 +23,7 @@ import {
   openMessageHTML,
   openWebxdc,
   enterEditMessageMode,
+  isMessageResendable,
 } from './messageFunctions'
 import Attachment from '../attachment/messageAttachment'
 import { isGenericAttachment, isImage } from '../attachment/Attachment'
@@ -291,8 +292,6 @@ function buildContextMenu(
   const showAttachmentOptions = !!message.file
   const showCopyImage =
     !!message.file && isImage(message.viewType) && message.viewType !== 'Gif'
-  const showResend =
-    message.sender.id === C.DC_CONTACT_ID_SELF && message.viewType !== 'Call'
 
   // Do not show "reply" in read-only chats, and for info messages.
   // See
@@ -409,7 +408,7 @@ function buildContextMenu(
         ),
     },
     // Resend Message
-    showResend && {
+    isMessageResendable(message) && {
       label: tx('resend'),
       action: () => {
         BackendRemote.rpc.resendMessages(selectedAccountId(), [message.id])
