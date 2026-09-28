@@ -90,3 +90,47 @@ test('add a second device', async ({ browserName }) => {
     pageA.getByLabel('Chats').getByRole('tab', { name: 'Device Messages' })
   ).toContainText('Profile transferred to your second device')
 })
+
+test('add a second device from default QR scanner', async ({ browserName }) => {
+  const pageBProfileButtons = pageB
+    .getByRole('navigation', { name: /Profiles?/ })
+    .getByRole('tab')
+  // From previous test
+  await expect(pageBProfileButtons).toHaveCount(1)
+
+  await prepareAddSecondDevice(pageA, browserName)
+
+  await pageB.getByRole('button', { name: 'Scan QR Code' }).click()
+  await pageB
+    .getByRole('dialog')
+    .getByRole('button', { name: 'Scan QR Code' })
+    .click()
+  if (browserName.toLowerCase().indexOf('chrom') > -1) {
+    await pageB.context().grantPermissions(['clipboard-read'])
+  }
+  await pageB.getByRole('button', { name: 'Paste' }).click()
+  await pageB
+    .getByRole('dialog')
+    .filter({ hasText: 'Add as Second Device' })
+    .filter({
+      hasText: 'Copy the profile from the other device to this device?',
+    })
+    .filter({
+      hasText: 'Make sure both devices are on the same Wi-Fi or network',
+    })
+    .getByRole('button', { name: 'Continue' })
+    .click()
+
+  await expect(pageB.getByRole('dialog')).toHaveCount(0)
+  await expect(pageBProfileButtons).toHaveCount(2)
+  await expect(pageBProfileButtons.last()).toHaveAttribute(
+    'aria-selected',
+    'true'
+  )
+  await expect(
+    pageB.getByLabel('Chats').getByRole('tab', { name: 'Saved Messages' })
+  ).toBeVisible()
+
+  // Clean up
+  await deleteSelectedProfile(pageB)
+})
