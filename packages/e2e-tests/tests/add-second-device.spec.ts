@@ -38,25 +38,29 @@ test.afterAll(async () => {
   await contextB.close()
 })
 
+async function prepareAddSecondDevice(page: Page, browserName: string) {
+  await page.getByRole('button', { name: 'Settings' }).click()
+  await page.getByRole('button', { name: 'Add Second Device' }).click()
+  await page
+    .getByRole('dialog')
+    .getByRole('button', { name: 'Continue' })
+    .click()
+  await expect(page.getByRole('dialog').getByRole('img')).toBeVisible()
+  await page.getByRole('dialog').getByRole('button', { name: 'More' }).click()
+  if (browserName.toLowerCase().indexOf('chrom') > -1) {
+    await page.context().grantPermissions(['clipboard-write'])
+  }
+  await page.getByRole('menuitem', { name: 'Copy' }).click()
+  await expect(
+    page.getByRole('status').getByText('Copied to clipboard')
+  ).toBeVisible()
+}
+
 test('add a second device', async ({ browserName }) => {
   await pageB.getByRole('button', { name: 'I Already Have a Profile' }).click()
   await pageB.getByRole('button', { name: 'Add as Second Device' }).click()
 
-  await pageA.getByRole('button', { name: 'Settings' }).click()
-  await pageA.getByRole('button', { name: 'Add Second Device' }).click()
-  await pageA
-    .getByRole('dialog')
-    .getByRole('button', { name: 'Continue' })
-    .click()
-  await expect(pageA.getByRole('dialog').getByRole('img')).toBeVisible()
-  await pageA.getByRole('dialog').getByRole('button', { name: 'More' }).click()
-  if (browserName.toLowerCase().indexOf('chrom') > -1) {
-    await pageA.context().grantPermissions(['clipboard-write'])
-  }
-  await pageA.getByRole('menuitem', { name: 'Copy' }).click()
-  await expect(
-    pageA.getByRole('status').getByText('Copied to clipboard')
-  ).toBeVisible()
+  await prepareAddSecondDevice(pageA, browserName)
 
   await pageB
     .getByRole('dialog')
