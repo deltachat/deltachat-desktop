@@ -9,6 +9,7 @@ declare global {
     exp: todo
     __changeScreen: (screen: Screens) => void
     __selectAccount: (accountId: number) => Promise<void>
+    __addAndSelectAccount: () => Promise<void | number>
     readonly __selectedAccountId: number | undefined
     __selectedChatId: number | undefined
     __screen: Screens
