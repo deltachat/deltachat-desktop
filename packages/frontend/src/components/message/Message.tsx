@@ -448,7 +448,7 @@ function buildContextMenu(
         openDialog(ConfirmDeleteMessageDialog, {
           accountId,
           messageIds: [message.id],
-          loadedMessages: { [message.id]: message },
+          loadedMessages: { [message.id]: { kind: 'message', ...message } },
           chat,
         }),
       danger: true,
@@ -506,7 +506,9 @@ function buildMultiselectContextMenu(
         openDialog(ConfirmDeleteMessageDialog, {
           accountId,
           messageIds,
-          loadedMessages: { [clickedMessage.id]: clickedMessage },
+          loadedMessages: {
+            [clickedMessage.id]: { kind: 'message', ...clickedMessage },
+          },
           chat,
         }),
       danger: true,
@@ -732,7 +734,7 @@ export default function Message(props: {
         openDialog(ConfirmDeleteMessageDialog, {
           accountId,
           messageIds: [...messageIds],
-          loadedMessages: { [message.id]: message },
+          loadedMessages: { [message.id]: { kind: 'message', ...message } },
           chat,
         })
         return
