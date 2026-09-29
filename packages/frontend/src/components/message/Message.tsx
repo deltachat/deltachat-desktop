@@ -309,6 +309,13 @@ function buildContextMenu(
   // Do not show "react" for system messages
   const showSendReaction = showReactionsUi(message, chat)
 
+  // Core also refuses to pin messages that failed to send.
+  const showPin =
+    chat.isEncrypted &&
+    chat.canSend &&
+    !message.isInfo &&
+    message.state !== C.DC_STATE_OUT_FAILED
+
   // Only show in groups, don't show on info messages or outgoing messages
   const showReplyPrivately =
     (conversationType.chatType === 'Group' ||
@@ -358,6 +365,15 @@ function buildContextMenu(
           ])
         }
       },
+    },
+    showPin && {
+      label: message.isPinned ? tx('unpin') : tx('pin'),
+      action: () =>
+        BackendRemote.rpc.setPinnedMessageState(
+          accountId,
+          message.id,
+          !message.isPinned
+        ),
     },
     // Send emoji reaction
     showSendReaction && {
@@ -805,9 +821,12 @@ export default function Message(props: {
     const isInvalidUnencryptedMail =
       message.systemMessageType === 'InvalidUnencryptedMail'
 
+    const isMessagePinnedInfo = message.systemMessageType === 'MessagePinned'
+
     // Some info messages can be clicked by the user to receive further information
     const isInteractive =
       (isWebxdcInfo && message.parentId) ||
+      (isMessagePinnedInfo && message.parentId) ||
       message.infoContactId != null ||
       isProtectionEnabledMsg ||
       isInvalidUnencryptedMail
@@ -818,6 +837,16 @@ export default function Message(props: {
         if (isWebxdcInfo) {
           // open or focus the webxdc app
           openWebxdc(message)
+        } else if (isMessagePinnedInfo && message.parentId) {
+          jumpToMessage({
+            accountId,
+            msgId: message.parentId,
+            msgChatId: message.chatId,
+            highlight: true,
+            focus: true,
+            msgParentId: message.id,
+            scrollIntoViewArg: { block: 'center' },
+          })
         } else if (
           message.systemMessageType === 'GroupDescriptionChanged' &&
           (chat.chatType === 'Group' || chat.chatType === 'OutBroadcast')
@@ -1096,6 +1125,7 @@ export default function Message(props: {
               timestamp={message.timestamp * 1000}
               encrypted={message.showPadlock}
               isSavedMessage={isOrHasSavedMessage}
+              isPinned={message.isPinned}
               onClickError={() =>
                 openDialog(AlertDialog, {
                   message: message.error
