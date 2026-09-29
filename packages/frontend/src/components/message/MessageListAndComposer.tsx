@@ -6,6 +6,7 @@ import Composer from '../composer/Composer'
 import { useDraft } from '../../hooks/chat/useDraft'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 import MessageList from './MessageList'
+import PinnedMessagesBanner from './PinnedMessagesBanner'
 import type ComposerMessageInput from '../composer/ComposerMessageInput'
 import { DesktopSettingsType } from '@deltachat-desktop/shared/shared-types'
 import { runtime } from '@deltachat-desktop/runtime-interface'
@@ -229,6 +230,7 @@ export default function MessageListAndComposer({
       ref={conversationRef}
       onDragOver={onDragOver}
     >
+      <PinnedMessagesBanner accountId={accountId} chatId={chat.id} />
       <div className='message-list-and-composer__message-list'>
         <MessageListMemoized
           accountId={accountId}
