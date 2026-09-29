@@ -455,22 +455,75 @@ function buildContextMenu(
     },
   ]
 }
-function buildMultiselectContextMenu(
+async function buildMultiselectContextMenu(
   {
     accountId,
     messageIds,
-    message: clickedMessage,
+    loadedMessages,
     openDialog,
     chat,
   }: {
     accountId: number
     messageIds: Array<T.Message['id']>
-    message: T.Message
+    loadedMessages: {
+      [msgId: T.Message['id']]: T.MessageLoadResult | undefined
+    }
     openDialog: OpenDialog
     chat: T.FullChat
   },
   _clickTarget: HTMLAnchorElement | null
-): (false | ContextMenuItem)[] {
+): Promise<(false | ContextMenuItem)[]> {
+  // Load the messages that are missing from `loadedMessages`.
+  const allMessages: typeof loadedMessages = await (async () => {
+    const missingMessageIds = messageIds.filter(
+      // Note that here we are also "happy" with `m.kind === 'loadingError'`,
+      // because it's probably pointless to retry loading it.
+      id => loadedMessages[id] == undefined
+    )
+
+    if (missingMessageIds.length === 0) {
+      log.info('message context menu: all selected messages are loaded')
+      return loadedMessages
+    }
+
+    // It's rare but possible that some selected messages are not loaded,
+    // e.g. if the user did a contiguous selection between messages far apart,
+    // by getting to them through the message search.
+    log.info(
+      'message context menu: some selected messages are not loaded, will load them',
+      missingMessageIds
+    )
+
+    return {
+      ...loadedMessages,
+      ...(await BackendRemote.rpc
+        .getMessages(accountId, missingMessageIds)
+        .catch(e => {
+          log.warn('message context menu: failed to load missing messages', e)
+
+          return {}
+        })),
+    }
+  })()
+  function selectedMessagesIter() {
+    return messageIds.values().map(id => {
+      const message = allMessages[id]
+      if (message == null) {
+        log.warn(
+          `we were supposed to load all messages, but ID ${id} is missing`
+        )
+        return null
+      }
+
+      if (message.kind === 'loadingError') {
+        log.warn(`failed to load message ${id}`, message.error)
+        return null
+      }
+
+      return message
+    })
+  }
+
   const tx = window.static_translate
   return [
     {
@@ -481,11 +534,12 @@ function buildMultiselectContextMenu(
           sourceChatId: chat.id,
         }),
     },
-    // Yes, we only check if the clicked message is resendable,
-    // (because we don't have others immediately available).
-    // Other selected messages might not be resendable,
-    // so the user might get an error. But it's better than nothing.
-    isMessageResendable(clickedMessage) && {
+    selectedMessagesIter().every(
+      m =>
+        // Just assume that a message is resendable if it's missing:
+        // we'll simply get a Core error if the action really is impossible.
+        m == null || isMessageResendable(m)
+    ) && {
       label: tx('resend'),
       action: async () => {
         try {
@@ -506,9 +560,7 @@ function buildMultiselectContextMenu(
         openDialog(ConfirmDeleteMessageDialog, {
           accountId,
           messageIds,
-          loadedMessages: {
-            [clickedMessage.id]: { kind: 'message', ...clickedMessage },
-          },
+          loadedMessages: allMessages,
           chat,
         }),
       danger: true,
@@ -519,6 +571,10 @@ function buildMultiselectContextMenu(
 export default function Message(props: {
   chat: T.FullChat
   message: T.Message
+  // Why ref instead of the object itself? For fewer re-renders.
+  messageCacheRef: React.RefObject<{
+    [msgId: T.Message['id']]: T.MessageLoadResult | undefined
+  }>
   conversationType: ConversationType
 }) {
   const { message, conversationType, chat } = props
@@ -546,7 +602,7 @@ export default function Message(props: {
     focusAndMultiselect.selectedItems.has(message.id)
 
   const showContextMenu = useCallback(
-    (
+    async (
       event: React.MouseEvent<
         HTMLButtonElement | HTMLAnchorElement | HTMLDivElement,
         MouseEvent
@@ -599,10 +655,11 @@ export default function Message(props: {
         jumpToMessage,
       }
       const items = isMultiselectMember
-        ? buildMultiselectContextMenu(
+        ? await buildMultiselectContextMenu(
             {
               ...common,
               messageIds: [...focusAndMultiselect.selectedItems],
+              loadedMessages: props.messageCacheRef.current,
             },
             target
           )
@@ -621,6 +678,7 @@ export default function Message(props: {
       props.chat,
       conversationType,
       message,
+      props.messageCacheRef,
       isMultiselectMember,
       focusAndMultiselect.selectedItems,
       resetSelection,
@@ -734,7 +792,7 @@ export default function Message(props: {
         openDialog(ConfirmDeleteMessageDialog, {
           accountId,
           messageIds: [...messageIds],
-          loadedMessages: { [message.id]: { kind: 'message', ...message } },
+          loadedMessages: props.messageCacheRef.current,
           chat,
         })
         return
