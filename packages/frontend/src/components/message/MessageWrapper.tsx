@@ -13,7 +13,7 @@ type RenderMessageProps = {
   message: T.Message
   conversationType: ConversationType
   unreadMessageInViewIntersectionObserver: IntersectionObserver
-}
+} & Parameters<typeof Message>[0]
 
 const log = getLogger('renderer/message/MessageWrapper')
 

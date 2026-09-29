@@ -137,6 +137,16 @@ export function isMessageEditable(
   )
 }
 
+export function isMessageResendable(
+  message: Pick<T.Message, 'viewType'> & {
+    sender: Pick<T.Message['sender'], 'id'>
+  }
+) {
+  return (
+    message.sender.id === C.DC_CONTACT_ID_SELF && message.viewType !== 'Call'
+  )
+}
+
 /**
  * If this returns `false` then it doesn't always mean
  * that the status should be shown.

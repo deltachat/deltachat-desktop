@@ -26,7 +26,9 @@ export type Props = {
    * If some messages from {@linkcode messageIds} are already loaded,
    * provide them here for better performance.
    */
-  loadedMessages: { [id: Type.Message['id']]: Type.Message | undefined }
+  loadedMessages: {
+    [id: Type.Message['id']]: Type.MessageLoadResult | undefined
+  }
   chat: Type.FullChat
 } & DialogProps
 
@@ -49,13 +51,13 @@ export default function ConfirmDeleteMessageDialog(props: Props) {
       if (
         messageIds
           .map(id => loadedMessages[id])
-          .filter(m => m != undefined)
+          .filter(m => m != undefined && m.kind === 'message')
           .some(m => !msgDeleteForAllPossible(m))
       ) {
         return false
       }
       const missingMessageIds = messageIds.filter(
-        id => loadedMessages[id] == undefined
+        id => loadedMessages[id]?.kind !== 'message'
       )
       if (missingMessageIds.length === 0) {
         return true
