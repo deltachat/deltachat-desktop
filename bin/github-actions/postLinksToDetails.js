@@ -35,7 +35,7 @@ if (PLATFORM === 'macOS') {
   platform_status['context'] = '⭐ Linux Preview Build'
   platform_status['target_url'] =
     FULL_ARTIFACT_URL ||
-    base_url + '.' + branchName + '.AppImage'
+    base_url + '.' + branchName + '.deb'
 } else {
   throw new Error('Unsupported platform: ' + PLATFORM)
 }
