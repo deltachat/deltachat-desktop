@@ -11,6 +11,12 @@ $info-text-max-width: 400px;
     --shortcut-menu-visibility: visible;
     --shortcut-menu-multiplier: 1;
   }
+  .multiselected-one-or-more & {
+    // "React" and "three-dot menu"'s functionality is not entirely clear
+    // in the multiselect context, so hide them.
+    --shortcut-menu-visibility: hidden;
+    --shortcut-menu-multiplier: 0;
+  }
 }
 
 /* Message Bubble */
