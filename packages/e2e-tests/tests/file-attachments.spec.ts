@@ -252,7 +252,7 @@ test('send contact as vCard', async () => {
   await expect(receivedContactMessage.locator('.msg-body')).toContainText(
     userA.name
   )
-  await receivedContactMessage.click()
+  await receivedContactMessage.getByRole('button', { name: userA.name }).click()
   await expect(page.getByRole('dialog')).toContainText(
     `Chat with ${userA.name}?`
   )
