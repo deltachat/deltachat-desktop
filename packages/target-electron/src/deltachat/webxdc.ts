@@ -331,8 +331,22 @@ export default class DCWebxdc {
         // href is user provided content, so we want to be sure it's relative
         // relative href needs a base to construct URL
         const url = new URL(href, 'http://dummy')
-        const relativeUrl = url.pathname + url.search + url.hash
-        fullHref = appURL + relativeUrl
+
+        const finalUrl = new URL(appURL)
+        finalUrl.pathname = url.pathname
+        finalUrl.search = url.search
+        finalUrl.hash = url.hash
+        // Should never happen, but assert.
+        if (
+          !finalUrl.toString().startsWith(appURL) ||
+          finalUrl.protocol + '//' + finalUrl.host !== appURL
+        ) {
+          throw new Error(
+            `refusing to open WebXDC "${appURL}" with href "${href}": resulting URL is not formatted as expected: "${finalUrl.toString()}"`
+          )
+        }
+
+        fullHref = finalUrl.toString()
       }
       const alreadyOpenApp = open_apps[appId]
       if (alreadyOpenApp) {
