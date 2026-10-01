@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useId,
+  useState,
+} from 'react'
 import { DialogProps } from '../../../contexts/DialogContext'
 import Dialog, { DialogBody, DialogHeader, DialogFooter } from '../../Dialog'
 import { BackendRemote, onDCEvent } from '../../../backend-com'
@@ -11,10 +17,12 @@ import Button from '../../Button'
 
 import styles from './styles.module.scss'
 
-import classNames from 'classnames'
 import useDialog from '../../../hooks/dialog/useDialog'
 import useAddTransportDialog from '../../../hooks/dialog/useAddTransportDialog'
 import useConfirmationDialog from '../../../hooks/dialog/useConfirmationDialog'
+import { IconButton } from '../../Icon'
+import { ContextMenuContext } from '../../../contexts/ContextMenuContext'
+import { mouseEventToPosition } from '../../../utils/mouseEventToPosition'
 
 type Transport = Awaited<
   ReturnType<typeof BackendRemote.rpc.listTransports>
@@ -28,8 +36,11 @@ export default function TransportsDialog(
     accountId: number
   }
 ) {
+  const idBase = useId()
   const tx = useTranslationFunction()
   const openConfirmationDialog = useConfirmationDialog()
+  const { openContextMenu } = useContext(ContextMenuContext)
+
   const openAlertDialog = useAlertDialog()
   const { accountId, onClose } = props
   const addTransportDialog = useAddTransportDialog()
@@ -139,40 +150,34 @@ export default function TransportsDialog(
                   </label>
                 </div>
                 <div>
-                  <Button
-                    onClick={() => editTransport(transport)}
-                    aria-label={`${tx('edit_transport')}`}
-                    title={tx('edit_transport')}
-                    styling='borderless'
-                    className={styles.editButton}
-                  >
-                    <i
-                      className={classNames(
-                        'material-svg-icon',
-                        'material-icon-edit',
-                        styles.edit
-                      )}
-                      aria-hidden='true'
-                    />
-                  </Button>
-                  {transports.length > 1 && (
-                    <Button
-                      onClick={() => deleteTransport(transport)}
-                      aria-label={`${tx('delete')}`}
-                      title={tx('delete')}
-                      styling='borderless'
-                      className={styles.deleteButton}
-                    >
-                      <i
-                        className={classNames(
-                          'material-svg-icon',
-                          'material-icon-trash',
-                          styles.trash
-                        )}
-                        aria-hidden='true'
-                      />
-                    </Button>
-                  )}
+                  {/* TODO better style */}
+                  <IconButton
+                    id={`${idBase}-three-dot-${index}`}
+                    aria-haspopup='menu'
+                    aria-label={tx('menu_more_options')}
+                    icon='more_vert'
+                    onClick={e =>
+                      openContextMenu({
+                        ...mouseEventToPosition(e),
+                        ariaAttrs: {
+                          'aria-labelledby': `${idBase}-three-dot-${index}`,
+                        },
+                        items: [
+                          {
+                            action: () => editTransport(transport),
+                            label: tx('edit_transport'),
+                            icon: 'edit',
+                          },
+                          transports.length > 1 && {
+                            action: () => deleteTransport(transport),
+                            label: tx('delete'),
+                            icon: 'trash',
+                            danger: true,
+                          },
+                        ],
+                      })
+                    }
+                  />
                 </div>
               </div>
             ))}
