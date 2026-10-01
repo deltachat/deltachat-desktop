@@ -247,6 +247,7 @@ export function AddMemberInnerDialog({
                         onCreateContactCheckboxClick: createNewContact,
                         queryStr,
                         queryStrIsValidEmail,
+                        itemCount,
                       }}
                       itemCount={itemCount}
                       itemKey={(index, { contactIds }) =>
@@ -305,6 +306,7 @@ function AddMemberInnerDialogRow({
     onCreateContactCheckboxClick: (contact: T.Contact) => void
     queryStr: string
     queryStrIsValidEmail: boolean
+    itemCount: number
   }
 }) {
   const {
@@ -316,7 +318,9 @@ function AddMemberInnerDialogRow({
     onCreateContactCheckboxClick,
     queryStr,
     queryStrIsValidEmail,
+    itemCount,
   } = data
+  const ariaAttrs = { 'aria-setsize': itemCount, 'aria-posinset': index + 1 }
 
   const renderAddContact = () => {
     if (queryStrIsValidEmail) {
@@ -340,6 +344,7 @@ function AddMemberInnerDialogRow({
         <ContactListItem
           tagName='li'
           style={style}
+          {...ariaAttrs}
           contact={pseudoContact}
           showCheckbox={true}
           checked={false}
@@ -350,7 +355,7 @@ function AddMemberInnerDialogRow({
       )
     } else {
       return (
-        <li style={style}>
+        <li style={style} {...ariaAttrs}>
           <PseudoListItemAddContact
             queryStr={queryStr}
             queryStrIsEmail={false}
@@ -368,13 +373,14 @@ function AddMemberInnerDialogRow({
   const contact = contactCache[contactId]
   if (!contact) {
     // Not loaded yet
-    return <li style={style}></li>
+    return <li style={style} {...ariaAttrs}></li>
   }
 
   return (
     <ContactListItem
       tagName='li'
       style={style}
+      {...ariaAttrs}
       contact={contact}
       showCheckbox
       checked={
