@@ -76,6 +76,9 @@ test.beforeAll(async ({ browser }) => {
 
   for (let i = 1; i <= 9; i++) {
     await textarea().fill(getMessageText(i))
+    if (i === 6) {
+      await attachImage()
+    }
     await textarea().press('ControlOrMeta+Enter')
     await expect(textarea()).toBeEmpty()
   }
@@ -285,6 +288,20 @@ test('menu items', async () => {
 
   await expect(page.getByRole('menuitem')).toHaveText([
     'Forward',
+    // 'Export Attachments',
+    'Resend',
+    'Delete',
+  ])
+  await page.keyboard.press('Escape')
+
+  // Message with an attachment
+  await getMessage(6).click({ modifiers: ['ControlOrMeta'] })
+  await getMessage(7).click({
+    button: 'right',
+  })
+  await expect(page.getByRole('menuitem')).toHaveText([
+    'Forward',
+    'Export Attachments',
     'Resend',
     'Delete',
   ])
