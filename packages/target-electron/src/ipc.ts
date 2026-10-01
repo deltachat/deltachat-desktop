@@ -20,7 +20,13 @@ import path, {
 } from 'path'
 import { inspect } from 'util'
 import { platform } from 'os'
-import { existsSync, copyFileSync, mkdirSync, linkSync } from 'fs'
+import {
+  default as fs,
+  existsSync,
+  copyFileSync,
+  mkdirSync,
+  linkSync,
+} from 'fs'
 import { versions } from 'process'
 import { fileURLToPath } from 'url'
 
@@ -56,6 +62,7 @@ import {
   startOutgoingVideoCall,
   openIncomingVideoCallWindow,
 } from './windows/video-call.js'
+import { tx } from './load-translations.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -293,6 +300,100 @@ export async function init(cwd: string, logHandler: LogHandler) {
           }
         }
         lastSaveDialogLocation = path.dirname(filePath)
+      }
+    }
+  )
+  // Mostly a copy-paste of `saveFile` above.
+  ipcMain.handle(
+    'saveFiles',
+    async (_ev, ...args: Parameters<Runtime['downloadFiles']>) => {
+      const files = args[0]
+
+      if (!mainWindow.window) {
+        throw new Error('window does not exist, this should never happen')
+      }
+
+      let base_path = lastSaveDialogLocation || app.getPath('downloads')
+
+      if (!existsSync(base_path)) {
+        base_path = app.getPath('downloads')
+      }
+
+      const { canceled, filePaths } = await dialog.showOpenDialog(
+        mainWindow.window,
+        {
+          // As of writing, `saveFiles` is only used for "export attachments".
+          title: tx('menu_export_attachments'),
+          defaultPath: base_path,
+          buttonLabel: tx('save'),
+          properties: ['openDirectory', 'createDirectory'],
+        }
+      )
+
+      if (filePaths.length > 1) {
+        log.warn(
+          'saveFiles: got multiple paths from the dialog, will use just the first one',
+          filePaths
+        )
+      }
+
+      const dir = filePaths[0]
+      if (canceled || !dir) {
+        return
+      }
+
+      lastSaveDialogLocation = dir
+
+      const promises = files.map(async f => {
+        const { pathToSource, filename: _filename } = f
+        const filename = path.basename(_filename)
+        if (filename !== _filename) {
+          log.warn(
+            `filename passed to saveFiles by front-end is not just a file name: "${_filename}", sanitized to "${filename}"`
+          )
+        }
+
+        const { name, ext } = path.parse(filename)
+
+        for (let i = 0; ; i++) {
+          const dest = path.join(
+            dir,
+            i === 0 ? filename : `${name} (${i})${ext}`
+          )
+
+          try {
+            await copyFile(pathToSource, dest, fs.constants.COPYFILE_EXCL)
+            break // success
+          } catch (error) {
+            if (
+              !(error instanceof Error) ||
+              !('code' in error) ||
+              error.code !== 'EEXIST'
+            ) {
+              throw error
+            }
+
+            // Sanity check, so the loop is not technically potentially endless.
+            if (i >= 999_999_999) {
+              throw new Error(
+                `could not find an unoccupied name for file after ${i} attempts`,
+                {
+                  cause: error,
+                }
+              )
+            }
+          }
+        }
+      })
+
+      const errors = (await Promise.allSettled(promises))
+        .filter(r => r.status !== 'fulfilled')
+        .map(r => r.reason)
+      if (errors.length !== 0) {
+        dialog.showErrorBox(
+          'Unhandled Error',
+          `Cannot copy files (${errors.length}/${promises.length} failed). Error: ${errors[0]}`
+        )
       }
     }
   )

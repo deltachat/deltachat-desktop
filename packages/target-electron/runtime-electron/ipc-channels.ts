@@ -36,6 +36,7 @@ export const INVOKE_CHANNELS = Object.freeze([
   'restart_app',
   'saveBackgroundImage',
   'saveFile',
+  'saveFiles',
   'set-desktop-setting',
   'setLocale',
   'startOutgoingVideoCall',

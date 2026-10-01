@@ -55,6 +55,16 @@ const expectMessages = async (messageNums: number[]) => {
 
 const fixturesPath = path.join(import.meta.dirname, '..', 'fixtures')
 const imagePath = path.join(fixturesPath, 'Deltachat-Logo.png')
+const attachImage = async () => {
+  const fileChooserPromise = page.waitForEvent('filechooser')
+  await page.getByRole('button', { name: 'Attach' }).click()
+  await page.getByRole('menuitem', { name: 'Image' }).click()
+  const fileChooser = await fileChooserPromise
+  await fileChooser.setFiles(imagePath)
+  await expect(
+    page.getByRole('region', { name: 'Write a message' }).getByRole('img')
+  ).toBeVisible()
+}
 
 test.beforeAll(async ({ browser }) => {
   page = await browser.newPage()
@@ -66,6 +76,9 @@ test.beforeAll(async ({ browser }) => {
 
   for (let i = 1; i <= 9; i++) {
     await textarea().fill(getMessageText(i))
+    if (i === 6) {
+      await attachImage()
+    }
     await textarea().press('ControlOrMeta+Enter')
     await expect(textarea()).toBeEmpty()
   }
@@ -138,14 +151,7 @@ test.describe('clickable elements', () => {
   let closeDialogButton!: Locator
   test.beforeAll(async () => {
     // Prepare a message with an image and a link.
-    const fileChooserPromise = page.waitForEvent('filechooser')
-    await page.getByRole('button', { name: 'Attach' }).click()
-    await page.getByRole('menuitem', { name: 'Image' }).click()
-    const fileChooser = await fileChooserPromise
-    await fileChooser.setFiles(imagePath)
-    await expect(
-      page.getByRole('region', { name: 'Write a message' }).getByRole('img')
-    ).toBeVisible()
+    await attachImage()
     await textarea().fill(
       getMessageText(42) + '\nhttps://localhost/somepage.html'
     )
@@ -282,6 +288,20 @@ test('menu items', async () => {
 
   await expect(page.getByRole('menuitem')).toHaveText([
     'Forward',
+    // 'Export Attachments',
+    'Resend',
+    'Delete',
+  ])
+  await page.keyboard.press('Escape')
+
+  // Message with an attachment
+  await getMessage(6).click({ modifiers: ['ControlOrMeta'] })
+  await getMessage(7).click({
+    button: 'right',
+  })
+  await expect(page.getByRole('menuitem')).toHaveText([
+    'Forward',
+    'Export Attachments',
     'Resend',
     'Delete',
   ])

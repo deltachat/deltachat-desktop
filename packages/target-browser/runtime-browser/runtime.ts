@@ -570,6 +570,13 @@ class BrowserRuntime implements Runtime {
       )
     }
   }
+  async downloadFiles(
+    files: Array<{ pathToSource: string; filename: string }>
+  ): Promise<void> {
+    await Promise.all(
+      files.map(f => this.downloadFile(f.pathToSource, f.filename))
+    )
+  }
   readClipboardText(): Promise<string> {
     return navigator.clipboard.readText()
   }
