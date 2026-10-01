@@ -229,7 +229,8 @@ test('onboarding with manual credentials', async ({ browserName }) => {
   )
   await page.getByTestId('open-advanced-settings').click()
   await page.getByTestId('open-transport-settings').click()
-  await page.getByLabel('Edit Relay').first().click()
+  await page.getByRole('button', { name: 'More Options' }).click()
+  await page.getByRole('menuitem', { name: 'Edit Relay' }).click()
   const addressLocator = page.locator('#addr')
   await expect(addressLocator).toHaveValue(/.+@.+/)
   const addressFromSettings = await addressLocator.inputValue()
@@ -433,7 +434,8 @@ test('instant onboarding works with DCLOGIN qr code', async ({
     'open-advanced-settings',
     'open-transport-settings',
   ])
-  await page.getByLabel('Edit Relay').first().click()
+  await page.getByRole('button', { name: 'More Options' }).click()
+  await page.getByRole('menuitem', { name: 'Edit Relay' }).click()
   const addressLocator = page.locator('#addr')
   await expect(addressLocator).toHaveValue(/.+@.+/)
   const addressFromSettings = await addressLocator.inputValue()

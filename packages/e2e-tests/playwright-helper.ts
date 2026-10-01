@@ -326,7 +326,8 @@ export async function createNewProfile(
   )
   await page.getByTestId('open-advanced-settings').click()
   await page.getByTestId('open-transport-settings').click()
-  await page.getByLabel('Edit Relay').first().click()
+  await page.getByRole('button', { name: 'More Options' }).click()
+  await page.getByRole('menuitem', { name: 'Edit Relay' }).click()
   const addressLocator = page.locator('#addr')
   await expect(addressLocator).toHaveValue(/.+@.+/)
   const address = await addressLocator.inputValue()
@@ -380,7 +381,8 @@ export async function getProfile(
 
   await page.getByTestId('open-advanced-settings').click()
   await page.getByTestId('open-transport-settings').click()
-  await page.getByLabel('Edit Relay').first().click()
+  await page.getByRole('button', { name: 'More Options' }).click()
+  await page.getByRole('menuitem', { name: 'Edit Relay' }).click()
   const addressLocator = page.locator('#addr')
   await expect(addressLocator).toHaveValue(/.+@.+/)
   const address = await addressLocator.inputValue()
@@ -414,7 +416,8 @@ export async function setForceEncryption(
   await page.getByTestId('open-settings-menu-item').click()
   await page.getByTestId('open-advanced-settings').click()
   await page.getByTestId('open-transport-settings').click()
-  await page.getByLabel('Edit Relay').first().click()
+  await page.getByRole('button', { name: 'More Options' }).click()
+  await page.getByRole('menuitem', { name: 'Edit Relay' }).click()
   await page.locator('#show-advanced-button').click()
   const switchInput = page.getByRole('checkbox', {
     name: 'Enforce Encryption for All Relays',
