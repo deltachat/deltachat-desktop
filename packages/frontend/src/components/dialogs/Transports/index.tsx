@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useId,
+  useState,
+} from 'react'
 import { DialogProps } from '../../../contexts/DialogContext'
 import Dialog, { DialogBody, DialogHeader, DialogFooter } from '../../Dialog'
 import { BackendRemote, onDCEvent } from '../../../backend-com'
@@ -8,6 +14,7 @@ import useAlertDialog from '../../../hooks/dialog/useAlertDialog'
 import BasicQrScanner from '../BasicScanner'
 import EditTransportDialog from '../EditTransportDialog'
 import Button from '../../Button'
+import Icon from '../../Icon'
 
 import styles from './styles.module.scss'
 
@@ -15,6 +22,8 @@ import classNames from 'classnames'
 import useDialog from '../../../hooks/dialog/useDialog'
 import useAddTransportDialog from '../../../hooks/dialog/useAddTransportDialog'
 import useConfirmationDialog from '../../../hooks/dialog/useConfirmationDialog'
+import { ContextMenuContext } from '../../../contexts/ContextMenuContext'
+import { mouseEventToPosition } from '../../../utils/mouseEventToPosition'
 
 type Transport = Awaited<
   ReturnType<typeof BackendRemote.rpc.listTransports>
@@ -28,8 +37,11 @@ export default function TransportsDialog(
     accountId: number
   }
 ) {
+  const idBase = useId()
   const tx = useTranslationFunction()
   const openConfirmationDialog = useConfirmationDialog()
+  const { openContextMenu } = useContext(ContextMenuContext)
+
   const openAlertDialog = useAlertDialog()
   const { accountId, onClose } = props
   const addTransportDialog = useAddTransportDialog()
@@ -139,22 +151,6 @@ export default function TransportsDialog(
                   </label>
                 </div>
                 <div>
-                  <Button
-                    onClick={() => editTransport(transport)}
-                    aria-label={`${tx('edit_transport')}`}
-                    title={tx('edit_transport')}
-                    styling='borderless'
-                    className={styles.editButton}
-                  >
-                    <i
-                      className={classNames(
-                        'material-svg-icon',
-                        'material-icon-edit',
-                        styles.edit
-                      )}
-                      aria-hidden='true'
-                    />
-                  </Button>
                   {transports.length > 1 && (
                     <Button
                       onClick={() => deleteTransport(transport)}
@@ -173,6 +169,29 @@ export default function TransportsDialog(
                       />
                     </Button>
                   )}
+                  <Button
+                    id={`${idBase}-options-${index}`}
+                    aria-haspopup='menu'
+                    aria-label={tx('menu_more_options')}
+                    styling='borderless'
+                    className={styles.optionsButton}
+                    onClick={e =>
+                      openContextMenu({
+                        ...mouseEventToPosition(e),
+                        ariaAttrs: {
+                          'aria-labelledby': `${idBase}-options-${index}`,
+                        },
+                        items: [
+                          {
+                            action: () => editTransport(transport),
+                            label: tx('edit_transport'),
+                          },
+                        ],
+                      })
+                    }
+                  >
+                    <Icon icon='more_vert' className={styles.options} />
+                  </Button>
                 </div>
               </div>
             ))}
