@@ -340,6 +340,11 @@ class ElectronRuntime implements Runtime {
   async downloadFile(pathToSource: string, filename: string): Promise<void> {
     await ipcBackend.invoke('saveFile', pathToSource, filename)
   }
+  async downloadFiles(
+    files: Array<{ pathToSource: string; filename: string }>
+  ): Promise<void> {
+    await ipcBackend.invoke('saveFiles', files)
+  }
   readClipboardText(): Promise<string> {
     return ipcBackend.invoke('electron.clipboard.readText')
   }

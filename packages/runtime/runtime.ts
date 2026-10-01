@@ -98,6 +98,9 @@ export interface Runtime {
   openLink(link: `http:${string}` | `https:${string}`): void
   showOpenFileDialog(options: RuntimeOpenDialogOptions): Promise<string[]>
   downloadFile(pathToSource: string, filename: string): Promise<void>
+  downloadFiles(
+    files: Array<{ pathToSource: string; filename: string }>
+  ): Promise<void>
   transformBlobURL(blob: string): string
   transformStickerURL(sticker_path: string): string
   /** Moves a sticker file to the system trash. The path must be an absolute
