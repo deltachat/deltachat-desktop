@@ -55,6 +55,16 @@ const expectMessages = async (messageNums: number[]) => {
 
 const fixturesPath = path.join(import.meta.dirname, '..', 'fixtures')
 const imagePath = path.join(fixturesPath, 'Deltachat-Logo.png')
+const attachImage = async () => {
+  const fileChooserPromise = page.waitForEvent('filechooser')
+  await page.getByRole('button', { name: 'Attach' }).click()
+  await page.getByRole('menuitem', { name: 'Image' }).click()
+  const fileChooser = await fileChooserPromise
+  await fileChooser.setFiles(imagePath)
+  await expect(
+    page.getByRole('region', { name: 'Write a message' }).getByRole('img')
+  ).toBeVisible()
+}
 
 test.beforeAll(async ({ browser }) => {
   page = await browser.newPage()
@@ -138,14 +148,7 @@ test.describe('clickable elements', () => {
   let closeDialogButton!: Locator
   test.beforeAll(async () => {
     // Prepare a message with an image and a link.
-    const fileChooserPromise = page.waitForEvent('filechooser')
-    await page.getByRole('button', { name: 'Attach' }).click()
-    await page.getByRole('menuitem', { name: 'Image' }).click()
-    const fileChooser = await fileChooserPromise
-    await fileChooser.setFiles(imagePath)
-    await expect(
-      page.getByRole('region', { name: 'Write a message' }).getByRole('img')
-    ).toBeVisible()
+    await attachImage()
     await textarea().fill(
       getMessageText(42) + '\nhttps://localhost/somepage.html'
     )
