@@ -119,9 +119,10 @@ export default function AccountSetupScreen({
             </FooterActionButton>
             <FooterActionButton
               onClick={onClickLogin}
+              styling='primary'
               data-testid='login-with-credentials'
             >
-              {tx('login_title')}
+              {tx('ok')}
             </FooterActionButton>
           </FooterActions>
         </DialogFooter>
