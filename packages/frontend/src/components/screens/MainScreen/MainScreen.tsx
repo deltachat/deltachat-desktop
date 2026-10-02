@@ -32,6 +32,7 @@ import asyncThrottle from '@jcoreio/async-throttle'
 import { useFetch } from '../../../hooks/useFetch'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 import { GlobalVoiceMessagePlayer } from '../../GlobalVoiceMessagePlayer/GlobalVoiceMessagePlayer'
+import * as Resizeable from 'react-resizable-panels'
 
 const log = getLogger('MainScreen')
 
@@ -267,18 +268,36 @@ export default function MainScreen({ accountId }: Props) {
   const isSearchActive = queryStr.length > 0 || queryChatId !== null
   const showArchivedChats = !isSearchActive && archivedChatsSelected
 
+  const { defaultLayout, onLayoutChanged } = Resizeable.useDefaultLayout({
+    id: 'mainScreen',
+    // We generally use `DesktopSettings` for storing things like this,
+    // but it's probably fine to use the default `localStorage` here.
+    // storage:
+  })
+
   const lastUsedApps =
     lastUsedAppsFetch?.result?.ok && lastUsedAppsFetch.result.value.length > 0
       ? lastUsedAppsFetch.result.value
       : []
 
   return (
-    <div
+    <Resizeable.Group
       className={`main-screen ${smallScreenMode ? 'small-screen' : ''} ${
         !messageSectionShouldBeHidden ? 'chat-view-open' : ''
       }`}
+      defaultLayout={defaultLayout}
+      onLayoutChanged={onLayoutChanged}
     >
-      <div className={styles.chatListAndHeaderAndAudioPlayer}>
+      <Resizeable.Panel
+        id='chatList'
+        className={styles.chatListAndHeaderAndAudioPlayer}
+        defaultSize={`${3 / (3 + 8) * 100}%`}
+        // Enough space to ensure that the "unread" badge is visible.
+        // This also ensures that the "header" (search area) doesn't overflow,
+        // even when the "proxy" icon is present.
+        minSize='6rem'
+        // groupResizeBehavior='preserve-pixel-size'
+      >
         <section
           className={styles.chatListAndHeader}
           role='region'
@@ -319,13 +338,18 @@ export default function MainScreen({ accountId }: Props) {
         </section>
 
         <GlobalVoiceMessagePlayer />
-      </div>
-      <ChatView
-        className={styles.chatView}
-        accountId={accountId}
-        lastUsedApps={lastUsedApps}
-      />
+      </Resizeable.Panel>
+      <Resizeable.Separator className={styles.chatListResizeHandle} />
+      <Resizeable.Panel
+        id='chatView'
+        // Basically no limit, but leave some margin
+        // to ensure that the user can still grab the resize handle.
+        minSize='1rem'
+        style={{ display: 'flex' }}
+      >
+        <ChatView accountId={accountId} lastUsedApps={lastUsedApps} />
+      </Resizeable.Panel>
       {!chatListShouldBeHidden && <ConnectivityToast />}
-    </div>
+    </Resizeable.Group>
   )
 }
