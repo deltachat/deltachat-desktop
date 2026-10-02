@@ -173,7 +173,7 @@ function EditTransportInner({
       <OkCancelFooterAction
         onCancel={() => onClose()}
         onOk={onOk}
-        confirmLabel={tx('login_title')}
+        confirmLabel={tx('ok')}
       />
     </>
   )
