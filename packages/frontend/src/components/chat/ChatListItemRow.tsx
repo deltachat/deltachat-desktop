@@ -137,6 +137,9 @@ export const ChatListItemRowChat = React.memo<{
       }
       if (shouldPreventDefault) {
         e.preventDefault()
+        // As of writing `stopPropagation()` is not important,
+        // but it might become at some point.
+        e.stopPropagation()
         return
       }
     },
