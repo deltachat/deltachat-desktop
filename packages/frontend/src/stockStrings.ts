@@ -46,7 +46,6 @@ export async function updateCoreStrings() {
     [C.DC_STR_VIDEO]: tx('video'),
     [C.DC_STR_AUDIO]: tx('audio'),
     [C.DC_STR_FILE]: tx('file'),
-    [C.DC_STR_FINGERPRINTS]: tx('qrscan_fingerprint_label'),
     [C.DC_STR_ARCHIVEDCHATS]: tx('chat_archived_chats_title'),
     [C.DC_STR_DEVICE_MESSAGES]: tx('device_talk'),
     [C.DC_STR_NEW_GROUP_SEND_FIRST_MESSAGE]: tx('chat_new_group_hint'),
