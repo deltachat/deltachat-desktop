@@ -1,0 +1,97 @@
+.pinnedMessagesBanner {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  border-bottom: var(--outlineProperties);
+  background-color: var(--composerBg);
+  color: var(--globalText);
+}
+
+.jumpButton {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-grow: 1;
+  /* Allows the summary to be truncated instead of overflowing. */
+  min-width: 0;
+  min-height: 40px;
+  padding-block: 4px;
+  padding-inline: 12px;
+  border: none;
+  background: none;
+  color: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+/* Covers the whole row, so that the "Start" button area doesn't stand out. */
+.pinnedMessagesBanner:has(.jumpButton:hover) {
+  background-color: color-mix(
+    in srgb,
+    var(--composerBg) 92%,
+    var(--globalText)
+  );
+}
+
+.positionDots {
+  display: flex;
+  /* Oldest pinned message at the top, newest at the bottom, like in the message list. */
+  flex-direction: column;
+  gap: 3px;
+  flex-shrink: 0;
+}
+
+.dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: var(--globalText);
+  opacity: 0.25;
+}
+
+.activeDot {
+  opacity: 0.8;
+}
+
+.thumbnail {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.summary {
+  flex-grow: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  opacity: 0.7;
+}
+
+.pinIcon {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  mask: url(./images/pin.svg) no-repeat center;
+  -webkit-mask: url(./images/pin.svg) no-repeat center;
+  mask-size: 100%;
+  -webkit-mask-size: 100%;
+  background-color: var(--globalText);
+}
+
+.startButton {
+  flex-shrink: 0;
+  margin-inline: 8px;
+  padding-block: 4px;
+  padding-inline: 14px;
+  border: none;
+  border-radius: 50px;
+  background-color: var(--buttonPrimaryBackground);
+  color: var(--buttonPrimaryText);
+  cursor: pointer;
+}
+
+.startButton:hover {
+  background-color: var(--buttonPrimaryHover);
+}

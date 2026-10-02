@@ -27,10 +27,6 @@ export async function updateCoreStrings() {
     | typeof C.DC_STR_SYNC_MSG_SUBJECT
     | typeof C.DC_STR_SYNC_MSG_BODY
 
-    // No string for these upstream yet. TODO.
-    | typeof C.DC_STR_MESSAGE_PINNED_BY_OTHER
-    | typeof C.DC_STR_MESSAGE_PINNED_BY_YOU
-
     // Deprecated, see
     // https://github.com/chatmail/core/blob/main/deltachat-ffi/deltachat.h
     | typeof C.DC_STR_E2E_AVAILABLE
@@ -185,6 +181,8 @@ export async function updateCoreStrings() {
     [C.DC_STR_CHANNEL_IMAGE_CHANGED]: tx('channel_image_changed'),
     [C.DC_STR_CHANNEL_NAME_CHANGED]: tx('channel_name_changed'),
     [C.DC_STR_MESSAGES_ARE_E2EE]: tx('messages_are_e2ee'),
+    [C.DC_STR_MESSAGE_PINNED_BY_YOU]: tx('message_pinned_by_you'),
+    [C.DC_STR_MESSAGE_PINNED_BY_OTHER]: tx('message_pinned_by_other'),
 
     [C.DC_STR_ADD_YOU]: tx('member_you_added'),
     [C.DC_STR_ADD_YOU_BY]: tx('add_you_by_other'),
