@@ -63,7 +63,6 @@ export async function updateCoreStrings() {
     [C.DC_STR_BAD_TIME_MSG_BODY]: tx('devicemsg_bad_time'),
     [C.DC_STR_UPDATE_REMINDER_MSG_BODY]: tx('devicemsg_update_reminder'),
     [C.DC_STR_SELF_DELETED_MSG_BODY]: tx('devicemsg_self_deleted'),
-    [C.DC_STR_QUOTA_EXCEEDING_MSG_BODY]: tx('devicemsg_storage_exceeding'),
     [C.DC_STR_INCOMING_MESSAGES]: tx('incoming_messages'),
     [C.DC_STR_OUTGOING_MESSAGES]: tx('outgoing_messages'),
     [C.DC_STR_CONNECTED]: tx('connectivity_connected'),
