@@ -77,7 +77,7 @@ const create = (win: BrowserWindow) => {
       separator: () => ({ type: 'separator' }),
       learnSpelling: () => ({
         id: 'learnSpelling',
-        label: tx('menu_learn_spelling'),
+        label: 'Learn Spelling',
         visible: Boolean(props.isEditable && hasText && props.misspelledWord),
         click() {
           const target = webContents(win)
@@ -170,7 +170,7 @@ const create = (win: BrowserWindow) => {
       } else {
         dictionarySuggestions.push({
           id: 'dictionarySuggestions',
-          label: tx('no_spellcheck_suggestions_found'),
+          label: 'No spelling suggestions found.',
           visible: Boolean(hasText && props.misspelledWord),
           enabled: false,
         })
