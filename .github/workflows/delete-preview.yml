@@ -35,6 +35,7 @@ jobs:
           # The key is restricted to rrsync, so the target directory is configured in
           # authorized_keys on the server
           rsync -rv --delete \
+            --include="deltachat-desktop.${BRANCH}.deb" \
             --include="deltachat-desktop.${BRANCH}.AppImage" \
             --include="deltachat-desktop.${BRANCH}.portable.exe" \
             --include="deltachat-desktop.${BRANCH}.dmg" \

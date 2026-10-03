@@ -61,7 +61,7 @@ jobs:
         run: |
           export DEBUG=electron-builder
           cd packages/target-electron
-          pnpm electron-builder --publish never --linux AppImage
+          pnpm electron-builder --publish never --linux deb
       - name: LINUX renaming / upload Preperation
         if: runner.os == 'Linux'
         working-directory: packages/target-electron
@@ -70,7 +70,7 @@ jobs:
         run: |
           cd dist
           mkdir preview
-          mv *.AppImage preview/deltachat-desktop.$BRANCH.AppImage
+          mv *.deb preview/deltachat-desktop.$BRANCH.deb
           ls preview
           cd ..
       - name: MAC electron builder

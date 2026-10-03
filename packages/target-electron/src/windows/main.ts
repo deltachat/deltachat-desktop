@@ -90,12 +90,21 @@ export function init(options: { hidden: boolean; hideMenuBar: boolean }) {
 
   window.loadFile(join(htmlDistDir(), defaults.main))
 
-  window.once('ready-to-show', () => {
+  const showWindow = () => {
     if (!options.hidden) mainWindow.show()
     if (process.env.NODE_ENV === 'test') {
       mainWindow.maximize()
     }
-  })
+  }
+  // The `ready-to-show` event doesn't always fire on wayland.
+  // Use the `did-finish-load` event on the web contents instead as that is similar enough
+  // https://github.com/electron/electron/issues/48859
+  if (process.platform === 'linux' /* && app.commandLine.getSwitchValue('ozone-platform') === 'wayland' */) {
+    mainWindow.webContents.once('did-finish-load', showWindow)
+  } else {
+    // Show when loaded
+    mainWindow.once('ready-to-show', showWindow)
+  }
 
   if (window.setSheetOffset) {
     window.setSheetOffset(defaults.headerHeight)
