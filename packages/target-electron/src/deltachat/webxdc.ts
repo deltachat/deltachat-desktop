@@ -212,67 +212,70 @@ export default class DCWebxdc {
       internetAccess: boolean
     ): Promise<string> => {
       const partition = partitionKeyFromAccountId(accountId, internetAccess)
-      if (!existing_sessions.includes(partition)) {
-        const ses = session.fromPartition(partition, {
-          cache: false,
-        })
-        existing_sessions.push(partition)
-
-        // Thanks to the fact that we specify `host-resolver-rules`,
-        // no connection attempt to the proxy should occur at all,
-        // at least as of now.
-        // See https://www.chromium.org/developers/design-documents/network-stack/socks-proxy/ :
-        // > The "EXCLUDE" clause make an exception for "myproxy",
-        // > because otherwise Chrome would be unable to resolve
-        // > the address of the SOCKS proxy server itself,
-        // > and all requests would necessarily fail
-        // > with PROXY_CONNECTION_FAILED.
-        //
-        // However, let's still use our dummy TCP listener, just in case.
-        await ses.setProxy({
-          mode: 'fixed_servers',
-          proxyRules: await getDummyProxyUrl(),
-        })
-        await ses.closeAllConnections()
-
-        ses.webRequest.onBeforeRequest(
-          {
-            urls: ['<all_urls>'],
-          },
-          (details, cb) => {
-            let cancelRequest = true
-            if (details.url.startsWith('webxdc://')) {
-              cancelRequest = false
-            } else if (details.url.startsWith('devtools://')) {
-              // devtools can only be open at all if their risk was confirmed
-              cancelRequest = !Object.values(open_apps).some(
-                app => app.devToolsConfirmed
-              )
-            } else if (details.url.startsWith('https://')) {
-              cancelRequest = !internetAccess
-            }
-            cb({ cancel: cancelRequest })
-          }
-        )
-
-        // TODO also consider this. However, this might have observable effects
-        // on the app (i.e. "offline" status).
-        // ses.enableNetworkEmulation({ offline: true })
-
-        // register appropriate protocols
-        // see https://www.electronjs.org/docs/latest/api/protocol
-        ses.protocol.handle('webxdc', (...args) => {
-          return webxdcProtocolHandler(this.rpc, ...args)
-        })
-        if (
-          DesktopSettings.state.enableOnDemandLocationStreaming &&
-          internetAccess
-        ) {
-          ses.protocol.handle('https', req =>
-            webRequestHandler(accountId, this.rpc, req)
-          )
-        }
+      if (existing_sessions.includes(partition)) {
+        return partition
       }
+
+      const ses = session.fromPartition(partition, {
+        cache: false,
+      })
+      existing_sessions.push(partition)
+
+      // Thanks to the fact that we specify `host-resolver-rules`,
+      // no connection attempt to the proxy should occur at all,
+      // at least as of now.
+      // See https://www.chromium.org/developers/design-documents/network-stack/socks-proxy/ :
+      // > The "EXCLUDE" clause make an exception for "myproxy",
+      // > because otherwise Chrome would be unable to resolve
+      // > the address of the SOCKS proxy server itself,
+      // > and all requests would necessarily fail
+      // > with PROXY_CONNECTION_FAILED.
+      //
+      // However, let's still use our dummy TCP listener, just in case.
+      await ses.setProxy({
+        mode: 'fixed_servers',
+        proxyRules: await getDummyProxyUrl(),
+      })
+      await ses.closeAllConnections()
+
+      ses.webRequest.onBeforeRequest(
+        {
+          urls: ['<all_urls>'],
+        },
+        (details, cb) => {
+          let cancelRequest = true
+          if (details.url.startsWith('webxdc://')) {
+            cancelRequest = false
+          } else if (details.url.startsWith('devtools://')) {
+            // devtools can only be open at all if their risk was confirmed
+            cancelRequest = !Object.values(open_apps).some(
+              app => app.devToolsConfirmed
+            )
+          } else if (details.url.startsWith('https://')) {
+            cancelRequest = !internetAccess
+          }
+          cb({ cancel: cancelRequest })
+        }
+      )
+
+      // TODO also consider this. However, this might have observable effects
+      // on the app (i.e. "offline" status).
+      // ses.enableNetworkEmulation({ offline: true })
+
+      // register appropriate protocols
+      // see https://www.electronjs.org/docs/latest/api/protocol
+      ses.protocol.handle('webxdc', (...args) => {
+        return webxdcProtocolHandler(this.rpc, ...args)
+      })
+      if (
+        DesktopSettings.state.enableOnDemandLocationStreaming &&
+        internetAccess
+      ) {
+        ses.protocol.handle('https', req =>
+          webRequestHandler(accountId, this.rpc, req)
+        )
+      }
+
       return partition
     }
 
