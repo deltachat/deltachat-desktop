@@ -254,15 +254,9 @@ function openVideoCallWindow<D extends CallDirection>(
 
   const chatInfoPromise = jsonrpcRemote.rpc.getBasicChatInfo(accountId, chatId)
 
-  const ses = session.fromPartition('calls-webapp')
-
-  if (!ses.protocol.isProtocolHandled(SCHEME_NAME)) {
-    ses.protocol.handle(SCHEME_NAME, returnIndexHtmlOrAvatar)
-  }
-
   const win = new BrowserWindow({
     webPreferences: {
-      session: ses,
+      session: getSession(),
 
       // Basically the same as for our WebXDC window.
       sandbox: true,
@@ -343,39 +337,6 @@ function openVideoCallWindow<D extends CallDirection>(
   // This might also be solved with `WebContentsView`?
   win.on('page-title-updated', ev => {
     ev.preventDefault()
-  })
-
-  const permission_handler = (
-    permission: string,
-    details: {
-      // These can also be empty strings.
-      requestingOrigin?: string
-      requestingUrl?: string
-      securityOrigin?: string
-      isMainFrame?: boolean
-    }
-  ) => {
-    if (
-      (details.requestingOrigin && !isOriginGood(details.requestingOrigin)) ||
-      (details.requestingUrl && !isOriginGood(details.requestingUrl)) ||
-      (details.securityOrigin && !isOriginGood(details.securityOrigin)) ||
-      (typeof details.isMainFrame === 'boolean' && !details.isMainFrame)
-    ) {
-      return false
-    }
-
-    return ['media'].includes(permission)
-  }
-  ses.setPermissionCheckHandler(
-    (_wc, permission, requestingOrigin, details) => {
-      return permission_handler(permission, {
-        requestingOrigin,
-        ...details,
-      })
-    }
-  )
-  ses.setPermissionRequestHandler((_wc, permission, callback, details) => {
-    callback(permission_handler(permission, details))
   })
 
   const webAppMessagePort = (() => {
@@ -662,6 +623,49 @@ function handleCallEnd(
     .finally(onDone)
 
   return { done, onCallAcceptedOnThisDevice }
+}
+
+function getSession() {
+  const ses = session.fromPartition('calls-webapp')
+
+  if (!ses.protocol.isProtocolHandled(SCHEME_NAME)) {
+    ses.protocol.handle(SCHEME_NAME, returnIndexHtmlOrAvatar)
+  }
+
+  const permission_handler = (
+    permission: string,
+    details: {
+      // These can also be empty strings.
+      requestingOrigin?: string
+      requestingUrl?: string
+      securityOrigin?: string
+      isMainFrame?: boolean
+    }
+  ) => {
+    if (
+      (details.requestingOrigin && !isOriginGood(details.requestingOrigin)) ||
+      (details.requestingUrl && !isOriginGood(details.requestingUrl)) ||
+      (details.securityOrigin && !isOriginGood(details.securityOrigin)) ||
+      (typeof details.isMainFrame === 'boolean' && !details.isMainFrame)
+    ) {
+      return false
+    }
+
+    return ['media'].includes(permission)
+  }
+  ses.setPermissionCheckHandler(
+    (_wc, permission, requestingOrigin, details) => {
+      return permission_handler(permission, {
+        requestingOrigin,
+        ...details,
+      })
+    }
+  )
+  ses.setPermissionRequestHandler((_wc, permission, callback, details) => {
+    callback(permission_handler(permission, details))
+  })
+
+  return ses
 }
 
 // See https://github.com/deltachat/calls-webapp/pull/20.
