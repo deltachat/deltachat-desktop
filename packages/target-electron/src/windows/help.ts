@@ -1,4 +1,4 @@
-import { BrowserWindow, Menu, shell } from 'electron'
+import { BrowserWindow, Menu, session, shell } from 'electron'
 import { join } from 'path'
 import { stat } from 'fs/promises'
 import { platform } from 'os'
@@ -61,6 +61,9 @@ export async function openHelpWindow(locale: string, anchor?: string) {
     minWidth: 450,
     minHeight: 450,
   }
+
+  const ses = session.fromPartition('help-window')
+
   const help_window = (win = new BrowserWindow({
     backgroundColor: '#282828',
     darkTheme: true, // Forces dark theme (GTK+3)
@@ -71,6 +74,7 @@ export async function openHelpWindow(locale: string, anchor?: string) {
     useContentSize: true, // Specify web page size without OS chrome
 
     webPreferences: {
+      session: ses,
       contextIsolation: true,
       sandbox: true,
       spellcheck: false,
@@ -130,9 +134,9 @@ export async function openHelpWindow(locale: string, anchor?: string) {
   `)
 
   // help does not need web permissions so deny all
-  win.webContents.session.setPermissionCheckHandler((_wc, _permission) => false)
-  win.webContents.session.setPermissionRequestHandler(
-    (_wc, _permission, callback) => callback(false)
+  ses.setPermissionCheckHandler((_wc, _permission) => false)
+  ses.setPermissionRequestHandler((_wc, _permission, callback) =>
+    callback(false)
   )
 
   const isMac = platform() === 'darwin'
