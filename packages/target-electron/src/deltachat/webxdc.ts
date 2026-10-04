@@ -221,6 +221,33 @@ export default class DCWebxdc {
       })
       existing_sessions.push(partition)
 
+      const loggedPermissionRequests = new Set<string>()
+
+      const permission_handler = (permission: string) => {
+        const isAllowed: boolean = ALLOWED_PERMISSIONS.includes(permission)
+
+        // Prevent webxdcs from spamming the log
+        if (!loggedPermissionRequests.has(permission)) {
+          loggedPermissionRequests.add(permission)
+          if (isAllowed) {
+            log.info(`ALLOWED permission '${permission}' to webxdc`)
+          } else {
+            log.info(
+              `DENIED permission '${permission}' to webxdc. If you think that's a bug and you need that permission, then please open an issue on github.`
+            )
+          }
+        }
+
+        return isAllowed
+      }
+
+      ses.setPermissionCheckHandler((_wc, permission) => {
+        return permission_handler(permission)
+      })
+      ses.setPermissionRequestHandler((_wc, permission, callback) => {
+        callback(permission_handler(permission))
+      })
+
       // Thanks to the fact that we specify `host-resolver-rules`,
       // no connection attempt to the proxy should occur at all,
       // at least as of now.
@@ -658,39 +685,6 @@ export default class DCWebxdc {
       webxdcWindow.on('page-title-updated', ev => {
         ev.preventDefault()
       })
-
-      const loggedPermissionRequests = new Set<string>()
-
-      const permission_handler = (permission: string) => {
-        const isAllowed: boolean = ALLOWED_PERMISSIONS.includes(permission)
-
-        // Prevent webxdcs from spamming the log
-        if (!loggedPermissionRequests.has(permission)) {
-          loggedPermissionRequests.add(permission)
-          if (isAllowed) {
-            log.info(
-              `ALLOWED permission '${permission}' to webxdc '${webxdcInfo.name}'`
-            )
-          } else {
-            log.info(
-              `DENIED permission '${permission}' to webxdc '${webxdcInfo.name}'. If you think that's a bug and you need that permission, then please open an issue on github.`
-            )
-          }
-        }
-
-        return isAllowed
-      }
-
-      webxdcWindow.webContents.session.setPermissionCheckHandler(
-        (_wc, permission) => {
-          return permission_handler(permission)
-        }
-      )
-      webxdcWindow.webContents.session.setPermissionRequestHandler(
-        (_wc, permission, callback) => {
-          callback(permission_handler(permission))
-        }
-      )
     }
 
     // actual webxdc instances
