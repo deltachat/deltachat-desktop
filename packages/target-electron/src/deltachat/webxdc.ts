@@ -44,8 +44,6 @@ type AppInstance = {
   msgId: number
   accountId: number
   internet_access: boolean
-  grantedPermissions: Set<PermissionName>
-  requestedOrCheckedPermissions: Set<PermissionName>
   displayName: string
   /**
    * Whether the user accepted the risk of opening developer tools on this app,
@@ -66,6 +64,14 @@ type AppInstance = {
 >
 const open_apps: {
   [instanceId: string]: AppInstance
+} = {}
+// Separate from `open_apps` in order to persist permissions
+// between WebXDC app launches.
+const permissionsMap: {
+  [instanceId: string]: {
+    grantedPermissions: Set<PermissionName>
+    requestedOrCheckedPermissions: Set<PermissionName>
+  }
 } = {}
 
 /**
@@ -377,6 +383,14 @@ export default class DCWebxdc {
           return false
         }
 
+        const instancePermissions = permissionsMap[appId]
+        if (instancePermissions == undefined) {
+          log.warn(
+            `got WebXDC permission request from "${requestingUrl}" but its permissions are not recorded`
+          )
+          return false
+        }
+
         // Hardening measure. WebXDCs shouldn't be able
         // to load other origins already, but let's check just in case.
         // TODO refactor: DRY this check? We also have it elsewhere.
@@ -397,8 +411,8 @@ export default class DCWebxdc {
          * so we need to check this in order to not spam the log.
          */
         const firstTimeRequestOrCheck =
-          !instance.requestedOrCheckedPermissions.has(permission)
-        instance.requestedOrCheckedPermissions.add(permission)
+          !instancePermissions.requestedOrCheckedPermissions.has(permission)
+        instancePermissions.requestedOrCheckedPermissions.add(permission)
 
         if (firstTimeRequestOrCheck) {
           const menu = windowToMenu.get(instance.win)
@@ -419,7 +433,7 @@ export default class DCWebxdc {
 
         if (
           DesktopSettings.state.enableWebxdcPermissionManagement
-            ? instance.grantedPermissions.has(permission)
+            ? instancePermissions.grantedPermissions.has(permission)
             : (
                 DEFAULT_ALLOWED_PERMISSIONS as readonly PermissionName[]
               ).includes(permission)
@@ -645,23 +659,12 @@ export default class DCWebxdc {
         }
       })
 
-      // TODO some (poorly written?) apps might require a refresh
-      // after a permission has been granted,
-      // but we don't support it because
-      // 1. There is no way to refresh a webxdc
-      const grantedPermissions = new Set<PermissionName>(
-        DEFAULT_ALLOWED_PERMISSIONS
-      )
-      const requestedOrCheckedPermissions = new Set<PermissionName>()
-
       open_apps[appId] = {
         win: webxdcWindow,
         devToolsConfirmed: false,
         accountId,
         msgId: msg_id,
         internet_access: webxdcInfo['internetAccess'],
-        grantedPermissions,
-        requestedOrCheckedPermissions,
         selfAddr: webxdcInfo.selfAddr || 'unknown@unknown',
         displayName: p.displayname || tx('unnamed'),
         sendUpdateInterval: webxdcInfo.sendUpdateInterval,
@@ -669,6 +672,15 @@ export default class DCWebxdc {
         isAppSender: webxdcInfo.isAppSender,
         isBroadcast: webxdcInfo.isBroadcast,
       }
+      // TODO some (poorly written?) apps might require a refresh
+      // after a permission has been granted,
+      // but we don't support it because
+      // 1. There is no way to refresh a webxdc
+      const instancePermissions = permissionsMap[appId] ?? {
+        grantedPermissions: new Set(DEFAULT_ALLOWED_PERMISSIONS),
+        requestedOrCheckedPermissions: new Set(),
+      }
+      permissionsMap[appId] = instancePermissions
 
       const isMac = platform() === 'darwin'
 
@@ -688,21 +700,27 @@ export default class DCWebxdc {
                   // TODO proper names for permissions, i18n
                   label:
                     permissionName === 'media'
-                      ? 'Camera and microphone'
+                      ? '🎥 Camera and microphone'
                       : permissionName,
                   type: 'checkbox',
 
-                  checked: grantedPermissions.has(permissionName),
+                  checked:
+                    instancePermissions.grantedPermissions.has(permissionName),
                   click: item => {
                     if (item.checked) {
-                      grantedPermissions.add(permissionName)
+                      instancePermissions.grantedPermissions.add(permissionName)
                     } else {
-                      grantedPermissions.delete(permissionName)
+                      instancePermissions.grantedPermissions.delete(
+                        permissionName
+                      )
                     }
                   },
                   // Don't clutter the UI with permissions
                   // that were never checked or requested.
-                  visible: requestedOrCheckedPermissions.has(permissionName),
+                  visible:
+                    instancePermissions.requestedOrCheckedPermissions.has(
+                      permissionName
+                    ),
                 })),
               } satisfies Electron.MenuItemConstructorOptions,
             ]),
