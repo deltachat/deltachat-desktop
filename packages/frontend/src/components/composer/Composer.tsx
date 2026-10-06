@@ -31,7 +31,8 @@ import type { EmojiMartData } from '../EmojiPicker'
 import { VisualVCardComponent } from '../message/VCard'
 import { ActionEmitter, KeybindAction } from '../../keybindings'
 import useKeyBindingAction from '../../hooks/useKeyBindingAction'
-import { CloseButton } from '../Dialog'
+import { CloseButton, EditButton } from '../Dialog'
+import ImageEditorDialog, { type EditedImage } from '../dialogs/ImageEditor'
 import { enterKeySendsKeyboardShortcuts } from '../KeyboardShortcutHint'
 import { AppPicker } from '../AppPicker'
 import { AppInfo } from '../AppPicker'
@@ -533,6 +534,28 @@ const Composer = forwardRef<
         }
       }
 
+  const editImage = () => {
+    if (!draftState.file) {
+      return
+    }
+    openDialog(ImageEditorDialog, {
+      file: draftState.file,
+      fileName: draftState.fileName,
+      onSave: async ({ base64, fileName }: EditedImage) => {
+        try {
+          const path = await runtime.writeTempFileFromBase64(fileName, base64)
+          await addFileToDraft(path, fileName, 'Image')
+          await runtime.removeTempFile(path)
+        } catch (err) {
+          log.error('Failed to attach edited image.', err)
+          openDialog(AlertDialog, {
+            message: `${tx('error')}: ${unknownErrorToString(err)}`,
+          })
+        }
+      },
+    })
+  }
+
   const desktopSettingsStore = useDesktopSettingsStore()[0]
 
   const focusMessageInput = useCallback(() => {
@@ -672,10 +695,18 @@ const Composer = forwardRef<
                   {/* <p>file: {draftState.file}</p> */}
                   {/* {draftState.viewType} */}
                   <DraftAttachment attachment={draftState} />
-                  <CloseButton
-                    onClick={removeFile}
-                    aria-label={tx('remove_attachment')}
-                  />
+                  <div className='attachment-actions'>
+                    <CloseButton
+                      onClick={removeFile}
+                      aria-label={tx('remove_attachment')}
+                    />
+                    {draftState.viewType === 'Image' && (
+                      <EditButton
+                        onClick={editImage}
+                        aria-label={tx('edit_image')}
+                      />
+                    )}
+                  </div>
                 </section>
               )}
               {draftState.vcardContact && (
