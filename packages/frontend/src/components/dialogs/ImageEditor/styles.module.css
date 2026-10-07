@@ -57,3 +57,13 @@
   height: var(--save-button-height);
   width: calc(var(--tabs-column-width) - 2 * var(--save-button-gap));
 }
+
+/*
+ * Option popups (stroke, opacity, shadow) are portaled into `<body>`.
+ * Their `overflow: hidden` cuts off the value label above the slider thumb.
+ * Two classes, so this wins over the single-class rule that styled-components
+ * injects after our stylesheet.
+ */
+:global(.SfxMenu-root.FIE_annotation-option-popup) {
+  overflow: visible;
+}
