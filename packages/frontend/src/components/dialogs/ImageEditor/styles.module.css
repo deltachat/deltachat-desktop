@@ -1,4 +1,47 @@
 .imageEditor {
   width: 100%;
   height: 100%;
+
+  --tabs-column-width: 112px;
+  --save-button-gap: 16px;
+  --save-button-height: 40px;
+}
+
+/* Tabs column (Adjust, Annotate, Resize) on the right side */
+.imageEditor :global(.FIE_main-container) {
+  flex-direction: row-reverse;
+}
+
+.imageEditor :global(.FIE_tabs_navbar) {
+  box-sizing: border-box;
+  width: var(--tabs-column-width);
+  flex-shrink: 0;
+  /* keep the tabs clear of the save button */
+  padding-block-end: calc(
+    var(--save-button-height) + 2 * var(--save-button-gap)
+  );
+}
+
+/*
+ * Move the save button from the top bar to the bottom of the tabs column.
+ * On narrow windows Filerobot replaces the tabs column with a drawer,
+ * then the save button stays in the top bar.
+ */
+.imageEditor :global(.FIE_root:has(.FIE_tabs_navbar) .FIE_topbar) {
+  position: static;
+}
+
+.imageEditor
+  :global(.FIE_root:has(.FIE_tabs_navbar) .FIE_buttons-save-btn-wrapper) {
+  position: absolute;
+  /* the wrapper has an inline `width: fit-content`, so it is as wide as
+  the button and the gap centers it in the tabs column */
+  inset-block-end: var(--save-button-gap);
+  inset-inline-end: var(--save-button-gap);
+}
+
+.imageEditor
+  :global(.FIE_root:has(.FIE_tabs_navbar) .FIE_buttons-save-btn-button) {
+  height: var(--save-button-height);
+  width: calc(var(--tabs-column-width) - 2 * var(--save-button-gap));
 }
