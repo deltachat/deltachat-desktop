@@ -60,6 +60,9 @@ overrides:
   esbuild-plugin-inline-worker>esbuild: ^0.25.0
   '@xmldom/xmldom@>=0.8.0 <=0.8.14': ^0.8.15
 
+patchedDependencies:
+  react-filerobot-image-editor@5.0.0-beta.159: ded5306135fcf3ed2b1f9b1c61254d8053e7d8368eb24795867a3b7be6e331de
+
 importers:
 
   .:
@@ -192,7 +195,7 @@ importers:
         version: 19.2.0(react@19.2.0)
       react-filerobot-image-editor:
         specifier: 5.0.0-beta.159
-        version: 5.0.0-beta.159(@babel/core@7.29.7(supports-color@8.1.1))(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(react-dom@19.2.0(react@19.2.0))(react-konva@19.2.7(@types/react@19.2.2)(konva@9.3.18)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react@19.2.0)(styled-components@6.6.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0))
+        version: 5.0.0-beta.159(patch_hash=ded5306135fcf3ed2b1f9b1c61254d8053e7d8368eb24795867a3b7be6e331de)(@babel/core@7.29.7(supports-color@8.1.1))(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(react-dom@19.2.0(react@19.2.0))(react-konva@19.2.7(@types/react@19.2.2)(konva@9.3.18)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react@19.2.0)(styled-components@6.6.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0))
       react-konva:
         specifier: ~19.2.7
         version: 19.2.7(@types/react@19.2.2)(konva@9.3.18)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
@@ -7352,7 +7355,7 @@ snapshots:
       react: 19.2.0
       scheduler: 0.27.0
 
-  react-filerobot-image-editor@5.0.0-beta.159(@babel/core@7.29.7(supports-color@8.1.1))(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(react-dom@19.2.0(react@19.2.0))(react-konva@19.2.7(@types/react@19.2.2)(konva@9.3.18)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react@19.2.0)(styled-components@6.6.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)):
+  react-filerobot-image-editor@5.0.0-beta.159(patch_hash=ded5306135fcf3ed2b1f9b1c61254d8053e7d8368eb24795867a3b7be6e331de)(@babel/core@7.29.7(supports-color@8.1.1))(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(react-dom@19.2.0(react@19.2.0))(react-konva@19.2.7(@types/react@19.2.2)(konva@9.3.18)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react@19.2.0)(styled-components@6.6.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)):
     dependencies:
       '@babel/runtime': 7.28.2
       '@scaleflex/icons': 3.0.0-beta.10(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)

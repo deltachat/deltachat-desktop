@@ -68,3 +68,6 @@ minimumReleaseAgeExclude:
   - '@deltachat/stdio-rpc-server-win32-ia32'
   - '@deltachat/stdio-rpc-server-win32-x64'
   - '@deltachat/stdio-rpc-server'
+
+patchedDependencies:
+  react-filerobot-image-editor@5.0.0-beta.159: packages/frontend/patches/react-filerobot-image-editor@5.0.0-beta.159.patch
