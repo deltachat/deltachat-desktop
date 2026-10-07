@@ -145,8 +145,11 @@ function isInput(el: HTMLElement): boolean {
   )
 }
 
+/** native modal dialogs and overlays such as the image editor */
+const MODAL_SELECTOR = 'dialog:modal, [aria-modal="true"]'
+
 function haveOpenDialogs(): boolean {
-  return document.querySelector('dialog:modal') != null
+  return document.querySelector(MODAL_SELECTOR) != null
 }
 
 export function keyDownEvent2Action(
@@ -162,7 +165,8 @@ export function keyDownEvent2Action(
   // but it's probably not important to support that,
   // so let's not complicate things yet.
   if (
-    (ev.target instanceof HTMLElement && ev.target.closest('dialog') != null) ||
+    (ev.target instanceof HTMLElement &&
+      ev.target.closest(`dialog, ${MODAL_SELECTOR}`) != null) ||
     // `ev.target.closest('dialog')` doesn't always work as of writing
     // because of `allowDefaultFocus` in `Dialog.tsx`,
     // which `.blur()`s the element inside the dialog
