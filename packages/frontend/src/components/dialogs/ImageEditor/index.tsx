@@ -16,6 +16,12 @@ const log = getLogger('renderer/image_editor')
 // instead of importing it.
 ;(window as any).Konva ??= Konva
 
+// Filerobot only lets users change an arrow's stroke color, not its fill,
+// so the arrowhead would keep its initial color. Fill it with the stroke color.
+;(Konva.Arrow.prototype as any).getFill = function (this: Konva.Arrow) {
+  return this.stroke()
+}
+
 const ANNOTATION_COLOR = '#e53935'
 
 type SavedImageType = 'png' | 'jpeg' | 'webp'
@@ -140,7 +146,6 @@ export default function ImageEditorDialog({
             Line={{ stroke: ANNOTATION_COLOR, strokeWidth }}
             Arrow={{
               stroke: ANNOTATION_COLOR,
-              fill: ANNOTATION_COLOR,
               strokeWidth,
               pointerLength: strokeWidth * 4,
               pointerWidth: strokeWidth * 4,
