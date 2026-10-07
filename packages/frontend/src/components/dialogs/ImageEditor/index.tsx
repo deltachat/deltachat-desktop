@@ -1,8 +1,7 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import Konva from 'konva'
 import FilerobotImageEditor from 'react-filerobot-image-editor/lib/components/AssemblyPoint'
 
-import Dialog from '../../Dialog'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
@@ -103,13 +102,28 @@ export default function ImageEditorDialog({
   const fontSize = Math.max(16, Math.round(shortSide / 12))
   const strokeWidth = Math.max(2, Math.round(shortSide / 100))
 
+  const overlayRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const previouslyFocused = document.activeElement
+    overlayRef.current?.focus()
+    return () => {
+      if (previouslyFocused instanceof HTMLElement) {
+        previouslyFocused.focus()
+      }
+    }
+  }, [])
+
+  // Not a native modal `<dialog>`: Filerobot's color picker and option
+  // popups are portaled into `<body>`, which `showModal()` would make inert
+  // and render below the dialog.
   return (
-    <Dialog
-      unstyled
-      onClose={onClose}
-      canEscapeKeyClose={false}
-      canOutsideClickClose={false}
-      allowDefaultFocus
+    <div
+      ref={overlayRef}
+      className={styles.overlay}
+      role='dialog'
+      aria-modal='true'
+      aria-label={tx('edit_image')}
+      tabIndex={-1}
     >
       <div className={styles.imageEditor}>
         {image && (
@@ -169,6 +183,6 @@ export default function ImageEditorDialog({
           />
         )}
       </div>
-    </Dialog>
+    </div>
   )
 }
