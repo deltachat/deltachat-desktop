@@ -1,7 +1,6 @@
 import React, { ReactElement, useId, useState } from 'react'
 import Button from './Button'
 import Icon from './Icon'
-import useTranslationFunction from '../hooks/useTranslationFunction'
 
 export const DeltaSelect = React.memo(
   (
@@ -152,16 +151,19 @@ export const DeltaPasswordInput = React.memo(
       ) => void
     }>
   ) => {
-    const tx = useTranslationFunction()
-
+    const idFallback = useId()
+    const id = props.id ?? idFallback
     const [showPassword, setShowPassword] = useState(false)
 
     const password = props.password || ''
 
     const rightElement = (
       <Button
+        role='checkbox'
+        aria-checked={showPassword}
+        aria-controls={id}
         onClick={() => setShowPassword(!showPassword)}
-        aria-label={showPassword ? tx('hide_password') : tx('show_password')}
+        aria-label='👁️'
         styling='borderless'
       >
         <Icon
@@ -173,7 +175,7 @@ export const DeltaPasswordInput = React.memo(
     )
     return (
       <DeltaInput
-        id={props.id}
+        id={id}
         type={showPassword ? 'text' : 'password'}
         label={props.label ? props.label : ''}
         value={password === null ? '' : password}
