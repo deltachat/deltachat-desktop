@@ -184,12 +184,13 @@ export default function LoginForm({
               value={smtpUser}
               onChange={handleCredentialsChange}
             />
-            <DeltaPasswordInput
+            <DeltaInput
               key='smtpPassword'
               id='smtpPassword'
               label={tx('login_smtp_password')}
               placeholder={tx('automatic')}
-              password={smtpPassword || ''}
+              type='password'
+              value={smtpPassword || ''}
               onChange={handleCredentialsChange}
             />
             <DeltaInput
