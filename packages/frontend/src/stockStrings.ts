@@ -35,6 +35,9 @@ export async function updateCoreStrings() {
     // https://github.com/chatmail/core/blob/main/deltachat-ffi/deltachat.h
     | typeof C.DC_STR_E2E_AVAILABLE
     | typeof C.DC_STR_PHASING_OUT
+    | typeof C.DC_STR_FINGERPRINTS
+    | typeof C.DC_STR_CANNOT_LOGIN
+    | typeof C.DC_STR_QUOTA_EXCEEDING_MSG_BODY
   >
   const strings: StockStringsSomeOmited = {
     [C.DC_STR_NOMESSAGES]: tx('chat_no_messages'),
