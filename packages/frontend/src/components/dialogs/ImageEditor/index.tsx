@@ -5,6 +5,8 @@ import FilerobotImageEditor from 'react-filerobot-image-editor/lib/components/As
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
+import useDialog from '../../../hooks/dialog/useDialog'
+import { confirmDialog } from '../../message/messageFunctions'
 
 import type { DialogProps } from '../../../contexts/DialogContext'
 
@@ -20,6 +22,29 @@ const log = getLogger('renderer/image_editor')
 // so the arrowhead would keep its initial color. Fill it with the stroke color.
 ;(Konva.Arrow.prototype as any).getFill = function (this: Konva.Arrow) {
   return this.stroke()
+}
+
+// The crop handles are centered on the crop frame. When the frame matches the
+// image, which fills the canvas, half of each handle is cut off by the canvas
+// edge. Draw them inside the frame instead.
+// Filerobot's crop rectangle is the only node with `destination-out`.
+function insetCropAnchor(anchor: Konva.Node) {
+  const size = anchor.width()
+  const name = anchor.name()
+  if (name.includes('left')) anchor.offsetX(0)
+  if (name.includes('right')) anchor.offsetX(size)
+  if (name.includes('top')) anchor.offsetY(0)
+  if (name.includes('bottom')) anchor.offsetY(size)
+}
+const getAnchorStyleFunc = (Konva.Transformer.prototype as any)
+  .getAnchorStyleFunc
+;(Konva.Transformer.prototype as any).getAnchorStyleFunc = function (
+  this: Konva.Transformer
+) {
+  const styleFunc = getAnchorStyleFunc.call(this)
+  const isCropTransformer =
+    this.nodes()[0]?.globalCompositeOperation() === 'destination-out'
+  return styleFunc ?? (isCropTransformer ? insetCropAnchor : undefined)
 }
 
 const ANNOTATION_COLOR = '#e53935'
@@ -119,6 +144,31 @@ export default function ImageEditorDialog({
     }
   }, [])
 
+  const { openDialog } = useDialog()
+  const hasChanges = useRef(false)
+
+  // Replaces Filerobot's own "discard changes" modal with our dialog.
+  const onCloseButtonClickCapture = async (ev: React.MouseEvent) => {
+    if (
+      !(ev.target instanceof Element) ||
+      !ev.target.closest('.FIE_buttons-close-btn')
+    ) {
+      return
+    }
+    ev.stopPropagation()
+    if (
+      !hasChanges.current ||
+      (await confirmDialog(
+        openDialog,
+        tx('discard_changes_question'),
+        tx('discard'),
+        true
+      ))
+    ) {
+      onClose()
+    }
+  }
+
   // Not a native modal `<dialog>`: Filerobot's color picker and option
   // popups are portaled into `<body>`, which `showModal()` would make inert
   // and render below the dialog.
@@ -130,6 +180,7 @@ export default function ImageEditorDialog({
       aria-modal='true'
       aria-label={tx('edit_image')}
       tabIndex={-1}
+      onClickCapture={onCloseButtonClickCapture}
     >
       <div className={styles.imageEditor}>
         {image && (
@@ -183,6 +234,9 @@ export default function ImageEditorDialog({
                 fileName: `${savedImageName}.${extension === 'jpeg' ? 'jpg' : extension}`,
               })
               onClose()
+            }}
+            onModify={() => {
+              hasChanges.current = true
             }}
             onClose={() => onClose()}
           />

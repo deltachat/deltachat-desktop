@@ -125,6 +125,8 @@ declare module 'react-filerobot-image-editor/lib/components/AssemblyPoint' {
     /** return `false` to skip the built-in "save as" dialog */
     onBeforeSave?: (savedImageData: SavedImageData) => void | boolean
     onSave?: (savedImageData: SavedImageData, designState: object) => void
+    /** called on every change of the image (annotations, crop, rotation, …) */
+    onModify?: (designState: object) => void
     onClose?: (closeReason: string, haveNotSavedChanges: boolean) => void
   }
 

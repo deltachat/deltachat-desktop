@@ -58,6 +58,59 @@
   width: calc(var(--tabs-column-width) - 2 * var(--save-button-gap));
 }
 
+/* same colors as the primary (OK) buttons of our dialogs */
+.imageEditor :global(.FIE_buttons-save-btn-button) {
+  background-color: var(--buttonPrimaryBackground);
+  color: var(--buttonPrimaryText);
+}
+
+.imageEditor :global(.FIE_buttons-save-btn-button:hover),
+.imageEditor :global(.FIE_buttons-save-btn-button:active) {
+  background-color: var(--buttonPrimaryHover);
+}
+
+/*
+ * Higher contrast for the close, undo, redo and reset buttons (Scaleflex sets
+ * the color on the icon, not the button). Filerobot's UI is always light,
+ * so this uses its dark text color instead of a theme color.
+ */
+.imageEditor
+  :global(
+    .FIE_topbar
+      :is(
+        .FIE_buttons-close-btn,
+        .FIE_buttons-undo-btn,
+        .FIE_buttons-redo-btn,
+        .FIE_buttons-reset-btn
+      ):not(:disabled)
+  ),
+.imageEditor
+  :global(
+    .FIE_topbar
+      :is(
+        .FIE_buttons-close-btn,
+        .FIE_buttons-undo-btn,
+        .FIE_buttons-redo-btn,
+        .FIE_buttons-reset-btn
+      ):not(:disabled)
+      svg
+  ) {
+  color: rgb(55, 65, 75);
+}
+
+.imageEditor
+  :global(
+    .FIE_topbar
+      :is(
+        .FIE_buttons-undo-btn,
+        .FIE_buttons-redo-btn,
+        .FIE_buttons-reset-btn
+      ):disabled
+      svg
+  ) {
+  color: rgb(55, 65, 75, 0.35);
+}
+
 /*
  * Option popups (stroke, opacity, shadow) are portaled into `<body>`.
  * Their `overflow: hidden` cuts off the value label above the slider thumb.
