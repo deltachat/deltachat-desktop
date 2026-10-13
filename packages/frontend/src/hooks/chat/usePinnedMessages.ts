@@ -75,22 +75,18 @@ export default function usePinnedMessages(accountId: number, chatId: number) {
     }, 100)
 
     load()
-    const cleanups = [
-      // Emitted by core on pinning and unpinning, locally and remotely.
-      onDCEvent(accountId, 'MsgsChanged', ({ chatId: eventChatId }) => {
-        if (eventChatId === chatId || eventChatId === 0) {
-          load()
-        }
-      }),
-      onDCEvent(accountId, 'MsgDeleted', ({ chatId: eventChatId }) => {
+    const cleanup = onDCEvent(
+      accountId,
+      'PinnedMessagesChanged',
+      ({ chatId: eventChatId }) => {
         if (eventChatId === chatId) {
           load()
         }
-      }),
-    ]
+      }
+    )
     return () => {
       cancelled = true
-      cleanups.forEach(cleanup => cleanup())
+      cleanup()
     }
   }, [accountId, chatId])
 

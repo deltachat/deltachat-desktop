@@ -262,7 +262,7 @@ $info-text-max-width: 400px;
 
     .pinned-message-icon {
       @include mixins.color-svg(
-        './images/pin.svg',
+        './images/icons/push-pin.svg',
         var(--messageMetadataIconColorIncoming),
         100%
       );
@@ -324,7 +324,7 @@ $info-text-max-width: 400px;
 
     .pinned-message-icon {
       @include mixins.color-svg(
-        './images/pin.svg',
+        './images/icons/push-pin.svg',
         var(--messageMetadataIconColorOutgoing),
         100%
       );
@@ -421,7 +421,7 @@ $info-text-max-width: 400px;
     }
 
     .pinned-message-icon {
-      @include mixins.color-svg('./images/pin.svg', white, 100%);
+      @include mixins.color-svg('./images/icons/push-pin.svg', white, 100%);
     }
   }
 

@@ -36,7 +36,7 @@
     }
 
     .pinned-message-icon {
-      @include mixins.color-svg('./images/pin.svg', white, 100%);
+      @include mixins.color-svg('./images/icons/push-pin.svg', white, 100%);
     }
 
     .status-icon.sending {

@@ -2,7 +2,8 @@
   display: flex;
   align-items: center;
   flex-shrink: 0;
-  border-bottom: var(--outlineProperties);
+  border-bottom: 1px solid
+    color-mix(in srgb, var(--globalText) 15%, transparent);
   background-color: var(--composerBg);
   color: var(--globalText);
 }
@@ -26,11 +27,7 @@
 
 /* Covers the whole row, so that the "Start" button area doesn't stand out. */
 .pinnedMessagesBanner:has(.jumpButton:hover) {
-  background-color: color-mix(
-    in srgb,
-    var(--composerBg) 92%,
-    var(--globalText)
-  );
+  background-color: var(--chatListItemBgHover);
 }
 
 .positionDots {
@@ -45,12 +42,13 @@
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background-color: var(--globalText);
-  opacity: 0.25;
+  /* Same as on Android: the accent color, inactive ones at 40% opacity. */
+  background-color: var(--colorPrimary);
+  opacity: 0.4;
 }
 
 .activeDot {
-  opacity: 0.8;
+  opacity: 1;
 }
 
 .thumbnail {
@@ -73,11 +71,12 @@
   flex-shrink: 0;
   width: 16px;
   height: 16px;
-  mask: url(./images/pin.svg) no-repeat center;
-  -webkit-mask: url(./images/pin.svg) no-repeat center;
+  mask: url(./images/icons/push-pin.svg) no-repeat center;
+  -webkit-mask: url(./images/icons/push-pin.svg) no-repeat center;
   mask-size: 100%;
   -webkit-mask-size: 100%;
-  background-color: var(--globalText);
+  /* Same grey as on Android, for light and dark themes. */
+  background-color: #a4a4a4;
 }
 
 .startButton {
