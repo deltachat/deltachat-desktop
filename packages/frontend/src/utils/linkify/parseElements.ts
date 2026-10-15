@@ -20,7 +20,7 @@ export function parseElements(message: string): linkify.MultiToken[] {
       }
     }
     // here we could also disable email links in fediverse mentions
-    // or hashtags that have no preceeding space
+    // that have no preceeding space
     return element
   })
 }
