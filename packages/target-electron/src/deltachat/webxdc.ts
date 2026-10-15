@@ -54,6 +54,9 @@ type AppInstance = {
    * be confirmed on its own, and again after it was closed and reopened.
    */
   devToolsConfirmed: boolean
+  numPermissionRequestsDeniedInARow: number
+  // permissionDialogClosedPromise: null | Promise<void>
+  isPermissionDialogOpen: boolean
 } & Pick<
   T.WebxdcMessageInfo,
   | 'selfAddr'
@@ -67,6 +70,9 @@ const open_apps: {
 } = {}
 // Separate from `open_apps` in order to persist permissions
 // between WebXDC app launches.
+//
+// TODO hm do we need more state? i.e. if a permission was requested but denied,
+// we need to not ask for it again.
 const permissionsMap: {
   [instanceId: string]: {
     grantedPermissions: Set<PermissionName>
@@ -224,6 +230,15 @@ const DEFAULT_ALLOWED_PERMISSIONS = [
   // Games might do that too
   'fullscreen',
 ] as const
+// picked randomly
+const permissionToString: {
+  [P in (typeof userControllablePermissions)[number]]?: string
+} = {
+  media: '🎥 Camera and microphone',
+  geolocation: '📍 Your precise location',
+  'geolocation-approximate': '📍 Your location (approximate)',
+} as const
+const WORLD_ID_TRUSTED = 423
 
 /**
  * Prefix for the webxdc bounds UI configuration
@@ -343,18 +358,25 @@ export default class DCWebxdc {
       })
       existing_sessions.push(partition)
 
-      const permission_handler = (
+      // TODO rename?
+      function getInstance(
         webContents: Electron.WebContents,
-        permission: PermissionName,
         requestingUrl: string
-      ) => {
+      ): {
+        instance: AppInstance
+        instancePermissions: (typeof permissionsMap)[string]
+      } | null {
         const requestingUrlParsed = URL.parse(requestingUrl)
         if (!requestingUrlParsed) {
+          // TODO maybe return error instead?
+          //
+          // TODO hmm, this happens on every launch basically.
+          // For permission checks. But we still log...?
           log.error(
             `got WebXDC permission request but requestingUrl is invalid: '${requestingUrl}', rejecting`
           )
 
-          return false
+          return null
         }
 
         // TODO maybe DRY? See protocol handler.
@@ -370,7 +392,7 @@ export default class DCWebxdc {
             `got WebXDC permission request from "${requestingUrl}" but its instance "${appId}" doesn't appear to be open`
           )
 
-          return false
+          return null
         }
 
         if (webContents !== instance.win.webContents) {
@@ -380,7 +402,7 @@ export default class DCWebxdc {
             `got WebXDC permission request from "${requestingUrl}" but its WebContents doesn't match "${appId}" instance's WebContents`
           )
 
-          return false
+          return null
         }
 
         const instancePermissions = permissionsMap[appId]
@@ -388,7 +410,7 @@ export default class DCWebxdc {
           log.warn(
             `got WebXDC permission request from "${requestingUrl}" but its permissions are not recorded`
           )
-          return false
+          return null
         }
 
         // Hardening measure. WebXDCs shouldn't be able
@@ -403,8 +425,24 @@ export default class DCWebxdc {
             `Got permission request from another origin: '${requestingUrl}'`
           )
 
+          return null
+        }
+
+        return { instance, instancePermissions }
+      }
+      const permission_handler = (
+        webContents: Electron.WebContents,
+        permission: PermissionName,
+        requestingUrl: string
+      ) => {
+        // TODO fix: handle DesktopSettings.state.enableWebxdcPermissionManagement
+
+        const instanceAndPerms = getInstance(webContents, requestingUrl)
+        if (instanceAndPerms == null) {
+          log.error(`couldn't find WebXDC app instance for ${requestingUrl}`)
           return false
         }
+        const { instance, instancePermissions } = instanceAndPerms
 
         /**
          * Permission check could be performed quite frequently,
@@ -467,14 +505,232 @@ export default class DCWebxdc {
           return permission_handler(webContents, permission, requestingOrigin)
         }
       )
-      ses.setPermissionRequestHandler(
-        // TODO maybe handle `details`, which has specific properties
-        // depending on which permission is requested, e.g. for 'media'
-        // it would be `mediaType: 'video' | 'audio'`.
-        (webContents, permission, callback, details) => {
-          callback(
-            permission_handler(webContents, permission, details.requestingUrl)
+
+      type RequestHandler = NonNullable<
+        Parameters<typeof ses.setPermissionRequestHandler>[0]
+      >
+      // TODO maybe handle `details`, which has specific properties
+      // depending on which permission is requested, e.g. for 'media'
+      // it would be `mediaType: 'video' | 'audio'`.
+      //
+      // TODO convert `return false` to throws?
+      // Or nah?
+      //
+      // TODO hmmm so this logs every time, without checking
+      // `firstTimeRequestOrCheck`. For permission _requests_ it's fine I guess?
+      //
+      // TODO about logging: maybe we should log "got permission request..."
+      // in the handler, and not duplicate this in each log.
+      /**
+       * @throws
+       */
+      async function permissionRequestHandler(
+        webContents: Parameters<RequestHandler>[0],
+        permission: Parameters<RequestHandler>[1],
+        details: Parameters<RequestHandler>[3]
+      ): Promise<boolean> {
+        // const requestingUrl =
+        if (
+          permission_handler(webContents, permission, details.requestingUrl) ===
+          true
+        ) {
+          // Already granted
+          return true
+        }
+
+        // TODO maybe we don't need to get the instance?
+        // Just have the permission rejected count per window,
+        // that's it.
+        const instanceAndPerms = getInstance(webContents, details.requestingUrl)
+        if (instanceAndPerms == null) {
+          log.error(
+            `couldn't find WebXDC app instance for ${details.requestingUrl}`
           )
+          return false
+        }
+        const { instance, instancePermissions } = instanceAndPerms
+
+        function isUserControllable(
+          p: PermissionName
+        ): p is (typeof userControllablePermissions)[number] {
+          return (
+            userControllablePermissions satisfies PermissionName[] as PermissionName[]
+          ).includes(p)
+        }
+        if (
+          // !(
+          //   userControllablePermissions satisfies PermissionName[] as PermissionName[]
+          // ).includes(permission)
+
+          !isUserControllable(permission)
+
+          // !(function isUserControllable(
+          //   p: PermissionName
+          // ): p is (typeof userControllablePermissions)[number] {
+          //   return (
+          //     userControllablePermissions satisfies PermissionName[] as PermissionName[]
+          //   ).includes(p)
+          // })(permission)
+        ) {
+          log.info(
+            `app requested permission "${permission}", but it's not in the userControllablePermissions list, denying`
+          )
+          return false
+        }
+
+        const menuItem = windowToMenu
+          .get(instance.win)
+          ?.getMenuItemById(`webxdc_permission_${permission}`)
+        // We might not have a menu item for some permissions.
+        if (menuItem == undefined) {
+          log.error(
+            `no menu permission menu item for "${permission}", ${details.requestingUrl}, denying`
+          )
+          return false
+        }
+        // It was already set to visible in `permission_handler`,
+        // but double-tap.
+        menuItem.visible = true
+
+        if (instance.numPermissionRequestsDeniedInARow >= 3) {
+          // They can still grant a permission through the menu.
+          log.info(
+            `user denied a permission for "${instance.accountId} ${instance.msgId}" ${instance.numPermissionRequestsDeniedInARow} times, we won't prompt them any more`
+          )
+          return false
+        }
+
+        // const isUserActive = await webContents.executeJavaScriptInIsolatedWorld(
+        //   WORLD_ID_TRUSTED,
+        //   [{ code: 'navigator.userActivation.isActive' }]
+        // )
+        // if (typeof isUserActive !== 'boolean') {
+        //   throw new Error(
+        //     `'navigator.userActivation.isActive' evaluated to ${isUserActive}, expected a boolean`
+        //   )
+        // }
+        // if (isUserActive !== true) {
+        //   // Apps may request a permission while the user is not active,
+        //   // but they shouldn't.
+        //   // We don't want to pop up the permission request dialog.
+        //   log.info(
+        //     'got permission request, but the user is not active in the WebXDC window, denying'
+        //   )
+        //   return false
+        // }
+
+        // `isUserActive` should be enough, but let's double-check
+        if (!instance.win.isFocused()) {
+          log.warn('the window is not focused, denying')
+          return false
+        }
+
+        if (instance.isPermissionDialogOpen) {
+          // TODO maybe we ought to just wait for it to close instead?
+          // Because an app could request several permissions at the same time.
+          // Of course it's possible to re-request, but not all apps do that.
+          // Same goes for the window not being focused.
+          log.info(
+            `denying permission, because there is already an open permission dialog`
+          )
+          return false
+        }
+
+        // const windowClosedAbortController = new AbortController()
+        // instance.win.once('closed', () => {
+        //   windowClosedAbortController.abort('window closed')
+        // })
+
+        // TODO hm but what if they're playing AFK clicker
+        // and the cursor ends up on the "allow" button
+        // and they're not looking at the screen?
+        // I guess starting countdown for each time we show the dialog
+        // would somewhat improve the situation?
+        // But then it might get a bit confusing why it's not working.
+        log.info(
+          `asking the user if they want to grant "${permission}" permission to ${details.requestingUrl}`
+        )
+        // const firstDialogShownAt = Date.now()
+        instance.isPermissionDialogOpen = true
+        try {
+          // A loop to ensure that the user hasn't accidentally
+          // clicked "Allow" too fast.
+          // We don't have a way to simply disable the button
+          // as such dialogs usually do.
+          while (true) {
+            const useCheckbox = true
+            const dialogShownAt = Date.now()
+            const { response, checkboxChecked } = await dialog.showMessageBox(
+              instance.win,
+              {
+                type: 'question',
+                buttons: useCheckbox
+                  ? [tx('cancel'), tx('ok')]
+                  : [tx('cancel'), tx('webxdc_permission_allow')],
+                defaultId: 0,
+                cancelId: 0,
+                // TODO probably need a less strongly worded title?
+                title: tx('perm_required_title'),
+                message: tx(
+                  'webxdc_permission_dialog_message',
+                  permissionToString[permission] ?? permission
+                ),
+                // detail: tx('webxdc_permission_dialog_detail'),
+                checkboxLabel: useCheckbox
+                  ? tx('webxdc_permission_allow')
+                  : undefined,
+                // signal: windowClosedAbortController.signal,
+                signal: (() => {
+                  const c = new AbortController()
+                  instance.win.once('closed', () => c.abort('window closed'))
+                  return c.signal
+                })(),
+              }
+            )
+            if (response !== 1 || (useCheckbox && !checkboxChecked)) {
+              log.info('user declined the permission request')
+              instance.numPermissionRequestsDeniedInARow += 1
+              return false
+            }
+            // Allowed
+
+            const userRespondedAt = Date.now()
+            // An alternative is checking the delay from when the _first_ dialog
+            // was shown, but that is still prone to "cookie clicker" attacks.
+            //
+            // TODO if we go for a checkbox, we can remove the whole loop
+            // and the timing thing,
+            // because that requires 2 clicks, which is hard enough.
+            // Hm or actually, a bit of safety is still nice. 500ms?
+            // if (!useCheckbox && (userRespondedAt - dialogShownAt < 1000)) {
+            if (userRespondedAt - dialogShownAt < (useCheckbox ? 500 : 1000)) {
+              continue
+            } else {
+              break
+            }
+          }
+          // } while (Date.now() - firstDialogShownAt < 1000)
+        } finally {
+          instance.isPermissionDialogOpen = false
+        }
+        log.info('user granted the permission request')
+        instance.numPermissionRequestsDeniedInARow = 0
+
+        instancePermissions.grantedPermissions.add(permission)
+        menuItem.checked = true
+        return true
+      }
+      ses.setPermissionRequestHandler(
+        (webContents, permission, callback, details) => {
+          permissionRequestHandler(webContents, permission, details)
+            .then(callback)
+            .catch(err => {
+              log.error(
+                `permission request handler error for ${details.requestingUrl}, denying permission "${permission}"`,
+                err
+              )
+              callback(false)
+            })
         }
       )
 
@@ -662,6 +918,8 @@ export default class DCWebxdc {
       open_apps[appId] = {
         win: webxdcWindow,
         devToolsConfirmed: false,
+        numPermissionRequestsDeniedInARow: 0,
+        isPermissionDialogOpen: false,
         accountId,
         msgId: msg_id,
         internet_access: webxdcInfo['internetAccess'],
@@ -698,22 +956,76 @@ export default class DCWebxdc {
                 submenu: userControllablePermissions.map(permissionName => ({
                   id: `webxdc_permission_${permissionName}`,
                   // TODO proper names for permissions, i18n
-                  label:
-                    permissionName === 'media'
-                      ? '🎥 Camera and microphone'
-                      : permissionName,
+                  label: permissionToString[permissionName] ?? permissionName,
                   type: 'checkbox',
 
                   checked:
                     instancePermissions.grantedPermissions.has(permissionName),
-                  click: item => {
-                    if (item.checked) {
-                      instancePermissions.grantedPermissions.add(permissionName)
-                    } else {
+                  click: async item => {
+                    // if (item.checked) {
+                    //   instancePermissions.grantedPermissions.add(permissionName)
+                    // } else {
+                    //   instancePermissions.grantedPermissions.delete(
+                    //     permissionName
+                    //   )
+                    // }
+
+                    if (!item.checked) {
                       instancePermissions.grantedPermissions.delete(
                         permissionName
                       )
+                      item.checked = false
+                      return
                     }
+
+                    // Still show the usual permission request dialog,
+                    // because otherwise it might not be entirely clear
+                    // what the menu does,
+                    // whereas the dialog is supposed to provide
+                    // the detailed info.
+                    //
+                    // TODO DRY with another `showMessageBox` above.
+                    const useCheckbox = true
+                    const { response, checkboxChecked } =
+                      await dialog.showMessageBox(webxdcWindow, {
+                        type: 'question',
+                        buttons: useCheckbox
+                          ? [tx('cancel'), tx('ok')]
+                          : [tx('cancel'), tx('webxdc_permission_allow')],
+                        defaultId: 0,
+                        cancelId: 0,
+                        // TODO probably need a less strongly worded title?
+                        title: tx('perm_required_title'),
+                        message: tx(
+                          'webxdc_permission_dialog_message',
+                          permissionToString[permissionName] ?? permissionName
+                        ),
+                        // message: permissionName,
+                        // detail: tx('webxdc_permission_dialog_detail'),
+                        checkboxLabel: useCheckbox
+                          ? tx('webxdc_permission_allow')
+                          : undefined,
+                        // signal: windowClosedAbortController.signal,
+                        signal: (() => {
+                          const c = new AbortController()
+                          webxdcWindow.once('closed', () =>
+                            c.abort('window closed')
+                          )
+                          return c.signal
+                        })(),
+                      })
+                    if (response !== 1 || (useCheckbox && !checkboxChecked)) {
+                      log.info('user declined the permission request')
+                      instancePermissions.grantedPermissions.delete(
+                        permissionName
+                      )
+                      item.checked = false
+                      return
+                    }
+
+                    open_apps[appId].numPermissionRequestsDeniedInARow = 0
+                    instancePermissions.grantedPermissions.add(permissionName)
+                    item.checked = true
                   },
                   // Don't clutter the UI with permissions
                   // that were never checked or requested.
