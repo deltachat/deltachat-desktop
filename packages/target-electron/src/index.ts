@@ -427,6 +427,9 @@ app.on('activate', () => {
 app.on('before-quit', e => quit(e))
 app.on('window-all-closed', () => quit())
 
+// Picked randomly. Any non-default world ID will do.
+const WORLD_ID_TRUSTED = 423
+
 app.on('web-contents-created', (_ev, contents) => {
   const is_webxdc =
     contents.session.storagePath &&
@@ -443,6 +446,30 @@ app.on('web-contents-created', (_ev, contents) => {
     let preventOpeningLinkClickDialogs = false
 
     const webxdcOpenUrl = async (url: string) => {
+      log.info(
+        `handling WebXDC "${contents.getURL()}" link click or navigation to ${url}`
+      )
+
+      const isUserActive = await contents.executeJavaScriptInIsolatedWorld(
+        WORLD_ID_TRUSTED,
+        [{ code: 'navigator.userActivation.isActive' }]
+      )
+      if (typeof isUserActive !== 'boolean') {
+        log.error(
+          `failed to handle link click: 'navigator.userActivation.isActive' evaluated to ${isUserActive}, expected a boolean`
+        )
+        return
+      }
+      if (isUserActive !== true) {
+        // Apps may request a permission while the user is not active,
+        // but they shouldn't.
+        // We don't want to pop up the permission request dialog.
+        log.warn(
+          `ignoring link click: the user is not active in the WebXDC window "${contents.getURL()}"`
+        )
+        return
+      }
+
       if (shouldHandleLinkInMainApp(url)) {
         // handle mailto in dc, without any prompt.
         // Note that such links can also lead to exfiltration,
@@ -463,10 +490,6 @@ app.on('web-contents-created', (_ev, contents) => {
       // Note that here we could have also utilized
       // the native Electron `safeDialogs` directly,
       // e.g. with `executeJavaScriptInIsolatedWorld('confirm("open link?")')`.
-      //
-      // TODO fix: we should probably also disallow opening this dialog
-      // when the window is not focused, or otherwise
-      // if there is no "user gesture" that caused the event.
       if (linkClickDialogIsOpen) {
         // This is important because otherwise a malicious app
         // can make the machine unusable until reboot.
