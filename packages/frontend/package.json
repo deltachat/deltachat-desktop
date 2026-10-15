@@ -38,7 +38,6 @@
     "emoji-mart-awesome": "3.0.0",
     "filesize": "^10.1.4",
     "jsqr": "^1.4.0",
-    "linkify-plugin-hashtag": "^4.3.2",
     "linkifyjs": "^4.3.2",
     "mime-types": "catalog:",
     "moment": "^2.30.1",

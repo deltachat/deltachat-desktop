@@ -1,14 +1,12 @@
 import React, { useContext } from 'react'
 
 import type * as linkify from 'linkifyjs'
-import 'linkify-plugin-hashtag'
 import '../../utils/linkify/plugin-bot-command/index.js'
 
 import { Link } from './Link.js'
 import { parseElements } from '../../utils/linkify/parseElements.js'
 import { getLinkDestination } from '../../utils/linkify/getLinkDestination.js'
 import { getLogger } from '@deltachat-desktop/shared/logger'
-import { ActionEmitter, KeybindAction } from '../../keybindings'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { MessagesDisplayContext } from '../../contexts/MessagesDisplayContext'
@@ -24,15 +22,6 @@ function renderElement(
   key?: number
 ): React.ReactElement {
   switch (elm.t) {
-    case 'hashtag':
-      return (
-        <TagLink
-          key={key}
-          tag={elm.v}
-          tabIndex={tabindexForInteractiveContents}
-        />
-      )
-
     case 'url': {
       const destination = getLinkDestination(elm)
       if (destination == null) {
@@ -150,24 +139,6 @@ function EmailLink({
       tabIndex={tabIndex}
     >
       {email}
-    </a>
-  )
-}
-
-function TagLink({ tag, tabIndex }: { tag: string; tabIndex: -1 | 0 }) {
-  const setSearch = () => {
-    log.debug(
-      `Clicked on a hashtag, this should open search for the text "${tag}"`
-    )
-    if (window.__chatlistSetSearch) {
-      window.__chatlistSetSearch(tag, null)
-      ActionEmitter.emitAction(KeybindAction.ChatList_FocusSearchInput)
-    }
-  }
-
-  return (
-    <a href={'#'} x-not-a-link='tag' onClick={setSearch} tabIndex={tabIndex}>
-      {tag}
     </a>
   )
 }

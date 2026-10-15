@@ -169,9 +169,6 @@ importers:
       jsqr:
         specifier: ^1.4.0
         version: 1.4.0
-      linkify-plugin-hashtag:
-        specifier: ^4.3.2
-        version: 4.3.2(linkifyjs@4.3.2)
       linkifyjs:
         specifier: ^4.3.2
         version: 4.3.2
@@ -2792,11 +2789,6 @@ packages:
   lilconfig@2.1.0:
     resolution: {integrity: sha512-utWOt/GHzuUxnLKxB6dk81RoOeoNeHgbrXiuGk4yyF5qlRz+iIVWu56E2fqGHFrXz0QNUhLB/8nKqvRH66JKGQ==}
     engines: {node: '>=10'}
-
-  linkify-plugin-hashtag@4.3.2:
-    resolution: {integrity: sha512-04geGSNuWTeMUJZdje0HvjZqN+cKbyKu1fV3R51TCNIjqnR+vXza5M5G/sBfL5WzOppVoas4XGoFCfv63oGglw==}
-    peerDependencies:
-      linkifyjs: ^4.0.0
 
   linkifyjs@4.3.2:
     resolution: {integrity: sha512-NT1CJtq3hHIreOianA8aSXn6Cw0JzYOuDQbOrSPe7gqFnCpKP++MQe3ODgO3oh2GJFORkAAdqredOa60z63GbA==}
@@ -6640,10 +6632,6 @@ snapshots:
       type-check: 0.4.0
 
   lilconfig@2.1.0: {}
-
-  linkify-plugin-hashtag@4.3.2(linkifyjs@4.3.2):
-    dependencies:
-      linkifyjs: 4.3.2
 
   linkifyjs@4.3.2: {}
 
