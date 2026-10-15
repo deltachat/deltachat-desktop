@@ -458,6 +458,13 @@ app.on('web-contents-created', (_ev, contents) => {
         return
       }
 
+      if (!win.isFocused()) {
+        log.warn(
+          'WebXDC link click or navigation triggered while the window is not focused, ignoring'
+        )
+        return
+      }
+
       if (shouldHandleLinkInMainApp(url)) {
         // handle mailto in dc, without any prompt.
         // Note that such links can also lead to exfiltration,
@@ -480,7 +487,6 @@ app.on('web-contents-created', (_ev, contents) => {
       // e.g. with `executeJavaScriptInIsolatedWorld('confirm("open link?")')`.
       //
       // TODO fix: we should probably also disallow opening this dialog
-      // when the window is not focused, or otherwise
       // if there is no "user gesture" that caused the event.
       if (linkClickDialogIsOpen) {
         // This is important because otherwise a malicious app
