@@ -455,6 +455,7 @@ app.on('web-contents-created', (_ev, contents) => {
         log.warn(
           'WebXDC link click or navigation triggered while the window is not focused, ignoring'
         )
+        return
       }
 
       if (shouldHandleLinkInMainApp(url)) {
