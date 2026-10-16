@@ -28,10 +28,17 @@ rawApp.commandLine.appendSwitch('host-resolver-rules', hostRules)
 
 rawApp.commandLine.appendSwitch('disable-features', 'IsolateSandboxedIframes')
 
-rawApp.commandLine.appendSwitch(
-  'enable-features',
-  'WebRtcPipeWireCamera,WebRtcPipeWireScreenCapturer'
-)
+// Opt-in, because accessing the camera through the xdg-desktop-portal
+// makes `getUserMedia()` hang on some setups, see
+// https://github.com/deltachat/deltachat-desktop/issues/6819.
+// It is needed on systems where the camera is only usable through PipeWire
+// (e.g. libcamera-based phones like Mobian).
+if (rc['pipewire-camera']) {
+  rawApp.commandLine.appendSwitch(
+    'enable-features',
+    'WebRtcPipeWireCamera,WebRtcPipeWireScreenCapturer'
+  )
+}
 
 if (rc['version'] === true || rc['v'] === true) {
   // eslint-disable-next-line no-console
