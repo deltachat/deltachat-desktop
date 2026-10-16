@@ -89,7 +89,7 @@
     &.selected {
       background-color: var(--chatListItemBgHover);
     }
-    &:focus {
+    &:focus-visible {
       background-color: rgba(125, 125, 125, 0.4);
     }
   }

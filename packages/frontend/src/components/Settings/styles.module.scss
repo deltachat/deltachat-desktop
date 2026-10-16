@@ -68,7 +68,7 @@ $settingsHeight: 40px;
   width: 100%;
 
   &:hover,
-  &:focus {
+  &:focus-visible {
     background-color: var(--chatListItemBgHover);
   }
 }
@@ -146,7 +146,7 @@ $settingsHeight: 40px;
   display: flex;
   cursor: pointer;
   &:hover,
-  &:focus {
+  &:focus-visible {
     background-color: var(--chatListItemBgHover);
   }
   padding: 10px 25px;
