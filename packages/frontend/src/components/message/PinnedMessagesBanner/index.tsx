@@ -77,13 +77,12 @@ export default function PinnedMessagesBanner({ accountId, chatId }: Props) {
   }
 
   return (
-    <div className={styles.pinnedMessagesBanner}>
+    <section aria-label={tx('pinned')} className={styles.pinnedMessagesBanner}>
       <button type='button' className={styles.jumpButton} onClick={onClick}>
         {pinnedIds.length > 1 && (
           <PositionDots index={index} count={pinnedIds.length} />
         )}
         <span className='visually-hidden'>
-          {tx('pinned')}
           {pinnedIds.length > 1 && ` ${index + 1}/${pinnedIds.length}`}
         </span>
         {summary?.image && (
@@ -107,7 +106,7 @@ export default function PinnedMessagesBanner({ accountId, chatId }: Props) {
           {tx('start_app')}
         </button>
       )}
-    </div>
+    </section>
   )
 }
 
