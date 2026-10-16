@@ -18,22 +18,20 @@ type PinnedMessagesState = {
  * newjust pinned message. Otherwise it keeps showing the same message
  * as long as that is still pinned or falls back to the newest one.
  */
-function applyPinnedIds(
+function getNextShownId(
   prev: PinnedMessagesState,
   pinnedIds: T.Message['id'][]
-): PinnedMessagesState {
+): PinnedMessagesState['shownId'] {
   const newestNewlyPinned = pinnedIds.findLast(
     id => !prev.pinnedIds.includes(id)
   )
-  let shownId: T.Message['id'] | null
   if (newestNewlyPinned !== undefined) {
-    shownId = newestNewlyPinned
+    return newestNewlyPinned
   } else if (prev.shownId !== null && pinnedIds.includes(prev.shownId)) {
-    shownId = prev.shownId
+    return prev.shownId
   } else {
-    shownId = pinnedIds.at(-1) ?? null
+    return pinnedIds.at(-1) ?? null
   }
-  return { pinnedIds, shownId }
 }
 
 /**
@@ -67,7 +65,10 @@ export default function usePinnedMessages(accountId: number, chatId: number) {
           chatId
         )
         if (!cancelled) {
-          setState(prev => applyPinnedIds(prev, pinnedIds))
+          setState(prev => ({
+            shownId: getNextShownId(prev, pinnedIds),
+            pinnedIds,
+          }))
         }
       } catch (error) {
         log.error('failed to load pinned messages', error)
