@@ -138,12 +138,16 @@ export function isMessageEditable(
 }
 
 export function isMessageResendable(
-  message: Pick<T.Message, 'viewType'> & {
+  message: Pick<T.Message, 'viewType' | 'isInfo'> & {
     sender: Pick<T.Message['sender'], 'id'>
   }
 ) {
+  // https://github.com/deltachat/deltachat-android/blob/4be54abb533874c730680e294854cb89b7b3479e/src/main/java/org/thoughtcrime/securesms/ConversationFragment.java#L505
+  // https://github.com/chatmail/core/blob/f8edd9136a3bb4c09796ac308f6ff10d8888c338/src/chat.rs#L4677-L4681
   return (
-    message.sender.id === C.DC_CONTACT_ID_SELF && message.viewType !== 'Call'
+    message.sender.id === C.DC_CONTACT_ID_SELF &&
+    !message.isInfo &&
+    message.viewType !== 'Call'
   )
 }
 
