@@ -138,12 +138,14 @@ export function isMessageEditable(
 }
 
 export function isMessageResendable(
-  message: Pick<T.Message, 'viewType'> & {
+  message: Pick<T.Message, 'viewType' | 'isInfo'> & {
     sender: Pick<T.Message['sender'], 'id'>
   }
 ) {
   return (
-    message.sender.id === C.DC_CONTACT_ID_SELF && message.viewType !== 'Call'
+    message.sender.id === C.DC_CONTACT_ID_SELF &&
+    !message.isInfo &&
+    message.viewType !== 'Call'
   )
 }
 
