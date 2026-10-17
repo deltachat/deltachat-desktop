@@ -1,11 +1,11 @@
-# Browser Target of Deltachat desktop
+# Browser Target of Delta Chat desktop
 
 For now this is only meant for development and debugging the frontend.
 So not all features will work. It is not meant for end users.
 
 > Future ideas:
 >
-> In the future someone could porbably use this to make a deltachat webclient that could use the deltachat installation on android for example.
+> In the future someone could porbably use this to make a Delta Chat webclient that could use the Delta Chat installation on android for example.
 >
 > You could even host it on a raspberry pi in your local network or on your homeserver and connect to it from every device.
 

@@ -39,7 +39,7 @@ export class JRPCDeltaChat extends BaseDeltaChat<ElectronMainTransport> {}
 /**
  * DeltaChatController
  *
- * - proxy for a deltachat instance
+ * - proxy for a Delta Chat instance
  * - sends events to renderer
  * - handles events from renderer
  */
