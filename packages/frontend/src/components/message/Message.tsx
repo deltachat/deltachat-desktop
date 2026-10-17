@@ -524,6 +524,16 @@ async function buildMultiselectContextMenu(
     })
   }
 
+  const messagesWithFile = () =>
+    selectedMessagesIter()
+      // If there are missing messages,
+      // still display the "Export Attachments" button.
+      // It's something that shouldn't really happen,
+      // and so it's not entirely clear if it'd be better
+      // to hide the button instead.
+      .filter(m => m != null)
+      .filter(m => m.file)
+
   const tx = window.static_translate
   return [
     {
@@ -533,6 +543,21 @@ async function buildMultiselectContextMenu(
           messageIds: messageIds,
           sourceChatId: chat.id,
         }),
+    },
+    // Note that on Android if any selected message has no attachment
+    // then "Export Attachments" is not displayed at all.
+    // https://github.com/deltachat/deltachat-android/blob/a5290d6275fec268ba242a5f00b204f2fa0fc0be/src/main/java/org/thoughtcrime/securesms/ConversationFragment.java#L437-L438
+    messagesWithFile().some(() => true) && {
+      label: tx('menu_export_attachments'),
+      action: () =>
+        runtime.downloadFiles(
+          messagesWithFile()
+            .map(m => ({
+              pathToSource: m.file!,
+              filename: m.fileName ?? m.file!,
+            }))
+            .toArray()
+        ),
     },
     selectedMessagesIter().every(
       m =>
