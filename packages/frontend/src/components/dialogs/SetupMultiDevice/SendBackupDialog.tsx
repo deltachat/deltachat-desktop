@@ -134,7 +134,7 @@ export function SendBackupDialog({ onClose }: DialogProps) {
     <Dialog
       canEscapeKeyClose={true}
       canOutsideClickClose={false}
-      onClose={cancel}
+      onClose={onClose}
       width={500}
     >
       <DialogHeader

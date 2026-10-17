@@ -56,6 +56,36 @@ async function prepareAddSecondDevice(page: Page, browserName: string) {
   ).toBeVisible()
 }
 
+test.describe('cancel add second device', () => {
+  test('with Escape', async ({ browserName }) => {
+    await prepareAddSecondDevice(pageA, browserName)
+    // We could also check for the presence of the "Not connected" toast
+    // which also appears when transferring a backup,
+    // but it's always visible since the account has no real relay.
+
+    await pageA.keyboard.press('Escape')
+    await pageA.keyboard.press('Escape')
+    await pageA.keyboard.press('Escape')
+    await expect(pageA.getByRole('dialog')).toHaveCount(0)
+  })
+  test('with clicks', async ({ browserName }) => {
+    await prepareAddSecondDevice(pageA, browserName)
+
+    await pageA.getByRole('button', { name: 'Close' }).click()
+    const confirmDialog = pageA
+      .getByRole('dialog')
+      .filter({ hasText: 'Abort setting up second device?' })
+    await expect(confirmDialog).toHaveText(
+      'Abort setting up second device?' +
+        'This will invalidate the QR code copied to clipboard.' +
+        'No' +
+        'Yes'
+    )
+    await confirmDialog.getByRole('button', { name: 'Yes' }).click()
+    await expect(pageA.getByRole('dialog')).toHaveCount(0)
+  })
+})
+
 test('add a second device', async ({ browserName }) => {
   await pageB.getByRole('button', { name: 'I Already Have a Profile' }).click()
   await pageB.getByRole('button', { name: 'Add as Second Device' }).click()
