@@ -29,7 +29,7 @@
 
 ## Official releases
 
-- Versioning: every deltachat client app should follow this versiong rule:
+- Versioning: every Delta Chat client app should follow this versiong rule:
   the two first digits (Major.Minor) should reflect the current core version and
   only the revision might be client specific. So if core is on 2.23.0 the first
   release with that core should have 2.23.0. If more releases are needed with the
@@ -43,7 +43,7 @@
 - When making an official release the build machine creates a new issue following this template to
   track its status:
   ```
-  - [ ] [DeltaChat Website](https://delta.chat/en/download)
+  - [ ] [Delta Chat Website](https://delta.chat/en/download)
   - [ ] [flathub](https://flathub.org/apps/chat.delta.desktop)
   - [ ] [GitHub release](https://github.com/deltachat/deltachat-desktop/releases)
        - [ ] downloadable files also on [GitHub](https://download.delta.chat/desktop/)
@@ -98,7 +98,7 @@
 - review the description field which includes the relevant part of the `CHANGELOG.md`
   - for patch releases the full changelog is not needed, the part that changed from the last release is enough
 
-10. Update the official DeltaChat website by adjusting the DESKTOP_VERSION constant in this file:
+10. Update the official Delta Chat website by adjusting the DESKTOP_VERSION constant in this file:
     <https://github.com/deltachat/deltachat-pages/blob/master/_includes/download-boxes.html>
 
 11. Make a PR on https://github.com/flathub/chat.delta.desktop (follow the steps in th README)

@@ -29,6 +29,7 @@ import {
 } from '@deltachat-desktop/shared/themes.js'
 
 import { MessageToBackend } from '../src/runtime-ws-protocol.js'
+import { appName } from '@deltachat-desktop/shared/constants.js'
 
 const { WebsocketTransport } = yerpc
 
@@ -47,7 +48,7 @@ class BrowserTransport extends WebsocketTransport {
       (message as any)['method'] === 'error_other_client_stole_dc_connection'
     ) {
       alert(
-        'error other client stole dc connection.\nonly use deltachat web in one browser at a time.\nreload to steal connection back.'
+        `error other client stole dc connection.\nonly use ${appName} web in one browser at a time.\nreload to steal connection back.`
       )
       throw new Error(
         'connection inactive: error other client stole dc connection, please reload page'
@@ -514,7 +515,7 @@ class BrowserRuntime implements Runtime {
     })
   }
   setBadgeCounter(value: number): void {
-    document.title = `DeltaChat${value ? `(${value})` : ''}`
+    document.title = `${appName}${value ? `(${value})` : ''}`
   }
   deleteWebxdcAccountData(_accountId: number): Promise<void> {
     // not applicable in browser

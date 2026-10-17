@@ -126,7 +126,7 @@ import { getLogger, setLogHandler } from '@deltachat-desktop/shared/logger.js'
 const log = getLogger('main/index')
 setLogHandler(logHandler.log, rc)
 log.info(
-  `Deltachat Version ${BuildInfo.VERSION} ${BuildInfo.GIT_REF} ${BuildInfo.BUILD_TIMESTAMP}`
+  `${appName} Version ${BuildInfo.VERSION} ${BuildInfo.GIT_REF} ${BuildInfo.BUILD_TIMESTAMP}`
 )
 process.on('exit', logHandler.end)
 
@@ -265,7 +265,7 @@ async function onReady([_appReady, _loadedState, _appx, _webxdc_cleanup]: [
   const legacyAccountData = await findLegacyAccountData(getAccountsPath())
   if (legacyAccountData) {
     const { path: legacyPath, moveTo } = legacyAccountData
-    const message = `Your profiles were created by a very old version of Delta Chat (before 1.22) and cannot be opened by this version.
+    const message = `Your profiles were created by a very old version of ${appName} (before 1.22) and cannot be opened by this version.
 
   To keep them:
      1. Quit now
@@ -619,6 +619,7 @@ import { getLocaleDirectoryPath } from './getLocaleDirectory.js'
 import { join } from 'path'
 import { BuildInfo } from './get-build-info.js'
 import { arch, platform } from 'os'
+import { appName } from '@deltachat-desktop/shared/constants.js'
 openUrlsAndFilesFromArgv(process.argv)
 
 ipcMain.handle('restart_app', async _ev => {

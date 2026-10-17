@@ -1,6 +1,6 @@
 # Update core
 
-[DeltaChat core](https://github.com/chatmail/core) is the base library that all clients and bots build upon and is the heart of DeltaChat.
+[Delta Chat core](https://github.com/chatmail/core) is the base library that all clients and bots build upon and is the heart of Delta Chat.
 
 To update the desktop application to a new core you need to update the following dependencies:
 

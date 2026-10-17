@@ -28,7 +28,7 @@ Open help: `F1`
 
 Open keybindings cheatsheet: `cmd ⌘ + /` or `Ctrl` + `/`
 
-Call MaybeNetwork (can help if deltachat doesn't detect that it is online again after resuming standby): `F5`
+Call MaybeNetwork (can help if Delta Chat doesn't detect that it is online again after resuming standby): `F5`
 
 Scroll up/down a page in the messagelist: `PageUp` and `PageDown`
 

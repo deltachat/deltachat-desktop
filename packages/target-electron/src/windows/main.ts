@@ -5,7 +5,7 @@ import { platform } from 'os'
 import { fileURLToPath } from 'url'
 import { Session } from 'electron/main'
 
-import { appWindowTitle } from '@deltachat-desktop/shared/constants.js'
+import { appName, appWindowTitle } from '@deltachat-desktop/shared/constants.js'
 import { getLogger } from '@deltachat-desktop/shared/logger.js'
 import {
   appIcon,
@@ -278,7 +278,7 @@ async function promptUserAfterRendererCrash(
   try {
     const { response } = await electron.dialog.showMessageBox(win, {
       type: 'warning',
-      title: 'Delta Chat had a problem',
+      title: `${appName} had a problem`,
       message:
         'The window stopped responding and could not recover automatically.',
       detail: `Reason: ${details.reason} (exit code ${details.exitCode})`,

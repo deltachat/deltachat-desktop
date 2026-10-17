@@ -9,6 +9,7 @@ import { getLogger } from '@deltachat-desktop/shared/logger.js'
 import { DesktopSettings } from './desktop_settings.js'
 import { tx } from './load-translations.js'
 import { htmlDistDir } from './application-constants.js'
+import { appName } from '@deltachat-desktop/shared/constants.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -199,7 +200,7 @@ function renderTrayIcon() {
   log.info('add icon tray')
   tray = TrayIcon()
 
-  tray.setToolTip('Delta Chat')
+  tray.setToolTip(appName)
 
   if (process.platform === 'darwin') {
     tray.on('click', () => tray?.popUpContextMenu(getTrayMenu()))

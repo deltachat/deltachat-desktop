@@ -89,10 +89,10 @@ const WITHDRAW_OR_REVIVE_CONFIGS: WithdrawOrReviveConfigs = {
 /**
  * Processes an unchecked string which was scanned from a QR code.
  *
- * If the string represents a valid DeltaChat URI-scheme, it initiatives
+ * If the string represents a valid Delta Chat URI-scheme, it initiatives
  * various secure join, instant onboarding or other actions based on it.
  *
- * See list of supported DeltaChat URI-schemes here:
+ * See list of supported Delta Chat URI-schemes here:
  * - https://github.com/deltachat/interface/blob/main/uri-schemes.md
  * - https://c.delta.chat/classdc__context__t.html#a34a865a52127ed2cc8c2f016f085086c
  */
@@ -202,7 +202,7 @@ export default function useProcessQR() {
       scanContext: SCAN_CONTEXT_TYPE,
       callback?: () => void
     ): Promise<void> => {
-      // Check if given string is a valid DeltaChat URI-Scheme and return
+      // Check if given string is a valid Delta Chat URI-Scheme and return
       // parsed object, otherwise show an error to the user
       let qr: T.Qr
       try {

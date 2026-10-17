@@ -80,7 +80,7 @@ export interface DesktopSettingsType {
   /** whether to use system ui font */
   useSystemUIFont: boolean
   /**
-   * Tell the operating system to prevent screen recoding and screenshots for delta chat
+   * Tell the operating system to prevent screen recoding and screenshots for Delta Chat
    * also called screen_security
    */
   contentProtectionEnabled: boolean
@@ -127,7 +127,7 @@ export type Theme = {
   name: string
   description: string
   address: string
-  /** whether the theme is a prototype and should be hidden in the selection unless deltachat is started in devmode */
+  /** whether the theme is a prototype and should be hidden in the selection unless Delta Chat is started in devmode */
   is_prototype: boolean
 }
 

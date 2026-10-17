@@ -12,7 +12,7 @@ But of course we can overwrite those variables manually too, we can even overwri
 ## Theme codes
 
 There are two types of themes `dc`(built-in) and `custom` themes.
-DeltaChat Desktop searches in two places for themes, the theme folder contained in the deltachat installation and the theme folder in the deltachat user data folder of the users account (custom themes).
+Delta Chat Desktop searches in two places for themes, the theme folder contained in the Delta Chat installation and the theme folder in the Delta Chat user data folder of the users account (custom themes).
 
 The actual theme code is build as follows:
 

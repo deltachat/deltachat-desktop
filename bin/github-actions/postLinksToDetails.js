@@ -53,7 +53,7 @@ const options = {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
-    'User-Agent': 'github-action ci for deltachat deskop',
+    'User-Agent': 'github-action ci for Delta Chat Desktop',
     authorization: 'Bearer ' + GITHUB_TOKEN,
   },
 }
