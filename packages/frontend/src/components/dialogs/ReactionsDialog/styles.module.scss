@@ -17,7 +17,7 @@
 
 .reactionsDialogListClickable {
   &:hover,
-  &:focus {
+  &:focus-visible {
     background-color: var(--chatListItemBgHover);
   }
 }

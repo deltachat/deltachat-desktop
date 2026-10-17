@@ -115,7 +115,7 @@ $emojimart-search-height: 31px + 6px;
             border-color: transparent;
 
             &:hover,
-            &:focus {
+            &:focus-visible {
               background-color: lightgrey;
               cursor: pointer;
             }

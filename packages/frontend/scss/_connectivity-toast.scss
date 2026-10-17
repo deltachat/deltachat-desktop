@@ -47,7 +47,7 @@
     cursor: pointer;
 
     &:hover,
-    &:focus {
+    &:focus-visible {
       text-decoration: solid var(--colorPrimary);
       opacity: 0.8;
     }
