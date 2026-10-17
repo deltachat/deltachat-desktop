@@ -3,7 +3,7 @@
 Options:
 | Flag | Effect |
 | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| `--minimized` | Start deltachat in minimized mode with trayicon (trayicon will be activated for this session regardless whether it's disabled) |
+| `--minimized` | Start Delta Chat in minimized mode with trayicon (trayicon will be activated for this session regardless whether it's disabled) |
 | `--pipewire-camera` | (Linux) Access the camera through PipeWire / xdg-desktop-portal. Needed on systems where the camera is not usable otherwise (e.g. libcamera-based phones) |
 | **Development Options** | |
 | `--translation-watch` | enable auto-reload for `_locales/_untranslated_en.json`, when that file changes the current language is reloaded |

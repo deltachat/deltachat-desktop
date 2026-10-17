@@ -923,7 +923,7 @@ export default class DCWebxdc {
 
   /**
    * convenience accessor for rpc calls to access the RawClient
-   * of jsonrpcRemote of the injected DeltaChat Controller
+   * of jsonrpcRemote of the injected DeltaChatController
    */
   get rpc() {
     return this.controller.jsonrpcRemote.rpc
