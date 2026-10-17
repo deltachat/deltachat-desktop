@@ -40,6 +40,7 @@ export type DraftObject = Pick<
 
 function emptyDraft(): DraftObject {
   return {
+    // TODO probably don't want an invalid id?
     id: 0,
     text: '',
     file: null,
@@ -187,15 +188,39 @@ export function useDraft(
   const saveAndRefetchDraft_ = useCallback(
     async (chatId: number, draft: DraftObject) => {
       if (!isDraftEmpty(draft)) {
-        await BackendRemote.rpc.miscSetDraft(
-          accountId,
-          chatId,
-          draft.text,
-          draft.file !== '' ? draft.file : null,
-          draft.fileName,
-          draft.quote?.kind === 'WithMessage' ? draft.quote.messageId : null,
-          draft.viewType
-        )
+        if ('setDraft' in BackendRemote.rpc) {
+          await BackendRemote.rpc.setDraft(
+            accountId,
+            chatId,
+            {
+              id: draft.id,
+              text: draft.text,
+              file: draft.file,
+              filename: draft.fileName,
+              quotedMessageId:
+                draft.quote?.kind === 'WithMessage'
+                  ? draft.quote.messageId
+                  : null,
+              viewtype: draft.viewType,
+              // IDK
+              html: null,
+              location: null,
+              overrideSenderName: null,
+              quotedText: null,
+            }
+          )
+        } else {
+          await BackendRemote.rpc.miscSetDraft(
+            accountId,
+            chatId,
+            // draft.id,
+            draft.text,
+            draft.file !== '' ? draft.file : null,
+            draft.fileName,
+            draft.quote?.kind === 'WithMessage' ? draft.quote.messageId : null,
+            draft.viewType
+          )
+        }
       } else {
         await BackendRemote.rpc.removeDraft(accountId, chatId)
       }

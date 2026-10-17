@@ -2,7 +2,7 @@ import React, { useContext, useMemo, useState } from 'react'
 import classNames from 'classnames'
 import { filesize } from 'filesize'
 
-import { openAttachmentInShell } from '../message/messageFunctions'
+import { openAttachmentInShell, openWebxdc } from '../message/messageFunctions'
 import {
   isDisplayableByFullscreenMedia,
   isImage,
@@ -335,7 +335,20 @@ export function DraftAttachment({
   } else if (isViewTypeWebxdc) {
     const iconUrl = runtime.getWebxdcIconURL(selectedAccountId(), attachment.id)
     return (
-      <div className='media-attachment-webxdc'>
+      <button
+        type='button'
+        className='media-attachment-webxdc'
+        // TODO check accessibility
+        onClick={() =>
+          openWebxdc(
+            // TODO unsafe typecast, need to un-shittify `openWebxdc` parameters.
+            { ...attachment, chatId: window.__selectedChatId } as T.Message,
+            webxdcInfoFetch?.result?.ok
+              ? webxdcInfoFetch.result.value
+              : undefined
+          )
+        }
+      >
         <img className='icon' src={iconUrl} alt='' />
         <div className='text-part'>
           <div className='name'>
@@ -349,7 +362,7 @@ export function DraftAttachment({
           </div>
           <div className='size'>{filesize(attachment.fileBytes ?? 0)}</div>
         </div>
-      </div>
+      </button>
     )
   } else {
     const { file, fileName, fileBytes, fileMime } = attachment
