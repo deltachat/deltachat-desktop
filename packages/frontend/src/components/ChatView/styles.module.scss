@@ -1,6 +1,11 @@
 @use '../../../scss/main_screen/_navbar';
 
 .chatAndNavbar {
+  flex-grow: 1;
+  // Otherwise a long word in the composer will make this section
+  // horizontally scrollable.
+  min-width: 0;
+
   display: flex;
   flex-direction: column;
 
