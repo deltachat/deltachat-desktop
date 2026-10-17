@@ -24,6 +24,7 @@ import { LastUsedSlot, rememberLastUsedPath } from '../../utils/lastUsedPaths'
 import { RuntimeOpenDialogOptions } from '@deltachat-desktop/shared/shared-types'
 import { DialogProps } from '../../contexts/DialogContext'
 import AlertDialog from '../dialogs/AlertDialog'
+import { unknownErrorToString } from '@deltachat-desktop/shared/unknownErrorToString'
 
 const log = getLogger('renderer/Settings/Backup')
 
@@ -86,8 +87,16 @@ export default function Backup() {
       try {
         await BackendRemote.rpc.exportBackup(accountId, destination, null)
       } catch (error) {
-        // TODO/QUESTION - how are errors shown to user?
         log.error('backup-export failed:', error)
+        openDialog(AlertDialog, {
+          message:
+            tx('export_aborted') +
+            '\n' +
+            tx(
+              'error_x',
+              'failed to export backup\n' + unknownErrorToString(error)
+            ),
+        })
       } finally {
         closeDialog(dialogId)
         if (runtime.getRuntimeInfo().target === 'browser') {
