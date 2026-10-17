@@ -98,10 +98,24 @@
 - review the description field which includes the relevant part of the `CHANGELOG.md`
   - for patch releases the full changelog is not needed, the part that changed from the last release is enough
 
-10. Update the official DeltaChat website by adjusting the DESKTOP_VERSION constant in this file:
+10. Regenerate the apt repository index of the download directory, so that
+    users who installed Delta Chat Desktop from
+    <https://download.delta.chat/desktop/> get the new version with a plain
+    `apt update`. The index also lists the builds of older versions, apt
+    picks the newest version itself:
+
+    ```bash
+    ssh download.delta.chat bash -s -- <download-dir> < bin/build/update-apt-repo.sh
+    ```
+
+    `<download-dir>` is the directory served as
+    <https://download.delta.chat/desktop/>; see the header of
+    `bin/build/update-apt-repo.sh` for details and for signing the index.
+
+11. Update the official DeltaChat website by adjusting the DESKTOP_VERSION constant in this file:
     <https://github.com/deltachat/deltachat-pages/blob/master/_includes/download-boxes.html>
 
-11. Make a PR on https://github.com/flathub/chat.delta.desktop (follow the steps in th README)
+12. Make a PR on https://github.com/flathub/chat.delta.desktop (follow the steps in th README)
 
 ## What if the `main` branch changed in the meantime
 
