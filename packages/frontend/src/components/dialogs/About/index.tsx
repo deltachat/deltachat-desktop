@@ -17,6 +17,7 @@ import styles from './styles.module.scss'
 
 import type { DialogProps } from '../../../contexts/DialogContext'
 import { ClickableLink } from '../../helpers/ClickableLink'
+import { appName } from '@deltachat-desktop/shared/constants'
 
 export default function About({ onClose }: DialogProps) {
   const tx = useTranslationFunction()
@@ -53,7 +54,9 @@ export default function About({ onClose }: DialogProps) {
         <DialogContent>
           <div className={styles.aboutContent}>
             <img src='./images/intro1.png' />
-            <h1 className={styles.appName}>Delta Chat {edition}</h1>
+            <h1 className={styles.appName}>
+              {appName} {edition}
+            </h1>
             <div>
               v{VERSION}
               {runtime.getRC_Config().devmode && (

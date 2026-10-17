@@ -6,6 +6,7 @@ import { join } from 'path'
 import { getLogger } from '@deltachat-desktop/shared/logger.js'
 import { appx } from './isAppx.js'
 import { AutostartState } from '@deltachat-desktop/shared/shared-types.js'
+import { appName } from '@deltachat-desktop/shared/constants.js'
 
 const log = getLogger('main/autostart')
 
@@ -91,8 +92,8 @@ async function getLinuxAutostartRegisteredState(): Promise<boolean> {
 function getLinuxDesktopFileContent(): string {
   return `[Desktop Entry]
 Type=Application
-Name=Delta Chat
-Comment=Delta Chat decentralized private messenger
+Name=${appName}
+Comment=${appName} decentralized private messenger
 Exec=${getLinuxExecCommand()} -- --minimized
 Hidden=false
 NoDisplay=false
