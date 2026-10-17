@@ -509,6 +509,8 @@ function GridGallery({
             >
               {({ onItemsRendered, ref }) => (
                 <FixedSizeGrid
+                  innerElementType={'ol'}
+                  className='react-window-list-reset'
                   width={width}
                   height={height}
                   columnWidth={itemWidth}
@@ -600,20 +602,26 @@ function GalleryGridCell({
     itemsPerRow,
   } = data
 
-  const msgId = mediaMessageIds[rowIndex * itemsPerRow + columnIndex]
+  const index = rowIndex * itemsPerRow + columnIndex
+  const msgId = mediaMessageIds[index]
   const message = messageCache[msgId]
   if (!message) {
     // todo skeleton item (for each mode a fitting shape: image, video, audio, webxdc)
     return null
   }
   return (
-    <div style={{ ...style }} className='item'>
+    <li
+      style={{ ...style }}
+      className='item'
+      aria-setsize={mediaMessageIds.length}
+      aria-posinset={index + 1}
+    >
       <Component
         messageId={msgId}
         loadResult={message}
         openFullscreenMedia={openFullscreenMedia}
       />
-    </div>
+    </li>
   )
 }
 
@@ -705,7 +713,12 @@ function FileAttachmentRowWrapper({
     return null
   }
   return (
-    <li style={style} className='item'>
+    <li
+      style={style}
+      className='item'
+      aria-setsize={mediaMessageIds.length}
+      aria-posinset={index + 1}
+    >
       <FileAttachmentRow
         messageId={msgId}
         loadResult={message}
