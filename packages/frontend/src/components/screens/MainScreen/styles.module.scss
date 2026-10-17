@@ -14,15 +14,51 @@
   }
 }
 
+$chatListFraction: 3;
+$chatViewFraction: 8;
+$widthPixelsEstimate: 1000px;
 .chatListAndHeaderAndAudioPlayer {
   display: flex;
   flex-direction: column;
 
-  // See below, `.chatView`'s flex-grow.
-  width: 0;
-  flex-grow: 3;
+  resize: horizontal;
+  // Resize won't actually work without this.
+  overflow-x: hidden;
 
-  min-width: 295px;
+  // `width` will be overridden by the `element.style.width`
+  // when the user resizes it.
+  //
+  // Note that due to the fact that we use `flex-grow` and `flex-shrink`,
+  // the `width` property value does not equal the actual width of the elements,
+  // but rather just their relative sizes.
+  // The downside is that the size doesn't actually follow the user's cursor
+  // when they resize the chat list,
+  // and the width annoyingly jumps just as they start resizing it.
+  // The upside is that when they resize it, they specify
+  // the *relative sizes* of the two sections.
+  // Unfortunately this native resizing always sets `style.width` in pixels
+  // and not as a percentage or something.
+  width: var(
+    --initialChatListAndHeaderAndAudioPlayerWidth,
+    calc(
+      $widthPixelsEstimate * $chatListFraction /
+        ($chatListFraction + $chatViewFraction)
+    )
+  );
+  // `flex-grow` kicks in when the `width` of the the two sections combined
+  // is smaller than that of the parent.
+  // `flex-shrink` kicks in when it's smaller.
+  //
+  // I'm not gonna pretend like there is thorough understanding
+  // and deliberate calculation behind these values,
+  // but they feel pretty alright.
+  flex-grow: $chatListFraction;
+  flex-shrink: 1;
+
+  // TODO this should probably depend on the avatar size and padding,
+  // (and the scrollbar width?)
+  // Also if the proxy icon is disabled in the header then it overflows.
+  min-width: 5rem;
 
   .chatListAndHeader {
     display: flex;
@@ -65,13 +101,17 @@
     }
   }
 }
+:global(.main-screen.small-screen) {
+  .chatListAndHeaderAndAudioPlayer {
+    resize: unset;
+  }
+}
 .chatView {
-  // Otherwise e.g. the contents of the gallery view
-  // (tabs, sepcifically) will refuse to shrink,
-  // and this element (`.chatView`) will overflow the parent.
-  // Also this ensures that `.chatListAndHeaderAndAudioPlayer`
-  // and `.chatView` take respectively 3 and 8 parts
-  // of the width of the parent on wide screens.
-  width: 0;
-  flex-grow: 8;
+  // See above, `.chatListAndHeaderAndAudioPlayer`.
+  width: calc(
+    $widthPixelsEstimate * $chatViewFraction /
+      ($chatListFraction + $chatViewFraction)
+  );
+  flex-grow: $chatViewFraction;
+  flex-shrink: 1;
 }
