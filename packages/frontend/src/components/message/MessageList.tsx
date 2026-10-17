@@ -750,6 +750,9 @@ export const MessageListInner = React.memo(
       loadMissingMessages,
     } = props
 
+    const messageCacheRef = useRef(messageCache)
+    messageCacheRef.current = messageCache
+
     const conversationType: ConversationType = useMemo(
       () => ({
         hasMultipleParticipants: chat.chatType !== 'Single',
@@ -931,6 +934,7 @@ export const MessageListInner = React.memo(
                       key2={`${messageId.msg_id}`}
                       chat={chat}
                       message={message}
+                      messageCacheRef={messageCacheRef}
                       conversationType={conversationType}
                       unreadMessageInViewIntersectionObserver={
                         unreadMessageInViewIntersectionObserver
