@@ -166,14 +166,6 @@
         scroll-margin-top: $scroll-margin-top;
       }
 
-      &::after {
-        visibility: hidden;
-        display: block;
-        font-size: 0;
-        content: ' ';
-        clear: both;
-        height: 0;
-      }
       &.highlight {
         -webkit-animation: highlight-fade 3s 1;
         -moz-animation: highlight-fade 3s 1;
