@@ -103,7 +103,7 @@ function buildArchiveAndPinMenuItems(
   chats: ChatListItem[],
   tx: ReturnType<typeof useTranslationFunction>,
   activeChatId: number | null
-): { pin: ContextMenuItem | null; archive: ContextMenuItem } {
+): { pin: ContextMenuItem; archive: ContextMenuItem } {
   const batchAction = (fn: (chat: ChatListItem) => Promise<unknown>) => () =>
     Promise.all(chats.map(chat => fn(chat)))
 
@@ -148,17 +148,13 @@ function buildArchiveAndPinMenuItems(
 
   /*      Archive  UnArchive  Pin  UnPin
   pinned      y       n       n      y
-  archived    n       y       n      n
+  archived    n       y       y      n
   normal      y       n       y      n
   */
 
-  // Determine which menu items to show based on chat states
-  if (chats.every(chat => chat.isPinned)) {
-    return { pin: unPin, archive }
-  } else if (chats.every(chat => chat.isArchived)) {
-    return { pin: null, archive: unArchive }
-  } else {
-    return { pin, archive }
+  return {
+    pin: chats.every(chat => chat.isPinned) ? unPin : pin,
+    archive: chats.every(chat => chat.isArchived) ? unArchive : archive,
   }
 }
 
