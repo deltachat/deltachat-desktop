@@ -107,6 +107,8 @@ export function useMessageFocusAndMultiselect(
         const shouldPreventDefault = multiselect.onKeyDown(e, messageId)
         if (shouldPreventDefault) {
           e.preventDefault()
+          // As of writing this ensures that the chat doesn't get unselected
+          e.stopPropagation()
         }
       },
       [messageId, multiselect, rovingTabindex]

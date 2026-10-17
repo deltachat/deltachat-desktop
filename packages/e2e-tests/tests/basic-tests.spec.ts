@@ -63,6 +63,8 @@ test.afterEach(async () => {
   // Pressing Escape a bunch of times should reset the UI state,
   // so there is no need to reload the page.
   for (let i = 0; i < 5; i++) {
+    // TODO this unselects the chat and breaks the tests.
+    // Same with other test files.
     await page.keyboard.press('Escape')
   }
 })
@@ -551,6 +553,30 @@ test('Escape closes the chat', async () => {
   await expect(
     page.locator('textarea.create-or-edit-message-input')
   ).toBeFocused()
+  await page.keyboard.press('Escape')
+  await expect(
+    page.locator('textarea.create-or-edit-message-input')
+  ).not.toBeVisible()
+  await expect(
+    page.getByLabel('Chats').getByRole('tab', { selected: true })
+  ).toHaveCount(0)
+})
+test("Escape doesn't close the chat if focus is outside chat view", async () => {
+  await selectChat(page, userB.id)
+  await page.getByRole('button', { name: 'New Chat' }).focus()
+
+  await page.keyboard.press('Escape')
+  await expect(
+    page.locator('textarea.create-or-edit-message-input')
+  ).toBeVisible()
+  await expect(
+    page.getByLabel('Chats').getByRole('tab', { selected: true })
+  ).toHaveCount(1)
+})
+test('Escape closes the chat when chat header is focused', async () => {
+  await selectChat(page, userB.id)
+  await page.getByRole('button', { name: 'Chats & Media' }).focus()
+
   await page.keyboard.press('Escape')
   await expect(
     page.locator('textarea.create-or-edit-message-input')

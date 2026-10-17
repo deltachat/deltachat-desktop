@@ -248,6 +248,21 @@ test.describe('clickable elements', () => {
   })
 })
 
+test('Escape unselects all', async () => {
+  await getMessage(4).click()
+  await expectSelectedMessages([])
+
+  await getMessage(2).click({ modifiers: ['ControlOrMeta'] })
+  await getMessage(4).click({ modifiers: ['ControlOrMeta'] })
+  await getMessage(7).click({ modifiers: ['ControlOrMeta'] })
+  await expectSelectedMessages([2, 4, 7])
+
+  await page.keyboard.press('Escape')
+  await expectSelectedMessages([])
+  // Ensure that the chat didn't get unselected
+  await expect(getMessage(7)).toBeVisible()
+})
+
 test('Click on dead space', async () => {
   await getMessage(5).click()
   await expectSelectedMessages([])
