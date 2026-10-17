@@ -146,12 +146,6 @@ function buildArchiveAndPinMenuItems(
     ),
   }
 
-  /*      Archive  UnArchive  Pin  UnPin
-  pinned      y       n       n      y
-  archived    n       y       y      n
-  normal      y       n       y      n
-  */
-
   return {
     pin: chats.every(chat => chat.isPinned) ? unPin : pin,
     archive: chats.every(chat => chat.isArchived) ? unArchive : archive,
