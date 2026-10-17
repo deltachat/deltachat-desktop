@@ -7,6 +7,7 @@ import { getCustomThemesPath, htmlDistDir } from './application-constants.js'
 import { ExtendedAppMainProcess } from './types.js'
 import * as mainWindow from './windows/main.js'
 import { getLogger } from '@deltachat-desktop/shared/logger.js'
+import { appName } from '@deltachat-desktop/shared/constants.js'
 import { DesktopSettings } from './desktop_settings.js'
 
 import { Theme } from '@deltachat-desktop/shared/shared-types.js'
@@ -123,7 +124,7 @@ export function acceptThemeCLI() {
       throw new Error(
         `THEME "${app.rc['theme']}" NOT FOUND,
 this is fatal because the user specified it via cli argument.
-If you did not specify this, ask the person which installed deltachat for you to remove the cli argument again.
+If you did not specify this, ask the person which installed ${appName} for you to remove the cli argument again.
 
 If they are not available find the shortcut/.desktop file yourself and edit it to not contain the "--theme" argument.
 Using --theme is for developers and theme creators ONLY and should not be used by normal users

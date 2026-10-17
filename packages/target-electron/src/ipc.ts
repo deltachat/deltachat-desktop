@@ -63,6 +63,7 @@ import {
   openIncomingVideoCallWindow,
 } from './windows/video-call.js'
 import { tx } from './load-translations.js'
+import { appName } from '@deltachat-desktop/shared/constants.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -87,20 +88,20 @@ export async function init(cwd: string, logHandler: LogHandler) {
     await dcController.init()
   } catch (error) {
     log.critical(
-      "Fatal: The DeltaChat Module couldn't be loaded. Please check if all dependencies for deltachat-core are installed!",
+      `Fatal: The ${appName} Module couldn't be loaded. Please check if all dependencies for deltachat-core are installed!`,
       error,
       dcController.rpcServerPath
     )
     // eslint-disable-next-line no-console
     console.error(
-      "Fatal: The DeltaChat Module couldn't be loaded. Please check if all dependencies for deltachat-core are installed!",
+      `Fatal: The ${appName} Module couldn't be loaded. Please check if all dependencies for deltachat-core are installed!`,
       error,
       dcController.rpcServerPath
     )
 
     dialog.showErrorBox(
       'Fatal Error',
-      `The DeltaChat Module couldn't be loaded.
+      `The ${appName} Module couldn't be loaded.
   Please check if all dependencies for deltachat-core are installed!
   The Log file is located in this folder: ${getLogsPath()}\n
   ${dcController.rpcServerPath}\n
