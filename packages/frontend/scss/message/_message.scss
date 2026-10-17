@@ -19,7 +19,7 @@ $info-text-max-width: 400px;
   display: inline-flex;
   flex-direction: row;
   align-items: stretch;
-  max-width: 75%;
+  width: 100%;
 
   // Messages in the "Saved Messages" might
   // have an extra "show in chat" button
@@ -84,7 +84,7 @@ $info-text-max-width: 400px;
   .msg-container {
     position: relative;
     display: inline-block;
-    max-width: 100%;
+    max-width: 66%;
     // Flexible column: allow it to shrink below its content's intrinsic width
     // so the fixed avatar and shortcut-menu columns always fit within the row.
     min-width: 0;
@@ -280,7 +280,6 @@ $info-text-max-width: 400px;
 
 .message.outgoing {
   flex-direction: row-reverse;
-  float: inline-end;
   margin-inline-end: 0;
 
   .metadata:not(.with-image-no-caption) {
@@ -458,7 +457,9 @@ $info-text-max-width: 400px;
 
 @media (max-width: variables.$breakpoint-messagelist) {
   .message {
-    max-width: 100%;
+    .msg-container {
+      max-width: 100%;
+    }
 
     img.portrait:not(.sticker) {
       height: 300px;
