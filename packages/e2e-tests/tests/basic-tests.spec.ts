@@ -217,6 +217,7 @@ test('message menu items presence', async () => {
     'Reply',
     'Forward',
     'Save Message',
+    'Pin',
     'React',
     'Edit',
     'Copy Text',
