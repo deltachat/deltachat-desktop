@@ -15,7 +15,7 @@
     "desktop"
   ],
   "author": {
-    "name": "DeltaChat Developers",
+    "name": "Delta Chat Developers",
     "email": "delta-systems@codespeak.net"
   },
   "main": "index.js",

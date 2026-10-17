@@ -145,7 +145,7 @@ because there you get automatic updates.
 
 ### From Source <a id="source"></a>
 
-> ⚠ This is mostly for development purposes, this won't install/integrate deltachat into your system.
+> ⚠ This is mostly for development purposes, this won't install/integrate Delta Chat into your system.
 > So unless you know what you are doing, we recommend to stick to the methods above if possible.
 
 ```sh
@@ -202,7 +202,7 @@ For more details on how the logging system works, read [`docs/LOGGING.md`](docs/
 
 Licensed under `GPL-3.0-or-later`, see [`LICENSE`](./LICENSE) file for details.
 
-> Copyright © DeltaChat contributors.
+> Copyright © Delta Chat contributors.
 >
 > This program is free software: you can redistribute it and/or modify
 > it under the terms of the GNU General Public License as published by
