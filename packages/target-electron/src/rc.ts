@@ -1,7 +1,12 @@
 import rc from 'rc'
 import type { RC_Config } from '@deltachat-desktop/shared/shared-types.js'
 
-const defaults: RC_Config = {
+type ElectronRcConfig = RC_Config & {
+  /** Linux: access the camera through PipeWire (xdg-desktop-portal) */
+  'pipewire-camera': boolean
+}
+
+const defaults: ElectronRcConfig = {
   'log-debug': false,
   'log-to-console': false,
   'machine-readable-stacktrace': false,
@@ -16,9 +21,10 @@ const defaults: RC_Config = {
   h: false,
   'allow-custom-rpc-server-path': false,
   'allow-unsafe-core-replacement': false,
+  'pipewire-camera': false,
 }
 
-const config = rc('DeltaChat', defaults) as RC_Config
+const config = rc('DeltaChat', defaults) as ElectronRcConfig
 
 if (config.version || config.v) {
   config.version = true
