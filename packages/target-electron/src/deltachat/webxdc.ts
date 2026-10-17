@@ -212,67 +212,97 @@ export default class DCWebxdc {
       internetAccess: boolean
     ): Promise<string> => {
       const partition = partitionKeyFromAccountId(accountId, internetAccess)
-      if (!existing_sessions.includes(partition)) {
-        const ses = session.fromPartition(partition, {
-          cache: false,
-        })
-        existing_sessions.push(partition)
-
-        // Thanks to the fact that we specify `host-resolver-rules`,
-        // no connection attempt to the proxy should occur at all,
-        // at least as of now.
-        // See https://www.chromium.org/developers/design-documents/network-stack/socks-proxy/ :
-        // > The "EXCLUDE" clause make an exception for "myproxy",
-        // > because otherwise Chrome would be unable to resolve
-        // > the address of the SOCKS proxy server itself,
-        // > and all requests would necessarily fail
-        // > with PROXY_CONNECTION_FAILED.
-        //
-        // However, let's still use our dummy TCP listener, just in case.
-        await ses.setProxy({
-          mode: 'fixed_servers',
-          proxyRules: await getDummyProxyUrl(),
-        })
-        await ses.closeAllConnections()
-
-        ses.webRequest.onBeforeRequest(
-          {
-            urls: ['<all_urls>'],
-          },
-          (details, cb) => {
-            let cancelRequest = true
-            if (details.url.startsWith('webxdc://')) {
-              cancelRequest = false
-            } else if (details.url.startsWith('devtools://')) {
-              // devtools can only be open at all if their risk was confirmed
-              cancelRequest = !Object.values(open_apps).some(
-                app => app.devToolsConfirmed
-              )
-            } else if (details.url.startsWith('https://')) {
-              cancelRequest = !internetAccess
-            }
-            cb({ cancel: cancelRequest })
-          }
-        )
-
-        // TODO also consider this. However, this might have observable effects
-        // on the app (i.e. "offline" status).
-        // ses.enableNetworkEmulation({ offline: true })
-
-        // register appropriate protocols
-        // see https://www.electronjs.org/docs/latest/api/protocol
-        ses.protocol.handle('webxdc', (...args) => {
-          return webxdcProtocolHandler(this.rpc, ...args)
-        })
-        if (
-          DesktopSettings.state.enableOnDemandLocationStreaming &&
-          internetAccess
-        ) {
-          ses.protocol.handle('https', req =>
-            webRequestHandler(accountId, this.rpc, req)
-          )
-        }
+      if (existing_sessions.includes(partition)) {
+        return partition
       }
+
+      const ses = session.fromPartition(partition, {
+        cache: false,
+      })
+      existing_sessions.push(partition)
+
+      const loggedPermissionRequests = new Set<string>()
+
+      const permission_handler = (permission: string) => {
+        const isAllowed: boolean = ALLOWED_PERMISSIONS.includes(permission)
+
+        // Prevent webxdcs from spamming the log
+        if (!loggedPermissionRequests.has(permission)) {
+          loggedPermissionRequests.add(permission)
+          if (isAllowed) {
+            log.info(`ALLOWED permission '${permission}' to webxdc`)
+          } else {
+            log.info(
+              `DENIED permission '${permission}' to webxdc. If you think that's a bug and you need that permission, then please open an issue on github.`
+            )
+          }
+        }
+
+        return isAllowed
+      }
+
+      ses.setPermissionCheckHandler((_wc, permission) => {
+        return permission_handler(permission)
+      })
+      ses.setPermissionRequestHandler((_wc, permission, callback) => {
+        callback(permission_handler(permission))
+      })
+
+      // Thanks to the fact that we specify `host-resolver-rules`,
+      // no connection attempt to the proxy should occur at all,
+      // at least as of now.
+      // See https://www.chromium.org/developers/design-documents/network-stack/socks-proxy/ :
+      // > The "EXCLUDE" clause make an exception for "myproxy",
+      // > because otherwise Chrome would be unable to resolve
+      // > the address of the SOCKS proxy server itself,
+      // > and all requests would necessarily fail
+      // > with PROXY_CONNECTION_FAILED.
+      //
+      // However, let's still use our dummy TCP listener, just in case.
+      await ses.setProxy({
+        mode: 'fixed_servers',
+        proxyRules: await getDummyProxyUrl(),
+      })
+      await ses.closeAllConnections()
+
+      ses.webRequest.onBeforeRequest(
+        {
+          urls: ['<all_urls>'],
+        },
+        (details, cb) => {
+          let cancelRequest = true
+          if (details.url.startsWith('webxdc://')) {
+            cancelRequest = false
+          } else if (details.url.startsWith('devtools://')) {
+            // devtools can only be open at all if their risk was confirmed
+            cancelRequest = !Object.values(open_apps).some(
+              app => app.devToolsConfirmed
+            )
+          } else if (details.url.startsWith('https://')) {
+            cancelRequest = !internetAccess
+          }
+          cb({ cancel: cancelRequest })
+        }
+      )
+
+      // TODO also consider this. However, this might have observable effects
+      // on the app (i.e. "offline" status).
+      // ses.enableNetworkEmulation({ offline: true })
+
+      // register appropriate protocols
+      // see https://www.electronjs.org/docs/latest/api/protocol
+      ses.protocol.handle('webxdc', (...args) => {
+        return webxdcProtocolHandler(this.rpc, ...args)
+      })
+      if (
+        DesktopSettings.state.enableOnDemandLocationStreaming &&
+        internetAccess
+      ) {
+        ses.protocol.handle('https', req =>
+          webRequestHandler(accountId, this.rpc, req)
+        )
+      }
+
       return partition
     }
 
@@ -655,39 +685,6 @@ export default class DCWebxdc {
       webxdcWindow.on('page-title-updated', ev => {
         ev.preventDefault()
       })
-
-      const loggedPermissionRequests = new Set<string>()
-
-      const permission_handler = (permission: string) => {
-        const isAllowed: boolean = ALLOWED_PERMISSIONS.includes(permission)
-
-        // Prevent webxdcs from spamming the log
-        if (!loggedPermissionRequests.has(permission)) {
-          loggedPermissionRequests.add(permission)
-          if (isAllowed) {
-            log.info(
-              `ALLOWED permission '${permission}' to webxdc '${webxdcInfo.name}'`
-            )
-          } else {
-            log.info(
-              `DENIED permission '${permission}' to webxdc '${webxdcInfo.name}'. If you think that's a bug and you need that permission, then please open an issue on github.`
-            )
-          }
-        }
-
-        return isAllowed
-      }
-
-      webxdcWindow.webContents.session.setPermissionCheckHandler(
-        (_wc, permission) => {
-          return permission_handler(permission)
-        }
-      )
-      webxdcWindow.webContents.session.setPermissionRequestHandler(
-        (_wc, permission, callback) => {
-          callback(permission_handler(permission))
-        }
-      )
     }
 
     // actual webxdc instances
