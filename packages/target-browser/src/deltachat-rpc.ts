@@ -7,6 +7,7 @@ import type { WebSocket, WebSocketServer } from 'ws'
 import { RCConfig } from './rc-config'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 import { join } from 'path'
+import { appName } from '@deltachat-desktop/shared/constants'
 
 const log = getLogger('main/dc_wss')
 const logCoreEvent = getLogger('core')
@@ -60,7 +61,7 @@ class StdioServer {
         log.debug(`child process exited with code ${code}`)
         if (code !== 0) {
           // IDEA attempt restart it automatically with backoff-Algorithm?
-          log.critical('Fatal: The Delta Chat Core exited unexpectedly', code)
+          log.critical(`Fatal: The ${appName} Core exited unexpectedly`, code)
           process.exit(1)
         }
       } else {

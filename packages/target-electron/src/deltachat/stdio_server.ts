@@ -4,6 +4,7 @@ import { app, dialog } from 'electron/main'
 import { BuildInfo } from '../get-build-info'
 import { arch, platform } from 'os'
 import { getLogsPath } from '../application-constants'
+import { appName } from '@deltachat-desktop/shared/constants'
 
 const log = getLogger('DC-RPC')
 
@@ -38,7 +39,7 @@ export class StdioServer {
       if (err.message.endsWith('ENOENT')) {
         dialog.showErrorBox(
           'Fatal Error: Core Library Missing',
-          `The DeltaChat Module is missing! This could be due to your antivirus program. Please check the quarantine to restore it and notify the developers about this issue.
+          `The ${appName} Module is missing! This could be due to your antivirus program. Please check the quarantine to restore it and notify the developers about this issue.
 You can reach us on delta@merlinux.eu or on github.com/deltachat/deltachat-desktop/issues.
 
 The missing module should be located at "${this.cmd_path}".

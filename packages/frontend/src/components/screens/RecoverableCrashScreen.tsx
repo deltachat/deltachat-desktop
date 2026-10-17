@@ -3,6 +3,7 @@ import React, { PropsWithChildren } from 'react'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 import { DialogContext } from '../../contexts/DialogContext'
+import { appName } from '@deltachat-desktop/shared/constants'
 
 const log = getLogger('renderer/react-crashhandler')
 
@@ -65,7 +66,7 @@ export class RecoverableCrashScreen extends React.Component<
           {this.props.reset_on_change_key}:{this.state.timestamp}
           <h1>Ooops something crashed</h1>
           <h2>
-            Please restart Deltachat, if this problem persists please notify the
+            Please restart {appName}, if this problem persists please notify the
             developers on github issues (
             <a
               href='#'
@@ -97,7 +98,7 @@ export class RecoverableCrashScreen extends React.Component<
             </a>
           </p>
           <p>
-            DeltaChat Version: {VERSION} (git: {GIT_REF})
+            {appName} Version: {VERSION} (git: {GIT_REF})
           </p>
         </div>
       )
