@@ -69,7 +69,7 @@ function getMessage(page: Page, text: string) {
 }
 
 function getBanner(page: Page) {
-  return page.getByRole('button', { name: /^Pinned/ })
+  return page.getByRole('region', { name: 'Pinned' })
 }
 
 async function clickContextMenuItem(page: Page, text: string, item: string) {
@@ -217,6 +217,6 @@ test('banner shows a start button for a pinned webxdc app', async () => {
   await clickContextMenuItem(page, appName, 'Pin')
   await expect(getBanner(page)).toContainText(appName)
   await expect(
-    getBanner(page).locator('..').getByRole('button', { name: 'Start…' })
+    getBanner(page).getByRole('button', { name: 'Start…' })
   ).toBeVisible()
 })
