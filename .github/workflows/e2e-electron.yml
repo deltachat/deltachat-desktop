@@ -1,0 +1,74 @@
+name: e2e Tests (Electron)
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'docs/**' # only trigger build if a file outside of /docs was changed
+      - '_locales/*.xml'
+      - '.vscode/**'
+      - 'README_ASSETS/**'
+      - 'README.md'
+  pull_request:
+    paths-ignore:
+      - 'docs/**' # only trigger build if a file outside of /docs was changed
+      - '_locales/*.xml'
+      - '.vscode/**'
+      - 'README_ASSETS/**'
+      - 'README.md'
+
+permissions: {}
+
+jobs:
+  test:
+    name: Electron E2E Tests (${{ matrix.os }}, ${{ matrix.suite }})
+    env:
+      CI: true
+      NODE_ENV: test
+      VERSION_INFO_GIT_REF: ${{ github.ref }}
+      DC_CHATMAIL_DOMAIN: ci-chatmail.testrun.org
+    timeout-minutes: 30
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Tests that don't need a relay run on all platforms,
+          # because window, protocol and sandbox behaviour differs between them.
+          - os: ubuntu-latest
+            suite: offline
+            playwright_args: --grep-invert @network
+          - os: macos-latest
+            suite: offline
+            playwright_args: --grep-invert @network
+          - os: windows-latest
+            suite: offline
+            playwright_args: --grep-invert @network
+          - os: ubuntu-latest
+            suite: network
+            playwright_args: --grep @network
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          show-progress: false
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+      - name: Install dependencies
+        run: npm install -g pnpm && pnpm install
+      - name: Build electron target
+        run: pnpm build:electron
+      - name: Run e2e tests
+        # Linux runners have no display.
+        run: >
+          ${{ runner.os == 'Linux' && 'xvfb-run --auto-servernum' || '' }}
+          pnpm --filter=e2e-tests e2e:electron ${{ matrix.playwright_args }}
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: e2e-electron-report-${{ matrix.os }}-${{ matrix.suite }}
+          path: |
+            packages/e2e-tests/playwright-report-electron
+            packages/e2e-tests/test-results-electron
+          if-no-files-found: ignore
+          retention-days: 10

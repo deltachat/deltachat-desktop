@@ -260,7 +260,10 @@ export async function createNewProfile(
   page: Page,
   name: string,
   isFirstOnboarding: boolean,
-  useChatmail: boolean
+  useChatmail: boolean,
+  /** The Electron main window blocks `page.evaluate`, so tests there pass their own. */
+  writeClipboard: (text: string) => Promise<void> = text =>
+    page.evaluate(`navigator.clipboard.writeText('${text}')`)
 ): Promise<User> {
   await page.waitForSelector('.styles_module_account')
   const accountList = page.locator('.styles_module_account')
@@ -293,7 +296,7 @@ export async function createNewProfile(
     }
     dcAccountLink = `dcaccount:${mailServerUrl satisfies string}//new_email?t=${mailServerToken satisfies string}&n=ci_github`
   }
-  await page.evaluate(`navigator.clipboard.writeText('${dcAccountLink}')`)
+  await writeClipboard(dcAccountLink)
   await clickThroughTestIds(page, [
     'other-login-button',
     'scan-qr-login',
