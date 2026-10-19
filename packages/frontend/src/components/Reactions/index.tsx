@@ -58,9 +58,10 @@ export default function Reactions(props: Props) {
   const handleClick = () => {
     openDialog(ReactionsDialog, {
       message: props.message,
-      // Subscribers of a channel only get to know the accumulated reactions,
-      // not who reacted with what.
-      showContacts: chatType !== 'InBroadcast',
+      // In channels only the accumulated reactions are shown, not who reacted
+      // with what. Subscribers don't know it anyway, and for the owner
+      // the details would be of little use and clutter the UI.
+      showContacts: chatType !== 'InBroadcast' && chatType !== 'OutBroadcast',
     })
   }
 
