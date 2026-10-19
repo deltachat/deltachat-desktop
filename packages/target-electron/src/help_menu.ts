@@ -7,6 +7,8 @@ Flag
 -h, --help                      Print DeltaChat command line options (currently set).
 --minimized                     Start deltachat in minimized mode with trayicon (trayicon will be activated
                                 for this session regardless whether it's disabled)
+--pipewire-camera               (Linux) Access the camera through PipeWire / xdg-desktop-portal.
+                                Needed on systems where the camera is not usable otherwise
 -v, --version                   Prints DeltaChat version.
 
 Development Options
