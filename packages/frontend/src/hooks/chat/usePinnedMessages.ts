@@ -15,7 +15,7 @@ type PinnedMessagesState = {
 
 /**
  * Initially and whenever a message gets pinned, the banner shows the
- * newjust pinned message. Otherwise it keeps showing the same message
+ * new just pinned message. Otherwise it keeps showing the same message
  * as long as that is still pinned or falls back to the newest one.
  */
 function getNextShownId(
@@ -59,19 +59,18 @@ export default function usePinnedMessages(accountId: number, chatId: number) {
     // Make sure older results from previous loads
     // can't overwrite a newer one.
     const load = asyncThrottle(async () => {
+      let pinnedIds: T.Message['id'][]
       try {
-        const pinnedIds = await BackendRemote.rpc.getPinnedMessages(
-          accountId,
-          chatId
-        )
-        if (!cancelled) {
-          setState(prev => ({
-            shownId: getNextShownId(prev, pinnedIds),
-            pinnedIds,
-          }))
-        }
+        pinnedIds = await BackendRemote.rpc.getPinnedMessages(accountId, chatId)
       } catch (error) {
         log.error('failed to load pinned messages', error)
+        return
+      }
+      if (!cancelled) {
+        setState(prev => ({
+          shownId: getNextShownId(prev, pinnedIds),
+          pinnedIds,
+        }))
       }
     }, 100)
 
