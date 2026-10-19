@@ -36,8 +36,8 @@ import ReactionsBar from '../../ReactionsBar'
 export type Props = {
   message: Pick<T.Message, 'id' | 'reactions'>
   /**
-   * Whether it is known who reacted with what. This is not the case for
-   * subscribers of a channel, they only know the accumulated reactions.
+   * Whether to show who reacted with what.
+   * In channels only the accumulated reactions are shown.
    */
   showContacts: boolean
   onClose?: () => void

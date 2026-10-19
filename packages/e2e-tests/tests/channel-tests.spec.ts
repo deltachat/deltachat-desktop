@@ -364,17 +364,17 @@ test.describe('channel reactions', () => {
     await expect(message()).toContainText('😂')
   })
 
-  test('owner sees who reacted', async () => {
+  test('owner only sees the accumulated reactions', async () => {
     await switchToProfile(page, userA.id)
     await selectChat(page, channelName)
 
-    const rows = (await openReactionsDialog(page, message())).getByRole(
-      'listitem'
-    )
-    await expect(rows).toHaveCount(1)
-    // The row is a button, it opens the profile of the contact that reacted
-    await expect(rows.getByRole('button')).toHaveCount(1)
-    await expect(rows.first()).toContainText(userB.name)
+    const dialog = await openReactionsDialog(page, message())
+
+    await expect(dialog).toHaveText('1 reaction' + '😂 1')
+    await expect(dialog.getByRole('menuitemradio')).toHaveText(['😂 1'])
+    await expect(dialog.getByRole('button')).toHaveCount(1)
+    await expect(dialog.getByRole('listitem')).not.toBeVisible()
+    await expect(dialog).not.toContainText(userB.name)
   })
 
   test('owner can only use the default reactions', async () => {
