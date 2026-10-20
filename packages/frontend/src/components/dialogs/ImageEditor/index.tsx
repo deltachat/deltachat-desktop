@@ -144,6 +144,23 @@ export default function ImageEditorDialog({
     }
   }, [])
 
+  // Filerobot's close button has no accessible name and doesn't take props.
+  useEffect(() => {
+    const overlay = overlayRef.current
+    if (!overlay) {
+      return
+    }
+    const labelCloseButton = () => {
+      overlay
+        .querySelectorAll('.FIE_buttons-close-btn:not([aria-label])')
+        .forEach(button => button.setAttribute('aria-label', tx('close')))
+    }
+    labelCloseButton()
+    const observer = new MutationObserver(labelCloseButton)
+    observer.observe(overlay, { childList: true, subtree: true })
+    return () => observer.disconnect()
+  }, [tx])
+
   const { openDialog } = useDialog()
   const hasChanges = useRef(false)
 
