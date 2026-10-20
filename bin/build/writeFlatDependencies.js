@@ -5,7 +5,7 @@
 /// This workaround is needed for electron builder but breaks the tests
 /// so don't forget to reset afterwards with `pnpm -w run reset:node_modules`
 
-import { readFile, mkdir, copyFile, readdir, stat } from 'fs/promises'
+import { readFile, mkdir, copyFile, readdir, stat, realpath } from 'fs/promises'
 import { existsSync } from 'fs'
 import { fileURLToPath } from 'url'
 import { dirname, isAbsolute, join } from 'path'
@@ -80,71 +80,81 @@ if (!destination) {
   }
   //   console.log(importer);
 
-  const flatDependencyList = []
-  const getDeps = dependencies => {
+  // Follow pnpm's own links instead of computing the folder names in
+  // node_modules/.pnpm: pnpm shortens long names (virtualStoreDirMaxLength),
+  // so they can't be derived from the lockfile. Like node's resolution, a
+  // package's dependencies are linked next to it in .pnpm/<folder>/node_modules
+  const copied = new Set()
+  const skippedOptional = new Set()
+  const missing = new Set()
+  const linkedDependencies = []
+
+  const copyDependencies = async (nodeModulesDir, dependencies, optional) => {
     for (const dep in dependencies) {
       const version = dependencies[dep].version || dependencies[dep]
-      const depCode = `${dep}@${version}`
-      const dependency = Lockfile.snapshots[depCode]
-      flatDependencyList.push(depCode)
-      //   console.log(
-      //     depCode,
-      //     dependency?.dependencies,
-      //     dependency?.optionalDependencies
-      //   )
-      if (dependency?.dependencies) {
-        getDeps(dependency.dependencies)
+      if (version.startsWith('link:')) {
+        linkedDependencies.push(`${dep}@${version}`)
+        continue
       }
-      if (dependency?.optionalDependencies) {
-        getDeps(dependency.optionalDependencies)
+      const link = join(nodeModulesDir, dep)
+      if (!existsSync(link)) {
+        // pnpm doesn't install optional dependencies for platforms that are
+        // not in supportedArchitectures (e.g. android, linux-arm)
+        if (optional) {
+          skippedOptional.add(dep)
+          continue
+        }
+        // only warn: external package builds may remove dependencies on purpose
+        console.warn(
+          `${yellow('WARN:')} dependency ${dep}@${version} is not installed, skipped: ${link}`
+        )
+        missing.add(`${dep}@${version}`)
+        continue
       }
+      const source = await realpath(link)
+      if (copied.has(source)) {
+        continue
+      }
+      copied.add(source)
+
+      const dest = join(destination, dep)
+      // direct dependencies may already be linked there by pnpm
+      if (!existsSync(dest) || (await realpath(dest)) !== source) {
+        await mkdir(dest, { recursive: true })
+        await copyRecursive(source, dest)
+      }
+
+      const snapshot = Lockfile.snapshots[`${dep}@${version}`]
+      // .pnpm/<folder>/node_modules/[@scope/]name -> .pnpm/<folder>/node_modules
+      const siblings = join(source, ...dep.split('/').map(() => '..'))
+      await copyDependencies(siblings, snapshot?.dependencies, false)
+      await copyDependencies(siblings, snapshot?.optionalDependencies, true)
     }
-  }
-  getDeps(importer.dependencies)
-
-  const uniqueflatDependencyList = [...new Set(flatDependencyList)]
-  //   console.log({ uniqueflatDependencyList })
-
-  const linkedDependencies = uniqueflatDependencyList.filter(name =>
-    name.includes('@link:')
-  )
-  if (linkedDependencies.length !== 0) {
-    console.warn(
-      'WARN: Linked dependencies are not supported yet by our flatten workaround script:',
-      {
-        linkedDependencies,
-      }
-    )
   }
 
   await mkdir(destination, { recursive: true })
+  await copyDependencies(
+    join(dirname(workspacePackageJsonPath), 'node_modules'),
+    importer.dependencies,
+    false
+  )
 
-  for (const pkg of uniqueflatDependencyList) {
-    const name = pkg.match(/(^@?.*?)@/)[1]
-    const folderInStoreName = pkg
-      .replace(/\//g, '+')
-      .replace(/\(|\)/g, '_')
-      .replace(/_$/, '')
-    const source = join(
-      pnpmStore,
-      folderInStoreName,
-      'node_modules',
-      name
+  if (linkedDependencies.length !== 0) {
+    console.warn(
+      `${yellow('WARN:')} Linked dependencies are not supported yet by our flatten workaround script:`,
+      { linkedDependencies }
     )
-    const dest = join(destination, name)
-    await mkdir(dest, { recursive: true })
-    // console.log(source, dest)
-
-    if (!existsSync(source)) {
-      console.warn(
-        `${yellow(
-          'WARN:'
-        )} ${folderInStoreName} not found in pnpm store, skipped`, {name}
-      )
-      continue
-    }
-    // console.log({ pkg, name, dest })
-
-    await copyRecursive(source, dest)
+  }
+  if (missing.size !== 0) {
+    console.warn(
+      `${yellow('WARN:')} ${missing.size} dependencies are missing, the app may not start:`,
+      [...missing].join(', ')
+    )
+  }
+  if (skippedOptional.size !== 0) {
+    console.log(
+      'optional dependencies not installed for the supported architectures:',
+      [...skippedOptional].join(', ')
+    )
   }
 })()
