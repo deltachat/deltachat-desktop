@@ -108,6 +108,8 @@ declare module 'react-filerobot-image-editor/lib/components/AssemblyPoint' {
     useBackendTranslations?: boolean
     translations?: { [key: string]: string }
     tabsIds?: ('Adjust' | 'Annotate' | 'Resize' | 'Finetune' | 'Filters')[]
+    /** tools shown per tab; replaces Filerobot's default map entirely */
+    tabsToolsIds?: { [tabId: string]: string[] }
     defaultTabId?: string
     defaultToolId?: string
     Text?: AnnotationConfig & { text?: string; fontSize?: number }
@@ -116,7 +118,6 @@ declare module 'react-filerobot-image-editor/lib/components/AssemblyPoint' {
     Arrow?: AnnotationConfig & { pointerLength?: number; pointerWidth?: number }
     Rect?: AnnotationConfig
     Ellipse?: AnnotationConfig
-    Image?: AnnotationConfig & { disableUpload?: boolean }
     avoidChangesNotSavedAlertOnLeave?: boolean
     savingPixelRatio: number
     previewPixelRatio: number

@@ -207,6 +207,20 @@ export default function ImageEditorDialog({
             useBackendTranslations={false}
             translations={translations}
             tabsIds={['Adjust', 'Annotate', 'Resize']}
+            // Without the Image tool: it adds images from URLs or uploads.
+            tabsToolsIds={{
+              Adjust: ['Crop', 'Rotate', 'Flip_X', 'Flip_Y'],
+              Annotate: [
+                'Text',
+                'Rect',
+                'Ellipse',
+                'Polygon',
+                'Pen',
+                'Line',
+                'Arrow',
+              ],
+              Resize: ['Resize'],
+            }}
             defaultTabId='Annotate'
             defaultToolId='Pen'
             Text={{ text: '…', fill: ANNOTATION_COLOR, fontSize }}
@@ -228,7 +242,6 @@ export default function ImageEditorDialog({
               fill: 'transparent',
               strokeWidth,
             }}
-            Image={{ disableUpload: true }}
             // Filerobot's `beforeunload` handler would block closing
             // or reloading the Electron window.
             avoidChangesNotSavedAlertOnLeave
