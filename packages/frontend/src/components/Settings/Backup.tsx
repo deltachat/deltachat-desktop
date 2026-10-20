@@ -88,15 +88,25 @@ export default function Backup() {
         await BackendRemote.rpc.exportBackup(accountId, destination, null)
       } catch (error) {
         log.error('backup-export failed:', error)
-        openDialog(AlertDialog, {
-          message:
-            tx('export_aborted') +
-            '\n' +
-            tx(
-              'error_x',
-              'failed to export backup\n' + unknownErrorToString(error)
-            ),
-        })
+        if (
+          // Mega fragile check, but whatever.
+          !(
+            typeof error === 'object' &&
+            error != null &&
+            'message' in error &&
+            error.message === 'canceled'
+          )
+        ) {
+          openDialog(AlertDialog, {
+            message:
+              tx('export_aborted') +
+              '\n' +
+              tx(
+                'error_x',
+                'failed to export backup\n' + unknownErrorToString(error)
+              ),
+          })
+        }
       } finally {
         closeDialog(dialogId)
         if (runtime.getRuntimeInfo().target === 'browser') {
