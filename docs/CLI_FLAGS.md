@@ -30,6 +30,7 @@ useful env vars you can set:
 | `DC_TEST_DIR=<dir>` | specify an alternative data directory (electron target) |
 | `DATA_DIR=<dir>` | specify an alternative data directory (browser target) |
 | `DELTACHAT_LOCALE_DIR=<path>` | allows to specify an alternative translation data directory in development, the intended purpose is to be used together with `--translation-watch` [^1] |
+| `DELTA_CHAT_AUTOSTART_EXEC=<command>` | (Linux) command written to the `Exec=` line of the autostart entry, for distribution packages (see [DEVELOPMENT.md](./DEVELOPMENT.md#building-only-the-app-archive-for-distribution-packages)) |
 
 Most env vars can be set in .env files. Look fo a env.example in the related package for more info.
 

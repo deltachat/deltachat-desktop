@@ -38,6 +38,10 @@ function getLinuxAutostartFilePath(): string {
 // Returns the command for the Exec= key of the autostart desktop entry,
 // without the trailing app arguments (`-- --minimized`).
 function getLinuxExecCommand(): string {
+  if (process.env.DELTA_CHAT_AUTOSTART_EXEC) {
+    // Can be set by distribution packages
+    return process.env.DELTA_CHAT_AUTOSTART_EXEC
+  }
   if (process.env.FLATPAK_ID) {
     return `flatpak run ${process.env.FLATPAK_ID}`
   }
