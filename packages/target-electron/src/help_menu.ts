@@ -5,7 +5,6 @@ export function getHelpMenu() {
   console.info(`Options:
 
 Flag
---                              indicates the end of ${appName} options
 -h, --help                      Print ${appName} command line options (currently set).
 --minimized                     Start ${appName} in minimized mode with trayicon (trayicon will be activated
                                 for this session regardless whether it's disabled)

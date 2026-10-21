@@ -248,6 +248,20 @@ pnpm -w pack:asar
 Note that this leaves the patched `node_modules` behind, run
 `pnpm -w reset:node_modules` before running the tests again.
 
+When the app runs through a shared `electron` binary, Delta Chat can't detect
+its own launch command for the autostart entry
+(`~/.config/autostart/deltachat-desktop.desktop`). Set
+`DELTA_CHAT_AUTOSTART_EXEC` in the launcher script to the command that starts
+Delta Chat. It is written as-is to the `Exec=` line, followed by
+`-- --minimized`. It is not quoted or escaped, so it may contain arguments
+
+```sh
+#!/bin/sh
+export DELTA_CHAT_RPC_SERVER=/usr/bin/deltachat-rpc-server
+export DELTA_CHAT_AUTOSTART_EXEC=/usr/bin/deltachat-desktop
+exec electron /usr/lib/deltachat-desktop/app.asar --allow-custom-rpc-server-path "$@"
+```
+
 The commands for windows10 appx and the App Store package for mac are currently not in the scripts section. They are useless for most people anyway, as they require special paid developer accounts or signing certificates.
 
 - `mas` - mac appstore build
