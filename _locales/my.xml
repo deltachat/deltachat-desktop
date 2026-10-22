@@ -15,7 +15,6 @@
     <string name="on">ဖွင့်</string>
     <string name="off">ပိတ်</string>
     <string name="def">နဂို</string>
-    <string name="default_value">နဂို (%1$s)</string>
     <string name="custom">စိတ်ကြိုက်</string>
     <string name="none">မရှိပါ</string>
     <string name="automatic">အလိုအလျောက်</string>
@@ -27,7 +26,6 @@
     <string name="join">ဝင်ရောက်ပါ</string>
     <string name="join_group">အဖွဲ့ထဲဝင်ပါ</string>
     <string name="join_channel">ချန်နယ်ကို ဝင်ရောက်ပါ</string>
-    <string name="rejoin">ပြန်လည်ပါဝင်ရန်</string>
     <string name="delete">ဖျက်ရန်</string>
     <string name="delete_for_me">ကျွန်ုုပ်အတွက် ဖျက်ပါ</string>
     <string name="delete_for_everyone">လူတိုင်းအတွက် ဖျက်ပါ</string>
@@ -61,10 +59,6 @@
     <string name="media">မီဒီယာ</string>
     <string name="apps_and_media">အက်ပ်များ &amp; မီဒီယာ</string>
     <string name="profile">ပရိုဖိုင်</string>
-    <!-- deprecated -->
-    <string name="all_profiles">ပရိုဖိုင်အားလုံး</string>
-    <!-- deprecated -->
-    <string name="current_profile">လက်ရှိပရိုဖိုင်</string>
     <string name="main_menu">အဓိက မီနူး</string>
     <string name="start_chat">ချတ်စတင်ပါ</string>
     <string name="show_full_message">မက်ဆေ့ချ်အပြည့်အစုံပြပါ...</string>
@@ -86,10 +80,7 @@
     <!-- Possible answers to the question are: Never, Always, Once -->
     <string name="load_remote_content_ask">အဝေးထိန်းပုံရိပ်များသည် သင့်အား ခြေရာခံနိုင်သည်။\n\nဤဆက်တင်သည် ဖောင့်များနှင့် အခြားအကြောင်းအရာများကိုလည်း ဖွင့်နိုင်သည်။ ပိတ်ထားပါက ထည့်သွင်းထားသော သို့မဟုတ် ကက်ရှ်လုပ်ထားသော ရုပ်ပုံများ ပေါ်လာနိုင်သည်။\n\nအဝေးထိန်းပုံရိပ်များကို ဖွင့်ချင်ပါသလား?</string>
     <string name="always">အမြဲတမ်း</string>
-    <string name="always_load_remote_images">အဝေးထိန်းပုံများကို အမြဲဖွင့်ပါ</string>
     <string name="once">တစ်ကြိမ်</string>
-    <!-- deprecated -->
-    <string name="show_warning">သတိပေးချက်ပြပါ</string>
     <string name="not_now">အခုမဟုတ်ပါ</string>
     <string name="never">ဘယ်တော့မှ</string>
     <string name="one_moment">ခဏလေး...</string>
@@ -104,12 +95,9 @@
     <string name="no_app_to_handle_data">ဤဒေတာအမျိုးအစားကို ကိုင်တွယ်ရန် အက်ပ်တစ်ခု ရှာမတွေ့ပါ။</string>
     <string name="no_browser_installed">ထည့်သွင်းထားသော ဘရောက်ဆာ မရှိပါ။</string>
     <string name="file_not_found">ရှာမတွေ့ပါ %1$s။</string>
-    <!-- the placeholder will be replaced by the name of a file -->
-    <string name="cannot_save_file">သိမ်းဆည်း၍မရပါ %1$s။</string>
     <string name="copied_to_clipboard">ကလစ်ဘုတ်သို့ ကူးယူပြီးပါပြီ။</string>
     <string name="contacts_headline">အဆက်အသွယ်များ</string>
     <string name="email_address">အီးမေးလ်လိပ်စာ</string>
-    <string name="bad_email_address">မကောင်းသော အီးမေးလ်လိပ်စာ</string>
     <string name="password">စကားဝှက်</string>
     <string name="existing_password">ရှိပြီးသား စကားဝှက်</string>
     <string name="now">အခု</string>
@@ -165,7 +153,6 @@
     <plurals name="n_selected">
         <item quantity="other">%d ရွေးချယ်ပြီး</item>
     </plurals>
-    <string name="selected_colon">ရွေးချယ်ထားသော-</string>
     <string name="selected">ရွေးချယ်ပြီးပြီ</string>
     <string name="self">ကျွန်ုပ်</string>
     <string name="draft">မူကြမ်း</string>
@@ -176,10 +163,6 @@
     <!-- "Stickers" as known from other messengers; in some languages, the English "Sticker" is fine. -->
     <string name="sticker">စတစ်ကာ</string>
     <string name="add_to_sticker_collection">စတစ်ကာစုစည်းမှုထဲသို့ ထည့်ပါ</string>
-    <!-- deprecated, use sticker_picker_empty_hint instead -->
-    <string name="add_stickers_instructions">စတစ်ကာများထည့်ရန် \"စတစ်ကာဖိုင်တွဲကိုဖွင့်ပါ\" ကိုနှိပ်ပြီး သင့်စတစ်ကာအထုပ်အတွက် ဆပ်ဖိုဒါတစ်ခုဖန်တီးပြီး ပုံနှင့်စတစ်ကာဖိုင်များကို ထိုနေရာသို့ ဆွဲယူပါ။</string>
-    <!-- deprecated -->
-    <string name="open_sticker_folder">စတစ်ကာဖိုင်တွဲကို ဖွင့်ပါ</string>
     <string name="ask_add_sticker_to_collection">ဤစတစ်ကာကို သင့်စုစည်းမှုထဲသို့ ထည့်ချင်ပါလား?</string>
     <string name="ask_delete_sticker">ဤစတစ်ကာကို ဖျက်မှာလား?</string>
     <string name="sticker_picker_empty_hint">ဤနေရာတွင်ထည့်ရန် စတစ်ကာတစ်ခုကို နှိပ်ပါ။</string>
@@ -202,12 +185,13 @@
     <string name="switch_camera">ကင်မရာပြောင်းပါ</string>
     <!-- Toggle camera on/off eg. during an video call -->
     <string name="toggle_camera">ကင်မရာပြောင်းရန်</string>
-    <string name="toggle_fullscreen">မျက်နှာပြင်အပြည့်မုဒ်ကို ပြောင်းပါ</string>
     <string name="location">တည်နေရာ</string>
     <string name="locations">တည်နေရာများ</string>
     <string name="gallery">ပြခန်း</string>
     <string name="images_and_videos">ရုပ်ပုံများနှင့် ဗီဒီယိုများ</string>
+    <!-- A single file or document object (manual.pdf, readme.txt and so on). For referring to the "File" menu in desktop apps, see the strings "global_menu_file_desktop" -->
     <string name="file">ဖိုင်</string>
+    <!-- Title for an unknown number of files or document objects (manual.pdf, readme.txt and so on). Use e.g. as a tab in the gallery. For referring to the "File" menu in desktop apps, see the strings "global_menu_file_desktop" -->
     <string name="files">ဖိုင်များ</string>
     <string name="files_attach_hint">မူရင်းဖိုင်များနှင့် ချုံ့မထားသော ပုံများ ပို့ပါ</string>
     <!-- "Files" here means the "Files Selector App" or "Files Manager App" -->
@@ -240,11 +224,9 @@
     <string name="white">အဖြူ</string>
 
     <string name="zoom">ချဲ့</string>
-    <string name="extra_small">အလွန်သေးငယ်သော</string>
     <string name="small">သေးငယ်သော</string>
     <string name="normal">ပုံမှန်</string>
     <string name="large">ကြီးသော</string>
-    <string name="extra_large">အလွန်ကြီးသော</string>
 
     <string name="fast">မြန်ဆန်</string>
     <string name="slow">နှေးကွေး</string>
@@ -278,8 +260,6 @@
     <string name="menu_send">ပို့ပါ</string>
     <string name="menu_toggle_keyboard">အီမိုဂျီ ကီးဘုတ်ကို ပြောင်းပါ</string>
     <string name="menu_edit_group">အဖွဲ့ကို တည်းဖြတ်ပါ</string>
-    <!-- deprecated: "Edit Group" dialog usually also contains the "Group Description" field, use global_menu_edit_desktop instead -->
-    <string name="menu_group_name_and_image">အဖွဲ့အမည်နှင့် ရုပ်ပုံ</string>
     <string name="menu_show_global_map">နေရာအားလုံး</string>
     <string name="menu_archive_chat">မော်ကွန်းတင်ချတ်</string>
     <string name="menu_unarchive_chat">ချတ်ကို မော်ကွန်းတင်ခြင်းမှ ပယ်ဖျက်ပါ</string>
@@ -291,7 +271,6 @@
     <!-- Command to delete all messages in a chat. The chat itself will not be deleted but will be empty afterwards, so make sure to be different from "Delete Chat" here. "Clear" is a verb here, "Empty Chat" would also be fine (eg. in German "Chat leeren") -->
     <string name="clear_chat">ချတ်ကို ရှင်းလင်းပါ</string>
     <string name="delete_contact">အဆက်အသွယ်ကို ဖျက်ပါ</string>
-    <string name="menu_delete_location">ဤတည်နေရာကို ဖျက်ချင်ပါသလား</string>
     <string name="menu_message_details">မက်ဆေ့ချ်အချက်အလက်</string>
     <string name="menu_copy_to_clipboard">ကလစ်ဘုတ်သို့ ကူးယူပါ</string>
     <string name="share_invite_link">ဖိတ်ကြားချက်လင့်ခ်ကို မျှဝေပါ</string>
@@ -333,7 +312,6 @@
     <string name="privacy_policy">ကိုယ်ရေးအချက်အလက်မူဝါဒ</string>
     <string name="menu_select_all">အားလုံးကို ရွေးချယ်ပါ</string>
     <string name="select_chat">ချတ်ကို ရွေးချယ်ပါ</string>
-    <string name="select_more">နောက်ထပ် ရွေးချယ်ပါ</string>
     <string name="menu_edit_name">အမည်ကို တည်းဖြတ်ပါ</string>
     <!-- The placeholder will be replaced by the name the contact gave themself -->
     <string name="edit_name_explain">၎င်းတို့ပေးထားသော အမည်မှာ %1$s ဖြစ်သည်။</string>
@@ -346,7 +324,6 @@
     <string name="menu_zoom_out">ချုံ့ရန်</string>
     <string name="menu_save_log">မှတ်တမ်းကို သိမ်းဆည်းရန်</string>
     <string name="menu_more_options">နောက်ထပ် ရွေးချယ်စရာများ</string>
-    <string name="menu_learn_spelling">စာလုံးပေါင်း လေ့လာရန်</string>
     <string name="jump_to_message">မက်ဆေ့ချ်သို့ သွားရန်</string>
     <string name="replace_draft">မူကြမ်းကို အစားထိုးပါ</string>
     <string name="title_share_location">တည်နေရာကို မျှဝေပါ</string>
@@ -361,7 +338,7 @@
     <string name="unpin_chat">ချတ်ကို ပင်ဖြုတ်ပါ</string>
     <!-- Verb "to pin", making something sticky, not a noun or abbreviation for "pin number". -->
     <string name="pin">ပင်ထိုးပါ</string>
-    <!-- Opposite of "Pin chat", removing the sticky-state from a chat. -->
+    <!-- Opposite of "Pin", removing the sticky-state from a chat or message. -->
     <string name="unpin">ပင်ဖြုတ်ပါ</string>
     <string name="ConversationFragment_quoted_message_not_found">မူရင်းမက်ဆေ့ချ်ကို ရှာမတွေ့ပါ။</string>
     <string name="reply_privately">သီးသန့်ပြန်ကြားရန်</string>
@@ -376,10 +353,8 @@
     <string name="mute_for_one_day">၁ ရက်ကြာ အသံပိတ်ရန်</string>
     <string name="mute_for_seven_days">၇ ရက်ကြာ အသံပိတ်ရန်</string>
     <string name="mute_forever">အမြဲတမ်း အသံပိတ်ရန်</string>
-
-    <!-- deprecated -->
+    
     <string name="share_location_for_5_minutes">၅ မိနစ်ကြာ တည်နေရာမျှဝေပါ</string>
-
     <string name="share_location_for_30_minutes">မိနစ် ၃၀ ကြာ တည်နေရာမျှဝေပါ</string>
     <string name="share_location_for_one_hour">၁ နာရီကြာ တည်နေရာမျှဝေပါ</string>
     <string name="share_location_for_two_hours">၂ နာရီကြာ တည်နေရာမျှဝေပါ</string>
@@ -413,14 +388,6 @@
     <string name="call_reconnecting">ပြန်လည်ချိတ်ဆက်နေသည်</string>
     <string name="call_ended">ခေါ်ဆိုမှု ပြီးဆုံးသွားပါပြီ</string>
     <string name="call_failed">ခေါ်ဆိုမှု မအောင်မြင်ပါ</string>
-    <!-- deprecated, use "Audio call" instead -->
-    <string name="outgoing_audio_call">အသံဖြင့် ခေါ်ဆိုမှုအထွက်</string>
-    <!-- deprecated, use "Video call" instead -->
-    <string name="outgoing_video_call">ဗီဒီယိုခေါ်ဆိုမှုအထွက်</string>
-    <!-- deprecated, use "Audio call" instead -->
-    <string name="incoming_audio_call">ဝင်လာသော အသံခေါ်ဆိုမှု</string>
-    <!-- deprecated, use "Video call" instead -->
-    <string name="incoming_video_call">ဝင်လာသော ဗီဒီယိုခေါ်ဆိုမှု</string>
     <string name="declined_call">ငြင်းပယ်ထားသော ခေါ်ဆိုမှု</string>
     <string name="canceled_call">ပယ်ဖျက်ထားသော ခေါ်ဆိုမှု</string>
     <string name="missed_call">လွတ်သွားသော ခေါ်ဆိုမှု</string>
@@ -449,8 +416,6 @@
     <plurals name="ask_forward_messages">
         <item quantity="other">စာတို %1$d ကို %2$s ဆီသို့ ထပ်ဆင့် ပို့ မှာလား?</item>
     </plurals>
-    <!-- deprecated, use ask_forward_messages -->
-    <string name="ask_forward">မက်ဆေ့ချ်ကို %1$s ဆီသို့ ထပ်ဆင့်ပို့မည်လား?</string>
     <string name="ask_forward_multiple">မက်ဆေ့ချ်များကို %1$d ဆီသို့ ထပ်ဆင့်ပို့မည်လား?</string>
     <string name="ask_export_attachment">ပူးတွဲပါဖိုင်ကို ထုတ်ယူမည်လား?</string>
     <string name="ask_block_contact">ဤအဆက်အသွယ်ကို ပိတ်ပင်မည်လား?\n\nပိတ်ပင်ထားသော အဆက်အသွယ်များမှ တိုက်ရိုက်မက်ဆေ့ချ်များ သို့မဟုတ် ၎င်းတို့ ဖန်တီးထားသော အဖွဲ့များကို ပြသမည်မဟုတ်ပါ။\n\nပိတ်ပင်ထားသော အဆက်အသွယ်များ ပါဝင်သော အခြားအဖွဲ့များတွင်မူ ၎င်းတို့၏ မက်ဆေ့ချ်များကို ဆက်လက်ပြသပါမည်။</string>
@@ -495,7 +460,6 @@
     <string name="chat_input_placeholder">မက်ဆေ့ချ်</string>
     <string name="chat_archived_label">မော်ကွန်းတင်ပြီး</string>
     <string name="chat_request_label">မက်ဆေ့ချ် တောင်းဆိုမှု</string>
-    <string name="chat_request_label_explain">ဤသူထံမှ မက်ဆေ့ချ်ကို လက်ခံမည်လား?</string>
     <string name="chat_no_messages">မက်ဆေ့ချ်များ မရှိပါ</string>
     <string name="chat_self_talk_subtitle">မှတ်စုများနှင့် ဖိုင်များ သိမ်းဆည်းရန်</string>
     <string name="archive_empty_hint">မော်ကွန်းတိုက် လွတ်နေပါသည်</string>
@@ -505,9 +469,6 @@
     <string name="saved_messages_explain">• လွယ်ကူစွာ ဝင်ရောက်ကြည့်ရှုနိုင်ရန် မက်ဆေ့ချ်များကို ဤနေရာသို့ ထပ်ဆင့်ပို့ပါ\n\n• မှတ်စုများ သို့မဟုတ် အသံမှတ်တမ်းများကို မှတ်သားပါ\n\n• သိမ်းဆည်းရန်အတွက် မီဒီယာများကို ပူးတွဲပါ</string>
     <!-- Should match "Saved" from "Saved messages" -->
     <string name="saved">သိမ်းဆည်းပြီးပြီ</string>
-    <string name="save_as">အဖြစ် သိမ်းဆည်းပါ</string>
-    <string name="retry_send">ပြန်လည်ပေးပို့ပါ</string>
-    <string name="cannot_display_unsuported_file_type">ဤဖိုင်အမျိုးအစားကို ပြသ၍မရပါ- %s</string>
     <string name="attachment_failed_to_load">ပူးတွဲပါဖိုင်ကို ဖွင့်၍မရပါ</string>
     <!-- For recording Voice messages: Description for the "Lock" button allowing to lift the thumb from the record button while recording continues -->
     <string name="lock_recording">အသံဖမ်းခြင်းကို သော့ခတ်ထားပါ</string>
@@ -515,9 +476,6 @@
     <!-- mailing lists -->
     <string name="mailing_list">မေးလ်လိပ်စာစာရင်း</string>
 
-    <!-- webxdc -->
-    <!-- "Start..." button for an app -->
-    <string name="start_app">အက်ပ်ကို စတင်ပါ</string>
     <!-- this is a warning that is shown when one tries to send something to a chat that is not yet accepted. -->
     <string name="accept_request_first">ဦးစွာ တောင်းဆိုချက်ကို လက်ခံပါ</string>
     <!-- title shown above a list of chats where one should be selected (eg. when sharing files from a webxdc). the placeholder will be replaced by a file name -->
@@ -539,8 +497,6 @@
     <string name="search_in">%1$s တွင် ရှာဖွေပါ</string>
     <string name="search_files">ဖိုင်များကို ရှာဖွေပါ</string>
     <string name="search_explain">မက်ဆေ့ချ်များကို ရှာဖွေပါ</string>
-    <!-- deprecated, there is not much point to repeat the query, use emoji_search_results, or no headline at all -->
-    <string name="search_result_for_x">%1$s အတွက် ရှာဖွေမှုရလဒ်များ</string>
     <string name="search_no_result_for_x">\"%s\" အတွက် ရလဒ်မရှိပါ</string>
     <!-- Adjective, as in "Show Unread Messages" -->
     <string name="search_unread">မဖတ်ရသေးသော မက်ဆေ့ချ်များ</string>
@@ -551,8 +507,6 @@
     <string name="remove_group_image">အဖွဲ့ရုပ်ပုံကို ဖယ်ရှားပါ</string>
     <string name="change_group_image">အဖွဲ့ရုပ်ပုံကို ပြောင်းပါ</string>
     <string name="group_create_button">အဖွဲ့ ဖန်တီးပါ</string>
-    <!-- deprecated, use please_enter_chat_name -->
-    <string name="group_please_enter_group_name">ကျေးဇူးပြု၍ အဖွဲ့အမည် ရိုက်ထည့်ပါ</string>
     <string name="please_enter_chat_name">ကျေးဇူးပြု၍ ချတ်အမည်ကို ရိုက်ထည့်ပါ</string>
     <string name="group_add_members">အဖွဲ့ဝင်များ ထည့်ပါ</string>
     <string name="group_self_not_in_group">သင်သည် ဤအဖွဲ့တွင် မရှိပါ</string>
@@ -563,23 +517,17 @@
     <string name="tab_contact">အဆက်အသွယ်</string>
     <string name="tab_group">အဖွဲ့</string>
     <string name="tab_gallery">ပြခန်း</string>
-    <string name="tab_docs">စာရွက်စာတမ်းများ</string>
     <string name="tab_links">လင့်ခ်များ</string>
     <string name="tab_map">မြေပုံ</string>
     <string name="tab_gallery_empty_hint">ဤချတ်တွင် ပူးတွဲထားသော ရုပ်ပုံများနှင့် ဗီဒီယိုများ ဤနေရာတွင် ပေါ်လာပါမည်။</string>
     <string name="tab_docs_empty_hint">ဤချတ်တွင် ပူးတွဲထားသော စာရွက်စာတမ်းများနှင့် အခြားဖိုင်များ ဤနေရာတွင် ပေါ်လာပါမည်။</string>
     <string name="tab_image_empty_hint">ဤချတ်တွင် ပူးတွဲထားသော ရုပ်ပုံများ ဤနေရာတွင် ပေါ်လာပါမည်။</string>
-    <string name="tab_video_empty_hint">ဤချတ်တွင် ပူးတွဲထားသော ဗီဒီယိုများ ဤနေရာတွင် ပေါ်လာပါမည်။</string>
     <string name="tab_audio_empty_hint">ဤချတ်နှင့် တွဲထားသော အသံဖိုင်များနှင့် အသံမက်ဆေ့ချ်များကို ဤနေရာတွင် ပေါ်လာပါမည်</string>
     <string name="tab_webxdc_empty_hint">ဤချတ်တွင် ပူးတွဲထားသော အက်ပ်များ ဤနေရာတွင် ပေါ်လာပါမည်။</string>
     <string name="tab_all_media_empty_hint">ဤချတ်တွင် ပူးတွဲထားသော မီဒီယာ ဤနေရာတွင် ပေါ်လာပါမည်။</string>
     <string name="all_files_empty_hint">မည်သည့်ချတ်နှင့်မဆို တွဲထားသော စာရွက်စာတမ်းများနှင့် အခြားဖိုင်များကို ဤနေရာတွင် ပေါ်လာပါမည်။</string>
     <string name="all_apps_empty_hint">မည်သည့်ချတ်နှင့်မဆို တွဲထားသော အက်ပ်များကို ဤနေရာတွင် ပေါ်လာပါမည်။</string>
     <string name="media_preview">မီဒီယာ အစမ်းကြည့်ရှုခြင်း</string>
-    <!-- option to show images in the gallery with the correct width/height aspect (instead of square); other gallery apps may be a source of inspiration for translation :) -->
-    <string name="aspect_ratio_grid">မူလအချိုးအစားအတိုင်း ပြရန်</string>
-    <!-- option to show images in the gallery as square (instead of using correct width/height) -->
-    <string name="square_grid">လေးထောင့်ပုံစံ ပြရန်</string>
     <string name="send_message">မက်ဆေ့ချ်ပို့ပါ</string>
 
     <!-- Multi Device -->
@@ -621,14 +569,12 @@
     <string name="connectivity_connected">ချိတ်ဆက်ပြီးပါပြီ</string>
     <string name="sending">ပို့နေသည်</string>
     <string name="last_msg_sent_successfully">နောက်ဆုံးမက်ဆေ့ချ်ကို အောင်မြင်စွာ ပို့ပြီးပါပြီ</string>
-    <!-- deprecated -->
-    <string name="not_supported_by_provider">ဝန်ဆောင်မှုပေးသူမှ မထောက်ပံ့ပါ</string>
     <!-- Subtitle in quota context of "Connectivity" view. Should be be plural always, no number is prefixed. -->
     <string name="messages">မက်ဆေ့ချ်များ</string>
     <!-- Used for describing resource usage, resulting string will be eg. "1.2 GiB of 3 GiB used" -->
     <string name="part_of_total_used">%2$s တွင် %1$s အသုံးပြုပြီးပြီ</string>
 
-    <!-- welcome and login -->
+    <!-- welcome and profile creation -->
     <!-- Primary button on the welcome screen, allows to create an instant profile -->
     <string name="onboarding_create_instant_account">အကောင့်ကို ချက်ချင်း ဖန်တီးပါ</string>
     <!-- Secondary button on the welcome screen, allows to "Add as Second Device", "Restore from Backup" -->
@@ -637,12 +583,6 @@
     <string name="manual_account_setup_option">ကိုယ်တိုင် အကောင့်ထည့်သွင်းရန်</string>
     <!-- Instant onboarding title (there is not more to do than to set name and avatar) -->
     <string name="instant_onboarding_title">အမြန်ဖန်တီးခြင်း</string>
-    <!-- The placeholder will be replaced by the default onboarding server -->
-    <!-- deprecated -->
-    <string name="instant_onboarding_agree_default2">%1$s တွင် ဖန်တီးရန်</string>
-    <!-- The placeholder will be replaced by instance name, the whole text will link to the instance page -->
-    <!-- deprecated -->
-    <string name="instant_onboarding_agree_instance">%1$s စာချုပ်</string>
     <!-- Confirmation button on the instant onboarding screen -->
     <string name="instant_onboarding_create">ဖန်တီးပါ</string>
     <!-- Secondary, link-like button to open a page with other possible instances -->
@@ -657,10 +597,7 @@
 
     <string name="welcome_chat_over_email">အီးမေးလ်မှတစ်ဆင့် ချတ်လုပ်ပါ</string>
     <string name="scan_invitation_code">ဖိတ်ကြားချက်ကုဒ်ကို စကင်ဖတ်ပါ</string>
-    <string name="login_title">လော့ဂ်အင်</string>
-    <string name="login_advanced_hint">ဤလော့ဂ်အင်သည် အဆင့်မြင့်
-အသုံးပြုသူများအတွက်ဖြစ်သည်။\n\nအခြားအက်ပ်တွင် 
-သင်အသုံးပြုနေသောလိပ်စာကို မသုံးပါနှင့်။</string>
+    <string name="login_advanced_hint">ဤလော့ဂ်အင်သည် အဆင့်မြင့် အသုံးပြုသူများအတွက်ဖြစ်သည်။\n\nအခြားအက်ပ်တွင် သင်အသုံးပြုနေသောလိပ်စာကို မသုံးပါနှင့်။</string>
     <string name="login_inbox">ဝင်စာ</string>
     <string name="login_imap_login">IMAP လော့ဂ်အင်</string>
     <string name="login_imap_server">IMAP ဆာဗာ</string>
@@ -692,28 +629,16 @@
     <string name="add_transport">ရီလေး ထည့်ပါ</string>
     <string name="remove_transport">ရီလေးကို ဖယ်ရှားပါ</string>
     <string name="edit_transport">ရီလေးကို တည်းဖြတ်ပါ</string>
-    <!-- deprecated -->
-    <string name="used_for_sending">ပေးပို့ရန်အတွက် အသုံးပြုသည်</string>
-    <!-- deprecated -->
-    <string name="hide_from_contacts">အဆက်အသွယ်များမှ ဝှက်ထားပါ</string>
-    <!-- deprecated -->
-    <string name="hidden_from_contacts">အဆက်အသွယ်များမှ ဝှက်ထားသည်</string>
     <string name="enforce_e2ee">ရီလေးများအားလုံးအတွက် စာဝှက်စနစ်ကို ပြဋ္ဌာန်းပါ</string>
     <!-- shown if a QR code was scanned that can be used as a relay -->
     <string name="confirm_add_transport">ဤရီလေးကို ထည့်မည်လား?</string>
     <string name="invalid_transport_qr">ရီလေး QR ကုဒ် မမှန်ကန်ပါ</string>
-    <!-- deprecated -->
-    <string name="confirm_remove_or_hide_transport_x">%1$s ကို ဖယ်ရှားမည်/ဝှက်ထားမည်လား?</string>
     <string name="login_certificate_checks">လက်မှတ် စစ်ဆေးမှုများ</string>
+    <!-- deprecated -->
     <string name="login_error_mail">အီးမေးလ် လိပ်စာ မှားယွင်းနေသည်</string>
-    <string name="login_error_server">ဆာဗာ အမှားအယွင်း</string>
-    <string name="login_error_port">ပို့တ် အမှားအယွင်း</string>
-    <string name="login_error_required_fields">လိုအပ်သော အချက်အလက်များ ဖြည့်ပါ</string>
     <string name="import_backup_title">မိတ္တူကို တင်သွင်းပါ</string>
     <string name="import_backup_ask">မိတ္တူမှ ဒေတာများကို တင်သွင်းမည်လား?</string>
     <string name="import_backup_no_backup_found">မိတ္တူ ရှာမတွေ့ပါ</string>
-    <!-- deprecated, %1$s will be replaced by the failing address -->
-    <string name="login_error_cannot_login">လော့ဂ်အင်ဝင်၍မရပါ- %1$s</string>
     <!-- TLS certificate checks -->
     <string name="accept_invalid_certificates">မမှန်ကန်သော လက်မှတ်များကို လက်ခံပါ</string>
     <string name="switch_account">အကောင့် ပြောင်းပါ</string>
@@ -740,8 +665,6 @@
     <!-- first placeholder is replaced by the number of files (always 2 or more); second placeholder is replaced by a chat name -->
     <string name="ask_send_files_to_chat">ဖိုင် %1$d ခုကို %2$s သို့ ပို့မည်လား?</string>
     <string name="ask_send_files_to_selected_chats">ရွေးချယ်ထားသော ချတ်များသို့ ဖိုင်များကို ပို့မည်လား?</string>
-    <!-- deprecated -->
-    <string name="videos_sent_without_recoding">ဗီဒီယိုများကို မပြောင်းလဲဘဲ ပို့လိုက်သည်</string>
     <string name="share_text_multiple_chats">ချတ်အများအပြားသို့ စာသားမျှဝေပါ</string>
     <string name="share_abort">မျှဝေခြင်းကို ပယ်ဖျက်ပါ</string>
 
@@ -778,12 +701,9 @@
     <string name="pref_notifications_priority">အသိပေးချက် ဦးစားပေး</string>
     <string name="pref_notifications_explain">အသိပေးချက် ဆက်တင်များ</string>
     <string name="pref_show_notification_content">အသိပေးချက်တွင် အကြောင်းအရာကို ပြပါ</string>
-    <!-- deprecated -->
-    <string name="pref_show_notification_content_explain">ဝင်လာသော မက်ဆေ့ချ်များ၏ စာသားကို အသိပေးချက်တွင် ပြပါမည်</string>
     <string name="pref_led_color">LED အရောင်</string>
     <string name="pref_sound">အသံ</string>
     <string name="pref_silent">အသံတိတ်</string>
-    <string name="pref_privacy">ကိုယ်ရေးကိုယ်တာ</string>
     <string name="pref_system_default">စနစ် မူလဆက်တင်</string>
     <!-- Translators: as in "opposite of dark" -->
     <string name="pref_light_theme">အလင်း သင်းမ်</string>
@@ -800,8 +720,6 @@
     <!-- Title above a list of contacts who read a message -->
     <string name="read_by">ဖတ်ပြီးသူ -</string>
     <string name="pref_server">ဆာဗာ</string>
-    <string name="pref_encryption">ကုဒ်ဝှက်စနစ်</string>
-    <string name="pref_manage_keys">သော့များကို စီမံရန်</string>
     <string name="pref_chats">ချတ်များ</string>
     <string name="pref_in_chat_sounds">ချတ်တွင်း အသံများ</string>
     <string name="pref_view_log">မှတ်တမ်းကို ကြည့်ရန်</string>
@@ -821,23 +739,11 @@
     <string name="pref_background">နောက်ခံပုံ</string>
     <string name="pref_background_btn_default">မူလ နောက်ခံ</string>
     <string name="pref_background_btn_gallery">ပြခန်းမှ ရွေးချယ်ရန်</string>
-    <!-- deprecated -->
-    <string name="pref_imap_folder_warn_disable_defaults">မူလဖိုင်တွဲများကို ပိတ်ထားပါက သတိပေးပါ</string>
     <!-- No need to be literal here, you can also use "Use Multiple Devices", "Support Multiple Devices" or other fitting terms. However, it should fit to the wording or your language at https://delta.chat/help -->
     <string name="pref_multidevice">စက်ပစ္စည်းပေါင်းစုံ</string>
     <string name="pref_multidevice_explain">အခြားစက်ပစ္စည်းများကို အသုံးပြုပါ</string>
     <string name="pref_multidevice_change_warn">သတိပေးချက်- ဤဆက်တင်ပြောင်းလဲမှု</string>
-    <!-- deprecated -->
-    <string name="pref_auto_folder_moves">အလိုအလျောက် ဖိုင်တွဲရွှေ့ခြင်း</string>
-    <!-- deprecated -->
-    <string name="pref_only_fetch_mvbox_title">Mvbox ကိုသာ ရယူပါ</string>
-    <!-- deprecated -->
-    <string name="pref_show_emails">အီးမေးလ်များကို ပြပါ</string>
-    <!-- deprecated -->
-    <string name="pref_show_emails_no">မပြပါနှင့်</string>
-    <!-- deprecated -->
-    <string name="pref_show_emails_accepted_contacts">လက်ခံထားသော အဆက်အသွယ်များအတွက်သာ</string>
-    <!-- deprecated -->
+    <!-- deprecated, use "All" -->
     <string name="pref_show_emails_all">အားလုံး</string>
     <string name="pref_experimental_features">စမ်းသပ်ဆဲ လုပ်ဆောင်ချက်များ</string>
     <string name="pref_experimental_features_explain">ဤအရာများသည် မတည်ငြိမ်နိုင်ပါ</string>
@@ -848,6 +754,8 @@
     <string name="pref_background_custom_color">စိတ်ကြိုက် အရောင်</string>
     <string name="export_aborted">တင်ပို့ခြင်းကို ပယ်ဖျက်လိုက်သည်</string>
     <string name="auto_download_messages">မက်ဆေ့ချ်များကို အလိုအလျောက် ဒေါင်းလုဒ်လုပ်ပါ</string>
+    <!-- "All" as an option for "Auto-Download Messages", meaning that "all messages will be downloaded" -->
+    <string name="all">အားလုံး</string>
     <!-- %1$s will be replaced by a human-readable number of bytes, eg. 32 KiB, 1 MiB -->
     <string name="up_to_x">%1$s အထိ</string>
     <string name="up_to_x_most_worse_quality_images">%1$s အထိ (အရည်အသွေးနိမ့်)</string>
@@ -892,18 +800,8 @@
     <!-- automatically delete message -->
     <string name="delete_old_messages">မက်ဆေ့ချ်ဟောင်းများကို ဖျက်ပါ</string>
     <string name="autodel_device_title">စက်ပစ္စည်းတွင် အလိုအလျောက် ဖျက်ခြင်း</string>
-    <!-- deprecated -->
-    <string name="autodel_server_title">ဆာဗာတွင် အလိုအလျောက် ဖျက်ခြင်း</string>
     <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan option. -->
     <string name="autodel_device_ask">စက်ပစ္စည်းပေါ်ရှိ မက်ဆေ့ချ် %1$d ခုကို %2$s တွင် ဖျက်မည်လား?</string>
-    <!-- deprecated -->
-    <string name="autodel_server_ask">ဆာဗာပေါ်ရှိ မက်ဆေ့ချ် %1$d ခုကို %2$s တွင် ဖျက်မည်လား?</string>
-    <!-- deprecated -->
-    <string name="autodel_server_enabled_hint">ဆာဗာပေါ်ရှိ မက်ဆေ့ချ်များကို အလိုအလျောက် ဖျက်မည်။</string>
-    <!-- deprecated -->
-    <string name="autodel_server_warn_multi_device_title">စက်ပစ္စည်းပေါင်းစုံ သတိပေးချက်</string>
-    <!-- deprecated -->
-    <string name="autodel_server_warn_multi_device">အခြားစက်ပစ္စည်းများမှ မက်ဆေ့ချ်များကိုလည်း ဖျက်ပစ်နိုင်သည်</string>
     <string name="autodel_confirm">အတည်ပြုရန်</string>
     <!-- "At once" in the meaning of "Immediately", without any intervening time. -->
     <string name="autodel_at_once">ချက်ချင်း</string>
@@ -999,8 +897,6 @@
     <string name="learn_more">ပိုမိုလေ့လာရန်</string>
 
     <string name="devicemsg_self_deleted">ဤမက်ဆေ့ချ်ကို မိမိကိုယ်တိုင် ဖျက်လိုက်ပြီ။</string>
-    <!-- deprecated -->
-    <string name="devicemsg_storage_exceeding">သိုလှောင်မှုပမာဏ ပြည့်နေပြီ။</string>
     <!-- %1%s will be replaced by date and time in some human-readable format -->
     <string name="devicemsg_bad_time">အချိန် မှားယွင်းနေသည် (%1$s)</string>
     <string name="devicemsg_update_reminder">အပ်ဒိတ်လုပ်ရန် လိုအပ်ပါသည်။</string>
@@ -1017,14 +913,8 @@
     <string name="qrscan_failed">QR စကင်ဖတ်ခြင်း မအောင်မြင်ပါ</string>
     <string name="qrscan_ask_join_group">ဤအဖွဲ့သို့ ဝင်မည်လား?</string>
     <string name="qrscan_ask_join_channel">ဤချန်နယ်သို့ ဝင်မည်လား?</string>
-    <!-- deprecated -->
-    <string name="qrscan_fingerprint_mismatch">လက်ဗွေရာ မကိုက်ညီပါ</string>
-    <!-- deprecated -->
-    <string name="qrscan_no_addr_found">လိပ်စာ ရှာမတွေ့ပါ</string>
     <string name="qrscan_contains_text">၎င်းတွင် စာသားပါဝင်သည်</string>
     <string name="qrscan_contains_url">၎င်းတွင် လင့်ခ်ပါဝင်သည်</string>
-    <!-- deprecated -->
-    <string name="qrscan_fingerprint_label">လက်ဗွေရာ</string>
     <string name="withdraw_verifycontact_explain">အဆက်အသွယ် အတည်ပြုခြင်းကို ရုပ်သိမ်းမည်လား?</string>
     <string name="withdraw_verifygroup_explain">အဖွဲ့ အတည်ပြုခြင်းကို ရုပ်သိမ်းမည်လား?</string>
     <string name="withdraw_joinbroadcast_explain">အသံလွှင့်ချန်နယ်သို့ ဝင်ရောက်ခြင်းကို ရုပ်သိမ်းမည်လား?</string>
@@ -1043,12 +933,9 @@
     <!-- This text is shown inside the "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by the profile name eg. "Scan to chat with Alice" -->
     <string name="qrshow_join_contact_hint">%1$s နှင့် ချတ်လုပ်ရန် စကင်ဖတ်ပါ</string>
     <string name="qrshow_join_contact_no_connection_toast">ချိတ်ဆက်မှု မရှိပါ</string>
-    <string name="qraccount_ask_create_and_login">ဖန်တီးပြီး လော့ဂ်အင်ဝင်မည်လား?</string>
     <string name="set_name_and_avatar_explain">အမည်နှင့် ရုပ်ပုံကို သတ်မှတ်ပါ</string>
     <string name="please_enter_name">ကျေးဇူးပြု၍ အမည်ကို ရိုက်ထည့်ပါ</string>
     <string name="qraccount_qr_code_cannot_be_used">ဤ QR ကုဒ်ကို အသုံးပြု၍ မရပါ</string>
-    <!-- the placeholder will be replaced by the address of the profile -->
-    <string name="qrlogin_ask_login">%1$s သို့ လော့ဂ်အင်ဝင်မည်လား?</string>
     <!-- first placeholder will be replaced by name of the inviter, second placeholder will be replaced by the name of the inviter. -->
     <string name="secure_join_started">%1$s သည် %2$s နှင့် လုံခြုံစွာ ချိတ်ဆက်နေပါသည်...</string>
     <!-- first placeholder will be replaced by name of the inviter, second placeholder will be replaced by the name of the inviter. -->
@@ -1058,13 +945,6 @@
     <string name="secure_join_wait">ကျေးဇူးပြု၍ ခဏစောင့်ပါ...</string>
     <string name="contact_verified">အဆက်အသွယ် အတည်ပြုပြီးပါပြီ</string>
     <string name="contact_blocked">အဆက်အသွယ်ကို ပိတ်ပင်ထားသည်</string>
-    <!-- Shown in contact profile. The placeholder will be replaced by the name of the contact that introduced the contact. -->
-    <!-- deprecated -->
-    <string name="verified_by">%1$s မှ အတည်ပြုသည်</string>
-    <!-- deprecated -->
-    <string name="verified_by_you">သင် အတည်ပြုခဲ့သည်</string>
-    <!-- deprecated -->
-    <string name="verified_by_unknown">အမည်မသိသူမှ အတည်ပြုသည်</string>
     <string name="mailto_dialog_header_select_chat">ချတ်ကို ရွေးချယ်ပါ</string>
     <!-- first placeholder is the name of the chat -->
     <string name="confirm_replace_draft">%1$s ရှိ မူကြမ်းကို အစားထိုးမည်လား?</string>
@@ -1113,6 +993,7 @@
 
     <string name="welcome_desktop">ဒယ်လ်တာချတ်မှ ကြိုဆိုပါသည်</string>
     <string name="global_menu_preferences_language_desktop">ဘာသာစကား</string>
+    <!-- The "File" menu in desktop apps. For referring to a file or document object (manual.pdf, readme.txt and so on), see the strings "file" or "files" -->
     <string name="global_menu_file_desktop">ဖိုင်</string>
     <string name="global_menu_file_quit_desktop">ထွက်ရန်</string>
     <string name="global_menu_edit_desktop">တည်းဖြတ်ရန်</string>
@@ -1151,8 +1032,6 @@
     <string name="menu.view.developer.open.log.folder">မှတ်တမ်းဖိုင်တွဲကို ဖွင့်ရန်</string>
     <string name="menu.view.developer.open.current.log.file">လက်ရှိ မှတ်တမ်းဖိုင်ကို ဖွင့်ရန်</string>
     <string name="explain_desktop_minimized_disabled_tray_pref" tools:ignore="TypographyDashes">Tray သို့ ခေါက်ထားခြင်းကို ပိတ်ထားသည်</string>
-    <!-- deprecated, used on desktop although there is not spell checker -->
-    <string name="no_spellcheck_suggestions_found">စာလုံးပေါင်း အကြံပြုချက်များ မရှိပါ</string>
     <string name="show_window">ဝင်းဒိုးကို ပြရန်</string>
     <string name="data_found_other_installation_message">အခြား ဒယ်လ်တာချတ် ထည့်သွင်းမှုမှ သင်၏ ပရိုဖိုင်များကို အသုံးပြု၍မရနိုင်ပါ - ထည့်သွင်းမှု အမျိုးမျိုးသည် ၎င်းတို့၏ အချက်အလက်များကို သီးခြားနေရာများတွင် သိမ်းဆည်းသောကြောင့် ဖြစ်ပါသည်။\n\nရှိပြီးသား ပရိုဖိုင်များကို ဆက်လက်သိမ်းဆည်းထားရန်-\n၁။ ယခု ထွက်လိုက်ပါ။\n၂။ အခြား Delta Chat ကို ဖွင့်ပါ - လိုအပ်ပါက %1$s မှ ပြန်လည်ထည့်သွင်းပါ။\n၃။ \"ဆက်တင်များ/ချတ်များ\" တွင် ပရိုဖိုင်တစ်ခုချင်းစီကို အရန်ကူးယူပါ။\n၄။ ဤဗားရှင်းကို ပြန်ဖွင့်ပါ။\n၅။ \"ကျွန်ုပ်မှာ ပရိုဖိုင်တစ်ခု ရှိပြီးသား\"ကို အသုံးပြု၍ အရန်ကူးယူမှုများကို ပြန်လည်ထည့်သွင်းပါ။\"\n\nသင်၏ ယခင်ပရိုဖိုင်များ မပါဘဲ ဆက်လက်လုပ်ဆောင်မှာလား?</string>
 
@@ -1188,24 +1067,15 @@
 
     <!-- iOS specific strings, developers: please take care to remove strings that are no longer used! -->
     <string name="stop_sharing_location">တည်နေရာ မျှဝေခြင်းကို ရပ်ရန်</string>
-    <string name="a11y_voice_message_hint_ios">အသံဖမ်းပြီးနောက် ပေးပို့ရန် နှစ်ချက်နှိပ်ပါ။ အသံဖမ်းယူထားမှုကို ဖျက်ပစ်ရန် လက်ချောင်းနှစ်ချောင်းဖြင့် ပွတ်ဆွဲပါ။</string>
     <string name="a11y_connectivity_hint">ချိတ်ဆက်မှုဆိုင်ရာ အသေးစိတ်အချက်အလက်များကို ကြည့်ရှုရန် နှစ်ချက်နှိပ်ပါ။</string>
     <string name="login_error_no_internet_connection">အင်တာနက် ချိတ်ဆက်မှု မရှိပါ၊ လော့ဂ်အင်ဝင်ခြင်း မအောင်မြင်ပါ</string>
-    <string name="share_account_not_configured">ပရိုဖိုင်ကို ပြင်ဆင်သတ်မှတ်မထားပါ။</string>
     <string name="cannot_play_audio_file">အသံဖိုင်ကို ဖွင့်၍မရပါ။</string>
     <!-- iOS camera permission alert -->
     <string name="perm_ios_explain_access_to_camera_denied">ဓာတ်ပုံရိုက်ကူးရန်၊ ဗီဒီယိုရိုက်ကူးရန် သို့မဟုတ် QR-ကုဒ် စကင်နာကို အသုံးပြုရန်အတွက် စနစ် ဆက်တင်များကို ဖွင့်ပြီး \"ကင်မရာ\" ကို ဖွင့်ပေးပါ။</string>
     <string name="open_settings">ဆက်တင်များကို ဖွင့်ပါ</string>
-    <!-- iOS device contact alert -->
-    <string name="import_device_contacts">စက်ပစ္စည်းမှ အဆက်အသွယ်များကို တင်သွင်းပါ</string>
-    <string name="import_device_contacts_hint">အဆက်အသွယ်များကို အလွယ်တကူ ရှာဖွေရန်</string>
-    <!-- iOS notification settings -->
-    <string name="disabled_in_dc">ဒယ်လ်တာချတ်တွင် ပိတ်ထားသည်</string>
+    <!-- Notifications, that are disabled in the system settings -->
     <string name="disabled_in_system_settings">စနစ် ဆက်တင်များတွင် ပိတ်ထားသည်</string>
     <string name="bg_app_refresh_disabled">နောက်ခံ အက်ပ်ရီဖရက်ရှ်ကို ပိတ်ထားသည်</string>
-    <string name="notifications_avg_minutes">ခန့်မှန်းခြေ မိနစ်</string>
-    <string name="notifications_avg_hours">ခန့်မှန်းခြေ နာရီ</string>
-    <string name="last_check_at">နောက်ဆုံးစစ်ဆေးခဲ့သော အချိန်- %1$s</string>
     <string name="system_settings">စနစ် ဆက်တင်များ</string>
     <!-- shown below the button "System Settings" on the notification screen. this is a hint about what can be edited on System Settings' Notification page - eg. the notification type (banner, lock screen, notification centre), sound, badges and so on. no need to be exhaustive here, it is only to give the user an idea. -->
     <string name="system_settings_notify_explain_ios">စနစ် ဆက်တင်များတွင် အသိပေးချက်များကို ပြောင်းလဲနိုင်သည်</string>
@@ -1235,7 +1105,7 @@
     <string name="pref_reliable_service_explain">အမြဲတမ်းအသိပေးချက်ဖြစ်ပေါ်စေသည်</string>
 
     <string name="pref_background_notifications_rationale">ချိတ်ဆက်မှုကို ထိန်းသိမ်းပြီး နောက်ခံတွင် မက်ဆေ့ချ်များ လက်ခံရယူရန်အတွက် နောက်တစ်ဆင့်တွင် ဘက်ထရီ အကောင်းဆုံးဖြစ်အောင် လုပ်ဆောင်မှုများကို လျစ်လျူရှုပါ။\n\nဒယ်လ်တာချတ်သည် အရင်းအမြစ်အနည်းငယ်သာ အသုံးပြုပြီး သင့်ဘက်ထရီကို မကုန်စေရန် ဂရုစိုက်ပါသည်။</string>
-    <!-- disabling "Reliable service" will hide a the maybe annoying permanent-notification with the drawback that new-message-notifications get potentially unreliable -->
+    <!-- disabling "Reliable service" will hide the maybe annoying permanent-notification with the drawback that new-message-notifications get potentially unreliable -->
     <string name="perm_enable_bg_reminder_title">ဒယ်လ်တာချတ်ကို နောက်ခံတွင် ဖွင့်ထားစဉ် မက်ဆေ့ချ်များ လက်ခံရရှိရန် ဤနေရာကို နှိပ်ပါ။</string>
     <string name="perm_enable_bg_already_done">ဒယ်လ်တာချတ်ကို နောက်ခံမှာ မက်ဆေ့ချ်တွေ လက်ခံခွင့်ပြုပြီးပါပြီ။\n\nမက်ဆေ့ချ်တွေ နောက်ခံမှာ မရောက်သေးဘူးဆိုရင် စနစ်ဆက်တင်များကိုလည်း စစ်ဆေးပါ။</string>
 

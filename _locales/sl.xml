@@ -15,7 +15,6 @@
     <string name="on">Prižgano</string>
     <string name="off">Ugasnjeno</string>
     <string name="def">Privzeto</string>
-    <string name="default_value">Privzeto (%1$s)</string>
     <string name="custom">Po meri</string>
     <string name="none">Nič</string>
     <string name="automatic">Samodejno</string>
@@ -25,7 +24,6 @@
     <string name="downloading">Prenašanje...</string>
     <string name="open_attachment">Odpri priponko</string>
     <string name="join">Pridruži se</string>
-    <string name="rejoin">Pridruži se ponovno</string>
     <string name="delete">Izbriši</string>
     <string name="delete_for_me">Izbriši le zame</string>
     <string name="delete_for_everyone">Izbriši za vse</string>
@@ -58,10 +56,6 @@
     <string name="media">Večpredstavnost</string>
     <string name="apps_and_media">Aplikacije in večpredstavnost</string>
     <string name="profile">Profil</string>
-    <!-- deprecated -->
-    <string name="all_profiles">Vsi profili</string>
-    <!-- deprecated -->
-    <string name="current_profile">Trenuten profil</string>
     <string name="main_menu">Glavni meni</string>
     <string name="start_chat">Začni klepet</string>
     <string name="show_full_message">Prikaži celotno sporočilo...</string>
@@ -75,10 +69,7 @@
     <string name="activate">Aktiviraj</string>
     <string name="load_remote_content">Naloži oddaljene slike</string>
     <string name="always">Vedno</string>
-    <string name="always_load_remote_images">Vedno naloži oddaljene slike</string>
     <string name="once">Enkrat</string>
-    <!-- deprecated -->
-    <string name="show_warning">Prikaži opozorilo</string>
     <string name="not_now">Ne zdaj</string>
     <string name="never">Nikoli</string>
     <string name="one_moment">Trenutek...</string>
@@ -91,12 +82,9 @@
     <string name="no_app_to_handle_data">Ni bilo mogoče najti aplikacije za to vrsto podatkov.</string>
     <string name="no_browser_installed">Brskalnik ni nameščen.</string>
     <string name="file_not_found">Ni bilo mogoče najti \"%1$s\".</string>
-    <!-- the placeholder will be replaced by the name of a file -->
-    <string name="cannot_save_file">Ni bilo mogoče shraniti \"%1$s\".</string>
     <string name="copied_to_clipboard">Kopirano v odložišče.</string>
     <string name="contacts_headline">Stiki</string>
     <string name="email_address">E-poštni naslov</string>
-    <string name="bad_email_address">Neveljaven elektronski naslov.</string>
     <string name="password">Geslo</string>
     <string name="now">Zdaj</string>
     <!-- Headline for destructive actions with no undo. Could also be "Caution" or "Warning". -->
@@ -172,7 +160,6 @@
         <item quantity="few">%d izbrani</item>
         <item quantity="other">%d izbranih</item>
     </plurals>
-    <string name="selected_colon">Izbrano:</string>
     <string name="self">Jaz</string>
     <string name="draft">Osnutek</string>
     <string name="image">Slika</string>
@@ -182,8 +169,6 @@
     <!-- "Stickers" as known from other messengers; in some languages, the English "Sticker" is fine. -->
     <string name="sticker">Nalepka</string>
     <string name="add_to_sticker_collection">Dodaj v zbirko nalepk</string>
-    <!-- deprecated -->
-    <string name="open_sticker_folder">Odpri mapo z nalepkami</string>
     <string name="images">Slike</string>
     <!-- a noun, used for "Music" and other "Audio" files -->
     <string name="audio">Zvok</string>
@@ -201,12 +186,13 @@
     <string name="capture">Zajemi</string>
     <!-- Switch eg. from front to back camera -->
     <string name="switch_camera">Zamenjaj kamero</string>
-    <string name="toggle_fullscreen">Preklopi celozaslonski način</string>
     <string name="location">Lokacija</string>
     <string name="locations">Lokacije</string>
     <string name="gallery">Galerija</string>
     <string name="images_and_videos">Slike in videoposnetki</string>
+    <!-- A single file or document object (manual.pdf, readme.txt and so on). For referring to the "File" menu in desktop apps, see the strings "global_menu_file_desktop" -->
     <string name="file">Datoteka</string>
+    <!-- Title for an unknown number of files or document objects (manual.pdf, readme.txt and so on). Use e.g. as a tab in the gallery. For referring to the "File" menu in desktop apps, see the strings "global_menu_file_desktop" -->
     <string name="files">Datoteke</string>
     <string name="files_attach_hint">Pošlji originalne datoteke in ne stiskaj slik</string>
     <!-- "Files" here means the "Files Selector App" or "Files Manager App" -->
@@ -239,11 +225,9 @@
     <string name="white">Belo</string>
 
     <string name="zoom">Povečava</string>
-    <string name="extra_small">Zelo majhno</string>
     <string name="small">Majhno</string>
     <string name="normal">Normalno</string>
     <string name="large">Veliko</string>
-    <string name="extra_large">Zelo veliko</string>
 
     <string name="fast">Hitro</string>
     <string name="slow">Počasno</string>
@@ -269,7 +253,7 @@
     <string name="select_chat">Izberi klepet</string>
     <string name="reply_privately">Odzovi se zasebno</string>
     <string name="mute_forever">Utišaj zavedno</string>
-
+    
     <string name="ask_start_chat_with">Začni klepet z \"%1$s\"?</string>
     <!-- %1$s is replaced by a comma-separated list of names -->
     <string name="ask_remove_members">Odstrani \"%1$s\" iz skupine?</string>
@@ -285,25 +269,21 @@
     <string name="tab_contact">Stik</string>
     <string name="tab_group">Skupina</string>
     <string name="tab_gallery">Galerija</string>
-    <string name="tab_docs">Dokumentacija</string>
     <string name="tab_links">Povezave</string>
     <string name="tab_map">Zemljevid</string>
     <string name="tab_audio_empty_hint">Zvočne datoteke in glasovna sporočila, ki so pripeta k temu pogovoru, bodo prikazana tu.</string>
     <string name="instant_onboarding_other_server">Prikaži Chatmail strežnike</string>
+    <!-- deprecated -->
     <string name="login_error_mail">Vnesite veljaven e-poštni naslov</string>
-    <string name="login_error_required_fields">Vnesi veljaven e-poštni naslov in geslo zanj</string>
     <string name="pref_server">Strežnik</string>
-    <string name="pref_encryption">Šifriranje</string>
     <string name="pref_chats">Klepeti</string>
-    <!-- deprecated -->
-    <string name="pref_show_emails_no">Ne, le klepeti</string>
-    <!-- deprecated -->
-    <string name="pref_show_emails_accepted_contacts">Za sprejete stike</string>
-    <!-- deprecated -->
+    <!-- deprecated, use "All" -->
     <string name="pref_show_emails_all">Vsi</string>
     <string name="pref_experimental_features">Eksperimentalne funkcije</string>
     <string name="pref_background_default">Privzeta slika</string>
     <string name="pref_background_default_color">Privzeta barva</string>
+    <!-- "All" as an option for "Auto-Download Messages", meaning that "all messages will be downloaded" -->
+    <string name="all">Vsi</string>
     <!-- Reactions -->
     <string name="reactions">Reakcije</string>
     <!-- Verb, the action of adding a "Reaction" to a message. Used eg. in context menus, similar to "Reply" or "Forward" -->
@@ -316,8 +296,6 @@
     <!-- automatically delete message -->
     <string name="delete_old_messages">Briši stara sporočila</string>
     <string name="autodel_device_title">Briši sporočila z naprave</string>
-    <!-- deprecated -->
-    <string name="autodel_server_title">Briši sporočila s strežnika</string>
     <string name="secure_join_wait">Vzpostavljanje povezave, prosimo počakajte...</string>
     <!-- notifications -->
     <string name="notify_reply_button">Odziv</string>
