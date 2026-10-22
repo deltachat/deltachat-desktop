@@ -163,26 +163,41 @@ export default function ImageEditorDialog({
 
   const { openDialog } = useDialog()
   const hasChanges = useRef(false)
+  // Remounting the editor with a new key resets it to the original image.
+  const [editorKey, setEditorKey] = useState(0)
 
-  // Replaces Filerobot's own "discard changes" modal with our dialog.
-  const onCloseButtonClickCapture = async (ev: React.MouseEvent) => {
-    if (
-      !(ev.target instanceof Element) ||
-      !ev.target.closest('.FIE_buttons-close-btn')
-    ) {
+  // Replaces Filerobot's own "discard changes" and "reset" modals
+  // with our dialog.
+  const onTopbarButtonClickCapture = async (ev: React.MouseEvent) => {
+    if (!(ev.target instanceof Element)) {
       return
     }
-    ev.stopPropagation()
-    if (
-      !hasChanges.current ||
-      (await confirmDialog(
-        openDialog,
-        tx('discard_changes_question'),
-        tx('discard'),
-        true
-      ))
-    ) {
-      onClose()
+    if (ev.target.closest('.FIE_buttons-close-btn')) {
+      ev.stopPropagation()
+      if (
+        !hasChanges.current ||
+        (await confirmDialog(
+          openDialog,
+          tx('discard_changes_question'),
+          tx('discard'),
+          true
+        ))
+      ) {
+        onClose()
+      }
+    } else if (ev.target.closest('.FIE_buttons-reset-btn')) {
+      ev.stopPropagation()
+      if (
+        await confirmDialog(
+          openDialog,
+          tx('reset_changes_question'),
+          tx('reset'),
+          true
+        )
+      ) {
+        hasChanges.current = false
+        setEditorKey(key => key + 1)
+      }
     }
   }
 
@@ -197,11 +212,12 @@ export default function ImageEditorDialog({
       aria-modal='true'
       aria-label={tx('edit_image')}
       tabIndex={-1}
-      onClickCapture={onCloseButtonClickCapture}
+      onClickCapture={onTopbarButtonClickCapture}
     >
       <div className={styles.imageEditor}>
         {image && (
           <FilerobotImageEditor
+            key={editorKey}
             source={image}
             // Translations are otherwise fetched from a Scaleflex server.
             useBackendTranslations={false}

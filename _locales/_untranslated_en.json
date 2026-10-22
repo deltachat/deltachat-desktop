@@ -100,5 +100,8 @@
   },
   "discard": {
     "message": "Discard"
+  },
+  "reset_changes_question": {
+    "message": "Reset all changes?"
   }
 }
