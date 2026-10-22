@@ -92,6 +92,18 @@
   "webxdc_store_url_explain_2_desktop": {
     "message": "This is different from the same feature on Android and iOS.\nThis must be the path containing the xdcget-lock.json file."
   },
+  "pin_for_everyone_ask": {
+    "message": "Pin message for everyone in the chat?"
+  },
+  "pin_for_everyone": {
+    "message": "Pin for Everyone"
+  },
+  "unpin_for_everyone_ask": {
+    "message": "Unpin message for everyone in the chat?"
+  },
+  "unpin_for_everyone": {
+    "message": "Unpin for Everyone"
+  },
   "message_pinned_by_you": {
     "message": "You pinned a message."
   },

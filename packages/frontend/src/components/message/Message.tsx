@@ -24,6 +24,7 @@ import {
   openWebxdc,
   enterEditMessageMode,
   isMessageResendable,
+  confirmDialog,
 } from './messageFunctions'
 import Attachment from '../attachment/messageAttachment'
 import { isGenericAttachment, isImage } from '../attachment/Attachment'
@@ -368,12 +369,25 @@ function buildContextMenu(
     },
     showPin && {
       label: message.isPinned ? tx('unpin') : tx('pin'),
-      action: () =>
+      action: async () => {
+        if (!chat.isSelfTalk) {
+          const confirmed = await confirmDialog(
+            openDialog,
+            message.isPinned
+              ? tx('unpin_for_everyone_ask')
+              : tx('pin_for_everyone_ask'),
+            message.isPinned ? tx('unpin_for_everyone') : tx('pin_for_everyone')
+          )
+          if (!confirmed) {
+            return
+          }
+        }
         BackendRemote.rpc.setPinnedMessageState(
           accountId,
           message.id,
           !message.isPinned
-        ),
+        )
+      },
     },
     // Send emoji reaction
     showSendReaction && {
