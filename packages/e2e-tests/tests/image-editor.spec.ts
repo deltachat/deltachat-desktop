@@ -117,6 +117,38 @@ test('asks before discarding changes', async () => {
   await expect(draftImage).toHaveAttribute('src', draftImageSrc!)
 })
 
+test('asks before resetting changes', async () => {
+  await openEditor()
+  const resetButton = editor.getByRole('button', {
+    name: 'Reset',
+    exact: true,
+  })
+  await expect(resetButton).toBeDisabled()
+  await drawStroke()
+  await expect(resetButton).toBeEnabled()
+
+  const confirmDialog = page
+    .getByRole('dialog')
+    .filter({ hasText: 'Reset all changes?' })
+
+  await resetButton.click()
+  await expect(confirmDialog).toBeVisible()
+  await confirmDialog.getByRole('button', { name: 'Cancel' }).click()
+  await expect(confirmDialog).not.toBeVisible()
+  await expect(resetButton).toBeEnabled()
+
+  await resetButton.click()
+  await confirmDialog.getByRole('button', { name: 'Reset' }).click()
+  await expect(confirmDialog).not.toBeVisible()
+  await expect(editor.locator('canvas').first()).toBeVisible()
+  await expect(resetButton).toBeDisabled()
+
+  // nothing left to discard after the reset
+  await closeButton().click()
+  await expect(editor).not.toBeVisible()
+  await expect(page.getByRole('dialog')).not.toBeVisible()
+})
+
 test('saving replaces the draft image with the edited one', async () => {
   await openEditor()
   await editor.getByText('Resize', { exact: true }).click()
