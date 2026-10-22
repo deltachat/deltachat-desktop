@@ -183,6 +183,9 @@ build['linux'] = {
   },
   files: [...files, PREBUILD_FILTERS.NOT_MAC, PREBUILD_FILTERS.NOT_WINDOWS],
   icon: 'build/icon.icns', // electron builder gets the icon out of the mac icon archive
+  // first line of the deb Description field, shown by apt and package managers;
+  // without it that line is empty
+  synopsis: 'Decentralized Private Messenger',
   description: 'Decentralized Private Messenger (https://delta.chat)',
 }
 
@@ -198,6 +201,8 @@ build['toolsets'] = {
 
 build['deb'] = {
   packageName: previewBuild ? 'deltachat-desktop-preview' : 'deltachat-desktop',
+  // Debian section
+  packageCategory: 'net',
   depends: [
     'libasound2',
     'libgtk-3-0',
