@@ -24,9 +24,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 
 - Camera (QR scanner, calls) not working after opening the "Help" window
-- Screen readers now announce the correct number of items in long lists
 - Apps (WebXDC) can no longer open the "Open Link?" dialog or other Delta Chat dialogs while Delta Chat is not focused
-- "Help" window: escape translated strings (hardening, not exploitable with current translations)
 
 ### Removed
 
