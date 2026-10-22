@@ -87,6 +87,10 @@ test('pin a message and see it pinned on the other side', async () => {
 
   await expect(getBanner(page)).not.toBeVisible()
   await clickContextMenuItem(page, firstMessage, 'Pin')
+  await page
+    .getByRole('dialog')
+    .getByRole('button', { name: 'Pin for Everyone' })
+    .click()
 
   await expect(
     page.locator('.info-message').filter({ hasText: 'You pinned a message.' })
@@ -119,6 +123,10 @@ test('banner cycles through several pinned messages', async () => {
   await switchToProfile(page, userB.id)
   await selectChat(page, userA.name)
   await clickContextMenuItem(page, secondMessage, 'Pin')
+  await page
+    .getByRole('dialog')
+    .getByRole('button', { name: 'Pin for Everyone' })
+    .click()
 
   // The newly pinned message is shown first.
   const banner = getBanner(page)
@@ -170,6 +178,10 @@ test('unpin a message', async () => {
   await switchToProfile(page, userA.id)
   await selectChat(page, userB.name)
   await clickContextMenuItem(page, secondMessage, 'Unpin')
+  await page
+    .getByRole('dialog')
+    .getByRole('button', { name: 'Unpin for Everyone' })
+    .click()
 
   const banner = getBanner(page)
   await expect(banner).toContainText(firstMessage)
@@ -184,6 +196,10 @@ test('unpin a message', async () => {
   await expect(getBanner(page)).not.toContainText('/2')
 
   await clickContextMenuItem(page, firstMessage, 'Unpin')
+  await page
+    .getByRole('dialog')
+    .getByRole('button', { name: 'Unpin for Everyone' })
+    .click()
   await expect(getBanner(page)).not.toBeVisible()
 
   await switchToProfile(page, userA.id)
@@ -215,6 +231,10 @@ test('banner shows a start button for a pinned webxdc app', async () => {
   await expect(page.locator('.msg-body .webxdc').last()).toContainText(appName)
 
   await clickContextMenuItem(page, appName, 'Pin')
+  await page
+    .getByRole('dialog')
+    .getByRole('button', { name: 'Pin for Everyone' })
+    .click()
   await expect(getBanner(page)).toContainText(appName)
   await expect(
     getBanner(page).getByRole('button', { name: 'Start…' })
