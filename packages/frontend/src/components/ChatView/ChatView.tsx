@@ -38,6 +38,7 @@ import {
   useMessageFocusAndMultiselectContextValue,
 } from '../message/focusAndMultiselect'
 import { useMessageList } from '../../stores/messagelist'
+import { ActionEmitter, KeybindAction } from '../../keybindings'
 
 const log = getLogger('ChatView')
 
@@ -50,12 +51,36 @@ export function ChatView(
     className?: string
   }
 ) {
-  const { chatWithLinger } = useChat()
+  const { chatWithLinger, unselectChat, chatId } = useChat()
   return (
     <section
       role='region'
       aria-labelledby='chat-section-heading'
       className={classNames(props.className, styles.chatAndNavbar)}
+      // TODO fix: if the user clicked on empty space inside of the chat view
+      // and then pressed Escape, that will not invoke this listener,
+      // because the target element would be `document.body`.
+      onKeyDown={e => {
+        if (e.code !== 'Escape') {
+          return
+        }
+        if (e.shiftKey || e.ctrlKey || e.altKey || e.metaKey) {
+          return
+        }
+        if (chatId === undefined) {
+          // Already unselected
+          return
+        }
+
+        e.stopPropagation()
+        e.preventDefault()
+        // Unselecting the chat goes back to chatlist in small screen mode.
+        // But it's also good in "regular" mode.
+        unselectChat()
+        // Focus the chatlist item to enable arrow key navigation between chats
+        // TODO fix: doesn't work in small screen mode.
+        ActionEmitter.emitAction(KeybindAction.ChatList_FocusItems)
+      }}
     >
       {props.accountId != undefined && chatWithLinger ? (
         <ChatViewInner

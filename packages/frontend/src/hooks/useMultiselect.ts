@@ -424,6 +424,7 @@ export function useMultiselect<T>(
        * {@link availableItems}.
        *
        * @returns whether the caller should `preventDefault()`
+       * and possibly `stopPropagation()`
        * the original event and not execute the regular click action.
        */
       onClick,

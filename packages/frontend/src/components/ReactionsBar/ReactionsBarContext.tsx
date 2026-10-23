@@ -44,18 +44,6 @@ export const ReactionsBarProvider = ({ children }: PropsWithChildren<{}>) => {
     [showReactionsBar, hideReactionsBar, isReactionsBarShown]
   )
 
-  useEffect(() => {
-    const hideOnEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape' && barArgs !== null) {
-        hideReactionsBar()
-      }
-    }
-    window.addEventListener('keyup', hideOnEscape)
-    return () => {
-      window.removeEventListener('keyup', hideOnEscape)
-    }
-  }, [barArgs, hideReactionsBar])
-
   return (
     <ReactionsBarContext.Provider value={value}>
       <AbsolutePositioningHelper
@@ -64,12 +52,23 @@ export const ReactionsBarProvider = ({ children }: PropsWithChildren<{}>) => {
       >
         {barArgs !== null && (
           <OutsideClickHelper onClick={hideReactionsBar}>
-            <ReactionsShortcutBar
-              key={barArgs.messageId}
-              messageId={barArgs.messageId}
-              myReaction={barArgs.myReaction}
-              onClick={hideReactionsBar}
-            />
+            <div
+              style={{ display: 'contents ' }}
+              onKeyDown={e => {
+                if (e.key === 'Escape' && barArgs !== null) {
+                  hideReactionsBar()
+                  e.preventDefault()
+                  e.stopPropagation()
+                }
+              }}
+            >
+              <ReactionsShortcutBar
+                key={barArgs.messageId}
+                messageId={barArgs.messageId}
+                myReaction={barArgs.myReaction}
+                onClick={hideReactionsBar}
+              />
+            </div>
           </OutsideClickHelper>
         )}
       </AbsolutePositioningHelper>

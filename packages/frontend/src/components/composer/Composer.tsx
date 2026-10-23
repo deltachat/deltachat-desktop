@@ -29,7 +29,7 @@ import { useDraft, type DraftObject } from '../../hooks/chat/useDraft'
 
 import type { EmojiMartData } from '../EmojiPicker'
 import { VisualVCardComponent } from '../message/VCard'
-import { ActionEmitter, KeybindAction } from '../../keybindings'
+import { KeybindAction } from '../../keybindings'
 import useKeyBindingAction from '../../hooks/useKeyBindingAction'
 import { CloseButton } from '../Dialog'
 import { enterKeySendsKeyboardShortcuts } from '../KeyboardShortcutHint'
@@ -371,22 +371,15 @@ const Composer = forwardRef<
           handled = true
         }
         if (handled) {
+          ev.stopPropagation()
+
           // after all cases above you want to focus composer input again
           setTimeout(() => {
             // Only one of these is actually rendered at any given moment.
             regularMessageInputRef.current?.focus()
             editMessageInputRef.current?.focus()
           })
-        } else {
-          // No picker/edit mode/quote to close.
-          // Unselecting the chat goes back to chatlist in small screen mode.
-          // But it's also good in "regular" mode.
-          ActionEmitter.emitAction(KeybindAction.Chat_Unselect)
-          // Focus the chatlist item to enable arrow key navigation between chats
-          // TODO fix: doesn't work in small screen mode.
-          ActionEmitter.emitAction(KeybindAction.ChatList_FocusItems)
         }
-        ev.stopPropagation()
       }
     }
     // these options are needed, otherwise emoji mart sometimes eats the keydown event
