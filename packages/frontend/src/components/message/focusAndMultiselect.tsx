@@ -59,7 +59,12 @@ export function useMessageFocusAndMultiselectContextValue(props: {
     // It's annoying that a message keeps being displayed as selected
     // even though all you did is click on its bubble
     // to focus it or to select text or something.
-    { onNormalClick: 'unselectAll' }
+    {
+      onNormalClick: 'unselectAll',
+      // See discussion
+      // https://github.com/deltachat/deltachat-desktop/pull/6457#issuecomment-4679631210
+      ignoreContiguousSelectOfSingleItem: true,
+    }
   )
   // Memoized because it is used as a context value.
   return useMemo(
