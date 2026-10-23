@@ -77,9 +77,6 @@ const open_apps: {
  * */
 const existing_sessions: string[] = []
 
-// TODO:
-// 2. on message deletion close webxdc if open and remove its DOMStorage data
-
 /**
  * see: https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CSP
  */
