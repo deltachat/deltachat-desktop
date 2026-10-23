@@ -12,6 +12,12 @@ on:
       - '.prettierrc.yml'
       - '.vscode/**'
 
+# Shared with delete-preview.yml: closing the PR cancels a running build,
+# so its upload can't restore the previews after they were deleted.
+concurrency:
+  group: preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 permissions:
   # For `postLinksToDetails.js`.
   statuses: write
