@@ -237,6 +237,7 @@ const Composer = forwardRef<
 
           const preSendDraftState = draftState
           const sendMessagePromise = sendMessage(accountId, chatId, {
+            id: draftState.id,
             text: draftState.text,
             file: draftState.file || undefined,
             filename: draftState.fileName || undefined,
@@ -245,6 +246,7 @@ const Composer = forwardRef<
                 ? draftState.quote.messageId
                 : null,
             viewtype: draftState.viewType,
+            reuseExistingDraft: true
           })
           // _Immediately_ clear the draft from React state.
           // This does _not_ remove the draft from the back-end yet.
