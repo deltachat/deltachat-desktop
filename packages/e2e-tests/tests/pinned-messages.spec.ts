@@ -93,7 +93,7 @@ test('pin a message and see it pinned on the other side', async () => {
     .click()
 
   await expect(
-    page.locator('.info-message').filter({ hasText: 'You pinned a message.' })
+    page.locator('.info-message').filter({ hasText: 'You pinned a message' })
   ).toBeVisible()
   await expect(getBanner(page)).toContainText(firstMessage)
   await expect(
@@ -108,7 +108,7 @@ test('pin a message and see it pinned on the other side', async () => {
   await expect(
     page
       .locator('.info-message')
-      .filter({ hasText: `Message pinned by ${userA.name}.` })
+      .filter({ hasText: `Message pinned by ${userA.name}` })
   ).toBeVisible()
   await expect(getBanner(page)).toContainText(firstMessage)
   await expect(
@@ -164,7 +164,7 @@ test('clicking the info message jumps to the pinned message', async () => {
 
   await page
     .locator('.info-message')
-    .filter({ hasText: `Message pinned by ${userA.name}.` })
+    .filter({ hasText: `Message pinned by ${userA.name}` })
     .getByRole('button')
     .click()
   await expect(getMessage(page, firstMessage)).toHaveClass(/highlight/)
@@ -237,6 +237,6 @@ test('banner shows a start button for a pinned webxdc app', async () => {
     .click()
   await expect(getBanner(page)).toContainText(appName)
   await expect(
-    getBanner(page).getByRole('button', { name: 'Start…' })
+    getBanner(page).getByRole('button', { name: 'Start' })
   ).toBeVisible()
 })

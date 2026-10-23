@@ -186,6 +186,8 @@ export async function updateCoreStrings() {
     [C.DC_STR_MESSAGES_ARE_E2EE]: tx('messages_are_e2ee'),
     [C.DC_STR_MESSAGE_PINNED_BY_YOU]: tx('message_pinned_by_you'),
     [C.DC_STR_MESSAGE_PINNED_BY_OTHER]: tx('message_pinned_by_other'),
+    [C.DC_STR_MESSAGE_UNPINNED_BY_YOU]: tx('message_unpinned_by_you'),
+    [C.DC_STR_MESSAGE_UNPINNED_BY_OTHER]: tx('message_unpinned_by_other'),
 
     [C.DC_STR_ADD_YOU]: tx('member_you_added'),
     [C.DC_STR_ADD_YOU_BY]: tx('add_you_by_other'),
