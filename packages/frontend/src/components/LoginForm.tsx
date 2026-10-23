@@ -1,7 +1,7 @@
 import type { T } from '@deltachat/jsonrpc-client'
 import React, { useState } from 'react'
 
-import { DeltaInput, DeltaSelect } from './Login-Styles'
+import { DeltaInput, DeltaPasswordInput, DeltaSelect } from './Login-Styles'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 import Collapse from './Collapse'
 import { I18nContext } from '../contexts/I18nContext'
@@ -95,12 +95,11 @@ export default function LoginForm({
             disabled={isEdit === true}
           />
 
-          <DeltaInput
+          <DeltaPasswordInput
             key='password'
             id='password'
-            type='password'
             placeholder={tx('existing_password')}
-            value={password || ''}
+            password={password || ''}
             onChange={handleCredentialsChange}
           />
 
