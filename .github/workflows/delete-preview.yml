@@ -7,6 +7,12 @@ on:
     paths-ignore:
       - 'docs/**' # only trigger build if a file outside of /docs was changed
 
+# Shared with build-preview.yml: cancels a running build of this PR, so its
+# upload can't restore the previews after they were deleted.
+concurrency:
+  group: preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 permissions: {}
 
 jobs:
