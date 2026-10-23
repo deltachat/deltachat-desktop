@@ -96,6 +96,11 @@ export interface DesktopSettingsType {
    * {@linkcode defaultAppStoreBaseUrl}.
    */
   appStoreBaseUrl?: string
+  /**
+   * Whether the user can grant webxdc apps permissions,
+   * such as camera access, like in browsers.
+   */
+  enableWebxdcPermissionManagement: boolean
 }
 
 export interface RC_Config {
