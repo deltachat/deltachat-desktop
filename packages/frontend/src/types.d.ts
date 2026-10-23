@@ -81,3 +81,56 @@ declare module 'react-virtualized-auto-sizer' {
   }
   export default AutoSizer
 }
+
+// The package's own `lib/index.d.ts` doesn't type-check,
+// so we import the component from its internal path and type it here.
+declare module 'react-filerobot-image-editor/lib/components/AssemblyPoint' {
+  import type { FunctionComponent } from 'react'
+
+  type AnnotationConfig = {
+    fill?: string
+    stroke?: string
+    strokeWidth?: number
+  }
+
+  export type SavedImageData = {
+    name: string
+    extension: string
+    mimeType: string
+    fullName?: string
+    width?: number
+    height?: number
+    imageBase64?: string
+  }
+
+  export type FilerobotImageEditorConfig = {
+    source: string | HTMLImageElement
+    useBackendTranslations?: boolean
+    translations?: { [key: string]: string }
+    tabsIds?: ('Adjust' | 'Annotate' | 'Resize' | 'Finetune' | 'Filters')[]
+    /** tools shown per tab; replaces Filerobot's default map entirely */
+    tabsToolsIds?: { [tabId: string]: string[] }
+    defaultTabId?: string
+    defaultToolId?: string
+    Text?: AnnotationConfig & { text?: string; fontSize?: number }
+    Pen?: AnnotationConfig
+    Line?: AnnotationConfig
+    Arrow?: AnnotationConfig & { pointerLength?: number; pointerWidth?: number }
+    Rect?: AnnotationConfig
+    Ellipse?: AnnotationConfig
+    avoidChangesNotSavedAlertOnLeave?: boolean
+    savingPixelRatio: number
+    previewPixelRatio: number
+    defaultSavedImageName?: string
+    defaultSavedImageType?: 'png' | 'jpeg' | 'jpg' | 'webp'
+    /** return `false` to skip the built-in "save as" dialog */
+    onBeforeSave?: (savedImageData: SavedImageData) => void | boolean
+    onSave?: (savedImageData: SavedImageData, designState: object) => void
+    /** called on every change of the image (annotations, crop, rotation, …) */
+    onModify?: (designState: object) => void
+    onClose?: (closeReason: string, haveNotSavedChanges: boolean) => void
+  }
+
+  const FilerobotImageEditor: FunctionComponent<FilerobotImageEditorConfig>
+  export default FilerobotImageEditor
+}

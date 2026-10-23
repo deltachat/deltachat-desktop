@@ -13,7 +13,7 @@ export default function EditButton(
   return (
     <HeaderButton
       aria-label={props['aria-label'] ?? tx('global_menu_edit_desktop')}
-      icon='lead-pencil'
+      icon='edit'
       iconSize={24}
       {...props}
     />

@@ -1,0 +1,122 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  /* above the app, below Filerobot's popups (z-index 1200 and up) */
+  z-index: 100;
+  background-color: var(--bp4DialogBgPrimary);
+}
+
+.overlay:focus {
+  outline: none;
+}
+
+.imageEditor {
+  width: 100%;
+  height: 100%;
+
+  --tabs-column-width: 112px;
+  --save-button-gap: 16px;
+  --save-button-height: 40px;
+}
+
+/* Tabs column (Adjust, Annotate, Resize) on the right side */
+.imageEditor :global(.FIE_main-container) {
+  flex-direction: row-reverse;
+}
+
+.imageEditor :global(.FIE_tabs_navbar) {
+  box-sizing: border-box;
+  width: var(--tabs-column-width);
+  flex-shrink: 0;
+  /* keep the tabs clear of the save button */
+  padding-block-end: calc(
+    var(--save-button-height) + 2 * var(--save-button-gap)
+  );
+}
+
+/*
+ * Move the save button from the top bar to the bottom of the tabs column.
+ * On narrow windows Filerobot replaces the tabs column with a drawer,
+ * then the save button stays in the top bar.
+ */
+.imageEditor :global(.FIE_root:has(.FIE_tabs_navbar) .FIE_topbar) {
+  position: static;
+}
+
+.imageEditor
+  :global(.FIE_root:has(.FIE_tabs_navbar) .FIE_buttons-save-btn-wrapper) {
+  position: absolute;
+  /* the wrapper has an inline `width: fit-content`, so it is as wide as
+  the button and the gap centers it in the tabs column */
+  inset-block-end: var(--save-button-gap);
+  inset-inline-end: var(--save-button-gap);
+}
+
+.imageEditor
+  :global(.FIE_root:has(.FIE_tabs_navbar) .FIE_buttons-save-btn-button) {
+  height: var(--save-button-height);
+  width: calc(var(--tabs-column-width) - 2 * var(--save-button-gap));
+}
+
+/* same colors as the primary (OK) buttons of our dialogs */
+.imageEditor :global(.FIE_buttons-save-btn-button) {
+  background-color: var(--buttonPrimaryBackground);
+  color: var(--buttonPrimaryText);
+}
+
+.imageEditor :global(.FIE_buttons-save-btn-button:hover),
+.imageEditor :global(.FIE_buttons-save-btn-button:active) {
+  background-color: var(--buttonPrimaryHover);
+}
+
+/*
+ * Higher contrast for the close, undo, redo and reset buttons (Scaleflex sets
+ * the color on the icon, not the button). Filerobot's UI is always light,
+ * so this uses its dark text color instead of a theme color.
+ */
+.imageEditor
+  :global(
+    .FIE_topbar
+      :is(
+        .FIE_buttons-close-btn,
+        .FIE_buttons-undo-btn,
+        .FIE_buttons-redo-btn,
+        .FIE_buttons-reset-btn
+      ):not(:disabled)
+  ),
+.imageEditor
+  :global(
+    .FIE_topbar
+      :is(
+        .FIE_buttons-close-btn,
+        .FIE_buttons-undo-btn,
+        .FIE_buttons-redo-btn,
+        .FIE_buttons-reset-btn
+      ):not(:disabled)
+      svg
+  ) {
+  color: rgb(55, 65, 75);
+}
+
+.imageEditor
+  :global(
+    .FIE_topbar
+      :is(
+        .FIE_buttons-undo-btn,
+        .FIE_buttons-redo-btn,
+        .FIE_buttons-reset-btn
+      ):disabled
+      svg
+  ) {
+  color: rgb(55, 65, 75, 0.35);
+}
+
+/*
+ * Option popups (stroke, opacity, shadow) are portaled into `<body>`.
+ * Their `overflow: hidden` cuts off the value label above the slider thumb.
+ * Two classes, so this wins over the single-class rule that styled-components
+ * injects after our stylesheet.
+ */
+:global(.SfxMenu-root.FIE_annotation-option-popup) {
+  overflow: visible;
+}

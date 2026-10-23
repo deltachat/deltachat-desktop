@@ -42,6 +42,12 @@
         justify-content: flex-end;
       }
 
+      .attachment-actions {
+        display: flex;
+        flex-direction: column;
+        margin-inline-start: auto;
+      }
+
       .message-attachment-media {
         flex-grow: 1;
         margin: 4px;
