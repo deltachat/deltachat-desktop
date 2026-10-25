@@ -24,6 +24,20 @@
   background-color: var(--colorPrimary);
 }
 
+.imageSelectorRemoveButton {
+  background-color: var(--colorDanger);
+}
+
+.imageSelectorAvatarButton {
+  background: none;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
 .imageSelectorIcon {
   background-color: white;
 }

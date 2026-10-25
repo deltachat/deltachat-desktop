@@ -131,11 +131,13 @@ export function ClickForFullscreenAvatarWrapper(
   props: React.ButtonHTMLAttributes<HTMLButtonElement> & {
     filename?: string
     disableFullscreen: boolean
+    onEdit?: () => void
   }
 ) {
   const { openDialog } = useDialog()
 
-  const { children, filename, disableFullscreen, ...buttonProps } = props
+  const { children, filename, disableFullscreen, onEdit, ...buttonProps } =
+    props
 
   return filename && !disableFullscreen ? (
     <button
@@ -144,6 +146,7 @@ export function ClickForFullscreenAvatarWrapper(
       onClick={() => {
         openDialog(FullscreenAvatar, {
           imagePath: filename!,
+          onEdit,
         })
       }}
       {...buttonProps}

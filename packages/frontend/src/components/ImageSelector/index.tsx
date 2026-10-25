@@ -1,5 +1,6 @@
 import React from 'react'
 import { dirname } from 'path'
+import classNames from 'classnames'
 
 import Icon from '../Icon'
 import LargeProfileImage from '../LargeProfileImage'
@@ -57,20 +58,32 @@ export default function ImageSelector({
 
   const handleRemove = () => onChange(null)
 
+  const selectLabelText = selectLabel ? selectLabel : tx('profile_image_select')
+
   return (
     <div className={styles.imageSelectorContainer}>
       <div className={styles.imageSelector}>
-        <LargeProfileImage
-          color={color}
-          imagePath={filePath || undefined}
-          initials={initials}
-          disableFullscreen={false}
-        />
+        <button
+          type='button'
+          title={selectLabelText}
+          aria-label={selectLabelText}
+          className={styles.imageSelectorAvatarButton}
+          onClick={handleSelect}
+        >
+          <LargeProfileImage
+            color={color}
+            imagePath={filePath || undefined}
+            initials={initials}
+            disableFullscreen={true}
+          />
+        </button>
         {!filePath && (
+          // same action as clicking the avatar, so hide it from assistive tech
           <button
             type='button'
-            title={selectLabel ? selectLabel : tx('profile_image_select')}
-            aria-label={selectLabel ? selectLabel : tx('profile_image_select')}
+            title={selectLabelText}
+            aria-hidden
+            tabIndex={-1}
             className={styles.imageSelectorButton}
             onClick={handleSelect}
           >
@@ -82,7 +95,10 @@ export default function ImageSelector({
             type='button'
             title={removeLabel ? removeLabel : tx('profile_image_delete')}
             aria-label={removeLabel ? removeLabel : tx('profile_image_delete')}
-            className={styles.imageSelectorButton}
+            className={classNames(
+              styles.imageSelectorButton,
+              styles.imageSelectorRemoveButton
+            )}
             onClick={handleRemove}
           >
             <Icon className={styles.imageSelectorIcon} icon='cross' />

@@ -16,7 +16,7 @@ type Props = {
   subtitle?: React.ReactNode
 } & Pick<
   Parameters<typeof ClickForFullscreenAvatarWrapper>[0],
-  'disableFullscreen'
+  'disableFullscreen' | 'onEdit'
 >
 
 export default function ProfileInfoHeader({
@@ -27,12 +27,14 @@ export default function ProfileInfoHeader({
   description = '',
   subtitle,
   disableFullscreen,
+  onEdit,
 }: Props) {
   return (
     <div className={styles.profileInfoHeader}>
       <ClickForFullscreenAvatarWrapper
         filename={avatarPath}
         disableFullscreen={disableFullscreen}
+        onEdit={onEdit}
       >
         <Avatar
           displayName={displayName}
