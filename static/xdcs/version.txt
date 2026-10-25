@@ -1,1 +1,6 @@
-Based on https://github.com/deltachat/maps/
+Based on https://github.com/deltachat/maps/ (a1d6d76)
+
+When updating maps.xdc, increase BUNDLED_MAPS_VERSION in
+packages/target-electron/src/deltachat/webxdc.ts, otherwise accounts
+that already use the map keep their old copy.
+TODO: manage a release version in maps.xdc

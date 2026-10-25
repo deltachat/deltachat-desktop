@@ -115,7 +115,8 @@ export interface Runtime {
   writeClipboardText(text: string): Promise<void>
   writeClipboardImage(path: string): Promise<void>
   getAppPath(name: RuntimeAppPath): Promise<string>
-  openMapsWebxdc(accountId: number, chatId?: number): void
+  /** @param contactId focus the map on the last location of this contact */
+  openMapsWebxdc(accountId: number, chatId?: number, contactId?: number): void
   /** return value is error (this comes from electron: TODO convert to real error) */
   openPath(path: string): Promise<string>
   getConfigPath(): string // TODO: rename -> this is for app data directory, it should include the scheme - seems to be only used for bg path right now

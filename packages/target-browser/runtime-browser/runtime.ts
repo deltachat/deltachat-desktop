@@ -156,7 +156,11 @@ class BrowserRuntime implements Runtime {
 
   // #endregion
 
-  openMapsWebxdc(_accountId: number, _chatId?: number | undefined): void {
+  openMapsWebxdc(
+    _accountId: number,
+    _chatId?: number,
+    _contactId?: number
+  ): void {
     throw new Error('Method not implemented.')
   }
 
