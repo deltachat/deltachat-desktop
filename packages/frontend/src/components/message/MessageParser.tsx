@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 
 import type * as linkify from 'linkifyjs'
 import '../../utils/linkify/plugin-bot-command/index.js'
+import '../../utils/linkify/deltachatSchemes.js'
 
 import { Link } from './Link.js'
 import { parseElements } from '../../utils/linkify/parseElements.js'

@@ -12,8 +12,11 @@ export function truncateText(text: string, max_len: number) {
  * - https://github.com/deltachat/interface/blob/main/uri-schemes.md#invite-links-httpsideltachat-
  */
 export function isInviteLink(url: string) {
+  const lowerCaseUrl = url.toLowerCase()
   return (
-    url.toLowerCase().startsWith('https://i.delta.chat/') && url.includes('#')
+    (lowerCaseUrl.startsWith('https://i.delta.chat/') ||
+      lowerCaseUrl.startsWith('https://i.delta.chat#')) &&
+    url.includes('#')
   )
 }
 
@@ -25,6 +28,18 @@ export function isInviteLink(url: string) {
  */
 export function isInviteUri(url: string) {
   return isInviteLink(url) || url.toLowerCase().startsWith('openpgp4fpr:')
+}
+
+/**
+ * @returns Whether the `url` is a `DCACCOUNT:` or `DCLOGIN:` URI,
+ * which set up a new profile or add a relay to an existing one.
+ * @see https://github.com/deltachat/interface/blob/main/uri-schemes.md
+ */
+export function isAccountOrLoginUri(url: string) {
+  const lowerCaseUrl = url.toLowerCase()
+  return (
+    lowerCaseUrl.startsWith('dcaccount:') || lowerCaseUrl.startsWith('dclogin:')
+  )
 }
 
 /**
