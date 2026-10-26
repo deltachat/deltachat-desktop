@@ -146,6 +146,7 @@ export function init(options: { hidden: boolean; hideMenuBar: boolean }) {
   })
 
   const saveBounds = debounce(() => {
+    if (!window || window.isDestroyed()) return
     const bounds = window?.getBounds()
     if (bounds) {
       DesktopSettings.update({ bounds })
@@ -343,7 +344,7 @@ export function toggleAlwaysOnTop() {
 }
 
 export function isAlwaysOnTop() {
-  return window ? window.isAlwaysOnTop() : false
+  return window && !window.isDestroyed() ? window.isAlwaysOnTop() : false
 }
 
 export function applyHideMenuBar(hide: boolean) {
@@ -367,7 +368,7 @@ export function toggleHideMenuBar() {
 }
 
 export function isHideMenuBar() {
-  return window ? window.autoHideMenuBar : false
+  return window && !window.isDestroyed() ? window.autoHideMenuBar : false
 }
 
 export function toggleDevTools() {
