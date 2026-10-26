@@ -1,6 +1,6 @@
 .container {
   margin-inline-start: 30px;
-  margin-inline-end: 10px;
+  margin-inline-end: 30px;
   display: flex;
   flex-direction: column;
   flex: 1 1 auto;
@@ -9,7 +9,7 @@
 .transportRow {
   display: flex;
   border-bottom: 1px solid var(--separatorColor);
-  padding: 10px 0 10px 10px;
+  padding: 10px 0;
   justify-content: space-between;
   &:hover {
     background-color: var(--globalHoverBg);
@@ -35,11 +35,6 @@ $iconSize: 1.3em;
 .deleteButton,
 .editButton {
   padding: 0 !important;
-}
-
-// Apply margin when editButton is the last child in its parent
-.editButton:last-child {
-  margin-inline-end: 30px;
 }
 
 .buttonsContainer {
