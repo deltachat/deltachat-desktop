@@ -53,6 +53,11 @@ pnpm -w --filter e2e-tests e2e:report
 
 to show the last report
 
+`pnpm -w e2e` also builds the browser target before running the tests.
+When you run Playwright directly there is a stale-build-guard to avoid
+running the tests against an outdated build
+(see _packages/e2e-tests/stale-build-guard.ts_).
+
 The account dirs for tests are _packages/e2e-tests/data/app-instance-\*/accounts_
 
 The whole _data/_ dir can be deleted after running tests
@@ -75,7 +80,7 @@ pnpm -w e2e:electron                 # build electron target + run all
 pnpm --filter=e2e-tests e2e:electron webxdc  # without rebuilding, filtered
 ```
 
-Without rebuilding, the tests run against the last build.
+Like the browser tests, they refuse to run against a stale build.
 On Linux without a display, wrap the command in `xvfb-run`.
 
 In CI (_.github/workflows/e2e-electron.yml_) tests run on Linux, macOS and
