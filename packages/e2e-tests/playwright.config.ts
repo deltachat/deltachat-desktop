@@ -17,6 +17,9 @@ loadEnv()
  */
 export default defineConfig<TestOptions>({
   testDir: './tests',
+  // refuses to run against an outdated build, see stale-build-guard.ts
+  globalSetup: './stale-build-guard.ts',
+  metadata: { buildTarget: 'browser' },
   /* Run all tests in serial mode only */
   fullyParallel: false,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
