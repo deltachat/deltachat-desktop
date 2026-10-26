@@ -64,9 +64,27 @@ test('runtime_api only exposes allowlisted IPC channels', async () => {
 })
 
 test('shell.openExternal refuses file:// (and other non-web protocols)', async () => {
-  const threw = await evalInMainWorld<boolean>(`
-    window.runtime_api.invoke('electron.shell.openExternal', 'file:///etc/passwd')
-      .then(() => false).catch(() => false)
-  `)
-  expect(threw).toBe(false)
+  // Record the URLs instead of opening them. The IPC handler doesn't throw
+  // for refused URLs, so the only observable effect is whether it calls
+  // `shell.openExternal`.
+  await dc.app.evaluate(({ shell }) => {
+    const opened: string[] = []
+    ;(globalThis as any).openedExternalUrls = opened
+    shell.openExternal = async url => {
+      opened.push(url)
+    }
+  })
+  const openExternal = (url: string) =>
+    evalInMainWorld(
+      `window.runtime_api.invoke('electron.shell.openExternal', ${JSON.stringify(url)})`
+    )
+
+  await openExternal('file:///etc/passwd')
+  await openExternal('smb://example.com/share')
+  // proves that the stand-in is actually used
+  await openExternal('https://delta.chat/')
+
+  expect(
+    await dc.app.evaluate(() => (globalThis as any).openedExternalUrls)
+  ).toEqual(['https://delta.chat/'])
 })
