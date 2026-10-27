@@ -40,17 +40,6 @@ export default function ShortcutMenu(props: Props) {
         [styles.outgoing]: props.direction === 'outgoing',
       })}
     >
-      {showReactionsUi(props.message, props.chat) && (
-        <ReactButton
-          messageId={props.message.id}
-          reactions={props.message.reactions}
-          tabIndex={props.tabindexForInteractiveContents}
-        />
-      )}
-      <ContextMenuButton
-        onClick={props.showContextMenu}
-        tabIndex={props.tabindexForInteractiveContents}
-      />
       {props.message.originalMsgId !== null && (
         <button
           type='button'
@@ -62,6 +51,17 @@ export default function ShortcutMenu(props: Props) {
           <div className={classNames(styles.originalMessageIcon)} />
         </button>
       )}
+      {showReactionsUi(props.message, props.chat) && (
+        <ReactButton
+          messageId={props.message.id}
+          reactions={props.message.reactions}
+          tabIndex={props.tabindexForInteractiveContents}
+        />
+      )}
+      <ContextMenuButton
+        onClick={props.showContextMenu}
+        tabIndex={props.tabindexForInteractiveContents}
+      />
     </div>
   )
 }

@@ -51,8 +51,7 @@ export function showReactionsUi(message: T.Message, chat: T.FullChat): boolean {
       (chat.chatType === 'InBroadcast' &&
         chat.contactIds.includes(C.DC_CONTACT_ID_SELF) &&
         !chat.isContactRequest)) &&
-    !message.isInfo &&
-    message.originalMsgId === null
+    !message.isInfo
   )
 }
 
