@@ -2,6 +2,46 @@
 
 All notable changes to this project will be documented in this file.
 
+<a id="2_65_0"></a>
+## [2.65.0] - 2026-10-23
+
+### Added
+
+- Pinned messages ([#6802](https://github.com/deltachat/deltachat-desktop/issues/6802))
+- Message multiselect: "Resend" and "Export Attachments"
+- Language setting: new "System default" option
+
+### Changed
+
+- Linux: accessing the camera through PipeWire is now opt-in via the `--pipewire-camera` flag, as it made the camera hang on some systems. Use the flag if your camera only works through PipeWire, e.g. on Mobian ([#6859](https://github.com/deltachat/deltachat-desktop/issues/6859))
+- Channels: the owner now only sees the total number of reactions, not who reacted with what ([#6870](https://github.com/deltachat/deltachat-desktop/issues/6870))
+- Chats can now be pinned directly from the archive
+- Clicking anywhere on a message's row now works, not just on the message bubble
+- Message multiselect: hide the message hover menu
+- Avoid "Log In" wording, in line with Android and iOS ([#6820](https://github.com/deltachat/deltachat-desktop/issues/6820))
+- Consistent "Delta Chat" spelling in window titles, the tray menu and other places
+
+### Fixed
+
+- Camera (QR scanner, calls) not working after opening the "Help" window
+- Screen readers now announce the correct number of items in long lists
+- Apps (WebXDC) can no longer open the "Open Link?" dialog or other Delta Chat dialogs while Delta Chat is not focused
+- "Help" window: escape translated strings (hardening, not exploitable with current translations)
+
+### Removed
+
+- Hashtags are no longer turned into links that start a search ([#6850](https://github.com/deltachat/deltachat-desktop/issues/6850))
+
+### Miscellaneous Tasks
+
+- Upgrade Electron to 43.8
+- Upgrade core to 2.65.0,
+  notable changes:
+  - Read receipts are no longer requested or sent for unencrypted messages
+  - Animated WebP images are no longer converted to JPEG
+  - Reactions no longer flood channel summaries
+  - Lower memory usage when sending large attachments on Linux
+
 <a id="2_62_0"></a>
 ## [2.62.0] - 2026-09-23
 
@@ -4335,7 +4375,8 @@ This section is only relevant to contributors.
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.62.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.65.0...HEAD
+[2.65.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.62.0...v2.65.0
 [2.62.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.59.1...v2.62.0
 [2.59.1]: https://github.com/deltachat/deltachat-desktop/compare/v2.59.0...v2.59.1
 [2.59.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.57.0...v2.59.0
