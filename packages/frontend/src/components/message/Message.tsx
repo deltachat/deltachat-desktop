@@ -941,7 +941,9 @@ export default function Message(props: {
     const isInvalidUnencryptedMail =
       message.systemMessageType === 'InvalidUnencryptedMail'
 
-    const isMessagePinnedInfo = message.systemMessageType === 'MessagePinned'
+    const isMessagePinnedInfo =
+      message.systemMessageType === 'MessagePinned' ||
+      message.systemMessageType === 'MessageUnpinned'
 
     const isLocationStreamingEnabledInfo =
       message.systemMessageType === 'LocationStreamingEnabled' &&

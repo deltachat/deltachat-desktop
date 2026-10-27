@@ -195,6 +195,17 @@ test('unpin a message', async () => {
   await expect(getBanner(page)).toContainText(firstMessage)
   await expect(getBanner(page)).not.toContainText('/2')
 
+  // Clicking the unpin info message jumps to the unpinned message.
+  await getBanner(page).click()
+  await expect(getMessage(page, firstMessage)).toHaveClass(/highlight/)
+  await page
+    .locator('.info-message')
+    .filter({ hasText: `Message unpinned by ${userA.name}` })
+    .getByRole('button')
+    .click()
+  await expect(getMessage(page, secondMessage)).toHaveClass(/highlight/)
+  await expect(getMessage(page, firstMessage)).not.toHaveClass(/highlight/)
+
   await clickContextMenuItem(page, firstMessage, 'Unpin')
   await page
     .getByRole('dialog')
