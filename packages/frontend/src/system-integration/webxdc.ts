@@ -72,6 +72,10 @@ export async function internalOpenWebxdc(
   })
 }
 
-export async function openMapWebxdc(accountId: number, chatId?: number) {
-  runtime.openMapsWebxdc(accountId, chatId)
+export async function openMapWebxdc(
+  accountId: number,
+  chatId?: number,
+  contactId?: number
+) {
+  runtime.openMapsWebxdc(accountId, chatId, contactId)
 }

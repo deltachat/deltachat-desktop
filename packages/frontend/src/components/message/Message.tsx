@@ -71,6 +71,8 @@ import MessageDetail from '../dialogs/MessageDetail/MessageDetail'
 import ConfirmDeleteMessageDialog from '../dialogs/ConfirmDeleteMessage'
 import AlertDialog from '../dialogs/AlertDialog'
 import { unknownErrorToString } from '@deltachat-desktop/shared/unknownErrorToString'
+import { openMapWebxdc } from '../../system-integration/webxdc'
+import { DesktopSettingsStoreInstance } from '../../stores/settings'
 
 const log = getLogger('Message')
 
@@ -941,10 +943,16 @@ export default function Message(props: {
 
     const isMessagePinnedInfo = message.systemMessageType === 'MessagePinned'
 
+    const isLocationStreamingEnabledInfo =
+      message.systemMessageType === 'LocationStreamingEnabled' &&
+      DesktopSettingsStoreInstance.state?.enableOnDemandLocationStreaming ===
+        true
+
     // Some info messages can be clicked by the user to receive further information
     const isInteractive =
       (isWebxdcInfo && message.parentId) ||
       (isMessagePinnedInfo && message.parentId) ||
+      isLocationStreamingEnabledInfo ||
       message.infoContactId != null ||
       isProtectionEnabledMsg ||
       isInvalidUnencryptedMail
@@ -965,6 +973,8 @@ export default function Message(props: {
             msgParentId: message.id,
             scrollIntoViewArg: { block: 'center' },
           })
+        } else if (isLocationStreamingEnabledInfo) {
+          openMapWebxdc(accountId, message.chatId, message.fromId)
         } else if (
           message.systemMessageType === 'GroupDescriptionChanged' &&
           (chat.chatType === 'Group' || chat.chatType === 'OutBroadcast')

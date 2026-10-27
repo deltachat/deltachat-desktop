@@ -226,8 +226,8 @@ class ElectronRuntime implements Runtime {
   }): Promise<void> {
     return ipcBackend.invoke('openIncomingVideoCallWindow', params)
   }
-  openMapsWebxdc(accountId: number, chatId?: number | undefined): void {
-    ipcBackend.invoke('open-maps-webxdc', accountId, chatId)
+  openMapsWebxdc(accountId: number, chatId?: number, contactId?: number): void {
+    ipcBackend.invoke('open-maps-webxdc', accountId, chatId, contactId)
   }
   saveBackgroundImage(
     file: string,

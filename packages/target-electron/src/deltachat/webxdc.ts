@@ -39,6 +39,10 @@ import { openExternalHttpOrPromptToCopy } from './link-clicks.js'
 
 const log = getLogger('main/deltachat/webxdc')
 
+/** increase whenever static/xdcs/maps.xdc is updated */
+const BUNDLED_MAPS_VERSION = 2
+const MAPS_VERSION_CONFIG_KEY = 'ui.desktop.maps_version'
+
 type AppInstance = {
   win: BrowserWindow
   msgId: number
@@ -857,11 +861,15 @@ export default class DCWebxdc {
 
     ipcMain.handle(
       'open-maps-webxdc',
-      async (evt, accountId: number, chatId?: number) => {
-        let msgId = await this.rpc.initWebxdcIntegration(
-          accountId,
-          chatId ?? null
-        )
+      async (evt, accountId: number, chatId?: number, contactId?: number) => {
+        // the integration is stored in the account, so an outdated
+        // bundled maps.xdc has to be replaced explicitly
+        const hasNewMaps =
+          (await this.rpc.getConfig(accountId, MAPS_VERSION_CONFIG_KEY)) !==
+          String(BUNDLED_MAPS_VERSION)
+        let msgId = hasNewMaps
+          ? null
+          : await this.rpc.initWebxdcIntegration(accountId, chatId ?? null)
         if (!msgId) {
           // after packaging all files are in asar dir
           // core needs real path
@@ -873,6 +881,11 @@ export default class DCWebxdc {
           msgId = await this.rpc.initWebxdcIntegration(
             accountId,
             chatId ?? null
+          )
+          await this.rpc.setConfig(
+            accountId,
+            MAPS_VERSION_CONFIG_KEY,
+            String(BUNDLED_MAPS_VERSION)
           )
         }
         if (msgId) {
@@ -909,7 +922,10 @@ export default class DCWebxdc {
                 displayname: '',
                 chatName,
                 webxdcInfo,
-                href: '',
+                href:
+                  contactId !== undefined
+                    ? `index.html?contactId=${contactId}`
+                    : '',
               },
               // special behaviour for the map dc integration,
               // (in this case bigger landscape window)
