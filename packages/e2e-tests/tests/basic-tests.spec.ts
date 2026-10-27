@@ -271,6 +271,43 @@ test('React to a message', async () => {
   await expect(chatList).not.toContainText('You reacted')
 })
 
+test('React to a saved message', async () => {
+  const userB = existingProfiles[1]
+  await selectChat(page, userB.name)
+  await page
+    .getByLabel('Messages')
+    .getByText('Hello')
+    .first()
+    .click({ button: 'right' })
+  await page.getByRole('menuitem', { name: 'Save Message' }).click()
+
+  await selectChat(page, 'Saved Messages')
+  const savedMessage = page
+    .getByRole('list', { name: 'Messages' })
+    .getByRole('listitem')
+    .filter({ hasText: `Hello ${userB.name}!` })
+  await savedMessage.hover()
+  await expect(
+    savedMessage.getByRole('button', { name: 'Show in Chat' })
+  ).toBeVisible()
+  await savedMessage.getByRole('button', { name: 'React' }).click()
+  await page
+    .getByRole('menu', { name: 'React' })
+    .getByRole('menuitemradio', { name: '❤️' })
+    .click()
+  await expect(savedMessage).toContainText('❤️')
+
+  // other tests select the chat by filtering for userB.name,
+  // so "Saved Messages" must not show this message in its summary
+  await savedMessage.getByText('Hello').click({ button: 'right' })
+  await page.getByRole('menuitem', { name: 'Delete Message' }).click()
+  await page.getByTestId('delete_for_me').click()
+  await expect(savedMessage).toHaveCount(0)
+  await expect(
+    page.getByLabel('Chats').getByRole('tab', { name: 'Saved Messages' })
+  ).not.toContainText(userB.name)
+})
+
 /**
  * user A deletes one message for himself
  */
