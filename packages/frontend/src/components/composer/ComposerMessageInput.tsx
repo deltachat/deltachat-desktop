@@ -68,7 +68,7 @@ export default class ComposerMessageInput extends React.Component<ComposerMessag
     setTimeout(() => this.textareaRef?.current?.focus())
   }
 
-  componentDidUpdate(prevProps: ComposerMessageInputProps) {
+  componentDidUpdate() {
     if (this.setCursorPosition && this.textareaRef.current) {
       this.textareaRef.current.selectionStart = this.setCursorPosition
       this.textareaRef.current.selectionEnd = this.setCursorPosition
