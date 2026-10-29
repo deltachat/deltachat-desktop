@@ -490,28 +490,23 @@ export async function deleteAllProfiles(
 export async function loadExistingProfiles(page: Page): Promise<User[]> {
   // await page.goto('/')
   const existingProfiles: User[] = []
-  await page.waitForSelector('.main-container')
   await expect(page.locator('.main-container')).toBeVisible()
-  // TODO: the next waitFor calls are needed when loading existing profiles
-  // and skipping the createProfiles step, but will never succeed if there
-  // are no profiles yet
-  await page.waitForSelector('button.styles_module_account')
-  await page.waitForSelector('button.styles_module_account[aria-busy=false]')
   const accountList = page.locator('button.styles_module_account')
+  const welcomeDialog = page.locator('.styles_module_welcome')
+  await expect(accountList.or(welcomeDialog).first()).toBeVisible()
+  await expect(
+    page.locator('button.styles_module_account[aria-busy=true]')
+  ).toHaveCount(0)
   const existingAccountItems = await accountList.count()
   console.log('existingAccountItems', existingAccountItems)
+  if (existingAccountItems <= 1 && (await welcomeDialog.isVisible())) {
+    // special case: when no account exists on app start, a new
+    // unconfigured account is created and the welcome dialog is shown,
+    // so there are no existing profiles yet. The sidebar may not list
+    // that account yet when the welcome dialog becomes visible.
+    return []
+  }
   if (existingAccountItems > 0) {
-    if (existingAccountItems === 1) {
-      const welcomeDialog = await page
-        .locator('.styles_module_welcome')
-        .isVisible()
-      if (welcomeDialog) {
-        // special case: when no account exists on app start a new empty
-        // account is created but not yet persisted, so there are no
-        // existing profiles in database yet
-        return []
-      }
-    }
     for (let i = 0; i < existingAccountItems; i++) {
       const account = accountList.nth(i)
       const id = await account.getAttribute('x-account-sidebar-account-id')
