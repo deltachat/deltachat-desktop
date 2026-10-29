@@ -108,5 +108,8 @@ export default defineConfig(
     'packages/shared/ts-compiled-for-tests',
     'packages/e2e-tests/playwright-report',
     'packages/e2e-tests/test-results',
+    'packages/e2e-tests/playwright-report-electron',
+    'packages/e2e-tests/test-results-electron',
+    'packages/e2e-tests/fixtures',
   ])
 )
