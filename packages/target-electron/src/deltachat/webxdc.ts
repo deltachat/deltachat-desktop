@@ -69,6 +69,14 @@ type AppInstance = {
 const open_apps: {
   [instanceId: string]: AppInstance
 } = {}
+// Separate from `open_apps` in order to persist permissions
+// between WebXDC app launches.
+const permissionsMap: {
+  [instanceId: string]: {
+    grantedPermissions: Set<PermissionName>
+    requestedOrCheckedPermissions: Set<PermissionName>
+  }
+} = {}
 
 /**
  * holds all partitionKeys that have an existing session
@@ -97,17 +105,129 @@ const CSP =
   media-src 'self' data: blob: ;\
   webrtc 'block'"
 
-/**
- * Allowed permissions for webxdc applications.
- * https://www.electronjs.org/docs/latest/api/session#sessetpermissioncheckhandlerhandler
- * https://www.electronjs.org/docs/latest/api/session#sessetpermissionrequesthandlerhandler
- */
-const ALLOWED_PERMISSIONS: string[] = [
+// https://www.electronjs.org/docs/latest/api/session#sessetpermissioncheckhandlerhandler
+type PermissionName =
+  | Parameters<
+      Exclude<
+        Parameters<
+          | Electron.Session['setPermissionCheckHandler']
+          | Electron.Session['setPermissionRequestHandler']
+        >[0],
+        null
+      >
+    >[1]
+  // Not listed in Electron type definitions, but still possible
+  | 'ar'
+  | 'automatic-fullscreen'
+  | 'background-fetch'
+  | 'background-sync'
+  | 'captured-surface-control'
+  | 'geolocation-approximate'
+  | 'hand-tracking'
+  | 'local-fonts'
+  | 'local-network'
+  | 'local-network-access'
+  | 'loopback-network'
+  | 'nfc'
+  | 'payment-handler'
+  | 'periodic-background-sync'
+  | 'persistent-storage'
+  | 'screen-wake-lock'
+  | 'sensors'
+  | 'smart-card'
+  | 'system-wake-lock'
+  | 'vr'
+  | 'web-app-installation'
+  | 'web-printing'
+// Some are commented out because they make no sense,
+// some because they're too powerful, or require extra handling,
+// such as `fileSystem`.
+// It's better to take the white-list approach,
+// we can reconsider later if there is demand.
+const userControllablePermissions = [
+  'ar',
+  'automatic-fullscreen',
+
+  // These probably aren't useful for WebXDC?
+  // 'background-fetch',
+  // 'background-sync',
+
+  // 'captured-surface-control',
+  'clipboard-read',
+  'clipboard-sanitized-write',
+  // Deprecated, so I guess let's comment out.
+  // 'deprecated-sync-clipboard-read',
+
+  // TODO apparently display-capture needs `ses.setDisplayMediaRequestHandler()` to work
+  // 'display-capture',
+
+  // Commented out because we probably should implement more granular,
+  // per-path scoping, instead of just allowing the app to read and write
+  // any file on the system. See
+  // https://www.electronjs.org/docs/latest/api/structures/filesystem-permission-request
+  // 'fileSystem',
+
+  // This is allowed by default, but let's let the user revoke it, why not.
+  'fullscreen',
+
+  // TODO `navigator.geolocation.getCurrentPosition(console.log, console.error)`
+  // fails because
+  // `Network location provider at 'https://www.googleapis.com/' : ERR_NAME_NOT_RESOLVED.`
+  'geolocation',
+  'geolocation-approximate',
+
+  'hand-tracking',
+  // Browsers usually offer to select a particular device,
+  // but we don't have a way to do the same.
+  // 'hid',
+  // 'idle-detection',
+
+  'keyboardLock',
+  'local-fonts',
+
+  // Not sure if these work, since the network is disabled?
+  // 'local-network',
+  // 'local-network-access',
+  // 'loopback-network',
+
+  'media',
+  // 'mediaKeySystem',
+  'midi',
+  // 'midiSysex',
+  // 'nfc',
+  'notifications',
+
+  // This one can be powerful, possible to exploit vulnerabilities.
+  // 'openExternal',
+
+  // 'payment-handler',
+  // 'periodic-background-sync',
+  'persistent-storage',
+  'pointerLock', // Allowed by default, as with `fullscreen`.
+  'screen-wake-lock',
+  'sensors',
+  // 'serial',
+  // 'smart-card',
+  'speaker-selection',
+
+  // These two don't seem to make sense for WebXDC apps.
+  // 'storage-access',
+  // 'top-level-storage-access',
+
+  'system-wake-lock',
+  // 'unknown',
+  // 'usb',
+  'vr',
+  // 'web-app-installation',
+  // 'web-printing',
+  // 'window-management',
+] as const satisfies PermissionName[]
+const DEFAULT_ALLOWED_PERMISSIONS = [
   // Games might lock the pointer
   'pointerLock',
   // Games might do that too
   'fullscreen',
-]
+] as const
 
 /**
  * Prefix for the webxdc bounds UI configuration
@@ -125,6 +245,8 @@ const DEFAULT_SIZE_MAP: Size = {
   width: 1000,
   height: 800,
 }
+
+const windowToMenu = new WeakMap<Electron.BrowserWindow, Electron.Menu>()
 
 /**
  * see [docs/WEBXDC.md](../../docs/WEBXDC.md) for a detailed
@@ -225,32 +347,140 @@ export default class DCWebxdc {
       })
       existing_sessions.push(partition)
 
-      const loggedPermissionRequests = new Set<string>()
+      const permission_handler = (
+        webContents: Electron.WebContents,
+        permission: PermissionName,
+        requestingUrl: string
+      ) => {
+        const requestingUrlParsed = URL.parse(requestingUrl)
+        if (!requestingUrlParsed) {
+          log.error(
+            `got WebXDC permission request but requestingUrl is invalid: '${requestingUrl}', rejecting`
+          )
 
-      const permission_handler = (permission: string) => {
-        const isAllowed: boolean = ALLOWED_PERMISSIONS.includes(permission)
+          return false
+        }
 
-        // Prevent webxdcs from spamming the log
-        if (!loggedPermissionRequests.has(permission)) {
-          loggedPermissionRequests.add(permission)
-          if (isAllowed) {
-            log.info(`ALLOWED permission '${permission}' to webxdc`)
-          } else {
-            log.info(
-              `DENIED permission '${permission}' to webxdc. If you think that's a bug and you need that permission, then please open an issue on github.`
+        // TODO maybe DRY? See protocol handler.
+        const [accountId, msgId] = requestingUrlParsed.hostname.split('.')
+        // TODO DRY? See `openWebxdc`
+        const appId = `${accountId}.${msgId}`
+        const appURL = `webxdc://${appId}.webxdc`
+        const appURLParsed = new URL(appURL)
+
+        const instance = open_apps[appId]
+        if (instance == undefined) {
+          log.warn(
+            `got WebXDC permission request from "${requestingUrl}" but its instance "${appId}" doesn't appear to be open`
+          )
+
+          return false
+        }
+
+        if (webContents !== instance.win.webContents) {
+          // Might potentially happen (but shouldn't) if the window navigated,
+          // resulting in a different `appId`.
+          log.warn(
+            `got WebXDC permission request from "${requestingUrl}" but its WebContents doesn't match "${appId}" instance's WebContents`
+          )
+
+          return false
+        }
+
+        const instancePermissions = permissionsMap[appId]
+        if (instancePermissions == undefined) {
+          log.warn(
+            `got WebXDC permission request from "${requestingUrl}" but its permissions are not recorded`
+          )
+          return false
+        }
+
+        // Hardening measure. WebXDCs shouldn't be able
+        // to load other origins already, but let's check just in case.
+        // TODO refactor: DRY this check? We also have it elsewhere.
+        const isSameOrigin =
+          requestingUrlParsed.protocol === appURLParsed.protocol &&
+          requestingUrlParsed.hostname === appURLParsed.hostname &&
+          requestingUrlParsed.port === appURLParsed.port
+        if (!isSameOrigin) {
+          log.error(
+            `Got permission request from another origin: '${requestingUrl}'`
+          )
+
+          return false
+        }
+
+        /**
+         * Permission check could be performed quite frequently,
+         * so we need to check this in order to not spam the log.
+         */
+        const firstTimeRequestOrCheck =
+          !instancePermissions.requestedOrCheckedPermissions.has(permission)
+        instancePermissions.requestedOrCheckedPermissions.add(permission)
+
+        if (firstTimeRequestOrCheck) {
+          const menu = windowToMenu.get(instance.win)
+          if (menu == undefined) {
+            log.warn(
+              "WebXDC window's menu not recorded: cannot update its permissions list"
             )
+          } else {
+            const menuItem = menu.getMenuItemById(
+              `webxdc_permission_${permission}`
+            )
+            // We might not have a menu item for some permissions.
+            if (menuItem) {
+              menuItem.visible = true
+            }
           }
         }
 
-        return isAllowed
+        if (
+          DesktopSettings.state.enableWebxdcPermissionManagement
+            ? instancePermissions.grantedPermissions.has(permission)
+            : (
+                DEFAULT_ALLOWED_PERMISSIONS as readonly PermissionName[]
+              ).includes(permission)
+        ) {
+          // TODO should also print this once to prevent log spam.
+          // Not sure if they spam in this case.
+          // Though simply checking `firstTimeRequestOrCheck` will not work,
+          // cause the first time the permission usually is denied.
+          log.info(`ALLOWED permission '${permission}' to webxdc`)
+
+          return true
+        }
+
+        if (firstTimeRequestOrCheck) {
+          log.info(`DENIED permission '${permission}' to webxdc`)
+        }
+        return false
       }
 
-      ses.setPermissionCheckHandler((_wc, permission) => {
-        return permission_handler(permission)
-      })
-      ses.setPermissionRequestHandler((_wc, permission, callback) => {
-        callback(permission_handler(permission))
-      })
+      ses.setPermissionCheckHandler(
+        (webContents, permission, requestingOrigin, _details) => {
+          if (webContents == undefined) {
+            // Apparently this can happen for `notifications` permission?
+            // https://www.electronjs.org/docs/latest/api/session#sessetpermissioncheckhandlerhandler
+            log.info(
+              `WebXDC permission check: webContents is ${webContents}, rejecting`
+            )
+            return false
+          }
+          // _details.requestingUrl
+          return permission_handler(webContents, permission, requestingOrigin)
+        }
+      )
+      ses.setPermissionRequestHandler(
+        // TODO maybe handle `details`, which has specific properties
+        // depending on which permission is requested, e.g. for 'media'
+        // it would be `mediaType: 'video' | 'audio'`.
+        (webContents, permission, callback, details) => {
+          callback(
+            permission_handler(webContents, permission, details.requestingUrl)
+          )
+        }
+      )
 
       // Thanks to the fact that we specify `host-resolver-rules`,
       // no connection attempt to the proxy should occur at all,
@@ -448,127 +678,168 @@ export default class DCWebxdc {
         isAppSender: webxdcInfo.isAppSender,
         isBroadcast: webxdcInfo.isBroadcast,
       }
+      // TODO some (poorly written?) apps might require a refresh
+      // after a permission has been granted,
+      // but we don't support it because
+      // 1. There is no way to refresh a webxdc
+      const instancePermissions = permissionsMap[appId] ?? {
+        grantedPermissions: new Set(DEFAULT_ALLOWED_PERMISSIONS),
+        requestedOrCheckedPermissions: new Set(),
+      }
+      permissionsMap[appId] = instancePermissions
 
       const isMac = platform() === 'darwin'
 
       const { locale } = getCurrentLocaleDate()
 
-      const makeMenu = () => {
-        return Menu.buildFromTemplate([
-          ...(isMac ? [getAppMenu(webxdcWindow)] : []),
-          getFileMenu(webxdcWindow, isMac),
-          getEditMenu(),
-          {
-            label: tx('global_menu_view_desktop'),
-            submenu: [
+      const menu = Menu.buildFromTemplate([
+        ...(isMac ? [getAppMenu(webxdcWindow)] : []),
+        getFileMenu(webxdcWindow, isMac),
+        getEditMenu(),
+        ...(!DesktopSettings.state.enableWebxdcPermissionManagement
+          ? []
+          : [
               {
-                accelerator: 'CmdOrCtrl+=',
-                label: tx('menu_zoom_in'),
-                role: 'zoomIn',
+                label: tx('menu_webxdc_permissions'),
+                submenu: userControllablePermissions.map(permissionName => ({
+                  id: `webxdc_permission_${permissionName}`,
+                  // TODO proper names for permissions, i18n
+                  label:
+                    permissionName === 'media'
+                      ? '🎥 Camera and microphone'
+                      : permissionName,
+                  type: 'checkbox',
+
+                  checked:
+                    instancePermissions.grantedPermissions.has(permissionName),
+                  click: item => {
+                    if (item.checked) {
+                      instancePermissions.grantedPermissions.add(permissionName)
+                    } else {
+                      instancePermissions.grantedPermissions.delete(
+                        permissionName
+                      )
+                    }
+                  },
+                  // Don't clutter the UI with permissions
+                  // that were never checked or requested.
+                  visible:
+                    instancePermissions.requestedOrCheckedPermissions.has(
+                      permissionName
+                    ),
+                })),
+              } satisfies Electron.MenuItemConstructorOptions,
+            ]),
+        {
+          label: tx('global_menu_view_desktop'),
+          submenu: [
+            {
+              accelerator: 'CmdOrCtrl+=',
+              label: tx('menu_zoom_in'),
+              role: 'zoomIn',
+            },
+            {
+              accelerator: 'CmdOrCtrl+-',
+              label: tx('menu_zoom_out'),
+              role: 'zoomOut',
+            },
+            {
+              accelerator: 'CmdOrCtrl+0',
+              label: `${tx('reset')}`,
+              role: 'resetZoom',
+            },
+            { type: 'separator' },
+            {
+              label: tx('global_menu_view_floatontop_desktop'),
+              type: 'checkbox',
+              checked: webxdcWindow.isAlwaysOnTop(),
+              click: item => {
+                webxdcWindow.setAlwaysOnTop(item.checked)
               },
-              {
-                accelerator: 'CmdOrCtrl+-',
-                label: tx('menu_zoom_out'),
-                role: 'zoomOut',
-              },
-              {
-                accelerator: 'CmdOrCtrl+0',
-                label: `${tx('reset')}`,
-                role: 'resetZoom',
-              },
-              { type: 'separator' },
-              {
-                label: tx('global_menu_view_floatontop_desktop'),
-                type: 'checkbox',
-                checked: webxdcWindow.isAlwaysOnTop(),
-                click: () => {
-                  webxdcWindow.setAlwaysOnTop(!webxdcWindow.isAlwaysOnTop())
-                  if (isMac) {
-                    // change to webxdc menu
-                    Menu.setApplicationMenu(makeMenu())
-                  } else {
-                    webxdcWindow.setMenu(makeMenu())
-                  }
-                },
-              },
-              { role: 'togglefullscreen' },
-              { type: 'separator' },
-              {
-                label: tx('global_menu_view_developer_desktop'),
-                submenu: [
-                  {
-                    label: tx('global_menu_view_developer_tools_desktop'),
-                    accelerator: isMac ? 'Alt+Command+I' : 'Ctrl+Shift+I',
-                    // Deliberately no `role: 'toggleDevTools'`: the role opens
-                    // devtools directly, bypassing the confirmation below.
-                    // Its shortcuts are bound to this item instead.
-                    click: async () => {
-                      const { webContents } = webxdcWindow
-                      if (webContents.isDevToolsOpened()) {
-                        webContents.closeDevTools()
+            },
+            { role: 'togglefullscreen' },
+            { type: 'separator' },
+            {
+              label: tx('global_menu_view_developer_desktop'),
+              submenu: [
+                {
+                  label: tx('global_menu_view_developer_tools_desktop'),
+                  accelerator: isMac ? 'Alt+Command+I' : 'Ctrl+Shift+I',
+                  // Deliberately no `role: 'toggleDevTools'`: the role opens
+                  // devtools directly, bypassing the confirmation below.
+                  // Its shortcuts are bound to this item instead.
+                  click: async () => {
+                    const { webContents } = webxdcWindow
+                    if (webContents.isDevToolsOpened()) {
+                      webContents.closeDevTools()
+                      return
+                    }
+                    const instance = open_apps[appId]
+                    if (!instance.devToolsConfirmed) {
+                      const confirmed =
+                        (
+                          await dialog.showMessageBox(webxdcWindow, {
+                            type: 'warning',
+                            buttons: [tx('cancel'), tx('open')],
+                            defaultId: 0,
+                            cancelId: 0,
+                            title: tx('webxdc_devtools_dialog_title'),
+                            message: tx('webxdc_devtools_dialog_title'),
+                            detail: tx('webxdc_devtools_dialog_message'),
+                          })
+                        ).response === 1
+                      if (!confirmed) {
                         return
                       }
-                      const instance = open_apps[appId]
-                      if (!instance.devToolsConfirmed) {
-                        const confirmed =
-                          (
-                            await dialog.showMessageBox(webxdcWindow, {
-                              type: 'warning',
-                              buttons: [tx('cancel'), tx('open')],
-                              defaultId: 0,
-                              cancelId: 0,
-                              title: tx('webxdc_devtools_dialog_title'),
-                              message: tx('webxdc_devtools_dialog_title'),
-                              detail: tx('webxdc_devtools_dialog_message'),
-                            })
-                          ).response === 1
-                        if (!confirmed) {
-                          return
-                        }
-                        instance.devToolsConfirmed = true
-                      }
-                      webContents.openDevTools()
-                    },
+                      instance.devToolsConfirmed = true
+                    }
+                    webContents.openDevTools()
                   },
-                ],
-              },
-            ],
-          },
-          {
-            label: tx('menu_help'),
-            submenu: [
-              {
-                label: tx('source_code'),
-                enabled: !!webxdcInfo.sourceCodeUrl,
-                icon: app_icon?.resize({ width: 24 }) || undefined,
-                click: () =>
-                  openExternalHttpOrPromptToCopy(
-                    webxdcWindow,
-                    webxdcInfo.sourceCodeUrl ?? ''
-                  ),
-              },
-              {
-                type: 'separator',
-              },
-              {
-                label: tx('what_is_webxdc'),
-                click: () => openHelpWindow(locale, 'webxdc'),
-              },
-            ],
-          },
-        ])
-      }
+                },
+              ],
+            },
+          ],
+        },
+        {
+          label: tx('menu_help'),
+          submenu: [
+            {
+              id: 'source-code',
+              label: tx('source_code'),
+              enabled: !!webxdcInfo.sourceCodeUrl,
+              icon: app_icon?.resize({ width: 24 }) || undefined,
+              click: () =>
+                openExternalHttpOrPromptToCopy(
+                  webxdcWindow,
+                  webxdcInfo.sourceCodeUrl ?? ''
+                ),
+            },
+            {
+              type: 'separator',
+            },
+            {
+              label: tx('what_is_webxdc'),
+              click: () => openHelpWindow(locale, 'webxdc'),
+            },
+          ],
+        },
+      ])
+      appIconPromise.then(icon => {
+        if (icon == undefined) {
+          return
+        }
+        menu.getMenuItemById('source-code')!.icon = icon.resize({ width: 24 })
+      })
 
       if (!isMac) {
-        // the menu shows the app icon, so it can only be built once the
-        // icon is loaded
-        appIconPromise.then(() => webxdcWindow.setMenu(makeMenu()))
+        webxdcWindow.setMenu(menu)
       }
+      windowToMenu.set(webxdcWindow, menu)
 
       webxdcWindow.on('focus', () => {
         if (isMac) {
           // change to webxdc menu
-          Menu.setApplicationMenu(makeMenu())
+          Menu.setApplicationMenu(menu)
         }
       })
       webxdcWindow.on('blur', () => {
@@ -858,6 +1129,8 @@ export default class DCWebxdc {
           await this.removeWebxdcAppData(accountId, instanceId)
         }
         this.webxdcCleanup(accountId)
+        // Maybe clean up here if we store granted permissions
+        // (currently we don't).
       }
     )
 

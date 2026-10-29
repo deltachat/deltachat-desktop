@@ -87,6 +87,13 @@ export function ExperimentalFeatures() {
       >
         {tx('webxdc_store_url')}
       </SettingsSelector>
+      {runtime.getRuntimeInfo().target === 'electron' && (
+        <DesktopSettingsSwitch
+          settingsKey='enableWebxdcPermissionManagement'
+          label={tx('pref_webxdc_permission_management')}
+          description={tx('explain_webxdc_permission_management')}
+        />
+      )}
     </>
   )
 }
