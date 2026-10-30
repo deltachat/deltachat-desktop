@@ -342,9 +342,8 @@ export default function MainScreen({ accountId }: Props) {
       <Resizeable.Separator className={styles.chatListResizeHandle} />
       <Resizeable.Panel
         id='chatView'
-        // Basically no limit, but leave some margin
-        // to ensure that the user can still grab the resize handle.
-        minSize='1rem'
+        // Keep space for all the composer's buttons to be visible.
+        minSize='12rem'
         style={{ display: 'flex' }}
       >
         <ChatView accountId={accountId} lastUsedApps={lastUsedApps} />
