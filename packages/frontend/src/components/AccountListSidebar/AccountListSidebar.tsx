@@ -2,6 +2,7 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
 } from 'react'
@@ -191,7 +192,9 @@ export default function AccountListSidebar({
     }
   }, [accountForHoverInfo])
 
-  useEffect(() => {
+  // Position it before it gets painted, otherwise it briefly covers
+  // the account list and intercepts pointer events.
+  useLayoutEffect(() => {
     updateHoverInfoPosition()
   }, [accountForHoverInfo, updateHoverInfoPosition])
 
