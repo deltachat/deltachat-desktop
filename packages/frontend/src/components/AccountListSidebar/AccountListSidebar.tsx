@@ -65,6 +65,16 @@ export default function AccountListSidebar({
       BackendRemote.off('AccountsChanged', throttledRefreshAccountList)
     }
   }, [accountsFetch.refresh])
+  // Refresh the account list when selectedAccountId changes.
+  // The selected account might be one that was just added.
+  // Without this refresh the e2e tests often failed, since
+  // the `AccountsChanged` event was missed (probably by race conditions)
+  const refreshAccountList = accountsFetch.refresh
+  useEffect(() => {
+    if (selectedAccountId !== undefined) {
+      refreshAccountList()
+    }
+  }, [selectedAccountId, refreshAccountList])
 
   const [{ accounts: noficationSettings }] = useAccountNotificationStore()
 
