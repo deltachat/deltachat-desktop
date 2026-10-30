@@ -536,6 +536,7 @@ function ViewGroupInner(
             color={initialGroupState.color}
             displayName={group.name}
             disableFullscreen={shouldDisableFullscreenAvatar(initialGroupState)}
+            onEdit={allowEdit ? onClickEdit : undefined}
             subtitle={
               <div className='group-profile-subtitle'>
                 {!isBroadcast

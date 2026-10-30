@@ -12,10 +12,14 @@ import Dialog from '../Dialog'
 import { IconButton } from '../Icon'
 
 export default function FullscreenAvatar(
-  props: { imagePath: string } & DialogProps
+  props: {
+    imagePath: string
+    /** If set, an "Edit" option is offered, e.g. to change the group image */
+    onEdit?: () => void
+  } & DialogProps
 ) {
   const tx = useTranslationFunction()
-  const { onClose, imagePath } = props
+  const { onClose, imagePath, onEdit } = props
 
   const { zoomInRef, zoomOutRef, zoomResetRef } = useZoomKeyboardShortcuts()
 
@@ -23,7 +27,16 @@ export default function FullscreenAvatar(
     runtime.downloadFile(imagePath, basename(imagePath))
   }
 
+  const edit = () => {
+    onClose()
+    onEdit?.()
+  }
+
   const openMenu = useContextMenu([
+    onEdit !== undefined && {
+      label: tx('global_menu_edit_desktop'),
+      action: edit,
+    },
     {
       label: tx('menu_copy_image_to_clipboard'),
       action: () => {
@@ -83,6 +96,15 @@ export default function FullscreenAvatar(
         </div>
       </div>
       <div data-no-drag-region className='btn-wrapper'>
+        {onEdit && (
+          <IconButton
+            onClick={edit}
+            icon='lead-pencil'
+            size={26}
+            coloring='fullscreenControls'
+            aria-label={tx('global_menu_edit_desktop')}
+          />
+        )}
         <IconButton
           onClick={saveAs}
           icon='download'
