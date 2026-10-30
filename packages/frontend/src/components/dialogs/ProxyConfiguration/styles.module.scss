@@ -1,10 +1,12 @@
 .proxyList {
   flex-grow: 1;
-  overflow-y: scroll;
+  overflow-y: auto;
+  padding-bottom: 10px;
 }
 
 .container {
-  margin: 0 10px 0 30px;
+  margin-inline-start: 30px;
+  margin-inline-end: 30px;
   display: flex;
   flex-direction: column;
   flex: 1 1 auto;
@@ -12,19 +14,21 @@
     margin: 0;
     margin-top: 10px;
   }
+  > label {
+    padding-inline: 0;
+  }
 }
 
 .proxyItem {
   display: flex;
   border-bottom: 1px solid var(--separatorColor);
-  padding: 10px 0 10px 10px;
+  padding: 10px 0;
   &:hover {
     background-color: var(--globalHoverBg);
   }
 }
 
 .explain {
-  margin-inline-end: 20px;
   margin-top: 10px;
 }
 
