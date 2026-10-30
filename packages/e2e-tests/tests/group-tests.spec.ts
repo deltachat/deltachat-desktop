@@ -86,6 +86,23 @@ test('create group', async () => {
   await expect(badgeNumber).toHaveText('1')
 })
 
+test('Select group image by clicking the avatar when creating a group', async () => {
+  await switchToProfile(page, existingProfiles[0].id)
+  await page.locator('#new-chat-button').click()
+  await page.locator('#newgroup button').click()
+
+  const fileChooserPromise = page.waitForEvent('filechooser')
+  await page.getByRole('button', { name: 'Select Group Image' }).click()
+  const fileChooser = await fileChooserPromise
+  await fileChooser.setFiles(
+    path.join(import.meta.dirname, '..', 'fixtures', 'Deltachat-Logo.png')
+  )
+  await page.getByRole('button', { name: 'Save' }).click()
+  await expect(
+    page.getByRole('button', { name: 'Select Group Image' }).locator('img')
+  ).toBeVisible()
+})
+
 test('check "New Email" option presence', async ({ isChatmail }) => {
   await page.locator('#new-chat-button').click()
 
