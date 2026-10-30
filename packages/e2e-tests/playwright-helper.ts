@@ -265,10 +265,12 @@ export async function createNewProfile(
   writeClipboard: (text: string) => Promise<void> = text =>
     page.evaluate(`navigator.clipboard.writeText('${text}')`)
 ): Promise<User> {
-  await page.waitForSelector('.styles_module_account')
-  const accountList = page.locator('.styles_module_account')
-
-  if (!isFirstOnboarding) {
+  // Wait for the welcome dialog and read the new account id
+  // from the `selected-account:` test id
+  if (isFirstOnboarding) {
+    await expect(page.locator('.styles_module_welcome')).toBeVisible()
+  } else {
+    await expect(page.locator('.styles_module_account').first()).toBeVisible()
     // add account to show onboarding screen
     await page.getByTestId('add-account-button').click()
   }
@@ -315,10 +317,6 @@ export async function createNewProfile(
 
   await page.getByTestId('login-button').click()
 
-  const newAccountList = page.locator('.styles_module_account')
-  await expect(newAccountList.last()).toHaveClass(
-    /(^|\s)styles_module_active(\s|$)/
-  )
   // open settings to validate the name and to get
   // the (randomly) created mail address
   const settingsButton = page.getByTestId('open-settings-button')
@@ -329,21 +327,17 @@ export async function createNewProfile(
   )
   await page.getByTestId('open-advanced-settings').click()
   await page.getByTestId('open-transport-settings').click()
-  await page.getByRole('button', { name: 'More Options' }).click()
-  await page.getByRole('menuitem', { name: 'Edit Relay' }).click()
-  const addressLocator = page.locator('#addr')
-  await expect(addressLocator).toHaveValue(/.+@.+/)
-  const address = await addressLocator.inputValue()
-
-  await page.getByTestId('cancel').click()
+  const address = await readFirstTransportAddress(page)
   await page.getByTestId('transports-settings-close').click()
   await page.getByTestId('settings-advanced-close').click()
 
-  const newId = await accountList
-    .last()
-    .getAttribute('x-account-sidebar-account-id')
+  const newId = (
+    await page
+      .locator('[data-testid^="selected-account:"]')
+      .getAttribute('data-testid')
+  )?.replace('selected-account:', '')
 
-  expect(newId).not.toBeNull()
+  expect(newId).toMatch(/^\d+$/)
 
   if (newId && address) {
     return {
@@ -384,26 +378,40 @@ export async function getProfile(
 
   await page.getByTestId('open-advanced-settings').click()
   await page.getByTestId('open-transport-settings').click()
-  await page.getByRole('button', { name: 'More Options' }).click()
-  await page.getByRole('menuitem', { name: 'Edit Relay' }).click()
-  const addressLocator = page.locator('#addr')
-  await expect(addressLocator).toHaveValue(/.+@.+/)
-  const address = await addressLocator.inputValue()
+  const address = await readFirstTransportAddress(page)
   let password = ''
   if (includePasswd) {
-    const passwdLocator = page.locator('#password')
-    password = await passwdLocator.inputValue()
+    // the password is only shown in the edit form
+    await page.getByRole('button', { name: 'More Options' }).first().click()
+    await page.getByRole('menuitem', { name: 'Edit Relay' }).click()
+    const addressLocator = page.locator('#addr')
+    await expect(addressLocator).toHaveValue(address)
+    password = await page.locator('#password').inputValue()
+    await page.getByTestId('cancel').click()
   }
-  await page.getByTestId('cancel').click()
   await page.getByTestId('transports-settings-close').click()
   await page.getByTestId('settings-advanced-close').click()
 
   return {
     id: accountId,
     name: name ?? '',
-    address: address ?? '',
+    address,
     password: password,
   }
+}
+
+/**
+ * Reads the address of the first relay in the open transports dialog,
+ * where it is listed as domain and local part on separate lines.
+ */
+async function readFirstTransportAddress(page: Page): Promise<string> {
+  const label = page.getByTestId('transports-dialog').locator('label').first()
+  const [domain, localPart] = (await label.innerText())
+    .split('\n')
+    .map(part => part.trim())
+  expect(domain).toBeTruthy()
+  expect(localPart).toBeTruthy()
+  return `${localPart}@${domain}`
 }
 
 /**
@@ -419,7 +427,7 @@ export async function setForceEncryption(
   await page.getByTestId('open-settings-menu-item').click()
   await page.getByTestId('open-advanced-settings').click()
   await page.getByTestId('open-transport-settings').click()
-  await page.getByRole('button', { name: 'More Options' }).click()
+  await page.getByRole('button', { name: 'More Options' }).first().click()
   await page.getByRole('menuitem', { name: 'Edit Relay' }).click()
   await page.locator('#show-advanced-button').click()
   const switchInput = page.getByRole('checkbox', {
@@ -490,28 +498,23 @@ export async function deleteAllProfiles(
 export async function loadExistingProfiles(page: Page): Promise<User[]> {
   // await page.goto('/')
   const existingProfiles: User[] = []
-  await page.waitForSelector('.main-container')
   await expect(page.locator('.main-container')).toBeVisible()
-  // TODO: the next waitFor calls are needed when loading existing profiles
-  // and skipping the createProfiles step, but will never succeed if there
-  // are no profiles yet
-  await page.waitForSelector('button.styles_module_account')
-  await page.waitForSelector('button.styles_module_account[aria-busy=false]')
   const accountList = page.locator('button.styles_module_account')
+  const welcomeDialog = page.locator('.styles_module_welcome')
+  await expect(accountList.or(welcomeDialog).first()).toBeVisible()
+  await expect(
+    page.locator('button.styles_module_account[aria-busy=true]')
+  ).toHaveCount(0)
   const existingAccountItems = await accountList.count()
   console.log('existingAccountItems', existingAccountItems)
+  if (existingAccountItems <= 1 && (await welcomeDialog.isVisible())) {
+    // special case: when no account exists on app start, a new
+    // unconfigured account is created and the welcome dialog is shown,
+    // so there are no existing profiles yet. The sidebar may not list
+    // that account yet when the welcome dialog becomes visible.
+    return []
+  }
   if (existingAccountItems > 0) {
-    if (existingAccountItems === 1) {
-      const welcomeDialog = await page
-        .locator('.styles_module_welcome')
-        .isVisible()
-      if (welcomeDialog) {
-        // special case: when no account exists on app start a new empty
-        // account is created but not yet persisted, so there are no
-        // existing profiles in database yet
-        return []
-      }
-    }
     for (let i = 0; i < existingAccountItems; i++) {
       const account = accountList.nth(i)
       const id = await account.getAttribute('x-account-sidebar-account-id')
