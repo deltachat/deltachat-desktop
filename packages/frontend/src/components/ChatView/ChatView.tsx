@@ -47,7 +47,6 @@ export function ChatView(
     'accountId' | 'chatWithLinger'
   > & {
     accountId: T.Account['id'] | undefined
-    className?: string
   }
 ) {
   const { chatWithLinger } = useChat()
@@ -55,7 +54,7 @@ export function ChatView(
     <section
       role='region'
       aria-labelledby='chat-section-heading'
-      className={classNames(props.className, styles.chatAndNavbar)}
+      className={styles.chatAndNavbar}
     >
       {props.accountId != undefined && chatWithLinger ? (
         <ChatViewInner
