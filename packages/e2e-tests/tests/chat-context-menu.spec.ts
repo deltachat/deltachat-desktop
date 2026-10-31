@@ -284,6 +284,8 @@ test.describe('Main View - 3-Dot Menu', () => {
     await expect(
       page.locator('.chat-list .chat-list-item').filter({ hasText: userB.name })
     ).toBeVisible()
+    const archiveEmptyHint = page.getByText('Archived chats will appear here.')
+    await expect(archiveEmptyHint).not.toBeVisible()
 
     // Select archived chat and unarchive
     await page
@@ -297,11 +299,18 @@ test.describe('Main View - 3-Dot Menu', () => {
     ).toBeVisible()
     await page.getByRole('menuitem', { name: 'Unarchive Chat' }).click()
 
+    // The archive is empty now but still open
+    await expect(archiveEmptyHint).toBeVisible()
+    await expect(
+      page.getByRole('textbox', { name: 'Write a message' })
+    ).not.toBeVisible()
+
     // Go back to main list using the back button
     await page.getByRole('button', { name: 'back' }).click()
     await expect(
       page.locator('.chat-list .chat-list-item').filter({ hasText: userB.name })
     ).toBeVisible()
+    await expect(archiveEmptyHint).not.toBeVisible()
   })
 
   test('mute and unmute chat from main view', async () => {
