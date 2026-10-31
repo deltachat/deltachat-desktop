@@ -596,6 +596,120 @@ export default class DCWebxdc {
         saveBounds()
       })
 
+      // Listening on the whole window is not required,
+      // because the WebXDC API is only exposed on the main frame,
+      // we haven't set `nodeIntegrationInSubFrames: true`
+      const ipc = webxdcWindow.webContents.mainFrame.ipc
+
+      ipc.handle('webxdc.exitFullscreen', async event => {
+        const app = lookupAppFromEvent(event)
+        // On Linux Electron hides the menu bar if we call
+        // `setFullScreen(false)` and we're not already in full-screen,
+        // so let's check for this.
+        if (app && app.win.isFullScreen()) {
+          app.win.setFullScreen(false)
+        }
+      })
+
+      ipc.handle('webxdc.getAllUpdates', async (event, serial = 0) => {
+        const app = lookupAppFromEvent(event)
+        if (!app) {
+          log.error(
+            'webxdc.getAllUpdates failed, app not found in list of open ones'
+          )
+          return []
+        }
+
+        return await this.rpc.getWebxdcStatusUpdates(
+          app.accountId,
+          app.msgId,
+          serial
+        )
+      })
+
+      ipc.handle('webxdc.sendUpdate', async (event, update) => {
+        const app = lookupAppFromEvent(event)
+        if (!app) {
+          log.error(
+            'webxdc.sendUpdate failed, app not found in list of open ones'
+          )
+          return
+        }
+        try {
+          return await this.rpc.sendWebxdcStatusUpdate(
+            app.accountId,
+            app.msgId,
+            update,
+            ''
+          )
+        } catch (error) {
+          log.error('webxdc.sendUpdate failed:', error)
+          throw error
+        }
+      })
+
+      ipc.handle('webxdc.sendRealtimeData', async (event, update: number[]) => {
+        const app = lookupAppFromEvent(event)
+        if (!app) {
+          log.error(
+            'webxdc.sendRealtimeData failed, app not found in list of open ones'
+          )
+          return
+        }
+        try {
+          return await this.rpc.sendWebxdcRealtimeData(
+            app.accountId,
+            app.msgId,
+            update
+          )
+        } catch (error) {
+          log.error('webxdc.sendWebxdcRealtimeData failed:', error)
+          throw error
+        }
+      })
+
+      ipc.handle('webxdc.sendRealtimeAdvertisement', async event => {
+        const app = lookupAppFromEvent(event)
+        if (!app) {
+          log.error(
+            'webxdc.sendRealtimeAdvertisement failed, app not found in list of open ones'
+          )
+          return
+        }
+        await this.rpc.sendWebxdcRealtimeAdvertisement(app.accountId, app.msgId)
+      })
+
+      ipc.handle('webxdc.leaveRealtimeChannel', async event => {
+        const app = lookupAppFromEvent(event)
+        if (!app) {
+          log.error(
+            'webxdc.leaveRealtimeChannel, app not found in list of open ones'
+          )
+          return
+        }
+        this.rpc.leaveWebxdcRealtime(app.accountId, app.msgId)
+      })
+
+      ipc.handle(
+        'webxdc.sendToChat',
+        (
+          event,
+          file: { file_name: string; file_content: string } | null,
+          text: string | null
+        ) => {
+          const app = lookupAppFromEvent(event)
+          if (!app) {
+            log.error(
+              'webxdc.sendToChat failed, app not found in list of open ones'
+            )
+            return
+          }
+          // forward to main window
+          send('webxdc.sendToChat', file, text, app.accountId)
+          main_window?.focus()
+        }
+      )
+
       loadURL(webxdcWindow, fullHref ?? appURL + '/index.html')
 
       let denyPreventUnload = false
@@ -692,118 +806,6 @@ export default class DCWebxdc {
 
     // actual webxdc instances
     ipcMain.handle('open-webxdc', openWebxdc)
-
-    ipcMain.handle('webxdc.exitFullscreen', async event => {
-      const app = lookupAppFromEvent(event)
-      // On Linux Electron hides the menu bar if we call
-      // `setFullScreen(false)` and we're not already in full-screen,
-      // so let's check for this.
-      if (app && app.win.isFullScreen()) {
-        app.win.setFullScreen(false)
-      }
-    })
-
-    ipcMain.handle('webxdc.getAllUpdates', async (event, serial = 0) => {
-      const app = lookupAppFromEvent(event)
-      if (!app) {
-        log.error(
-          'webxdc.getAllUpdates failed, app not found in list of open ones'
-        )
-        return []
-      }
-
-      return await this.rpc.getWebxdcStatusUpdates(
-        app.accountId,
-        app.msgId,
-        serial
-      )
-    })
-
-    ipcMain.handle('webxdc.sendUpdate', async (event, update) => {
-      const app = lookupAppFromEvent(event)
-      if (!app) {
-        log.error(
-          'webxdc.sendUpdate failed, app not found in list of open ones'
-        )
-        return
-      }
-      try {
-        return await this.rpc.sendWebxdcStatusUpdate(
-          app.accountId,
-          app.msgId,
-          update,
-          ''
-        )
-      } catch (error) {
-        log.error('webxdc.sendUpdate failed:', error)
-        throw error
-      }
-    })
-
-    ipcMain.handle(
-      'webxdc.sendRealtimeData',
-      async (event, update: number[]) => {
-        const app = lookupAppFromEvent(event)
-        if (!app) {
-          log.error(
-            'webxdc.sendRealtimeData failed, app not found in list of open ones'
-          )
-          return
-        }
-        try {
-          return await this.rpc.sendWebxdcRealtimeData(
-            app.accountId,
-            app.msgId,
-            update
-          )
-        } catch (error) {
-          log.error('webxdc.sendWebxdcRealtimeData failed:', error)
-          throw error
-        }
-      }
-    )
-
-    ipcMain.handle('webxdc.sendRealtimeAdvertisement', async event => {
-      const app = lookupAppFromEvent(event)
-      if (!app) {
-        log.error(
-          'webxdc.sendRealtimeAdvertisement failed, app not found in list of open ones'
-        )
-        return
-      }
-      await this.rpc.sendWebxdcRealtimeAdvertisement(app.accountId, app.msgId)
-    })
-
-    ipcMain.handle('webxdc.leaveRealtimeChannel', async event => {
-      const app = lookupAppFromEvent(event)
-      if (!app) {
-        log.error(
-          'webxdc.leaveRealtimeChannel, app not found in list of open ones'
-        )
-        return
-      }
-      this.rpc.leaveWebxdcRealtime(app.accountId, app.msgId)
-    })
-
-    ipcMain.handle(
-      'webxdc.sendToChat',
-      (
-        event,
-        file: { file_name: string; file_content: string } | null,
-        text: string | null
-      ) => {
-        const app = lookupAppFromEvent(event)
-        if (!app) {
-          log.error(
-            'webxdc.sendToChat failed, app not found in list of open ones'
-          )
-          return
-        }
-        // forward to main window
-        send('webxdc.sendToChat', file, text, app.accountId)
-        main_window?.focus()
-      }
-    )
 
     ipcMain.handle('close-all-webxdc', () => {
       this._closeAll()
