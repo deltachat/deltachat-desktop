@@ -3,6 +3,7 @@ import { expect } from 'chai'
 import { before, describe, it } from 'mocha'
 
 import { botcommand } from '../utils/linkify/plugin-bot-command/index.js'
+import { registerDeltachatSchemes } from '../utils/linkify/deltachatSchemes.js'
 import { parseElements } from '../utils/linkify/parseElements.js'
 import { getLinkDestination } from '../utils/linkify/getLinkDestination.js'
 
@@ -18,10 +19,11 @@ function destinationOfSingleUrl(text: string) {
 
 describe('getLinkDestination', () => {
   before(() => {
-    // `MessageParser` registers this plugin, and it influences how message
-    // text gets tokenized, so register it here as well.
+    // `MessageParser` registers this plugin and these schemes, and they
+    // influence how message text gets tokenized, so register them here as well.
     linkify.reset()
     linkify.registerPlugin('botcommand', botcommand)
+    registerDeltachatSchemes()
   })
 
   it('adds https as the default scheme for URLs without one', () => {
@@ -89,6 +91,42 @@ describe('getLinkDestination', () => {
       'https://example.com/fun_ftp_facts',
       'https://delta.chat',
     ])
+  })
+
+  it('recognizes delta chat URIs as a whole', () => {
+    const cases = [
+      [
+        'OPENPGP4FPR:79252762C34C5096AF57958F4FC3D21A81B0F0A7#a=alice%40example.org&n=Alice&i=Xkr7&s=3Jc9',
+        'openpgp4fpr',
+      ],
+      ['DCACCOUNT:https://nine.testrun.org/new', 'dcaccount'],
+      ['dcaccount:nine.testrun.org', 'dcaccount'],
+      ['DCLOGIN:alice@example.org?p=secret&v=1', 'dclogin'],
+      [
+        'dclogin://alice@example.org?p=secret&v=1&ih=imap.example.org',
+        'dclogin',
+      ],
+      ['https://i.delta.chat#FPR&a=alice%40example.org&i=abc&s=def', 'https'],
+    ] as const
+
+    for (const [uri, expectedScheme] of cases) {
+      for (const text of [uri, `see ${uri}.`, `(${uri})`, `${uri}, ok`]) {
+        const destination = destinationOfSingleUrl(text)
+        expect(destination?.target, text).to.equal(uri)
+        expect(destination?.linkText, text).to.equal(uri)
+        expect(destination?.scheme, text).to.equal(expectedScheme)
+      }
+    }
+  })
+
+  it('does not recognize delta chat schemes inside of other words', () => {
+    for (const text of ['mydcaccount:foo', 'xdclogin:alice@example.org']) {
+      const elements = parseElements(text)
+      expect(
+        elements.some(el => el.t === 'url' && el.v.includes(':')),
+        text
+      ).to.equal(false)
+    }
   })
 
   it('reports a punycode warning for non-ascii hostnames', () => {
