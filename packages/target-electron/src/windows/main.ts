@@ -41,7 +41,12 @@ const RENDERER_RELOAD_COOLDOWN_MS = 30_000
 
 export function init(options: { hidden: boolean; hideMenuBar: boolean }) {
   if (window) {
-    return window.show()
+    window.show()
+
+    // Probably already loaded, so noop.
+    return () => {
+      log.warn('loadMainWindow called after second call to `init`')
+    }
   }
 
   const defaults = windowDefaults()
@@ -87,8 +92,6 @@ export function init(options: { hidden: boolean; hideMenuBar: boolean }) {
   // issue: https://github.com/electron/electron/issues/22995
   // feature request for local dictionary: https://github.com/electron/electron/issues/22995
   session.defaultSession.setSpellCheckerDictionaryDownloadURL('https://00.00/')
-
-  window.loadFile(join(htmlDistDir(), defaults.main))
 
   window.once('ready-to-show', () => {
     if (!options.hidden) mainWindow.show()
@@ -266,6 +269,8 @@ export function init(options: { hidden: boolean; hideMenuBar: boolean }) {
       return callback({ cancel: true })
     }
   )
+
+  return () => mainWindow.loadFile(join(htmlDistDir(), defaults.main))
 }
 
 async function promptUserAfterRendererCrash(

@@ -318,10 +318,12 @@ async function onReady([_appReady, _loadedState, _appx, _webxdc_cleanup]: [
   log.info(`cwd ${cwd}`)
   ipc_shutdown_function = ipc.init(cwd, logHandler)
 
-  mainWindow.init({
+  const loadMainWindow = mainWindow.init({
     hidden: app.rc['minimized'],
     hideMenuBar: DesktopSettings.state.hideMenuBar,
   })
+  loadMainWindow()
+
   initMenu(logHandler)
 
   if (rc.devmode) {
