@@ -117,6 +117,18 @@ export function useMultiselect<T>(
      * @default true
      */
     onNormalClickIgnoreInteractiveChildren?: boolean
+    /**
+     * When `true` and no items are selected, Shift + Clicking
+     * or Shift + Space-ing or focusing an item with Shift pressed
+     * will do nothing if that would result in only this single item
+     * getting selected.
+     *
+     * Can be useful if items contain text that the user might want to select
+     * with Shift + Click, entering multiselect "mode".
+     *
+     * @default false
+     */
+    ignoreContiguousSelectOfSingleItem?: boolean
   }
 ) {
   // TODO feat: a way to set initially active item?
@@ -155,6 +167,11 @@ export function useMultiselect<T>(
     },
     [onSelectionChange]
   )
+  const selectionIsEmpty = selectedItems.size <= 0
+  // This might be a weird var, but this reduces the frequency
+  // of React hook dependency changes.
+  const ignoreContiguousIfSingleItem =
+    options?.ignoreContiguousSelectOfSingleItem && selectionIsEmpty
   /**
    * Besides changing selection, this reads and writes `lastActivatedItem`.
    */
@@ -196,6 +213,10 @@ export function useMultiselect<T>(
 
       ;[fromInd, toInd] = [Math.min(fromInd, toInd), Math.max(fromInd, toInd)]
 
+      if (fromInd == toInd && ignoreContiguousIfSingleItem) {
+        return
+      }
+
       // Yes, we replace the entire selection. Not good.
       // But otherwise it requires a lot more logic, namely
       // contiguous selection should never _un_select items,
@@ -216,7 +237,7 @@ export function useMultiselect<T>(
         )
       )
     },
-    [onSelectionChange]
+    [onSelectionChange, ignoreContiguousIfSingleItem]
   )
 
   // Note that these are also present on `MouseEvent` (click),
