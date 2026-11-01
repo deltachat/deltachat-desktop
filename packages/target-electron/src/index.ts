@@ -167,7 +167,6 @@ import { DesktopSettings } from './desktop_settings.js'
 import * as mainWindow from './windows/main.js'
 import { ExtendedAppMainProcess } from './types.js'
 import { updateTrayIcon, hideDeltaChat, showDeltaChat } from './tray.js'
-import './notifications.js'
 import { acceptThemeCLI } from './themes.js'
 import {
   WEBXDC_PARTITION_PREFIX,
