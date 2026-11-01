@@ -53,7 +53,7 @@ import { openHtmlEmailWindow } from './windows/html_email.js'
 import { refresh } from './menu.js'
 import { applyNativeThemeSource } from './themes.js'
 import { appx, mapPackagePath } from './isAppx.js'
-import DeltaChatController from './deltachat/controller.js'
+import DeltaChatController, { getRPCServerPath2 } from './deltachat/controller.js'
 import { BuildInfo } from './get-build-info.js'
 import { updateContentProtectionOnAllActiveWindows } from './content-protection.js'
 import { MediaType, type Runtime } from '@deltachat-desktop/runtime-interface'
@@ -83,21 +83,23 @@ export const DCJsonrpcRemoteInitializedP = new Promise<
 
 /** returns shutdown function */
 export function init(cwd: string, logHandler: LogHandler) {
+  let rpcServerPath: string | undefined
   dcController = new DeltaChatController(cwd)
 
   try {
-    dcController.init()
+    rpcServerPath = getRPCServerPath2()
+    dcController.init(rpcServerPath)
   } catch (error) {
     log.critical(
       `Fatal: The ${appName} Module couldn't be loaded. Please check if all dependencies for deltachat-core are installed!`,
       error,
-      dcController.rpcServerPath
+      rpcServerPath
     )
     // eslint-disable-next-line no-console
     console.error(
       `Fatal: The ${appName} Module couldn't be loaded. Please check if all dependencies for deltachat-core are installed!`,
       error,
-      dcController.rpcServerPath
+      rpcServerPath
     )
 
     dialog.showErrorBox(
@@ -105,7 +107,7 @@ export function init(cwd: string, logHandler: LogHandler) {
       `The ${appName} Module couldn't be loaded.
   Please check if all dependencies for deltachat-core are installed!
   The Log file is located in this folder: ${getLogsPath()}\n
-  ${dcController.rpcServerPath}\n
+  ${rpcServerPath}\n
   ${error instanceof Error ? error.message : inspect(error, { depth: null })}`
     )
 
@@ -206,7 +208,7 @@ export function init(cwd: string, logHandler: LogHandler) {
         { label: 'node', value: versions.node },
       ],
       runningUnderARM64Translation: app.runningUnderARM64Translation,
-      rpcServerPath: dcController.rpcServerPath,
+      rpcServerPath,
       buildInfo: BuildInfo,
       isContentProtectionSupported:
         platform() === 'darwin' || platform() === 'win32',

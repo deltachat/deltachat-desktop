@@ -55,8 +55,6 @@ export default class DeltaChatController {
     }
     return this._inner_account_manager
   }
-  /** for runtime info */
-  rpcServerPath?: string
 
   constructor(public cwd: string) {}
 
@@ -68,20 +66,8 @@ export default class DeltaChatController {
     return this._jsonrpcRemote
   }
 
-  init() {
+  init(serverPath: string) {
     log.debug('Initiating DeltaChatNode')
-    const allowCustomServerPath = rc_config['allow-custom-rpc-server-path']
-    let serverPath = getRPCServerPath({
-      // desktop should only use prebuilds normally
-      disableEnvPath: !allowCustomServerPath,
-      takeVersionFromPATH: allowCustomServerPath,
-    })
-    if (serverPath.includes('app.asar')) {
-      // probably inside of electron build
-      serverPath = serverPath.replace('app.asar', 'app.asar.unpacked')
-    }
-
-    this.rpcServerPath = serverPath
     log.info('using deltachat-rpc-server at', { serverPath })
 
     this._inner_account_manager = new StdioServer(
@@ -153,6 +139,21 @@ export default class DeltaChatController {
   }
 
   readonly webxdc = new DCWebxdc(this)
+}
+
+export function getRPCServerPath2(): string {
+  const allowCustomServerPath = rc_config['allow-custom-rpc-server-path']
+  let serverPath = getRPCServerPath({
+    // desktop should only use prebuilds normally
+    disableEnvPath: !allowCustomServerPath,
+    takeVersionFromPATH: allowCustomServerPath,
+  })
+  if (serverPath.includes('app.asar')) {
+    // probably inside of electron build
+    serverPath = serverPath.replace('app.asar', 'app.asar.unpacked')
+  }
+
+  return serverPath
 }
 
 /**
