@@ -314,14 +314,15 @@ async function onReady([_appReady, _loadedState, _appx, _webxdc_cleanup]: [
     }
   }
 
-  const cwd = getAccountsPath()
-  log.info(`cwd ${cwd}`)
-  ipc_shutdown_function = ipc.init(cwd, logHandler)
-
   const loadMainWindow = mainWindow.init({
     hidden: app.rc['minimized'],
     hideMenuBar: DesktopSettings.state.hideMenuBar,
   })
+
+  const cwd = getAccountsPath()
+  log.info(`cwd ${cwd}`)
+  ipc_shutdown_function = ipc.init(cwd, logHandler)
+
   loadMainWindow()
 
   initMenu(logHandler)
