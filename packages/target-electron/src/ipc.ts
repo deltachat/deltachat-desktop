@@ -3,7 +3,6 @@ import {
   app as rawApp,
   clipboard,
   dialog,
-  ipcMain,
   nativeImage,
   shell,
   NativeImage,
@@ -84,11 +83,17 @@ export const DCJsonrpcRemoteInitializedP = new Promise<
 >(r => (onInitialized = r))
 
 /** returns shutdown function */
-export function init(cwd: string, logHandler: LogHandler) {
+export function init(
+  mainWindowIpc: Electron.BrowserWindow['webContents']['ipc'],
+  cwd: string,
+  logHandler: LogHandler
+) {
   let rpcServerPath: string | undefined
+  const ipc = mainWindowIpc
+
   try {
     rpcServerPath = getRPCServerPath2()
-    dcController = new DeltaChatController(cwd, rpcServerPath)
+    dcController = new DeltaChatController(cwd, rpcServerPath, ipc)
   } catch (error) {
     log.critical(
       `Fatal: The ${appName} Module couldn't be loaded. Please check if all dependencies for deltachat-core are installed!`,
@@ -114,18 +119,18 @@ export function init(cwd: string, logHandler: LogHandler) {
     rawApp.exit(1)
   }
 
-  new DCWebxdc(dcController.jsonrpcRemote)
+  new DCWebxdc(dcController.jsonrpcRemote, ipc)
 
-  ipcMain.once('ipcReady', _e => {
+  ipc.once('ipcReady', _e => {
     app.ipcReady = true
     app.emit('ipcReady')
   })
 
-  ipcMain.on('handleLogMessage', (_e, channel, level, stacktrace, ...args) =>
+  ipc.on('handleLogMessage', (_e, channel, level, stacktrace, ...args) =>
     logHandler.log(channel, level, stacktrace, ...args)
   )
 
-  ipcMain.on('ondragstart', (event, filePath, realName) => {
+  ipc.on('ondragstart', (event, filePath, realName) => {
     let tmpFilePath = filePath
     let tmpDir: string | undefined
     if (realName && realName !== '') {
@@ -174,33 +179,33 @@ export function init(cwd: string, logHandler: LogHandler) {
     }
   })
 
-  ipcMain.on('help', async (_ev, locale, anchor?: string) => {
+  ipc.on('help', async (_ev, locale, anchor?: string) => {
     await openHelpWindow(locale, anchor)
   })
 
-  ipcMain.on('reload-main-window', () => {
+  ipc.on('reload-main-window', () => {
     if (!mainWindow.window) {
       throw new Error('window does not exist, this should never happen')
     }
     mainWindow.window.webContents.reload()
   })
 
-  ipcMain.on('get-log-path', ev => {
+  ipc.on('get-log-path', ev => {
     ev.returnValue = logHandler.logFilePath()
   })
-  ipcMain.handle('read-current-log', async () => {
+  ipc.handle('read-current-log', async () => {
     return readFile(logHandler.logFilePath(), 'utf-8')
   })
 
-  ipcMain.on('get-config-path', ev => {
+  ipc.on('get-config-path', ev => {
     ev.returnValue = getConfigPath().split(sep).join(posix.sep)
   })
 
-  ipcMain.on('get-rc-config', ev => {
+  ipc.on('get-rc-config', ev => {
     ev.returnValue = app.rc
   })
 
-  ipcMain.on('get-runtime-info', ev => {
+  ipc.on('get-runtime-info', ev => {
     const info: RuntimeInfo = {
       isMac: platform() === 'darwin',
       isAppx: appx,
@@ -218,14 +223,14 @@ export function init(cwd: string, logHandler: LogHandler) {
     ev.returnValue = info
   })
 
-  ipcMain.on('app-get-path', (ev, arg) => {
+  ipc.on('app-get-path', (ev, arg) => {
     ev.returnValue = app.getPath(arg)
   })
 
   /**
    * https://www.electronjs.org/docs/latest/api/system-preferences#systempreferencesgetmediaaccessstatusmediatype-windows-macos
    */
-  ipcMain.handle('checkMediaAccess', (_ev, mediaType: MediaType) => {
+  ipc.handle('checkMediaAccess', (_ev, mediaType: MediaType) => {
     if (!systemPreferences.getMediaAccessStatus) {
       return new Promise(resolve => {
         resolve('unknown')
@@ -243,7 +248,7 @@ export function init(cwd: string, logHandler: LogHandler) {
   /**
    * https://www.electronjs.org/docs/latest/api/system-preferences#systempreferencesaskformediaaccessmediatype-macos
    */
-  ipcMain.handle(
+  ipc.handle(
     'askForMediaAccess',
     (_ev, mediaType: MediaType): Promise<boolean | undefined> => {
       if (systemPreferences.askForMediaAccess) {
@@ -259,7 +264,7 @@ export function init(cwd: string, logHandler: LogHandler) {
     }
   )
 
-  ipcMain.handle('fileChooser', async (_ev, options) => {
+  ipc.handle('fileChooser', async (_ev, options) => {
     if (!mainWindow.window) {
       throw new Error('window does not exist, this should never happen')
     }
@@ -269,7 +274,7 @@ export function init(cwd: string, logHandler: LogHandler) {
   })
 
   let lastSaveDialogLocation: string | undefined = undefined
-  ipcMain.handle(
+  ipc.handle(
     'saveFile',
     async (_ev, pathToSource: string, filename: string) => {
       if (!mainWindow.window) {
@@ -310,7 +315,7 @@ export function init(cwd: string, logHandler: LogHandler) {
     }
   )
   // Mostly a copy-paste of `saveFile` above.
-  ipcMain.handle(
+  ipc.handle(
     'saveFiles',
     async (_ev, ...args: Parameters<Runtime['downloadFiles']>) => {
       const files = args[0]
@@ -404,11 +409,11 @@ export function init(cwd: string, logHandler: LogHandler) {
     }
   )
 
-  ipcMain.handle('get-desktop-settings', async _ev => {
+  ipc.handle('get-desktop-settings', async _ev => {
     return DesktopSettings.state
   })
 
-  ipcMain.handle(
+  ipc.handle(
     'set-desktop-setting',
     async (
       _ev,
@@ -437,31 +442,28 @@ export function init(cwd: string, logHandler: LogHandler) {
     }
   )
 
-  ipcMain.handle('get-autostart-state', () => {
+  ipc.handle('get-autostart-state', () => {
     return getAutostartState()
   })
 
-  ipcMain.handle(
-    'app.setBadgeCountAndTrayIconIndicator',
-    (_, count: number) => {
-      app.setBadgeCount(count)
-      set_has_unread(count !== 0)
-    }
-  )
+  ipc.handle('app.setBadgeCountAndTrayIconIndicator', (_, count: number) => {
+    app.setBadgeCount(count)
+    set_has_unread(count !== 0)
+  })
 
-  ipcMain.handle('app.writeTempFileFromBase64', (_ev, name, content) =>
+  ipc.handle('app.writeTempFileFromBase64', (_ev, name, content) =>
     writeTempFileFromBase64(name, content)
   )
-  ipcMain.handle('app.writeTempFile', (_ev, name, content) =>
+  ipc.handle('app.writeTempFile', (_ev, name, content) =>
     writeTempFile(name, content)
   )
-  ipcMain.handle('app.copyFileToInternalTmpDir', (_ev, name, pathToFile) => {
+  ipc.handle('app.copyFileToInternalTmpDir', (_ev, name, pathToFile) => {
     return copyFileToInternalTmpDir(name, pathToFile)
   })
-  ipcMain.handle('app.removeTempFile', (_ev, path) => removeTempFile(path))
-  ipcMain.handle('app.deleteSticker', (_ev, path) => deleteSticker(path))
+  ipc.handle('app.removeTempFile', (_ev, path) => removeTempFile(path))
+  ipc.handle('app.deleteSticker', (_ev, path) => deleteSticker(path))
 
-  ipcMain.handle('electron.shell.openExternal', (_ev, url) => {
+  ipc.handle('electron.shell.openExternal', (_ev, url) => {
     if (
       url.toLowerCase().startsWith('http:') ||
       url.toLowerCase().startsWith('https:')
@@ -474,14 +476,14 @@ export function init(cwd: string, logHandler: LogHandler) {
     }
   })
 
-  ipcMain.handle('electron.shell.openPath', (_ev, path) => {
+  ipc.handle('electron.shell.openPath', (_ev, path) => {
     // map sandbox path if on Windows
     return shell.openPath(mapPackagePath(path))
   })
-  ipcMain.handle('electron.clipboard.readText', () => {
+  ipc.handle('electron.clipboard.readText', () => {
     return clipboard.readText()
   })
-  ipcMain.handle('electron.clipboard.readImage', () => {
+  ipc.handle('electron.clipboard.readImage', () => {
     const image = clipboard.readImage()
 
     // Electron just returns an empty base64 string (for example
@@ -493,14 +495,14 @@ export function init(cwd: string, logHandler: LogHandler) {
 
     return image.toDataURL()
   })
-  ipcMain.handle('electron.clipboard.writeText', (_ev, text) => {
+  ipc.handle('electron.clipboard.writeText', (_ev, text) => {
     return clipboard.writeText(text)
   })
-  ipcMain.handle('electron.clipboard.writeImage', (_ev, path) => {
+  ipc.handle('electron.clipboard.writeImage', (_ev, path) => {
     return clipboard.writeImage(nativeImage.createFromPath(path))
   })
 
-  ipcMain.handle(
+  ipc.handle(
     'saveBackgroundImage',
     async (_ev, file: string, isDefaultPicture: boolean) => {
       const originalFilePath = !isDefaultPicture
@@ -522,7 +524,7 @@ export function init(cwd: string, logHandler: LogHandler) {
     }
   )
 
-  ipcMain.handle(
+  ipc.handle(
     'openMessageHTML',
     async (
       _ev,
@@ -546,7 +548,7 @@ export function init(cwd: string, logHandler: LogHandler) {
     }
   )
 
-  ipcMain.handle(
+  ipc.handle(
     'startOutgoingVideoCall',
     (
       _ev,
@@ -557,7 +559,7 @@ export function init(cwd: string, logHandler: LogHandler) {
       startOutgoingVideoCall(accountId, chatId, param)
     }
   )
-  ipcMain.handle(
+  ipc.handle(
     'openIncomingVideoCallWindow',
     (_ev, ...args: Parameters<Runtime['openIncomingVideoCallWindow']>) => {
       openIncomingVideoCallWindow(...args)
