@@ -114,7 +114,7 @@ export function init(cwd: string, logHandler: LogHandler) {
     rawApp.exit(1)
   }
 
-  new DCWebxdc(dcController)
+  new DCWebxdc(dcController.jsonrpcRemote)
 
   ipcMain.once('ipcReady', _e => {
     app.ipcReady = true

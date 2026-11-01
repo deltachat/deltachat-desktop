@@ -12,7 +12,7 @@ import { join } from 'path'
 import { platform } from 'os'
 import { readdir, stat, rmdir, writeFile } from 'fs/promises'
 import { existsSync } from 'fs'
-import type DeltaChatController from './controller.js'
+import type { JRPCDeltaChat } from './controller.js'
 import { getLogger } from '@deltachat-desktop/shared/logger.js'
 import { getConfigPath, htmlDistDir } from '../application-constants.js'
 import { truncateText } from '@deltachat-desktop/shared/util.js'
@@ -129,7 +129,7 @@ const DEFAULT_SIZE_MAP: Size = {
  */
 
 export default class DCWebxdc {
-  constructor(private readonly controller: DeltaChatController) {
+  constructor(private readonly jsonrpcRemote: JRPCDeltaChat) {
     let dummyProxy_: { server: Server; url: string } | undefined
     const getDummyProxyUrl = async () => {
       if (dummyProxy_) {
@@ -894,11 +894,10 @@ export default class DCWebxdc {
   } // end of DeltaChatController constructor
 
   /**
-   * convenience accessor for rpc calls to access the RawClient
-   * of jsonrpcRemote of the injected DeltaChatController
+   * convenience accessor for rpc calls to access the RawClient of jsonrpcRemote
    */
   get rpc() {
-    return this.controller.jsonrpcRemote.rpc
+    return this.jsonrpcRemote.rpc
   }
 
   async getLastBounds(
