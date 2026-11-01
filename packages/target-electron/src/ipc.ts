@@ -67,6 +67,7 @@ import {
 } from './windows/video-call.js'
 import { tx } from './load-translations.js'
 import { appName } from '@deltachat-desktop/shared/constants.js'
+import DCWebxdc from './deltachat/webxdc.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -113,6 +114,8 @@ export function init(cwd: string, logHandler: LogHandler) {
 
     rawApp.exit(1)
   }
+
+  new DCWebxdc(dcController)
 
   ipcMain.once('ipcReady', _e => {
     app.ipcReady = true

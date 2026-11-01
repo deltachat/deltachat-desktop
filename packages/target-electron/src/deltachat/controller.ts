@@ -11,7 +11,6 @@ import { getRPCServerPath } from '@deltachat/stdio-rpc-server'
 import { getLogger } from '@deltachat-desktop/shared/logger.js'
 import * as mainWindow from '../windows/main.js'
 import { ExtendedAppMainProcess } from '../types.js'
-import DCWebxdc from './webxdc.js'
 import { DesktopSettings } from '../desktop_settings.js'
 import { StdioServer } from './stdio_server.js'
 import rc_config from '../rc.js'
@@ -125,8 +124,6 @@ export default class DeltaChatController {
       log.info('Started accounts io.')
     }
   }
-
-  readonly webxdc = new DCWebxdc(this)
 }
 
 export function getRPCServerPath2(): string {
