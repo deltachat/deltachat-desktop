@@ -52,7 +52,9 @@ import { set_has_unread, updateTrayIcon } from './tray.js'
 import { openHtmlEmailWindow } from './windows/html_email.js'
 import { refresh } from './menu.js'
 import { appx, mapPackagePath } from './isAppx.js'
-import DeltaChatController, { getRPCServerPath2 } from './deltachat/controller.js'
+import DeltaChatController, {
+  getRPCServerPath2,
+} from './deltachat/controller.js'
 import { BuildInfo } from './get-build-info.js'
 import { updateContentProtectionOnAllActiveWindows } from './content-protection.js'
 import { MediaType, type Runtime } from '@deltachat-desktop/runtime-interface'
@@ -83,11 +85,9 @@ export const DCJsonrpcRemoteInitializedP = new Promise<
 /** returns shutdown function */
 export function init(cwd: string, logHandler: LogHandler) {
   let rpcServerPath: string | undefined
-  dcController = new DeltaChatController(cwd)
-
   try {
     rpcServerPath = getRPCServerPath2()
-    dcController.init(rpcServerPath)
+    dcController = new DeltaChatController(cwd, rpcServerPath)
   } catch (error) {
     log.critical(
       `Fatal: The ${appName} Module couldn't be loaded. Please check if all dependencies for deltachat-core are installed!`,
