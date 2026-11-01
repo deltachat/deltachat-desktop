@@ -1,11 +1,4 @@
-import {
-  app,
-  BrowserWindow,
-  protocol,
-  ipcMain,
-  session,
-  screen,
-} from 'electron/main'
+import { app, BrowserWindow, protocol, session, screen } from 'electron/main'
 import Mime from 'mime-types'
 import { Menu, nativeImage, dialog, IpcMainInvokeEvent } from 'electron'
 import { join } from 'path'
@@ -819,6 +812,11 @@ export default class DCWebxdc {
     )
 
     mainWindowIpc.handle(
+      'delete_webxdc_account_data',
+      (_ev, accountId: number) => deleteWebxdcAccountData(accountId)
+    )
+
+    mainWindowIpc.handle(
       'open-maps-webxdc',
       async (evt, accountId: number, chatId?: number, contactId?: number) => {
         // the integration is stored in the account, so an outdated
@@ -1272,7 +1270,7 @@ function adjustSize(size: Size): Size {
   }
 }
 
-ipcMain.handle('delete_webxdc_account_data', async (_ev, accountId: number) => {
+async function deleteWebxdcAccountData(accountId: number) {
   // we can not delete the directory as it might still be used and that would be a problem on windows
   // so the second next best thing we can do is telling electron to clear the data, even though it won't delete everything
   async function clearData(session: Electron.Session) {
@@ -1294,4 +1292,4 @@ ipcMain.handle('delete_webxdc_account_data', async (_ev, accountId: number) => {
       log.error('failed to clear webxdc session data', error)
     }
   }
-})
+}
