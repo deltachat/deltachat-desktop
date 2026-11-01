@@ -1,4 +1,5 @@
 import { expect, type Page } from '@playwright/test'
+import path from 'path'
 
 import {
   groupName,
@@ -83,6 +84,23 @@ test('create group', async () => {
     .getByTestId(`account-item-${userB.id}`)
     .locator('.styles_module_accountBadgeIcon')
   await expect(badgeNumber).toHaveText('1')
+})
+
+test('Select group image by clicking the avatar when creating a group', async () => {
+  await switchToProfile(page, existingProfiles[0].id)
+  await page.locator('#new-chat-button').click()
+  await page.locator('#newgroup button').click()
+
+  const fileChooserPromise = page.waitForEvent('filechooser')
+  await page.getByRole('button', { name: 'Select Group Image' }).click()
+  const fileChooser = await fileChooserPromise
+  await fileChooser.setFiles(
+    path.join(import.meta.dirname, '..', 'fixtures', 'Deltachat-Logo.png')
+  )
+  await page.getByRole('button', { name: 'Save' }).click()
+  await expect(
+    page.getByRole('button', { name: 'Select Group Image' }).locator('img')
+  ).toBeVisible()
 })
 
 test('check "New Email" option presence', async ({ isChatmail }) => {
@@ -509,6 +527,50 @@ test('Clear group description', async () => {
   // Description should not be visible anymore
   await expect(descriptionDiv).not.toBeVisible()
 
+  await page.getByTestId('view-group-dialog-header-close').click()
+})
+
+test('Set, edit and remove group image', async () => {
+  const userA = existingProfiles[0]
+
+  await switchToProfile(page, userA.id)
+  await page
+    .locator('.chat-list .chat-list-item')
+    .filter({ hasText: groupName + ' edited' })
+    .click()
+  await page.getByTestId('chat-info-button').click()
+
+  // clicking the avatar in the edit dialog selects a new image
+  await page.getByTestId('view-group-menu').click()
+  await page.getByTestId('view-group-edit').click()
+  const fileChooserPromise = page.waitForEvent('filechooser')
+  await page.getByRole('button', { name: 'Change Group Image' }).click()
+  const fileChooser = await fileChooserPromise
+  await fileChooser.setFiles(
+    path.join(import.meta.dirname, '..', 'fixtures', 'Deltachat-Logo.png')
+  )
+  await page.getByRole('button', { name: 'Save' }).click()
+  await expect(
+    page.getByRole('button', { name: 'Remove Group Image' })
+  ).toBeVisible()
+  await page.getByTestId('ok').click()
+
+  // the enlarged avatar offers to edit the group
+  const groupDialog = page.getByTestId('view-group-dialog')
+  await groupDialog.getByRole('button', { name: groupName + ' edited' }).click()
+  await page.getByRole('button', { name: 'Edit', exact: true }).click()
+  await expect(page.locator('#groupname')).toBeVisible()
+
+  await page.getByRole('button', { name: 'Remove Group Image' }).click()
+  await expect(
+    page.getByRole('button', { name: 'Remove Group Image' })
+  ).not.toBeVisible()
+  await expect(
+    page.getByRole('button', { name: 'Change Group Image' })
+  ).toBeVisible()
+  await page.getByTestId('ok').click()
+
+  await expect(groupDialog.locator('.very-large img')).not.toBeVisible()
   await page.getByTestId('view-group-dialog-header-close').click()
 })
 
