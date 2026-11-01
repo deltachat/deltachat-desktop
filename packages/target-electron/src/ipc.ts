@@ -68,6 +68,7 @@ import { initIpc as translationsInitIpc, tx } from './load-translations.js'
 import { initIpc as themesInitIpc } from './themes.js'
 import { appName } from '@deltachat-desktop/shared/constants.js'
 import DCWebxdc from './deltachat/webxdc.js'
+import { onFrontendReady } from './open_url.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -127,6 +128,8 @@ export function init(
     app.ipcReady = true
     app.emit('ipcReady')
   })
+
+  ipc.once('frontendReady', onFrontendReady)
 
   ipc.on('handleLogMessage', (_e, channel, level, stacktrace, ...args) =>
     logHandler.log(channel, level, stacktrace, ...args)

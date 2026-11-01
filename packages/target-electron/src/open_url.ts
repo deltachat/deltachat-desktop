@@ -1,4 +1,4 @@
-import { app as rawApp, ipcMain } from 'electron'
+import { app as rawApp } from 'electron'
 import { readFile } from 'fs/promises'
 import { basename } from 'path'
 import { getLogger } from '@deltachat-desktop/shared/logger.js'
@@ -26,7 +26,12 @@ if (platform() !== 'linux' && !process.env.PORTABLE_EXECUTABLE_DIR) {
 }
 
 let frontend_ready = false
-ipcMain.once('frontendReady', () => {
+
+export let onFrontendReady: () => void
+const frontendReadyPromise = new Promise<void>(r => {
+  onFrontendReady = r
+})
+frontendReadyPromise.then(() => {
   frontend_ready = true
 })
 
@@ -46,7 +51,7 @@ export const open_url = function (url: string) {
     if (frontend_ready) {
       sendToFrontend(url)
     } else {
-      ipcMain.once('frontendReady', () => {
+      frontendReadyPromise.then(() => {
         sendToFrontend(url)
       })
     }
@@ -87,7 +92,7 @@ async function handleWebxdcFileOpen(path: string) {
     await new Promise(res => app.once('ipcReady' as any, res))
   }
   if (!frontend_ready) {
-    await new Promise(res => ipcMain.once('frontendReady', res))
+    await frontendReadyPromise
   }
   send(
     'webxdc.sendToChat',
