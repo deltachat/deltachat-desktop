@@ -314,7 +314,7 @@ async function onReady([_appReady, _loadedState, _appx, _webxdc_cleanup]: [
     }
   }
 
-  const loadMainWindow = mainWindow.init({
+  const { loadMainWindow } = mainWindow.init({
     hidden: app.rc['minimized'],
     hideMenuBar: DesktopSettings.state.hideMenuBar,
   })

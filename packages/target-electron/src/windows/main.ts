@@ -43,9 +43,12 @@ export function init(options: { hidden: boolean; hideMenuBar: boolean }) {
   if (window) {
     window.show()
 
-    // Probably already loaded, so noop.
-    return () => {
-      log.warn('loadMainWindow called after second call to `init`')
+    return {
+      mainWindow: window,
+      // Probably already loaded, so noop.
+      loadMainWindow: () => {
+        log.warn('loadMainWindow called after second call to `init`')
+      },
     }
   }
 
@@ -270,7 +273,11 @@ export function init(options: { hidden: boolean; hideMenuBar: boolean }) {
     }
   )
 
-  return () => mainWindow.loadFile(join(htmlDistDir(), defaults.main))
+  return {
+    mainWindow,
+    loadMainWindow: () =>
+      mainWindow.loadFile(join(htmlDistDir(), defaults.main)),
+  }
 }
 
 async function promptUserAfterRendererCrash(
