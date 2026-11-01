@@ -696,16 +696,16 @@ const Composer = forwardRef<
                   {/* {draftState.viewType} */}
                   <DraftAttachment attachment={draftState} />
                   <div className='attachment-actions'>
-                    <CloseButton
-                      onClick={removeFile}
-                      aria-label={tx('remove_attachment')}
-                    />
                     {draftState.viewType === 'Image' && (
                       <EditButton
                         onClick={editImage}
                         aria-label={tx('edit_image')}
                       />
                     )}
+                    <CloseButton
+                      onClick={removeFile}
+                      aria-label={tx('remove_attachment')}
+                    />
                   </div>
                 </section>
               )}
