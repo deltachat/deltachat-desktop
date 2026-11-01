@@ -1,6 +1,6 @@
 import path from 'path'
 import fs from 'fs'
-import { app, ipcMain } from 'electron'
+import { app } from 'electron'
 
 import { getLogger } from '@deltachat-desktop/shared/logger.js'
 import {
@@ -101,14 +101,16 @@ function getLocaleMessages(file: string) {
   }
 }
 
-ipcMain.handle('getLocaleData', (_ev, locale?: string): LocaleData => {
-  if (locale) {
-    loadTranslations(locale)
-  }
-  return getCurrentLocaleDate()
-})
+export function initIpc(ipc: Electron.IpcMain) {
+  ipc.handle('getLocaleData', (_ev, locale?: string): LocaleData => {
+    if (locale) {
+      loadTranslations(locale)
+    }
+    return getCurrentLocaleDate()
+  })
 
-ipcMain.handle('setLocale', (_ev, locale: string) => {
-  setLanguage(locale)
-  refreshMenu()
-})
+  ipc.handle('setLocale', (_ev, locale: string) => {
+    setLanguage(locale)
+    refreshMenu()
+  })
+}
