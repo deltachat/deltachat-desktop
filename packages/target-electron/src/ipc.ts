@@ -64,7 +64,7 @@ import {
   startOutgoingVideoCall,
   openIncomingVideoCallWindow,
 } from './windows/video-call.js'
-import { tx } from './load-translations.js'
+import { initIpc as translationsInitIpc, tx } from './load-translations.js'
 import { appName } from '@deltachat-desktop/shared/constants.js'
 import DCWebxdc from './deltachat/webxdc.js'
 
@@ -227,6 +227,8 @@ export function init(
   ipc.on('app-get-path', (ev, arg) => {
     ev.returnValue = app.getPath(arg)
   })
+
+  translationsInitIpc(ipc)
 
   /**
    * https://www.electronjs.org/docs/latest/api/system-preferences#systempreferencesgetmediaaccessstatusmediatype-windows-macos
