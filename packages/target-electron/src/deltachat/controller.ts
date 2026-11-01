@@ -48,29 +48,17 @@ export default class DeltaChatController {
    * Created and owned by ipc on the backend
    */
 
-  _inner_account_manager: StdioServer | null = null
-  get account_manager(): Readonly<StdioServer> {
-    if (!this._inner_account_manager) {
-      throw new Error('account manager is not defined (yet?)')
-    }
-    return this._inner_account_manager
-  }
+  account_manager: StdioServer
+  jsonrpcRemote: JRPCDeltaChat
 
-  constructor(public cwd: string) {}
-
-  _jsonrpcRemote: JRPCDeltaChat | null = null
-  get jsonrpcRemote(): Readonly<JRPCDeltaChat> {
-    if (!this._jsonrpcRemote) {
-      throw new Error('_jsonrpcRemote is not defined (yet?)')
-    }
-    return this._jsonrpcRemote
-  }
-
-  init(serverPath: string) {
+  constructor(
+    public cwd: string,
+    serverPath: string
+  ) {
     log.debug('Initiating DeltaChatNode')
     log.info('using deltachat-rpc-server at', { serverPath })
 
-    this._inner_account_manager = new StdioServer(
+    this.account_manager = new StdioServer(
       response => {
         try {
           // The `main-` in the ID prefix signifies that this is a response
@@ -97,7 +85,7 @@ export default class DeltaChatController {
             if (isEventResponse(result[0])) {
               /** Handle {@linkcode RawClient.getNextEventBatch} */
               for (const event of result) {
-                handleEventResponse(event, this._jsonrpcRemote)
+                handleEventResponse(event, this.jsonrpcRemote)
               }
             }
           } catch (_error) {
@@ -123,7 +111,7 @@ export default class DeltaChatController {
       this.account_manager.send(message)
     })
 
-    this._jsonrpcRemote = new JRPCDeltaChat(
+    this.jsonrpcRemote = new JRPCDeltaChat(
       mainProcessTransport,
       // Do NOT start calling `rpc.getNextEvent`.
       // Because there can be only one consumer of
@@ -168,7 +156,7 @@ function isEventResponse(
 
 function handleEventResponse(
   result: T.Event,
-  jsonrpcRemote_: DeltaChatController['_jsonrpcRemote']
+  jsonrpcRemote_: DeltaChatController['jsonrpcRemote']
 ): void {
   // A workaround.
   // Intercept the events that go to the renderer
@@ -182,26 +170,24 @@ function handleEventResponse(
   //
   // The code is copy-pasted from
   // https://github.com/chatmail/core/blob/df0c0c47bacabfb8dcb4a5ea5edd92dc0652e0b3/deltachat-jsonrpc/typescript/src/client.ts#L56-L70
-  if (jsonrpcRemote_) {
-    type JRPCDeltaChatWithPrivateExposed = {
-      [P in keyof typeof jsonrpcRemote_]: (typeof jsonrpcRemote_)[P]
-    } & {
-      contextEmitters: (typeof jsonrpcRemote_)['contextEmitters']
-    }
-    const jsonrpcRemote =
-      jsonrpcRemote_ as unknown as JRPCDeltaChatWithPrivateExposed
-    jsonrpcRemote.emit(
+  type JRPCDeltaChatWithPrivateExposed = {
+    [P in keyof typeof jsonrpcRemote_]: (typeof jsonrpcRemote_)[P]
+  } & {
+    contextEmitters: (typeof jsonrpcRemote_)['contextEmitters']
+  }
+  const jsonrpcRemote =
+    jsonrpcRemote_ as unknown as JRPCDeltaChatWithPrivateExposed
+  jsonrpcRemote.emit(
+    result.event.kind,
+    ...([result.contextId, result.event] as any)
+  )
+  jsonrpcRemote.emit('ALL', result.contextId, result.event)
+  if (jsonrpcRemote.contextEmitters[result.contextId]) {
+    jsonrpcRemote.contextEmitters[result.contextId].emit(
       result.event.kind,
-      ...([result.contextId, result.event] as any)
+      result.event
     )
-    jsonrpcRemote.emit('ALL', result.contextId, result.event)
-    if (jsonrpcRemote.contextEmitters[result.contextId]) {
-      jsonrpcRemote.contextEmitters[result.contextId].emit(
-        result.event.kind,
-        result.event
-      )
-      jsonrpcRemote.contextEmitters[result.contextId].emit('ALL', result.event)
-    }
+    jsonrpcRemote.contextEmitters[result.contextId].emit('ALL', result.event)
   }
 
   const { event, contextId } = result
