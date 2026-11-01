@@ -1,4 +1,4 @@
-import { app as rawApp, ipcMain } from 'electron'
+import { app as rawApp } from 'electron'
 import {
   yerpc,
   BaseDeltaChat,
@@ -52,7 +52,8 @@ export default class DeltaChatController {
 
   constructor(
     public cwd: string,
-    serverPath: string
+    serverPath: string,
+    mainWindowIpc: Electron.BrowserWindow['webContents']['ipc']
   ) {
     log.debug('Initiating DeltaChatNode')
     log.info('using deltachat-rpc-server at', { serverPath })
@@ -106,7 +107,7 @@ export default class DeltaChatController {
       this.account_manager.send(JSON.stringify(message))
     })
 
-    ipcMain.on('json-rpc-request', (_ev, message) => {
+    mainWindowIpc.on('json-rpc-request', (_ev, message) => {
       this.account_manager.send(message)
     })
 

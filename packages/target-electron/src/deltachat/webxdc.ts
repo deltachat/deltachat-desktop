@@ -129,7 +129,10 @@ const DEFAULT_SIZE_MAP: Size = {
  */
 
 export default class DCWebxdc {
-  constructor(private readonly jsonrpcRemote: JRPCDeltaChat) {
+  constructor(
+    private readonly jsonrpcRemote: JRPCDeltaChat,
+    mainWindowIpc: Electron.BrowserWindow['webContents']['ipc']
+  ) {
     let dummyProxy_: { server: Server; url: string } | undefined
     const getDummyProxyUrl = async () => {
       if (dummyProxy_) {
@@ -760,13 +763,13 @@ export default class DCWebxdc {
     }
 
     // actual webxdc instances
-    ipcMain.handle('open-webxdc', openWebxdc)
+    mainWindowIpc.handle('open-webxdc', openWebxdc)
 
-    ipcMain.handle('close-all-webxdc', () => {
+    mainWindowIpc.handle('close-all-webxdc', () => {
       this._closeAll()
     })
 
-    ipcMain.handle(
+    mainWindowIpc.handle(
       'webxdc:status-update',
       (_ev, accountId: number, instanceId: number) => {
         const instance = open_apps[`${accountId}.${instanceId}`]
@@ -776,7 +779,7 @@ export default class DCWebxdc {
       }
     )
 
-    ipcMain.handle(
+    mainWindowIpc.handle(
       'webxdc:realtime-data',
       async (_ev, accountId: number, instanceId: number, payload: number[]) => {
         const instance = open_apps[`${accountId}.${instanceId}`]
@@ -790,7 +793,7 @@ export default class DCWebxdc {
       }
     )
 
-    ipcMain.handle(
+    mainWindowIpc.handle(
       'webxdc:message-changed',
       async (_ev, accountId: number, instanceId: number) => {
         const instance = open_apps[`${accountId}.${instanceId}`]
@@ -805,7 +808,7 @@ export default class DCWebxdc {
       }
     )
 
-    ipcMain.handle(
+    mainWindowIpc.handle(
       'webxdc:instance-deleted',
       async (_ev, accountId: number, instanceId: number | null) => {
         if (instanceId !== null) {
@@ -815,7 +818,7 @@ export default class DCWebxdc {
       }
     )
 
-    ipcMain.handle(
+    mainWindowIpc.handle(
       'open-maps-webxdc',
       async (evt, accountId: number, chatId?: number, contactId?: number) => {
         // the integration is stored in the account, so an outdated
