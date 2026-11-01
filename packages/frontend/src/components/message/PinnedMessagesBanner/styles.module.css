@@ -67,6 +67,21 @@
   opacity: 0.8;
 }
 
+.webxdcText {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  min-width: 0;
+}
+
+.webxdcSummary {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 0.85em;
+  opacity: 0.6;
+}
+
 .pinIcon {
   flex-shrink: 0;
   width: 16px;
@@ -82,15 +97,5 @@
 .startButton {
   flex-shrink: 0;
   margin-inline: 8px;
-  padding-block: 4px;
-  padding-inline: 14px;
-  border: none;
-  border-radius: 50px;
-  background-color: var(--buttonPrimaryBackground);
-  color: var(--buttonPrimaryText);
-  cursor: pointer;
-}
-
-.startButton:hover {
-  background-color: var(--buttonPrimaryHover);
+  font-size: 14px;
 }

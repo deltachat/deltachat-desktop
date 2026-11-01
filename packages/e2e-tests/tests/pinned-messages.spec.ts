@@ -218,6 +218,40 @@ test('unpin a message', async () => {
   await expect(getBanner(page)).not.toBeVisible()
 })
 
+test('banner does not show a "Forwarded" hint', async () => {
+  const userA = getUser(0, existingProfiles)
+  const userB = getUser(1, existingProfiles)
+  const messageText = 'message to forward and pin'
+
+  await switchToProfile(page, userA.id)
+  await sendMessage(page, userB.name, messageText)
+
+  await getMessage(page, messageText).locator('.message').click({
+    button: 'right',
+  })
+  await page
+    .getByRole('menu')
+    .getByRole('menuitem', { name: 'Forward' })
+    .click()
+  await page
+    .getByRole('dialog')
+    .locator('.chat-list-item')
+    .filter({ hasText: userB.name })
+    .click()
+  await page.getByTestId('confirm-dialog').getByTestId('confirm').click()
+  const forwardedMessage = getMessage(page, messageText).last()
+  await expect(forwardedMessage).toContainText('Forwarded')
+
+  await forwardedMessage.locator('.message').click({ button: 'right' })
+  await page.getByRole('menu').getByRole('menuitem', { name: 'Pin' }).click()
+  await page
+    .getByRole('dialog')
+    .getByRole('button', { name: 'Pin for Everyone' })
+    .click()
+  await expect(getBanner(page)).toContainText(messageText)
+  await expect(getBanner(page)).not.toContainText('Forwarded')
+})
+
 test('banner shows a start button for a pinned webxdc app', async () => {
   const userA = getUser(0, existingProfiles)
   const userB = getUser(1, existingProfiles)
@@ -247,6 +281,7 @@ test('banner shows a start button for a pinned webxdc app', async () => {
     .getByRole('button', { name: 'Pin for Everyone' })
     .click()
   await expect(getBanner(page)).toContainText(appName)
+  await expect(getBanner(page).locator('img')).toBeVisible()
   await expect(
     getBanner(page).getByRole('button', { name: 'Start' })
   ).toBeVisible()

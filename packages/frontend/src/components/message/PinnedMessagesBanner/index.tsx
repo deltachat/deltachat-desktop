@@ -7,11 +7,14 @@ import { useRpcFetch } from '../../../hooks/useFetch'
 import useMessage from '../../../hooks/chat/useMessage'
 import usePinnedMessages from '../../../hooks/chat/usePinnedMessages'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
+import Button from '../../Button'
 import { openWebxdc } from '../messageFunctions'
 
 import styles from './styles.module.css'
 
 const MAX_POSITION_DOTS = 5
+/** The banner shows a single line only */
+const SUMMARY_APPROX_CHARS = 100
 
 type Props = {
   accountId: number
@@ -31,13 +34,36 @@ export default function PinnedMessagesBanner({ accountId, chatId }: Props) {
     BackendRemote.rpc.getMessage,
     shownId === null ? null : [accountId, shownId]
   )
+  const message =
+    messageFetch?.lingeringResult?.ok === true
+      ? messageFetch.lingeringResult.value
+      : null
+  const isWebxdc = message?.viewType === 'Webxdc'
+  const thumbnail =
+    message?.file &&
+    (message.viewType === 'Image' ||
+      message.viewType === 'Gif' ||
+      message.viewType === 'Sticker')
+      ? message.file
+      : null
+
+  // No "Forwarded" hint, as the sender isn't shown either.
+  // Show type emoji only if there is no thumbnail.
   const summaryFetch = useRpcFetch(
-    BackendRemote.rpc.getMessageNotificationInfo,
-    shownId === null ? null : [accountId, shownId]
+    BackendRemote.rpc.getMessageSummaryText,
+    shownId === null
+      ? null
+      : [accountId, shownId, false, thumbnail === null, SUMMARY_APPROX_CHARS]
+  )
+  const webxdcInfoFetch = useRpcFetch(
+    BackendRemote.rpc.getWebxdcInfo,
+    shownId === null || !isWebxdc ? null : [accountId, shownId]
   )
   const refresh = useEffectEvent(() => {
     messageFetch?.refresh()
     summaryFetch?.refresh()
+    // Changes of the app's document or summary also emit `MsgsChanged`.
+    webxdcInfoFetch?.refresh()
   })
   useEffect(() => {
     if (shownId === null) {
@@ -54,13 +80,13 @@ export default function PinnedMessagesBanner({ accountId, chatId }: Props) {
     return null
   }
 
-  const message =
-    messageFetch?.lingeringResult?.ok === true
-      ? messageFetch.lingeringResult.value
-      : null
   const summary =
     summaryFetch?.lingeringResult?.ok === true
       ? summaryFetch.lingeringResult.value
+      : null
+  const webxdcInfo =
+    isWebxdc && webxdcInfoFetch?.lingeringResult?.ok === true
+      ? webxdcInfoFetch.lingeringResult.value
       : null
   const index = pinnedIds.indexOf(shownId)
 
@@ -85,26 +111,46 @@ export default function PinnedMessagesBanner({ accountId, chatId }: Props) {
         <span className='visually-hidden'>
           {pinnedIds.length > 1 && ` ${index + 1}/${pinnedIds.length}`}
         </span>
-        {summary?.image && (
+        {thumbnail && (
           <img
             className={styles.thumbnail}
-            src={runtime.transformBlobURL(summary.image)}
+            src={runtime.transformBlobURL(thumbnail)}
             alt=''
           />
         )}
-        <span className={styles.summary}>{summary?.summaryText}</span>
-        {message?.viewType !== 'Webxdc' && (
-          <span className={styles.pinIcon} aria-hidden='true' />
+        {isWebxdc ? (
+          <>
+            <img
+              className={styles.thumbnail}
+              src={runtime.getWebxdcIconURL(accountId, message.id)}
+              alt=''
+            />
+            <span className={styles.webxdcText}>
+              <span className={styles.summary}>
+                {webxdcInfo?.document || webxdcInfo?.name}
+              </span>
+              {webxdcInfo?.summary && (
+                <span className={styles.webxdcSummary}>
+                  {webxdcInfo.summary}
+                </span>
+              )}
+            </span>
+          </>
+        ) : (
+          <>
+            <span className={styles.summary}>{summary}</span>
+            <span className={styles.pinIcon} aria-hidden='true' />
+          </>
         )}
       </button>
-      {message?.viewType === 'Webxdc' && (
-        <button
-          type='button'
+      {isWebxdc && (
+        <Button
           className={styles.startButton}
-          onClick={() => openWebxdc(message)}
+          styling='primary'
+          onClick={() => openWebxdc(message, webxdcInfo ?? undefined)}
         >
           {tx('start_app')}
-        </button>
+        </Button>
       )}
     </section>
   )
