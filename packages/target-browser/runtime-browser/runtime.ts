@@ -529,9 +529,6 @@ class BrowserRuntime implements Runtime {
   closeAllWebxdcInstances(): void {
     this.log.critical('Method not implemented.')
   }
-  restartApp(): void {
-    this.log.critical('Method not implemented.')
-  }
   private runtime_info: RuntimeInfo | null = null
   getRuntimeInfo(): RuntimeInfo {
     if (this.runtime_info === null) {
