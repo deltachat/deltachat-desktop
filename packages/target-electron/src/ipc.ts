@@ -63,6 +63,7 @@ import {
   startOutgoingVideoCall,
   openIncomingVideoCallWindow,
 } from './windows/video-call.js'
+import { initIpc as notificationsInitIpc } from './notifications.js'
 import { initIpc as translationsInitIpc, tx } from './load-translations.js'
 import { initIpc as themesInitIpc } from './themes.js'
 import { appName } from '@deltachat-desktop/shared/constants.js'
@@ -228,6 +229,7 @@ export function init(
     ev.returnValue = app.getPath(arg)
   })
 
+  notificationsInitIpc(ipc)
   translationsInitIpc(ipc)
   themesInitIpc(ipc)
 

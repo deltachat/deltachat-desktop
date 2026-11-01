@@ -1,5 +1,5 @@
 import { platform } from 'os'
-import { app, Notification, nativeImage, ipcMain } from 'electron'
+import { app, Notification, nativeImage } from 'electron'
 import { dialog } from 'electron/main'
 
 import * as mainWindow from './windows/main.js'
@@ -28,18 +28,20 @@ const log = getLogger('main/notifications')
 
 const isMac = platform() === 'darwin'
 
-if (Notification.isSupported()) {
-  ipcMain.handle('notifications.show', showNotification)
-  ipcMain.handle('notifications.clear', clearNotificationsForChat)
-  ipcMain.handle('notifications.clearAll', clearAll)
-  ipcMain.handle('notifications.clearAccount', clearAccount)
-  process.on('beforeExit', clearAll)
-} else {
-  // Register no-op handlers for notifications to silently fail when
-  // no notifications are supported
-  ipcMain.handle('notifications.show', () => {})
-  ipcMain.handle('notifications.clear', () => {})
-  ipcMain.handle('notifications.clearAll', () => {})
+export function initIpc(ipc: Electron.IpcMain) {
+  if (Notification.isSupported()) {
+    ipc.handle('notifications.show', showNotification)
+    ipc.handle('notifications.clear', clearNotificationsForChat)
+    ipc.handle('notifications.clearAll', clearAll)
+    ipc.handle('notifications.clearAccount', clearAccount)
+    process.on('beforeExit', clearAll)
+  } else {
+    // Register no-op handlers for notifications to silently fail when
+    // no notifications are supported
+    ipc.handle('notifications.show', () => {})
+    ipc.handle('notifications.clear', () => {})
+    ipc.handle('notifications.clearAll', () => {})
+  }
 }
 
 function createNotification(data: DcNotification): Notification {
