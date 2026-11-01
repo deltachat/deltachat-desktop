@@ -65,7 +65,6 @@ const removeUnusedMenuItems = (
 }
 
 const create = (win: BrowserWindow) => {
-  const enableSpellChecking = false
   const handleContextMenu = (_event: Event, props: todo) => {
     const { editFlags } = props
     const hasText = props.selectionText.trim().length > 0
@@ -75,15 +74,6 @@ const create = (win: BrowserWindow) => {
       [key: string]: () => MenuItemConstructorOptions
     } = {
       separator: () => ({ type: 'separator' }),
-      learnSpelling: () => ({
-        id: 'learnSpelling',
-        label: 'Learn Spelling',
-        visible: Boolean(props.isEditable && hasText && props.misspelledWord),
-        click() {
-          const target = webContents(win)
-          target.session.addWordToSpellCheckerDictionary(props.misspelledWord)
-        },
-      }),
       cut: () => ({
         id: 'cut',
         label: tx('global_menu_edit_cut_desktop'),
@@ -143,46 +133,7 @@ const create = (win: BrowserWindow) => {
       }),
     }
 
-    function word(suggestion: string) {
-      return {
-        id: 'dictionarySuggestions',
-        label: suggestion,
-        visible: Boolean(props.isEditable && hasText && props.misspelledWord),
-        click(menuItem: MenuItemConstructorOptions) {
-          if (menuItem.label) {
-            const target = webContents(win)
-            target.insertText(menuItem.label)
-          }
-        },
-      }
-    }
-
-    let dictionarySuggestions = []
-    if (enableSpellChecking) {
-      if (
-        hasText &&
-        props.misspelledWord &&
-        props.dictionarySuggestions.length > 0
-      ) {
-        dictionarySuggestions = props.dictionarySuggestions.map(
-          (suggestion: string) => word(suggestion)
-        )
-      } else {
-        dictionarySuggestions.push({
-          id: 'dictionarySuggestions',
-          label: 'No spelling suggestions found.',
-          visible: Boolean(hasText && props.misspelledWord),
-          enabled: false,
-        })
-      }
-    }
-
     let menuTemplate: MenuItem[] = [
-      dictionarySuggestions.length > 0 && defaultActions.separator(),
-      ...dictionarySuggestions,
-      defaultActions.separator(),
-      enableSpellChecking && defaultActions.learnSpelling(),
-      defaultActions.separator(),
       defaultActions.cut(),
       defaultActions.copy(),
       defaultActions.paste(),
