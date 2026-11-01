@@ -68,6 +68,7 @@ import { initIpc as themesInitIpc } from './themes.js'
 import { appName } from '@deltachat-desktop/shared/constants.js'
 import DCWebxdc from './deltachat/webxdc.js'
 import { onFrontendReady } from './open_url.js'
+import { onInitialized } from './jsonrpcRemoteInitializedP.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -79,10 +80,6 @@ let dcController: typeof DeltaChatController.prototype
 export function getDCJsonrpcRemote() {
   return dcController.jsonrpcRemote
 }
-let onInitialized: (val: DeltaChatController['jsonrpcRemote']) => void
-export const DCJsonrpcRemoteInitializedP = new Promise<
-  DeltaChatController['jsonrpcRemote']
->(r => (onInitialized = r))
 
 /** returns shutdown function */
 export function init(
