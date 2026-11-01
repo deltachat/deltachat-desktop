@@ -1,7 +1,7 @@
 import { existsSync, watchFile } from 'fs'
 import { readFile, readdir } from 'fs/promises'
 import { join, basename } from 'path'
-import { app as rawApp, ipcMain, nativeTheme } from 'electron'
+import { app as rawApp, nativeTheme } from 'electron'
 
 import { getCustomThemesPath, htmlDistDir } from './application-constants.js'
 import { ExtendedAppMainProcess } from './types.js'
@@ -177,14 +177,16 @@ If you have question or need help, feel free to ask in our forum https://support
   applyNativeThemeSource(DesktopSettings.state.activeTheme)
 }
 
-ipcMain.handle('themes.getActiveTheme', async () => {
-  try {
-    log.debug('theme', DesktopSettings.state.activeTheme)
-    return await loadTheme(DesktopSettings.state.activeTheme)
-  } catch (error) {
-    log.error('loading theme failed:', error)
-    return null
-  }
-})
+export function initIpc(ipc: Electron.IpcMain) {
+  ipc.handle('themes.getActiveTheme', async () => {
+    try {
+      log.debug('theme', DesktopSettings.state.activeTheme)
+      return await loadTheme(DesktopSettings.state.activeTheme)
+    } catch (error) {
+      log.error('loading theme failed:', error)
+      return null
+    }
+  })
 
-ipcMain.handle('themes.getAvailableThemes', getAvailableThemes)
+  ipc.handle('themes.getAvailableThemes', getAvailableThemes)
+}
