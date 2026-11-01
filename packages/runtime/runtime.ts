@@ -161,9 +161,6 @@ export interface Runtime {
     startWithCameraEnabled: boolean
   }): Promise<void>
 
-  // control app
-  restartApp(): void
-
   // translations
   /**
    * @param locale when `undefined`, get the current locale.

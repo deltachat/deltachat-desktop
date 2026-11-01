@@ -3,7 +3,7 @@ console.time('init')
 
 import { existsSync, mkdirSync, Stats, watchFile } from 'fs'
 import fsPromises from 'fs/promises'
-import { app as rawApp, dialog, ipcMain, protocol, clipboard } from 'electron'
+import { app as rawApp, dialog, protocol, clipboard } from 'electron'
 import { BrowserWindow } from 'electron/main'
 import rc from './rc.js'
 import contextMenu from './electron-context-menu.js'
@@ -634,8 +634,3 @@ import { BuildInfo } from './get-build-info.js'
 import { arch, platform } from 'os'
 import { appName } from '@deltachat-desktop/shared/constants.js'
 openUrlsAndFilesFromArgv(process.argv)
-
-ipcMain.handle('restart_app', async _ev => {
-  app.relaunch()
-  app.quit()
-})

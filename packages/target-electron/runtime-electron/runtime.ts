@@ -303,9 +303,6 @@ class ElectronRuntime implements Runtime {
   closeAllWebxdcInstances(): void {
     ipcBackend.invoke('close-all-webxdc')
   }
-  restartApp(): void {
-    ipcBackend.invoke('restart_app')
-  }
 
   getDesktopSettings(): Promise<DesktopSettingsType> {
     return ipcBackend.invoke('get-desktop-settings')
