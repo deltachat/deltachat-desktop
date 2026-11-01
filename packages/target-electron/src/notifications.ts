@@ -8,7 +8,7 @@ import type { DcNotification } from '@deltachat-desktop/shared/shared-types.js'
 import { getLogger } from '@deltachat-desktop/shared/logger.js'
 
 import type { NativeImage, IpcMainInvokeEvent } from 'electron'
-import { DCJsonrpcRemoteInitializedP } from './ipc.js'
+import { DCJsonrpcRemoteInitializedP } from './jsonrpcRemoteInitializedP.js'
 import { tx } from './load-translations.js'
 import { unknownErrorToString } from '@deltachat-desktop/shared/unknownErrorToString'
 import { appName } from '@deltachat-desktop/shared/constants.js'
