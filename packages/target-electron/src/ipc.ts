@@ -81,11 +81,11 @@ export const DCJsonrpcRemoteInitializedP = new Promise<
 >(r => (onInitialized = r))
 
 /** returns shutdown function */
-export async function init(cwd: string, logHandler: LogHandler) {
+export function init(cwd: string, logHandler: LogHandler) {
   dcController = new DeltaChatController(cwd)
 
   try {
-    await dcController.init()
+    dcController.init()
   } catch (error) {
     log.critical(
       `Fatal: The ${appName} Module couldn't be loaded. Please check if all dependencies for deltachat-core are installed!`,

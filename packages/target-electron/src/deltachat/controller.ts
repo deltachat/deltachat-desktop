@@ -68,10 +68,10 @@ export default class DeltaChatController {
     return this._jsonrpcRemote
   }
 
-  async init() {
+  init() {
     log.debug('Initiating DeltaChatNode')
     const allowCustomServerPath = rc_config['allow-custom-rpc-server-path']
-    let serverPath = await getRPCServerPath({
+    let serverPath = getRPCServerPath({
       // desktop should only use prebuilds normally
       disableEnvPath: !allowCustomServerPath,
       takeVersionFromPATH: allowCustomServerPath,
