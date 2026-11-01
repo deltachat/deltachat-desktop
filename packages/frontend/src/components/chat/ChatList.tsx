@@ -205,10 +205,8 @@ export default function ChatList(props: {
   } = props
   const isSearchActive = queryStr && queryStr !== ''
 
-  const { chatListIds, isChatLoaded, loadChats, chatCache } = useLogicChatPart(
-    queryStr,
-    showArchivedChats
-  )
+  const { chatListIds, isLoadedAndEmpty, isChatLoaded, loadChats, chatCache } =
+    useLogicChatPart(queryStr, showArchivedChats)
 
   const qrSearchResult = useQrSearchResult(accountId, queryStr ?? '')
 
@@ -398,6 +396,9 @@ export default function ChatList(props: {
               >
                 {translate_n('n_chats', chatListIds.length)}
               </div>
+            )}
+            {showArchivedChats && !isSearchActive && isLoadedAndEmpty && (
+              <p className='archive-empty-hint'>{tx('archive_empty_hint')}</p>
             )}
             {/* TODO RovingTabindex doesn't work well with virtualized
               lists, because the currently active element might get removed
@@ -888,11 +889,16 @@ function useLogicChatPart(
   const listFlags =
     showArchivedChats && queryStr?.length === 0 ? C.DC_GCL_ARCHIVED_ONLY : 0
 
-  const { chatListIds } = useChatList(listFlags, queryStr)
+  const { chatListIds, chatListFetch } = useChatList(listFlags, queryStr)
   const { isChatLoaded, loadChats, chatCache } =
     useLogicVirtualChatList(chatListIds)
 
-  return { chatListIds, isChatLoaded, loadChats, chatCache }
+  // Not derived from `chatListIds`, which is also empty while loading.
+  const isLoadedAndEmpty =
+    chatListFetch?.result?.ok === true &&
+    chatListFetch.result.value.length === 0
+
+  return { chatListIds, isLoadedAndEmpty, isChatLoaded, loadChats, chatCache }
 }
 
 function useMessageResults(

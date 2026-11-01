@@ -23,4 +23,11 @@
     border-bottom: var(--cli-search-result-divider-border-width) solid
       var(--cli-search-result-divider-border);
   }
+
+  .archive-empty-hint {
+    margin: 0;
+    padding: 20px 15px;
+    text-align: center;
+    color: var(--chat-list-item-summary-text);
+  }
 }
