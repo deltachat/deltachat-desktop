@@ -91,5 +91,17 @@
   },
   "webxdc_store_url_explain_2_desktop": {
     "message": "This is different from the same feature on Android and iOS.\nThis must be the path containing the xdcget-lock.json file."
+  },
+  "edit_image": {
+    "message": "Edit Image"
+  },
+  "discard_changes_question": {
+    "message": "Discard changes?"
+  },
+  "discard": {
+    "message": "Discard"
+  },
+  "reset_changes_question": {
+    "message": "Reset all changes?"
   }
 }
