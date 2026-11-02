@@ -116,11 +116,8 @@ const create = (win: BrowserWindow) => {
         id: 'copyLink',
         label: tx('menu_copy_link_to_clipboard'),
         visible: props.linkURL.length !== 0 && props.mediaType === 'none',
-        click() {
-          electron.clipboard.write({
-            bookmark: props.linkText,
-            text: props.linkURL,
-          })
+        async click() {
+          await electron.clipboard.writeText(props.linkURL)
         },
       }),
       copyImage: () => ({
