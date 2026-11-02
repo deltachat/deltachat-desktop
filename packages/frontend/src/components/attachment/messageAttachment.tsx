@@ -21,12 +21,12 @@ import { AudioPlayer } from '../AudioPlayer'
 import { NextVoiceMessagePlayerContext } from '../../contexts/NextVoiceMessagePlayerContext'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { AudioAttachment as GalleryAudioAttachment } from './galleryAttachment'
-import { T } from '@deltachat/jsonrpc-client'
 import { selectedAccountId } from '../../ScreenController'
 import { BackendRemote } from '../../backend-com'
 import { useRpcFetch } from '../../hooks/useFetch'
 import { useHasChanged2 } from '../../hooks/useHasChanged'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
+import { getImageDisplaySize } from './imageDisplaySize'
 
 type AttachmentProps = {
   text?: string
@@ -80,67 +80,6 @@ export default function Attachment({
 
   const maxStickerSize = 200
 
-  /**
-   * height has to be calculated before images are loaded to enable
-   * the virtual list to calculate the correct height of all messages
-   *
-   * if the image exceeds the maximal width or height it will be scaled down
-   * if the image exceeds the minimal width or height it will be scaled up
-   *
-   * if after resizing one dimension exceeds a maximum it will be cropped
-   * by css rules: max-width/max-height with object-fit: cover
-   */
-  const calculateHeight = (
-    message: Pick<
-      T.Message,
-      'dimensionsHeight' | 'dimensionsWidth' | 'viewType'
-    >
-  ): number => {
-    const minWidth = 200 // needed for readable footer & reactions
-    const minHeight = 50 // needed for readable footer
-    const maxLandscapeWidth = 450 // also set by css
-    const maxPortraitHeight = 450 // also set by css
-
-    if (message.viewType === 'Sticker') {
-      return maxStickerSize
-    }
-
-    const height = message.dimensionsHeight
-    const width = message.dimensionsWidth
-    const portrait = isPortrait(message)
-    let finalHeight: number
-    if (portrait) {
-      // limit height if needed
-      finalHeight = Math.min(height, maxPortraitHeight)
-      if (height < maxPortraitHeight) {
-        if ((finalHeight / height) * width < minWidth) {
-          // stretch image to have minWidth
-          finalHeight = (height / width) * minWidth
-        }
-      }
-    } else {
-      // make sure image is not wider than maxWidth
-      finalHeight = Math.min(height, (maxLandscapeWidth / width) * height)
-      if ((finalHeight / height) * width < minWidth) {
-        // stretch image to have minWidth
-        finalHeight = (height / width) * minWidth
-      }
-      if (finalHeight < minHeight) {
-        finalHeight = minHeight
-      }
-    }
-    return finalHeight
-  }
-
-  const isPortrait = (
-    message: Pick<T.Message, 'dimensionsHeight' | 'dimensionsWidth'>
-  ): boolean => {
-    if (message.dimensionsHeight === 0 || message.dimensionsWidth === 0) {
-      return false
-    }
-    return message.dimensionsHeight > message.dimensionsWidth
-  }
-
   const withCaption = Boolean(text)
   // For attachments which aren't full-frame
   const withContentBelow = withCaption
@@ -156,6 +95,13 @@ export default function Attachment({
     (isImage(message.viewType) || message.viewType === 'Sticker') &&
     !isOversizedImage
   ) {
+    const isSticker = message.viewType === 'Sticker'
+    const size = isSticker
+      ? {
+          width: maxStickerSize,
+          height: maxStickerSize,
+        }
+      : getImageDisplaySize(message.dimensionsWidth, message.dimensionsHeight)
     return (
       <button
         type='button'
@@ -169,12 +115,13 @@ export default function Attachment({
         <img
           className={classNames(
             'attachment-content',
-            isPortrait(message) ? 'portrait' : null,
-            message.viewType === 'Sticker' ? 'sticker' : null
+            isSticker ? 'sticker' : null
           )}
           src={runtime.transformBlobURL(message.file)}
-          height={calculateHeight(message)}
-          width={message.viewType === 'Sticker' ? maxStickerSize : undefined}
+          width={size.width}
+          height={size.height}
+          // keeps the ratio if the width shrinks with the message bubble
+          style={{ aspectRatio: `${size.width} / ${size.height}` }}
         />
       </button>
     )
