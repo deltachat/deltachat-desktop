@@ -2,6 +2,7 @@ import { copyFile, writeFile, mkdir, rm, readFile } from 'fs/promises'
 import {
   app as rawApp,
   clipboard,
+  ClipboardItem,
   dialog,
   nativeImage,
   shell,
@@ -492,23 +493,36 @@ export function init(
   ipc.handle('electron.clipboard.readText', () => {
     return clipboard.readText()
   })
-  ipc.handle('electron.clipboard.readImage', () => {
-    const image = clipboard.readImage()
+  ipc.handle('electron.clipboard.readImage', async () => {
+    for (const item of await clipboard.read()) {
+      const type = item.types.find(t => t.startsWith('image/'))
+      if (type == undefined) {
+        continue
+      }
 
-    // Electron just returns an empty base64 string (for example
-    // 'data:image/png;base64,' when no image was in the clipboard),
-    // we check that here and more conveniently return null instead
-    if (image.isEmpty()) {
-      return null
+      const blob = await item.getType(type)
+      if (!(blob instanceof Blob)) {
+        log.warn(
+          `clipboard item "${type}" is not a Blob, ignoring this item and proceeding`
+        )
+        continue
+      }
+
+      const base64 = Buffer.from(await blob.arrayBuffer()).toString('base64')
+      return `data:${type};base64,${base64}`
     }
-
-    return image.toDataURL()
+    return null
   })
   ipc.handle('electron.clipboard.writeText', (_ev, text) => {
     return clipboard.writeText(text)
   })
   ipc.handle('electron.clipboard.writeImage', (_ev, path) => {
-    return clipboard.writeImage(nativeImage.createFromPath(path))
+    const png = nativeImage.createFromPath(path).toPNG()
+    return clipboard.write([
+      new ClipboardItem({
+        'image/png': new Blob([new Uint8Array(png)], { type: 'image/png' }),
+      }),
+    ])
   })
 
   ipc.handle(

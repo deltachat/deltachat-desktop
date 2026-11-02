@@ -144,8 +144,8 @@ export class DeltaChatElectron {
    * (the main window blocks `page.evaluate`), so write via the main process.
    */
   async setClipboard(text: string) {
-    await this.app.evaluate(({ clipboard }, text) => {
-      clipboard.writeText(text)
+    await this.app.evaluate(async ({ clipboard }, text) => {
+      await clipboard.writeText(text)
     }, text)
   }
 
