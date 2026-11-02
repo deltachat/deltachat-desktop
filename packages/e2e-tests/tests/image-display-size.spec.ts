@@ -32,27 +32,48 @@ const imagesPath = path.join(import.meta.dirname, '..', 'fixtures', 'images')
 
 /**
  * `size` is the expected size of the image in px
- * with the default viewport (wide enough for 450px images)
+ * with the default viewport (wide enough for 450px images),
+ * `cropped` whether the cropped indicator must be shown
  */
 const cases = [
   // typical ratios are shown completely, scaled down to the maximum size
-  { file: '4x3_landscape_L_1280x960.png', size: [450, 338] },
-  { file: '9x20_portrait_L_576x1280.png', size: [203, 450] },
+  { file: '4x3_landscape_L_1280x960.png', size: [450, 338], cropped: false },
+  { file: '9x20_portrait_L_576x1280.png', size: [203, 450], cropped: false },
   // small images are scaled up to the minimum width
-  { file: '4x3_landscape_XS_48x36.png', size: [200, 150] },
-  { file: '9x16_portrait_XS_27x48.png', size: [200, 356] },
+  { file: '4x3_landscape_XS_48x36.png', size: [200, 150], cropped: false },
+  { file: '9x16_portrait_XS_27x48.png', size: [200, 356], cropped: false },
   // wide images: up to 4:1 they are shown completely, wider ones are cropped
-  { file: 'extreme_3x1_landscape_2000x667.png', size: [450, 150] },
-  { file: 'extreme_5x1_landscape_2000x400.png', size: [450, 113] },
-  { file: 'extreme_10x1_landscape_2000x200.png', size: [450, 113] },
-  { file: 'extreme_10x1_landscape_200x20.png', size: [200, 50] },
+  {
+    file: 'extreme_3x1_landscape_2000x667.png',
+    size: [450, 150],
+    cropped: false,
+  },
+  {
+    file: 'extreme_5x1_landscape_2000x400.png',
+    size: [450, 113],
+    cropped: true,
+  },
+  {
+    file: 'extreme_10x1_landscape_2000x200.png',
+    size: [450, 113],
+    cropped: true,
+  },
+  { file: 'extreme_10x1_landscape_200x20.png', size: [200, 50], cropped: true },
   // tall images: everything taller than 1:2.25 is cropped to 200x450
-  { file: 'extreme_1x3_portrait_667x2000.png', size: [200, 450] },
-  { file: 'extreme_1x3_portrait_67x200.png', size: [200, 450] },
-  { file: 'extreme_1x10_portrait_200x2000.png', size: [200, 450] },
+  {
+    file: 'extreme_1x3_portrait_667x2000.png',
+    size: [200, 450],
+    cropped: true,
+  },
+  { file: 'extreme_1x3_portrait_67x200.png', size: [200, 450], cropped: true },
+  {
+    file: 'extreme_1x10_portrait_200x2000.png',
+    size: [200, 450],
+    cropped: true,
+  },
   // small tall images must not get higher than the maximum height
   // when they are scaled up to the minimum width
-  { file: 'extreme_1x10_portrait_20x200.png', size: [200, 450] },
+  { file: 'extreme_1x10_portrait_20x200.png', size: [200, 450], cropped: true },
 ] as const
 
 test.beforeAll(async ({ browser }) => {
@@ -102,7 +123,7 @@ async function sendImage(file: string) {
   return page.locator(`.message[id="${id}"]`)
 }
 
-for (const { file, size } of cases) {
+for (const { file, size, cropped } of cases) {
   test(`image ${file} is displayed with ${size[0]}x${size[1]}`, async () => {
     const message = await sendImage(file)
     const image = message.locator('img.attachment-content')
@@ -111,6 +132,13 @@ for (const { file, size } of cases) {
     const box = await image.boundingBox()
     expect(box?.width).toBeCloseTo(size[0], 0)
     expect(box?.height).toBeCloseTo(size[1], 0)
+
+    const indicator = message.getByRole('img', { name: 'Image is cropped' })
+    if (cropped) {
+      await expect(indicator).toBeVisible()
+    } else {
+      await expect(indicator).toHaveCount(0)
+    }
   })
 }
 

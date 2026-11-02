@@ -26,7 +26,10 @@ import { BackendRemote } from '../../backend-com'
 import { useRpcFetch } from '../../hooks/useFetch'
 import { useHasChanged2 } from '../../hooks/useHasChanged'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
+import Icon from '../Icon'
 import { getImageDisplaySize } from './imageDisplaySize'
+
+import styles from './styles.module.css'
 
 type AttachmentProps = {
   text?: string
@@ -100,6 +103,7 @@ export default function Attachment({
       ? {
           width: maxStickerSize,
           height: maxStickerSize,
+          visibleFraction: 1,
         }
       : getImageDisplaySize(message.dimensionsWidth, message.dimensionsHeight)
     return (
@@ -123,6 +127,16 @@ export default function Attachment({
           // keeps the ratio if the width shrinks with the message bubble
           style={{ aspectRatio: `${size.width} / ${size.height}` }}
         />
+        {size.visibleFraction < 1 && (
+          <span
+            className={styles.croppedIndicator}
+            role='img'
+            aria-label={tx('image_cropped')}
+            title={tx('image_cropped')}
+          >
+            <Icon icon='open_in_full' coloring='currentColor' size={16} />
+          </span>
+        )}
       </button>
     )
   } else if (message.viewType === 'Video') {

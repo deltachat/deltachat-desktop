@@ -1,0 +1,11 @@
+.croppedIndicator {
+  position: absolute;
+  inset-block-start: 6px;
+  inset-inline-end: 6px;
+  display: flex;
+  padding: 3px;
+  border-radius: 4px;
+  /* same look as the metadata overlay on images */
+  background-color: #0000008f;
+  color: white;
+}
