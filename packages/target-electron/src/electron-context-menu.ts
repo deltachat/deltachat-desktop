@@ -65,14 +65,15 @@ const removeUnusedMenuItems = (
 }
 
 const create = (win: BrowserWindow) => {
-  const handleContextMenu = (_event: Event, props: todo) => {
+  const handleContextMenu = (
+    _event: Event,
+    props: Electron.ContextMenuParams
+  ) => {
     const { editFlags } = props
     const hasText = props.selectionText.trim().length > 0
-    const can = (type: todo) => editFlags[`can${type}`] && hasText
+    const can = (type: 'Cut' | 'Copy') => editFlags[`can${type}`] && hasText
 
-    const defaultActions: {
-      [key: string]: () => MenuItemConstructorOptions
-    } = {
+    const defaultActions = {
       separator: () => ({ type: 'separator' }),
       cut: () => ({
         id: 'cut',
@@ -128,7 +129,7 @@ const create = (win: BrowserWindow) => {
           webContents(win).copyImageAt(props.x, props.y)
         },
       }),
-    }
+    } satisfies { [key: string]: () => MenuItemConstructorOptions }
 
     let menuTemplate: MenuItem[] = [
       defaultActions.cut(),
