@@ -227,6 +227,9 @@ async function setFuses(context) {
     [FuseV1Options.RunAsNode]: false, // Disables ELECTRON_RUN_AS_NODE
     [FuseV1Options.EnableNodeOptionsEnvironmentVariable]: false, // Disables the NODE_OPTIONS environment variable
     [FuseV1Options.EnableNodeCliInspectArguments]: false, // Disables the --inspect and --inspect-brk family of CLI options
+    [FuseV1Options.EnableEmbeddedAsarIntegrityValidation]:
+      (isMac || context.electronPlatformName === 'win32') && !env['NO_ASAR'],
+    [FuseV1Options.OnlyLoadAppFromAsar]: !env['NO_ASAR'],
   })
   console.log('Successfully flipped configured fuses')
 }
