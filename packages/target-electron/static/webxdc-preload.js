@@ -250,8 +250,8 @@ class RealtimeListener {
       if (is_ready) {
         return
       }
-      api.selfAddr = Buffer.from(selfAddr, 'base64').toString('utf-8')
-      api.selfName = Buffer.from(selfName, 'base64').toString('utf-8')
+      api.selfAddr = new TextDecoder().decode(Uint8Array.fromBase64(selfAddr))
+      api.selfName = new TextDecoder().decode(Uint8Array.fromBase64(selfName))
       api.sendUpdateInterval = sendUpdateInterval
       api.sendUpdateMaxSize = sendUpdateMaxSize
       api.isAppSender = isAppSender
