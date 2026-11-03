@@ -78,6 +78,17 @@ function createNotification(data: DcNotification): Notification {
       // Also need this condition because we don't want to have the "reply" UI
       // for generic "<chat name>: 3 new messages" notifications.
       data.messageId !== 0,
+    // Note that `actions` don't work on macOS
+    // without `NSUserNotificationAlertStyle = alert`.
+    actions:
+      data.accountId !== 0 &&
+      data.chatId !== 0 &&
+      // We don't have a message to pass to `markseenMsgs`
+      // (which is responsible for sending read receipts),
+      // so hide the button.
+      data.messageId !== 0
+        ? [{ type: 'button', text: tx('mark_as_read') }]
+        : undefined,
     timeoutType: 'default',
   }
 
@@ -154,6 +165,34 @@ function showNotification(_event: IpcMainInvokeEvent, data: DcNotification) {
         ][messageId].filter(n => n !== notify)
       }
       closeNotification(notify)
+    })
+    notify.on('action', async details => {
+      log.info('notification button click', details.actionIndex)
+      if (details.actionIndex !== 0) {
+        log.error(
+          'notification button clicked, but we forgot to handle it, ignoring'
+        )
+        return
+      }
+
+      if (notifications[accountId]?.[chatId]?.[messageId]) {
+        notifications[accountId][chatId][messageId] = notifications[accountId][
+          chatId
+        ][messageId].filter(n => n !== notify)
+      }
+      closeNotification(notify)
+
+      try {
+        const jsonrpcRemote = await DCJsonrpcRemoteInitializedP
+        await Promise.all([
+          // This will also fire `MsgsNoticed`, which will remove
+          // other notifications of this chat.
+          jsonrpcRemote.rpc.marknoticedChat(accountId, chatId),
+          jsonrpcRemote.rpc.markseenMsgs(accountId, [messageId]),
+        ])
+      } catch (err) {
+        log.error('failed to mark chat as read from notification', err)
+      }
     })
     notify.on('close', () => {
       // on Window and Linux this can be triggered by system time out
