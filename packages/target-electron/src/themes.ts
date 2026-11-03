@@ -114,6 +114,32 @@ export function resolveThemeAddress(address: string): string {
   }
 }
 
+/**
+ * Make the UI that Electron or the OS renders (menus, title bar, scrollbars,
+ * `prefers-color-scheme`) follow the active Delta Chat theme instead of
+ * the system theme. On Linux the menu bar is not affected, because Electron
+ * takes its colors from the GTK theme.
+ */
+export async function applyNativeThemeSource(theme_address: string) {
+  if (theme_address === 'system') {
+    nativeTheme.themeSource = 'system'
+    return
+  }
+  try {
+    const themedata = await readFile(
+      resolveThemeAddress(theme_address),
+      'utf-8'
+    )
+    const darkOrLight = /--themeDarkOrLight:\s*(dark|light)/.exec(
+      themedata
+    )?.[1] as 'dark' | 'light' | undefined
+    nativeTheme.themeSource = darkOrLight ?? 'system'
+  } catch (error) {
+    log.error('failed to determine native theme source', error)
+    nativeTheme.themeSource = 'system'
+  }
+}
+
 export function acceptThemeCLI() {
   if (app.rc['theme']) {
     log.info(`trying to load theme from '${app.rc['theme']}'`)
@@ -148,6 +174,7 @@ If you have question or need help, feel free to ask in our forum https://support
   nativeTheme.on('updated', () => {
     mainWindow.send('theme-update')
   })
+  applyNativeThemeSource(DesktopSettings.state.activeTheme)
 }
 
 ipcMain.handle('themes.getActiveTheme', async () => {

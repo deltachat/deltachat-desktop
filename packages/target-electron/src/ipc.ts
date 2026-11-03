@@ -51,6 +51,7 @@ import {
 import { set_has_unread, updateTrayIcon } from './tray.js'
 import { openHtmlEmailWindow } from './windows/html_email.js'
 import { refresh } from './menu.js'
+import { applyNativeThemeSource } from './themes.js'
 import { appx, mapPackagePath } from './isAppx.js'
 import DeltaChatController from './deltachat/controller.js'
 import { BuildInfo } from './get-build-info.js'
@@ -426,6 +427,8 @@ export async function init(cwd: string, logHandler: LogHandler) {
         mainWindow.applyHideMenuBar(Boolean(value))
         // Refresh menu to update checkbox state when changed from Settings UI
         refresh()
+      } else if (key === 'activeTheme') {
+        await applyNativeThemeSource(String(value))
       }
 
       return true
