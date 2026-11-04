@@ -13,7 +13,7 @@ const log = getLogger('ChatContext')
 
 export type SelectChat = (nextAccountId: number, chatId: number) => void
 
-export type UnselectChat = () => void
+export type UnselectChat = (options?: { keepStorage?: boolean }) => void
 
 export type ChatContextValue = {
   /**
@@ -194,9 +194,22 @@ export const ChatProvider = ({
     [accountId, chatId, setChatId]
   )
 
-  const unselectChat = useCallback<UnselectChat>(() => {
-    setChatId(undefined)
-  }, [setChatId])
+  const unselectChat = useCallback<UnselectChat>(
+    options => {
+      setChatId(undefined)
+
+      if (options?.keepStorage !== true) {
+        if (accountId == undefined) {
+          log.warn(
+            `unselectChat: can't reset last selected chat storage: accountId is ${accountId}`
+          )
+        } else {
+          saveLastChatId(accountId, null)
+        }
+      }
+    },
+    [accountId, setChatId]
+  )
 
   // Callback ref pattern: keeping ref in sync for external callers
   unselectChatRef.current = unselectChat

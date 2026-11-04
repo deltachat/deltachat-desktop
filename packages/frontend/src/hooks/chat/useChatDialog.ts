@@ -94,7 +94,11 @@ export default function useChatDialog() {
         // @TODO: Check this:
         // Workaround event race where it tried to load already deleted
         // messages by unloading the chat first.
-        unselectChat()
+        unselectChat({
+          // Not super necessary because we will still `selectChat()`
+          // two lines below, but why not.
+          keepStorage: true,
+        })
         await BackendRemote.rpc.deleteMessages(accountId, messagesToDelete)
         selectChat(accountId, chatId)
       }

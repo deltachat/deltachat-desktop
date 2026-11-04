@@ -32,8 +32,12 @@ export async function getChatInfoByEmail(
   }
 }
 
-export async function saveLastChatId(accountId: number, chatId: number) {
-  await BackendRemote.rpc.setConfig(accountId, 'ui.lastchatid', `${chatId}`)
+export async function saveLastChatId(accountId: number, chatId: number | null) {
+  await BackendRemote.rpc.setConfig(
+    accountId,
+    'ui.lastchatid',
+    chatId == null ? null : `${chatId}`
+  )
 }
 
 export async function getLastChatId(accountId: number): Promise<number | null> {
