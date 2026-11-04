@@ -9,3 +9,19 @@
   background-color: #0000008f;
   color: white;
 }
+
+/* fills the space next to images that are narrower than the bubble */
+.blurredFill {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(16px);
+  /* hides the transparent edges of the blur */
+  scale: 1.2;
+}
+
+.aboveBlurredFill {
+  position: relative;
+}

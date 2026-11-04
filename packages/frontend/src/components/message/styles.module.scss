@@ -17,6 +17,7 @@
 
 // The bubble gets the width of the image (but at least 300px, so the text
 // doesn't get too narrow), everything else wraps instead of widening it.
+// Keep in sync with IMAGE_WITH_TEXT_MIN_WIDTH in imageDisplaySize.ts
 // The selector is more specific than `.message .msg-container` on purpose.
 :global(.message) :global(.msg-container).imageWithText {
   min-width: min(300px, 100%);

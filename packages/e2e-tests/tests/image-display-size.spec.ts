@@ -209,21 +209,47 @@ const longText =
 
 /**
  * Image messages with text get the width of the image, the text wraps
- * instead of widening the bubble. Narrow images get a minimum bubble width
- * of 300px, so the text doesn't get too narrow.
+ * instead of widening the bubble. The bubble is at least 300px wide, so the
+ * text doesn't get too narrow: narrower images are widened and cropped a
+ * little (9:16), or, if that would crop too much (9:20), the space next to
+ * the image is filled with a blurred copy.
  */
 const withTextCases = [
-  { file: '4x3_landscape_L_1280x960.png', bubbleWidth: 411 },
-  { file: '9x20_portrait_L_576x1280.png', bubbleWidth: 300 },
+  {
+    file: '4x3_landscape_L_1280x960.png',
+    bubbleWidth: 411,
+    imageWidth: 411,
+    blurredFill: false,
+  },
+  {
+    file: '9x16_portrait_L_720x1280.png',
+    bubbleWidth: 300,
+    imageWidth: 300,
+    blurredFill: false,
+  },
+  {
+    file: '9x20_portrait_L_576x1280.png',
+    bubbleWidth: 300,
+    imageWidth: 203,
+    blurredFill: true,
+  },
 ] as const
 
-for (const { file, bubbleWidth } of withTextCases) {
+for (const { file, bubbleWidth, imageWidth, blurredFill } of withTextCases) {
   test(`image ${file} with text has a ${bubbleWidth}px wide bubble`, async () => {
     const message = await sendImage(file, longText)
     const bubble = message.locator('.msg-container')
     await expect(bubble).toContainText(longText)
     const bubbleBox = (await bubble.boundingBox())!
     expect(bubbleBox.width).toBeCloseTo(bubbleWidth, 0)
+    const imageBox = (await message
+      .locator('img.attachment-content')
+      .boundingBox())!
+    expect(imageBox.width).toBeCloseTo(imageWidth, 0)
+    // the blurred copy is decorative, so it has an empty alt text
+    await expect(
+      message.locator('.message-attachment-media img[alt=""]')
+    ).toHaveCount(blurredFill ? 1 : 0)
   })
 }
 

@@ -104,8 +104,14 @@ export default function Attachment({
           width: maxStickerSize,
           height: maxStickerSize,
           visibleFraction: 1,
+          blurredFill: false,
         }
-      : getImageDisplaySize(message.dimensionsWidth, message.dimensionsHeight)
+      : getImageDisplaySize(
+          message.dimensionsWidth,
+          message.dimensionsHeight,
+          withCaption
+        )
+    const src = runtime.transformBlobURL(message.file)
     return (
       <button
         type='button'
@@ -116,12 +122,16 @@ export default function Attachment({
           withCaption ? 'content-below' : null
         )}
       >
+        {size.blurredFill && (
+          <img className={styles.blurredFill} src={src} alt='' aria-hidden />
+        )}
         <img
           className={classNames(
             'attachment-content',
-            isSticker ? 'sticker' : null
+            isSticker ? 'sticker' : null,
+            size.blurredFill ? styles.aboveBlurredFill : null
           )}
-          src={runtime.transformBlobURL(message.file)}
+          src={src}
           width={size.width}
           height={size.height}
           // keeps the ratio if the width shrinks with the message bubble

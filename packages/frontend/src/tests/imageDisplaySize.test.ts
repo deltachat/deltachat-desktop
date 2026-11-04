@@ -91,7 +91,37 @@ describe('getImageDisplaySize', () => {
       width: 200,
       height: 200,
       visibleFraction: 1,
+      blurredFill: false,
     })
     expect(getImageDisplaySize(500, 0).width).to.equal(200)
+    expect(getImageDisplaySize(0, 0, true).width).to.equal(300)
+  })
+
+  describe('with text', () => {
+    const withText = (w: number, h: number) => {
+      const { width, height, visibleFraction, blurredFill } =
+        getImageDisplaySize(w, h, true)
+      return [width, height, Math.round(visibleFraction * 1000), blurredFill]
+    }
+
+    it('keeps images that are at least 300px wide', () => {
+      expect(withText(1280, 960)).to.deep.equal([411, 309, 1000, false])
+      expect(withText(1280, 720)).to.deep.equal([450, 253, 1000, false])
+      expect(withText(2000, 200)).to.deep.equal([450, 113, 400, false])
+    })
+
+    it('widens narrower images to 300px, cropping a little', () => {
+      // the minimum width wins over the width + height limit
+      expect(withText(853, 1280)).to.deep.equal([300, 450, 1000, false])
+      expect(withText(720, 1280)).to.deep.equal([300, 450, 844, false])
+      expect(withText(48, 36)).to.deep.equal([300, 225, 1000, false])
+    })
+
+    it('fills the space next to images that would be cropped too much', () => {
+      expect(withText(576, 1280)).to.deep.equal([203, 450, 1000, true])
+      // the usual cropping of extreme ratios still applies
+      expect(withText(667, 2000)).to.deep.equal([200, 450, 750, true])
+      expect(withText(20, 200)).to.deep.equal([200, 450, 225, true])
+    })
   })
 })
