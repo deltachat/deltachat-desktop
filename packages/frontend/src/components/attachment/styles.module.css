@@ -10,6 +10,29 @@
   color: white;
 }
 
+/*
+ * Images are also cropped if the window is so low that --image-min-width
+ * wins over --image-max-height (see _message-attachment.scss).
+ * As long as that isn't the case, this moves the indicator out of the
+ * (clipped) attachment: the offset is > 0 while
+ * min width / ratio < max height, and 0 otherwise.
+ */
+.croppedInLowWindow {
+  translate: 0
+    calc(
+      -1 *
+        clamp(
+          0px,
+          (
+              var(--image-max-height) - var(--image-min-width) /
+                var(--image-ratio)
+            ) *
+            1000,
+          40px
+        )
+    );
+}
+
 /* fills the space next to images that are narrower than the bubble */
 .blurredFill {
   position: absolute;

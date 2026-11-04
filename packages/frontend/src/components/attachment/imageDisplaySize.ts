@@ -102,6 +102,9 @@ function computeSize(width: number, height: number, minWidth: number) {
  *
  * - images with text fill a bubble of at least IMAGE_WITH_TEXT_MIN_WIDTH,
  *   see IMAGE_WITH_TEXT_MIN_VISIBLE
+ *
+ * The height is further limited to 2/3 of the window height in CSS,
+ * see `.attachment-content` in _message-attachment.scss
  */
 export function getImageDisplaySize(
   width: number,

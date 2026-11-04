@@ -31,8 +31,14 @@ let page: Page
 const imagesPath = path.join(import.meta.dirname, '..', 'fixtures', 'images')
 
 /**
+ * wide and high enough for 450px images
+ * (the height is limited to 2/3 of the window height without the navbar)
+ */
+const defaultViewport = { width: 1280, height: 800 }
+
+/**
  * `size` is the expected size of the image in px
- * with the default viewport (wide enough for 450px images),
+ * with the default viewport,
  * `cropped` whether the cropped indicator must be shown
  */
 const cases = [
@@ -78,7 +84,7 @@ const cases = [
 ] as const
 
 test.beforeAll(async ({ browser }) => {
-  page = await browser.newPage()
+  page = await browser.newPage({ viewport: defaultViewport })
   await reloadPage(page)
   await importDummyProfileFromBackup(page)
 
@@ -175,12 +181,8 @@ for (const { file, viewportWidth, size } of narrowCases) {
     const image = message.locator('img.attachment-content')
     await expect(image).toBeVisible()
 
-    const viewport = page.viewportSize()!
     try {
-      await page.setViewportSize({
-        width: viewportWidth,
-        height: viewport.height,
-      })
+      await page.setViewportSize({ ...defaultViewport, width: viewportWidth })
       // retry until the layout has adapted to the new viewport size
       await expect(async () => {
         const imageBox = (await image.boundingBox())!
@@ -198,7 +200,7 @@ for (const { file, viewportWidth, size } of narrowCases) {
       }).toPass()
     } finally {
       // the following tests expect the default viewport
-      await page.setViewportSize(viewport)
+      await page.setViewportSize(defaultViewport)
     }
   })
 }
@@ -250,6 +252,45 @@ for (const { file, bubbleWidth, imageWidth, blurredFill } of withTextCases) {
     await expect(
       message.locator('.message-attachment-media img[alt=""]')
     ).toHaveCount(blurredFill ? 1 : 0)
+  })
+}
+
+/**
+ * In a 500px high window images are at most (500 - 50) * 2/3 = 300px high.
+ * They shrink keeping their ratio, but not below the minimum width of 200px,
+ * then they are cropped instead.
+ */
+const lowWindowCases = [
+  // ratio of the rounded display size 411x309
+  { file: '4x3_landscape_L_1280x960.png', size: [399, 300], cropped: false },
+  { file: '9x16_portrait_L_720x1280.png', size: [200, 300], cropped: true },
+] as const
+
+for (const { file, size, cropped } of lowWindowCases) {
+  test(`image ${file} is ${size[0]}x${size[1]} in a low window`, async () => {
+    const message = await sendImage(file)
+    const image = message.locator('img.attachment-content')
+    await expect(image).toBeVisible()
+
+    try {
+      await page.setViewportSize({ ...defaultViewport, height: 500 })
+      // retry until the layout has adapted to the new viewport size
+      await expect(async () => {
+        const box = (await image.boundingBox())!
+        expect(box.width).toBeCloseTo(size[0], 0)
+        expect(box.height).toBeCloseTo(size[1], 0)
+      }).toPass()
+
+      // The indicator is only moved out of the image by CSS,
+      // so check its position instead of its visibility
+      const imageBox = (await image.boundingBox())!
+      const indicatorBox = (await message
+        .locator('.message-attachment-media > span')
+        .boundingBox())!
+      expect(indicatorBox.y >= imageBox.y).toBe(cropped)
+    } finally {
+      await page.setViewportSize(defaultViewport)
+    }
   })
 }
 

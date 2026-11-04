@@ -27,7 +27,11 @@ import { useRpcFetch } from '../../hooks/useFetch'
 import { useHasChanged2 } from '../../hooks/useHasChanged'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import Icon from '../Icon'
-import { getImageDisplaySize } from './imageDisplaySize'
+import {
+  getImageDisplaySize,
+  IMAGE_MIN_WIDTH,
+  IMAGE_WITH_TEXT_MIN_WIDTH,
+} from './imageDisplaySize'
 
 import styles from './styles.module.css'
 
@@ -112,6 +116,18 @@ export default function Attachment({
           withCaption
         )
     const src = runtime.transformBlobURL(message.file)
+    // used in CSS to limit the height to the window height,
+    // see `.attachment-content` in _message-attachment.scss
+    const heightLimitVars = isSticker
+      ? undefined
+      : ({
+          '--image-ratio': size.width / size.height,
+          '--image-min-width': `${
+            withCaption && !size.blurredFill
+              ? IMAGE_WITH_TEXT_MIN_WIDTH
+              : IMAGE_MIN_WIDTH
+          }px`,
+        } as React.CSSProperties)
     return (
       <button
         type='button'
@@ -121,6 +137,7 @@ export default function Attachment({
           'message-attachment-media',
           withCaption ? 'content-below' : null
         )}
+        style={heightLimitVars}
       >
         {size.blurredFill && (
           <img className={styles.blurredFill} src={src} alt='' aria-hidden />
@@ -137,7 +154,7 @@ export default function Attachment({
           // keeps the ratio if the width shrinks with the message bubble
           style={{ aspectRatio: `${size.width} / ${size.height}` }}
         />
-        {size.visibleFraction < 1 && (
+        {size.visibleFraction < 1 ? (
           <span
             className={styles.croppedIndicator}
             role='img'
@@ -146,6 +163,20 @@ export default function Attachment({
           >
             <Icon icon='open_in_full' coloring='currentColor' size={16} />
           </span>
+        ) : (
+          !isSticker && (
+            // only visible if the window is too low to show the whole image,
+            // CSS can't tell screen readers about that
+            <span
+              className={classNames(
+                styles.croppedIndicator,
+                styles.croppedInLowWindow
+              )}
+              aria-hidden
+            >
+              <Icon icon='open_in_full' coloring='currentColor' size={16} />
+            </span>
+          )
         )}
       </button>
     )
