@@ -34,14 +34,21 @@ export function AudioPlayer({
 
   const ignoreOnePlayEvent = useRef(false)
   const ignoreOnePauseEvent = useRef(false)
+  const ignoreOneSeekingEvent = useRef(false)
+  const ignoreOneRateChangeEvent = useRef(false)
+  /**
+   * A counter and not a boolean, because changing both `volume` and `muted`
+   * fires two `volumechange` events.
+   */
+  const ignoreVolumeChangeEvents = useRef(0)
 
-  // When we start playing another media, pause this one.
-  //
-  // Also mirror the `paused` state of the global audio element.
+  // Sync this player's state to the global one.
   useEffect(() => {
     const el = ref.current
     if (el == null) {
-      log.error('media element not mounted, cannot pause it')
+      log.error(
+        'media element not mounted, cannot sync it to the global player'
+      )
       return
     }
     const globalEl = mediaPlayerMutexCtx.audioElement
@@ -53,9 +60,7 @@ export function AudioPlayer({
       return
     }
 
-    // This is very primitive syncing. Only the `paused` state,
-    // no regard for `currentTime`, `playbackRate` etc.
-    // But it's good enough for a start.
+    // This probably doesn't sync perfectly, but good enough.
     const onPlayGlobal = () => {
       if (el.paused) {
         el.play()
@@ -68,11 +73,43 @@ export function AudioPlayer({
         ignoreOnePauseEvent.current = true
       }
     }
+    const onSeekingGlobal = () => {
+      if (el.currentTime === globalEl.currentTime) {
+        return
+      }
+      el.currentTime = globalEl.currentTime
+      ignoreOneSeekingEvent.current = true
+    }
+    const onRateChangeGlobal = () => {
+      if (el.playbackRate === globalEl.playbackRate) {
+        return
+      }
+      el.playbackRate = globalEl.playbackRate
+      ignoreOneRateChangeEvent.current = true
+    }
+    const onVolumeChangeGlobal = () => {
+      if (el.volume !== globalEl.volume) {
+        el.volume = globalEl.volume
+        ignoreVolumeChangeEvents.current++
+      }
+
+      if (el.muted !== globalEl.muted) {
+        el.muted = globalEl.muted
+        ignoreVolumeChangeEvents.current++
+      }
+    }
+
+    onSeekingGlobal()
+    onRateChangeGlobal()
+    onVolumeChangeGlobal()
     if (!globalEl.paused) {
       onPlayGlobal()
     }
     globalEl.addEventListener('play', onPlayGlobal)
     globalEl.addEventListener('pause', onPauseGlobal)
+    globalEl.addEventListener('seeking', onSeekingGlobal)
+    globalEl.addEventListener('ratechange', onRateChangeGlobal)
+    globalEl.addEventListener('volumechange', onVolumeChangeGlobal)
 
     return () => {
       el.pause()
@@ -80,6 +117,9 @@ export function AudioPlayer({
 
       globalEl.removeEventListener('play', onPlayGlobal)
       globalEl.removeEventListener('pause', onPauseGlobal)
+      globalEl.removeEventListener('seeking', onSeekingGlobal)
+      globalEl.removeEventListener('ratechange', onRateChangeGlobal)
+      globalEl.removeEventListener('volumechange', onVolumeChangeGlobal)
     }
   }, [
     mediaPlayerMutexCtx.audioElement,
@@ -93,7 +133,6 @@ export function AudioPlayer({
     <ForceMutedAudioPlayer
       ref={ref}
       {...props}
-      {...mediaPlayerMutexCtx.eventListeners}
       onPlay={e => {
         props.onPlay?.(e)
         if (!ignoreOnePlayEvent.current) {
@@ -108,6 +147,25 @@ export function AudioPlayer({
           mediaPlayerMutexCtx.eventListeners.onPause(e)
         }
         ignoreOnePauseEvent.current = false
+      }}
+      onSeeking={e => {
+        if (!ignoreOneSeekingEvent.current) {
+          mediaPlayerMutexCtx.eventListeners.onSeeking(e)
+        }
+        ignoreOneSeekingEvent.current = false
+      }}
+      onRateChange={e => {
+        if (!ignoreOneRateChangeEvent.current) {
+          mediaPlayerMutexCtx.eventListeners.onRateChange(e)
+        }
+        ignoreOneRateChangeEvent.current = false
+      }}
+      onVolumeChange={e => {
+        if (ignoreVolumeChangeEvents.current > 0) {
+          ignoreVolumeChangeEvents.current--
+          return
+        }
+        mediaPlayerMutexCtx.eventListeners.onVolumeChange(e)
       }}
     />
   )
