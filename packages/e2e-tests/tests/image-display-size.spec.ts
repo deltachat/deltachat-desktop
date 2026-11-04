@@ -91,8 +91,8 @@ test.afterAll(async () => {
   await page?.close()
 })
 
-/** sends the image and returns the new message */
-async function sendImage(file: string) {
+/** sends the image (with an optional text) and returns the new message */
+async function sendImage(file: string, text?: string) {
   const fileChooserPromise = page.waitForEvent('filechooser')
   await page.getByRole('button', { name: 'Attach' }).click()
   await page.getByRole('menuitem', { name: 'Image' }).click()
@@ -103,6 +103,9 @@ async function sendImage(file: string) {
   await expect(
     page.getByRole('region', { name: 'Write a message' }).getByRole('img')
   ).toBeVisible()
+  if (text) {
+    await page.getByRole('textbox', { name: 'Write a message' }).fill(text)
+  }
 
   const lastMessage = page
     .getByRole('list', { name: 'Messages' })
@@ -197,6 +200,30 @@ for (const { file, viewportWidth, size } of narrowCases) {
       // the following tests expect the default viewport
       await page.setViewportSize(viewport)
     }
+  })
+}
+
+const longText =
+  'This is an image message with a longer text so it needs at least one ' +
+  'line break. Just to test how images with text are displayed.'
+
+/**
+ * Image messages with text get the width of the image, the text wraps
+ * instead of widening the bubble. Narrow images get a minimum bubble width
+ * of 300px, so the text doesn't get too narrow.
+ */
+const withTextCases = [
+  { file: '4x3_landscape_L_1280x960.png', bubbleWidth: 411 },
+  { file: '9x20_portrait_L_576x1280.png', bubbleWidth: 300 },
+] as const
+
+for (const { file, bubbleWidth } of withTextCases) {
+  test(`image ${file} with text has a ${bubbleWidth}px wide bubble`, async () => {
+    const message = await sendImage(file, longText)
+    const bubble = message.locator('.msg-container')
+    await expect(bubble).toContainText(longText)
+    const bubbleBox = (await bubble.boundingBox())!
+    expect(bubbleBox.width).toBeCloseTo(bubbleWidth, 0)
   })
 }
 
