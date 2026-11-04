@@ -15,15 +15,26 @@ function expectSizes(cases: Case[]) {
 describe('getImageDisplaySize', () => {
   it('scales typical ratios without cropping', () => {
     const cases: Case[] = [
-      [4000, 4000, 450, 450],
-      [480, 480, 450, 450],
-      [4000, 3000, 450, 338],
       [1280, 720, 450, 253],
       [4000, 1800, 450, 203],
-      [3000, 4000, 338, 450],
       [720, 1280, 253, 450],
       [576, 1280, 203, 450],
       [300, 200, 300, 200],
+    ]
+    expectSizes(cases)
+    for (const [w, h] of cases) {
+      expect(getImageDisplaySize(w, h).visibleFraction, `${w}x${h}`).to.equal(1)
+    }
+  })
+
+  it('limits width + height of images close to 1:1', () => {
+    const cases: Case[] = [
+      [4000, 4000, 360, 360],
+      [480, 480, 360, 360],
+      [4000, 3000, 411, 309],
+      [3000, 4000, 309, 411],
+      [1280, 853, 432, 288],
+      [853, 1280, 288, 432],
     ]
     expectSizes(cases)
     for (const [w, h] of cases) {

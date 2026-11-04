@@ -37,8 +37,9 @@ const imagesPath = path.join(import.meta.dirname, '..', 'fixtures', 'images')
  */
 const cases = [
   // typical ratios are shown completely, scaled down to the maximum size
-  { file: '4x3_landscape_L_1280x960.png', size: [450, 338], cropped: false },
   { file: '9x20_portrait_L_576x1280.png', size: [203, 450], cropped: false },
+  // ratios close to 1:1 are limited by width + height (max 720)
+  { file: '4x3_landscape_L_1280x960.png', size: [411, 309], cropped: false },
   // small images are scaled up to the minimum width
   { file: '4x3_landscape_XS_48x36.png', size: [200, 150], cropped: false },
   { file: '9x16_portrait_XS_27x48.png', size: [200, 356], cropped: false },
@@ -150,11 +151,11 @@ for (const { file, size, cropped } of cases) {
  */
 const narrowCases = [
   // above the narrow layout breakpoint (900px), but the bubble
-  // (max 66% of the message list) is narrower than 450px
+  // (max 66% of the message list) is narrower than the image
   {
     file: '3x2_landscape_L_1280x853.png',
     viewportWidth: 950,
-    size: [450, 300],
+    size: [432, 288],
   },
   // narrow layout, the bubble is wider than the image,
   // so the image keeps its full size

@@ -2,6 +2,11 @@
 export const IMAGE_MIN_WIDTH = 200
 export const IMAGE_MAX_WIDTH = 450
 export const IMAGE_MAX_HEIGHT = 450
+/**
+ * limits images close to 1:1, so they don't take much more room
+ * than e.g. 16:9 images (450x253)
+ */
+export const IMAGE_MAX_WIDTH_PLUS_HEIGHT = 720
 
 /** wider images are cropped to this width/height ratio */
 export const IMAGE_MAX_LANDSCAPE_RATIO = 4
@@ -25,6 +30,9 @@ const clamp = (value: number, min: number, max: number) =>
  *
  * - images are scaled to a width between IMAGE_MIN_WIDTH (200px) and IMAGE_MAX_WIDTH (450px)
  *   and a height of at most IMAGE_MAX_HEIGHT (450px)
+ *
+ * - width + height is at most IMAGE_MAX_WIDTH_PLUS_HEIGHT (720px),
+ *   so a square image becomes 360x360 and not 450x450
  *
  * - ratios between IMAGE_MIN_PORTRAIT_RATIO (200x450) and IMAGE_MAX_LANDSCAPE_RATIO (4:1)
  *   are shown completely
@@ -67,6 +75,12 @@ export function getImageDisplaySize(
       IMAGE_MAX_HEIGHT
     )
     displayWidth = displayHeight * displayRatio
+  }
+
+  const sizeSum = displayWidth + displayHeight
+  if (sizeSum > IMAGE_MAX_WIDTH_PLUS_HEIGHT) {
+    displayWidth *= IMAGE_MAX_WIDTH_PLUS_HEIGHT / sizeSum
+    displayHeight *= IMAGE_MAX_WIDTH_PLUS_HEIGHT / sizeSum
   }
 
   return {
