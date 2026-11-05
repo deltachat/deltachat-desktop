@@ -67,6 +67,9 @@ if (previewBuild) {
 
 //@ts-ignore
 build.extraMetadata.desktopName = `${appName}.desktop`
+// read by afterPackHook.mjs
+//@ts-ignore
+build.extraMetadata.displayName = displayName
 
 build['protocols'] = [
   {
@@ -122,9 +125,10 @@ build['mac'] = {
   extendInfo: {
     // Don't override `CFBundleName`: electron resolves the helper apps with it,
     // and electron-builder names them after `productName`.
-    // The menu bar name comes from `InfoPlist.strings` instead,
-    // which afterPackHook.mjs generates from `CFBundleDisplayName`.
-    CFBundleDisplayName: displayName,
+    // Don't override `CFBundleDisplayName` either: macOS only uses the localized
+    // name in the Dock and app switcher if this value matches the bundle's file
+    // name. The visible names come from `InfoPlist.strings` instead,
+    // which afterPackHook.mjs generates from `displayName`.
     LSHasLocalizedDisplayName: true,
     NSCameraUsageDescription: 'For scanning qr codes.',
     NSMicrophoneUsageDescription: 'For recording voice messages',

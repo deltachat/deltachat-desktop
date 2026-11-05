@@ -103,5 +103,8 @@
   },
   "reset_changes_question": {
     "message": "Reset all changes?"
+  },
+  "global_menu_hide_app_desktop": {
+    "message": "Hide %1$s"
   }
 }

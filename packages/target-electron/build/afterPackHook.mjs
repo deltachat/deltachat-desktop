@@ -145,12 +145,13 @@ async function copyMapXdc(resources_dir, source_dir, asar) {
 }
 
 /**
- * macOS shows the localized `CFBundleName` in the menu bar, while electron
- * resolves its helper apps with the unlocalized value from `Info.plist`.
+ * macOS shows the localized `CFBundleName` in the menu bar and the localized
+ * `CFBundleDisplayName` in the Dock and app switcher, while electron resolves
+ * its helper apps with the unlocalized value from `Info.plist`.
  * So this changes the visible name without affecting the helper apps.
  */
 async function writeInfoPlistStrings(resources_dir, context) {
-  const displayName = context.packager.config.mac.extendInfo.CFBundleDisplayName
+  const displayName = context.packager.config.extraMetadata.displayName
   const content =
     `CFBundleName = "${displayName}";\n` +
     `CFBundleDisplayName = "${displayName}";\n`

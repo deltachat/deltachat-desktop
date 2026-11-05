@@ -3,6 +3,7 @@ import { readFileSync } from 'fs'
 import { join } from 'path'
 
 import {
+  appName,
   gitHubIssuesUrl,
   homePageUrl,
   appWindowTitle,
@@ -134,7 +135,8 @@ export function getAppMenu(
     label: appWindowTitle,
     submenu: [
       ...(isMainWindow ? extraItemsForMainWindow : []),
-      { role: 'hide' },
+      // the default label uses `app.name`, which is `productName` ("DeltaChat")
+      { role: 'hide', label: tx('global_menu_hide_app_desktop', appName) },
       { role: 'hideOthers' },
       { role: 'unhide' },
       { type: 'separator' },
