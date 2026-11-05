@@ -25,6 +25,7 @@ import { env } from 'process'
  * - Clean up unneeded native prebuilds for other architectures (reduces bundle size)
  * - Package MSVC redistributables for Windows builds
  * - Copy map XDC files to the correct location in the packaged app
+ * - Set the user-facing app name on macOS
  * - Apply Electron security fuses to harden the application
  */
 
@@ -87,6 +88,15 @@ export default async context => {
   // asar is electrons archive format, flatpak doesn't use it. read more about what asar is on https://www.electronjs.org/docs/latest/glossary#asar
   const asar = env['NO_ASAR'] ? false : true
   await copyMapXdc(resources_dir, source_dir, asar)
+
+  // set user-facing mac app name
+  // ---------------------------------------------------------------------------------
+  // Must happen before `setFuses`, which may re-sign the app. Like the fuses,
+  // this is skipped for the temporary arch-specific builds of a universal build.
+  if (isMacBuild && !context.appOutDir.includes('-temp')) {
+    await writeInfoPlistStrings(resources_dir, context)
+  }
+
   if (!env['SKIP_FUSES']) {
     await setFuses(context)
   }
@@ -132,6 +142,25 @@ async function copyMapXdc(resources_dir, source_dir, asar) {
     console.log('failed to create dir', destination, error)
   }
   await cp(join(source_dir, 'html-dist/xdcs'), destination, { recursive: true })
+}
+
+/**
+ * macOS shows the localized `CFBundleName` in the menu bar, while electron
+ * resolves its helper apps with the unlocalized value from `Info.plist`.
+ * So this changes the visible name without affecting the helper apps.
+ */
+async function writeInfoPlistStrings(resources_dir, context) {
+  const displayName = context.packager.config.mac.extendInfo.CFBundleDisplayName
+  const content =
+    `CFBundleName = "${displayName}";\n` +
+    `CFBundleDisplayName = "${displayName}";\n`
+
+  const lprojDirs = (await readdir(resources_dir)).filter(name =>
+    name.endsWith('.lproj')
+  )
+  for (const lprojDir of lprojDirs) {
+    await writeFile(join(resources_dir, lprojDir, 'InfoPlist.strings'), content)
+  }
 }
 
 async function deleteNotNeededPrebuildsFromUnpackedASAR(

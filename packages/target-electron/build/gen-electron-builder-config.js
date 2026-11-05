@@ -122,7 +122,10 @@ build['mac'] = {
   extendInfo: {
     // Don't override `CFBundleName`: electron resolves the helper apps with it,
     // and electron-builder names them after `productName`.
+    // The menu bar name comes from `InfoPlist.strings` instead,
+    // which afterPackHook.mjs generates from `CFBundleDisplayName`.
     CFBundleDisplayName: displayName,
+    LSHasLocalizedDisplayName: true,
     NSCameraUsageDescription: 'For scanning qr codes.',
     NSMicrophoneUsageDescription: 'For recording voice messages',
     ITSAppUsesNonExemptEncryption: false,
