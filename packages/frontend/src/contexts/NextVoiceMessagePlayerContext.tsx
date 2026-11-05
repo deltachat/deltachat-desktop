@@ -132,6 +132,26 @@ export function NextVoiceMessagePlayerProvider({
     setPendingEndedEvent(null)
   }
 
+  const onNextTrack = useEffectEvent(() => {
+    if (nextMessage == null) {
+      log.warn('onNextTrack called but there is no next message')
+      return
+    }
+    playVoiceMessage(nextMessage.accountId, nextMessage.message)
+  })
+  const haveNextMessage = nextMessage != null
+  useEffect(() => {
+    // TODO fix: don't disable the button while loading the next message.
+    if (!haveNextMessage) {
+      return
+    }
+    if (!('mediaSession' in navigator)) {
+      return
+    }
+    navigator.mediaSession.setActionHandler('nexttrack', onNextTrack)
+    return () => navigator.mediaSession.setActionHandler('nexttrack', null)
+  }, [haveNextMessage])
+
   return (
     <NextVoiceMessagePlayerContext.Provider value={{ setCurrMessage }}>
       {children}
