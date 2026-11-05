@@ -174,7 +174,10 @@ export default class ScreenController extends Component {
     // while rapidly switching accounts.
     // Maybe this has to do with us using `window.__selectedAccountId`
     // in some places and the `accountId` prop in others.
-    this.unselectChatRef.current?.()
+    this.unselectChatRef.current?.({
+      // Still, restore this chat the next time this account is selected.
+      keepStorage: true,
+    })
 
     const previousAccountId = this.selectedAccountId
 
