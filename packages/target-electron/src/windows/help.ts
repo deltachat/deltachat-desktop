@@ -1,4 +1,4 @@
-import { BrowserWindow, Menu, session, shell } from 'electron'
+import { BrowserWindow, Menu, session } from 'electron'
 import { join } from 'path'
 import { stat } from 'fs/promises'
 import { platform } from 'os'
@@ -17,6 +17,7 @@ import {
 } from '../menu.js'
 import { initMinWinDimensionHandling } from './helpers.js'
 import { setContentProtection } from '../content-protection.js'
+import { openExternalHttpOrPromptToCopy } from '../deltachat/link-clicks.js'
 
 const log = getLogger('main/help')
 
@@ -114,7 +115,9 @@ export async function openHelpWindow(locale: string, anchor?: string) {
 
   win.webContents.on('will-navigate', (_ev, url) => {
     log.debug('open ', url)
-    shell.openExternal(url)
+    if (win != null) {
+      openExternalHttpOrPromptToCopy(win, url)
+    }
   })
 
   win.on('close', _e => {
