@@ -559,6 +559,8 @@ test('focuses first visible item on arrow down key on input in create chat dialo
   await switchToProfile(page, userA.id)
   await page.locator('#new-chat-button').click()
   await page.locator('dialog *:focus').waitFor({ state: 'visible' })
+  // The input gets focused before the list below it is rendered.
+  await page.getByRole('button', { name: 'New Contact' }).waitFor()
   await page.locator('*:focus').press('ArrowDown')
 
   // check if moved the focus down
