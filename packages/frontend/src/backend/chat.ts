@@ -32,15 +32,42 @@ export async function getChatInfoByEmail(
   }
 }
 
-export async function saveLastChatId(accountId: number, chatId: number) {
-  await BackendRemote.rpc.setConfig(accountId, 'ui.lastchatid', `${chatId}`)
+const knownLastChatId: Map<number, number> = new Map()
+const pendingLastChatSave: Map<number, Promise<void>> = new Map()
+
+/**
+ * Remembers the selected chat of an account.
+ *
+ * A write that doesn't change the value is skipped: it would queue behind
+ * `marknoticed_chat` right when a chat is being opened and delay the chat list.
+ * Saves of an account run one after the other, because `knownLastChatId`
+ * only tells what the last completed save wrote.
+ */
+export function saveLastChatId(
+  accountId: number,
+  chatId: number
+): Promise<void> {
+  const save = (pendingLastChatSave.get(accountId) ?? Promise.resolve())
+    .catch(() => {})
+    .then(async () => {
+      if (knownLastChatId.get(accountId) === chatId) {
+        return
+      }
+      await BackendRemote.rpc.setConfig(accountId, 'ui.lastchatid', `${chatId}`)
+      knownLastChatId.set(accountId, chatId)
+    })
+  pendingLastChatSave.set(accountId, save)
+  return save
 }
 
 export async function getLastChatId(accountId: number): Promise<number | null> {
+  await pendingLastChatSave.get(accountId)?.catch(() => {})
   const chatId = await BackendRemote.rpc.getConfig(accountId, 'ui.lastchatid')
 
   if (typeof chatId === 'string') {
-    return parseInt(chatId, 10)
+    const parsed = parseInt(chatId, 10)
+    knownLastChatId.set(accountId, parsed)
+    return parsed
   }
 
   return null
