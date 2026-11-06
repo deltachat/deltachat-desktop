@@ -20,20 +20,36 @@ import { setContentProtection } from '../content-protection.js'
 
 const log = getLogger('main/help')
 
-async function getHelpFileForLang(locale: string) {
+const SCHEME_NAME = 'dc-help'
+
+/**
+ * To be passed to {@linkcode protocol.registerSchemesAsPrivileged}.
+ */
+export const helpWindowElectronScheme = {
+  scheme: SCHEME_NAME,
+  privileges: {
+    // Pagefind search uses `fetch` and module `import()`.
+    standard: true,
+    supportFetchAPI: true,
+  },
+} satisfies Parameters<
+  (typeof Electron.protocol)['registerSchemesAsPrivileged']
+>[0][number]
+
+async function getHelpUrlForLang(locale: string) {
   const contentFilePath = join(htmlDistDir(), `help/${locale}/help.html`)
   try {
     if (!(await stat(join(contentFilePath))).isFile()) {
       log.warn('contentFilePath not a file')
       throw new Error('contentFilePath not a file')
     }
-    return contentFilePath
   } catch (_error) {
     log.warn(
       `Did not find help file for language ${locale}, falling back to english`
     )
-    return join(htmlDistDir(), `help/en/help.html`)
+    locale = 'en'
   }
+  return `${SCHEME_NAME}://help/${encodeURIComponent(locale)}/help.html`
 }
 
 let win: BrowserWindow | null = null
@@ -63,6 +79,13 @@ export async function openHelpWindow(locale: string, anchor?: string) {
   }
 
   const ses = session.fromPartition('help-window')
+  if (!ses.protocol.isProtocolHandled(SCHEME_NAME)) {
+    ses.protocol.registerSource(SCHEME_NAME, {
+      routes: [
+        { source: { type: 'directory', root: join(htmlDistDir(), 'help') } },
+      ],
+    })
+  }
 
   const help_window = (win = new BrowserWindow({
     backgroundColor: '#282828',
@@ -91,11 +114,11 @@ export async function openHelpWindow(locale: string, anchor?: string) {
     defaults.minHeight
   )
 
-  const url = await getHelpFileForLang(locale)
+  const url = await getHelpUrlForLang(locale)
 
   log.debug(url)
 
-  win.loadFile(url)
+  win.loadURL(url)
 
   win.once('ready-to-show', async () => {
     if (anchor) {
