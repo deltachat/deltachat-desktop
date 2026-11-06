@@ -523,17 +523,18 @@ export function useDraft(
       currQuoteMessageIdInd + direction
     ).next()
     if (newQuoteRes.done) {
-      if (upOrDown === KeybindAction.Composer_SelectReplyToDown) {
-        // Currently quoted message was the last message of the chat
+      // The loaded messages end here, but the chat may go on:
+      // only its last message ends the selection of a quote.
+      if (
+        upOrDown === KeybindAction.Composer_SelectReplyToDown &&
+        !messageListState.hasNewer
+      ) {
         removeQuote()
-      } else {
-        // Currently quoted message is the first message of the chat,
-        // just do nothing.
       }
       return
     }
     if (newQuoteRes.value.kind === 'notLoaded') {
-      // message is in the full list, just not in the cache (yet)
+      // message is in the window, just not in the cache (yet)
       // -> jump to it, it will be loaded then (and the surrounding messages)
       jumpToMessage({
         accountId,
