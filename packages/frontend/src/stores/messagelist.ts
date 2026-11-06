@@ -211,9 +211,9 @@ export function useMessageList(
           store.reducer.setMessageState(msgId, C.DC_STATE_OUT_DELIVERED)
         }
       }),
-      onDCEvent(accountId, 'IncomingMsg', ({ chatId: eventChatId }) => {
+      onDCEvent(accountId, 'IncomingMsg', ({ chatId: eventChatId, msgId }) => {
         if (chatId === eventChatId) {
-          store.effect.onEventIncomingMessage()
+          store.effect.onEventIncomingMessage(msgId)
 
           // Otherwise an OS notification will be shown, which is enough.
           if (!shouldShowOSNotificationForCurrentChat()) {
@@ -690,8 +690,12 @@ export class MessageListStore extends Store<MessageListState> {
           }
 
           // The anchor message is part of the window, but we already have it.
+          // So do we have a message that moved in front of the anchor,
+          // because its timestamp changed.
           const olderMessageIds = messageWindow.loadedMessageIds.filter(
-            msgId => msgId !== anchorMsgId
+            msgId =>
+              msgId !== anchorMsgId &&
+              !this.state.loadedMessageIds.includes(msgId)
           )
           if (olderMessageIds.length === 0) {
             this.log.debug(
@@ -763,7 +767,7 @@ export class MessageListStore extends Store<MessageListState> {
           const anchorIndex = Math.floor(existingIds.length / 2)
           const anchorMsgId = existingIds[anchorIndex] ?? null
 
-          const messageWindow = await this.__fetchWindowAround(
+          const messageWindow = await this.fetchWindowAround(
             anchorMsgId,
             anchorIndex,
             existingIds.length - 1 - anchorIndex
@@ -784,9 +788,12 @@ export class MessageListStore extends Store<MessageListState> {
       ),
       'refresh'
     ),
-    onEventIncomingMessage: this.scheduler.queuedEffect(async () => {
-      await this.__appendNewMessages()
-    }, 'onEventIncomingMessage'),
+    onEventIncomingMessage: this.scheduler.queuedEffect(
+      async (msgId?: number) => {
+        await this.__addMessage(msgId)
+      },
+      'onEventIncomingMessage'
+    ),
     onEventMessagesChanged: this.scheduler.queuedEffect(
       async (messageId: number) => {
         if (
@@ -820,6 +827,13 @@ export class MessageListStore extends Store<MessageListState> {
             // (only if we're close to the bottom)
             const messageHeightMightHaveChanged = downloadFinished || edited
             this.reducer.messageChanged(message, messageHeightMightHaveChanged)
+
+            // A timestamp of 0 is not comparable: `sortTimestamp`
+            // falls back to the sent time for such messages.
+            const loadedTimestamp = this.state.loadedTimestamps[messageId]
+            if (loadedTimestamp && message.sortTimestamp !== loadedTimestamp) {
+              await this.__reloadWindow()
+            }
           } catch (error) {
             this.log.warn('failed to fetch message with id', messageId, error)
             // ignore not found and other errors
@@ -854,7 +868,9 @@ export class MessageListStore extends Store<MessageListState> {
           // (changing the group name, disappearing messages etc.) or
           // IncomingCall messages. Treat them the same as incoming messages so
           // the list scrolls to bottom when the user is already there.
-          await this.__appendNewMessages()
+          await this.__addMessage(
+            messageId > C.DC_MSG_ID_LAST_SPECIAL ? messageId : undefined
+          )
         }
       },
       'onEventMessagesChanged'
@@ -865,7 +881,7 @@ export class MessageListStore extends Store<MessageListState> {
    * Loads a window around `anchorMsgId`, falling back to the newest messages
    * of the chat if that message is not (or no longer) part of the chat.
    */
-  private async __fetchWindowAround(
+  private async fetchWindowAround(
     anchorMsgId: number | null,
     before: number,
     after: number,
@@ -922,8 +938,11 @@ export class MessageListStore extends Store<MessageListState> {
     }
 
     // The anchor message is part of the window, but we already have it.
+    // So do we have a message that moved behind the anchor,
+    // because its timestamp changed.
     const newerMessageIds = messageWindow.loadedMessageIds.filter(
-      msgId => msgId !== anchorMsgId
+      msgId =>
+        msgId !== anchorMsgId && !this.state.loadedMessageIds.includes(msgId)
     )
     if (newerMessageIds.length === 0) {
       return undefined
@@ -942,6 +961,91 @@ export class MessageListStore extends Store<MessageListState> {
       areIncoming,
     })
     return newerMessageIds
+  }
+
+  /**
+   * Whether a message sorts between the oldest and the newest loaded message,
+   * i.e. the window has to contain it to stay contiguous.
+   */
+  private isInsideWindow(msgId: number, timestamp: number): boolean {
+    const { loadedMessageIds, loadedTimestamps } = this.state
+    const oldest = loadedMessageIds[0]
+    const newest = loadedMessageIds[loadedMessageIds.length - 1]
+    if (oldest == undefined || newest == undefined) {
+      return false
+    }
+    const isAfter = (otherMsgId: number) => {
+      const otherTimestamp = loadedTimestamps[otherMsgId]
+      return (
+        timestamp > otherTimestamp ||
+        (timestamp === otherTimestamp && msgId > otherMsgId)
+      )
+    }
+    return isAfter(oldest) && !isAfter(newest)
+  }
+
+  /**
+   * Adds a message that is new to the chat to the window.
+   *
+   * Core sorts received messages by the time they were sent, so a delayed
+   * message can belong between the messages that are already loaded.
+   *
+   * @param msgId the new message. Without it, only the messages
+   * after the newest loaded one are considered.
+   */
+  private async __addMessage(msgId?: number) {
+    await this.__appendNewMessages()
+    if (msgId == undefined || this.state.loadedMessageIds.includes(msgId)) {
+      return
+    }
+
+    let timestamp: number | undefined
+    try {
+      const position = await fetchMessageWindow(
+        this.accountId,
+        this.chatId,
+        msgId,
+        0,
+        0
+      )
+      timestamp = position.loadedTimestamps[msgId]
+    } catch (err) {
+      // E.g. a hidden message, which is not part of any window.
+      this.log.debug('could not determine the position of message', err)
+    }
+    if (timestamp != undefined && this.isInsideWindow(msgId, timestamp)) {
+      await this.__reloadWindow()
+    }
+  }
+
+  /**
+   * Loads the window again after messages got inserted into it
+   * or moved inside of it, keeping the scroll position.
+   *
+   * Unlike the `refresh` effect, which is dropped while the scroll is locked,
+   * this can't lose a change. The window grows by a message on the side
+   * that is not anchored to make room for the change.
+   */
+  private async __reloadWindow() {
+    const { loadedMessageIds, hasNewer } = this.state
+    const size = loadedMessageIds.length
+    const middle = Math.floor(size / 2)
+    const messageWindow = hasNewer
+      ? await this.fetchWindowAround(
+          loadedMessageIds[middle],
+          middle + 1,
+          size - middle
+        )
+      : await fetchMessageWindow(this.accountId, this.chatId, null, size, 0)
+    const messageCache = await this.loadMessageBodies(
+      messageWindow.loadedMessageIds,
+      this.state.messageCache
+    )
+    this.reducer.setWindow(
+      messageWindow,
+      messageCache,
+      ChatViewReducer.refresh(this.state.viewState)
+    )
   }
 
   /**
@@ -1143,7 +1247,7 @@ export class MessageListStore extends Store<MessageListState> {
       newWindow = loadedWindowOf(this.state)
       newMessageCache = this.state.messageCache
     } else {
-      newWindow = await this.__fetchWindowAround(
+      newWindow = await this.fetchWindowAround(
         jumpToMessageId ?? null,
         halfPageSize,
         halfPageSize,
@@ -1154,7 +1258,7 @@ export class MessageListStore extends Store<MessageListState> {
         jumpToMessageId != undefined &&
         !newWindow.loadedMessageIds.includes(jumpToMessageId)
       ) {
-        // `__fetchWindowAround` fell back to the newest messages of the chat.
+        // `fetchWindowAround` fell back to the newest messages of the chat.
         // To be fair, it's expected that we could jump to a message
         // that is now deleted, e.g. if it got deleted just recently
         // and not all state has updated, but this is super rare.

@@ -56,13 +56,16 @@ function makeMessage(id: number, overrides: { [key: string]: any } = {}) {
  */
 function setupChat(ids: number[], opts: { firstUnread?: number } = {}) {
   let chatIds = [...ids]
+  const timestamps = new Map<number, number>()
+  const timestampOfMessage = (msgId: number) =>
+    timestamps.get(msgId) ?? timestampOf(msgId)
 
   stubRpc('getFirstUnreadMessageOfChat', async () => opts.firstUnread ?? null)
   stubRpc('getMessages', async (_accountId: number, msgIds: number[]) =>
     Object.fromEntries(msgIds.map(id => [id, makeMessage(id)]))
   )
   stubRpc('getMessage', async (_accountId: number, id: number) =>
-    makeMessage(id)
+    makeMessage(id, { sortTimestamp: timestampOfMessage(id) } as any)
   )
   stubRpc('getBasicChatInfo', async () => ({ archived: false }) as any)
   stubRpc('getExistingMsgIds', async (_accountId: number, msgIds: number[]) =>
@@ -105,9 +108,10 @@ function setupChat(ids: number[], opts: { firstUnread?: number } = {}) {
       return {
         items: chatIds.slice(start, end + 1).map(msgId => ({
           msgId,
-          timestamp: timestampOf(msgId),
+          timestamp: timestampOfMessage(msgId),
         })),
-        prevTimestamp: start > 0 ? timestampOf(chatIds[start - 1]!) : null,
+        prevTimestamp:
+          start > 0 ? timestampOfMessage(chatIds[start - 1]!) : null,
         hasOlder: start > 0,
         hasNewer: end < chatIds.length - 1,
       }
@@ -117,6 +121,9 @@ function setupChat(ids: number[], opts: { firstUnread?: number } = {}) {
   return {
     setMessages: (newIds: number[]) => {
       chatIds = [...newIds]
+    },
+    setTimestamp: (msgId: number, timestamp: number) => {
+      timestamps.set(msgId, timestamp)
     },
   }
 }
@@ -416,6 +423,18 @@ describe('MessageListStore', () => {
       })
     })
 
+    it('needs no extra request for a message at the end of the chat', async () => {
+      const { store, setMessages } = await makeLoadedStore(makeIds(30))
+      await emulateScrollDone(store)
+      const windowCalls = getRpcCalls('getMessageWindow').length
+
+      setMessages(makeIds(31)) // new message id 40
+      await store.effect.onEventIncomingMessage(40)
+
+      expect(store.state.loadedMessageIds).to.include(40)
+      expect(getRpcCalls('getMessageWindow')).to.have.length(windowCalls + 1)
+    })
+
     it('handles the first message arriving in an empty chat', async () => {
       const { store, setMessages } = await makeLoadedStore([])
       await emulateScrollDone(store)
@@ -447,14 +466,131 @@ describe('MessageListStore', () => {
       expect(store.state.messageCache[40]).to.equal(undefined)
       expect(store.state.hasNewer).to.equal(true)
     })
+
+    /** Ids 10..39 with the delayed message 100 sorted right after `afterId`. */
+    function withDelayedMessage(afterId: number) {
+      const ids = makeIds(30)
+      ids.splice(ids.indexOf(afterId) + 1, 0, 100)
+      return ids
+    }
+
+    it('inserts a delayed message into the window', async () => {
+      const { store, setMessages, setTimestamp } = await makeLoadedStore(
+        makeIds(30)
+      )
+      await emulateScrollDone(store)
+      fakeMessageListElement.scrollTop = 123
+      const loadedBefore = store.state.loadedMessageIds
+
+      setMessages(withDelayedMessage(35))
+      setTimestamp(100, timestampOf(35) + 1)
+      await store.effect.onEventIncomingMessage(100)
+
+      const expected = [...loadedBefore]
+      expected.splice(expected.indexOf(35) + 1, 0, 100)
+      expect(store.state.loadedMessageIds).to.deep.equal(expected)
+      expect(store.state.messageCache[100]).to.not.equal(undefined)
+      expect(store.state.hasNewer).to.equal(false)
+      expect(store.state.viewState.scrollTo).to.deep.equal({
+        type: 'scrollToPosition',
+        scrollTop: 123,
+      })
+    })
+
+    it('inserts a delayed message while the scroll is locked', async () => {
+      const { store, setMessages, setTimestamp } = await makeLoadedStore(
+        makeIds(30)
+      )
+      // no `emulateScrollDone()`: the scroll is still locked
+
+      setMessages(withDelayedMessage(35))
+      setTimestamp(100, timestampOf(35) + 1)
+      await store.effect.onEventIncomingMessage(100)
+
+      expect(store.state.loadedMessageIds).to.include(100)
+    })
+
+    it('inserts a delayed message when the user is scrolled up', async () => {
+      const { store, setMessages, setTimestamp } = await makeLoadedStore(
+        makeIds(30)
+      )
+      await emulateScrollDone(store)
+      await store.effect.jumpToMessage({ msgId: 25, focus: false })
+      await emulateScrollDone(store)
+      const loadedBefore = store.state.loadedMessageIds
+
+      setMessages(withDelayedMessage(25))
+      setTimestamp(100, timestampOf(25) + 1)
+      await store.effect.onEventIncomingMessage(100)
+
+      expect(store.state.loadedMessageIds).to.include.members(loadedBefore)
+      expect(store.state.loadedMessageIds).to.include(100)
+      expect(store.state.hasNewer).to.equal(true)
+    })
+
+    it('ignores a delayed message older than the window', async () => {
+      const { store, setMessages, setTimestamp } = await makeLoadedStore(
+        makeIds(30)
+      )
+      await emulateScrollDone(store)
+      const loadedBefore = store.state.loadedMessageIds
+
+      setMessages(withDelayedMessage(15))
+      setTimestamp(100, timestampOf(15) + 1)
+      await store.effect.onEventIncomingMessage(100)
+
+      expect(store.state.loadedMessageIds).to.equal(loadedBefore)
+    })
+
+    it('does not fail on a hidden message', async () => {
+      const { store } = await makeLoadedStore(makeIds(30))
+      await emulateScrollDone(store)
+      const loadedBefore = store.state.loadedMessageIds
+
+      await store.effect.onEventIncomingMessage(100)
+
+      expect(store.state.loadedMessageIds).to.equal(loadedBefore)
+    })
+
+    it('does not append a message that is already loaded', async () => {
+      const { store, setMessages, setTimestamp } = await makeLoadedStore(
+        makeIds(30)
+      )
+      await emulateScrollDone(store)
+
+      // the newest message moved back behind its predecessor
+      setMessages([...makeIds(28), 39, 38])
+      setTimestamp(39, timestampOf(38) - 1)
+      await store.effect.onEventIncomingMessage()
+
+      const ids = store.state.loadedMessageIds
+      expect(new Set(ids).size).to.equal(ids.length)
+    })
   })
 
   describe('onEventMessagesChanged', () => {
+    it('reorders the window when a timestamp changed', async () => {
+      const { store, setMessages, setTimestamp } = await makeLoadedStore(
+        makeIds(30)
+      )
+      await emulateScrollDone(store)
+
+      setMessages([...makeIds(28), 39, 38])
+      setTimestamp(39, timestampOf(38) - 1)
+      await store.effect.onEventMessagesChanged(39)
+
+      expect(store.state.loadedMessageIds.slice(-2)).to.deep.equal([39, 38])
+      expect(store.state.loadedTimestamps[39]).to.equal(timestampOf(38) - 1)
+    })
+
     it('reloads a message of the window without reloading the window', async () => {
       const { store } = await makeLoadedStore(makeIds(30))
       const windowCallsBefore = getRpcCalls('getMessageWindow').length
       stubRpc('getMessage', async (_accountId: number, id: number) =>
-        makeMessage(id, { text: 'edited' })
+        makeMessage(id, {
+          text: 'edited',
+          sortTimestamp: timestampOf(id),
+        } as any)
       )
 
       await store.effect.onEventMessagesChanged(39)
