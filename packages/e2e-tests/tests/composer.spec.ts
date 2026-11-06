@@ -565,6 +565,55 @@ test('gets focused after clicking/touching send message button', async () => {
   await expect(textarea).toBeFocused()
 })
 
+test.describe('Ctrl + Up shortcut at the edge of the loaded messages', () => {
+  test.describe.configure({
+    mode: 'serial',
+  })
+
+  const chatName = 'Dummy chat for shortcut paging'
+  function getMessageText(i: number) {
+    return `Paged message number ${i}.`
+  }
+  // More than one page, so that opening the chat doesn't load all of them.
+  const numMessages = 30
+  const numSteps = 20
+
+  test.beforeAll(async () => {
+    await createDummyChat(page, chatName)
+    for (let i = 0; i < numMessages; i++) {
+      const text = getMessageText(i)
+      await expect(textarea).toBeFocused()
+      await textarea.fill(text)
+      await textarea.press('ControlOrMeta+Enter')
+      await expect(page.getByLabel('Messages').getByText(text)).toBeVisible()
+    }
+  })
+  test.beforeEach(async () => {
+    await selectChatByName(page, chatName)
+    await expect(
+      page.getByLabel('Messages').getByText(getMessageText(numMessages - 1))
+    ).toBeVisible()
+  })
+
+  test('moves past the loaded messages in both directions', async () => {
+    await textarea.focus()
+    for (let i = 0; i < numSteps; i++) {
+      await textarea.press('ControlOrMeta+ArrowUp')
+      await expect(composerSection).toContainText(
+        getMessageText(numMessages - 1 - i)
+      )
+    }
+    for (let i = numSteps - 2; i >= 0; i--) {
+      await textarea.press('ControlOrMeta+ArrowDown')
+      await expect(composerSection).toContainText(
+        getMessageText(numMessages - 1 - i)
+      )
+    }
+    await textarea.press('ControlOrMeta+ArrowDown')
+    await expect(composerSection).toHaveText('')
+  })
+})
+
 test.describe('Ctrl + Up shortcut', () => {
   test.describe.configure({
     mode: 'serial',
