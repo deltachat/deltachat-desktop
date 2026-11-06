@@ -310,7 +310,6 @@ build['appx'] = {
 build['nsis'] = {
   oneClick: false,
   allowToChangeInstallationDirectory: false,
-  // the installer renames shortcuts with the old name on update
   shortcutName: displayName,
 }
 
