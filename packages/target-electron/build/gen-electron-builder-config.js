@@ -37,6 +37,14 @@ build['appId'] = 'chat.delta.desktop.electron'
 // see https://github.com/deltachat/deltachat-desktop/issues/6505
 let appName = 'deltachat-desktop'
 
+// `productName` ("DeltaChat") must stay without a space: electron-builder and
+// electron derive file names, install paths (e.g. `/opt/DeltaChat`) and the
+// `userData` dir (which holds the webxdc partitions) from it, and changing
+// those would break existing installations. So we only override the
+// user-facing names with this one.
+// see https://github.com/deltachat/deltachat-desktop/issues/6846
+let displayName = 'Delta Chat'
+
 build['extraMetadata'] = {
   //@ts-ignore
   name: appName,
@@ -49,6 +57,7 @@ if (previewBuild) {
   build.extraMetadata.name = appName
   //@ts-ignore
   build.extraMetadata.productName = 'DeltaChat-DevBuild'
+  displayName = 'Delta Chat DevBuild'
   const p = JSON.parse(
     readFileSync(join(__dirname, '../package.json'), { encoding: 'utf-8' })
   )
@@ -111,6 +120,9 @@ build['mac'] = {
   entitlements: 'build/entitlements.mac.plist',
   entitlementsInherit: 'build/entitlements.mac.plist',
   extendInfo: {
+    // Don't override `CFBundleName`: electron resolves the helper apps with it,
+    // and electron-builder names them after `productName`.
+    CFBundleDisplayName: displayName,
     NSCameraUsageDescription: 'For scanning qr codes.',
     NSMicrophoneUsageDescription: 'For recording voice messages',
     ITSAppUsesNonExemptEncryption: false,
@@ -172,6 +184,7 @@ build['linux'] = {
   category: 'Communication;Chat;InstantMessaging;',
   desktop: {
     entry: {
+      Name: displayName,
       Comment: 'Decentralized Private Messenger (https://delta.chat)',
       Keywords: 'delta chat;chat;deltachat;messaging;messenger;privacy',
       // must match the app_id electron derives from `desktopName`.
@@ -297,6 +310,7 @@ build['appx'] = {
 build['nsis'] = {
   oneClick: false,
   allowToChangeInstallationDirectory: false,
+  shortcutName: displayName,
 }
 
 // module.exports = build
