@@ -130,7 +130,9 @@ export default function MessageListAndComposer({
     accountId,
     chat.id,
     chat.canSend,
-    regularMessageInputRef
+    regularMessageInputRef,
+    fetchMoreTop,
+    fetchMoreBottom
   )
 
   const handleDrop = useEffectEvent(async (paths: string[]) => {
