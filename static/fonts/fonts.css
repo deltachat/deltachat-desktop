@@ -37,8 +37,9 @@
   font-family: "NotoEmoji";
   src: url("noto/emoji/NotoColorEmoji.ttf") format("truetype");
 }
-/* make emoji mart use the same emoji fonts in the same order that we use elsewhere */
+/* Use bundled emoji for the picker and app text. Apple emoji can render blank
+   in sandboxed Electron on macOS with Lockdown Mode enabled. */
 @font-face {
   font-family: 'EmojiMart';
-  src: local('Apple Color Emoji'), url("noto/emoji/NotoColorEmoji.ttf") format("truetype");
+  src: url("noto/emoji/NotoColorEmoji.ttf") format("truetype");
 }
