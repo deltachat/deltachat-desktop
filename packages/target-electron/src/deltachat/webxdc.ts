@@ -72,7 +72,7 @@ const open_apps: {
  * and one for apps without internet access
  *
  * */
-const existing_sessions: string[] = []
+const existing_sessions: { [partition: string]: Promise<void> } = {}
 
 /**
  * see: https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CSP
@@ -204,19 +204,14 @@ export default class DCWebxdc {
       })
     })
 
-    const createSessionIfNotExists = async (
+    const createSession = async (
       accountId: number,
+      partition: string,
       internetAccess: boolean
-    ): Promise<string> => {
-      const partition = partitionKeyFromAccountId(accountId, internetAccess)
-      if (existing_sessions.includes(partition)) {
-        return partition
-      }
-
+    ): Promise<void> => {
       const ses = session.fromPartition(partition, {
         cache: false,
       })
-      existing_sessions.push(partition)
 
       const loggedPermissionRequests = new Set<string>()
 
@@ -299,8 +294,6 @@ export default class DCWebxdc {
           webRequestHandler(accountId, this.rpc, req)
         )
       }
-
-      return partition
     }
 
     /**
@@ -353,10 +346,20 @@ export default class DCWebxdc {
       // TODO intercept / deny network access - CSP should probably be disabled for testing
 
       // used by BrowserWindow
-      const partition = await createSessionIfNotExists(
+      const partition = partitionKeyFromAccountId(
         accountId,
         webxdcInfo['internetAccess']
       )
+      if (existing_sessions[partition] == undefined) {
+        existing_sessions[partition] = createSession(
+          accountId,
+          partition,
+          webxdcInfo['internetAccess']
+        )
+      }
+      // Even if the session already exists,
+      // make sure to `await` its initialization.
+      await (existing_sessions[partition] satisfies Promise<void>)
 
       const webxdcWindow = new BrowserWindow({
         webPreferences: {
