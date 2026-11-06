@@ -65,7 +65,9 @@ export function useDraft(
   accountId: number,
   chatId: number | null,
   canSend: boolean, // no draft needed in chats we can't send messages
-  inputRef: React.RefObject<ComposerMessageInput | null>
+  inputRef: React.RefObject<ComposerMessageInput | null>,
+  fetchMoreTop: () => void,
+  fetchMoreBottom: () => void
 ): {
   draftState: DraftObject
   /**
@@ -523,12 +525,14 @@ export function useDraft(
       currQuoteMessageIdInd + direction
     ).next()
     if (newQuoteRes.done) {
-      // The loaded messages end here, but the chat may go on:
-      // only its last message ends the selection of a quote.
-      if (
-        upOrDown === KeybindAction.Composer_SelectReplyToDown &&
-        !messageListState.hasNewer
-      ) {
+      // The loaded messages end here, but the chat may go on. Scrolling
+      // doesn't load more if messages that can't be quoted are in between.
+      if (direction === -1 && messageListState.hasOlder) {
+        fetchMoreTop()
+      } else if (direction === 1 && messageListState.hasNewer) {
+        fetchMoreBottom()
+      } else if (upOrDown === KeybindAction.Composer_SelectReplyToDown) {
+        // Currently quoted message was the last message of the chat
         removeQuote()
       }
       return
