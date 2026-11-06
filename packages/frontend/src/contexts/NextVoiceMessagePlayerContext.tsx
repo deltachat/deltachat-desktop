@@ -14,6 +14,7 @@ import { BackendRemote, onDCEvent } from '../backend-com'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import { useHasChanged2 } from '../hooks/useHasChanged'
 import { getLogger } from '@deltachat-desktop/shared/logger'
+import type { T } from '@deltachat/jsonrpc-client'
 
 const log = getLogger('NextVoiceMessagePlayerContext')
 
@@ -55,26 +56,10 @@ export function NextVoiceMessagePlayerProvider({
     src: string
   } | null>(null)
 
-  const onEndedPlaybackAndLoadedNextMessage = useCallback(
-    (endedSrc: string, _nextMessageIsLoading: false) => {
-      if (nextMessage == null) {
-        log.info('no next voice message to play, stopping sequential playback')
-        mediaPlayerMutexCtx.stop()
-        setCurrMessage(null)
-        return
-      }
-
-      if (currMessage == null || endedSrc !== currMessage.src) {
-        return
-      }
-
-      const { accountId, message } = nextMessage
-
+  const playVoiceMessage = useCallback(
+    (accountId: number, message: T.Message) => {
       if (!message.file) {
-        log.warn(
-          'wanted to play next voice message, but its file is',
-          message.file
-        )
+        log.warn('wanted to play voice message, but its file is', message.file)
         return
       }
       const src = runtime.transformBlobURL(message.file)
@@ -88,7 +73,25 @@ export function NextVoiceMessagePlayerProvider({
       // Actually start playing the media.
       mediaPlayerMutexCtx.play(src)
     },
-    [currMessage, mediaPlayerMutexCtx, nextMessage]
+    [mediaPlayerMutexCtx]
+  )
+
+  const onEndedPlaybackAndLoadedNextMessage = useCallback(
+    (endedSrc: string, _nextMessageIsLoading: false) => {
+      if (nextMessage == null) {
+        log.info('no next voice message to play, stopping sequential playback')
+        mediaPlayerMutexCtx.stop()
+        setCurrMessage(null)
+        return
+      }
+
+      if (currMessage == null || endedSrc !== currMessage.src) {
+        return
+      }
+
+      playVoiceMessage(nextMessage.accountId, nextMessage.message)
+    },
+    [currMessage, mediaPlayerMutexCtx, nextMessage, playVoiceMessage]
   )
 
   const onEnded = useEffectEvent(() => {
@@ -128,6 +131,26 @@ export function NextVoiceMessagePlayerProvider({
     )
     setPendingEndedEvent(null)
   }
+
+  const onNextTrack = useEffectEvent(() => {
+    if (nextMessage == null) {
+      log.warn('onNextTrack called but there is no next message')
+      return
+    }
+    playVoiceMessage(nextMessage.accountId, nextMessage.message)
+  })
+  const haveNextMessage = nextMessage != null
+  useEffect(() => {
+    // TODO fix: don't disable the button while loading the next message.
+    if (!haveNextMessage) {
+      return
+    }
+    if (!('mediaSession' in navigator)) {
+      return
+    }
+    navigator.mediaSession.setActionHandler('nexttrack', onNextTrack)
+    return () => navigator.mediaSession.setActionHandler('nexttrack', null)
+  }, [haveNextMessage])
 
   return (
     <NextVoiceMessagePlayerContext.Provider value={{ setCurrMessage }}>
