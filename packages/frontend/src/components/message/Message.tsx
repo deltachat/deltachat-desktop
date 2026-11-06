@@ -1162,7 +1162,10 @@ export default function Message(props: {
         />
       )}
       <div
-        className='msg-container'
+        className={classNames('msg-container', {
+          [styles.imageWithText]:
+            hasText && showAttachment(message) && isImage(viewType),
+        })}
         style={{ borderColor: message.sender.color }}
         ref={messageContainerRef}
       >

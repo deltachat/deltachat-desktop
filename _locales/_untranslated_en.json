@@ -1,4 +1,7 @@
 {
+  "image_cropped": {
+    "message": "Image is cropped"
+  },
   "command_palette_tab_to_search": {
     "message": "Tab to search"
   },

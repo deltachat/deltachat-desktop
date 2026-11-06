@@ -18,8 +18,8 @@ import {
 /**
  * Regression test for https://github.com/deltachat/deltachat-desktop/issues/5858
  *
- * The test reproduces the race condition by delaying /blobs/** responses so the
- * initial measurement needs to be updated after the image loaded.
+ * The test delays /blobs/** responses so the reactions are measured
+ * before the image is loaded.
  */
 
 test.describe.configure({ mode: 'serial' })
@@ -181,16 +181,20 @@ test('reactions on image messages are not collapsed after image loads', async ()
     'image should not be loaded yet due to route delay'
   ).toHaveJSProperty('naturalWidth', 0, { timeout: 200 })
 
-  // While the image is still loading the container width is unknown, so the
-  // reactions should be in their initial collapsed state — not all three
-  // individual emojis should be visible at the same time.
+  // The image size is computed from the message's dimensions,
+  // so the container has its final width before the image is loaded.
   await expect(
     reloadedMessage.getByText(/\+\d+/),
-    'reactions should be collapsed while image has not loaded yet'
-  ).toBeVisible({ timeout: 200 })
+    'reactions should not be collapsed while image has not loaded yet'
+  ).not.toBeVisible({ timeout: 200 })
+  await expect(imgLocator, 'image should still be loading').toHaveJSProperty(
+    'naturalWidth',
+    0,
+    { timeout: 200 }
+  )
 
   // Wait for the image to finish loading (naturalWidth > 0 means the browser
-  // has decoded the image dimensions and the container has its final width)
+  // has decoded the image)
   await expect(
     imgLocator,
     'image should become visible after the delayed load'
