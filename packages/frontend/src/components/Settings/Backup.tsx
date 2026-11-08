@@ -37,7 +37,7 @@ export default function Backup() {
   const onBackupExport = useCallback(async () => {
     const confirmed = await openConfirmationDialog({
       message: tx('pref_backup_export_explain'),
-      confirmLabel: tx('pref_backup_export_start_button'),
+      confirmLabel: tx('pref_backup_export_this'),
     })
 
     if (confirmed) {
