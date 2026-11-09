@@ -113,6 +113,10 @@ const create = (win: BrowserWindow) => {
           target.paste()
         },
       }),
+      editMenu: () => ({
+        role: 'editMenu',
+        visible: props.isEditable,
+      }),
       copyLink: () => ({
         id: 'copyLink',
         label: tx('menu_copy_link_to_clipboard'),
@@ -135,6 +139,7 @@ const create = (win: BrowserWindow) => {
       defaultActions.cut(),
       defaultActions.copy(),
       defaultActions.paste(),
+      defaultActions.editMenu(),
       defaultActions.separator(),
       defaultActions.copyImage(),
       defaultActions.separator(),
@@ -149,7 +154,7 @@ const create = (win: BrowserWindow) => {
     if (menuTemplate.length > 0) {
       const menu = electron.Menu.buildFromTemplate(menuTemplate as MenuItem[])
 
-      menu.popup({ window: win })
+      menu.popup({ window: win, frame: props.frame || undefined })
     }
   }
 
