@@ -105,12 +105,12 @@ test.describe('export then import backup', () => {
     )
     await expect(
       pageA.getByRole('dialog').last().getByRole('button')
-    ).toHaveText(['Cancel', 'Start Backup'])
+    ).toHaveText(['Cancel', 'Export this profile'])
 
     // In Electron we would show a directory picker dialog,
     // but in the browser version it's a download.
     const downloadPromise = pageA.waitForEvent('download')
-    await pageA.getByRole('button', { name: 'Start Backup' }).click()
+    await pageA.getByRole('button', { name: 'Export this profile' }).click()
     // This dialog is also not present on Electron.
     await pageA
       .getByRole('dialog')
@@ -121,7 +121,7 @@ test.describe('export then import backup', () => {
     backupPath = download.path()
 
     await expect(
-      pageA.getByRole('button', { name: 'Start Backup' })
+      pageA.getByRole('button', { name: 'Export this profile' })
     ).not.toBeVisible()
   })
 
