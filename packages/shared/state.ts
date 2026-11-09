@@ -31,6 +31,7 @@ export function getDefaultState(): DesktopSettingsType {
     autostartElectron: false,
     hideMenuBar: false,
     appStoreBaseUrl: undefined,
+    enableWebxdcPermissionManagement: false,
   }
 }
 
