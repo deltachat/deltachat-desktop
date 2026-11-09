@@ -1,4 +1,10 @@
 This package is part of the noto project.  Visit
 google.com/get/noto for more information.
 
-version: https://github.com/googlefonts/noto-emoji/commit/f3b9faa83dedf51cd4d9d8ff30e13c17b8073211
+Version: 2.057 (release v2026-09-24-unicode18_0)
+Source: https://github.com/googlefonts/noto-emoji/blob/e20cbc2bbec1926686be9f9bee7d1d2cfa1fea0e/2D/fonts/Noto-COLRv1.ttf
+SHA-256: b8e25ea68db82f9e4d0aee921f4420be2be39887bd5c893a2ad98710531f9d0c
+
+Noto-COLRv1.ttf is bundled as NotoColorEmoji.ttf to preserve existing font URLs.
+It uses COLRv1 vector color glyphs instead of CBDT/CBLC bitmaps.
+The font is licensed under the SIL Open Font License 1.1; see LICENSE.
