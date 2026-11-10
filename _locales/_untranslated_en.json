@@ -106,5 +106,8 @@
   },
   "last_updated": {
     "message": "Last Updated"
+  },
+  "set_for_everyone": {
+    "message": "Set for Everyone"
   }
 }
