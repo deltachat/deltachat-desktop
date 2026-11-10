@@ -103,5 +103,8 @@
   },
   "reset_changes_question": {
     "message": "Reset all changes?"
+  },
+  "last_updated": {
+    "message": "Last Updated"
   }
 }
