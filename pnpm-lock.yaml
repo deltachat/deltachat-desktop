@@ -61,6 +61,7 @@ overrides:
   '@xmldom/xmldom@>=0.8.0 <=0.8.14': ^0.8.15
 
 patchedDependencies:
+  emoji-mart-awesome@3.0.0: 696d6dcdd58af988d4dfa9da7946a2b07c86739639b6eb8e19046f6042730029
   react-filerobot-image-editor@5.0.0-beta.159: ded5306135fcf3ed2b1f9b1c61254d8053e7d8368eb24795867a3b7be6e331de
 
 importers:
@@ -147,10 +148,7 @@ importers:
         version: 2.69.0(ws@8.21.0)
       '@emoji-mart-awesome/react':
         specifier: 1.0.0
-        version: 1.0.0(emoji-mart-awesome@3.0.0)(react@19.3.1)
-      '@emoji-mart/data':
-        specifier: 1.2.1
-        version: 1.2.1
+        version: 1.0.0(emoji-mart-awesome@3.0.0(patch_hash=696d6dcdd58af988d4dfa9da7946a2b07c86739639b6eb8e19046f6042730029))(react@19.3.1)
       '@jcoreio/async-throttle':
         specifier: ^1.6.1
         version: 1.6.1
@@ -165,7 +163,7 @@ importers:
         version: 1.2.1
       emoji-mart-awesome:
         specifier: 3.0.0
-        version: 3.0.0
+        version: 3.0.0(patch_hash=696d6dcdd58af988d4dfa9da7946a2b07c86739639b6eb8e19046f6042730029)
       filesize:
         specifier: ^10.1.4
         version: 10.1.6
@@ -224,6 +222,9 @@ importers:
         specifier: ^3.3.0
         version: 3.4.3(react@19.3.1)
     devDependencies:
+      '@emoji-mart/data':
+        specifier: 1.2.1
+        version: 1.2.1
       '@types/chai':
         specifier: 'catalog:'
         version: 4.3.20
@@ -254,6 +255,9 @@ importers:
       chai:
         specifier: 'catalog:'
         version: 6.2.1
+      emoji-datasource:
+        specifier: 16.0.0
+        version: 16.0.0
       esbuild:
         specifier: 'catalog:'
         version: 0.28.1
@@ -2030,6 +2034,9 @@ packages:
     resolution: {integrity: sha512-YS01j/AMWGbPAfbXijkLOUJGFhmrIg6pf9An8+LzY1PIc5sjwqEcSMsEBXgUQiWw1lSfPCP7RpxbvkN1JQRD8A==}
     engines: {node: '>= 22.12.0'}
     hasBin: true
+
+  emoji-datasource@16.0.0:
+    resolution: {integrity: sha512-/qHKqK5Nr3+8zhgO6kHmF43Fm5C8HNn0AaFRIpgw8HF3+uF0Vfc8jgLI1ZQS5ba1vBzksS8NBCjHejwLb2D/Sg==}
 
   emoji-mart-awesome@3.0.0:
     resolution: {integrity: sha512-bruL48qsNlk5ek4BCM36dgdDX+sFXGf+CgjCzzk0meI79N9l/uXNtdWcBeVRvtcb5x4EbYkDJ3XfW5ws96e9cA==}
@@ -4455,9 +4462,9 @@ snapshots:
       - supports-color
     optional: true
 
-  '@emoji-mart-awesome/react@1.0.0(emoji-mart-awesome@3.0.0)(react@19.3.1)':
+  '@emoji-mart-awesome/react@1.0.0(emoji-mart-awesome@3.0.0(patch_hash=696d6dcdd58af988d4dfa9da7946a2b07c86739639b6eb8e19046f6042730029))(react@19.3.1)':
     dependencies:
-      emoji-mart-awesome: 3.0.0
+      emoji-mart-awesome: 3.0.0(patch_hash=696d6dcdd58af988d4dfa9da7946a2b07c86739639b6eb8e19046f6042730029)
       react: 19.3.1
 
   '@emoji-mart/data@1.2.1': {}
@@ -5776,7 +5783,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  emoji-mart-awesome@3.0.0: {}
+  emoji-datasource@16.0.0: {}
+
+  emoji-mart-awesome@3.0.0(patch_hash=696d6dcdd58af988d4dfa9da7946a2b07c86739639b6eb8e19046f6042730029): {}
 
   emoji-regex@8.0.0: {}
 

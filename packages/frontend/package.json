@@ -19,7 +19,8 @@
     "watch:types": "npx tsc --noEmit --pretty -w --preserveWatchOutput",
     "watch:static": "node ../../bin/tools/copy.js ../../static ./html-dist & node ../../bin/tools/copy.js ./static ./html-dist & node ../../bin/tools/copy.js ../../images ./html-dist/images",
     "watch:scss": "pnpm build:scss --watch",
-    "test": "NODE_OPTIONS=\"--enable-source-maps --import ./bin/register-ts-node.mjs\" mocha 'src/tests/**/*.ts'"
+    "test": "node --test ./bin/generate-emoji-data.test.mjs && NODE_OPTIONS=\"--enable-source-maps --import ./bin/register-ts-node.mjs\" mocha 'src/tests/**/*.ts'",
+    "generate:emoji-data": "node ./bin/generate-emoji-data.mjs"
   },
   "browser": {
     "path": "path-browserify"
@@ -30,7 +31,6 @@
     "@deltachat-desktop/shared": "link:../shared",
     "@deltachat/jsonrpc-client": "catalog:",
     "@emoji-mart-awesome/react": "1.0.0",
-    "@emoji-mart/data": "1.2.1",
     "@jcoreio/async-throttle": "^1.6.1",
     "@types/linkifyjs": "^2.1.7",
     "classnames": "^2.5.1",
@@ -57,6 +57,7 @@
     "use-debounce": "^3.3.0"
   },
   "devDependencies": {
+    "@emoji-mart/data": "1.2.1",
     "@types/chai": "catalog:",
     "@types/debounce": "^1.2.4",
     "@types/mime-types": "catalog:",
@@ -67,6 +68,7 @@
     "@types/react-window": "^1.8.8",
     "@types/react-window-infinite-loader": "^1.0.9",
     "chai": "catalog:",
+    "emoji-datasource": "16.0.0",
     "esbuild": "catalog:",
     "esbuild-plugin-inline-worker": "^0.1.1",
     "mocha": "catalog:",

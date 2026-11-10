@@ -70,4 +70,5 @@ minimumReleaseAgeExclude:
   - '@deltachat/stdio-rpc-server'
 
 patchedDependencies:
+  emoji-mart-awesome@3.0.0: packages/frontend/patches/emoji-mart-awesome@3.0.0.patch
   react-filerobot-image-editor@5.0.0-beta.159: packages/frontend/patches/react-filerobot-image-editor@5.0.0-beta.159.patch
