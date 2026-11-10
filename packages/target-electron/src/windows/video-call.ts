@@ -428,9 +428,7 @@ function openVideoCallWindow<D extends CallDirection>(
         ? `#offerIncomingCall=${btoa(callerWebrtcOffer!)}`
         : // Otherwise we'll set the hash later, when the call gets accepted.
           ''
-  win.webContents.loadURL(`${SCHEME_NAME}://${host}?${query}${hash}`, {
-    extraHeaders: 'Content-Security-Policy: ' + CSP,
-  })
+  win.webContents.loadURL(`${SCHEME_NAME}://${host}?${query}${hash}`)
 
   if (callDirection === CallDirection.Outgoing) {
     // Do not `#startCall` immediately. Give the user a moment to cancel it

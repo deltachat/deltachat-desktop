@@ -308,9 +308,7 @@ export default class DCWebxdc {
       const { webxdcInfo, chatName, accountId, href } = p
 
       const loadURL = (webxdcWindow: BrowserWindow, url: string) => {
-        webxdcWindow.webContents.loadURL(url, {
-          extraHeaders: 'Content-Security-Policy: ' + CSP,
-        })
+        webxdcWindow.webContents.loadURL(url)
       }
 
       let fullHref: string | undefined = undefined
