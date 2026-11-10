@@ -290,7 +290,4 @@ DCJsonrpcRemoteInitializedP.then(jsonrpcRemote => {
   jsonrpcRemote.on('MsgDeleted', (accountId, { chatId, msgId }) => {
     clearNotificationsForMessage(null, accountId, chatId, msgId)
   })
-  jsonrpcRemote.on('MsgsNoticed', (accountId, { chatId }) => {
-    clearNotificationsForChat(null, accountId, chatId)
-  })
 })
