@@ -129,17 +129,18 @@ export default function DisappearingMessage({
         </DialogContent>
       </DialogBody>
       <DialogFooter>
-        <FooterActions align='spaceBetween'>
+        <FooterActions>
           <FooterActionButton
             onClick={() => runtime.openHelpWindow('ephemeralmsgs')}
           >
             {tx('learn_more')}
           </FooterActionButton>
+          <div style={{ flexGrow: 1 }}></div>
           <FooterActionButton onClick={onClose}>
             {tx('cancel')}
           </FooterActionButton>
-          <FooterActionButton onClick={saveAndClose}>
-            {tx('save_desktop')}
+          <FooterActionButton styling='primary' onClick={saveAndClose}>
+            {tx('set_for_everyone')}
           </FooterActionButton>
         </FooterActions>
       </DialogFooter>
