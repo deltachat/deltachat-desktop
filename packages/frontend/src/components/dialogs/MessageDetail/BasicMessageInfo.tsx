@@ -70,7 +70,9 @@ export function BasicMessageInfo(props: BasicMessageInfoProps) {
       {receivedFormatted && (
         <div className={styles.infoRow}>
           <span className={styles.infoLabel}>
-            {tx('message_detail_received_desktop')}
+            {message.viewType === 'Webxdc'
+              ? tx('last_updated')
+              : tx('message_detail_received_desktop')}
           </span>
           <span className={styles.infoValue}>{receivedFormatted}</span>
         </div>
