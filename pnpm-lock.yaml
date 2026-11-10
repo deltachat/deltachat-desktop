@@ -147,7 +147,7 @@ importers:
         version: 2.69.0(ws@8.21.0)
       '@emoji-mart-awesome/react':
         specifier: 1.0.0
-        version: 1.0.0(emoji-mart-awesome@3.0.0)(react@19.2.0)
+        version: 1.0.0(emoji-mart-awesome@3.0.0)(react@19.3.1)
       '@emoji-mart/data':
         specifier: 1.2.1
         version: 1.2.1
@@ -188,41 +188,41 @@ importers:
         specifier: ^1.0.1
         version: 1.0.1
       react:
-        specifier: ^19.2.0
-        version: 19.2.0
+        specifier: ^19.3.1
+        version: 19.3.1
       react-dom:
-        specifier: ^19.2.0
-        version: 19.2.0(react@19.2.0)
+        specifier: ^19.3.1
+        version: 19.3.1(react@19.3.1)
       react-filerobot-image-editor:
         specifier: 5.0.0-beta.159
-        version: 5.0.0-beta.159(patch_hash=ded5306135fcf3ed2b1f9b1c61254d8053e7d8368eb24795867a3b7be6e331de)(@babel/core@7.29.7(supports-color@8.1.1))(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(react-dom@19.2.0(react@19.2.0))(react-konva@19.2.7(@types/react@19.2.2)(konva@9.3.18)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react@19.2.0)(styled-components@6.6.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0))
+        version: 5.0.0-beta.159(patch_hash=ded5306135fcf3ed2b1f9b1c61254d8053e7d8368eb24795867a3b7be6e331de)(@babel/core@7.29.7(supports-color@8.1.1))(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react-konva@19.3.2(@types/react@19.3.0)(konva@9.3.18)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react@19.3.1)(styled-components@6.6.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1))
       react-konva:
-        specifier: ~19.2.7
-        version: 19.2.7(@types/react@19.2.2)(konva@9.3.18)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+        specifier: ~19.3.2
+        version: 19.3.2(@types/react@19.3.0)(konva@9.3.18)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       react-resizable-panels:
         specifier: ^4.14.5
-        version: 4.14.5(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+        version: 4.14.5(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       react-string-replace:
         specifier: ^1.1.1
         version: 1.1.1
       react-virtualized-auto-sizer:
         specifier: ^1.0.26
-        version: 1.0.26(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+        version: 1.0.26(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       react-window:
         specifier: ^1.8.11
-        version: 1.8.11(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+        version: 1.8.11(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       react-window-infinite-loader:
         specifier: ^1.0.10
-        version: 1.0.10(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+        version: 1.0.10(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       react-zoom-pan-pinch:
         specifier: ^4.0.0
-        version: 4.0.3(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+        version: 4.0.3(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       styled-components:
         specifier: ^6.5.3
-        version: 6.6.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+        version: 6.6.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       use-debounce:
         specifier: ^3.3.0
-        version: 3.4.3(react@19.2.0)
+        version: 3.4.3(react@19.3.1)
     devDependencies:
       '@types/chai':
         specifier: 'catalog:'
@@ -240,11 +240,11 @@ importers:
         specifier: 'catalog:'
         version: 22.15.33
       '@types/react':
-        specifier: ^19.2.2
-        version: 19.2.2
+        specifier: ^19.3.0
+        version: 19.3.0
       '@types/react-dom':
-        specifier: ^19.2.2
-        version: 19.2.2(@types/react@19.2.2)
+        specifier: ^19.3.0
+        version: 19.3.0(@types/react@19.3.0)
       '@types/react-window':
         specifier: ^1.8.8
         version: 1.8.8
@@ -1391,18 +1391,18 @@ packages:
   '@types/rc@1.2.4':
     resolution: {integrity: sha512-xD6+epQoMH79A1uwmJIq25D+XZ57jUzCQ1DGSvs3tGKdx7QDYOOaMh6m5KBkEIW4+Cy5++bZ7NLDfdpNiYVKYA==}
 
-  '@types/react-dom@19.2.2':
-    resolution: {integrity: sha512-9KQPoO6mZCi7jcIStSnlOWn2nEF3mNmyr3rIAsGnAbQKYbRLyqmeSc39EVgtxXVia+LMT8j3knZLAZAh+xLmrw==}
+  '@types/react-dom@19.3.0':
+    resolution: {integrity: sha512-ZI7bU42mZXXKHn/qNLEw2IrbiINU7X5+vfgdixBHkCNpYWXjKgfQ/P+uyGb5CjOLB9UcnTeg3rylQtV2hym44Q==}
     peerDependencies:
-      '@types/react': ^19.2.0
+      '@types/react': ^19.3.0
 
   '@types/react-reconciler@0.28.9':
     resolution: {integrity: sha512-HHM3nxyUZ3zAylX8ZEyrDNd2XZOnQ0D5XfunJF5FLQnZbHHYq4UWvW1QfelQNXv1ICNkwYhfxjwfnqivYB6bFg==}
     peerDependencies:
       '@types/react': '*'
 
-  '@types/react-reconciler@0.33.1':
-    resolution: {integrity: sha512-0kF59ji2mKuHUd5wytHSpmORybMYVerJvq0K10pz9ZFoOlJ3e+w1LBjLshWpCrokeyQOioRodNbO4PH4ddvRfg==}
+  '@types/react-reconciler@0.34.0':
+    resolution: {integrity: sha512-zVDzX0Fk1XgDP2IutTpSrxd57jwOHlX3rlPrFz68Sc+06tpgOFRlqSUK2ZiqQeQXqnIfUb2cfJQUupXBKy498w==}
     peerDependencies:
       '@types/react': '*'
 
@@ -1412,8 +1412,8 @@ packages:
   '@types/react-window@1.8.8':
     resolution: {integrity: sha512-8Ls660bHR1AUA2kuRvVG9D/4XpRC6wjAaPT9dil7Ckc76eP9TKWZwwmgfq8Q1LANX3QNDnoU4Zp48A3w+zK69Q==}
 
-  '@types/react@19.2.2':
-    resolution: {integrity: sha512-6mDvHUFSjyT2B2yeNx2nUgMxh9LtOWvkhIU3uePn2I2oyNymUAX1NIsdgviM4CH+JSrp2D2hsMvJOkxY+0wNRA==}
+  '@types/react@19.3.0':
+    resolution: {integrity: sha512-N0rFCuH9YoxG9/m61l9MfpJKfmLOVU0em7ipIz6TRgSSkvReLB9vL85GB+yr8Bs5leqpvg96JSwF4ZS1s4viQg==}
 
   '@types/resolve-path@1.4.3':
     resolution: {integrity: sha512-6mMvIPfQhbOOvntC6GbLqlEZP9fmkhqICNDbdCj2BbhaF7hoYuTiDiW63mOYtUQ9+E+b4ahyuqY1N0uVMxDH9w==}
@@ -1865,9 +1865,6 @@ packages:
     resolution: {integrity: sha512-/Tb/JcjK111nNScGob5MNtsntNM1aCNUDipB/TkwZFhyDrrE47SOx/18wF2bbjgc3ZzCSKW1T5nt5EbFoAz/Vg==}
     engines: {node: '>=4'}
     hasBin: true
-
-  csstype@3.1.3:
-    resolution: {integrity: sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw==}
 
   csstype@3.2.3:
     resolution: {integrity: sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ==}
@@ -3396,10 +3393,10 @@ packages:
     resolution: {integrity: sha512-y3bGgqKj3QBdxLbLkomlohkvsA8gdAiUQlSBJnBhfn+BPxg4bc62d8TcBW15wavDfgexCgccckhcZvywyQYPOw==}
     hasBin: true
 
-  react-dom@19.2.0:
-    resolution: {integrity: sha512-UlbRu4cAiGaIewkPyiRGJk0imDN2T3JjieT6spoL2UeSf5od4n5LB/mQ4ejmxhCFT1tYe8IvaFulzynWovsEFQ==}
+  react-dom@19.3.1:
+    resolution: {integrity: sha512-Y0bARz53lhEC1NMCASs0/j+faB/zqt3R8hpvg1e8+61ZVJ4UL0UdC4cBbXfZMcIuhrfgeILTLe+ZeBCavQPtKQ==}
     peerDependencies:
-      react: ^19.2.0
+      react: ^19.3.1
 
   react-filerobot-image-editor@5.0.0-beta.159:
     resolution: {integrity: sha512-PGmZVUD42fTTnjovHJqaY+X7dlP/uUG4fQOfmQkjYfaDV/8fuVpn6MgVbrsUiLetbtknVJx09mfvxoLfdH9Kmg==}
@@ -3423,18 +3420,18 @@ packages:
       react-dom: ^18.2.0 || ^19.0.0
       react-konva: ^18.2.10 || ^19.0.1
 
-  react-konva@19.2.7:
-    resolution: {integrity: sha512-z/mxVITj2W+MQ8+TeD7ONMnMvy99hj4NJ4UfmWbjJcdeUOm8AZR41cCfwRZTryE3/z4r2/nOyckRNlr0GP+G3w==}
+  react-konva@19.3.2:
+    resolution: {integrity: sha512-Uv0xlWoRSCByHinqs/03SFL8E28fYbe59sQ+2EJpwa1O4Zlz0+T+8DaKwlma9C2rkYwYj6j8eHD41F5oJafagg==}
     peerDependencies:
       konva: ^8.0.1 || ^7.2.5 || ^9.0.0 || ^10.0.0
-      react: ^19.2.0
-      react-dom: ^19.2.0
+      react: ^19.3.0
+      react-dom: ^19.3.0
 
-  react-reconciler@0.33.0:
-    resolution: {integrity: sha512-KetWRytFv1epdpJc3J4G75I4WrplZE5jOL7Yq0p34+OVOKF4Se7WrdIdVC45XsSSmUTlht2FM/fM1FZb1mfQeA==}
+  react-reconciler@0.34.0:
+    resolution: {integrity: sha512-eVibvB1fc9j5Qf1KRkiM3GzRPBdjg2P6G6QV2f3P6Eb3OGMxRBhdg2rrUwjbV5JrQaJj8nOa8uajmmJA5tJWjQ==}
     engines: {node: '>=0.10.0'}
     peerDependencies:
-      react: ^19.2.0
+      react: ^19.3.0
 
   react-resizable-panels@4.14.5:
     resolution: {integrity: sha512-AoHgoq3sGOfciPn2ahddFrBCqsitZLse8cJIYWblvE3kQ9z39IrhdlHCjnVRrDL8XcWqvA0u/t9nLZTfWePJ5A==}
@@ -3473,8 +3470,8 @@ packages:
       react: '*'
       react-dom: '*'
 
-  react@19.2.0:
-    resolution: {integrity: sha512-tmbWg6W31tQLeB5cdIBOicJDJRR2KzXsV7uSK9iNfLWQ5bIZfxuPEHp7M8wiHyHnn0DD1i7w3Zmin0FtkrwoCQ==}
+  react@19.3.1:
+    resolution: {integrity: sha512-QNhWdt7nrgVWWQG58QuGsAR3jv3Hbe4mb4vz7w2csnHavciZJgda1CPNaldF6eVxv90ud3jUXpKlHL69gO38yw==}
     engines: {node: '>=0.10.0'}
 
   read-binary-file-arch@1.0.6:
@@ -3582,8 +3579,8 @@ packages:
   sax@1.4.3:
     resolution: {integrity: sha512-yqYn1JhPczigF94DMS+shiDMjDowYO6y9+wB/4WgO0Y19jWYk0lQ4tuG5KI7kj4FTp1wxPj5IFfcrz/s1c3jjQ==}
 
-  scheduler@0.27.0:
-    resolution: {integrity: sha512-eNv+WrVbKu1f3vbYJT/xtiF5syA5HPIMtf9IgY/nKg0sWqzAUEvqY/xm7OcZc/qafLx/iO9FgOmeSAp4v5ti/Q==}
+  scheduler@0.28.0:
+    resolution: {integrity: sha512-juorfCmIkIw8tT+p5BXSm6PJjQF/ycEYmKyzURCIt/RaZIhL+PulbQ9Yu2z1HdOJDdqDTlxA1+xKBmHXJsczAw==}
 
   semver-compare@1.0.0:
     resolution: {integrity: sha512-YM3/ITh2MJ5MtzaM429anh+x2jiLVjqILF4m4oyQB18W7Ggea7BfqdH/wGMK7dDiMghv/6WG7znWMwUDzJiXow==}
@@ -4458,10 +4455,10 @@ snapshots:
       - supports-color
     optional: true
 
-  '@emoji-mart-awesome/react@1.0.0(emoji-mart-awesome@3.0.0)(react@19.2.0)':
+  '@emoji-mart-awesome/react@1.0.0(emoji-mart-awesome@3.0.0)(react@19.3.1)':
     dependencies:
       emoji-mart-awesome: 3.0.0
-      react: 19.2.0
+      react: 19.3.1
 
   '@emoji-mart/data@1.2.1': {}
 
@@ -4849,26 +4846,26 @@ snapshots:
 
   '@popperjs/core@2.11.8': {}
 
-  '@scaleflex/icons@3.0.0-beta.10(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
+  '@scaleflex/icons@3.0.0-beta.10(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)':
     dependencies:
-      '@types/react': 19.2.2
-      '@types/react-dom': 19.2.2(@types/react@19.2.2)
-      react: 19.2.0
-      react-dom: 19.2.0(react@19.2.0)
+      '@types/react': 19.3.0
+      '@types/react-dom': 19.3.0(@types/react@19.3.0)
+      react: 19.3.1
+      react-dom: 19.3.1(react@19.3.1)
 
-  '@scaleflex/ui@3.0.0-beta.10(@babel/core@7.29.7(supports-color@8.1.1))(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(styled-components@6.6.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0))':
+  '@scaleflex/ui@3.0.0-beta.10(@babel/core@7.29.7(supports-color@8.1.1))(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(styled-components@6.6.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1))':
     dependencies:
       '@popperjs/core': 2.11.8
-      '@scaleflex/icons': 3.0.0-beta.10(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      '@scaleflex/icons': 3.0.0-beta.10(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       '@types/lodash.merge': 4.6.9
-      '@types/react': 19.2.2
-      '@types/react-dom': 19.2.2(@types/react@19.2.2)
+      '@types/react': 19.3.0
+      '@types/react-dom': 19.3.0(@types/react@19.3.0)
       lodash.merge: 4.6.2
       prop-types: 15.8.1
-      rb-tippyjs-react: 4.3.1(@babel/core@7.29.7(supports-color@8.1.1))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
-      react: 19.2.0
-      react-dom: 19.2.0(react@19.2.0)
-      styled-components: 6.6.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      rb-tippyjs-react: 4.3.1(@babel/core@7.29.7(supports-color@8.1.1))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+      react: 19.3.1
+      react-dom: 19.3.1(react@19.3.1)
+      styled-components: 6.6.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
     transitivePeerDependencies:
       - '@babel/core'
 
@@ -4882,10 +4879,10 @@ snapshots:
     dependencies:
       defer-to-connect: 2.0.1
 
-  '@tippyjs/react@4.2.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
+  '@tippyjs/react@4.2.6(react-dom@19.3.1(react@19.3.1))(react@19.3.1)':
     dependencies:
-      react: 19.2.0
-      react-dom: 19.2.0(react@19.2.0)
+      react: 19.3.1
+      react-dom: 19.3.1(react@19.3.1)
       tippy.js: 6.3.7
 
   '@tsconfig/node10@1.0.11': {}
@@ -4962,7 +4959,7 @@ snapshots:
 
   '@types/linkifyjs@2.1.7':
     dependencies:
-      '@types/react': 19.2.2
+      '@types/react': 19.3.0
 
   '@types/lodash.merge@4.6.9':
     dependencies:
@@ -5016,30 +5013,30 @@ snapshots:
     dependencies:
       '@types/minimist': 1.2.2
 
-  '@types/react-dom@19.2.2(@types/react@19.2.2)':
+  '@types/react-dom@19.3.0(@types/react@19.3.0)':
     dependencies:
-      '@types/react': 19.2.2
+      '@types/react': 19.3.0
 
-  '@types/react-reconciler@0.28.9(@types/react@19.2.2)':
+  '@types/react-reconciler@0.28.9(@types/react@19.3.0)':
     dependencies:
-      '@types/react': 19.2.2
+      '@types/react': 19.3.0
 
-  '@types/react-reconciler@0.33.1(@types/react@19.2.2)':
+  '@types/react-reconciler@0.34.0(@types/react@19.3.0)':
     dependencies:
-      '@types/react': 19.2.2
+      '@types/react': 19.3.0
 
   '@types/react-window-infinite-loader@1.0.9':
     dependencies:
-      '@types/react': 19.2.2
+      '@types/react': 19.3.0
       '@types/react-window': 1.8.8
 
   '@types/react-window@1.8.8':
     dependencies:
-      '@types/react': 19.2.2
+      '@types/react': 19.3.0
 
-  '@types/react@19.2.2':
+  '@types/react@19.3.0':
     dependencies:
-      csstype: 3.1.3
+      csstype: 3.2.3
 
   '@types/resolve-path@1.4.3': {}
 
@@ -5592,8 +5589,6 @@ snapshots:
       which: 2.0.2
 
   cssesc@3.0.0: {}
-
-  csstype@3.1.3: {}
 
   csstype@3.2.3: {}
 
@@ -6734,10 +6729,10 @@ snapshots:
       has-symbols: 1.1.0
       set-function-name: 2.0.2
 
-  its-fine@2.1.1(@types/react@19.2.2)(react@19.2.0):
+  its-fine@2.1.1(@types/react@19.3.0)(react@19.3.1):
     dependencies:
-      '@types/react-reconciler': 0.28.9(@types/react@19.2.2)
-      react: 19.2.0
+      '@types/react-reconciler': 0.28.9(@types/react@19.3.0)
+      react: 19.3.1
     transitivePeerDependencies:
       - '@types/react'
 
@@ -7334,11 +7329,11 @@ snapshots:
       iconv-lite: 0.4.24
       unpipe: 1.0.0
 
-  rb-tippyjs-react@4.3.1(@babel/core@7.29.7(supports-color@8.1.1))(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
+  rb-tippyjs-react@4.3.1(@babel/core@7.29.7(supports-color@8.1.1))(react-dom@19.3.1(react@19.3.1))(react@19.3.1):
     dependencies:
       '@babel/core': 7.29.7(supports-color@8.1.1)
-      react: 19.2.0
-      react-dom: 19.2.0(react@19.2.0)
+      react: 19.3.1
+      react-dom: 19.3.1(react@19.3.1)
       react-is: 19.3.1
       tippy.js: 6.3.7
 
@@ -7349,24 +7344,24 @@ snapshots:
       minimist: 1.2.6
       strip-json-comments: 2.0.1
 
-  react-dom@19.2.0(react@19.2.0):
+  react-dom@19.3.1(react@19.3.1):
     dependencies:
-      react: 19.2.0
-      scheduler: 0.27.0
+      react: 19.3.1
+      scheduler: 0.28.0
 
-  react-filerobot-image-editor@5.0.0-beta.159(patch_hash=ded5306135fcf3ed2b1f9b1c61254d8053e7d8368eb24795867a3b7be6e331de)(@babel/core@7.29.7(supports-color@8.1.1))(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(react-dom@19.2.0(react@19.2.0))(react-konva@19.2.7(@types/react@19.2.2)(konva@9.3.18)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react@19.2.0)(styled-components@6.6.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)):
+  react-filerobot-image-editor@5.0.0-beta.159(patch_hash=ded5306135fcf3ed2b1f9b1c61254d8053e7d8368eb24795867a3b7be6e331de)(@babel/core@7.29.7(supports-color@8.1.1))(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react-konva@19.3.2(@types/react@19.3.0)(konva@9.3.18)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react@19.3.1)(styled-components@6.6.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1)):
     dependencies:
       '@babel/runtime': 7.28.2
-      '@scaleflex/icons': 3.0.0-beta.10(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
-      '@scaleflex/ui': 3.0.0-beta.10(@babel/core@7.29.7(supports-color@8.1.1))(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(styled-components@6.6.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0))
-      '@tippyjs/react': 4.2.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      '@scaleflex/icons': 3.0.0-beta.10(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+      '@scaleflex/ui': 3.0.0-beta.10(@babel/core@7.29.7(supports-color@8.1.1))(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(styled-components@6.6.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1))
+      '@tippyjs/react': 4.2.6(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       konva: 9.3.18
       prop-types: 15.7.2
-      react: 19.2.0
-      react-dom: 19.2.0(react@19.2.0)
-      react-konva: 19.2.7(@types/react@19.2.2)(konva@9.3.18)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
-      react-konva-utils: 1.1.0(konva@9.3.18)(react-dom@19.2.0(react@19.2.0))(react-konva@19.2.7(@types/react@19.2.2)(konva@9.3.18)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react@19.2.0)
-      styled-components: 6.6.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      react: 19.3.1
+      react-dom: 19.3.1(react@19.3.1)
+      react-konva: 19.3.2(@types/react@19.3.0)(konva@9.3.18)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+      react-konva-utils: 1.1.0(konva@9.3.18)(react-dom@19.3.1(react@19.3.1))(react-konva@19.3.2(@types/react@19.3.0)(konva@9.3.18)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react@19.3.1)
+      styled-components: 6.6.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
     transitivePeerDependencies:
       - '@babel/core'
       - '@types/react'
@@ -7376,61 +7371,61 @@ snapshots:
 
   react-is@19.3.1: {}
 
-  react-konva-utils@1.1.0(konva@9.3.18)(react-dom@19.2.0(react@19.2.0))(react-konva@19.2.7(@types/react@19.2.2)(konva@9.3.18)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react@19.2.0):
+  react-konva-utils@1.1.0(konva@9.3.18)(react-dom@19.3.1(react@19.3.1))(react-konva@19.3.2(@types/react@19.3.0)(konva@9.3.18)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react@19.3.1):
     dependencies:
       konva: 9.3.18
-      react: 19.2.0
-      react-dom: 19.2.0(react@19.2.0)
-      react-konva: 19.2.7(@types/react@19.2.2)(konva@9.3.18)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
-      use-image: 1.1.4(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      react: 19.3.1
+      react-dom: 19.3.1(react@19.3.1)
+      react-konva: 19.3.2(@types/react@19.3.0)(konva@9.3.18)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+      use-image: 1.1.4(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
 
-  react-konva@19.2.7(@types/react@19.2.2)(konva@9.3.18)(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
+  react-konva@19.3.2(@types/react@19.3.0)(konva@9.3.18)(react-dom@19.3.1(react@19.3.1))(react@19.3.1):
     dependencies:
-      '@types/react-reconciler': 0.33.1(@types/react@19.2.2)
-      its-fine: 2.1.1(@types/react@19.2.2)(react@19.2.0)
+      '@types/react-reconciler': 0.34.0(@types/react@19.3.0)
+      its-fine: 2.1.1(@types/react@19.3.0)(react@19.3.1)
       konva: 9.3.18
-      react: 19.2.0
-      react-dom: 19.2.0(react@19.2.0)
-      react-reconciler: 0.33.0(react@19.2.0)
-      scheduler: 0.27.0
+      react: 19.3.1
+      react-dom: 19.3.1(react@19.3.1)
+      react-reconciler: 0.34.0(react@19.3.1)
+      scheduler: 0.28.0
     transitivePeerDependencies:
       - '@types/react'
 
-  react-reconciler@0.33.0(react@19.2.0):
+  react-reconciler@0.34.0(react@19.3.1):
     dependencies:
-      react: 19.2.0
-      scheduler: 0.27.0
+      react: 19.3.1
+      scheduler: 0.28.0
 
-  react-resizable-panels@4.14.5(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
+  react-resizable-panels@4.14.5(react-dom@19.3.1(react@19.3.1))(react@19.3.1):
     dependencies:
-      react: 19.2.0
-      react-dom: 19.2.0(react@19.2.0)
+      react: 19.3.1
+      react-dom: 19.3.1(react@19.3.1)
 
   react-string-replace@1.1.1: {}
 
-  react-virtualized-auto-sizer@1.0.26(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
+  react-virtualized-auto-sizer@1.0.26(react-dom@19.3.1(react@19.3.1))(react@19.3.1):
     dependencies:
-      react: 19.2.0
-      react-dom: 19.2.0(react@19.2.0)
+      react: 19.3.1
+      react-dom: 19.3.1(react@19.3.1)
 
-  react-window-infinite-loader@1.0.10(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
+  react-window-infinite-loader@1.0.10(react-dom@19.3.1(react@19.3.1))(react@19.3.1):
     dependencies:
-      react: 19.2.0
-      react-dom: 19.2.0(react@19.2.0)
+      react: 19.3.1
+      react-dom: 19.3.1(react@19.3.1)
 
-  react-window@1.8.11(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
+  react-window@1.8.11(react-dom@19.3.1(react@19.3.1))(react@19.3.1):
     dependencies:
       '@babel/runtime': 7.28.2
       memoize-one: 5.2.1
-      react: 19.2.0
-      react-dom: 19.2.0(react@19.2.0)
+      react: 19.3.1
+      react-dom: 19.3.1(react@19.3.1)
 
-  react-zoom-pan-pinch@4.0.3(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
+  react-zoom-pan-pinch@4.0.3(react-dom@19.3.1(react@19.3.1))(react@19.3.1):
     dependencies:
-      react: 19.2.0
-      react-dom: 19.2.0(react@19.2.0)
+      react: 19.3.1
+      react-dom: 19.3.1(react@19.3.1)
 
-  react@19.2.0: {}
+  react@19.3.1: {}
 
   read-binary-file-arch@1.0.6(supports-color@8.1.1):
     dependencies:
@@ -7560,7 +7555,7 @@ snapshots:
 
   sax@1.4.3: {}
 
-  scheduler@0.27.0: {}
+  scheduler@0.28.0: {}
 
   semver-compare@1.0.0:
     optional: true
@@ -7817,15 +7812,15 @@ snapshots:
 
   strip-json-comments@3.1.1: {}
 
-  styled-components@6.6.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
+  styled-components@6.6.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1):
     dependencies:
       '@emotion/is-prop-valid': 1.4.0
       '@types/stylis': 4.2.7
       csstype: 3.2.3
-      react: 19.2.0
+      react: 19.3.1
       stylis: 4.3.6
     optionalDependencies:
-      react-dom: 19.2.0(react@19.2.0)
+      react-dom: 19.3.1(react@19.3.1)
 
   stylis@4.3.6: {}
 
@@ -8062,14 +8057,14 @@ snapshots:
     dependencies:
       punycode: 2.3.1
 
-  use-debounce@3.4.3(react@19.2.0):
+  use-debounce@3.4.3(react@19.3.1):
     dependencies:
-      react: 19.2.0
+      react: 19.3.1
 
-  use-image@1.1.4(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
+  use-image@1.1.4(react-dom@19.3.1(react@19.3.1))(react@19.3.1):
     dependencies:
-      react: 19.2.0
-      react-dom: 19.2.0(react@19.2.0)
+      react: 19.3.1
+      react-dom: 19.3.1(react@19.3.1)
 
   utf8-byte-length@1.0.5: {}
 
