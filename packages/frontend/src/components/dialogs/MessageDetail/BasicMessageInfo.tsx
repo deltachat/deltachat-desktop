@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { BackendRemote, onDCEvent } from '../../../backend-com'
-import { T } from '@deltachat/jsonrpc-client'
+import { C, T } from '@deltachat/jsonrpc-client'
 import { selectedAccountId } from '../../../ScreenController'
 
 import styles from './styles.module.scss'
@@ -51,13 +51,13 @@ export function BasicMessageInfo(props: BasicMessageInfoProps) {
   const sentTimestamp = moment(message.timestamp * 1000)
   const sentFormatted = sentTimestamp.format('lll')
 
-  // Format received timestamp
-  const receivedTimestamp = message.receivedTimestamp
-    ? moment(message.receivedTimestamp * 1000)
-    : null
-  const receivedFormatted = receivedTimestamp
-    ? receivedTimestamp.format('lll')
-    : null
+  // https://github.com/deltachat/deltachat-android/blob/04e1861a02b9567027588945cb74a341f3f45da3/src/main/java/org/thoughtcrime/securesms/messagedetails/MessageInfoDialogFragment.java#L187-L203
+  const receivedFormatted =
+    message.receivedTimestamp &&
+    (message.fromId !== C.DC_CONTACT_ID_SELF || message.viewType === 'Webxdc')
+      ? // Format received timestamp
+        moment(message.receivedTimestamp * 1000).format('lll')
+      : null
 
   return (
     <div className={styles.formattedMessageInfo}>
