@@ -417,7 +417,7 @@ export function useChatContextMenu(): {
         return
       }
       openDialog(DisappearingMessages, {
-        chatId: relatedChat.id,
+        chat: relatedChat,
       })
     }
 

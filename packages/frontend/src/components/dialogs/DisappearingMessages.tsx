@@ -17,6 +17,7 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 import { runtime } from '@deltachat-desktop/runtime-interface'
+import { type T } from '@deltachat/jsonrpc-client'
 
 enum DisappearingMessageDuration {
   OFF = Timespans.ZERO_SECONDS,
@@ -89,9 +90,9 @@ function SelectDisappearingMessageDuration({
 }
 
 export default function DisappearingMessage({
-  chatId,
+  chat,
   onClose,
-}: { chatId: number } & DialogProps) {
+}: { chat: Pick<T.FullChat, 'id'> } & DialogProps) {
   const [disappearingMessageDuration, setDisappearingMessageDuration] =
     useState<DisappearingMessageDuration>(DisappearingMessageDuration.OFF)
   const tx = useTranslationFunction()
@@ -100,16 +101,16 @@ export default function DisappearingMessage({
     ;(async () => {
       const ephemeralTimer = await BackendRemote.rpc.getChatEphemeralTimer(
         selectedAccountId(),
-        chatId
+        chat.id
       )
       setDisappearingMessageDuration(ephemeralTimer)
     })()
-  }, [chatId])
+  }, [chat.id])
 
   const saveAndClose = async () => {
     await BackendRemote.rpc.setChatEphemeralTimer(
       selectedAccountId(),
-      chatId,
+      chat.id,
       disappearingMessageDuration
     )
 
