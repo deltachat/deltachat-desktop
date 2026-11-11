@@ -51,7 +51,9 @@ export function BasicMessageInfo(props: BasicMessageInfoProps) {
   const sentTimestamp = moment(message.timestamp * 1000)
   const sentFormatted = sentTimestamp.format('lll')
 
-  // https://github.com/deltachat/deltachat-android/blob/04e1861a02b9567027588945cb74a341f3f45da3/src/main/java/org/thoughtcrime/securesms/messagedetails/MessageInfoDialogFragment.java#L187-L203
+  // Own messages sent from another device also have a receivedTimestamp,
+  // so we check fromId to hide the row for outgoing messages.
+  // For webxdc, receivedTimestamp is the time of the last status update.
   const receivedFormatted =
     message.receivedTimestamp &&
     (message.fromId !== C.DC_CONTACT_ID_SELF || message.viewType === 'Webxdc')
