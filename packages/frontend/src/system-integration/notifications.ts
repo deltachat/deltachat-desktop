@@ -161,7 +161,7 @@ type QueuedNotification = {
   noticedCount: number
 }
 
-let queuedNotifications: {
+const queuedNotifications: {
   [accountId: number]: QueuedNotification[]
 } = {}
 
@@ -358,11 +358,11 @@ async function showNotification(
 
 async function showGroupedNotification(
   accountId: number,
-  queuedNotifications: QueuedNotification[]
+  queued: QueuedNotification[]
 ) {
   const tx = window.static_translate
 
-  const notifications = withoutNoticed(accountId, queuedNotifications)
+  const notifications = withoutNoticed(accountId, queued)
   if (notifications.length === 0) {
     return
   }
@@ -443,12 +443,8 @@ const NORMAL_LIMIT = 3
 let notificationLimit = STARTUP_LIMIT
 
 async function flushNotifications(accountId: number) {
-  if (typeof queuedNotifications[accountId] === 'undefined') {
-    // make it work even if there is nothing
-    queuedNotifications[accountId] = []
-  }
-  const notifications = [...queuedNotifications[accountId]]
-  queuedNotifications = []
+  const notifications = queuedNotifications[accountId] ?? []
+  queuedNotifications[accountId] = []
 
   // filter out muted chats:
   const uniqueChats = [...new Set(notifications.map(n => n.chatId))]
