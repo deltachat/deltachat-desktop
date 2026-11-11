@@ -20,7 +20,6 @@ import { selectedAccountId } from '../../ScreenController'
 import { openMapWebxdc } from '../../system-integration/webxdc'
 import { ScreenContext } from '../../contexts/ScreenContext'
 import MediaView from '../dialogs/MediaView'
-import { openWebxdc } from '../message/messageFunctions'
 
 import type { T } from '@deltachat/jsonrpc-client'
 import { runtime } from '@deltachat-desktop/runtime-interface'
@@ -28,10 +27,7 @@ import { useRpcFetch } from '../../hooks/useFetch'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 import { useChatContextMenu } from '../chat/ChatContextMenu'
 import useContextMenu from '../../hooks/useContextMenu'
-import { ContextMenuContext } from '../../contexts/ContextMenuContext'
-import { mouseEventToPosition } from '../../utils/mouseEventToPosition'
 import { getContactStatusLine } from '../../utils/contactFreshness'
-import useMessage from '../../hooks/chat/useMessage'
 import classNames from 'classnames'
 import {
   MessageMultiselectContext,
@@ -84,11 +80,9 @@ export function ChatView(
 }
 export function ChatViewInner({
   accountId,
-  lastUsedApps,
   chatWithLinger,
 }: {
   accountId: number
-  lastUsedApps: T.Message[]
   chatWithLinger: NonNullable<ReturnType<typeof useChat>['chatWithLinger']>
 }) {
   const tx = useTranslationFunction()
@@ -145,9 +139,7 @@ export function ChatViewInner({
             </>
           )}
         </div>
-        {chatWithLinger && (
-          <ChatNavButtons chat={chatWithLinger} lastUsedApps={lastUsedApps} />
-        )}
+        {chatWithLinger && <ChatNavButtons chat={chatWithLinger} />}
       </nav>
       <RecoverableCrashScreen reset_on_change_key={chatWithLinger.id}>
         <MessageMultiselectContext.Provider
@@ -332,13 +324,7 @@ function ChatHeading({ chat, hidden }: { chat: T.FullChat; hidden: boolean }) {
   )
 }
 
-function ChatNavButtons({
-  chat,
-  lastUsedApps,
-}: {
-  chat: T.FullChat
-  lastUsedApps: T.Message[]
-}) {
+function ChatNavButtons({ chat }: { chat: T.FullChat }) {
   const tx = useTranslationFunction()
   const { openMainViewContextMenu } = useChatContextMenu()
   const onClickThreeDotMenu = useCallback(
@@ -357,24 +343,17 @@ function ChatNavButtons({
     })
   }, [openDialog, chatId])
 
-  const hasLastUsedApps = lastUsedApps && lastUsedApps.length > 0
-
   return (
     <div className='views' data-no-drag-region>
-      <div className={styles.appsGroup}>
-        {hasLastUsedApps && (
-          <AppIcons accountId={selectedAccountId()} apps={lastUsedApps} />
-        )}
-        <IconButton
-          onClick={openMediaViewDialog}
-          aria-label={tx('apps_and_media')}
-          title={tx('apps_and_media')}
-          className={styles.navbarButton}
-          coloring='navbar'
-          icon='apps'
-          size={22}
-        />
-      </div>
+      <IconButton
+        onClick={openMediaViewDialog}
+        aria-label={tx('apps_and_media')}
+        title={tx('apps_and_media')}
+        className={styles.navbarButton}
+        coloring='navbar'
+        icon='apps'
+        size={22}
+      />
       {desktopSettingsStore?.enableOnDemandLocationStreaming && (
         <IconButton
           onClick={() => openMapWebxdc(selectedAccountId(), chatId)}
@@ -408,108 +387,6 @@ function ChatNavButtons({
         size={24}
       />
     </div>
-  )
-}
-
-function AppIcon({ accountId, app }: { accountId: number; app: T.Message }) {
-  const tx = useTranslationFunction()
-  const { openContextMenu } = useContext(ContextMenuContext)
-  const { jumpToMessage } = useMessage()
-  const id = useId()
-
-  const webxdcInfoFetch = useRpcFetch(BackendRemote.rpc.getWebxdcInfo, [
-    accountId,
-    app.id,
-  ])
-  if (webxdcInfoFetch.result?.ok === false) {
-    log.error(
-      'Failed to load webxdc info for app:',
-      app.id,
-      webxdcInfoFetch.result.err
-    )
-  }
-
-  const appName = webxdcInfoFetch.loading
-    ? tx('loading')
-    : webxdcInfoFetch.result.ok
-      ? // Same as in `WebxdcMessageContent`
-        (webxdcInfoFetch.result.value.document
-          ? webxdcInfoFetch.result.value.document + '\n'
-          : '') + webxdcInfoFetch.result.value.name
-      : 'Unknown App'
-
-  return (
-    <Button
-      id={id}
-      styling='borderless'
-      key={app.id}
-      className={styles.webxdcIconButton}
-      title={appName}
-      aria-label={appName}
-      aria-busy={webxdcInfoFetch.loading}
-      onClick={() => {
-        openWebxdc(
-          app,
-          webxdcInfoFetch.result?.ok ? webxdcInfoFetch.result.value : undefined
-        )
-      }}
-      onContextMenu={event => {
-        openContextMenu({
-          ...mouseEventToPosition(event),
-          items: [
-            {
-              label: tx('show_in_chat'),
-              action: () =>
-                jumpToMessage({
-                  accountId,
-                  msgId: app.id,
-                  msgChatId: app.chatId,
-                  focus: true,
-                  scrollIntoViewArg: { block: 'center' },
-                }),
-            },
-          ],
-          ariaAttrs: {
-            'aria-labelledby': id,
-          },
-        })
-      }}
-      aria-haspopup='menu'
-    >
-      <img
-        className={styles.webxdcIcon}
-        src={runtime.getWebxdcIconURL(accountId, app.id)}
-        alt={appName}
-        onContextMenu={(e: React.MouseEvent) => e.preventDefault()}
-      />
-    </Button>
-  )
-}
-
-function AppIcons({
-  accountId,
-  apps,
-}: {
-  accountId: number | undefined
-  apps: T.Message[]
-}) {
-  const tx = useTranslationFunction()
-
-  if (!accountId || !apps || apps.length === 0) {
-    return null
-  }
-  return (
-    <section
-      role='region'
-      aria-label={tx('webxdc_apps')}
-      className={styles.webxdcIcons}
-      data-testid='last-used-apps'
-      data-no-drag-region='true'
-    >
-      {apps.map(app => (
-        <AppIcon key={app.id} accountId={accountId} app={app} />
-      ))}
-    </section>
   )
 }
 
