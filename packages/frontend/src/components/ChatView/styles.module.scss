@@ -78,44 +78,11 @@
       }
     }
 
-    .appsGroup {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-inline-end: 24px;
-
-      .navbarButton {
-        margin-inline-end: 0;
-      }
-    }
-
     .messageMultiselectCounter {
       font-size: large;
       font-weight: bold;
       line-height: normal;
       margin: 0.5rem 1rem;
     }
-  }
-}
-
-.webxdcIcons {
-  line-height: 0;
-  img.webxdcIcon {
-    width: 22px;
-    height: 22px;
-    cursor: pointer;
-    border-radius: 3px;
-  }
-}
-
-.webxdcIconButton {
-  display: inline-block !important;
-  margin: 0;
-  margin-inline-end: 10px;
-  padding: 0 !important;
-  border-radius: 0 !important;
-  line-height: 0;
-  &:last-child {
-    margin-inline-end: 0;
   }
 }

@@ -416,12 +416,6 @@ test('add app from picker to chat', async () => {
     .filter({ hasText: userB.name })
   await chatListItem.click()
 
-  // Check initial number of app icons (if any exist)
-  const initialAppIconsCount = await page
-    .getByTestId('last-used-apps')
-    .locator('img')
-    .count()
-
   await page.getByTestId('open-attachment-menu').click()
   await page.getByTestId('open-app-picker').click()
   const apps = page.locator('.styles_module_appPickerList button').first()
@@ -448,23 +442,6 @@ test('add app from picker to chat', async () => {
   await page.locator('button.send-button').click()
   const webxdcMessage = page.locator('.msg-body .webxdc')
   await expect(webxdcMessage).toContainText(appName)
-
-  // Check if the new app icon appears in the AppIcons component in the navbar
-  const appIconsContainer = page.getByTestId('last-used-apps')
-  await expect(appIconsContainer).toBeVisible()
-
-  // Check if the Calendar app icon is present in the navbar
-  const calendarAppIcon = appIconsContainer.locator(
-    'img[alt="' + appName + '"]'
-  )
-  await expect(calendarAppIcon).toBeVisible()
-
-  // Verify that the number of app icons has increased
-  const finalAppIconsCount = await page
-    .getByTestId('last-used-apps')
-    .locator('img')
-    .count()
-  expect(finalAppIconsCount).toBeGreaterThan(initialAppIconsCount)
 })
 
 test.describe('custom app picker URL', () => {
@@ -532,26 +509,6 @@ test.describe('custom app picker URL', () => {
     await page.getByRole('button', { name: 'Send', exact: true }).click()
     await expect(page.locator(`.message`).last()).toContainText('Poll')
   })
-})
-
-test('recent apps context menu', async () => {
-  const userB = existingProfiles[1]
-  await page
-    .locator('.chat-list .chat-list-item')
-    .filter({ hasText: userB.name })
-    .click()
-
-  await page
-    .getByTestId('last-used-apps')
-    .getByRole('button')
-    .first()
-    .click({ button: 'right' })
-
-  await expect(page.getByRole('menu').getByRole('menuitem')).toHaveText([
-    'Show in Chat',
-  ])
-
-  await page.keyboard.press('Escape')
 })
 
 test('focuses first visible item on arrow down key on input in create chat dialog', async () => {
