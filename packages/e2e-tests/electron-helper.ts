@@ -62,6 +62,12 @@ export type LaunchOptions = {
   /** Used for the profile dir name and in attached logs. */
   name?: string
   extraArgs?: string[]
+  /**
+   * Let Chromium auto-accept media requests (default `true`).
+   * This also answers `getDisplayMedia()` with a fake screen,
+   * without the app's display media request handler being invoked.
+   */
+  fakeMediaUi?: boolean
 }
 
 export class DeltaChatElectron {
@@ -79,6 +85,7 @@ export class DeltaChatElectron {
   static async launch({
     name = 'dc',
     extraArgs = [],
+    fakeMediaUi = true,
   }: LaunchOptions = {}): Promise<DeltaChatElectron> {
     // DC_TEST_DIR makes the app use its own config dir instead of the
     // developer's real one, and disables the single-instance lock.
@@ -101,7 +108,7 @@ export class DeltaChatElectron {
         // Synthetic camera/microphone and auto-accepted permission prompts,
         // so calls work without real devices.
         '--use-fake-device-for-media-stream',
-        '--use-fake-ui-for-media-stream',
+        ...(fakeMediaUi ? ['--use-fake-ui-for-media-stream'] : []),
         ...extraArgs,
       ],
       env: {
