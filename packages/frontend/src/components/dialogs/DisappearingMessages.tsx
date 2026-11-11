@@ -92,7 +92,7 @@ function SelectDisappearingMessageDuration({
 export default function DisappearingMessage({
   chat,
   onClose,
-}: { chat: Pick<T.FullChat, 'id'> } & DialogProps) {
+}: { chat: Pick<T.FullChat, 'id' | 'isSelfTalk'> } & DialogProps) {
   const [disappearingMessageDuration, setDisappearingMessageDuration] =
     useState<DisappearingMessageDuration>(DisappearingMessageDuration.OFF)
   const tx = useTranslationFunction()
@@ -141,7 +141,7 @@ export default function DisappearingMessage({
             {tx('cancel')}
           </FooterActionButton>
           <FooterActionButton styling='primary' onClick={saveAndClose}>
-            {tx('set_for_everyone')}
+            {chat.isSelfTalk ? tx('ok') : tx('set_for_everyone')}
           </FooterActionButton>
         </FooterActions>
       </DialogFooter>
