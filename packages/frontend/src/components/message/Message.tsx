@@ -873,6 +873,9 @@ export default function Message(props: {
       // The same goes for the `useRovingTabindex` code in Gallery.
       if (
         e.target instanceof HTMLMediaElement &&
+        // Media elements don't use Escape, and multiselect needs it
+        // to clear the selection.
+        e.code !== 'Escape' &&
         // This is purely for future-proofing, in case
         // the media element is a direct item of the roving tabindex widget,
         // and not merely a child of such an item.

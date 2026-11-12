@@ -45,14 +45,21 @@ export const ReactionsBarProvider = ({ children }: PropsWithChildren<{}>) => {
   )
 
   useEffect(() => {
+    if (barArgs === null) {
+      return
+    }
     const hideOnEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape' && barArgs !== null) {
+      if (event.key === 'Escape') {
         hideReactionsBar()
+        // Prevents the global keybinding handler from also unselecting the chat.
+        event.preventDefault()
       }
     }
-    window.addEventListener('keyup', hideOnEscape)
+    // Capture phase, so that this runs before any other Escape handlers,
+    // regardless of where focus is.
+    window.addEventListener('keydown', hideOnEscape, { capture: true })
     return () => {
-      window.removeEventListener('keyup', hideOnEscape)
+      window.removeEventListener('keydown', hideOnEscape, { capture: true })
     }
   }, [barArgs, hideReactionsBar])
 

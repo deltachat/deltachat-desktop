@@ -246,9 +246,20 @@ export function keyDownEvent2Action(
       return KeybindAction.Settings_Open
     } else if (ev.code === 'Escape') {
       if ((ev.target as any).id === 'chat-list-search') {
-        // Only handle Escape key events from chat list search input
-        // because others are handled in Composer and Dialogs already
         return KeybindAction.ChatList_ExitSearch
+      }
+      if (
+        // Something closer to the target has already handled this Escape
+        // (e.g. clearing message selection or closing the reactions bar).
+        // Composer handles its own Escapes (closing pickers, quote, edit mode)
+        // and stops propagation in that case.
+        !ev.defaultPrevented &&
+        !ev.shiftKey &&
+        !ev.ctrlKey &&
+        !ev.altKey &&
+        !ev.metaKey
+      ) {
+        return KeybindAction.Chat_Unselect
       }
     } else if (
       (ev.target as any).id === 'chat-list-search' &&

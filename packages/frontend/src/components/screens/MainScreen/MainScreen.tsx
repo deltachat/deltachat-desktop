@@ -19,7 +19,7 @@ import useKeyBindingAction from '../../../hooks/useKeyBindingAction'
 import useSelectLastChat from '../../../hooks/chat/useSelectLastChat'
 import useSelfNotInGroupToast from '../../../hooks/useSelfNotInGroupToast'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
-import { KeybindAction } from '../../../keybindings'
+import { ActionEmitter, KeybindAction } from '../../../keybindings'
 import { ScreenContext } from '../../../contexts/ScreenContext'
 import MediaView from '../../dialogs/MediaView'
 
@@ -161,7 +161,11 @@ export default function MainScreen({ accountId }: Props) {
 
   useKeyBindingAction(KeybindAction.Chat_Unselect, () => {
     if (chatId !== undefined) {
+      // Goes back to the chat list in small screen mode.
       unselectChat()
+      // Enables arrow key navigation between chats.
+      // TODO fix: doesn't work in small screen mode.
+      ActionEmitter.emitAction(KeybindAction.ChatList_FocusItems)
     }
   })
 
