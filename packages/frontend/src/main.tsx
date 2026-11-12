@@ -10,6 +10,7 @@ import {
   setLogHandler,
 } from '@deltachat-desktop/shared/logger'
 import { runtime } from '@deltachat-desktop/runtime-interface'
+import { ensureEmojiFont } from './utils/emojiFont'
 
 async function main() {
   // eslint-disable-next-line @typescript-eslint/no-unused-expressions
@@ -17,6 +18,13 @@ async function main() {
   try {
     await runtime.initialize(setLogHandler, getLogger)
     printProcessLogLevelInfo()
+
+    await ensureEmojiFont().catch(error => {
+      getLogger('renderer/emoji-font').warn(
+        'Could not check emoji rendering',
+        error
+      )
+    })
 
     initSystemIntegration()
     const domNode = document.querySelector('#root')
