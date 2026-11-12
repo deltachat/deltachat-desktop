@@ -25,6 +25,8 @@ export default function ConnectivityDialog({ onClose }: DialogProps) {
 
 function ConnectivityDialogInner() {
   const accountId = selectedAccountId()
+  // Note: don't set `srcdoc=""` initially: with `IsolateSandboxedIframes`,
+  // see https://issues.chromium.org/issues/584841604
   const [connectivityHTML, setConnectivityHTML] = useState<string | null>(null)
 
   const style = window.getComputedStyle(document.body)
