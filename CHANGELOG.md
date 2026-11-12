@@ -2,6 +2,54 @@
 
 All notable changes to this project will be documented in this file.
 
+<a id="2_69_0"></a>
+## [2.69.0] - 2026-11-12
+
+### Added
+
+- Show an image editor before sending image messages ([#6880](https://github.com/deltachat/deltachat-desktop/issues/6880))
+- Link to contact in location info messages ([#6895](https://github.com/deltachat/deltachat-desktop/issues/6895))
+- Enable to react to saved messages ([#6894](https://github.com/deltachat/deltachat-desktop/issues/6894))
+- Allow user to resize chat list
+- Handle Add Device QR from default QR scanner
+- Jump to unpinned message ([#6901](https://github.com/deltachat/deltachat-desktop/issues/6901))
+- Button to show password of a Transport
+- Make it easier to edit the group image ([#6908](https://github.com/deltachat/deltachat-desktop/issues/6908))
+- Voice msg player: nexttrack MediaSession API
+
+### Build system
+
+- Introduce displayName "Delta Chat" ([#6939](https://github.com/deltachat/deltachat-desktop/issues/6939))
+
+### Fixed
+
+- WebXDC: don't leak user locale if empty name
+- Open error dialog on backup export error
+- A11y of "show password" button in Transports
+- Hide forwarded in pinned messages ([#6906](https://github.com/deltachat/deltachat-desktop/issues/6906))
+- Adapt menu bar color to selected theme ([#6929](https://github.com/deltachat/deltachat-desktop/issues/6929))
+- Better sync global audio player to others
+- Remember if chat was unselected
+
+### Miscellaneous Tasks
+
+- Upgrade Electron to v44
+- Upgrade Core to 2.67.0
+- Update export button text ([#6949](https://github.com/deltachat/deltachat-desktop/issues/6949))
+
+### Other
+
+- Transports: move "edit" behind menu
+- Don't show export error on cancel
+- Set higher minSize for message list
+- SendBackup: no Escape on transferring
+- Less eager Shift + Click msg select
+- Disappearing Messages button title
+
+### Removed
+
+- Remove 'recent apps' in favor of 'pinned messages'
+
 <a id="2_65_0"></a>
 ## [2.65.0] - 2026-10-23
 
@@ -4375,7 +4423,8 @@ This section is only relevant to contributors.
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.65.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.69.0...HEAD
+[2.69.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.65.0...v2.69.0
 [2.65.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.62.0...v2.65.0
 [2.62.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.59.1...v2.62.0
 [2.59.1]: https://github.com/deltachat/deltachat-desktop/compare/v2.59.0...v2.59.1
