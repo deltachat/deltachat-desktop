@@ -25,7 +25,7 @@ export default function ConnectivityDialog({ onClose }: DialogProps) {
 
 function ConnectivityDialogInner() {
   const accountId = selectedAccountId()
-  const [connectivityHTML, setConnectivityHTML] = useState('')
+  const [connectivityHTML, setConnectivityHTML] = useState<string | null>(null)
 
   const style = window.getComputedStyle(document.body)
   const bgColor = style.getPropertyValue('--bgPrimary')
@@ -69,7 +69,7 @@ function ConnectivityDialogInner() {
             backgroundColor: bgColor,
             color: textColor,
           }}
-          srcDoc={connectivityHTML}
+          srcDoc={connectivityHTML ?? undefined}
           sandbox={''}
         />
       </DialogContent>
