@@ -26,8 +26,6 @@ rawApp.commandLine.appendSwitch('host-resolver-rules', hostRules)
 // but specifying `host-resolver-rules` appears to be enough based on our tests.
 // rawApp.commandLine.appendSwitch('host-rules', hostRules)
 
-rawApp.commandLine.appendSwitch('disable-features', 'IsolateSandboxedIframes')
-
 // Opt-in, because accessing the camera through the xdg-desktop-portal
 // makes `getUserMedia()` hang on some setups, see
 // https://github.com/deltachat/deltachat-desktop/issues/6819.
