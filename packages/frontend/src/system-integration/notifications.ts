@@ -10,6 +10,7 @@ import {
 import AccountNotificationStoreInstance from '../stores/accountNotifications'
 
 import { C, type T } from '@deltachat/jsonrpc-client'
+import type { DcNotification } from '@deltachat-desktop/shared/shared-types'
 
 const log = getLogger('renderer/notifications')
 
@@ -96,7 +97,55 @@ export function initNotifications() {
   BackendRemote.on('IncomingMsgBunch', accountId => {
     flushNotifications(accountId)
   })
+
+  // Clearing is done here and not in the runtime, so that it's ordered with
+  // showing notifications. A runtime listening for `MsgsNoticed` itself could
+  // clear before the notification of a message that just arrived is shown.
+  BackendRemote.on('MsgsNoticed', (accountId, { chatId }) => {
+    const counts = (noticedCounts[accountId] ??= {})
+    counts[chatId] = getNoticedCount(accountId, chatId) + 1
+    clearNotificationsForChat(accountId, chatId)
+  })
+
+  // Reactions and webxdc notifications don't add unread messages,
+  // so they are not cleared by reading the open chat
+  window.addEventListener('focus', () => {
+    const accountId = window.__selectedAccountId
+    const chatId = window.__selectedChatId
+    if (accountId != undefined && chatId != undefined) {
+      clearNotificationsForChat(accountId, chatId)
+    }
+  })
 }
+
+/**
+ * Number of `MsgsNoticed` events per chat. A queued notification remembers
+ * the count, so it can be dropped if its chat got noticed while it was queued
+ * or being prepared.
+ */
+const noticedCounts: {
+  [accountId: number]: { [chatId: number]: number }
+} = {}
+
+function getNoticedCount(accountId: number, chatId: number) {
+  return noticedCounts[accountId]?.[chatId] ?? 0
+}
+
+function withoutNoticed(
+  accountId: number,
+  notifications: QueuedNotification[]
+) {
+  return notifications.filter(
+    ({ chatId, noticedCount }) =>
+      getNoticedCount(accountId, chatId) === noticedCount
+  )
+}
+
+/**
+ * Chats covered by the summary notifications of an account. These are shown
+ * with `chatId: 0`, so they are cleared once all of these chats are cleared.
+ */
+const chatsInSummaryNotifications: { [accountId: number]: Set<number> } = {}
 
 function isMuted(accountId: number, chatId: number) {
   return BackendRemote.rpc.isChatMuted(accountId, chatId)
@@ -108,9 +157,11 @@ type QueuedNotification = {
   notificationType: NOTIFICATION_TYPE
   eventText: string // for webxdc-info notifications or reactions
   contactId?: number // for reactions
+  /** see {@link noticedCounts} */
+  noticedCount: number
 }
 
-let queuedNotifications: {
+const queuedNotifications: {
   [accountId: number]: QueuedNotification[]
 } = {}
 
@@ -175,6 +226,7 @@ function incomingMessageHandler(
     notificationType,
     eventText,
     contactId,
+    noticedCount: getNoticedCount(accountId, chatId),
   })
 }
 
@@ -192,15 +244,17 @@ export function shouldShowOSNotificationForCurrentChat() {
 
 async function showNotification(
   accountId: number,
-  chatId: number,
-  messageId: number,
-  notificationType: NOTIFICATION_TYPE,
-  eventText: string,
-  contactId?: number
+  notification: QueuedNotification
 ) {
   const tx = window.static_translate
+  const { chatId, messageId, notificationType, eventText, contactId } =
+    notification
+  const isNoticed = () => withoutNoticed(accountId, [notification]).length === 0
 
   if (!DesktopSettingsStoreInstance.state?.showNotificationContent) {
+    if (isNoticed()) {
+      return
+    }
     runtime.showNotification({
       body: tx('notify_new_message'),
       icon: null,
@@ -282,10 +336,14 @@ async function showNotification(
           summaryPrefix = '' // not needed, sender name is included in summaryText
         }
       }
+      const checkedNotificationIcon = await checkedIcon(icon)
+      if (isNoticed()) {
+        return
+      }
       runtime.showNotification({
         title: chatName,
         body: summaryPrefix ? `${summaryPrefix}: ${summaryText}` : summaryText,
-        icon: await checkedIcon(icon),
+        icon: checkedNotificationIcon,
         iconIsAvatar,
         chatId,
         messageId,
@@ -300,12 +358,25 @@ async function showNotification(
 
 async function showGroupedNotification(
   accountId: number,
-  notifications: QueuedNotification[]
+  queued: QueuedNotification[]
 ) {
   const tx = window.static_translate
 
+  const notifications = withoutNoticed(accountId, queued)
+  if (notifications.length === 0) {
+    return
+  }
+  const chatIds = [...new Set(notifications.map(({ chatId }) => chatId))]
+
+  const showSummaryNotification = (data: DcNotification) => {
+    const summarizedChats = (chatsInSummaryNotifications[accountId] ??=
+      new Set())
+    chatIds.forEach(chatId => summarizedChats.add(chatId))
+    runtime.showNotification(data)
+  }
+
   if (!DesktopSettingsStoreInstance.state?.showNotificationContent) {
-    runtime.showNotification({
+    showSummaryNotification({
       body: tx('new_messages'),
       icon: null,
       chatId: 0,
@@ -314,9 +385,6 @@ async function showGroupedNotification(
       notificationType: NOTIFICATION_TYPE.MESSAGE,
     })
   } else {
-    const chatIds = [...new Set(notifications.map(({ chatId }) => chatId))]
-    const msgCount = notifications.length
-
     try {
       if (chatIds.length === 1) {
         // all messages are from the same chat
@@ -329,12 +397,17 @@ async function showGroupedNotification(
             notifications[0].messageId
           )
         const { chatName, chatProfileImage } = notificationInfo
+        const icon = await checkedIcon(chatProfileImage || null)
+        const msgCount = withoutNoticed(accountId, notifications).length
+        if (msgCount === 0) {
+          return
+        }
         runtime.showNotification({
           title: chatName,
           body: tx('chat_n_new_messages', String(msgCount), {
             quantity: msgCount,
           }),
-          icon: await checkedIcon(chatProfileImage || null),
+          icon,
           chatId: chatIds[0],
           messageId: 0, // just select chat on click, no specific message
           accountId,
@@ -344,12 +417,11 @@ async function showGroupedNotification(
         // messages from diffent chats
         // title: "new messages"
         // body: "324 new messages in 6 chats"
-        const chatCount = chatIds.length
-        runtime.showNotification({
+        showSummaryNotification({
           title: tx('new_messages'), // IDEA: when we support notifications from multiple accounts, then show account displayname here?
           body: tx('n_messages_in_m_chats', [
-            String(msgCount),
-            String(chatCount),
+            String(notifications.length),
+            String(chatIds.length),
           ]),
           icon: null, // IDEA: when we support notifications from multiple accounts, then show account profile image here?
           chatId: 0,
@@ -371,12 +443,8 @@ const NORMAL_LIMIT = 3
 let notificationLimit = STARTUP_LIMIT
 
 async function flushNotifications(accountId: number) {
-  if (typeof queuedNotifications[accountId] === 'undefined') {
-    // make it work even if there is nothing
-    queuedNotifications[accountId] = []
-  }
-  const notifications = [...queuedNotifications[accountId]]
-  queuedNotifications = []
+  const notifications = queuedNotifications[accountId] ?? []
+  queuedNotifications[accountId] = []
 
   // filter out muted chats:
   const uniqueChats = [...new Set(notifications.map(n => n.chatId))]
@@ -434,23 +502,10 @@ async function flushNotifications(accountId: number) {
   ).filter(notification => notification !== null)
 
   if (filteredNotifications.length > notificationLimit) {
-    showGroupedNotification(accountId, notifications)
+    showGroupedNotification(accountId, filteredNotifications)
   } else {
-    for (const {
-      chatId,
-      messageId,
-      notificationType,
-      eventText,
-      contactId,
-    } of filteredNotifications) {
-      await showNotification(
-        accountId,
-        chatId,
-        messageId,
-        notificationType,
-        eventText,
-        contactId
-      )
+    for (const notification of filteredNotifications) {
+      await showNotification(accountId, notification)
     }
   }
   notificationLimit = NORMAL_LIMIT
@@ -497,12 +552,19 @@ export function clearNotificationsForAccount(accountId: number) {
   log.debug('clearNotificationsForAccount', { accountId })
   // ask runtime to delete the notifications
   runtime.clearNotificationsForAccount(accountId)
+  delete chatsInSummaryNotifications[accountId]
 }
 
 export function clearNotificationsForChat(accountId: number, chatId: number) {
   log.debug('clearNotificationsForChat', { accountId, chatId })
   // ask runtime to delete the notifications
   runtime.clearNotifications(accountId, chatId)
+
+  const summarizedChats = chatsInSummaryNotifications[accountId]
+  if (summarizedChats?.delete(chatId) && summarizedChats.size === 0) {
+    delete chatsInSummaryNotifications[accountId]
+    runtime.clearNotifications(accountId, 0)
+  }
 }
 
 function getNotificationIcon(

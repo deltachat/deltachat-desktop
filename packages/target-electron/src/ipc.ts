@@ -65,7 +65,10 @@ import {
   startOutgoingVideoCall,
   openIncomingVideoCallWindow,
 } from './windows/video-call.js'
-import { initIpc as notificationsInitIpc } from './notifications.js'
+import {
+  initIpc as notificationsInitIpc,
+  onUnreadCountChanged as notificationsOnUnreadCountChanged,
+} from './notifications.js'
 import { initIpc as translationsInitIpc, tx } from './load-translations.js'
 import { initIpc as themesInitIpc } from './themes.js'
 import { appName } from '@deltachat-desktop/shared/constants.js'
@@ -459,6 +462,7 @@ export function init(
   ipc.handle('app.setBadgeCountAndTrayIconIndicator', (_, count: number) => {
     app.setBadgeCount(count)
     set_has_unread(count !== 0)
+    notificationsOnUnreadCountChanged(count)
   })
 
   ipc.handle('app.writeTempFileFromBase64', (_ev, name, content) =>
