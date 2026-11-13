@@ -347,7 +347,7 @@ export function DraftAttachment({
                 ? webxdcInfoFetch.result.value.name
                 : 'Unknown App'}
           </div>
-          <div className='size'>{filesize(attachment.fileBytes ?? 0)}</div>
+          <div className='summary'>{tx('webxdc_app')}</div>
         </div>
       </div>
     )

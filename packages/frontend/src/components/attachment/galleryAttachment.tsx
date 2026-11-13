@@ -716,7 +716,7 @@ export function WebxdcAttachment({
             {document && truncateText(document, 25) + ' - '}
             {name}
           </div>
-          <div className='summary'>{summary}</div>
+          <div className='summary'>{summary || tx('webxdc_app')}</div>
         </div>
       </button>
     )
