@@ -58,7 +58,7 @@
   "dependencies": {
     "@deltachat/jsonrpc-client": "catalog:",
     "@deltachat/stdio-rpc-server": "catalog:",
-    "@deltachat/calls-webapp": "catalog:",
+    "@deltachat/calls-webapp": "file:vendor/deltachat-calls-webapp-0.13.0-screenshare.2-c9d6180.tgz",
     "escape-html": "^1.0.3",
     "mime-types": "catalog:",
     "ws": "catalog:"

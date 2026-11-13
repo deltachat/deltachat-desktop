@@ -1,11 +1,17 @@
 import escapeHTML from 'escape-html'
 import {
   BrowserWindow,
+  desktopCapturer,
   dialog,
   Menu,
   MessageChannelMain,
   net,
   session,
+  webContents,
+  type DesktopCapturerSource,
+  type DisplayMediaRequestHandlerHandlerRequest,
+  type MenuItemConstructorOptions,
+  type Streams,
   // This is actually used in a JSDoc.
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   type protocol,
@@ -665,7 +671,109 @@ function getSession() {
     callback(permission_handler(permission, details))
   })
 
+  ses.setDisplayMediaRequestHandler(
+    (request, callback) => {
+      handleDisplayMediaRequest(request).then(callback, error => {
+        log.error('Failed to handle screen sharing request', error)
+        callback(null)
+      })
+    },
+    // Only has an effect on macOS 15+,
+    // where the handler is then not invoked at all.
+    { useSystemPicker: true }
+  )
+
   return ses
+}
+
+async function handleDisplayMediaRequest(
+  request: DisplayMediaRequestHandlerHandlerRequest
+): Promise<Streams | null> {
+  const { frame } = request
+  if (
+    frame == null ||
+    frame.parent != null ||
+    !isOriginGood(request.securityOrigin) ||
+    !isOriginGood(frame.url) ||
+    !request.videoRequested ||
+    !request.userGesture
+  ) {
+    log.warn('Rejecting screen sharing request', {
+      securityOrigin: request.securityOrigin,
+      videoRequested: request.videoRequested,
+      userGesture: request.userGesture,
+    })
+    return null
+  }
+  const wc = webContents.fromFrame(frame)
+  const win = wc && BrowserWindow.fromWebContents(wc)
+  if (win == null) {
+    return null
+  }
+
+  const sources = (
+    await desktopCapturer.getSources({
+      types: ['screen', 'window'],
+      thumbnailSize: { width: 160, height: 90 },
+    })
+  )
+    // Sharing the call window itself would only show the call to the remote.
+    .filter(s => s.id !== win.getMediaSourceId())
+  if (sources.length === 0) {
+    return null
+  }
+  // On Wayland, the xdg-desktop-portal already showed a picker
+  // and gave us only the selected source.
+  // Chromium also decides by `XDG_SESSION_TYPE` whether to use the portal.
+  const userAlreadyPicked =
+    process.platform === 'linux' &&
+    process.env.XDG_SESSION_TYPE === 'wayland' &&
+    sources.length === 1
+  const source = userAlreadyPicked ? sources[0] : await pickSource(win, sources)
+  if (source == null || win.isDestroyed()) {
+    return null
+  }
+  // Note that we don't share audio, `getDisplayMedia` is invoked
+  // with `audio: false`.
+  return { video: source }
+}
+
+function pickSource(
+  win: BrowserWindow,
+  sources: DesktopCapturerSource[]
+): Promise<DesktopCapturerSource | null> {
+  return new Promise(resolve => {
+    let resolved = false
+    const pick = (source: DesktopCapturerSource | null) => {
+      if (resolved) {
+        return
+      }
+      resolved = true
+      resolve(source)
+    }
+
+    const toItem = (s: DesktopCapturerSource): MenuItemConstructorOptions => ({
+      label: s.name,
+      icon: s.thumbnail.isEmpty() ? undefined : s.thumbnail,
+      click: () => pick(s),
+    })
+    const screens = sources.filter(s => s.id.startsWith('screen:'))
+    const windows = sources.filter(s => !s.id.startsWith('screen:'))
+    const template: MenuItemConstructorOptions[] = [
+      ...screens.map(toItem),
+      ...(screens.length > 0 && windows.length > 0
+        ? [{ type: 'separator' } as const]
+        : []),
+      ...windows.map(toItem),
+    ]
+
+    Menu.buildFromTemplate(template).popup({
+      window: win,
+      // On some platforms `click` fires after the menu got closed,
+      // so give it a moment before treating this as "cancelled".
+      callback: () => setTimeout(() => pick(null), 100),
+    })
+  })
 }
 
 // See https://github.com/deltachat/calls-webapp/pull/20.

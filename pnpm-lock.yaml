@@ -6,9 +6,6 @@ settings:
 
 catalogs:
   default:
-    '@deltachat/calls-webapp':
-      specifier: 0.12.1-beta-debug
-      version: 0.12.1-beta-debug
     '@deltachat/jsonrpc-client':
       specifier: 2.69.0
       version: 2.69.0
@@ -383,8 +380,8 @@ importers:
   packages/target-electron:
     dependencies:
       '@deltachat/calls-webapp':
-        specifier: 'catalog:'
-        version: 0.12.1-beta-debug
+        specifier: file:vendor/deltachat-calls-webapp-0.13.0-screenshare.2-c9d6180.tgz
+        version: file:packages/target-electron/vendor/deltachat-calls-webapp-0.13.0-screenshare.2-c9d6180.tgz
       '@deltachat/jsonrpc-client':
         specifier: 'catalog:'
         version: 2.69.0(ws@8.21.0)
@@ -562,8 +559,9 @@ packages:
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
     engines: {node: '>=12'}
 
-  '@deltachat/calls-webapp@0.12.1-beta-debug':
-    resolution: {integrity: sha512-24ceQrtW3Jf7oCTrlAPY5h/pLoIybxiz/UgoiHn4sNjgIDYbhhp71zbdeQRCOS4oOmPrJoZftvB4lhpZurX9CQ==}
+  '@deltachat/calls-webapp@file:packages/target-electron/vendor/deltachat-calls-webapp-0.13.0-screenshare.2-c9d6180.tgz':
+    resolution: {integrity: sha512-m/FNEvaFdG3xT3nz+yGdLom18GPDRUuTZaHZkvGoSZ23WrSFkFu8GTQS9TQNhxdy5TMLt8h9wPwgABehOJyd1A==, tarball: file:packages/target-electron/vendor/deltachat-calls-webapp-0.13.0-screenshare.2-c9d6180.tgz}
+    version: 0.13.0-screenshare.2
 
   '@deltachat/jsonrpc-client@2.69.0':
     resolution: {integrity: sha512-2BjTLFPrY+XTGCvlBxbtT+eKYjMz2tQMpX8CpNn6x+Vp9w7ClCoj/rHa+3s1Ox03OMuGEgfL9BmHuAIplzq0Kw==}
@@ -3298,9 +3296,6 @@ packages:
     engines: {node: '>=14.0.0'}
     hasBin: true
 
-  preact@10.28.3:
-    resolution: {integrity: sha512-tCmoRkPQLpBeWzpmbhryairGnhW9tKV6c6gr/w+RhoRoKEJwsjzipwp//1oCpGPOchvSLaAPlpcJi9MwMmoPyA==}
-
   prelude-ls@1.2.1:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
@@ -4298,9 +4293,7 @@ snapshots:
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
 
-  '@deltachat/calls-webapp@0.12.1-beta-debug':
-    dependencies:
-      preact: 10.28.3
+  '@deltachat/calls-webapp@file:packages/target-electron/vendor/deltachat-calls-webapp-0.13.0-screenshare.2-c9d6180.tgz': {}
 
   '@deltachat/jsonrpc-client@2.69.0(ws@8.21.0)':
     dependencies:
@@ -7246,8 +7239,6 @@ snapshots:
     dependencies:
       commander: 9.5.0
     optional: true
-
-  preact@10.28.3: {}
 
   prelude-ls@1.2.1: {}
 

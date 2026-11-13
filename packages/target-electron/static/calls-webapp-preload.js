@@ -130,4 +130,7 @@ contextBridge.exposeInMainWorld('calls', {
   getAvatar() {
     return '/avatar'
   },
+  isScreenShareSupported() {
+    return true
+  },
 })
