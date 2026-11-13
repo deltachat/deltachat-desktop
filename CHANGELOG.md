@@ -34,7 +34,7 @@ All notable changes to this project will be documented in this file.
 ### Miscellaneous Tasks
 
 - Upgrade Electron to v44
-- Upgrade Core to 2.67.0
+- Upgrade Core to 2.69.0
 - Update export button text ([#6949](https://github.com/deltachat/deltachat-desktop/issues/6949))
 
 ### Other
