@@ -1518,7 +1518,7 @@ function WebxdcMessageContent({
         <div className='document'>{info.document}</div>
         <div className='name'>{info.name}</div>
       </div>
-      <div className='summary'>{info.summary}</div>
+      <div className='summary'>{info.summary || tx('webxdc_app')}</div>
       <Button
         className={styles.startWebxdcButton}
         styling='primary'

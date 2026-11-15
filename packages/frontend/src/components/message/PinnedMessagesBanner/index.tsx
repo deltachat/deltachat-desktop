@@ -129,9 +129,9 @@ export default function PinnedMessagesBanner({ accountId, chatId }: Props) {
               <span className={styles.summary}>
                 {webxdcInfo?.document || webxdcInfo?.name}
               </span>
-              {webxdcInfo?.summary && (
+              {webxdcInfo && (
                 <span className={styles.webxdcSummary}>
-                  {webxdcInfo.summary}
+                  {webxdcInfo.summary || tx('webxdc_app')}
                 </span>
               )}
             </span>
