@@ -126,7 +126,7 @@ export default function DisappearingMessage({
             disappearingMessageDuration={disappearingMessageDuration}
             onSelectDisappearingMessageDuration={setDisappearingMessageDuration}
           />
-          <p>{tx('ephemeral_messages_hint')}</p>
+          {!chat.isSelfTalk && <p>{tx('ephemeral_messages_hint')}</p>}
         </DialogContent>
       </DialogBody>
       <DialogFooter>
