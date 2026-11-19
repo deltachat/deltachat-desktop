@@ -657,7 +657,10 @@ function getSession() {
       return false
     }
 
-    return ['media'].includes(permission)
+    // `media` covers camera and microphone, `display-capture`
+    // covers screen sharing (the actual source is then picked
+    // in the `setDisplayMediaRequestHandler` below).
+    return ['media', 'display-capture'].includes(permission)
   }
   ses.setPermissionCheckHandler(
     (_wc, permission, requestingOrigin, details) => {
