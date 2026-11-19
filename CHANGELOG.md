@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+<a id="2_69_1"></a>
+## [2.69.1] - 2026-11-18
+
+### Miscellaneous Tasks
+
+- Upgrade Electron to v45
+- Improve webxdc security
+
 <a id="2_69_0"></a>
 ## [2.69.0] - 2026-11-12
 
@@ -4423,7 +4431,8 @@ This section is only relevant to contributors.
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.69.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.69.1...HEAD
+[2.69.1]: https://github.com/deltachat/deltachat-desktop/compare/v2.69.0...v2.69.1
 [2.69.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.65.0...v2.69.0
 [2.65.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.62.0...v2.65.0
 [2.62.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.59.1...v2.62.0
