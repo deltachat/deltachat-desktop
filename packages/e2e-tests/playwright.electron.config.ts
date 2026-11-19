@@ -18,6 +18,9 @@ loadEnv()
  */
 export default defineConfig({
   testDir: './electron-tests',
+  // refuses to run against an outdated build, see stale-build-guard.ts
+  globalSetup: './stale-build-guard.ts',
+  metadata: { buildTarget: 'electron' },
   outputDir: './test-results-electron',
   fullyParallel: false,
   workers: 1,
