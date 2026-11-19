@@ -35,6 +35,9 @@ export function initIpc(ipc: Electron.IpcMain) {
     ipc.handle('notifications.clearAll', clearAll)
     ipc.handle('notifications.clearAccount', clearAccount)
     process.on('beforeExit', clearAll)
+    // left over from a previous session, e.g. after a crash,
+    // so there is nothing that would ever remove them
+    removeAllFromNotificationCenter()
   } else {
     // Register no-op handlers for notifications to silently fail when
     // no notifications are supported
@@ -276,6 +279,38 @@ function clearAll() {
   }
 }
 
+/**
+ * Also removes notifications that are not tracked anymore. Call `clearAll`
+ * before, as calling `close()` on a removed notification may crash on macOS.
+ */
+function removeAllFromNotificationCenter() {
+  if (!isMac) {
+    return
+  }
+  try {
+    Notification.removeAll()
+  } catch (error) {
+    log.warn('could not remove notifications from notification center', error)
+  }
+}
+
+let previousUnreadCount = 0
+
+/**
+ * Removes all notifications once the last unread message got read.
+ * This catches notifications that were missed when clearing single chats.
+ *
+ * Only done when the count drops to 0, because reactions and webxdc
+ * notifications don't count as unread and should stay until seen.
+ */
+export function onUnreadCountChanged(count: number) {
+  if (previousUnreadCount > 0 && count === 0 && Notification.isSupported()) {
+    clearAll()
+    removeAllFromNotificationCenter()
+  }
+  previousUnreadCount = count
+}
+
 // Thanks to Signal for this function
 // https://github.com/signalapp/Signal-Desktop/blob/ae9181a4b26264ce553c7d8379a3ee5a07de018b/ts/services/notifications.ts#L485
 // it is licensed AGPL-3.0-only
@@ -289,8 +324,5 @@ function filterNotificationText(text: string) {
 DCJsonrpcRemoteInitializedP.then(jsonrpcRemote => {
   jsonrpcRemote.on('MsgDeleted', (accountId, { chatId, msgId }) => {
     clearNotificationsForMessage(null, accountId, chatId, msgId)
-  })
-  jsonrpcRemote.on('MsgsNoticed', (accountId, { chatId }) => {
-    clearNotificationsForChat(null, accountId, chatId)
   })
 })
