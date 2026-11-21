@@ -12,7 +12,10 @@ import useDialog from '../../hooks/dialog/useDialog'
 import useOpenLinkSafely from '../../hooks/useOpenLinkSafely'
 import useProcessQr from '../../hooks/useProcessQr'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
-import { isInviteLink } from '@deltachat-desktop/shared/util'
+import {
+  isAccountOrLoginUri,
+  isInviteUri,
+} from '@deltachat-desktop/shared/util'
 import { selectedAccountId } from '../../ScreenController'
 
 import type { DialogProps } from '../../contexts/DialogContext'
@@ -38,7 +41,9 @@ export const Link = ({
     ev.preventDefault()
     ev.stopPropagation()
 
-    if (isInviteLink(target)) {
+    // must be checked before `punycode`: these URIs have no hostname, and
+    // a false punycode warning is reported for uppercase schemes
+    if (isInviteUri(target) || isAccountOrLoginUri(target)) {
       processQr(accountId, target, SCAN_CONTEXT_TYPE.DEFAULT)
       return
     }
