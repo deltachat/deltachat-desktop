@@ -32,6 +32,7 @@ export type IconName =
   | 'minus'
   | 'more'
   | 'more_vert'
+  | 'open_in_full'
   | 'open_in_new'
   | 'palette'
   | 'paperclip'
