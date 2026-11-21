@@ -176,3 +176,12 @@ $settingsHeight: 40px;
   text-overflow: ellipsis;
   opacity: 0.6;
 }
+
+.exportProgressProfile {
+  color: var(--globalText);
+  margin-block: 0;
+  overflow: hidden;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
