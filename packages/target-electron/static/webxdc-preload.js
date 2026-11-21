@@ -65,7 +65,15 @@ class RealtimeListener {
     )
     for (const update of updates) {
       last_serial = update.max_serial
-      callback(update)
+      try {
+        callback(update)
+      } catch (e) {
+        reportError(
+          new Error('status update callback threw', {
+            cause: e,
+          })
+        )
+      }
     }
     if (setUpdateListenerPromise) {
       setUpdateListenerPromise()
