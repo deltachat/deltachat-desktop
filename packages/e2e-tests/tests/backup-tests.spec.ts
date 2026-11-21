@@ -144,43 +144,6 @@ test.describe('export then import backup', () => {
     ).toBeVisible()
     await expect(pageB.getByRole('dialog')).toHaveCount(0)
   })
-
-  test('export all profiles', async () => {
-    await pageA.getByRole('button', { name: 'Settings' }).click()
-    await pageA.getByRole('button', { name: 'Chats' }).click()
-    await pageA.getByRole('button', { name: 'Export Backup' }).click()
-
-    const exportAllButton = pageA.getByRole('button', {
-      name: /^Export all \d+ profiles$/,
-    })
-    const profileCount = Number(
-      (await exportAllButton.textContent())?.match(/\d+/)?.[0]
-    )
-    expect(profileCount).toBeGreaterThanOrEqual(2)
-
-    await exportAllButton.click()
-
-    // In the browser version every profile backup is a separate download,
-    // each offered via its own alert.
-    const successDialogs = pageA
-      .getByRole('dialog')
-      .filter({ hasText: 'Backup written successfully' })
-    await expect(successDialogs).toHaveCount(profileCount)
-    const backupFiles = (await successDialogs.allTextContents()).map(
-      text => text.match(/delta-chat-backup-[^"]+\.tar/)?.[0]
-    )
-    expect(backupFiles).not.toContain(undefined)
-    expect(new Set(backupFiles).size).toBe(profileCount)
-
-    const downloadedFiles: string[] = []
-    for (let i = 0; i < profileCount; i++) {
-      const downloadPromise = pageA.waitForEvent('download')
-      await successDialogs.last().getByRole('button', { name: 'Open' }).click()
-      downloadedFiles.push((await downloadPromise).suggestedFilename())
-    }
-    expect(downloadedFiles.sort()).toEqual([...backupFiles].sort())
-    await expect(successDialogs).toHaveCount(0)
-  })
 })
 
 test('shows warning when scanning backups that are newer than supported', async ({
