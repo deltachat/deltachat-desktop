@@ -214,6 +214,14 @@ build['toolsets'] = {
   appimage: '1.0.3',
 }
 
+if (process.env.APPX_BUILD === 'true') {
+  // The legacy default toolset (winCodeSign-2.6.0) ships a makeappx from
+  // before Windows 10 2004 that rejects `uap10:Parameters`
+  // (see `appx-extensions.xml` below). Only used for appx so the other
+  // Windows targets keep their rcedit/signtool.
+  build.toolsets.winCodeSign = '1.1.0'
+}
+
 build['deb'] = {
   packageName: previewBuild ? 'deltachat-desktop-preview' : 'deltachat-desktop',
   // Debian section
@@ -306,8 +314,33 @@ build['appx'] = {
   displayName,
   languages,
   artifactName: '${productName}-${version}-Package.${arch}.${ext}',
-  addAutoLaunchExtension: true,
+  // electron-builder's `addAutoLaunchExtension` can't pass arguments, so the
+  // startup task is declared in `appx-extensions.xml` (generated below) to
+  // start the app with `--minimized`.
+  addAutoLaunchExtension: false,
+  customExtensionsPath: 'appx-extensions.xml',
+  // `uap10:Parameters` requires Windows 10 2004
+  minVersion: '10.0.19041.0',
+  maxVersionTested: '10.0.19041.0',
 }
+
+// Keep TaskId "SlackStartup" (electron-builder's default): changing it would
+// register a new task and reset the users' startup choice.
+const appxProductName =
+  //@ts-ignore
+  build.extraMetadata.productName ||
+  JSON.parse(
+    readFileSync(join(__dirname, '../package.json'), { encoding: 'utf-8' })
+  ).productName
+writeFileSync(
+  join(__dirname, '../appx-extensions.xml'),
+  `<desktop:Extension Category="windows.startupTask" Executable="app\\${appxProductName}.exe" EntryPoint="Windows.FullTrustApplication"
+    xmlns:uap10="http://schemas.microsoft.com/appx/manifest/uap/windows10/10"
+    uap10:Parameters="-- --minimized">
+  <desktop:StartupTask TaskId="SlackStartup" Enabled="true" DisplayName="${displayName}" />
+</desktop:Extension>
+`
+)
 
 // see https://www.electron.build/configuration/nsis
 build['nsis'] = {

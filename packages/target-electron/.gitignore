@@ -3,3 +3,4 @@ bundle_out
 themes
 
 electron-builder.json5
+appx-extensions.xml
