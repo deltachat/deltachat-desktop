@@ -50,6 +50,7 @@ if (rc['help'] === true || rc['h'] === true) {
 }
 
 import { callsWebappElectronScheme } from './windows/video-call.js'
+import { helpWindowElectronScheme } from './windows/help.js'
 protocol.registerSchemesAsPrivileged([
   {
     scheme: 'webxdc',
@@ -83,6 +84,7 @@ protocol.registerSchemesAsPrivileged([
     },
   },
   callsWebappElectronScheme,
+  helpWindowElectronScheme,
 ])
 
 const app = rawApp as ExtendedAppMainProcess
