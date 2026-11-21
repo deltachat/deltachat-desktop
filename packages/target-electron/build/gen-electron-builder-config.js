@@ -181,7 +181,9 @@ build['dmg'] = {
 }
 build['linux'] = {
   target: ['AppImage', 'deb'],
-  category: 'Communication;Chat;InstantMessaging;',
+  // freedesktop menu spec
+  // https://specifications.freedesktop.org/menu/latest/category-registry.html
+  category: 'Network;Chat;InstantMessaging;',
   desktop: {
     entry: {
       Name: displayName,
