@@ -13,7 +13,7 @@ import type { DialogProps } from '../../contexts/DialogContext'
 
 export type Props = {
   cb?: () => void
-  message: string
+  message: React.ReactNode
   okBtnLabel?: string
   dataTestid?: string
   dialogComponentProps?: Omit<

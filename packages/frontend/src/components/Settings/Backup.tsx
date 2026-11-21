@@ -87,12 +87,12 @@ export default function Backup() {
         // this alert dialog is to make the opening of the link a user action, to prevent the popup warning
         openDialog(AlertDialog, {
           cb: () => window.open(downloadLink, '_blank'),
-          message: tx('pref_backup_written_to_x', downloadLink),
+          message: <BackupWrittenTo path={downloadLink} />,
           okBtnLabel: tx('open'),
         })
       } else if (accountIds.length === 1) {
         openDialog(AlertDialog, {
-          message: tx('pref_backup_written_to_x', path),
+          message: <BackupWrittenTo path={path} />,
         })
       }
     }
@@ -102,16 +102,36 @@ export default function Backup() {
       emitter.once('ImexFileWritten', listenForOutputFile)
     )
 
+    const accountLabels = Object.fromEntries(
+      configuredAccounts.map(a => [a.id, a.label])
+    )
+    const exportedAccountIds: number[] = []
     let currentAccountId = accountIds[0]
     let canceled = false
     const dialogId = openDialog(ExportProgressDialog, {
       accountIds,
-      accountLabels:
-        accountIds.length > 1
-          ? Object.fromEntries(configuredAccounts.map(a => [a.id, a.label]))
-          : undefined,
+      accountLabels: accountIds.length > 1 ? accountLabels : undefined,
       onCancel: () => {
         canceled = true
+        // Shown right away: core can take a long time to actually abort
+        // the running export (e.g. while it copies a big database).
+        // In the browser every written backup already got its own download alert.
+        if (!isBrowser && accountIds.length > 1 && exportedAccountIds.length) {
+          openDialog(AlertDialog, {
+            message: (
+              <>
+                {tx('export_aborted')}
+                {'\n'}
+                <BackupWrittenTo path={destination} />
+                {'\n'}
+                {[
+                  `${exportedAccountIds.length} / ${accountIds.length}`,
+                  ...exportedAccountIds.map(id => `· ${accountLabels[id]}`),
+                ].join('\n')}
+              </>
+            ),
+          })
+        }
         return BackendRemote.rpc.stopOngoingProcess(currentAccountId)
       },
     })
@@ -122,23 +142,16 @@ export default function Backup() {
         }
         currentAccountId = id
         await BackendRemote.rpc.exportBackup(id, destination, null)
+        exportedAccountIds.push(id)
       }
       if (!isBrowser && accountIds.length > 1 && !canceled) {
         openDialog(AlertDialog, {
-          message: tx('pref_backup_written_to_x', destination),
+          message: <BackupWrittenTo path={destination} />,
         })
       }
     } catch (error) {
       log.error('backup-export failed:', error)
-      if (
-        // Try to distinguish user cancel from other errors
-        !(
-          typeof error === 'object' &&
-          error != null &&
-          'message' in error &&
-          error.message === 'canceled'
-        )
-      ) {
+      if (!canceled) {
         openDialog(AlertDialog, {
           message:
             tx('export_aborted') +
@@ -166,6 +179,31 @@ export default function Backup() {
     <SettingsButton onClick={onBackupExport}>
       {tx('export_backup_desktop')}
     </SettingsButton>
+  )
+}
+
+/**
+ * Lets long paths wrap at directory separators, otherwise the browser
+ * breaks them at an arbitrary character.
+ */
+function BackupWrittenTo({ path }: { path: string }) {
+  const tx = useTranslationFunction()
+  const text = tx('pref_backup_written_to_x', path)
+  const pathStart = text.indexOf(path)
+  if (pathStart === -1) {
+    return text
+  }
+  return (
+    <>
+      {text.slice(0, pathStart)}
+      {path.split(/(?<=[/\\])/).map((segment, i) => (
+        <React.Fragment key={i}>
+          {i > 0 && <wbr />}
+          {segment}
+        </React.Fragment>
+      ))}
+      {text.slice(pathStart + path.length)}
+    </>
   )
 }
 
