@@ -58,6 +58,7 @@ import { useMultiselect } from '../../hooks/useMultiselect'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 import { useHasChanged2 } from '../../hooks/useHasChanged'
 import asyncThrottle from '@jcoreio/async-throttle'
+import { throttleWhilePageHidden } from '../../utils/throttleIfPageHidden'
 
 const log = getLogger('ChatList')
 const useMultiselectLog = getLogger('ChatListMultiselect')
@@ -826,7 +827,7 @@ export function useLogicVirtualChatList(
     // This reduces the number of re-renders bounded when many chats change
     // in a short period, e.g. when a lot of messages arrive
     const pendingChatIds = new Set<number>()
-    const flushPendingChatIds = asyncThrottle(async () => {
+    const _flushPendingChatIds = asyncThrottle(async () => {
       const chatIds = [...pendingChatIds]
       pendingChatIds.clear()
       if (chatIds.length === 0) {
@@ -846,6 +847,9 @@ export function useLogicVirtualChatList(
         }
       }
     }, 400)
+    const flushPendingChatIds = throttleWhilePageHidden(() =>
+      _flushPendingChatIds.invokeIgnoreResult()
+    )
 
     const removeListener = onDCEvent(
       accountId,
@@ -857,7 +861,7 @@ export function useLogicVirtualChatList(
         if (chatId !== null) {
           pendingChatIds.add(chatId)
           loadingChats.add(chatId)
-          flushPendingChatIds.invokeIgnoreResult()
+          flushPendingChatIds()
         } else {
           // invalidate whole chatlist cache and reload everything that was visible before
           pendingChatIds.clear()
@@ -868,6 +872,7 @@ export function useLogicVirtualChatList(
     return () => {
       removeListener()
       flushPendingChatIds.cancel()
+      _flushPendingChatIds.cancel()
     }
   }, [accountId])
 
