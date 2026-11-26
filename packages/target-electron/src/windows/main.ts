@@ -192,7 +192,7 @@ export function init(options: { hidden: boolean; hideMenuBar: boolean }) {
     'accessibility-events',
     'clipboard-sanitized-write',
     // not used:
-    //  "display-capture", - not used
+    //  "display-capture", - screen sharing only happens in the calls window
     //  "geolocation", - not used
     //  "midi" - not used
     //  "midiSysex" - not used
