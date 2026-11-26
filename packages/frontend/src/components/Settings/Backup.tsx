@@ -102,36 +102,16 @@ export default function Backup() {
       emitter.once('ImexFileWritten', listenForOutputFile)
     )
 
-    const accountLabels = Object.fromEntries(
-      configuredAccounts.map(a => [a.id, a.label])
-    )
-    const exportedAccountIds: number[] = []
     let currentAccountId = accountIds[0]
     let canceled = false
     const dialogId = openDialog(ExportProgressDialog, {
       accountIds,
-      accountLabels: accountIds.length > 1 ? accountLabels : undefined,
+      accountLabels:
+        accountIds.length > 1
+          ? Object.fromEntries(configuredAccounts.map(a => [a.id, a.label]))
+          : undefined,
       onCancel: () => {
         canceled = true
-        // Shown right away: core can take a long time to actually abort
-        // the running export (e.g. while it copies a big database).
-        // In the browser every written backup already got its own download alert.
-        if (!isBrowser && accountIds.length > 1 && exportedAccountIds.length) {
-          openDialog(AlertDialog, {
-            message: (
-              <>
-                {tx('export_aborted')}
-                {'\n'}
-                <BackupWrittenTo path={destination} />
-                {'\n'}
-                {[
-                  `${exportedAccountIds.length} / ${accountIds.length}`,
-                  ...exportedAccountIds.map(id => `· ${accountLabels[id]}`),
-                ].join('\n')}
-              </>
-            ),
-          })
-        }
         return BackendRemote.rpc.stopOngoingProcess(currentAccountId)
       },
     })
@@ -142,7 +122,6 @@ export default function Backup() {
         }
         currentAccountId = id
         await BackendRemote.rpc.exportBackup(id, destination, null)
-        exportedAccountIds.push(id)
       }
       if (!isBrowser && accountIds.length > 1 && !canceled) {
         openDialog(AlertDialog, {
