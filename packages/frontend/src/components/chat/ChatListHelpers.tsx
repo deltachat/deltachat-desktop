@@ -5,6 +5,7 @@ import { BackendRemote, onDCEvent } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { useFetch } from '../../hooks/useFetch'
 import asyncThrottle from '@jcoreio/async-throttle'
+import { throttleWhilePageHidden } from '../../utils/throttleIfPageHidden'
 
 const log = getLogger('renderer/helpers/ChatList')
 
@@ -197,10 +198,15 @@ function useChatListSimple(
     if (accountId == undefined || refreshChatlist == undefined) {
       return
     }
-    return onDCEvent(accountId, 'ChatlistChanged', () => {
+    const refresh = throttleWhilePageHidden(refreshChatlist)
+    const removeListener = onDCEvent(accountId, 'ChatlistChanged', () => {
       log.debug('useChatList: ChatlistChanged, will refetch chatlist')
-      refreshChatlist()
+      refresh()
     })
+    return () => {
+      refresh.cancel()
+      removeListener()
+    }
   }, [accountId, refreshChatlist])
 
   if (chatListFetch?.result?.ok === false) {
