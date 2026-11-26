@@ -103,9 +103,11 @@ test.describe('export then import backup', () => {
     await expect(pageA.getByRole('dialog').last()).toContainText(
       'Keep the backup file in a safe place or delete it as soon as possible'
     )
+    // At this point there are at least two configured profiles
+    // (see "import backup from file" and beforeAll).
     await expect(
       pageA.getByRole('dialog').last().getByRole('button')
-    ).toHaveText(['Cancel', 'Export this profile'])
+    ).toHaveText(['Cancel', /^Export all \d+ profiles$/, 'Export this profile'])
 
     // In Electron we would show a directory picker dialog,
     // but in the browser version it's a download.
