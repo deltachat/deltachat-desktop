@@ -303,6 +303,7 @@ build['appx'] = {
   publisher: 'CN=C13753E5-D590-467C-9FCA-6799E1A5EC1E',
   publisherDisplayName: 'merlinux',
   identityName: 'merlinux.DeltaChat',
+  displayName,
   languages,
   artifactName: '${productName}-${version}-Package.${arch}.${ext}',
   addAutoLaunchExtension: true,
