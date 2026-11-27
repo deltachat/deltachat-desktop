@@ -1,5 +1,4 @@
 @use '../mixins';
-@use '../variables';
 // "Has content above" selector
 // (i.e. author title, "Forwarded" indicator, quote).
 //
@@ -35,28 +34,40 @@
   overflow: hidden;
 
   background-color: var(--messageAttachmentIconBg);
+
+  // 2/3 of the chat view height, approximated by the window height
+  // without the navbar, so it doesn't change when the composer grows
+  --image-max-height: calc((100dvh - var(--navBarHeight)) * 2 / 3);
+
   /**
-   * we need a fix height for images to prevent reflow when the image loads
-   * till we have a better solution (more flexible) we allow a maximum height
-   * of 200px for all images in landscape mode and 300px for portrait mode
-   *
-   * for higher values (than 200px) we have to add media queries otherwise
-   * messages with images get strange paddings on small windows
-   *
-   * The same goes for `.quoted-image`.
+   * images get a fixed size to prevent reflow when the image loads,
+   * see `getImageDisplaySize` in `imageDisplaySize.ts`
    */
   & > .attachment-content {
     object-fit: cover;
     object-position: center;
-    max-width: 450px;
-    min-width: 200px;
+    // The size limits are set by the width/height attributes.
+    // Shrink with the message bubble or to --image-max-height, the height
+    // follows via the aspect-ratio set in the style attribute.
+    // The width doesn't shrink below --image-min-width, then max-height
+    // crops the image instead.
+    // --image-ratio and --image-min-width are set in messageAttachment.tsx,
+    // without them only `max-width: 100%` applies.
+    max-width: min(
+      100%,
+      max(
+        var(--image-min-width, 100%),
+        var(--image-max-height) * var(--image-ratio, 1)
+      )
+    );
+    max-height: var(--image-max-height);
+    height: auto;
     &.sticker {
-      min-width: auto;
       object-fit: contain;
     }
 
     // The padding on the bottom of the bubble produces 4 extra pixels of space at the
-    //   bottom, so this doesn't match up with the padding numbers above.
+    // bottom, so this doesn't match up with the padding numbers above.
     margin-bottom: -4px;
 
     // redundant with attachment-container, but we get cursor flashing on move otherwise
@@ -64,6 +75,7 @@
 
     &.video-content {
       height: 350px;
+      max-width: min(450px, 100%);
       min-width: 300px;
       background-color: black;
       object-fit: scale-down;
@@ -84,16 +96,6 @@
     margin-top: 4px;
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
-  }
-}
-@media (max-width: variables.$breakpoint-messagelist) {
-  .message-attachment-media {
-    & > .attachment-content {
-      max-width: 100%;
-      &.portrait {
-        max-width: 100%;
-      }
-    }
   }
 }
 
