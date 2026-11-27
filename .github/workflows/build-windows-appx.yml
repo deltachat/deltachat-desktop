@@ -31,6 +31,8 @@ jobs:
           echo "VERSION_INFO_GIT_REF=v${VERSION}" >> "$GITHUB_ENV"
       # Building JS
       - name: pnpm install, build
+        env:
+          APPX_BUILD: 'true'
         run: |
           npm i -g pnpm
           pnpm install --frozen-lockfile
