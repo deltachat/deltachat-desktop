@@ -724,7 +724,7 @@ async function returnIndexHtmlOrAvatar(request: GlobalRequest) {
             <style>
               @font-face { 
                 font-family: 'EmojiMart'; 
-                src: local('Apple Color Emoji'), url("noto/emoji/NotoColorEmoji.ttf") format("truetype"); 
+                src: url("noto/emoji/NotoColorEmoji.ttf") format("truetype");
               } 
             </style>
             <rect width="48" height="48" fill="${escapeHTML(chat.color)}"/>
@@ -734,7 +734,7 @@ async function returnIndexHtmlOrAvatar(request: GlobalRequest) {
               dominant-baseline="central"
               text-anchor="middle"
               font-size="26"
-              font-family="Roboto, 'EmojiMart', 'Apple Color Emoji', NotoEmoji, 'Helvetica Neue', Arial, Helvetica, NotoMono, sans-serif"
+              font-family="Roboto, 'EmojiMart', NotoEmoji, 'Apple Color Emoji', 'Helvetica Neue', Arial, Helvetica, NotoMono, sans-serif"
               fill="#fff"
             >
               ${escapeHTML(initial)}
