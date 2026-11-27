@@ -19,7 +19,7 @@ export const yellow = colorize(1, 33)
 export const grey = colorize(0, 37)
 
 const emojiFontCss =
-  'font-family: Roboto, "Apple Color Emoji", NotoEmoji, "Helvetica Neue", Arial, Helvetica, NotoMono, sans-serif !important;'
+  'font-family: Roboto, NotoEmoji, "Apple Color Emoji", "Helvetica Neue", Arial, Helvetica, NotoMono, sans-serif !important;'
 
 export const enum LogLevelString {
   DEBUG = 'DEBUG',

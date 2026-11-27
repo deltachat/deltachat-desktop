@@ -1,6 +1,6 @@
 :root {
   /* 'EmojiMart' represents the general emoji font of the app, themes may redefine it */
-  --emojifonts: 'EmojiMart', 'Apple Color Emoji', NotoEmoji;
+  --emojifonts: 'EmojiMart', NotoEmoji, 'Apple Color Emoji';
 
   --fonts-default:
     Roboto, var(--emojifonts), 'Helvetica Neue', Arial, Helvetica, NotoMono,

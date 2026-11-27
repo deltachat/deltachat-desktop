@@ -1,7 +1,7 @@
 @import '../fonts/fonts.css';
 
 html {
-  font-family: Roboto, Apple Color Emoji, NotoEmoji, Helvetica Neue, Arial,
+  font-family: Roboto, NotoEmoji, Apple Color Emoji, Helvetica Neue, Arial,
     Helvetica, NotoMono, sans-serif !important;
   color-scheme: light dark;
 }
