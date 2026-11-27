@@ -1,0 +1,48 @@
+--- a/dist/main.js
++++ b/dist/main.js
+@@ -580,6 +580,10 @@
+     emojiSize: {
+         value: 24
+     },
++    // The app bundles an emoji font independently of the system font.
++    nativeEmojiVersion: {
++        value: null
++    },
+     emojiVersion: {
+         value: 15,
+         choices: [
+@@ -803,8 +807,8 @@
+     let latestVersionSupport = null;
+     let noCountryFlags = null;
+     if (set == 'native') {
+-        latestVersionSupport = (0, $551eac79ded07bc8$export$2e2bcd8739ae039).latestVersion();
+-        noCountryFlags = props.noCountryFlags || (0, $551eac79ded07bc8$export$2e2bcd8739ae039).noCountryFlags();
++        latestVersionSupport = props.nativeEmojiVersion ?? (0, $551eac79ded07bc8$export$2e2bcd8739ae039).latestVersion();
++        noCountryFlags = props.nativeEmojiVersion != null ? props.noCountryFlags : (props.noCountryFlags || (0, $551eac79ded07bc8$export$2e2bcd8739ae039).noCountryFlags());
+     }
+     let categoryIndex = $47b4a70d4572a3b3$export$2d0294657ab35f1b.categories.length;
+     let resetSearchIndex = false;
+--- a/dist/module.js
++++ b/dist/module.js
+@@ -565,6 +565,10 @@
+     emojiSize: {
+         value: 24
+     },
++    // The app bundles an emoji font independently of the system font.
++    nativeEmojiVersion: {
++        value: null
++    },
+     emojiVersion: {
+         value: 15,
+         choices: [
+@@ -788,8 +792,8 @@
+     let latestVersionSupport = null;
+     let noCountryFlags = null;
+     if (set == 'native') {
+-        latestVersionSupport = (0, $c84d045dcc34faf5$export$2e2bcd8739ae039).latestVersion();
+-        noCountryFlags = props.noCountryFlags || (0, $c84d045dcc34faf5$export$2e2bcd8739ae039).noCountryFlags();
++        latestVersionSupport = props.nativeEmojiVersion ?? (0, $c84d045dcc34faf5$export$2e2bcd8739ae039).latestVersion();
++        noCountryFlags = props.nativeEmojiVersion != null ? props.noCountryFlags : (props.noCountryFlags || (0, $c84d045dcc34faf5$export$2e2bcd8739ae039).noCountryFlags());
+     }
+     let categoryIndex = $7adb23b0109cc36a$export$2d0294657ab35f1b.categories.length;
+     let resetSearchIndex = false;

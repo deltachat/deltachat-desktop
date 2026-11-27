@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react'
 import classNames from 'classnames'
-import emojiData from '@emoji-mart/data'
 import { EmojiPicker as Picker } from '@emoji-mart-awesome/react'
 
+import emojiData from '../../data/emoji/emoji.json'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { useThemeCssVar } from '../../ThemeManager'
 
@@ -71,6 +71,8 @@ export default function EmojiPicker({
     >
       <Picker
         data={emojiData}
+        // Supported by the bundled Noto font, independently of system fonts.
+        nativeEmojiVersion={emojiData.emojiVersion}
         i18n={{
           search: tx('search'),
           notfound: tx('emoji_not_found'),
